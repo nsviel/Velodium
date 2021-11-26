@@ -1,6 +1,7 @@
 #include "CT_ICP.h"
 
-#include "SLAM_optimization.h"
+#include "CT_ICP/SLAM_optim_ceres.h"
+#include "CT_ICP/SLAM_optim_gn.h"
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
@@ -13,14 +14,15 @@
 
 extern struct Database database;
 
-#include "truc.h"
+#include "CT_ICP/truc.h"
 
 //Constructor / Destructor
 CT_ICP::CT_ICP(){
   //---------------------------
 
-  slam_optiManager = new SLAM_optimization();
-  slam_normManager = new SLAM_normal();
+  ceresManager = new SLAM_optim_ceres();
+  gnManager = new SLAM_optim_gn();
+  normalManager = new SLAM_normal();
 
   this->solver_ceres = true;
   this->solver_GN = false;
@@ -178,7 +180,7 @@ void CT_ICP::compute_normal(Subset* subset){
   //---------------------------
 
   if(frame->ID > 1){
-    slam_normManager->compute_frameNormal(frame, map);
+    normalManager->compute_frameNormal(frame, map);
   }
 
   //---------------------------
@@ -188,9 +190,9 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
 
   if(frame->ID >= 2){
     if(solver_GN){
-      slam_optiManager->optim_GN();
+      gnManager->optim_GN();
     }else if(solver_ceres){
-      slam_optiManager->optim_test(frame, frame_m1, map);
+      ceresManager->optim_test(frame, frame_m1, map);
     }
   }
 

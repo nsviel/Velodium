@@ -89,7 +89,6 @@ void Operation::reset(){
   console.AddLog("Reset scene...");
 }
 
-
 //Loading functions
 void Operation::loading(){
   string zenity = "zenity --file-selection --multiple --title=Load --filename=" + pathDir + " 2> /dev/null";
@@ -130,14 +129,8 @@ void Operation::loading(){
   //---------------------------
 }
 void Operation::loading_frames(){
-  //---------------------------
 
-  //Get absolute executable location
-  string absPath = std::experimental::filesystem::current_path();
-  string folderPath = absPath + "/../media/";
-
-  //Load folder window
-  string zenity = "zenity --file-selection --directory --title=Directory --filename=" + folderPath + " 2> /dev/null";
+  string zenity = "zenity --file-selection --multiple --title=Load --filename=" + pathDir + " 2> /dev/null";
   FILE *file = popen(zenity.c_str(), "r");
   char filename[32768];
   const char* path_char = fgets(filename, 32768, file);
@@ -145,27 +138,26 @@ void Operation::loading_frames(){
 
   //Check if not empty
   if ((path_char != NULL) && (path_char[0] != '\0')){
-    string path_dir(path_char);
+    string path_str(path_char);
 
     //Supress unwanted line break
-    if (path_dir.find('\n')){
-      path_dir.erase(std::remove(path_dir.begin(), path_dir.end(), '\n'), path_dir.end());
+    vector<string> CloudPaths;
+    if (path_str.find('\n')){
+      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
     }
 
-    //Get all frame path
-    vector<string> path_vec;
-    for(const auto& entry : std::experimental::filesystem::directory_iterator(path_dir)){
-      string path_file = entry.path();
-
-      if (path_file.find(".ply") != string::npos){
-        path_vec.push_back(path_file);
+    //Check for multiple
+    if (path_str.find('|')){
+      int N = count(path_str.begin(), path_str.end(), '|');
+      for(int i=0; i<N; i++){
+        CloudPaths.push_back(path_str.substr(0, path_str.find('|')));
+        path_str = path_str.substr(path_str.find('|')+1);
       }
     }
+    CloudPaths.push_back(path_str);
 
-    if(path_vec.size() != 0){
-      loaderManager->load_cloud_byFrame(path_vec);
-    }
-
+    //Load files
+    loaderManager->load_cloud_byFrame(CloudPaths);
   }
 
   //---------------------------

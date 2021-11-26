@@ -1,7 +1,8 @@
 #include "GUI_slam.h"
 
 #include "../CT_ICP.h"
-#include "../SLAM_optimization.h"
+#include "../CT_ICP/SLAM_optim_ceres.h"
+#include "../CT_ICP/SLAM_optim_gn.h"
 
 #include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene.h"
@@ -14,7 +15,7 @@ GUI_slam::GUI_slam(){
   //---------------------------
 
   this->cticpManager = new CT_ICP();
-  this->slam_optiManager = cticpManager->get_SLAM_optimization();
+  this->slam_optiManager = cticpManager->get_SLAM_optim_ceres();
 
   //---------------------------
 }

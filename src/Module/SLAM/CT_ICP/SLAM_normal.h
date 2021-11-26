@@ -1,7 +1,7 @@
 #ifndef SLAM_NORMAL_H
 #define SLAM_NORMAL_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 #include <queue>
 #include <map>

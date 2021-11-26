@@ -1,7 +1,7 @@
 #ifndef CT_ICP_H
 #define CT_ICP_H
 
-#include "SLAM_normal.h"
+#include "CT_ICP/SLAM_normal.h"
 
 #include "Cost_function/Cost_function.h"
 
@@ -9,7 +9,8 @@
 
 #include <map>
 
-class SLAM_optimization;
+class SLAM_optim_ceres;
+class SLAM_optim_gn;
 
 
 class CT_ICP
@@ -33,11 +34,12 @@ public:
   void add_pointsToLocalMap(Frame* frame);
 
   inline float* get_sampling_size(){return &sampling_size;}
-  inline SLAM_optimization* get_SLAM_optimization(){return slam_optiManager;}
+  inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}
 
 private:
-  SLAM_optimization* slam_optiManager;
-  SLAM_normal* slam_normManager;
+  SLAM_optim_ceres* ceresManager;
+  SLAM_optim_gn* gnManager;
+  SLAM_normal* normalManager;
 
   voxelMap map;
   float sampling_size;

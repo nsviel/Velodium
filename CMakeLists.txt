@@ -20,6 +20,20 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(OpenMP REQUIRED)
 find_package(Ceres REQUIRED)
 
+#Denpendancies
+set(ALL_LIBS
+  ${OPENGL_LIBRARY}
+  ${GLFW_LIBRARY}
+  ${GLEW_LIBRARY}
+  ${GLM_LIBRARY}
+  ${OpenMP_CXX_FLAGS}
+  ${CERES_LIBRARIES}
+  OpenMP::OpenMP_CXX
+  Eigen3::Eigen
+  glfw
+  -fopenmp
+  -lGLEW)
+
 #Optional libraries
 if(WITH_PCL)
 MESSAGE(STATUS "WITH_PCL")
@@ -45,20 +59,6 @@ include_directories(${CMAKE_SOURCE_DIR}/../extern)
 
 #Source files
 file(GLOB_RECURSE ALL_SOURCES src/*.cpp extern/*.cpp)
-
-#Packing
-set(ALL_LIBS
-  ${OPENGL_LIBRARY}
-  ${GLFW_LIBRARY}
-  ${GLEW_LIBRARY}
-  ${GLM_LIBRARY}
-  ${OpenMP_CXX_FLAGS}
-  ${CERES_LIBRARIES}
-  OpenMP::OpenMP_CXX
-  Eigen3::Eigen
-  glfw
-  -fopenmp
-  -lGLEW)
 
 #Executable
 add_executable(executable ${ALL_SOURCES})

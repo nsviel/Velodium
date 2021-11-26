@@ -1,27 +1,26 @@
-#ifndef SLAM_OPTIMIZATION_H
-#define SLAM_OPTIMIZATION_H
+#ifndef SLAM_OPTIM_CERES_H
+#define SLAM_OPTIM_CERES_H
 
 #include "SLAM_normal.h"
 
-#include "Cost_function/Cost_function.h"
+#include "../Cost_function/Cost_function.h"
 
-#include "../../common.h"
+#include "../../../common.h"
 
 #include <ceres/internal/eigen.h>
 #include <ceres/ceres.h>
 #include <ceres/rotation.h>
 
 
-class SLAM_optimization
+class SLAM_optim_ceres
 {
 public:
   //Constructor / Destructor
-  SLAM_optimization();
-  ~SLAM_optimization();
+  SLAM_optim_ceres();
+  ~SLAM_optim_ceres();
 
 public:
   void optim_CERES(Frame* frame, Frame* frame_m1);
-  void optim_GN();
   void optim_test(Frame* frame, Frame* frame_m1, voxelMap& map);
   void optim_test_secured(Frame* frame, Frame* frame_m1, voxelMap& map);
 

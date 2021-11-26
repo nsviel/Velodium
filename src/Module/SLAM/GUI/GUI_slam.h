@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class CT_ICP;
-class SLAM_optimization;
+class SLAM_optim_ceres;
 
 
 class GUI_slam
@@ -19,7 +19,7 @@ public:
 
 private:
   CT_ICP* cticpManager;
-  SLAM_optimization* slam_optiManager;
+  SLAM_optim_ceres* slam_optiManager;
 };
 
 #endif

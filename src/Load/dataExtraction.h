@@ -25,6 +25,7 @@ private:
   void check_data(dataFile* data);
   void init_cloudParameters(Cloud* cloud, vector<dataFile*> data);
   void init_subsetParameters(Subset& subset, int i);
+  void init_randomColor();
 
   void extract_Location(Subset& subset, vector<vec3>& locationOBJ);
   void extract_Color(Subset& subset, vector<vec4>& colorOBJ);
@@ -33,6 +34,7 @@ private:
   void extract_Timestamp(Subset& subset, vector<float>& timestampOBJ);
 
 private:
+  float Red, Green, Blue;
   int ID, oneFrame_VAO;
   vec4 RGB_rdm;
   bool is_intensity;

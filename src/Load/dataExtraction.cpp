@@ -25,6 +25,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
 
   //Init cloud parameters
   this->init_cloudParameters(cloud, data);
+  this->init_randomColor();
 
   for(int i=0; i<data.size(); i++){
     Subset subset;
@@ -133,7 +134,6 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
     cloud->nb_subset = 1;
   }
 
-
   //---------------------------
 }
 
@@ -161,11 +161,6 @@ void dataExtraction::check_data(dataFile* data){
   }
 
   //Color
-  //---> Compute a random color for each cloud
-  float Red, Green, Blue;
-  Red = float(rand()%101)/100;
-  Green = float(rand()%101)/100;
-  Blue = float(rand()%101)/100;
   this->RGB_rdm = vec4(Red, Green, Blue, 1.0f);
 
   //---> if color data
@@ -239,6 +234,16 @@ void dataExtraction::init_subsetParameters(Subset& subset, int idx){
   subset.name = "frame_" + to_string(idx);
   subset.root = vec3(0.0);
   subset.dataFormat = " ";
+
+  //---------------------------
+}
+void dataExtraction::init_randomColor(){
+  //---------------------------
+
+  //---> Compute a random color for each cloud
+  Red = float(rand()%101)/100;
+  Green = float(rand()%101)/100;
+  Blue = float(rand()%101)/100;
 
   //---------------------------
 }
