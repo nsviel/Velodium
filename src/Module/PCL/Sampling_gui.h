@@ -1,0 +1,81 @@
+#ifdef USE_PCL
+#ifndef SAMPLING_GUI_H
+#define SAMPLING_GUI_H
+
+#include "../../common.h"
+#include "Sampling.h"
+
+class GUI_sampling
+{
+public:
+  //Constructor / Destructor
+  GUI_sampling(){
+    this->samplingManager = new Sampling();
+  }
+  ~GUI_sampling();
+
+public:
+  void sampling_gui(Cloud* cloud){
+    int sizeButton = 150;
+
+    //Random sampling
+    if(ImGui::Button("Random sampling", ImVec2(sizeButton,0))){
+      if(cloud != nullptr){
+        Subset* subset = &cloud->subset[cloud->subset_selected];
+        samplingManager->sampling_random(subset);
+      }
+    }
+    ImGui::SameLine();
+    static int percent = 50;
+    ImGui::PushItemWidth(100);
+    if(ImGui::DragInt("##2", &percent, 1, 0, 100, "%d%%")){
+      samplingManager->set_sampling(percent);
+    }
+
+    //Space sampling
+    static float resolution = 0.1f;
+    if(ImGui::Button("Space sampling", ImVec2(sizeButton,0))){
+      if(cloud != nullptr){
+        Subset* subset = &cloud->subset[cloud->subset_selected];
+        samplingManager->sampling_spaceRadius(subset, resolution);
+      }
+    }
+    ImGui::SameLine();
+    ImGui::DragFloat("##5", &resolution, 0.001, 0, 100, "%.4f");
+
+    //Outliers filtering
+    if(ImGui::Button("Outlier sampling", ImVec2(sizeButton,0))){
+      if(cloud != nullptr){
+        Subset* subset = &cloud->subset[cloud->subset_selected];
+        samplingManager->sampling_outlier(subset);
+      }
+    }
+    ImGui::SameLine();
+    static float radius = 0.1;
+    ImGui::PushItemWidth(100);
+    if(ImGui::DragFloat("##4", &radius, 0.0001, 0, 2, "%.5f")){
+      samplingManager->set_sampling_radius(radius);
+    }
+
+    //Statistical filtering
+    if(ImGui::Button("Statistical sampling", ImVec2(sizeButton,0))){
+      if(cloud != nullptr){
+        Subset* subset = &cloud->subset[cloud->subset_selected];
+        samplingManager->sampling_statistical(subset);
+      }
+    }
+    ImGui::SameLine();
+    static float sampling_std = 1.0f;
+    ImGui::PushItemWidth(100);
+    if(ImGui::DragFloat("##5", &sampling_std, 0.0001, 0, 2, "%.5f")){
+      samplingManager->set_samplingstd(sampling_std);
+    }
+  }
+
+private:
+  Sampling* samplingManager;
+
+};
+
+#endif
+#endif
