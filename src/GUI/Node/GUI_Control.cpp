@@ -34,8 +34,7 @@ GUI_control::GUI_control(Engine* engine){
   this->attribManager = new Attribut();
   this->opeManager = new Operation();
 
-  this->m_transCoef_slow = configuration.TRANSFORM_Trans;
-  this->m_transCoef_fast = configuration.TRANSFORM_TransFast;
+  this->move_trans_speed = configuration.TRANSFORM_Trans;
   this->rotatDegree = configuration.TRANSFORM_Rot;
   this->wheel_mode = 0;
 
@@ -230,11 +229,9 @@ void GUI_control::control_keyboard_movement(){
 
       //Shift speed up
       if(io.KeysDown[340]){
-        transCoef = m_transCoef_fast;
-      }else{
-        transCoef = m_transCoef_slow;
+        transCoef = move_trans_speed * 5;
       }
-      
+
       // Z key
       if(io.KeysDown[87]){
         vec3 translation = vec3(transCoef,0,0);
@@ -294,6 +291,8 @@ void GUI_control::control_keyboard_movement(){
         sceneManager->update_subset_location(subset);
         break;
       }
+
+      transCoef = move_trans_speed;
     }
   }
 

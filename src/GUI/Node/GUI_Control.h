@@ -37,7 +37,7 @@ public:
   void control_keyboard_movement();
   void control_keyboard_ctrlAction();
 
-  inline float* get_transCoef(){return &m_transCoef_slow;}
+  inline float* get_transCoef(){return &move_trans_speed;}
   inline float* get_rotatDegree(){return &rotatDegree;}
   inline int* get_mouseWheelMode(){return &wheel_mode;}
 
@@ -56,7 +56,7 @@ private:
   Heatmap* heatmapManager;
 
   float transCoef;
-  float m_transCoef_slow, m_transCoef_fast;
+  float move_trans_speed;
   float rotatDegree;
   int wheel_mode;
 };

@@ -61,7 +61,6 @@ void Configuration::initialize_configStruct(){
   //Parameters
   strcpy(configuration.INIT_DefaultDirPath, "../media/");
   configuration.TRANSFORM_Trans = 0.01;
-  configuration.TRANSFORM_TransFast = 0.05;
   configuration.TRANSFORM_Rot = 5; //Degree
   configuration.CLOUD_movement = true;
 
