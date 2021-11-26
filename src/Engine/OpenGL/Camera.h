@@ -51,6 +51,8 @@ public:
   inline vec3 get_camRight(){return cam_R;}
   inline vec3* get_camPosPtr(){return &cam_pos;}
 
+  inline bool is_cameraMovON(){return cameraMovON;}
+
 private:
   Dimension* dimManager;
 

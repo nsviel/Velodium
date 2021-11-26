@@ -82,7 +82,7 @@ void GUI_control::control_mouse(){
     cameraManager->set_cameraMovON(true);
 
   }
-  if(ImGui::IsMouseReleased(1) && !io.WantCaptureMouse){
+  if(ImGui::IsMouseReleased(1) && cameraManager->is_cameraMovON()){
     //Restaure cursor position
     dimManager->set_cursorPos(cursorPos);
 
