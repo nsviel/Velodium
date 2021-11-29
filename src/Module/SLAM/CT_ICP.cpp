@@ -216,9 +216,9 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
 
   //Display keypoints
   vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(frame->xyz);
-sayHello();say(frame->ID);say(keypoint.size());
-subset->xyz.clear();
-subset->RGB.clear();
+//sayHello();say(frame->ID);say(keypoint.size());
+//subset->xyz.clear();
+//subset->RGB.clear();
   for(int i=0; i<keypoint.size(); i++){
     subset->xyz.push_back(keypoint[i]);
     subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));

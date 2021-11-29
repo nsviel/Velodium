@@ -34,7 +34,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
   float elapsed_solve = 0.0;
   float elapsed_update = 0.0;
 
-  for (int iter(0); iter < 5; iter++) {
+  for (int iter(0); iter < 2; iter++) {
     Eigen::MatrixXd A = Eigen::MatrixXd::Zero(12, 12);
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
@@ -98,11 +98,11 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
 
         Eigen::VectorXd u(12);
         u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez;
-        for (int i = 0; i < 12; i++) {
-          for (int j = 0; j < 12; j++) {
-            A(i, j) = A(i, j) + u[i] * u[j];
+        for (int j = 0; j < 12; j++) {
+          for (int k = 0; k < 12; k++) {
+            A(j, k) = A(j, k) + u[j] * u[k];
           }
-          b(i) = b(i) - u[i] * scalar;
+          b(j) = b(j) - u[j] * scalar;
         }
       }
 
@@ -147,7 +147,10 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     //Solve
     Eigen::VectorXd X = A.ldlt().solve(b);
 
-    say(X);
+
+    say("(--------)");
+    say(nb_keypoint);
+    say(A);say(b);
 
     float Rx_b = X(0);
     float Ry_b = X(1);
