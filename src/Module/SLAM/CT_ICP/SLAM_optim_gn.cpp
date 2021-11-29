@@ -12,7 +12,7 @@ extern struct Database database;
 SLAM_optim_gn::SLAM_optim_gn(){
   //---------------------------
 
-  slam_normManager = new SLAM_normal();
+  normalManager = new SLAM_normal();
 
   this->iter_max = 1;
 
@@ -20,23 +20,13 @@ SLAM_optim_gn::SLAM_optim_gn(){
 }
 SLAM_optim_gn::~SLAM_optim_gn(){}
 
-void SLAM_optim_gn::optim_GN(){
-  /*
+void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
+  //---------------------------
+
   //SLAM_optim_gn with Traj constraints
-  float ALPHA_C = options.beta_location_consistency; // 0.001;
-  float ALPHA_E = options.beta_constant_velocity; // 0.001; //no ego (0.0) is not working
+  float beta_location_consistency = 0.001;
+  float beta_constant_velocity =  0.001;
 
-  // For the 50 first frames, visit 2 voxels
-  const short nb_voxels_visited = index_frame < options.init_num_frames ? 2 : 1;
-  int number_keypoints_used = 0;
-  const int kNN = options.min_number_neighbors;
-
-  using AType = Eigen::Matrix<float, 12, 12>;
-  using bType = Eigen::Matrix<float, 12, 1>;
-  AType A;
-  bType b;
-
-  // TODO Remove chronos
   float elapsed_search_neighbors = 0.0;
   float elapsed_select_closest_neighbors = 0.0;
   float elapsed_normals = 0.0;
@@ -44,253 +34,172 @@ void SLAM_optim_gn::optim_GN(){
   float elapsed_solve = 0.0;
   float elapsed_update = 0.0;
 
-  ICPSummary summary;
+  for (int iter(0); iter < 5; iter++) {
+    Eigen::MatrixXd A = Eigen::MatrixXd::Zero(12, 12);
+    Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
-  int iter_max = index_frame < options.init_num_frames ? 15 : options.num_iters_icp;
-  for (int iter(0); iter < iter_max; iter++) {
-      A = Eigen::MatrixXd::Zero(12, 12);
-      b = Eigen::VectorXd::Zero(12);
+    int nb_keypoint = 0;
+    float total_scalar = 0;
+    float mean_scalar = 0;
 
-      number_keypoints_used = 0;
-      float total_scalar = 0;
-      float mean_scalar = 0.0;
+    //Compute frame normal
+    normalManager->compute_frameNormal(frame, map);
 
-      for (auto &keypoint: keypoints) {
-          auto start = std::chrono::steady_clock::now();
-          auto &pt_keypoint = keypoint.pt;
+    for(int i=0; i<frame->xyz.size(); i++){
+      Eigen::Vector3d point = frame->xyz[i];
+      Eigen::Vector3d point_raw = frame->xyz_raw[i];
+      Eigen::Vector3d normal = frame->Nxyz[i];
+      Eigen::Vector3d iNN = frame->NN[i];
+      float ts_n = frame->ts_n[i];
+      float a2D = frame->a2D[i];
 
-          // Neighborhood search
-          vector<Eigen::Vector3d> vector_neighbors = search_neighbors(voxels_map, pt_keypoint,
-                                                            nb_voxels_visited, options.size_voxelMap,
-                                                            options.max_number_neighbors);
-          auto step1 = std::chrono::steady_clock::now();
-          std::chrono::duration<float> _elapsed_search_neighbors = step1 - start;
-          elapsed_search_neighbors += _elapsed_search_neighbors.count() * 1000.0;
+      say("---");
+      say(iter);
+      say(point);
 
+      float PTP_distance = 0;
+      for(int j=0; j<3; j++){
+        PTP_distance += normal[j] * (point[j] - iNN[j]);
+      }
 
-          if (vector_neighbors.size() < kNN) {
-              continue;
+      if (fabs(PTP_distance) < 0.5) {
+        Eigen::Vector3d iNN_N = a2D * a2D * normal;
+
+        float scalar = 0;
+        for(int j=0; j<3; j++){
+          scalar += iNN_N[j] * (point[j] - iNN[j]);
+        }
+
+        total_scalar = total_scalar + scalar * scalar;
+        mean_scalar = mean_scalar + fabs(scalar);
+        nb_keypoint++;
+
+        Eigen::Matrix3d rotat_b = frame->rotat_b;
+        Eigen::Matrix3d rotat_e = frame->rotat_e;
+
+        Eigen::Vector3d origin_b = rotat_b * point_raw;
+        Eigen::Vector3d origin_e = rotat_e * point_raw;
+
+        float cbx = (1 - ts_n) * (origin_b[1] * iNN_N[2] - origin_b[2] * iNN_N[1]);
+        float cby = (1 - ts_n) * (origin_b[2] * iNN_N[0] - origin_b[0] * iNN_N[2]);
+        float cbz = (1 - ts_n) * (origin_b[0] * iNN_N[1] - origin_b[1] * iNN_N[0]);
+
+        float nbx = (1 - ts_n) * iNN_N[0];
+        float nby = (1 - ts_n) * iNN_N[1];
+        float nbz = (1 - ts_n) * iNN_N[2];
+
+        float cex = ts_n * (origin_e[1] * iNN_N[2] - origin_e[2] * iNN_N[1]);
+        float cey = ts_n * (origin_e[2] * iNN_N[0] - origin_e[0] * iNN_N[2]);
+        float cez = ts_n * (origin_e[0] * iNN_N[1] - origin_e[1] * iNN_N[0]);
+
+        float nex = ts_n * iNN_N[0];
+        float ney = ts_n * iNN_N[1];
+        float nez = ts_n * iNN_N[2];
+
+        Eigen::VectorXd u(12);
+        u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez;
+        for (int i = 0; i < 12; i++) {
+          for (int j = 0; j < 12; j++) {
+            A(i, j) = A(i, j) + u[i] * u[j];
           }
-
-          auto step2 = std::chrono::steady_clock::now();
-          std::chrono::duration<float> _elapsed_neighbors_selection = step2 - step1;
-          elapsed_select_closest_neighbors += _elapsed_neighbors_selection.count() * 1000.0;
-
-          // Compute normals from neighbors
-          auto neighborhood = compute_neighborhood_distribution(vector_neighbors);
-          float planarity_weight = neighborhood.a2D;
-          auto &normal = neighborhood.normal;
-
-          if (normal.dot(trajectory[index_frame].trans_b - pt_keypoint) < 0) {
-              normal = -1.0 * normal;
-          }
-
-          float ts_n = keypoint.ts_n;
-          float weight = planarity_weight *
-                          planarity_weight; //planarity_weight**2 much better than planarity_weight (planarity_weight**3 is not working)
-          Eigen::Vector3d closest_pt_normal = weight * normal;
-
-          Eigen::Vector3d closest_point = vector_neighbors[0];
-
-          float dist_to_plane = normal[0] * (pt_keypoint[0] - closest_point[0]) +
-                                 normal[1] * (pt_keypoint[1] - closest_point[1]) +
-                                 normal[2] * (pt_keypoint[2] - closest_point[2]);
-
-          auto step3 = std::chrono::steady_clock::now();
-          std::chrono::duration<float> _elapsed_normals = step3 - step2;
-          elapsed_normals += _elapsed_normals.count() * 1000.0;
-
-          // std::cout << "dist_to_plane : " << dist_to_plane << std::endl;
-
-          if (fabs(dist_to_plane) < options.max_dist_to_plane_ct_icp) {
-
-              float scalar = closest_pt_normal[0] * (pt_keypoint[0] - closest_point[0]) +
-                              closest_pt_normal[1] * (pt_keypoint[1] - closest_point[1]) +
-                              closest_pt_normal[2] * (pt_keypoint[2] - closest_point[2]);
-              total_scalar = total_scalar + scalar * scalar;
-              mean_scalar = mean_scalar + fabs(scalar);
-              number_keypoints_used++;
-
-
-              Eigen::Vector3d frame_idx_previous_origin_begin =
-                      trajectory[index_frame].rotat_b * keypoint.raw_pt;
-              Eigen::Vector3d frame_idx_previous_origin_end =
-                      trajectory[index_frame].rotat_e * keypoint.raw_pt;
-
-              float cbx =
-                      (1 - ts_n) * (frame_idx_previous_origin_begin[1] * closest_pt_normal[2] -
-                                               frame_idx_previous_origin_begin[2] * closest_pt_normal[1]);
-              float cby =
-                      (1 - ts_n) * (frame_idx_previous_origin_begin[2] * closest_pt_normal[0] -
-                                               frame_idx_previous_origin_begin[0] * closest_pt_normal[2]);
-              float cbz =
-                      (1 - ts_n) * (frame_idx_previous_origin_begin[0] * closest_pt_normal[1] -
-                                               frame_idx_previous_origin_begin[1] * closest_pt_normal[0]);
-
-              float nbx = (1 - ts_n) * closest_pt_normal[0];
-              float nby = (1 - ts_n) * closest_pt_normal[1];
-              float nbz = (1 - ts_n) * closest_pt_normal[2];
-
-              float cex = (ts_n) * (frame_idx_previous_origin_end[1] * closest_pt_normal[2] -
-                                                frame_idx_previous_origin_end[2] * closest_pt_normal[1]);
-              float cey = (ts_n) * (frame_idx_previous_origin_end[2] * closest_pt_normal[0] -
-                                                frame_idx_previous_origin_end[0] * closest_pt_normal[2]);
-              float cez = (ts_n) * (frame_idx_previous_origin_end[0] * closest_pt_normal[1] -
-                                                frame_idx_previous_origin_end[1] * closest_pt_normal[0]);
-
-              float nex = (ts_n) * closest_pt_normal[0];
-              float ney = (ts_n) * closest_pt_normal[1];
-              float nez = (ts_n) * closest_pt_normal[2];
-
-              Eigen::VectorXd u(12);
-              u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez;
-              for (int i = 0; i < 12; i++) {
-                  for (int j = 0; j < 12; j++) {
-                      A(i, j) = A(i, j) + u[i] * u[j];
-                  }
-                  b(i) = b(i) - u[i] * scalar;
-              }
-
-
-              auto step4 = std::chrono::steady_clock::now();
-              std::chrono::duration<float> _elapsed_A = step4 - step3;
-              elapsed_search_neighbors += _elapsed_A.count() * 1000.0;
-          }
+          b(i) = b(i) - u[i] * scalar;
+        }
       }
 
+    }
 
-      if (number_keypoints_used < 100) {
-          std::stringstream ss_out;
-          ss_out << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << std::endl;
-          ss_out << "[CT_ICP]Number_of_residuals : " << number_keypoints_used << std::endl;
+    if (nb_keypoint < 100) {
+        cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
+        cout << "[CT_ICP]Number_of_residuals : " << nb_keypoint << endl;
+    }
 
-          summary.error_log = ss_out.str();
-          if (options.debug_print)
-              std::cout << summary.error_log;
+    // Normalize equation
+    for (int i(0); i < 12; i++) {
+        for (int j(0); j < 12; j++) {
+            A(i, j) = A(i, j) / nb_keypoint;
+        }
+        b(i) = b(i) / nb_keypoint;
+    }
 
-          summary.success = false;
-          return summary;
-      }
+    //Add constraints in trajectory
+    if (frame->ID > 1){
+      Eigen::Vector3d trans_b = frame->trans_b;
+      Eigen::Vector3d trans_e = frame->trans_e;
+      Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
-      auto start = std::chrono::steady_clock::now();
+      Eigen::Vector3d diff_traj = trans_b - trans_e_m1;
+      A(3, 3) = A(3, 3) + beta_location_consistency;
+      A(4, 4) = A(4, 4) + beta_location_consistency;
+      A(5, 5) = A(5, 5) + beta_location_consistency;
+      b(3) = b(3) - beta_location_consistency * diff_traj(0);
+      b(4) = b(4) - beta_location_consistency * diff_traj(1);
+      b(5) = b(5) - beta_location_consistency * diff_traj(2);
 
+      Eigen::Vector3d diff_ego = trans_e - trans_b - trans_e_m1 + trans_b;
+      A(9, 9) = A(9, 9) + beta_constant_velocity;
+      A(10, 10) = A(10, 10) + beta_constant_velocity;
+      A(11, 11) = A(11, 11) + beta_constant_velocity;
+      b(9) = b(9) - beta_constant_velocity * diff_ego(0);
+      b(10) = b(10) - beta_constant_velocity * diff_ego(1);
+      b(11) = b(11) - beta_constant_velocity * diff_ego(2);
+    }
 
-      // Normalize equation
-      for (int i(0); i < 12; i++) {
-          for (int j(0); j < 12; j++) {
-              A(i, j) = A(i, j) / number_keypoints_used;
-          }
-          b(i) = b(i) / number_keypoints_used;
-      }
+    //Solve
+    Eigen::VectorXd X = A.ldlt().solve(b);
 
-      //Add constraints in trajectory
-      if (index_frame > 1) //no constraints for frame_index == 1
-      {
-          Eigen::Vector3d diff_traj = trajectory[index_frame].trans_b - trajectory[index_frame - 1].trans_e;
-          A(3, 3) = A(3, 3) + ALPHA_C;
-          A(4, 4) = A(4, 4) + ALPHA_C;
-          A(5, 5) = A(5, 5) + ALPHA_C;
-          b(3) = b(3) - ALPHA_C * diff_traj(0);
-          b(4) = b(4) - ALPHA_C * diff_traj(1);
-          b(5) = b(5) - ALPHA_C * diff_traj(2);
+    float Rx_begin = X(0);
+    float Ry_begin = X(1);
+    float Rz_begin = X(2);
+    Eigen::Matrix3d gn_rotat_b;
+    gn_rotat_b(0, 0) = cos(Rz_begin) * cos(Ry_begin);
+    gn_rotat_b(0, 1) = -sin(Rz_begin) * cos(Rx_begin) + cos(Rz_begin) * sin(Ry_begin) * sin(Rx_begin);
+    gn_rotat_b(0, 2) = sin(Rz_begin) * sin(Rx_begin) + cos(Rz_begin) * sin(Ry_begin) * cos(Rx_begin);
+    gn_rotat_b(1, 0) = sin(Rz_begin) * cos(Ry_begin);
+    gn_rotat_b(1, 1) = cos(Rz_begin) * cos(Rx_begin) + sin(Rz_begin) * sin(Ry_begin) * sin(Rx_begin);
+    gn_rotat_b(1, 2) = -cos(Rz_begin) * sin(Rx_begin) + sin(Rz_begin) * sin(Ry_begin) * cos(Rx_begin);
+    gn_rotat_b(2, 0) = -sin(Ry_begin);
+    gn_rotat_b(2, 1) = cos(Ry_begin) * sin(Rx_begin);
+    gn_rotat_b(2, 2) = cos(Ry_begin) * cos(Rx_begin);
+    Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
 
-          Eigen::Vector3d diff_ego = trajectory[index_frame].trans_e - trajectory[index_frame].trans_b -
-                                     trajectory[index_frame - 1].trans_e + trajectory[index_frame - 1].trans_b;
-          A(9, 9) = A(9, 9) + ALPHA_E;
-          A(10, 10) = A(10, 10) + ALPHA_E;
-          A(11, 11) = A(11, 11) + ALPHA_E;
-          b(9) = b(9) - ALPHA_E * diff_ego(0);
-          b(10) = b(10) - ALPHA_E * diff_ego(1);
-          b(11) = b(11) - ALPHA_E * diff_ego(2);
-      }
+    float beta_constant_velocitynd = X(6);
+    float beta_end = X(7);
+    float gamma_end = X(8);
+    Eigen::Matrix3d gn_rotat_e;
+    gn_rotat_e(0, 0) = cos(gamma_end) * cos(beta_end);
+    gn_rotat_e(0, 1) = -sin(gamma_end) * cos(beta_constant_velocitynd) + cos(gamma_end) * sin(beta_end) * sin(beta_constant_velocitynd);
+    gn_rotat_e(0, 2) = sin(gamma_end) * sin(beta_constant_velocitynd) + cos(gamma_end) * sin(beta_end) * cos(beta_constant_velocitynd);
+    gn_rotat_e(1, 0) = sin(gamma_end) * cos(beta_end);
+    gn_rotat_e(1, 1) = cos(gamma_end) * cos(beta_constant_velocitynd) + sin(gamma_end) * sin(beta_end) * sin(beta_constant_velocitynd);
+    gn_rotat_e(1, 2) = -cos(gamma_end) * sin(beta_constant_velocitynd) + sin(gamma_end) * sin(beta_end) * cos(beta_constant_velocitynd);
+    gn_rotat_e(2, 0) = -sin(beta_end);
+    gn_rotat_e(2, 1) = cos(beta_end) * sin(beta_constant_velocitynd);
+    gn_rotat_e(2, 2) = cos(beta_end) * cos(beta_constant_velocitynd);
+    Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
+    frame->rotat_b = gn_rotat_b * frame->rotat_b;
+    frame->trans_b = gn_trans_b + frame->trans_b;
+    frame->rotat_e = gn_rotat_e * frame->rotat_e;
+    frame->trans_e = gn_trans_e + frame->trans_e;
 
-      //Solve
-      Eigen::VectorXd x_bundle = A.ldlt().solve(b);
+    //Update keypoints
+    for(int i=0; i<frame->xyz.size(); i++){
+      Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+      Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+      Eigen::Vector3d trans_b = frame->trans_b;
+      Eigen::Vector3d trans_e = frame->trans_e;
+      Eigen::Vector3d point_raw = frame->xyz_raw[i];
+      float ts_n = frame->ts_n[i];
 
-      float alpha_begin = x_bundle(0);
-      float beta_begin = x_bundle(1);
-      float gamma_begin = x_bundle(2);
-      Eigen::Matrix3d rotation_begin;
-      rotation_begin(0, 0) = cos(gamma_begin) * cos(beta_begin);
-      rotation_begin(0, 1) =
-              -sin(gamma_begin) * cos(alpha_begin) + cos(gamma_begin) * sin(beta_begin) * sin(alpha_begin);
-      rotation_begin(0, 2) =
-              sin(gamma_begin) * sin(alpha_begin) + cos(gamma_begin) * sin(beta_begin) * cos(alpha_begin);
-      rotation_begin(1, 0) = sin(gamma_begin) * cos(beta_begin);
-      rotation_begin(1, 1) =
-              cos(gamma_begin) * cos(alpha_begin) + sin(gamma_begin) * sin(beta_begin) * sin(alpha_begin);
-      rotation_begin(1, 2) =
-              -cos(gamma_begin) * sin(alpha_begin) + sin(gamma_begin) * sin(beta_begin) * cos(alpha_begin);
-      rotation_begin(2, 0) = -sin(beta_begin);
-      rotation_begin(2, 1) = cos(beta_begin) * sin(alpha_begin);
-      rotation_begin(2, 2) = cos(beta_begin) * cos(alpha_begin);
-      Eigen::Vector3d translation_begin = Eigen::Vector3d(x_bundle(3), x_bundle(4), x_bundle(5));
+      Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
+      Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+      frame->xyz[i] = R * point_raw + t;
+    }
 
-      float alpha_end = x_bundle(6);
-      float beta_end = x_bundle(7);
-      float gamma_end = x_bundle(8);
-      Eigen::Matrix3d rotation_end;
-      rotation_end(0, 0) = cos(gamma_end) * cos(beta_end);
-      rotation_end(0, 1) = -sin(gamma_end) * cos(alpha_end) + cos(gamma_end) * sin(beta_end) * sin(alpha_end);
-      rotation_end(0, 2) = sin(gamma_end) * sin(alpha_end) + cos(gamma_end) * sin(beta_end) * cos(alpha_end);
-      rotation_end(1, 0) = sin(gamma_end) * cos(beta_end);
-      rotation_end(1, 1) = cos(gamma_end) * cos(alpha_end) + sin(gamma_end) * sin(beta_end) * sin(alpha_end);
-      rotation_end(1, 2) = -cos(gamma_end) * sin(alpha_end) + sin(gamma_end) * sin(beta_end) * cos(alpha_end);
-      rotation_end(2, 0) = -sin(beta_end);
-      rotation_end(2, 1) = cos(beta_end) * sin(alpha_end);
-      rotation_end(2, 2) = cos(beta_end) * cos(alpha_end);
-      Eigen::Vector3d translation_end = Eigen::Vector3d(x_bundle(9), x_bundle(10), x_bundle(11));
-
-      trajectory[index_frame].rotat_b = rotation_begin * trajectory[index_frame].rotat_b;
-      trajectory[index_frame].trans_b = trajectory[index_frame].trans_b + translation_begin;
-      trajectory[index_frame].rotat_e = rotation_end * trajectory[index_frame].rotat_e;
-      trajectory[index_frame].trans_e = trajectory[index_frame].trans_e + translation_end;
-
-      auto solve_step = std::chrono::steady_clock::now();
-      std::chrono::duration<float> _elapsed_solve = solve_step - start;
-      elapsed_solve += _elapsed_solve.count() * 1000.0;
-
-
-      //Update keypoints
-      for (auto &keypoint: keypoints) {
-          Eigen::Quaterniond q_begin = Eigen::Quaterniond(trajectory[index_frame].rotat_b);
-          Eigen::Quaterniond q_end = Eigen::Quaterniond(trajectory[index_frame].rotat_e);
-          Eigen::Vector3d t_begin = trajectory[index_frame].trans_b;
-          Eigen::Vector3d t_end = trajectory[index_frame].trans_e;
-          float ts_n = keypoint.ts_n;
-          Eigen::Quaterniond q = q_begin.slerp(ts_n, q_end);
-          q.normalize();
-          Eigen::Matrix3d R = q.toRotationMatrix();
-          Eigen::Vector3d t = (1.0 - ts_n) * t_begin + ts_n * t_end;
-          keypoint.pt = R * keypoint.raw_pt + t;
-      }
-      auto update_step = std::chrono::steady_clock::now();
-      std::chrono::duration<float> _elapsed_update = update_step - solve_step;
-      elapsed_update += _elapsed_update.count() * 1000.0;
-
-
-      if ((index_frame > 1) && (x_bundle.norm() < options.threshold_orientation_norm)) {
-          summary.success = true;
-          summary.num_residuals_used = number_keypoints_used;
-
-          return summary;
-      }
   }
 
-  if (options.debug_print) {
-      std::cout << "Elapsed Normals: " << elapsed_normals << std::endl;
-      std::cout << "Elapsed Search Neighbors: " << elapsed_search_neighbors << std::endl;
-      std::cout << "Elapsed A Construction: " << elapsed_A_construction << std::endl;
-      std::cout << "Elapsed Select closest: " << elapsed_select_closest_neighbors << std::endl;
-      std::cout << "Elapsed Solve: " << elapsed_solve << std::endl;
-      std::cout << "Elapsed Solve: " << elapsed_update << std::endl;
-      std::cout << "Number iterations CT-ICP : " << options.num_iters_icp << std::endl;
-  }
-  summary.success = true;
-  summary.num_residuals_used = number_keypoints_used;
-
-  return summary;*/
+  //---------------------------
 }
 
 void SLAM_optim_gn::frame_update(Frame* frame){

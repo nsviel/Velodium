@@ -24,8 +24,8 @@ CT_ICP::CT_ICP(){
   gnManager = new SLAM_optim_gn();
   normalManager = new SLAM_normal();
 
-  this->solver_ceres = true;
-  this->solver_GN = false;
+  this->solver_ceres = false;
+  this->solver_GN = true;
   this->sampling_size = 0.1;
   this->size_voxelMap = 0.5f;
   this->voxel_sizeMax = 20;
@@ -190,7 +190,7 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
 
   if(frame->ID >= 2){
     if(solver_GN){
-      gnManager->optim_GN();
+      gnManager->optim_GN(frame, frame_m1, map);
     }else if(solver_ceres){
       ceresManager->optim_test(frame, frame_m1, map);
     }

@@ -209,6 +209,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->nb_subset = data.size();
   cloud->subset_selected = 0;
   cloud->heatmap = false;
+  cloud->point_size = 1;
 
   //Save path
   string absPath = std::experimental::filesystem::current_path();

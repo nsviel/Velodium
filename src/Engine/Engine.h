@@ -37,7 +37,6 @@ public:
   inline Glyphs* get_glyphManager(){return glyphManager;}
   inline Dimension* get_dimManager(){return dimManager;}
   inline Camera* get_CameraManager(){return cameraManager;}
-  inline void set_pointSize(int value){this->pointSize = value;}
 
 private:
   Dimension* dimManager;
@@ -46,7 +45,6 @@ private:
   Camera* cameraManager;
   GUI* guiManager;
 
-  int pointSize;
   uint modelID, comID;
 };
 

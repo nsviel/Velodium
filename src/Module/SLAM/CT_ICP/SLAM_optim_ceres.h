@@ -39,7 +39,7 @@ private:
   void ceres_solve(ceres::Problem* ceres_problem);
 
 private:
-  SLAM_normal* slam_normManager;
+  SLAM_normal* normalManager;
 
   int nb_residual;
   int iter_max;

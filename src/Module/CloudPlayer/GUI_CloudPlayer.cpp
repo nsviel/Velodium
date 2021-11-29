@@ -143,6 +143,11 @@ void GUI_CloudPlayer::parameter(){
 
     }
 
+    if(cloud != nullptr){
+      int* point_size = &cloud->point_size;
+      ImGui::SliderInt("Point size", point_size, 1, 20);
+    }
+
     bool* all_frame_visible = odoManager->get_all_frame_visible();
     if(ImGui::Checkbox("All frame visible", all_frame_visible)){
       if(cloud != nullptr){

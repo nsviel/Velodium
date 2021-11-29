@@ -12,7 +12,7 @@ extern struct Database database;
 SLAM_optim_ceres::SLAM_optim_ceres(){
   //---------------------------
 
-  slam_normManager = new SLAM_normal();
+  normalManager = new SLAM_normal();
 
   this->iter_max = 1;
 
@@ -69,7 +69,7 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap& map){
     this->frame_update(frame);
 
     //Compute frame normal
-    slam_normManager->compute_frameNormal(frame, map);
+    normalManager->compute_frameNormal(frame, map);
 
     //Parameter block
     ceres::Problem* ceres_problem = new ceres::Problem();
@@ -133,7 +133,7 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
     this->frame_update(frame);
 
     //Compute frame normal
-    slam_normManager->compute_frameNormal(frame, map);
+    normalManager->compute_frameNormal(frame, map);
 
     //Parameter block
     ceres::Problem* ceres_problem = new ceres::Problem();

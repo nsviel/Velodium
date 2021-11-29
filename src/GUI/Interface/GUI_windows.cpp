@@ -1150,14 +1150,14 @@ void GUI_windows::window_selection(){
       if(cloud != nullptr && selectionPtON){
         heatmapManager->set_Heatmap_all(true);
         selectionManager->set_markMode("sphere");
-        engineManager->set_pointSize(10);
+        cloud->point_size = 10;
         cloud_movement = false;
       }
 
       if(!selectionPtON){
         heatmapManager->set_Heatmap_all(false);
         selectionManager->set_markMode("cube");
-        engineManager->set_pointSize(1);
+        cloud->point_size = 1;
         cloud_movement = true;
       }
     }

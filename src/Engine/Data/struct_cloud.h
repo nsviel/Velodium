@@ -68,6 +68,7 @@ struct Cloud{ //Global set of the cloud
   int nb_subset;
   int nb_point;
   int subset_selected;
+  int point_size;
   bool visibility;
   bool heatmap;
 

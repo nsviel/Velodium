@@ -20,7 +20,7 @@ public:
   ~SLAM_optim_gn();
 
 public:
-  void optim_GN();
+  void optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map);
 
   void frame_update(Frame* frame);
   void frame_update_secured(Frame* frame);
@@ -29,7 +29,7 @@ public:
   inline int* get_iter_max(){return &iter_max;}
 
 private:
-  SLAM_normal* slam_normManager;
+  SLAM_normal* normalManager;
 
   int nb_residual;
   int iter_max;

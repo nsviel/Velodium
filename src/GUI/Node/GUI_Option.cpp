@@ -247,12 +247,12 @@ void GUI_option::option_parameters(){
     if (ImGui::ArrowButton("##left", ImGuiDir_Left)){
       cpt_pts--;
       if(cpt_pts<=1) cpt_pts=1;
-      engineManager->set_pointSize(cpt_pts);
+      cloud->point_size = cpt_pts;
     }
     ImGui::SameLine(0.0f, spacing);
     if (ImGui::ArrowButton("##right", ImGuiDir_Right)){
       cpt_pts++;
-      engineManager->set_pointSize(cpt_pts);
+      cloud->point_size = cpt_pts;
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
@@ -299,8 +299,8 @@ void GUI_option::option_mode(){
         glyphManager->set_glyph_color("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
         *backgColor = vec3(0,0,0);
       }else{
-        glyphManager->set_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 0.0f));
-        glyphManager->set_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 0.0f));
+        glyphManager->set_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        glyphManager->set_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
         *backgColor = vec3(1.0f,1.0f,1.0f);
       }
     }

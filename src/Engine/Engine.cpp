@@ -24,8 +24,6 @@ Engine::Engine(Dimension* dim, Camera* control){
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
-  this->pointSize = 2;
-
   glyphManager->init();
 
   //---------------------------
@@ -72,11 +70,11 @@ void Engine::draw_clouds(){
   list<Cloud*>* list_cloud = database.list_cloud;
   //---------------------------
 
-  glPointSize(pointSize);
-
   //By cloud
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
+
+    glPointSize(cloud->point_size);
 
     //By subset
     if(cloud->visibility){
