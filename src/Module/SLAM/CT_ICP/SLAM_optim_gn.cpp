@@ -53,9 +53,9 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
       float ts_n = frame->ts_n[i];
       float a2D = frame->a2D[i];
 
-      say("---");
-      say(iter);
-      say(point);
+      //say("---");
+      //say(iter);
+      //say(point);
 
       float PTP_distance = 0;
       for(int j=0; j<3; j++){
@@ -147,34 +147,36 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     //Solve
     Eigen::VectorXd X = A.ldlt().solve(b);
 
-    float Rx_begin = X(0);
-    float Ry_begin = X(1);
-    float Rz_begin = X(2);
+    say(X);
+
+    float Rx_b = X(0);
+    float Ry_b = X(1);
+    float Rz_b = X(2);
     Eigen::Matrix3d gn_rotat_b;
-    gn_rotat_b(0, 0) = cos(Rz_begin) * cos(Ry_begin);
-    gn_rotat_b(0, 1) = -sin(Rz_begin) * cos(Rx_begin) + cos(Rz_begin) * sin(Ry_begin) * sin(Rx_begin);
-    gn_rotat_b(0, 2) = sin(Rz_begin) * sin(Rx_begin) + cos(Rz_begin) * sin(Ry_begin) * cos(Rx_begin);
-    gn_rotat_b(1, 0) = sin(Rz_begin) * cos(Ry_begin);
-    gn_rotat_b(1, 1) = cos(Rz_begin) * cos(Rx_begin) + sin(Rz_begin) * sin(Ry_begin) * sin(Rx_begin);
-    gn_rotat_b(1, 2) = -cos(Rz_begin) * sin(Rx_begin) + sin(Rz_begin) * sin(Ry_begin) * cos(Rx_begin);
-    gn_rotat_b(2, 0) = -sin(Ry_begin);
-    gn_rotat_b(2, 1) = cos(Ry_begin) * sin(Rx_begin);
-    gn_rotat_b(2, 2) = cos(Ry_begin) * cos(Rx_begin);
+    gn_rotat_b(0, 0) = cos(Rz_b) * cos(Ry_b);
+    gn_rotat_b(0, 1) = -sin(Rz_b) * cos(Rx_b) + cos(Rz_b) * sin(Ry_b) * sin(Rx_b);
+    gn_rotat_b(0, 2) = sin(Rz_b) * sin(Rx_b) + cos(Rz_b) * sin(Ry_b) * cos(Rx_b);
+    gn_rotat_b(1, 0) = sin(Rz_b) * cos(Ry_b);
+    gn_rotat_b(1, 1) = cos(Rz_b) * cos(Rx_b) + sin(Rz_b) * sin(Ry_b) * sin(Rx_b);
+    gn_rotat_b(1, 2) = -cos(Rz_b) * sin(Rx_b) + sin(Rz_b) * sin(Ry_b) * cos(Rx_b);
+    gn_rotat_b(2, 0) = -sin(Ry_b);
+    gn_rotat_b(2, 1) = cos(Ry_b) * sin(Rx_b);
+    gn_rotat_b(2, 2) = cos(Ry_b) * cos(Rx_b);
     Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
 
-    float beta_constant_velocitynd = X(6);
-    float beta_end = X(7);
-    float gamma_end = X(8);
+    float Rx_e = X(6);
+    float Ry_e = X(7);
+    float Rz_e = X(8);
     Eigen::Matrix3d gn_rotat_e;
-    gn_rotat_e(0, 0) = cos(gamma_end) * cos(beta_end);
-    gn_rotat_e(0, 1) = -sin(gamma_end) * cos(beta_constant_velocitynd) + cos(gamma_end) * sin(beta_end) * sin(beta_constant_velocitynd);
-    gn_rotat_e(0, 2) = sin(gamma_end) * sin(beta_constant_velocitynd) + cos(gamma_end) * sin(beta_end) * cos(beta_constant_velocitynd);
-    gn_rotat_e(1, 0) = sin(gamma_end) * cos(beta_end);
-    gn_rotat_e(1, 1) = cos(gamma_end) * cos(beta_constant_velocitynd) + sin(gamma_end) * sin(beta_end) * sin(beta_constant_velocitynd);
-    gn_rotat_e(1, 2) = -cos(gamma_end) * sin(beta_constant_velocitynd) + sin(gamma_end) * sin(beta_end) * cos(beta_constant_velocitynd);
-    gn_rotat_e(2, 0) = -sin(beta_end);
-    gn_rotat_e(2, 1) = cos(beta_end) * sin(beta_constant_velocitynd);
-    gn_rotat_e(2, 2) = cos(beta_end) * cos(beta_constant_velocitynd);
+    gn_rotat_e(0, 0) = cos(Rz_e) * cos(Ry_e);
+    gn_rotat_e(0, 1) = -sin(Rz_e) * cos(Rx_e) + cos(Rz_e) * sin(Ry_e) * sin(Rx_e);
+    gn_rotat_e(0, 2) = sin(Rz_e) * sin(Rx_e) + cos(Rz_e) * sin(Ry_e) * cos(Rx_e);
+    gn_rotat_e(1, 0) = sin(Rz_e) * cos(Ry_e);
+    gn_rotat_e(1, 1) = cos(Rz_e) * cos(Rx_e) + sin(Rz_e) * sin(Ry_e) * sin(Rx_e);
+    gn_rotat_e(1, 2) = -cos(Rz_e) * sin(Rx_e) + sin(Rz_e) * sin(Ry_e) * cos(Rx_e);
+    gn_rotat_e(2, 0) = -sin(Ry_e);
+    gn_rotat_e(2, 1) = cos(Ry_e) * sin(Rx_e);
+    gn_rotat_e(2, 2) = cos(Ry_e) * cos(Rx_e);
     Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
     frame->rotat_b = gn_rotat_b * frame->rotat_b;
