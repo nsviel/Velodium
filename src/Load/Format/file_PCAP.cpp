@@ -68,6 +68,7 @@ vector<dataFile*> filePCAP::Loader(string pathFile){
   UDP_frame frameManager;
 
   if(vlp16){
+    int cpt = 0;
     UDP_parser_VLP16 udpManager;
     for(int i=0; i<file_packets.size(); i++){
       udpPacket* cloud = udpManager.parse_UDP_packet(file_packets[i]);
@@ -77,6 +78,7 @@ vector<dataFile*> filePCAP::Loader(string pathFile){
         udpPacket* frame = frameManager.get_endedFrame();
         dataFile* frame_data = new dataFile();
 
+        frame_data->name = "frame_" + to_string(cpt); cpt++;
         frame_data->path = pathFile;
         frame_data->size = frame->xyz.size();
 

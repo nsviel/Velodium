@@ -184,6 +184,9 @@ void GUI_menuBar::MenuBar_fastScene(){
   if(ImGui::Button("PCAP file", ImVec2(100,0))){
     opeManager->fastScene(2);
   }
+  if(ImGui::Button("Frames move", ImVec2(100,0))){
+    opeManager->fastScene(3);
+  }
 
   //---------------------------
 }

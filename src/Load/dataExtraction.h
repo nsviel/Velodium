@@ -24,7 +24,7 @@ private:
   //Subfunctions
   void check_data(dataFile* data);
   void init_cloudParameters(Cloud* cloud, vector<dataFile*> data);
-  void init_subsetParameters(Subset& subset, int i);
+  void init_subsetParameters(Subset& subset, string path, int i);
   void init_randomColor();
 
   void extract_Location(Subset& subset, vector<vec3>& locationOBJ);

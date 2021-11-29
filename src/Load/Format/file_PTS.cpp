@@ -21,6 +21,7 @@ filePTS::~filePTS(){}
 //Main functions
 dataFile* filePTS::Loader(string pathFile){
   data_out = new dataFile();
+  data_out->name = "";
   data_out->path = pathFile;
   //---------------------------
 

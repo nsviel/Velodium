@@ -31,7 +31,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     Subset subset;
 
     this->check_data(data[i]);
-    this->init_subsetParameters(subset, i);
+    this->init_subsetParameters(subset, data[i]->name, i);
 
     //Subset data
     this->extract_Location(subset, data[i]->location);
@@ -62,7 +62,7 @@ Subset dataExtraction::extractData(udpPacket* data){
   Subset subset;
   //---------------------------
 
-  this->init_subsetParameters(subset, 0);
+  this->init_subsetParameters(subset, "frame", 0);
 
   //Subset data
   this->extract_Location(subset, data->xyz);
@@ -81,7 +81,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   //---------------------------
 
   this->check_data(data);
-  this->init_subsetParameters(subset, cloud->nb_subset);
+  this->init_subsetParameters(subset, data->name, cloud->nb_subset);
 
   //Subset data
   this->extract_Location(subset, data->location);
@@ -180,6 +180,14 @@ void dataExtraction::check_data(dataFile* data){
     }
   }
 
+  //Name
+  string path = data->path;
+  if(data->name == ""){
+    string name = path.substr(path.find_last_of("/\\") + 1);
+    name =  name.substr(0, name.find_last_of("/"));
+    data->name = name.substr(0, name.find_last_of("."));
+  }
+
   //---------------------------
 }
 void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
@@ -222,7 +230,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void dataExtraction::init_subsetParameters(Subset& subset, int idx){
+void dataExtraction::init_subsetParameters(Subset& subset, string name, int idx){
   //---------------------------
 
   //Subset VAO
@@ -231,8 +239,8 @@ void dataExtraction::init_subsetParameters(Subset& subset, int idx){
   glBindVertexArray(VAO);
   subset.VAO = VAO;
 
-  //Path name
-  subset.name = "frame_" + to_string(idx);
+  //Other stuff
+  subset.name = name;
   subset.root = vec3(0.0);
   subset.dataFormat = " ";
 

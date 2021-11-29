@@ -19,6 +19,7 @@ public:
   void fastScene(int mode);
   void loading();
   void loading_frames();
+  void loading_directoryFrames(string path);
   void selectDirectory(string& path);
   void loading_sampling();
   void loading_treatment();

@@ -11,6 +11,7 @@
 #include "../Specific/fct_opengl.h"
 
 #include <experimental/filesystem>
+#include <set>
 
 extern struct Database database;
 
@@ -64,6 +65,11 @@ void Operation::fastScene(int mode){
     case 2:{//PCAP
       sceneManager->removeCloud_all();
       loaderManager->load_cloud("../media/fastScene/pcap_test.pcap");
+      break;
+    }
+    case 3:{//Frames in movement
+      sceneManager->removeCloud_all();
+      this->loading_directoryFrames("../media/frames/");
       break;
     }
   }
@@ -158,6 +164,36 @@ void Operation::loading_frames(){
 
     //Load files
     loaderManager->load_cloud_byFrame(CloudPaths);
+  }
+
+  //---------------------------
+}
+void Operation::loading_directoryFrames(string path){
+  //---------------------------
+
+  //Supress unwanted line break
+  if (path.find('\n')){
+    path.erase(std::remove(path.begin(), path.end(), '\n'), path.end());
+  }
+
+  //Set order by name
+  std::set<std::experimental::filesystem::path> sorted_by_name;
+  for (auto &entry : std::experimental::filesystem::directory_iterator(path)){
+   sorted_by_name.insert(entry.path());
+  }
+
+  //Get all frame path
+  vector<string> path_vec;
+  for(const auto& entry : sorted_by_name){
+    string path_file = entry.c_str();
+
+    if (path_file.find(".ply") != string::npos){
+      path_vec.push_back(path_file);
+    }
+  }
+
+  if(path_vec.size() != 0){
+    loaderManager->load_cloud_byFrame(path_vec);
   }
 
   //---------------------------

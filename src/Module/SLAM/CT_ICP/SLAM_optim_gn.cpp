@@ -14,7 +14,7 @@ SLAM_optim_gn::SLAM_optim_gn(){
 
   normalManager = new SLAM_normal();
 
-  this->iter_max = 1;
+  this->iter_max = 4;
 
   //---------------------------
 }
@@ -34,13 +34,19 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
   float elapsed_solve = 0.0;
   float elapsed_update = 0.0;
 
-  for (int iter(0); iter < 2; iter++) {
+  for (int iter(0); iter < iter_max; iter++) {
     Eigen::MatrixXd A = Eigen::MatrixXd::Zero(12, 12);
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
     int nb_keypoint = 0;
     float total_scalar = 0;
     float mean_scalar = 0;
+
+    std::cout<<"-----------"<<std::endl;
+    std::cout<<"frame index: "<<frame->ID<<std::endl;
+    std::cout<<"iteration: "<<iter<<std::endl;
+    std::cout<<frame->trans_b<<std::endl;
+    std::cout<<frame->trans_e<<std::endl;
 
     //Compute frame normal
     normalManager->compute_frameNormal(frame, map);
@@ -53,16 +59,12 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
       float ts_n = frame->ts_n[i];
       float a2D = frame->a2D[i];
 
-      //say("---");
-      //say(iter);
-      //say(point);
-
       float PTP_distance = 0;
       for(int j=0; j<3; j++){
         PTP_distance += normal[j] * (point[j] - iNN[j]);
       }
 
-      if (fabs(PTP_distance) < 0.5) {
+      if (fabs(PTP_distance) < 0.5 && isnan(a2D) == false) {
         Eigen::Vector3d iNN_N = a2D * a2D * normal;
 
         float scalar = 0;
@@ -104,6 +106,8 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
           }
           b(j) = b(j) - u[j] * scalar;
         }
+
+
       }
 
     }
@@ -114,8 +118,8 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     }
 
     // Normalize equation
-    for (int i(0); i < 12; i++) {
-        for (int j(0); j < 12; j++) {
+    for (int i=0; i < 12; i++) {
+        for (int j=0; j < 12; j++) {
             A(i, j) = A(i, j) / nb_keypoint;
         }
         b(i) = b(i) / nb_keypoint;
@@ -146,11 +150,10 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
 
     //Solve
     Eigen::VectorXd X = A.ldlt().solve(b);
-
-
-    say("(--------)");
-    say(nb_keypoint);
-    say(A);say(b);
+    std::cout << "X"  <<std::endl;
+      std::cout << X  <<std::endl;
+        std::cout << "b"  <<std::endl;
+          std::cout << b  <<std::endl;
 
     float Rx_b = X(0);
     float Ry_b = X(1);
@@ -182,8 +185,15 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     gn_rotat_e(2, 2) = cos(Ry_e) * cos(Rx_e);
     Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
+    /*say("----");
+    cout << "gn_trans_b: " <<gn_trans_b(0)<<" "<<gn_trans_b(1)<<" "<<gn_trans_b(2)<<endl;
+    cout << "gn_trans_e: " <<gn_trans_e(0)<<" "<<gn_trans_e(1)<<" "<<gn_trans_e(2)<<endl;
+    cout << "gn_rotat_b: "<<endl <<gn_rotat_b<<endl;
+    cout << "gn_rotat_e: "<<endl <<gn_rotat_e<<endl;*/
+
     frame->rotat_b = gn_rotat_b * frame->rotat_b;
     frame->trans_b = gn_trans_b + frame->trans_b;
+
     frame->rotat_e = gn_rotat_e * frame->rotat_e;
     frame->trans_e = gn_trans_e + frame->trans_e;
 

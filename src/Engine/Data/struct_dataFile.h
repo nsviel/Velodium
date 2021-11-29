@@ -5,6 +5,7 @@
 //Generique structure to parse file point clouds
 struct dataFile{
   int size;
+  std::string name;
   std::string path;
 
   std::vector<glm::vec3> location;

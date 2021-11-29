@@ -48,6 +48,8 @@ vector<dataFile*> fileCSV::Loader(string pathFile){
           float z = stof(zs);
 
           vec3 point = vec3(x, y, z);
+
+          data->name = "frame_" + to_string(cpt+1);
           data->location.push_back(point);
           data->timestamp.push_back(ts);
 

@@ -9,6 +9,7 @@
 
 #include <map>
 
+class Scene;
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
 
@@ -35,11 +36,13 @@ public:
 
   inline float* get_sampling_size(){return &sampling_size;}
   inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}
+  inline SLAM_optim_gn* get_SLAM_optim_gn(){return gnManager;}
 
 private:
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
+  Scene* sceneManager;
 
   voxelMap map;
   float sampling_size;

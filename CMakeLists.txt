@@ -31,6 +31,7 @@ set(ALL_LIBS
   OpenMP::OpenMP_CXX
   Eigen3::Eigen
   glfw
+  tsl::robin_map
   -fopenmp
   -lGLEW)
 
@@ -54,8 +55,10 @@ set(OTHERS_LIBS
   -lboost_iostreams
   -llz4)
 
+
 #Header libraries
 include_directories(${CMAKE_SOURCE_DIR}/../extern)
+include_directories(${CMAKE_SOURCE_DIR}/../extern/robin-map)
 
 #Source files
 file(GLOB_RECURSE ALL_SOURCES src/*.cpp extern/*.cpp)

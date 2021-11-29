@@ -27,6 +27,7 @@ public:
   void frame_distort(Frame* frame);
 
   inline int* get_iter_max(){return &iter_max;}
+  inline void set_iter_max(int value){iter_max = value;}
 
 private:
   SLAM_normal* normalManager;

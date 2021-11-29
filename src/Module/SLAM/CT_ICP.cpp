@@ -20,13 +20,14 @@ extern struct Database database;
 CT_ICP::CT_ICP(){
   //---------------------------
 
+  sceneManager = new Scene();
   ceresManager = new SLAM_optim_ceres();
   gnManager = new SLAM_optim_gn();
   normalManager = new SLAM_normal();
 
   this->solver_ceres = false;
   this->solver_GN = true;
-  this->sampling_size = 0.1;
+  this->sampling_size = 1;
   this->size_voxelMap = 0.5f;
   this->voxel_sizeMax = 20;
 
@@ -38,9 +39,6 @@ void CT_ICP::compute_slam(){
   Cloud* cloud = database.cloud_selected;
   if(cloud == nullptr) return;
   //---------------------------
-
-  say("---");
-  //truc();
 
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = &cloud->subset[i];
@@ -58,7 +56,7 @@ void CT_ICP::compute_slam(){
     this->add_keypointsToCloud(subset);
     this->add_pointsToLocalMap(frame);
 
-    if(i==5)break;
+    if(i==10)break;
   }
 
   //---------------------------
@@ -72,7 +70,7 @@ void CT_ICP::init_frameTimestamp(Subset* subset){
 
     //Timestamp
     vector<float>& ts = subset->ts;
-    if(ts.size() != 0 || frame->ID > 1){
+    if(ts.size() != 0 && frame->ID > 1){
 
       //Retrieve min & max
       double min = ts[0];
@@ -154,9 +152,9 @@ void CT_ICP::compute_gridSampling(Subset* subset){
   std::map<string, std::vector<glm::vec3>> grid;
   for (int j=0; j<subset_xyz.size(); j++){
 
-    int kx = static_cast<int>(subset_xyz[j].x / sampling_size);
-    int ky = static_cast<int>(subset_xyz[j].y / sampling_size);
-    int kz = static_cast<int>(subset_xyz[j].z / sampling_size);
+    auto kx = static_cast<short>(subset_xyz[j].x / sampling_size);
+    auto ky = static_cast<short>(subset_xyz[j].y / sampling_size);
+    auto kz = static_cast<short>(subset_xyz[j].z / sampling_size);
 
     string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
     grid[voxel_id].push_back(subset_xyz[j]);
@@ -165,8 +163,10 @@ void CT_ICP::compute_gridSampling(Subset* subset){
   //Take one random point inside each voxel
   frame_xyz.clear();
   frame_raw.clear();
+  int cpt =0;
   for (const auto &n: grid) {
     if (n.second.size() > 0) {
+      cpt++;
       Eigen::Vector3d point = glm_to_eigen_vec3_d(n.second[0]);
       frame_xyz.push_back(point);
       frame_raw.push_back(point);
@@ -188,7 +188,7 @@ void CT_ICP::compute_normal(Subset* subset){
 void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 
-  if(frame->ID >= 2){
+  if(frame->ID >= 1){
     if(solver_GN){
       gnManager->optim_GN(frame, frame_m1, map);
     }else if(solver_ceres){
@@ -216,15 +216,15 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
 
   //Display keypoints
   vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(frame->xyz);
-//sayHello();say(frame->ID);say(keypoint.size());
-//subset->xyz.clear();
-//subset->RGB.clear();
+
   for(int i=0; i<keypoint.size(); i++){
     subset->xyz.push_back(keypoint[i]);
     subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
   }
 
   //---------------------------
+  sceneManager->update_subset_location(subset);
+  sceneManager->update_subset_color(subset);
 }
 void CT_ICP::add_pointsToLocalMap(Frame* frame){
   //---------------------------

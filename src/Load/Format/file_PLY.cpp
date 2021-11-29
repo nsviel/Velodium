@@ -12,6 +12,7 @@ filePLY::~filePLY(){}
 //Main functions
 dataFile* filePLY::Loader(string pathFile){
   data_out = new dataFile();
+  data_out->name = "";
   data_out->path = pathFile;
   //---------------------------
 

@@ -15,7 +15,8 @@ GUI_slam::GUI_slam(){
   //---------------------------
 
   this->cticpManager = new CT_ICP();
-  this->slam_optiManager = cticpManager->get_SLAM_optim_ceres();
+  this->ceresManager = cticpManager->get_SLAM_optim_ceres();
+  this->gnManager = cticpManager->get_SLAM_optim_gn();
 
   //---------------------------
 }
@@ -34,9 +35,13 @@ void GUI_slam::design_SLAM(){
   }
 
   float* sampling_size = cticpManager->get_sampling_size();
-  ImGui::InputFloat("Subsample grid size", sampling_size, 0.001f, 1.0f, "%.3f");
-  int* iter_max = slam_optiManager->get_iter_max();
-  ImGui::SliderInt("Number iter", iter_max, 1, 20);
+  ImGui::InputFloat("Subsample grid size", sampling_size, 0.1f, 1.0f, "%.3f");
+
+  static int iter_max = 1;
+  if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
+    ceresManager->set_iter_max(iter_max);
+    gnManager->set_iter_max(iter_max);
+  }
 
   //---------------------------
 }
