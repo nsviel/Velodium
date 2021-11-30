@@ -126,8 +126,8 @@ namespace{
     //---------------------------
     return covMat;
   }
-  std::vector<double> fct_ones(int size){
-    std::vector<double> vec;
+  std::vector<float> fct_ones(int size){
+    std::vector<float> vec;
     //---------------------------
 
     for(int i=0; i<size; i++){

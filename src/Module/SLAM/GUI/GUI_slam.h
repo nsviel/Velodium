@@ -18,6 +18,11 @@ public:
 public:
   void design_SLAM();
 
+  void parameters();
+  void statistics();
+
+  vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
+
 private:
   CT_ICP* cticpManager;
   SLAM_optim_ceres* ceresManager;

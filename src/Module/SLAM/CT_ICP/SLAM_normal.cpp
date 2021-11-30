@@ -9,14 +9,14 @@
 SLAM_normal::SLAM_normal(){
   //---------------------------
 
-  this->size_voxelMap = 0.5f;
+  this->size_voxelMap = 1;
 
   //---------------------------
 }
 SLAM_normal::~SLAM_normal(){}
 
 //Main function
-void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap& map){
+void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   int size = frame->xyz.size();
   int nb_threads = 8;
   //---------------------------
@@ -56,7 +56,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap& map){
     this->compute_normals_reorientToOrigin(frame);
 
     //Store data
-    frame->Nxyz = Nxyz;
+    frame->Nptp = Nxyz;
     frame->NN = NN;
     frame->a2D = a2D;
   }
@@ -65,7 +65,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap& map){
 }
 
 //Sub function
-vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, voxelMap map){
+vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, voxelMap* map){
   priority_queue_iNN priority_queue;
   //---------------------------
 
@@ -85,14 +85,12 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
 
         //Search for pre-existing voxel in local map
         string voxel_id = to_string(vi) + " " + to_string(vj) + " " + to_string(vk);
-        auto search = map.find(voxel_id);
 
         //If we found something
-        if (search != map.end()){
-          vector<Eigen::Vector3d>& voxel_ijk = search->second;
-say(voxel_ijk.size());
-          for (int i=0; i < voxel_ijk.size(); i++) {
+        if (map->find(voxel_id) != map->end()){
+          vector<Eigen::Vector3d>& voxel_ijk = map->find(voxel_id).value();
 
+          for (int i=0; i < voxel_ijk.size(); i++) {
 
             Eigen::Vector3d neighbor = voxel_ijk[i];
             float distance = (neighbor - point).norm();

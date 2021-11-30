@@ -10,13 +10,10 @@ struct Frame{ //SLAM stuff
 
   std::vector<Eigen::Vector3d> xyz;
   std::vector<Eigen::Vector3d> xyz_raw;
-  std::vector<Eigen::Vector3d> Nxyz;
+  std::vector<Eigen::Vector3d> Nptp;
   std::vector<Eigen::Vector3d> NN; // Nearest Neighbor
   std::vector<float> a2D;
-
-  std::vector<double> ts_n;
-  float ts_b;
-  float ts_e;
+  std::vector<float> ts_n;
 
   //Begin pose
   Eigen::Matrix3d rotat_b;

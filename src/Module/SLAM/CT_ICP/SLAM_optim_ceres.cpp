@@ -61,7 +61,7 @@ sayHello();
 
   //---------------------------
 }
-void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap& map){
+void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap* map){
   //---------------------------
 
   for(int iter=0; iter<iter_max; iter++){
@@ -84,7 +84,7 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap& map){
     vector_residual.clear();
     for(int i=0; i<frame->xyz.size(); i++){
       Eigen::Vector3d point = frame->xyz[i];
-      Eigen::Vector3d normal = frame->Nxyz[i];
+      Eigen::Vector3d normal = frame->Nptp[i];
       Eigen::Vector3d iNN = frame->NN[i];
       float ts_n = frame->ts_n[i];
 
@@ -125,7 +125,7 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap& map){
 
   //---------------------------
 }
-void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMap& map){
+void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMap* map){
   //---------------------------
 
   for(int iter=0; iter<iter_max; iter++){
@@ -157,7 +157,7 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
     vector_residual.clear();
     for(int i=0; i<frame->xyz.size(); i++){
       Eigen::Vector3d point = frame->xyz[i];
-      Eigen::Vector3d normal = frame->Nxyz[i];
+      Eigen::Vector3d normal = frame->Nptp[i];
       Eigen::Vector3d iNN = frame->NN[i];
       float a2D = frame->a2D[i];
       float ts_n = frame->ts_n[i];
@@ -300,7 +300,7 @@ void SLAM_optim_ceres::ceres_computePointResidual(Frame* frame){
   //#pragma omp parallel for num_threads(nb_threads)
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
-    Eigen::Vector3d normal = frame->Nxyz[i];
+    Eigen::Vector3d normal = frame->Nptp[i];
     Eigen::Vector3d iNN = frame->NN[i];
     float a2D = frame->a2D[i];
     float ts_n = frame->ts_n[i];

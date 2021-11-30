@@ -24,11 +24,12 @@ CT_ICP::CT_ICP(){
   ceresManager = new SLAM_optim_ceres();
   gnManager = new SLAM_optim_gn();
   normalManager = new SLAM_normal();
+  map = new voxelMap();
 
   this->solver_ceres = false;
   this->solver_GN = true;
   this->sampling_size = 1;
-  this->size_voxelMap = 0.5f;
+  this->size_voxelMap = 1;
   this->voxel_sizeMax = 20;
 
   //---------------------------
@@ -49,6 +50,7 @@ void CT_ICP::compute_slam(){
 
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame, frame_m1, frame_m2);
+    this->init_distortion(frame);
 
     this->compute_gridSampling(subset);
     this->compute_optimization(frame, frame_m1);
@@ -66,44 +68,40 @@ void CT_ICP::init_frameTimestamp(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  if(frame->ts_n.size() == 0){
+  //Timestamp
+  vector<float>& ts = subset->ts;
+  if(ts.size() != 0){
 
-    //Timestamp
-    vector<float>& ts = subset->ts;
-    if(ts.size() != 0 && frame->ID > 1){
+    //Retrieve min & max
+    double min = ts[0];
+    double max = ts[0];
+    for(int i=0; i<ts.size(); i++){
+      if(ts[i] > max) max = ts[i];
+      if(ts[i] < min) min = ts[i];
+    }
+    subset->ts_b = min;
+    subset->ts_e = max;
 
-      //Retrieve min & max
-      double min = ts[0];
-      double max = ts[0];
-      for(int i=0; i<ts.size(); i++){
-        if(ts[i] > max) max = ts[i];
-        if(ts[i] < min) min = ts[i];
-      }
-      frame->ts_b = min;
-      frame->ts_e = max;
-
-      //Normalization
-      for(int i=0; i<ts.size(); i++){
-        double ts_n = (ts[i] - min) / (max - min);
-        frame->ts_n.push_back(ts_n);
-      }
-
-    }else{
-      frame->ts_n = fct_ones(subset->xyz.size());
-      frame->ts_b = 1.0f;
-      frame->ts_e = 1.0f;
+    //Normalization
+    subset->ts_n.clear();
+    for(int i=0; i<ts.size(); i++){
+      double ts_n = (ts[i] - min) / (max - min);
+      subset->ts_n.push_back(ts_n);
     }
 
+  }else{
+    subset->ts_n = fct_ones(subset->xyz.size());
+    subset->ts_b = 1.0f;
+    subset->ts_e = 1.0f;
   }
 
   //---------------------------
 }
 void CT_ICP::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
-  //Si je comprend bien, met juste des matrices identité aux transformation de chaque frame.....
   //---------------------------
 
   //i == 0 is the reference frame
-  if(frame->ID <= 1){
+  if(frame->ID < 2){
     frame->rotat_b = Eigen::Matrix3d::Identity();
     frame->rotat_e = Eigen::Matrix3d::Identity();
     frame->trans_b = Eigen::Vector3d::Zero();
@@ -122,12 +120,14 @@ void CT_ICP::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
     frame->trans_e = trans_next_e;
   }
   //Other frame
-  else if(frame->ID >= 3){
+  else if(frame->ID > 2){
     // When continuous: use the previous begin_pose as reference
     Eigen::Matrix3d rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
     Eigen::Vector3d trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
 
     // What (?)
+    //frame->rotat_b = rotat_next_b;
+    //frame->trans_b = trans_next_b;
     frame->rotat_b = frame_m1->rotat_e;
     frame->trans_b = frame_m1->trans_e;
 
@@ -140,36 +140,56 @@ void CT_ICP::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
 
   //---------------------------
 }
+void CT_ICP::init_distortion(Frame* frame){
+  //---------------------------
+
+  if(frame->ID > 1){
+    gnManager->frame_distort(frame);
+  }
+
+  //---------------------------
+}
 
 void CT_ICP::compute_gridSampling(Subset* subset){
   //---------------------------
 
-  vector<vec3>& subset_xyz = subset->xyz;
   vector<Eigen::Vector3d>& frame_xyz = subset->frame.xyz;
   vector<Eigen::Vector3d>& frame_raw = subset->frame.xyz_raw;
+  vector<float>& frame_ts_n = subset->frame.ts_n;
 
   //Subsample the scan with voxels
-  std::map<string, std::vector<glm::vec3>> grid;
-  for (int j=0; j<subset_xyz.size(); j++){
+  std::map<string, std::vector<glm::vec4>> grid;
+  for (int j=0; j<subset->xyz.size(); j++){
+    vec3 xyz = subset->xyz[j];
+    float ts_n = subset->ts_n[j];
 
-    auto kx = static_cast<short>(subset_xyz[j].x / sampling_size);
-    auto ky = static_cast<short>(subset_xyz[j].y / sampling_size);
-    auto kz = static_cast<short>(subset_xyz[j].z / sampling_size);
+    int kx = static_cast<int>(xyz.x / sampling_size);
+    int ky = static_cast<int>(xyz.y / sampling_size);
+    int kz = static_cast<int>(xyz.z / sampling_size);
 
     string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
-    grid[voxel_id].push_back(subset_xyz[j]);
+    vec4 point = vec4(xyz.x, xyz.y, xyz.z, ts_n);
+    grid[voxel_id].push_back(point);
   }
 
   //Take one random point inside each voxel
   frame_xyz.clear();
   frame_raw.clear();
+  frame_ts_n.clear();
+
   int cpt =0;
   for (const auto &n: grid) {
     if (n.second.size() > 0) {
       cpt++;
-      Eigen::Vector3d point = glm_to_eigen_vec3_d(n.second[0]);
-      frame_xyz.push_back(point);
-      frame_raw.push_back(point);
+
+      vec4 point = n.second[0];
+      vec3 xyz = vec3(point.x, point.y, point.z);
+      float ts_n = point[3];
+
+      Eigen::Vector3d xyz_eig = glm_to_eigen_vec3_d(xyz);
+      frame_xyz.push_back(xyz_eig);
+      frame_raw.push_back(xyz_eig);
+      frame_ts_n.push_back(ts_n);
     }
   }
 
@@ -209,18 +229,58 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
     subset->xyz[i] = eigen_to_glm_vec3_d(point);
   }*/
 
-  //Transform
-  /*for(int i=0; i<frame->xyz.size(); i++){
-    frame->xyz[i] = frame->rotat_e * frame->xyz_raw[i] + frame->trans_e;
-  }*/
+
 
   //Display keypoints
-  vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(frame->xyz);
+  /*vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(frame->xyz);
+  vector<vec3> normal = eigen_to_glm_vectorvec3_d(frame->Nptp);
 
   for(int i=0; i<keypoint.size(); i++){
     subset->xyz.push_back(keypoint[i]);
     subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
+  }*/
+
+  for(auto it = map->begin(); it != map->end(); ++it) {
+    vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(it.value());
+
+    for(int i=0; i<keypoint.size(); i++){
+      subset->xyz.push_back(keypoint[i]);
+      subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
+    }
   }
+
+
+
+
+
+  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+  Eigen::Vector3d trans_b = frame->trans_b;
+  Eigen::Vector3d trans_e = frame->trans_e;
+
+  Eigen::Vector3d root = glm_to_eigen_vec3_d(subset->root);
+
+  Eigen::Matrix3d R = quat_b.toRotationMatrix();
+  Eigen::Vector3d t = trans_b;
+  root = R * root + t;
+
+  subset->root = eigen_to_glm_vec3_d(root);
+
+  /*for(int i=0; i<subset->xyz.size(); i++){
+    Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
+    float ts_n = subset->ts_n[i];
+
+    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    point = R * point + t;
+
+    subset->xyz[i] = eigen_to_glm_vec3_d(point);
+  }*/
+
+
+
+
+
 
   //---------------------------
   sceneManager->update_subset_location(subset);
@@ -238,12 +298,11 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
 
     //Search for pre-existing voxel in local map
     string voxel_id = to_string(vx) + " " + to_string(vy) + " " + to_string(vz);
-    auto search = map.find(voxel_id);
 
     //if the voxel already exists
-    if (search != map.end()) {
+    if(map->find(voxel_id) != map->end()){
       //Get corresponding voxel
-      vector<Eigen::Vector3d>& voxel_xyz = search->second;
+      vector<Eigen::Vector3d>& voxel_xyz = map->find(voxel_id).value();
 
       //If the voxel is not full
       if (voxel_xyz.size() < voxel_sizeMax){
@@ -252,9 +311,10 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
     }
     //else create it
     else{
-      map[voxel_id].push_back(point);
+      vector<Eigen::Vector3d> vec;
+      vec.push_back(point);
+      map->insert({voxel_id, vec});
     }
-
   }
 
   //---------------------------

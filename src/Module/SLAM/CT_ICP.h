@@ -8,6 +8,8 @@
 #include "../../common.h"
 
 #include <map>
+#include <tsl/robin_map.h>
+#include <tsl/robin_set.h>
 
 class Scene;
 class SLAM_optim_ceres;
@@ -26,6 +28,7 @@ public:
 
   void init_frameTimestamp(Subset* subset);
   void init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
+  void init_distortion(Frame* frame);
 
   void compute_gridSampling(Subset* subset);
   void compute_normal(Subset* subset);
@@ -43,8 +46,8 @@ private:
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
   Scene* sceneManager;
+  voxelMap* map;
 
-  voxelMap map;
   float sampling_size;
   bool solver_GN, solver_ceres;
   float size_voxelMap;

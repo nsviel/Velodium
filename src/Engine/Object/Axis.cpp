@@ -111,29 +111,29 @@ void Axis::obj_axis_cloud(Subset* subset){
 void Axis::update_axis_cloud(Subset* subset){
   Glyph* axis_cloud = &subset->axis;
   vector<vec3>& XYZ = axis_cloud->location;
-  vec3 COM = subset->COM;
+  vec3 root = subset->root;
   //---------------------------
 
   XYZ.clear();
 
   //Axis rotation
-  mat4 rot = subset->rotat;
-  vec4 rotX = vec4(0.1,0,0,1) * rot;
-  vec4 rotY = vec4(0,0.1,0,1) * rot;
-  vec4 rotZ = vec4(0,0,0.1,1) * rot;
+  mat4 R = subset->rotat;
+  vec4 Rx = vec4(0.1,0,0,1) * R;
+  vec4 Ry = vec4(0,0.1,0,1) * R;
+  vec4 Rz = vec4(0,0,0.1,1) * R;
 
   //Construct glyph
   //X Axis
-  XYZ.push_back(vec3(COM.x,COM.y,COM.z));
-  XYZ.push_back(vec3(COM.x + rotX.x, COM.y + rotX.y, COM.z + rotX.z));
+  XYZ.push_back(vec3(root.x,root.y,root.z));
+  XYZ.push_back(vec3(root.x + Rx.x, root.y + Rx.y, root.z + Rx.z));
 
   //Y Axis
-  XYZ.push_back(vec3(COM.x,COM.y,COM.z));
-  XYZ.push_back(vec3(COM.x + rotY.x, COM.y + rotY.y, COM.z + rotY.z));
+  XYZ.push_back(vec3(root.x,root.y,root.z));
+  XYZ.push_back(vec3(root.x + Ry.x, root.y + Ry.y, root.z + Ry.z));
 
   //Z Axis
-  XYZ.push_back(vec3(COM.x,COM.y,COM.z));
-  XYZ.push_back(vec3(COM.x + rotZ.x, COM.y + rotZ.y, COM.z + rotZ.z));
+  XYZ.push_back(vec3(root.x,root.y,root.z));
+  XYZ.push_back(vec3(root.x + Rz.x, root.y + Rz.y, root.z + Rz.z));
 
   //---------------------------
 }

@@ -26,7 +26,7 @@ public:
 
 private:
   Scene* sceneManager;
-  CloudPlayer* odoManager;
+  CloudPlayer* playerManager;
   Heatmap* heatmapManager;
 
 };

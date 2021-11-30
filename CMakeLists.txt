@@ -19,6 +19,7 @@ find_package(GLEW REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(OpenMP REQUIRED)
 find_package(Ceres REQUIRED)
+find_package(tsl-robin-map REQUIRED)
 
 #Denpendancies
 set(ALL_LIBS
@@ -58,7 +59,6 @@ set(OTHERS_LIBS
 
 #Header libraries
 include_directories(${CMAKE_SOURCE_DIR}/../extern)
-include_directories(${CMAKE_SOURCE_DIR}/../extern/robin-map)
 
 #Source files
 file(GLOB_RECURSE ALL_SOURCES src/*.cpp extern/*.cpp)

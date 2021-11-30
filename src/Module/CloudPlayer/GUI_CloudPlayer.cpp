@@ -17,7 +17,7 @@ extern struct Database database;
 GUI_CloudPlayer::GUI_CloudPlayer(){
   //---------------------------
 
-  this->odoManager = new CloudPlayer();
+  this->playerManager = new CloudPlayer();
   this->heatmapManager = new Heatmap();
 
   //---------------------------
@@ -29,7 +29,6 @@ void GUI_CloudPlayer::design_CloudPlayer(){
   //---------------------------
 
   this->playCloud();
-  this->playCloud_byMouseWheel();
   this->parameter();
 
   //---------------------------
@@ -44,64 +43,64 @@ void GUI_CloudPlayer::playCloud(){
   //Play / Stop frame display
   if (ImGui::Button(ICON_FA_PLAY "##36")){
     if(cloud != nullptr){
-      odoManager->playCloud_start();
+      playerManager->playCloud_start();
     }
   }
   ImGui::SameLine();
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     if(cloud != nullptr){
-      odoManager->playCloud_pause();
+      playerManager->playCloud_pause();
     }
   }
   ImGui::SameLine();
   if (ImGui::Button(ICON_FA_STOP "##37")){
     if(cloud != nullptr){
-      odoManager->playCloud_stop();
+      playerManager->playCloud_stop();
     }
   }
   ImGui::SameLine();
-  int freq = *odoManager->get_frequency();
+  int freq = *playerManager->get_frequency();
   ImGui::SetNextItemWidth(40);
   if(ImGui::SliderInt("Frequency", &freq, 1, 20)){
-    odoManager->play_setFrequency(freq);
+    playerManager->play_setFrequency(freq);
   }
 
   //Display only the ieme cloud
-  odoManager->update_frame_ID(cloud);
-  int* subset_selected = odoManager->get_frame_ID();
-  int* frame_max_ID = odoManager->get_frame_max_ID();
-  bool* all_frame_visible = odoManager->get_all_frame_visible();
+  playerManager->update_frame_ID(cloud);
+  int* subset_selected = playerManager->get_frame_ID();
+  int* frame_max_ID = playerManager->get_frame_max_ID();
+  bool* all_frame_visible = playerManager->get_all_frame_visible();
   if(ImGui::SliderInt("##666", subset_selected, 0, *frame_max_ID)){
     if(cloud != nullptr){
       *all_frame_visible = false;
-      odoManager->select_byFrameID(cloud, *subset_selected);
+      playerManager->select_byFrameID(cloud, *subset_selected);
     }
   }
   ImGui::SameLine();
-  float* frame_ID_ts = odoManager->get_frame_ID_ts();
+  float* frame_ID_ts = playerManager->get_frame_ID_ts();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", *frame_ID_ts);
 
   //Range of displayed frames
-  int* frame_max_nb = odoManager->get_frame_max_nb();
-  int* frame_range = odoManager->get_frame_display_range();
+  int* frame_max_nb = playerManager->get_frame_max_nb();
+  int* frame_range = playerManager->get_frame_display_range();
   if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, *frame_max_nb)){
     if(cloud != nullptr){
-      odoManager->select_byFrameID(cloud, *subset_selected);
+      playerManager->select_byFrameID(cloud, *subset_selected);
     }
   }
 
   //Recording
   if (ImGui::Button(ICON_FA_CIRCLE "##37")){
     if(cloud != nullptr){
-      odoManager->playCloud_save(cloud);
+      playerManager->playCloud_save(cloud);
     }
   }
   ImGui::SameLine();
   if(ImGui::Button("...##23")){
-    odoManager->playCloud_selectDirSave();
+    playerManager->playCloud_selectDirSave();
   }
   ImGui::SameLine();
-  string saveas = *odoManager->get_saveas();
+  string saveas = *playerManager->get_saveas();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
@@ -116,7 +115,7 @@ void GUI_CloudPlayer::playCloud_byMouseWheel(){
   if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
     if(cloud != nullptr){
       if(cloud->subset[0].ts.size() != 0){
-        int subset_selected = *odoManager->get_frame_ID();
+        int subset_selected = *playerManager->get_frame_ID();
 
         if(io.MouseWheel > 0){
           subset_selected++;
@@ -124,7 +123,7 @@ void GUI_CloudPlayer::playCloud_byMouseWheel(){
           subset_selected--;
         }
 
-        odoManager->select_byFrameID(cloud, subset_selected);
+        playerManager->select_byFrameID(cloud, subset_selected);
       }
     }
   }
@@ -135,6 +134,12 @@ void GUI_CloudPlayer::parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
+
+    if (ImGui::Button("Supress first subset")){
+      if(cloud != nullptr){
+        playerManager->supress_firstSubset(cloud);
+      }
+    }
 
     //Choice of the LiDAR model
     ImGui::SetNextItemWidth(75);
@@ -148,7 +153,7 @@ void GUI_CloudPlayer::parameter(){
       ImGui::SliderInt("Point size", point_size, 1, 20);
     }
 
-    bool* all_frame_visible = odoManager->get_all_frame_visible();
+    bool* all_frame_visible = playerManager->get_all_frame_visible();
     if(ImGui::Checkbox("All frame visible", all_frame_visible)){
       if(cloud != nullptr){
         for(int i=0; i<cloud->nb_subset; i++){

@@ -100,6 +100,20 @@ void CloudPlayer::update_frame_ID(Cloud* cloud){
 
   //---------------------------
 }
+void CloudPlayer::supress_firstSubset(Cloud* cloud){
+  vector<Subset> vec;
+  //---------------------------
+
+  for(int i=1; i<cloud->nb_subset; i++){
+    cloud->subset[i].ID = i - 1;
+    vec.push_back(cloud->subset[i]);
+  }
+
+  cloud->subset = vec;
+  cloud->nb_subset = cloud->nb_subset - 1;
+
+  //---------------------------
+}
 
 void CloudPlayer::playCloud_start(){
   this->playCloud_isrunning = true;

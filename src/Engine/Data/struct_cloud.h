@@ -32,7 +32,11 @@ struct Subset{ //Cloud subset / part
   std::vector<glm::vec4> RGB;
   std::vector<glm::vec3> N;
   std::vector<float> I;
+  
   std::vector<float> ts;
+  std::vector<float> ts_n;
+  float ts_b;
+  float ts_e;
 
   //Various attributs
   std::vector<float> A;

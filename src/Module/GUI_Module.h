@@ -45,6 +45,7 @@ public:
           ImGui::EndTabItem();
         }
       }
+      gui_odomManager->playCloud_byMouseWheel();
 
       // Velodyne data management
       if(module_velodyne){

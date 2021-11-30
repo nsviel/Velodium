@@ -48,6 +48,7 @@ void GUI_menuBar::design_MenuBar(){
 
     this->MenuBar_menus();
     this->MenuBar_icons();
+    this->MenuBar_subsetSelected();
     this->MenuBar_appInfo();
 
     //-------------------------
@@ -57,6 +58,7 @@ void GUI_menuBar::design_MenuBar(){
 
 //Subfunctions
 void GUI_menuBar::MenuBar_menus(){
+  Cloud* cloud = database.cloud_selected;
   //-------------------------
 
   if (ImGui::BeginMenu("File")){
@@ -74,7 +76,7 @@ void GUI_menuBar::MenuBar_menus(){
       opeManager->allSaving();
     }
     if(ImGui::MenuItem("Remove cloud", "Suppr")){
-      sceneManager->removeCloud(database.cloud_selected);
+      sceneManager->removeCloud(cloud);
     }
     if(ImGui::MenuItem("Remove all")){
       sceneManager->removeCloud_all();
@@ -84,7 +86,6 @@ void GUI_menuBar::MenuBar_menus(){
     }
     if(ImGui::MenuItem("Center cloud")){
       if(sceneManager->is_atLeastOnecloud()){
-        Cloud* cloud = database.cloud_selected;
         Transforms transformManager;
         transformManager.make_centering(cloud);
         sceneManager->update_cloud_location(cloud);
@@ -169,6 +170,20 @@ void GUI_menuBar::MenuBar_icons(){
   //---------------------------
   ImGui::PopStyleVar(2);
   ImGui::PopStyleColor(1);
+}
+void GUI_menuBar::MenuBar_subsetSelected(){
+  Cloud* cloud = database.cloud_selected;
+  //-------------------------
+
+  if(cloud != nullptr){
+    int subset_selected = cloud->subset_selected;
+    int subset_max = cloud->nb_subset;
+    
+    ImGui::SetNextItemWidth(100);
+    ImGui::SliderInt("##666", &subset_selected, 0, subset_max);
+  }
+
+  //-------------------------
 }
 void GUI_menuBar::MenuBar_fastScene(){
   //---------------------------

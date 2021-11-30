@@ -14,27 +14,23 @@ SLAM_optim_gn::SLAM_optim_gn(){
 
   normalManager = new SLAM_normal();
 
-  this->iter_max = 4;
+  this->iter_max = 5;
 
   //---------------------------
 }
 SLAM_optim_gn::~SLAM_optim_gn(){}
 
-void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
+void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
   //---------------------------
 
   //SLAM_optim_gn with Traj constraints
   float beta_location_consistency = 0.001;
   float beta_constant_velocity =  0.001;
 
-  float elapsed_search_neighbors = 0.0;
-  float elapsed_select_closest_neighbors = 0.0;
-  float elapsed_normals = 0.0;
-  float elapsed_A_construction = 0.0;
-  float elapsed_solve = 0.0;
-  float elapsed_update = 0.0;
+  std::cout<<"-----------"<<std::endl;
+  std::cout<<"frame index: "<<frame->ID<<std::endl;
 
-  for (int iter(0); iter < iter_max; iter++) {
+  for (int iter=0; iter < iter_max; iter++) {
     Eigen::MatrixXd A = Eigen::MatrixXd::Zero(12, 12);
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
@@ -42,11 +38,14 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     float total_scalar = 0;
     float mean_scalar = 0;
 
-    std::cout<<"-----------"<<std::endl;
-    std::cout<<"frame index: "<<frame->ID<<std::endl;
     std::cout<<"iteration: "<<iter<<std::endl;
-    std::cout<<frame->trans_b<<std::endl;
-    std::cout<<frame->trans_e<<std::endl;
+
+    //std::cout<<frame->rotat_b<<std::endl;
+    //std::cout<<frame->rotat_e<<std::endl;
+    //std::cout<<"map size: "<<map->size()<<std::endl;
+
+
+
 
     //Compute frame normal
     normalManager->compute_frameNormal(frame, map);
@@ -54,7 +53,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     for(int i=0; i<frame->xyz.size(); i++){
       Eigen::Vector3d point = frame->xyz[i];
       Eigen::Vector3d point_raw = frame->xyz_raw[i];
-      Eigen::Vector3d normal = frame->Nxyz[i];
+      Eigen::Vector3d normal = frame->Nptp[i];
       Eigen::Vector3d iNN = frame->NN[i];
       float ts_n = frame->ts_n[i];
       float a2D = frame->a2D[i];
@@ -64,7 +63,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
         PTP_distance += normal[j] * (point[j] - iNN[j]);
       }
 
-      if (fabs(PTP_distance) < 0.5 && isnan(a2D) == false) {
+      if (abs(PTP_distance) < 0.5 && isnan(a2D) == false) {
         Eigen::Vector3d iNN_N = a2D * a2D * normal;
 
         float scalar = 0;
@@ -73,7 +72,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
         }
 
         total_scalar = total_scalar + scalar * scalar;
-        mean_scalar = mean_scalar + fabs(scalar);
+        mean_scalar = mean_scalar + abs(scalar);
         nb_keypoint++;
 
         Eigen::Matrix3d rotat_b = frame->rotat_b;
@@ -106,11 +105,10 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
           }
           b(j) = b(j) - u[j] * scalar;
         }
-
-
       }
-
     }
+
+
 
     if (nb_keypoint < 100) {
         cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
@@ -146,14 +144,12 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
       b(9) = b(9) - beta_constant_velocity * diff_ego(0);
       b(10) = b(10) - beta_constant_velocity * diff_ego(1);
       b(11) = b(11) - beta_constant_velocity * diff_ego(2);
+
     }
 
     //Solve
     Eigen::VectorXd X = A.ldlt().solve(b);
-    std::cout << "X"  <<std::endl;
-      std::cout << X  <<std::endl;
-        std::cout << "b"  <<std::endl;
-          std::cout << b  <<std::endl;
+
 
     float Rx_b = X(0);
     float Ry_b = X(1);
@@ -185,11 +181,9 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     gn_rotat_e(2, 2) = cos(Ry_e) * cos(Rx_e);
     Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
-    /*say("----");
-    cout << "gn_trans_b: " <<gn_trans_b(0)<<" "<<gn_trans_b(1)<<" "<<gn_trans_b(2)<<endl;
-    cout << "gn_trans_e: " <<gn_trans_e(0)<<" "<<gn_trans_e(1)<<" "<<gn_trans_e(2)<<endl;
-    cout << "gn_rotat_b: "<<endl <<gn_rotat_b<<endl;
-    cout << "gn_rotat_e: "<<endl <<gn_rotat_e<<endl;*/
+
+    //cout << "gn_trans_b: " <<gn_trans_b(0)<<" "<<gn_trans_b(1)<<" "<<gn_trans_b(2)<<endl;
+    //cout << "gn_trans_e: " <<gn_trans_e(0)<<" "<<gn_trans_e(1)<<" "<<gn_trans_e(2)<<endl;
 
     frame->rotat_b = gn_rotat_b * frame->rotat_b;
     frame->trans_b = gn_trans_b + frame->trans_b;
@@ -197,18 +191,21 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map){
     frame->rotat_e = gn_rotat_e * frame->rotat_e;
     frame->trans_e = gn_trans_e + frame->trans_e;
 
+
     //Update keypoints
+    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Vector3d trans_e = frame->trans_e;
+
     for(int i=0; i<frame->xyz.size(); i++){
-      Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-      Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-      Eigen::Vector3d trans_b = frame->trans_b;
-      Eigen::Vector3d trans_e = frame->trans_e;
       Eigen::Vector3d point_raw = frame->xyz_raw[i];
       float ts_n = frame->ts_n[i];
 
       Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
       Eigen::Matrix3d R = q.normalized().toRotationMatrix();
       Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
       frame->xyz[i] = R * point_raw + t;
     }
 
@@ -270,17 +267,16 @@ void SLAM_optim_gn::frame_distort(Frame* frame){
   Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
   Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
 
-  for (int i(0); i < frame->xyz.size(); ++i) {
+  for (int i=0; i < frame->xyz.size(); i++) {
 
     float ts_n = frame->ts_n[i];
-    Eigen::Vector3d point = frame->xyz[i];
+    Eigen::Vector3d& point = frame->xyz_raw[i];
 
     Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     // Distort Raw Keypoints
-    frame->xyz[i] = quat_e_inv * (quat_n * point + t) + trans_e_inv;
-
+    point = quat_e_inv * (quat_n * point + t) + trans_e_inv;
   }
 
   //---------------------------

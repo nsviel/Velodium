@@ -20,7 +20,7 @@ public:
   ~SLAM_optim_gn();
 
 public:
-  void optim_GN(Frame* frame, Frame* frame_m1, voxelMap& map);
+  void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
   void frame_update(Frame* frame);
   void frame_update_secured(Frame* frame);

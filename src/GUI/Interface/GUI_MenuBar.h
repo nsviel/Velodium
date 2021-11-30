@@ -29,6 +29,7 @@ public:
   void MenuBar_menus();
   void MenuBar_icons();
   void MenuBar_appInfo();
+  void MenuBar_subsetSelected();
   void MenuBar_fastScene();
   void MenuBar_Operations();
 

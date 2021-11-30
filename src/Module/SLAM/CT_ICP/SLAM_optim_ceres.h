@@ -21,8 +21,8 @@ public:
 
 public:
   void optim_CERES(Frame* frame, Frame* frame_m1);
-  void optim_test(Frame* frame, Frame* frame_m1, voxelMap& map);
-  void optim_test_secured(Frame* frame, Frame* frame_m1, voxelMap& map);
+  void optim_test(Frame* frame, Frame* frame_m1, voxelMap* map);
+  void optim_test_secured(Frame* frame, Frame* frame_m1, voxelMap* map);
 
   void frame_update(Frame* frame);
   void frame_update_secured(Frame* frame);

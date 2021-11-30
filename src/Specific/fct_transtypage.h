@@ -36,6 +36,19 @@ namespace{
     //---------------------------
     return mat_glm;
   }
+  glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3d mat_eig){
+    glm::mat4 mat_glm;
+    //---------------------------
+
+    for(int i=0; i<mat_eig.rows(); i++){
+      for(int j=0; j<mat_eig.cols(); j++){
+        mat_glm[i][j] = mat_eig(i,j);
+      }
+    }
+
+    //---------------------------
+    return mat_glm;
+  }
   glm::vec3 eigen_to_glm_vec3_d(Eigen::Vector3d eig_vec){
     glm::vec3 glm_vec = glm::vec3(eig_vec(0), eig_vec(1), eig_vec(2));
     return glm_vec;

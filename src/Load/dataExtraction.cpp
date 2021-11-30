@@ -32,6 +32,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
 
     this->check_data(data[i]);
     this->init_subsetParameters(subset, data[i]->name, i);
+    this->init_frameParameters(subset);
 
     //Subset data
     this->extract_Location(subset, data[i]->location);
@@ -63,6 +64,7 @@ Subset dataExtraction::extractData(udpPacket* data){
   //---------------------------
 
   this->init_subsetParameters(subset, "frame", 0);
+  this->init_frameParameters(subset);
 
   //Subset data
   this->extract_Location(subset, data->xyz);
@@ -82,6 +84,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
 
   this->check_data(data);
   this->init_subsetParameters(subset, data->name, cloud->nb_subset);
+  this->init_frameParameters(subset);
 
   //Subset data
   this->extract_Location(subset, data->location);
@@ -243,6 +246,17 @@ void dataExtraction::init_subsetParameters(Subset& subset, string name, int idx)
   subset.name = name;
   subset.root = vec3(0.0);
   subset.dataFormat = " ";
+
+  //---------------------------
+}
+void dataExtraction::init_frameParameters(Subset& subset){
+  Frame* frame = &subset.frame;
+  //---------------------------
+
+  frame->rotat_b = Eigen::Matrix3d::Identity();
+  frame->rotat_e = Eigen::Matrix3d::Identity();
+  frame->trans_b = Eigen::Vector3d::Zero();
+  frame->trans_e = Eigen::Vector3d::Zero();
 
   //---------------------------
 }
