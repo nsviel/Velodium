@@ -70,7 +70,7 @@ void CT_ICP::init_frameTimestamp(Subset* subset){
 
   //Timestamp
   vector<float>& ts = subset->ts;
-  if(ts.size() != 0){
+  if(ts.size() != 0 && frame->ID > 1){
 
     //Retrieve min & max
     double min = ts[0];

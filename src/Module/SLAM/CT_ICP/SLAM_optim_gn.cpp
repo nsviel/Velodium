@@ -108,8 +108,6 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
       }
     }
 
-
-
     if (nb_keypoint < 100) {
         cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
         cout << "[CT_ICP]Number_of_residuals : " << nb_keypoint << endl;
@@ -122,6 +120,8 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
         }
         b(i) = b(i) / nb_keypoint;
     }
+
+    say(b);
 
     //Add constraints in trajectory
     if (frame->ID > 1){
@@ -182,8 +182,8 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
     Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
 
-    //cout << "gn_trans_b: " <<gn_trans_b(0)<<" "<<gn_trans_b(1)<<" "<<gn_trans_b(2)<<endl;
-    //cout << "gn_trans_e: " <<gn_trans_e(0)<<" "<<gn_trans_e(1)<<" "<<gn_trans_e(2)<<endl;
+    cout << "gn_trans_b: " <<gn_trans_b(0)<<" "<<gn_trans_b(1)<<" "<<gn_trans_b(2)<<endl;
+    cout << "gn_trans_e: " <<gn_trans_e(0)<<" "<<gn_trans_e(1)<<" "<<gn_trans_e(2)<<endl;
 
     frame->rotat_b = gn_rotat_b * frame->rotat_b;
     frame->trans_b = gn_trans_b + frame->trans_b;
