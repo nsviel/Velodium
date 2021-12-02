@@ -42,6 +42,7 @@ void GUI_slam::design_SLAM(){
 }
 
 void GUI_slam::parameters(){
+  Cloud* cloud = database.cloud_selected;
   //---------------------------
 
   float* sampling_size = cticpManager->get_sampling_size();
@@ -51,6 +52,15 @@ void GUI_slam::parameters(){
   if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
     ceresManager->set_iter_max(iter_max);
     gnManager->set_iter_max(iter_max);
+  }
+
+  static int frame_max = 10;
+  int max = 1;
+  if(cloud != nullptr){
+    max = cloud->nb_subset;
+  }
+  if(ImGui::SliderInt("Number frame", &frame_max, 1, max)){
+    cticpManager->set_frame_max(frame_max);
   }
 
   //---------------------------

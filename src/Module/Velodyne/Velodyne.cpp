@@ -172,7 +172,8 @@ void Velodyne::lidar_start(){
   //If LiDAR not running
   if(rot_freq <= 0){
     int err = system("curl -s --connect-timeout 1 --data rpm=600 http://192.168.1.201/cgi/setting");
-
+    sleep(1);
+    
     rot_freq = 10;
     rot_rpm = 600;
 
@@ -199,6 +200,8 @@ void Velodyne::lidar_stop(){
     is_capturing = false;
 
     console.AddLog("LiDAR desactivated");
+
+    sleep(1);
   }
 
   //---------------------------
@@ -262,6 +265,7 @@ void Velodyne::lidar_get_status(){
   sleep(1);
 }
 bool Velodyne::lidar_get_is_connected(){
+  bool connected;
   //---------------------------
 
   int err = system("curl -s --connect-timeout 1 http://192.168.1.201/");
@@ -269,28 +273,31 @@ bool Velodyne::lidar_get_is_connected(){
   if(err == 7168){
     console.AddLog("[error] LiDAR not connected");
     this->is_connected = false;
-    return false;
+    connected = false;
   }else{
-    sleep(1);
     this->is_connected = true;
-    return true;
+    connected = true;
   }
 
   //---------------------------
+  sleep(1);
+  return connected;
 }
 void Velodyne::lidar_set_rpm(int value){
+  //---------------------------
+
   if(value % 60 != 0){
     cout << "The selected rpm is not modulo 60" << endl;
     return;
   }
   this->rot_rpm = value;
-  //---------------------------
 
   string rpm = to_string(rot_rpm);
   string command = "curl -s --connect-timeout 1 --data rpm=" + rpm + " http://192.168.1.201/cgi/setting";
   int err = system(command.c_str());
 
   //---------------------------
+  sleep(1);
 }
 void Velodyne::lidar_set_fov_min(int value){
   this->fov_min = value;
@@ -300,6 +307,7 @@ void Velodyne::lidar_set_fov_min(int value){
   int err = system(command.c_str());
 
   //---------------------------
+  sleep(1);
 }
 void Velodyne::lidar_set_fov_max(int value){
   this->fov_max = value;
@@ -309,4 +317,5 @@ void Velodyne::lidar_set_fov_max(int value){
   int err = system(command.c_str());
 
   //---------------------------
+  sleep(1);
 }

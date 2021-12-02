@@ -166,7 +166,7 @@ void GUI_velodyne::Recording(){
         console.AddLog("[sucess] LiDAR recording...");
         *is_recording = true;
       }else{
-        console.AddLog("[error] LiDAR is not recording");
+        console.AddLog("[error] LiDAR is not capturing");
         *is_recording = false;
       }
 

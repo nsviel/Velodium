@@ -23,6 +23,8 @@ public:
   bool init_object();
   bool init_shader();
 
+  void trucEDL();
+
   //GL loop
   void loop();
   void loop_begin();
@@ -33,7 +35,7 @@ public:
 private:
   Configuration* configManager;
   GLFWwindow* window;
-  Shader* mvp_shaderManager;
+  Shader* shaderManager;
   Engine* engineManager;
   Camera* cameraManager;
   Dimension* dimManager;
@@ -42,6 +44,11 @@ private:
 
   uint shader_program_ID, mvpID;
   vec3 backgColor;
+
+
+
+  GLuint fbo_pass_1;
+  GLuint fbo_pass_2;
 };
 
 #endif

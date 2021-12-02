@@ -31,6 +31,7 @@ CT_ICP::CT_ICP(){
   this->sampling_size = 1;
   this->size_voxelMap = 1;
   this->voxel_sizeMax = 20;
+  this->frame_max = 10;
 
   //---------------------------
 }
@@ -41,7 +42,7 @@ void CT_ICP::compute_slam(){
   if(cloud == nullptr) return;
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
+  for(int i=0; i<frame_max; i++){
     Subset* subset = &cloud->subset[i];
     Frame* frame = &cloud->subset[i].frame;
     Frame* frame_m1 = &cloud->subset[i-1].frame;
@@ -57,8 +58,6 @@ void CT_ICP::compute_slam(){
 
     this->add_keypointsToCloud(subset);
     this->add_pointsToLocalMap(frame);
-
-    if(i==10)break;
   }
 
   //---------------------------
@@ -240,14 +239,15 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
     subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
   }*/
 
-  for(auto it = map->begin(); it != map->end(); ++it) {
+  //Include local map into cloud subset
+  /*for(auto it = map->begin(); it != map->end(); ++it) {
     vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(it.value());
 
     for(int i=0; i<keypoint.size(); i++){
       subset->xyz.push_back(keypoint[i]);
       subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
     }
-  }
+  }*/
 
 
 
@@ -258,15 +258,15 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
   Eigen::Vector3d trans_b = frame->trans_b;
   Eigen::Vector3d trans_e = frame->trans_e;
 
+  //Update frame root
   Eigen::Vector3d root = glm_to_eigen_vec3_d(subset->root);
-
   Eigen::Matrix3d R = quat_b.toRotationMatrix();
   Eigen::Vector3d t = trans_b;
   root = R * root + t;
-
   subset->root = eigen_to_glm_vec3_d(root);
 
-  /*for(int i=0; i<subset->xyz.size(); i++){
+  //Update subset position
+  for(int i=0; i<subset->xyz.size(); i++){
     Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
     float ts_n = subset->ts_n[i];
 
@@ -275,12 +275,7 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
     point = R * point + t;
 
     subset->xyz[i] = eigen_to_glm_vec3_d(point);
-  }*/
-
-
-
-
-
+  }
 
   //---------------------------
   sceneManager->update_subset_location(subset);

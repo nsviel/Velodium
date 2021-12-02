@@ -91,6 +91,13 @@ bool CoreGLengine::init_OGL(){
     std::cout << "GLEW initiated" << std::endl;
   }
 
+
+
+  this->trucEDL();
+
+
+
+
   //---------------------------
   return true;
 }
@@ -98,9 +105,10 @@ bool CoreGLengine::init_shader(){
   //---------------------------
 
   //MVP shader
-  this->mvp_shaderManager = new Shader();
-  mvp_shaderManager->shader_build("shader_mvp");
-  mvp_shaderManager->run();
+  this->shaderManager = new Shader();
+  shaderManager->shader_build("shader_mvp");
+  //shaderManager->shader_build("shader_EDL");
+  shaderManager->run();
 
   //---------------------------
   return true;
@@ -117,6 +125,85 @@ bool CoreGLengine::init_object(){
 
   //---------------------------
   return true;
+}
+
+void CoreGLengine::trucEDL(){
+  int gl_width = configuration.WINDOW_InitResWidth - configuration.GUI_LeftPanel_width;
+  int gl_height = configuration.WINDOW_InitResHeight - configuration.GUI_TopPanel_height;
+
+
+  GLuint texture_color_ID;
+  GLuint texture_depth_ID;
+  GLuint texture_postProcess_ID;
+
+  glGenFramebuffers(1, &fbo_pass_1);
+  glGenFramebuffers(1, &fbo_pass_2);
+  glGenTextures(1, &texture_color_ID);
+  glGenTextures(1, &texture_depth_ID);
+  glGenTextures(1, &texture_postProcess_ID);
+
+  /*double edl_strength = 100.0;
+  double edl_distance = 1.0;
+  double z_far = 10000.0;
+  double z_near = 0.1;
+
+  GLuint program_ID = shaderManager->get_program_ID();
+
+  auto a_loc = glGetUniformLocation(program_ID, "A");
+  auto b_loc = glGetUniformLocation(program_ID, "B");
+  auto a = -(z_far + z_near) / (z_far - z_near);
+  auto b = -2 * (z_far * z_near) / (z_far - z_near);
+  glUniform1f(a_loc, (float) a);
+  glUniform1f(b_loc, (float) b);
+
+  auto edl_strength_loc = glGetUniformLocation(program_ID, "EDL_STRENGTH");
+  auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
+  auto with_edl_loc = glGetUniformLocation(program_ID, "WITH_EDL");
+
+  glUniform1f(edl_strength_loc, (float) edl_strength);
+  glUniform1f(edl_dist_loc, (float) edl_distance);
+  glUniform1i(with_edl_loc, true);*/
+
+  vec2 gl_dim = dimManager->get_glDim();
+
+  // FIRST PASS FRAMEBUFFER
+  //-------------------------------------
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1);
+
+  glBindTexture(GL_TEXTURE_2D, texture_color_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_color_ID, 0);
+
+  glBindTexture(GL_TEXTURE_2D, texture_depth_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_width, gl_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  // Attach the texture as the framebuffer's depth buffer
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture_depth_ID, 0);
+  if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+    std::cout << "[OpenGL] Invalid Framebuffer" << std::endl;
+  }
+
+  // SECOND PASS FRAMEBUFFER
+  //-------------------------------------
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_2);
+  glBindTexture(GL_TEXTURE_2D, texture_postProcess_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_postProcess_ID, 0);
+
+  if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+    std::cout << "[OpenGL] Invalid Framebuffer" << std::endl;
+  }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }
 
 //Engine loop
@@ -142,16 +229,21 @@ void CoreGLengine::loop(){
 
   do{
 
+    glfwPollEvents();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
-    this->loop_begin();
+
     this->loop_camera();
     this->loop_shader();
     engineManager->loop();
     guiManager->Gui_loop();
 
-
-
-    this->loop_end();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST);
+    glfwSwapBuffers(window);
   }
   while(!glfwWindowShouldClose(window));
 
@@ -181,7 +273,7 @@ void CoreGLengine::loop_shader(){
   //---------------------------
 
   mat4 mvp = cameraManager->compute_mvpMatrix();
-  mvp_shaderManager->setMat4("MVP", mvp);
+  shaderManager->setMat4("MVP", mvp);
 
   //---------------------------
 }

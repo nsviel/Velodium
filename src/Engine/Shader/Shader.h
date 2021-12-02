@@ -53,6 +53,8 @@ public:
       glUniformMatrix4fv(glGetUniformLocation(ID_program, name.c_str()), 1, GL_FALSE, &mat[0][0]);
   }
 
+  inline GLuint get_program_ID(){return ID_program;}
+
 private:
   GLuint shader_compilation(string fileName, GLenum shaderType);
 

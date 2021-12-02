@@ -135,9 +135,18 @@ void GUI_CloudPlayer::parameter(){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
 
-    if (ImGui::Button("Supress first subset")){
+    if (ImGui::Button("Supress first subset", ImVec2(120,0))){
       if(cloud != nullptr){
         playerManager->supress_firstSubset(cloud);
+      }
+    }
+
+    if(ImGui::Button("All frame visible", ImVec2(120,0))){
+      if(cloud != nullptr){
+        for(int i=0; i<cloud->nb_subset; i++){
+          Subset* subset = &cloud->subset[i];
+          subset->visibility = true;
+        }
       }
     }
 
@@ -151,16 +160,6 @@ void GUI_CloudPlayer::parameter(){
     if(cloud != nullptr){
       int* point_size = &cloud->point_size;
       ImGui::SliderInt("Point size", point_size, 1, 20);
-    }
-
-    bool* all_frame_visible = playerManager->get_all_frame_visible();
-    if(ImGui::Checkbox("All frame visible", all_frame_visible)){
-      if(cloud != nullptr){
-        for(int i=0; i<cloud->nb_subset; i++){
-          Subset* subset = &cloud->subset[i];
-          subset->visibility = all_frame_visible;
-        }
-      }
     }
 
     //Set or not heatmap for the entire cloud

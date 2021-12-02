@@ -31,21 +31,16 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
   std::cout<<"frame index: "<<frame->ID<<std::endl;
 
   for (int iter=0; iter < iter_max; iter++) {
-    Eigen::MatrixXd A = Eigen::MatrixXd::Zero(12, 12);
+    Eigen::MatrixXd J = Eigen::MatrixXd::Zero(12, 12);
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
-    int nb_keypoint = 0;
-    float total_scalar = 0;
-    float mean_scalar = 0;
+    int nb_residual = 0;
 
     std::cout<<"iteration: "<<iter<<std::endl;
 
     //std::cout<<frame->rotat_b<<std::endl;
     //std::cout<<frame->rotat_e<<std::endl;
     //std::cout<<"map size: "<<map->size()<<std::endl;
-
-
-
 
     //Compute frame normal
     normalManager->compute_frameNormal(frame, map);
@@ -66,14 +61,11 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
       if (abs(PTP_distance) < 0.5 && isnan(a2D) == false) {
         Eigen::Vector3d iNN_N = a2D * a2D * normal;
 
-        float scalar = 0;
+        float residual = 0;
         for(int j=0; j<3; j++){
-          scalar += iNN_N[j] * (point[j] - iNN[j]);
+          residual += (point[j] - iNN[j]) * iNN_N[j];
         }
-
-        total_scalar = total_scalar + scalar * scalar;
-        mean_scalar = mean_scalar + abs(scalar);
-        nb_keypoint++;
+        nb_residual++;
 
         Eigen::Matrix3d rotat_b = frame->rotat_b;
         Eigen::Matrix3d rotat_e = frame->rotat_e;
@@ -101,46 +93,45 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
         u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez;
         for (int j = 0; j < 12; j++) {
           for (int k = 0; k < 12; k++) {
-            A(j, k) = A(j, k) + u[j] * u[k];
+            J(j, k) = J(j, k) + u[j] * u[k];
           }
-          b(j) = b(j) - u[j] * scalar;
+          b(j) = b(j) - u[j] * residual;
         }
       }
     }
 
-    if (nb_keypoint < 100) {
+    if (nb_residual < 100) {
         cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
-        cout << "[CT_ICP]Number_of_residuals : " << nb_keypoint << endl;
+        cout << "[CT_ICP]Number_of_residuals : " << nb_residual << endl;
     }
 
     // Normalize equation
     for (int i=0; i < 12; i++) {
         for (int j=0; j < 12; j++) {
-            A(i, j) = A(i, j) / nb_keypoint;
+            J(i, j) = J(i, j) / nb_residual;
         }
-        b(i) = b(i) / nb_keypoint;
+        b(i) = b(i) / nb_residual;
     }
-
-    say(b);
 
     //Add constraints in trajectory
     if (frame->ID > 1){
       Eigen::Vector3d trans_b = frame->trans_b;
       Eigen::Vector3d trans_e = frame->trans_e;
+      Eigen::Vector3d trans_b_m1 = frame_m1->trans_b;
       Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
       Eigen::Vector3d diff_traj = trans_b - trans_e_m1;
-      A(3, 3) = A(3, 3) + beta_location_consistency;
-      A(4, 4) = A(4, 4) + beta_location_consistency;
-      A(5, 5) = A(5, 5) + beta_location_consistency;
+      J(3, 3) = J(3, 3) + beta_location_consistency;
+      J(4, 4) = J(4, 4) + beta_location_consistency;
+      J(5, 5) = J(5, 5) + beta_location_consistency;
       b(3) = b(3) - beta_location_consistency * diff_traj(0);
       b(4) = b(4) - beta_location_consistency * diff_traj(1);
       b(5) = b(5) - beta_location_consistency * diff_traj(2);
 
-      Eigen::Vector3d diff_ego = trans_e - trans_b - trans_e_m1 + trans_b;
-      A(9, 9) = A(9, 9) + beta_constant_velocity;
-      A(10, 10) = A(10, 10) + beta_constant_velocity;
-      A(11, 11) = A(11, 11) + beta_constant_velocity;
+      Eigen::Vector3d diff_ego = trans_e - trans_b - trans_e_m1 + trans_b_m1;
+      J(9, 9) = J(9, 9) + beta_constant_velocity;
+      J(10, 10) = J(10, 10) + beta_constant_velocity;
+      J(11, 11) = J(11, 11) + beta_constant_velocity;
       b(9) = b(9) - beta_constant_velocity * diff_ego(0);
       b(10) = b(10) - beta_constant_velocity * diff_ego(1);
       b(11) = b(11) - beta_constant_velocity * diff_ego(2);
@@ -148,9 +139,9 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
     }
 
     //Solve
-    Eigen::VectorXd X = A.ldlt().solve(b);
+    Eigen::VectorXd X = J.ldlt().solve(b);
 
-
+    //Retrieve parameters
     float Rx_b = X(0);
     float Ry_b = X(1);
     float Rz_b = X(2);
@@ -181,15 +172,15 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
     gn_rotat_e(2, 2) = cos(Ry_e) * cos(Rx_e);
     Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
-
-    cout << "gn_trans_b: " <<gn_trans_b(0)<<" "<<gn_trans_b(1)<<" "<<gn_trans_b(2)<<endl;
-    cout << "gn_trans_e: " <<gn_trans_e(0)<<" "<<gn_trans_e(1)<<" "<<gn_trans_e(2)<<endl;
-
     frame->rotat_b = gn_rotat_b * frame->rotat_b;
     frame->trans_b = gn_trans_b + frame->trans_b;
 
     frame->rotat_e = gn_rotat_e * frame->rotat_e;
     frame->trans_e = gn_trans_e + frame->trans_e;
+
+    cout << "gn_trans_b: " <<frame->trans_b(0)<<" "<<frame->trans_b(1)<<" "<<frame->trans_b(2)<<endl;
+    cout << "gn_trans_e: " <<frame->trans_e(0)<<" "<<frame->trans_e(1)<<" "<<frame->trans_e(2)<<endl;
+
 
 
     //Update keypoints

@@ -40,7 +40,7 @@ public:
 
       // Velodyne data management
       if(module_CloudPlayer){
-        if(ImGui::BeginTabItem("Cloud player")){
+        if(ImGui::BeginTabItem("Player")){
           gui_odomManager->design_CloudPlayer();
           ImGui::EndTabItem();
         }

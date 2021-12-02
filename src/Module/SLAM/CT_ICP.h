@@ -40,6 +40,7 @@ public:
   inline float* get_sampling_size(){return &sampling_size;}
   inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}
   inline SLAM_optim_gn* get_SLAM_optim_gn(){return gnManager;}
+  inline void set_frame_max(int value){frame_max = value;}
 
 private:
   SLAM_optim_ceres* ceresManager;
@@ -51,7 +52,7 @@ private:
   float sampling_size;
   bool solver_GN, solver_ceres;
   float size_voxelMap;
-  int voxel_sizeMax;
+  int voxel_sizeMax, frame_max;
 };
 
 #endif

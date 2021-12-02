@@ -1,6 +1,6 @@
 #ifndef EDL_H
 #define EDL_H
-
+&
 
 // A Screen Shader which implements Eye-Dome-Lighting shading for non realistic rendering of point cloud
 class shader_EDL

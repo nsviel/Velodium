@@ -27,7 +27,7 @@ vec2 neighborContribution(float log2Depth, vec2 offset) {
   float depthOrLogDepth0 = texture2D(depthTexture, texCoord0).r;
   float depthOrLogDepth1 = texture2D(depthTexture, texCoord1).r;
   if (depthOrLogDepth0 == 0.0 || depthOrLogDepth1 == 0.0) {
-  return vec2(0.0);
+    return vec2(0.0);
   }
 
   // interpolate the two adjacent depth values
