@@ -49,9 +49,13 @@ void GUI_slam::parameters(){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
 
-    //Subsampling size
-    float* sampling_size = cticpManager->get_sampling_size();
-    ImGui::InputFloat("Subsample grid size", sampling_size, 0.1f, 1.0f, "%.3f");
+    //Subsampling voxel width
+    float* sampling_width = cticpManager->get_sampling_width();
+    ImGui::InputFloat("Subsample grid size", sampling_width, 0.1f, 1.0f, "%.3f");
+
+    //Width of the local map voxel
+    float* map_width = cticpManager->get_mapVoxel_width();
+    ImGui::InputFloat("Map voxel size", map_width, 0.1f, 1.0f, "%.3f");
 
     //Number of optimization iterations
     static int iter_max = 5;
@@ -68,7 +72,8 @@ void GUI_slam::parameters(){
         cticpManager->set_frame_max(frame_max);
       }
     }else{
-      ImGui::SliderInt("Number frame", 0, 0, 0);
+      static int frame_max = 0;
+      ImGui::SliderInt("Number frame", &frame_max, 0, 0);
     }
 
     //Number of thread for the normal computation
@@ -79,6 +84,7 @@ void GUI_slam::parameters(){
     }
 
     //---------------------------
+    ImGui::Separator();
   }
 }
 void GUI_slam::statistics(){

@@ -5,6 +5,7 @@
 #include "Scala/GUI_Scala.h"
 #include "CloudPlayer/GUI_CloudPlayer.h"
 #include "SLAM/GUI/GUI_slam.h"
+#include "Network/GUI_Sender.h"
 
 #include "../common.h"
 
@@ -18,6 +19,7 @@ public:
     this->gui_scalaManager = new GUI_scala();
     this->gui_odomManager = new GUI_CloudPlayer(cameraManager);
     this->gui_slamManager = new GUI_slam();
+    this->gui_senderManager = new GUI_Sender();
 
     this->module_velodyne = true;
     this->module_CloudPlayer = true;
@@ -63,6 +65,14 @@ public:
         }
       }
 
+      // Network stuff management
+      if(module_velodyne){
+        if(ImGui::BeginTabItem("Network")){
+          gui_senderManager->design_Sender();
+          ImGui::EndTabItem();
+        }
+      }
+
       //-------------------------------
       ImGui::EndTabBar();
     }
@@ -73,6 +83,7 @@ private:
   GUI_scala* gui_scalaManager;
   GUI_CloudPlayer* gui_odomManager;
   GUI_slam* gui_slamManager;
+  GUI_Sender* gui_senderManager;
 
   bool module_velodyne;
   bool module_CloudPlayer;

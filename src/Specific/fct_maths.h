@@ -175,6 +175,17 @@ namespace{
     //---------------------------
     return min;
   }
+  template<typename Type> const Type fct_min(Type in1, Type in2){
+    //---------------------------
+
+    if(in1 > in2){
+      return in2;
+    }else{
+      return in1;
+    }
+
+    //---------------------------
+  }
   glm::vec3 fct_min_vec3(std::vector<glm::vec3> XYZ){
     glm::vec3 min = XYZ[0];
     int size = XYZ.size();

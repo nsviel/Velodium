@@ -68,7 +68,7 @@ void GUI_fileManager::fileManager(){
       }
 
       //Subset tree node
-      if(open_cloud_node){
+      if(open_cloud_node && cloud != nullptr){
 
         for(int j=0; j<cloud->subset.size(); j++){
           Subset* subset = &cloud->subset[j];

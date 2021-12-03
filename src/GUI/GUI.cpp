@@ -57,7 +57,7 @@ void GUI::Gui_init(){
 }
 void GUI::Gui_style(){
   ImGuiStyle& style = ImGui::GetStyle();
-  ImGuiIO io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   //---------------------------
 
   //Formatting

@@ -24,9 +24,15 @@ void Scene::removeCloud(Cloud* cloud){
     string name =  cloud->name;
     //---------------------------
 
-    //Delete cloud
+    //Keep trace of the ID order
     this->selection_setCloud(oID);
+
+    //Delete cloud
+    /*for(int i=0; i<cloud->nb_subset; i++){
+      delete cloud->subset
+    }*/
     delete database.cloud_selected;
+    //delete cloud;
 
     //Delete cloud iterator in list
     list<Cloud*>::iterator it = next(database.list_cloud->begin(), oID);

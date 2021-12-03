@@ -29,7 +29,7 @@ CloudPlayer::CloudPlayer(Camera* camManager){
   this->frequency = 10;
   this->all_frame_visible = false;
   this->playCloud_isrunning = false;
-  this->camera_follow = true;
+  this->camera_follow = false;
   this->camera_moved = vec3(0, 0, 0);
 
   //Get absolute executable location

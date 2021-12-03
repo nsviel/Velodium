@@ -27,9 +27,9 @@ CT_ICP::CT_ICP(){
 
   this->solver_ceres = false;
   this->solver_GN = true;
-  this->sampling_size = 1;
-  this->size_voxelMap = 1;
-  this->voxel_sizeMax = 20;
+  this->sampling_width = 1;
+  this->map_voxel_width = 1;
+  this->map_max_voxelNbPoints = 20;
   this->frame_max = 0;
   this->frame_all = true;
 
@@ -165,9 +165,9 @@ void CT_ICP::compute_gridSampling(Subset* subset){
     vec3 xyz = subset->xyz[j];
     float ts_n = subset->ts_n[j];
 
-    int kx = static_cast<int>(xyz.x / sampling_size);
-    int ky = static_cast<int>(xyz.y / sampling_size);
-    int kz = static_cast<int>(xyz.z / sampling_size);
+    int kx = static_cast<int>(xyz.x / sampling_width);
+    int ky = static_cast<int>(xyz.y / sampling_width);
+    int kz = static_cast<int>(xyz.z / sampling_width);
 
     string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
     vec4 point = vec4(xyz.x, xyz.y, xyz.z, ts_n);
@@ -290,9 +290,9 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
 
-    int vx = static_cast<int>(point(0) / size_voxelMap);
-    int vy = static_cast<int>(point(1) / size_voxelMap);
-    int vz = static_cast<int>(point(2) / size_voxelMap);
+    int vx = static_cast<int>(point(0) / map_voxel_width);
+    int vy = static_cast<int>(point(1) / map_voxel_width);
+    int vz = static_cast<int>(point(2) / map_voxel_width);
 
     //Search for pre-existing voxel in local map
     string voxel_id = to_string(vx) + " " + to_string(vy) + " " + to_string(vz);
@@ -303,7 +303,7 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
       vector<Eigen::Vector3d>& voxel_xyz = map->find(voxel_id).value();
 
       //If the voxel is not full
-      if (voxel_xyz.size() < voxel_sizeMax){
+      if (voxel_xyz.size() < map_max_voxelNbPoints){
         voxel_xyz.push_back(point);
       }
     }
