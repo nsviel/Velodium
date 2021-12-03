@@ -13,10 +13,10 @@ class GUI_module
 {
 public:
   //Constructor / Destructor
-  GUI_module(){
+  GUI_module(Camera* cameraManager){
     this->gui_veloManager = new GUI_velodyne();
     this->gui_scalaManager = new GUI_scala();
-    this->gui_odomManager = new GUI_CloudPlayer();
+    this->gui_odomManager = new GUI_CloudPlayer(cameraManager);
     this->gui_slamManager = new GUI_slam();
 
     this->module_velodyne = true;

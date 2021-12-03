@@ -4,6 +4,7 @@
 #include "../../Specific/timer.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Data/Database.h"
+#include "../../Engine/OpenGL/Camera.h"
 #include "../../Load/Loader.h"
 
 #include <experimental/filesystem>
@@ -12,9 +13,10 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-CloudPlayer::CloudPlayer(){
+CloudPlayer::CloudPlayer(Camera* camManager){
   //---------------------------
 
+  this->cameraManager = camManager;
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
   this->timerManager = new Timer();
@@ -27,6 +29,8 @@ CloudPlayer::CloudPlayer(){
   this->frequency = 10;
   this->all_frame_visible = false;
   this->playCloud_isrunning = false;
+  this->camera_follow = true;
+  this->camera_moved = vec3(0, 0, 0);
 
   //Get absolute executable location
   string absPath = std::experimental::filesystem::current_path();
@@ -38,6 +42,7 @@ CloudPlayer::~CloudPlayer(){}
 
 //Main function
 void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
+  Subset* subset = &cloud->subset[cloud->subset_selected];
   //---------------------------
 
   //If frame desired ID is superior to the number of subset restart it
@@ -56,7 +61,9 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
     if(i >= frame_id - frame_display_range && i < frame_id && i >= 0){
       subset->visibility = true;
 
-    }else if(i == frame_id){
+    }
+    //Selected frame
+    else if(i == frame_id){
       subset->visibility = true;
       cloud->subset_selected = i;
 
@@ -64,7 +71,25 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
         frame_ID_ts = subset->ts[0];
       }
 
-    }else{
+      //Camera follow up
+      if(camera_follow){
+        Frame* frame = &subset->frame;
+        Eigen::Vector3d trans_b = frame->trans_b;
+        vec3 camPos = cameraManager->get_camPos();
+
+        float x = camPos.x + trans_b(0) - camera_moved.x;
+        float y = camPos.y + trans_b(1) - camera_moved.y;
+        float z = camPos.z;
+
+        vec3 camPos_new = vec3(x, y, z);
+
+        camera_moved = vec3(trans_b(0), trans_b(1), 0);
+        cameraManager->set_camPos(camPos_new);
+      }
+
+    }
+    //All other frames
+    else{
       subset->visibility = false;
 
     }

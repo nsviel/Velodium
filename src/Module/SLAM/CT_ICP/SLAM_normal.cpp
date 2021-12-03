@@ -10,6 +10,7 @@ SLAM_normal::SLAM_normal(){
   //---------------------------
 
   this->size_voxelMap = 1;
+  this->nb_threads = 8;
 
   //---------------------------
 }
@@ -18,7 +19,6 @@ SLAM_normal::~SLAM_normal(){}
 //Main function
 void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   int size = frame->xyz.size();
-  int nb_threads = 8;
   //---------------------------
 
   //Reset variable conteners
@@ -27,7 +27,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   a2D.clear(); a2D.resize(size);
 
   //Compute normal for each point
-  //#pragma omp parallel for num_threads(nb_threads)
+  #pragma omp parallel for num_threads(nb_threads)
   for(int i=0; i<frame->xyz.size(); i++){
 
     // Neighborhood search

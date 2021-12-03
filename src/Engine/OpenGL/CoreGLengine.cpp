@@ -105,10 +105,13 @@ bool CoreGLengine::init_shader(){
   //---------------------------
 
   //MVP shader
-  this->shaderManager = new Shader();
+  /*this->shaderManager = new Shader();
   shaderManager->shader_build("shader_mvp");
   //shaderManager->shader_build("shader_EDL");
-  shaderManager->run();
+  shaderManager->run();*/
+
+  shaderManager = new Shader("../src/Engine/Shader/framebuffer.vs", "../src/Engine/Shader/framebuffer.fs");
+  screenShader = new Shader("../src/Engine/Shader/framebuffer_screen.vs", "../src/Engine/Shader/framebuffer_screen.fs");
 
   //---------------------------
   return true;
@@ -128,15 +131,13 @@ bool CoreGLengine::init_object(){
 }
 
 void CoreGLengine::trucEDL(){
-  int gl_width = configuration.WINDOW_InitResWidth - configuration.GUI_LeftPanel_width;
-  int gl_height = configuration.WINDOW_InitResHeight - configuration.GUI_TopPanel_height;
+  int gl_width = configuration.WINDOW_InitResWidth;
+  int gl_height = configuration.WINDOW_InitResHeight;
 
 
-  GLuint texture_color_ID;
-  GLuint texture_depth_ID;
-  GLuint texture_postProcess_ID;
 
-  glGenFramebuffers(1, &fbo_pass_1);
+
+  /*glGenFramebuffers(1, &fbo_pass_1);
   glGenFramebuffers(1, &fbo_pass_2);
   glGenTextures(1, &texture_color_ID);
   glGenTextures(1, &texture_depth_ID);
@@ -164,46 +165,62 @@ void CoreGLengine::trucEDL(){
   glUniform1f(edl_dist_loc, (float) edl_distance);
   glUniform1i(with_edl_loc, true);*/
 
-  vec2 gl_dim = dimManager->get_glDim();
 
-  // FIRST PASS FRAMEBUFFER
-  //-------------------------------------
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1);
+  //Quad stuff
+  float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+      // positions   // texCoords
+      -1.0f,  1.0f,  0.0f, 1.0f,
+      -1.0f, -1.0f,  0.0f, 0.0f,
+       1.0f, -1.0f,  1.0f, 0.0f,
 
-  glBindTexture(GL_TEXTURE_2D, texture_color_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_color_ID, 0);
+      -1.0f,  1.0f,  0.0f, 1.0f,
+       1.0f, -1.0f,  1.0f, 0.0f,
+       1.0f,  1.0f,  1.0f, 1.0f
+  };
+  unsigned int quadVAO, quadVBO;
+  glGenVertexArrays(1, &quadVAO);
+  glGenBuffers(1, &quadVBO);
+  glBindVertexArray(quadVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-  glBindTexture(GL_TEXTURE_2D, texture_depth_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_width, gl_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  // Attach the texture as the framebuffer's depth buffer
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture_depth_ID, 0);
-  if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-    std::cout << "[OpenGL] Invalid Framebuffer" << std::endl;
-  }
+  // shader configuration
+  // --------------------
+  shaderManager->use();
+  shaderManager->setInt("texture1", 0);
 
-  // SECOND PASS FRAMEBUFFER
-  //-------------------------------------
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_2);
-  glBindTexture(GL_TEXTURE_2D, texture_postProcess_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_postProcess_ID, 0);
+  screenShader->use();
+  screenShader->setInt("screenTexture", 0);
 
-  if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-    std::cout << "[OpenGL] Invalid Framebuffer" << std::endl;
-  }
 
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      glGenFramebuffers(1, &fbo_pass_1);
+      glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1);
+      // create a color attachment texture
+      unsigned int textureColorbuffer;
+      glGenTextures(1, &textureColorbuffer);
+      glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+      // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+      unsigned int rbo;
+      glGenRenderbuffers(1, &rbo);
+      glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, gl_width, gl_height); // use a single renderbuffer object for both a depth AND stencil buffer.
+      glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+      // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+          cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+      // draw as wireframe
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 //Engine loop
@@ -226,7 +243,6 @@ void CoreGLengine::trucEDL(){
 void CoreGLengine::loop(){
   //---------------------------
 
-
   do{
 
     glfwPollEvents();
@@ -236,13 +252,34 @@ void CoreGLengine::loop(){
     glEnable(GL_DEPTH_TEST);
 
 
+
+
     this->loop_camera();
-    this->loop_shader();
+
+    shaderManager->use();
+    mat4 mvp = cameraManager->compute_mvpMatrix();
+    shaderManager->setMat4("MVP", mvp);
+
+    //this->loop_shader();
     engineManager->loop();
     guiManager->Gui_loop();
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_DEPTH_TEST);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+    screenShader->use();
+
+
+
+
+    glBindVertexArray(quadVAO);
+    glBindTexture(GL_TEXTURE_2D, texture_color_ID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);*/
+
     glfwSwapBuffers(window);
   }
   while(!glfwWindowShouldClose(window));

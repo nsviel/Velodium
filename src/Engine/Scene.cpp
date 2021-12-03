@@ -126,6 +126,8 @@ void Scene::update_cloud_reset(Cloud* cloud){
     this->update_subset_MinMax(subset);
     this->update_subset_location(subset);
 
+    //Reset frame
+    subset->frame.reset();
   }
 
   //---------------------------

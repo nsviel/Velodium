@@ -4,6 +4,7 @@
 #include "../../common.h"
 
 class Scene;
+class Camera;
 class CloudPlayer;
 class Heatmap;
 
@@ -12,7 +13,7 @@ class GUI_CloudPlayer
 {
 public:
   //Constructor / Destructor
-  GUI_CloudPlayer();
+  GUI_CloudPlayer(Camera* cameraManager);
   ~GUI_CloudPlayer();
 
 public:

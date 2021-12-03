@@ -3,6 +3,7 @@
 
 #include "../../common.h"
 
+class Camera;
 class Scene;
 class Heatmap;
 class Timer;
@@ -12,7 +13,7 @@ class CloudPlayer
 {
 public:
   //Constructor / Destructor
-  CloudPlayer();
+  CloudPlayer(Camera* camManager);
   ~CloudPlayer();
 
 public:
@@ -37,11 +38,13 @@ public:
   inline float* get_frame_ID_ts(){return &frame_ID_ts;}
   inline bool* get_all_frame_visible(){return &all_frame_visible;}
   inline bool* get_playCloud_isrunning(){return &playCloud_isrunning;}
+  inline bool* get_camera_follow(){return &camera_follow;}
   inline string* get_saveas(){return &saveas;}
 
 private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
+  Camera* cameraManager;
   Timer* timerManager;
 
   int cpt;
@@ -52,7 +55,9 @@ private:
   float frame_ID_ts;
   bool all_frame_visible;
   bool playCloud_isrunning;
+  bool camera_follow;
   string saveas;
+  vec3 camera_moved;
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include "CloudPlayer.h"
 
 #include "../../Engine/Data/Database.h"
+#include "../../Engine/OpenGL/Camera.h"
 #include "../../Operation/Functions/Heatmap.h"
 
 #include "../../../extern/imgui/imgui.h"
@@ -14,10 +15,10 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-GUI_CloudPlayer::GUI_CloudPlayer(){
+GUI_CloudPlayer::GUI_CloudPlayer(Camera* cameraManager){
   //---------------------------
 
-  this->playerManager = new CloudPlayer();
+  this->playerManager = new CloudPlayer(cameraManager);
   this->heatmapManager = new Heatmap();
 
   //---------------------------
@@ -134,6 +135,9 @@ void GUI_CloudPlayer::parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
+
+    bool* cameraRoot = playerManager->get_camera_follow();
+    ImGui::Checkbox("Camera follow up", cameraRoot);
 
     if (ImGui::Button("Supress first subset", ImVec2(120,0))){
       if(cloud != nullptr){

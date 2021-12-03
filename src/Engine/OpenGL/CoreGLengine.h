@@ -36,6 +36,7 @@ private:
   Configuration* configManager;
   GLFWwindow* window;
   Shader* shaderManager;
+  Shader*screenShader;
   Engine* engineManager;
   Camera* cameraManager;
   Dimension* dimManager;
@@ -46,9 +47,12 @@ private:
   vec3 backgColor;
 
 
-
+  uint quadVAO;
   GLuint fbo_pass_1;
   GLuint fbo_pass_2;
+  GLuint texture_color_ID;
+  GLuint texture_depth_ID;
+  GLuint texture_postProcess_ID;
 };
 
 #endif

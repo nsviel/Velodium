@@ -24,14 +24,14 @@ CT_ICP::CT_ICP(){
   ceresManager = new SLAM_optim_ceres();
   gnManager = new SLAM_optim_gn();
   normalManager = new SLAM_normal();
-  map = new voxelMap();
 
   this->solver_ceres = false;
   this->solver_GN = true;
   this->sampling_size = 1;
   this->size_voxelMap = 1;
   this->voxel_sizeMax = 20;
-  this->frame_max = 10;
+  this->frame_max = 0;
+  this->frame_all = true;
 
   //---------------------------
 }
@@ -39,7 +39,9 @@ CT_ICP::~CT_ICP(){}
 
 void CT_ICP::compute_slam(){
   Cloud* cloud = database.cloud_selected;
+  map = new voxelMap();
   if(cloud == nullptr) return;
+  if(frame_all) frame_max = cloud->nb_subset;
   //---------------------------
 
   for(int i=0; i<frame_max; i++){
@@ -61,6 +63,7 @@ void CT_ICP::compute_slam(){
   }
 
   //---------------------------
+  delete map;
 }
 
 void CT_ICP::init_frameTimestamp(Subset* subset){
@@ -111,7 +114,7 @@ void CT_ICP::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
     frame->rotat_b = frame_m1->rotat_e;
     frame->trans_b = frame_m1->trans_e;
 
-    // Different regimen for the second frame due to the bootstrapped elasticity
+    // Different for the second frame due to the bootstrapped elasticity
     Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
     Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 

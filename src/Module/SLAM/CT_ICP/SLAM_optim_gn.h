@@ -23,25 +23,24 @@ public:
   void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
   void frame_update(Frame* frame);
-  void frame_update_secured(Frame* frame);
   void frame_distort(Frame* frame);
 
   inline int* get_iter_max(){return &iter_max;}
   inline void set_iter_max(int value){iter_max = value;}
 
 private:
+  void compute_constraints(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b);
+  void compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b);
+
+  void update_frame(Frame* frame, Eigen::VectorXd& X);
+  void update_keypoints(Frame* frame);
+
+  Eigen::Matrix3d compute_rotationMatrix(float Rx, float Ry, float Rz);
+
+private:
   SLAM_normal* normalManager;
 
-  int nb_residual;
   int iter_max;
-  double* quat_b_ptr;
-  double* quat_e_ptr;
-  double* trans_b_ptr;
-  double* trans_e_ptr;
-
-  // Ceres stuff
-  vector<CTPTPR*> vector_residual;
-  ceres::LossFunction* loss_function;
 };
 
 

@@ -22,7 +22,7 @@ GUI_leftPanel::GUI_leftPanel(Engine* renderer, GUI_windows* winManager){
 
   this->dimManager = engineManager->get_dimManager();
 
-  this->gui_moduleManager = new GUI_module();
+  this->gui_moduleManager = new GUI_module(engineManager->get_CameraManager());
   this->gui_fileManager = new GUI_fileManager(dimManager, winManager);
 
   this->panel_X = configuration.GUI_LeftPanel_width;
