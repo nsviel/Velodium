@@ -41,7 +41,7 @@ void Configuration::initialize_configStruct(){
   //Windows
   strcpy(configuration.WINDOW_Title, "Velodium");
   configuration.WINDOW_InitResWidth = 1024;
-  configuration.WINDOW_InitResHeight = 600;
+  configuration.WINDOW_InitResHeight = 500;
   configuration.WINDOW_Resolution = 4.0f/3.0f;
   configuration.WINDOW_BckgColor = 0.86f;
   configuration.WINDOW_MultiSample = 4;
@@ -49,7 +49,7 @@ void Configuration::initialize_configStruct(){
   //GUI
   configuration.GUI_LeftPanel_width = 220;
   configuration.GUI_TopPanel_height = 18;
-  configuration.GUI_BotPanel_height = 125;
+  configuration.GUI_BotPanel_height = 100;
   configuration.GUI_LeftPanel_mid = 200;
 
   //OpenGL

@@ -72,6 +72,16 @@ void Operation::fastScene(int mode){
       this->loading_directoryFrames("../media/frames/");
       break;
     }
+    case 4:{//more Frames in movement
+      sceneManager->removeCloud_all();
+      this->loading_directoryFrames("../media/frames_lot/");
+      break;
+    }
+    case 5:{//Scala
+      sceneManager->removeCloud_all();
+      this->loading_directoryFrames("../media/frames_lot/");
+      break;
+    }
   }
 
   //---------------------------

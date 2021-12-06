@@ -253,7 +253,6 @@ void CoreGLengine::loop(){
 
 
 
-
     this->loop_camera();
 
     shaderManager->use();

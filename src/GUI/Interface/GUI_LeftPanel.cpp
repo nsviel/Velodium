@@ -80,6 +80,8 @@ void GUI_leftPanel::panel_top(){
 void GUI_leftPanel::panel_bot(){
   //----------------------------
 
+
+
   //Parameters
   vec2 guiDim_tP = dimManager->get_guiDim_tP();
   vec2 winDim = dimManager->get_winDim();
@@ -103,12 +105,11 @@ void GUI_leftPanel::panel_bot(){
   window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar;
   ImGui::SetNextWindowPos(ImVec2(0, panel_Y + 1));
   ImGui::SetNextWindowSize(ImVec2(panel_X - 1, winDim.y - panel_Y - 1));
-  ImGui::Begin("LeftPanel##botInner", NULL, window_flags);{
+  ImGui::Begin("LeftPanel##botInner", NULL, window_flags);
 
   //Working areas
   gui_moduleManager->display_moduleTabs();
 
-  }
   ImGui::PopStyleVar();
 
   //---------------

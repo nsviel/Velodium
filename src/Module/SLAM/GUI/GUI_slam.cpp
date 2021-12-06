@@ -49,6 +49,10 @@ void GUI_slam::parameters(){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
 
+    //
+    bool* slam_verbose = cticpManager->get_verbose();
+    ImGui::Checkbox("Verbose", slam_verbose);
+
     //Subsampling voxel width
     float* sampling_width = cticpManager->get_sampling_width();
     ImGui::InputFloat("Subsample grid size", sampling_width, 0.1f, 1.0f, "%.3f");

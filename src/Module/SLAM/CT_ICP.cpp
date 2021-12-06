@@ -27,11 +27,13 @@ CT_ICP::CT_ICP(){
 
   this->solver_ceres = false;
   this->solver_GN = true;
+  this->verbose = false;
   this->sampling_width = 1;
   this->map_voxel_width = 1;
   this->map_max_voxelNbPoints = 20;
   this->frame_max = 0;
   this->frame_all = true;
+  this->slamMap_voxelized = false;
 
   //---------------------------
 }
@@ -51,6 +53,8 @@ void CT_ICP::compute_slam(){
     Frame* frame_m2 = &cloud->subset[i-2].frame;
     frame->ID = i;
 
+    tic();
+
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame, frame_m1, frame_m2);
     this->init_distortion(frame);
@@ -58,8 +62,14 @@ void CT_ICP::compute_slam(){
     this->compute_gridSampling(subset);
     this->compute_optimization(frame, frame_m1);
 
-    this->add_keypointsToCloud(subset);
+    this->add_pointsToSlamMap(subset);
     this->add_pointsToLocalMap(frame);
+
+
+    float duration = toc();
+    if(verbose){
+      cout<<"Compute SLAM for " << subset->name.c_str() <<" in "<< duration << " ms" << endl;
+    }
   }
 
   //---------------------------
@@ -221,40 +231,9 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 }
 
-void CT_ICP::add_keypointsToCloud(Subset* subset){
+void CT_ICP::add_pointsToSlamMap(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
-
-  /*for(int i=0; i<subset->xyz.size(); i++){
-    Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
-    point = frame->rotat_e * point + frame->trans_e;
-    subset->xyz[i] = eigen_to_glm_vec3_d(point);
-  }*/
-
-
-
-  //Display keypoints
-  /*vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(frame->xyz);
-  vector<vec3> normal = eigen_to_glm_vectorvec3_d(frame->Nptp);
-
-  for(int i=0; i<keypoint.size(); i++){
-    subset->xyz.push_back(keypoint[i]);
-    subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
-  }*/
-
-  //Include local map into cloud subset
-  /*for(auto it = map->begin(); it != map->end(); ++it) {
-    vector<vec3> keypoint = eigen_to_glm_vectorvec3_d(it.value());
-
-    for(int i=0; i<keypoint.size(); i++){
-      subset->xyz.push_back(keypoint[i]);
-      subset->RGB.push_back(vec4(1.0f,0.0f,0.0f,1.0f));
-    }
-  }*/
-
-
-
-
 
   Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
   Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
@@ -277,7 +256,12 @@ void CT_ICP::add_keypointsToCloud(Subset* subset){
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
     point = R * point + t;
 
-    subset->xyz[i] = eigen_to_glm_vec3_d(point);
+    if(slamMap_voxelized){
+      //TODO: voxelized SLAM map
+    }else{
+      subset->xyz[i] = eigen_to_glm_vec3_d(point);
+    }
+
   }
 
   //---------------------------

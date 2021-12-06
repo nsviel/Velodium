@@ -97,7 +97,6 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
 
   //---------------------------
   this->subset_selected = frame_id;
-  sceneManager->update_cloud(cloud);
 }
 void CloudPlayer::update_frame_ID(Cloud* cloud){
   //---------------------------

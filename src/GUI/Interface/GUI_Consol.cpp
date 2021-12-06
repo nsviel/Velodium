@@ -6,6 +6,7 @@
 
 #include "../../../extern/imgui/imgui.h"
 
+#include <thread>
 
 
 //Constructor / Destructor

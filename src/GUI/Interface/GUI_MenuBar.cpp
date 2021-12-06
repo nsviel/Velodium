@@ -178,7 +178,7 @@ void GUI_menuBar::MenuBar_subsetSelected(){
   if(cloud != nullptr){
     int subset_selected = cloud->subset_selected;
     int subset_max = cloud->nb_subset;
-    
+
     ImGui::SetNextItemWidth(100);
     ImGui::SliderInt("##666", &subset_selected, 0, subset_max);
   }
@@ -201,6 +201,12 @@ void GUI_menuBar::MenuBar_fastScene(){
   }
   if(ImGui::Button("Frames move", ImVec2(100,0))){
     opeManager->fastScene(3);
+  }
+  if(ImGui::Button("More frames", ImVec2(100,0))){
+    opeManager->fastScene(4);
+  }
+  if(ImGui::Button("Scala", ImVec2(100,0))){
+    opeManager->fastScene(5);
   }
 
   //---------------------------
