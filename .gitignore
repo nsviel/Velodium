@@ -1,6 +1,9 @@
 build/*
 media/data/data/*
 media/data/graphs/*
+media/frames/*
+media/frames_lot/*
+media/test/*
 doc
 doc/*
 archive/*
