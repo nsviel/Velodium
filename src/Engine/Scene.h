@@ -24,7 +24,7 @@ public:
   void removeCloud_all();
 
   //Update data
-  void update_cloud(Cloud* cloud);
+  void update_cloud_glyphs(Cloud* cloud);
   void update_cloud_IntensityToColor(Cloud* cloud);
   void update_cloud_oID(list<Cloud*>* list);
   void update_cloud_reset(Cloud* cloud);
@@ -32,6 +32,7 @@ public:
   void update_cloud_location(Cloud* cloud);
   void update_cloud_color(Cloud* cloud);
 
+  void update_subset_glyphs(Subset* subset);
   void update_subset(Subset* subset);
   void update_subset_IntensityToColor(Subset* subset);
   void update_subset_MinMax(Subset* subset);

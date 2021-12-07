@@ -62,7 +62,7 @@ void GUI_CloudPlayer::playCloud(){
   ImGui::SameLine();
   int freq = *playerManager->get_frequency();
   ImGui::SetNextItemWidth(40);
-  if(ImGui::SliderInt("Frequency", &freq, 1, 20)){
+  if(ImGui::SliderInt("Frequency", &freq, 1, 25)){
     playerManager->play_setFrequency(freq);
   }
 

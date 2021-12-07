@@ -19,7 +19,8 @@ Heatmap::Heatmap(){
 
   this->HMmode = 0;
   this->normalized = true;
-  this->range = vec2(0.0f, 1.0f);
+  this->range_norm = vec2(0.0f, 1.0f);
+  this->range_height = vec2(-2.0f, 2.0f);
 
   //---------------------------
 }
@@ -41,8 +42,8 @@ void Heatmap::set_Heatmap(Cloud* cloud){
 
     //Reverse heatmap
     if(is_heatmap == true){
-        this->compute_subset_heatmap_OFF(subset);
-      }
+      this->compute_subset_heatmap_OFF(subset);
+    }
   }
 
   //Inverse old boolean
@@ -74,18 +75,6 @@ void Heatmap::set_Heatmap(Cloud* cloud, bool is_heatmap){
   //---------------------------
   sceneManager->update_cloud_color(cloud);
 }
-void Heatmap::set_HeatmapField(int value){
-  //---------------------------
-
-  this->HMmode = value;
-
-  Cloud* cloud = database.cloud_selected;
-  if(cloud != nullptr){
-    this->set_Heatmap(cloud, true);
-  }
-
-  //---------------------------
-}
 void Heatmap::set_Heatmap_all(bool heatAll){
   list<Cloud*>* list = database.list_cloud;
   //---------------------------
@@ -102,19 +91,25 @@ void Heatmap::set_Heatmap_all(bool heatAll){
 
 //Processing functions
 void Heatmap::compute_subset_heatmap_ON(Subset* subset){
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cosIt = subset->cosIt;
-  vector<float>& It = subset->It;
   //---------------------------
 
   //Apply heatmap
   switch(HMmode){
-    case 0:{//Is
+    case 0:{//height
+      vector<float> z_vec = attribManager->get_z_vector(subset->xyz);
+      //TODO: normalize by z min max of the overall cloud
+
+      vector<float> z_vec_norm = fct_normalize(z_vec, range_height);
+      vector<float>& z_vec_n = z_vec_norm;
+      this->compute_heatmap_color(subset, z_vec_n);
+      break;
+    }
+    case 1:{//Is
+      vector<float>& Is = subset->I;
       if(Is.size() != 0){
         vector<float> data;
         for(int i=0; i<Is.size(); i++){
-          if(Is[i] >= range.x && Is[i] <= range.y){
+          if(Is[i] >= range_norm.x && Is[i] <= range_norm.y){
             //If in range
             data.push_back(Is[i]);
           }else{
@@ -126,19 +121,22 @@ void Heatmap::compute_subset_heatmap_ON(Subset* subset){
       }
       break;
     }
-    case 1:{//dist
+    case 2:{//dist
+      vector<float>& dist = subset->R;
       if(dist.size() == 0) attribManager->compute_subset_distance(subset);
       vector<float> dist_norm = fct_normalize(dist);
       vector<float>& dist_n = dist_norm;
       this->compute_heatmap_color(subset, dist_n);
       break;
     }
-    case 2:{//cosIt
+    case 3:{//cosIt
+      vector<float>& cosIt = subset->cosIt;
       if(cosIt.size() == 0) attribManager->compute_subset_cosIt(subset);
       this->compute_heatmap_color(subset, cosIt);
       break;
     }
-    case 3:{//It
+    case 4:{//It
+      vector<float>& It = subset->It;
       if(It.size() == 0) attribManager->compute_subset_cosIt(subset);
       vector<float> It_norm = fct_normalize(It);
       vector<float>& It_n = It_norm;
@@ -153,12 +151,21 @@ void Heatmap::compute_subset_heatmap_OFF(Subset* subset){
   int size = subset->nb_point;
   vector<vec4>& RGB = subset->RGB;
   vector<float>& Is = subset->I;
-  if(Is.size() == 0) return;
   //---------------------------
 
-  for(int i=0; i<size; i++){
-    RGB[i] = vec4(Is[i],Is[i],Is[i],1);
+  //If intensity, reapply color
+  if(Is.size() != 0){
+    for(int i=0; i<size; i++){
+      RGB[i] = vec4(Is[i],Is[i],Is[i],1);
+    }
   }
+  //else reapply random color
+  else{
+    for(int i=0; i<size; i++){
+      RGB[i] = subset->unicolor;
+    }
+  }
+
 
   //---------------------------
 }
@@ -175,7 +182,7 @@ void Heatmap::compute_heatmap_color(Subset* subset, vector<float>& v_in){
 
   vector<float> v_norm;
   if(normalized){
-    v_norm = fct_normalize(v_in, range);
+    v_norm = fct_normalize(v_in, range_norm);
   }else{
     v_norm = v_in;
   }

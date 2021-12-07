@@ -31,6 +31,11 @@ namespace{
       std::cout<<"line."<<i<<" -> "<< truc[i].x <<" "<< truc[i].y <<" "<< truc[i].z <<std::endl;
     }
   }
+  void sayVecVec4(std::vector<glm::vec4> truc){
+    for(int i=0; i<truc.size(); i++){
+      std::cout<<"line."<<i<<" -> "<< truc[i].x <<" "<< truc[i].y <<" "<< truc[i].z <<" "<< truc[i].w <<std::endl;
+    }
+  }
   void sayVec4(glm::vec4 truc){
     std::cout<< "-> " << truc[0] <<" "<< truc[1] <<" "<< truc[2] <<" "<< truc[3] << std::endl;
   }
@@ -51,7 +56,7 @@ namespace{
   template<typename Type>
   void sayVec(std::vector<Type>& vec){
     for(int i=0; i<vec.size(); i++){
-      std::cout<<"line."<<i<<" -> "<<vec[i]<<std::endl;
+      std::cout<<std::fixed<<std::setprecision(5)<<"line."<<i<<" -> "<<vec[i]<<std::endl;
     }
   }
   auto time_start(){

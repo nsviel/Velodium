@@ -178,10 +178,16 @@ void Glyphs::reset_colors(){
 void Glyphs::update(Subset* subset){
   //---------------------------
 
+  this->update_glyph_object("aabb", subset);
+
   Axis axisManager;
   axisManager.update_axis_cloud(subset);
   this->update_glyph_location(&subset->axis);
-  this->update_glyph_color(&subset->axis);
+
+  Normal normalManager;
+  normalManager.update_normal(subset);
+  this->update_glyph_location(&subset->normal);
+  this->update_glyph_color(&subset->normal);
 
   //---------------------------
 }
@@ -249,23 +255,16 @@ void Glyphs::update_glyph_object(string name, Cloud* cloud){
 
 }
 void Glyphs::update_glyph_object(string name, Subset* subset){
+  Glyph* glyph = get_glyph(name);
   //---------------------------
 
-
-
-  if(name == "aaaxis_cloud"){
-    Axis axisManager;
-    axisManager.update_axis_cloud(subset);
-    this->update_glyph_location(&subset->axis);
-    this->update_glyph_color(&subset->axis);
-  }
-  /*else if(name == "normal"){
-    Normal normalManager;
-    normalManager.update_normal(glyph, subset);
+  if(name == "aabb"){
+    AABB aabbManager;
+    aabbManager.update_aabb(glyph, subset);
 
     this->update_glyph_location(glyph);
     this->update_glyph_color(glyph);
-  }*/
+  }
 
   //---------------------------
 
@@ -599,7 +598,7 @@ void Glyphs::set_size_normal(int size){
       this->update(subset);
     }
   }
-  
+
   //---------------------------
 }
 void Glyphs::set_visibility(string name, bool value){

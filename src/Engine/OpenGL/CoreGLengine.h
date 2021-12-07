@@ -4,6 +4,7 @@
 class Dimension;
 class Shader;
 class Camera;
+class Viewport;
 class GUI;
 class Engine;
 class Framebuffer;
@@ -28,7 +29,7 @@ public:
   //GL loop
   void loop();
   void loop_begin();
-  void loop_camera();
+  void loop_camera(int viewport_ID);
   void loop_shader();
   void loop_end();
 
@@ -39,6 +40,7 @@ private:
   Shader*screenShader;
   Engine* engineManager;
   Camera* cameraManager;
+  Viewport* viewportManager;
   Dimension* dimManager;
   Framebuffer* fboManager;
   GUI* guiManager;
@@ -46,7 +48,7 @@ private:
   uint shader_program_ID, mvpID;
   vec3 backgColor;
 
-
+  int loop_cpt;
   uint quadVAO;
   GLuint fbo_pass_1;
   GLuint fbo_pass_2;

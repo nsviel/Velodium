@@ -18,6 +18,7 @@ public:
 public:
   void design_SLAM();
 
+  void compute();
   void parameters();
   void statistics();
 
@@ -27,6 +28,8 @@ private:
   CT_ICP* cticpManager;
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
+
+  int item_width;
 };
 
 #endif

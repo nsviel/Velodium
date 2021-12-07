@@ -1,5 +1,7 @@
 #include "file_CSV.h"
 
+#include "../CSV/CSV_state.h"
+
 
 //Constructor / Destructor
 fileCSV::fileCSV(){}
@@ -10,60 +12,59 @@ vector<dataFile*> fileCSV::Loader(string pathFile){
   vector<dataFile*> cloud;
   //---------------------------
 
-  std::ifstream file(pathFile);
-  aria::csv::CsvParser parser(file);
+  std::ifstream file(pathFile);;
+  std::vector<std::vector<std::string>> csvFile = readCSV(file);
 
-  int cpt = 0;
-  for (auto& row : parser) {
+  //At row level
+  for(int i=0; i<csvFile.size(); i++){
     dataFile* data = new dataFile();
     data->path = pathFile;
 
-    string tss, xs, ys, zs;
-    int cpt = -1;
-    for(;;){
-      auto field = parser.next_field();
+    //At field level
+    int cpt_field = -1;
+    int cpt_point = 0;
+    string ts_str, x_str, y_str, z_str;
+    for(int j=0; j<csvFile[i].size(); j++){
+      string field = csvFile[i][j];
 
-      if(field.type == aria::csv::FieldType::CSV_END){
-        break;
+      if(j == 0 && cpt_field == -1){
+        ts_str = field;
+        cpt_field++;
       }
-
-      if(field.type != aria::csv::FieldType::ROW_END){
-        if(cpt==-1){
-          tss = *field.data;
-          cpt++;
-        }else if(cpt==0){
-          xs = *field.data;
-          cpt++;
-        }
-        else if(cpt==1){
-          ys =*field.data;
-          cpt++;
-        }
-        else if(cpt==2){
-          zs =*field.data;
-
-          float ts = stof(tss);
-          float x = stof(xs);
-          float y = stof(ys);
-          float z = stof(zs);
-
-          vec3 point = vec3(x, y, z);
-
-          data->name = "frame_" + to_string(cpt+1);
-          data->location.push_back(point);
-          data->timestamp.push_back(ts);
-
-          cpt = 0;
-        }
+      else if(cpt_field == 0){
+        x_str = field;
+        cpt_field++;
       }
-      //End of row line
-      else{
-        cloud.push_back(data);
-        data = new dataFile();
-        cpt = -1;
+      else if(cpt_field == 1){
+        y_str = field;
+        cpt_field++;
       }
+      else if(cpt_field == 2){
+        z_str = field;
 
+        float ts = stof(ts_str);
+        float x = stof(x_str);
+        float y = stof(y_str);
+        float z = stof(z_str);
+
+        //Relative timestamp
+        float delay = 1000000.0f / (25.0f * 340.0f);
+        ts = ts + cpt_point * delay;
+
+        vec3 point = vec3(x, y, z);
+
+        data->name = "frame_" + to_string(i);
+        data->timestamp.push_back(ts);
+        data->location.push_back(point);
+
+        cpt_field = 0;
+        cpt_point++;
+      }
     }
+    sayVec(data->timestamp);
+
+    //End of row line
+    cloud.push_back(data);
   }
 
   //---------------------------

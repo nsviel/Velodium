@@ -259,7 +259,7 @@ void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
   //Update list cloud
   Scene sceneManager;
   sceneManager.update_cloud_oID(database.list_cloud);
-  sceneManager.update_cloud(cloud);
+  sceneManager.update_cloud_glyphs(cloud);
 
   //---------------------------
 }

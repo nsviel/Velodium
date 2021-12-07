@@ -1,6 +1,7 @@
 #include "CoreGLengine.h"
 
 #include "Camera.h"
+#include "Viewport.h"
 #include "Framebuffer.h"
 
 #include "../Engine.h"
@@ -21,6 +22,8 @@ CoreGLengine::CoreGLengine(){
   //---------------------------
 
   this->configManager = new Configuration();
+
+  this->loop_cpt = 0;
 
   //---------------------------
 }
@@ -76,7 +79,7 @@ bool CoreGLengine::init_OGL(){
   glfwSetWindowTitle(window, configuration.WINDOW_Title);
 
   //OpenGL stuff
-  glViewport(0, 0, gl_width, gl_height/2);
+  glViewport(0, 0, gl_width, gl_height);
   glPointSize(1);
   glLineWidth(1);
   glEnable(GL_MULTISAMPLE);
@@ -121,6 +124,7 @@ bool CoreGLengine::init_object(){
 
   this->dimManager = new Dimension(window);
   this->cameraManager = new Camera(dimManager);
+  this->viewportManager = new Viewport(dimManager);
   this->engineManager = new Engine(dimManager, cameraManager);
   this->fboManager = new Framebuffer();
   this->guiManager = new GUI(engineManager);
@@ -252,16 +256,27 @@ void CoreGLengine::loop(){
     glEnable(GL_DEPTH_TEST);
 
 
+    int nb_viewport = viewportManager->get_number_viewport();
+    for(int i=0; i<nb_viewport; i++){
+      this->loop_camera(i);
 
-    this->loop_camera();
+      if(i==0){
+        cameraManager->input_projView(0);
+      }
+      if(i==1){
+        cameraManager->input_projView(2);
+      }
 
-    shaderManager->use();
-    mat4 mvp = cameraManager->compute_mvpMatrix();
-    shaderManager->setMat4("MVP", mvp);
+      shaderManager->use();
+      mat4 mvp = cameraManager->compute_mvpMatrix();
+      shaderManager->setMat4("MVP", mvp);
 
-    //this->loop_shader();
-    engineManager->loop();
-    guiManager->Gui_loop();
+      //this->loop_shader();
+      engineManager->loop();
+      guiManager->Gui_loop();
+
+      glFlush();
+    }
 
 
     /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -296,10 +311,10 @@ void CoreGLengine::loop_begin(){
 
   //---------------------------
 }
-void CoreGLengine::loop_camera(){
+void CoreGLengine::loop_camera(int viewport_ID){
   //---------------------------
 
-  cameraManager->update_viewport();
+  viewportManager->update_viewport(viewport_ID);
   cameraManager->input_cameraMouseCommands();
   cameraManager->input_cameraKeyCommands();
 

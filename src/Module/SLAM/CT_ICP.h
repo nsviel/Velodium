@@ -1,15 +1,11 @@
 #ifndef CT_ICP_H
 #define CT_ICP_H
 
+#include "struct_voxelMap.h"
 #include "CT_ICP/SLAM_normal.h"
-
 #include "Cost_function/Cost_function.h"
 
 #include "../../common.h"
-
-#include <map>
-#include <tsl/robin_map.h>
-#include <tsl/robin_set.h>
 
 class Scene;
 class SLAM_optim_ceres;

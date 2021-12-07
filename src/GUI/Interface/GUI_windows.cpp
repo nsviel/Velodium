@@ -452,15 +452,21 @@ void GUI_windows::window_heatmap(){
 
     //Select heatmap channel
     static int style_idx = 0;
+
+    int* HMmode = heatmapManager->get_HeatmapField();
     ImGui::SetNextItemWidth(75);
-    if (ImGui::Combo("##1", &style_idx, "Is\0dist\0cos(It)\0It\0")){
-        heatmapManager->set_HeatmapField(style_idx);
-    }
+    ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
     ImGui::SameLine();
 
     //Normalize palette
     bool* normalizeON = heatmapManager->get_param_Normalized();
     ImGui::Checkbox("Normalized", normalizeON);
+
+    //Height range configuration
+    if(*HMmode == 0){
+      vec2* range = heatmapManager->get_height_range();
+      ImGui::DragFloatRange2("Height range", &range->x, &range->y, 0.01f, -20.0f, 50.0f, "%.2f", "%.2f");
+    }
 
     //Display color palette
     if(ImGui::Button("Palette", ImVec2(75,0))){

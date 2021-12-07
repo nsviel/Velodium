@@ -63,6 +63,18 @@ void AABB::update_aabb(Glyph* aabb, Cloud* cloud){
 
   //---------------------------
 }
+void AABB::update_aabb(Glyph* aabb, Subset* subset){
+  vector<vec3>& XYZ = aabb->location;
+  vector<vec4>& RGB = aabb->color;
+  vec3 min = subset->min;
+  vec3 max = subset->max;
+  //---------------------------
+
+  //location
+  aabb->location = build_box(min, max);
+
+  //---------------------------
+}
 void AABB::update_obstacle(Glyph* obstacle, mat4 transformation){
   vector<vec3>& XYZ = obstacle->location;
   vector<vec4>& RGB = obstacle->color;

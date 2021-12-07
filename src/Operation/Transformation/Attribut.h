@@ -28,6 +28,7 @@ public:
   void make_supressPoint(Subset* subset, int id);
   void make_supressPoints(vector<vec3>& XYZ, vector<int>& idx);
   void cloudsData();
+  vector<float> get_z_vector(vector<vec3>& xyz);
 
   //Color
   void set_pointCloudColor(Subset* subset, vec4 RGBA);

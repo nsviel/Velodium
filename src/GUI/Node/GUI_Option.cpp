@@ -140,11 +140,9 @@ void GUI_option::option_heatmap(){
       }
     }
 
+    int* HMmode = heatmapManager->get_HeatmapField();
     ImGui::SetNextItemWidth(75);
-    static int style_idx = 0;
-    if (ImGui::Combo("##1", &style_idx, "Is\0dist\0cos(It)\0It\0")){
-      heatmapManager->set_HeatmapField(style_idx);
-    }
+    ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
     ImGui::SameLine();
 
     //Normalize heatmap

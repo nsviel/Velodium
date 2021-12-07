@@ -145,6 +145,14 @@ void GUI_velodyne::Capture(){
     veloManager->onrun_ope();
   }
 
+  //If slam computation at capture time
+  //bool* slamON = playerManager->get_camera_follow();
+  //ImGui::Checkbox("SLAM", slamON);
+
+  //Do not record first frame
+  //bool* slamON = playerManager->get_camera_follow();
+  //ImGui::Checkbox("First frame not recorded", slamON);
+
   //---------------------------
   ImGui::Separator();
 }

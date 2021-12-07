@@ -212,7 +212,7 @@ namespace{
     Type max = vec[0];
     for(int i=0; i<size; i++){
       if(vec[i] > max) max = vec[i];
-      if(vec[i] < min && vec[i] >= 0) min = vec[i];
+      if(vec[i] < min) min = vec[i];
     }
 
     //Normalization

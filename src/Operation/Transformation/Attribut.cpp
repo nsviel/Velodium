@@ -367,6 +367,17 @@ void Attribut::cloudsData(){
   myfile.close();
   cout<<"Data extracted in Clouds_Name-*.txt"<<endl;
 }
+vector<float> Attribut::get_z_vector(vector<vec3>& xyz){
+  vector<float> z_vec;
+  //---------------------------
+
+  for(int i=0; i<xyz.size(); i++){
+    z_vec.push_back(xyz[i].z);
+  }
+
+  //---------------------------
+  return z_vec;
+}
 
 //Color
 void Attribut::set_pointCloudColor(Subset* subset, vec4 RGBA){

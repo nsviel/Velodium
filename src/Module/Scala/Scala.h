@@ -12,12 +12,14 @@ public:
   ~Scala();
 
 public:
-  void loading();
-  void reorganize_data(vector<Cloud*> clouds);
+  void loading(string pathDir);
+
+  vector<string> loading_allPathDir(string pathDir);
+  vector<Cloud*> loading_allFile(vector<string> allpath);
+  Cloud* loading_reoganizeData(vector<Cloud*> clouds);
+  void compute_relativeTimestamp(Cloud* cloud);
 
 private:
-
-
 };
 
 #endif

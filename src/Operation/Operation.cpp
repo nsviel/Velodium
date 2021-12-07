@@ -99,7 +99,7 @@ void Operation::reset(){
 
   //Reset all functions
   glyphManager->reset();
-  sceneManager->update_cloud(cloud);
+  sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
   console.AddLog("Reset scene...");
@@ -341,7 +341,7 @@ void Operation::samplingLoader(string path){
     cout<<" - "<<cloud_base->nb_point<<" points"<<endl;
 
     //Update final cloud
-    sceneManager->update_cloud(cloud_base);
+    sceneManager->update_cloud_glyphs(cloud_base);
   }
 */
   //---------------------------

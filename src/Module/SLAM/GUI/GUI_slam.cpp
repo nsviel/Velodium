@@ -19,16 +19,29 @@ GUI_slam::GUI_slam(){
   this->ceresManager = cticpManager->get_SLAM_optim_ceres();
   this->gnManager = cticpManager->get_SLAM_optim_gn();
 
+  this->item_width = 100;
+
   //---------------------------
 }
 GUI_slam::~GUI_slam(){}
 
 //Main function
 void GUI_slam::design_SLAM(){
+  //---------------------------
+
+  this->compute();
+  this->parameters();
+  this->statistics();
+
+  //---------------------------
+}
+
+void GUI_slam::compute(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
-  if(ImGui::Button("Compute", ImVec2(75,0))){
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Compute", ImVec2(item_width,0))){
     Scene sceneManager;
 
     if(cloud != nullptr){
@@ -37,13 +50,10 @@ void GUI_slam::design_SLAM(){
       sceneManager.update_cloud_location(cloud);
     }
   }
-
-  this->parameters();
-  this->statistics();
+  ImGui::PopStyleColor(1);
 
   //---------------------------
 }
-
 void GUI_slam::parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = database.cloud_selected;
@@ -55,14 +65,17 @@ void GUI_slam::parameters(){
 
     //Subsampling voxel width
     float* sampling_width = cticpManager->get_sampling_width();
+    ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Subsample grid size", sampling_width, 0.1f, 1.0f, "%.3f");
 
     //Width of the local map voxel
     float* map_width = cticpManager->get_mapVoxel_width();
+    ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Map voxel size", map_width, 0.1f, 1.0f, "%.3f");
 
     //Number of optimization iterations
     static int iter_max = 5;
+    ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
       ceresManager->set_iter_max(iter_max);
       gnManager->set_iter_max(iter_max);
@@ -71,17 +84,20 @@ void GUI_slam::parameters(){
     //Number of frame computed
     if(cloud != nullptr){
       static int frame_max = cloud->nb_subset;
+      ImGui::SetNextItemWidth(item_width);
       if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_subset)){
         cticpManager->set_frame_all(false);
         cticpManager->set_frame_max(frame_max);
       }
     }else{
       static int frame_max = 0;
+      ImGui::SetNextItemWidth(item_width);
       ImGui::SliderInt("Number frame", &frame_max, 0, 0);
     }
 
     //Number of thread for the normal computation
     static int nb_thread = 8;
+    ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
       SLAM_normal* normalManager = cticpManager->get_SLAM_normal();
       normalManager->set_nb_thread(nb_thread);

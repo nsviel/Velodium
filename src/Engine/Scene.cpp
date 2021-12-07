@@ -68,7 +68,7 @@ void Scene::removeCloud_all(){
 }
 
 //Updating
-void Scene::update_cloud(Cloud* cloud){
+void Scene::update_cloud_glyphs(Cloud* cloud){
   if(cloud == nullptr)return;
   //---------------------------
 
@@ -131,12 +131,14 @@ void Scene::update_cloud_reset(Cloud* cloud){
     //Update
     this->update_subset_MinMax(subset);
     this->update_subset_location(subset);
+    this->update_subset_color(subset);
 
     //Reset frame
     subset->frame.reset();
   }
 
   //---------------------------
+  this->update_cloud_glyphs(cloud);
 }
 void Scene::update_cloud_MinMax(Cloud* cloud){
   vec3 min_cloud = vec3(100, 100, 100);
@@ -179,6 +181,15 @@ void Scene::update_cloud_color(Cloud* cloud){
   //---------------------------
 }
 
+void Scene::update_subset_glyphs(Subset* subset){
+  //---------------------------
+
+  this->update_subset_MinMax(subset);
+  Glyphs glyphManager;
+  glyphManager.update(subset);
+
+  //---------------------------
+}
 void Scene::update_subset(Subset* subset){
   if(subset == nullptr)return;
   //---------------------------
@@ -245,7 +256,6 @@ void Scene::update_subset_MinMax(Subset* subset){
   subset->COM = centroid;
 }
 void Scene::update_subset_location(Subset* subset){
-  this->update_cloud(database.cloud_selected);
   //---------------------------
 
   //Reactualise vertex position data
@@ -274,7 +284,7 @@ void Scene::selection_setCloud(int ID){
     Cloud* cloud = *next(database.list_cloud->begin(),i);
     if(cloud->oID == ID){
       database.cloud_selected = cloud;
-      this->update_cloud(database.cloud_selected);
+      this->update_cloud_glyphs(database.cloud_selected);
     }
   }
 
@@ -284,7 +294,7 @@ void Scene::selection_setCloud(Cloud* cloud){
   //---------------------------
 
   database.cloud_selected = cloud;
-  this->update_cloud(database.cloud_selected);
+  this->update_cloud_glyphs(database.cloud_selected);
 
   //---------------------------
 }
@@ -331,7 +341,7 @@ void Scene::selection_cloudByName(string name){
 
     if(cloud->name == name){
       database.cloud_selected = cloud;
-      this->update_cloud(database.cloud_selected);
+      this->update_cloud_glyphs(database.cloud_selected);
     }
   }
 

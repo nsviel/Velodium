@@ -4,6 +4,10 @@
 #include "../../Load/Loader.h"
 #include "../../Engine/Scene.h"
 
+//1 frame = 2 lidar scans = 2046 points
+//1024 points per scan with 25Hz rotation and 3 faisceau up and down
+//1 timestamp per faisceau of the lidar for 340 points
+
 
 //Constructor / Destructor
 Scala::Scala(){
@@ -13,16 +17,34 @@ Scala::Scala(){
 }
 Scala::~Scala(){}
 
-void Scala::loading(){
+void Scala::loading(string pathDir){
+  //---------------------------
+
+  vector<string> allpath = loading_allPathDir(pathDir);
+  vector<Cloud*> clouds = loading_allFile(allpath);
+  Cloud* cloud_scala = loading_reoganizeData(clouds);
+  this->compute_relativeTimestamp(cloud_scala);
+
+  //---------------------------
+}
+
+vector<string> Scala::loading_allPathDir(string pathDir){
+  Operation opeManager;
+  //---------------------------
+
+  if(pathDir == ""){
+    opeManager.selectDirectory(pathDir);
+  }
+  vector<string> allpath = opeManager.get_directoryAllFilePath(pathDir);
+
+  //---------------------------
+  return allpath;
+}
+vector<Cloud*> Scala::loading_allFile(vector<string> allpath){
   vector<Cloud*> clouds;
   //---------------------------
 
-  string pathDir = "";
   string format = "csv";
-
-  Operation opeManager;
-  opeManager.selectDirectory(pathDir);
-  vector<string> allpath = opeManager.get_directoryAllFilePath(pathDir);
 
   Loader loaderManager;
   for(int i=0; i<allpath.size(); i++){
@@ -36,7 +58,7 @@ void Scala::loading(){
     if(format == "csv"){
       loaderManager.load_cloud_silent(path);
       Cloud* cloud = loaderManager.get_createdcloud();
-      cloud->path = pathDir + "/" + "scala" + ".csv";
+      cloud->path = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
         for(int k=0; k<cloud->subset[j].RGB.size(); k++){
@@ -48,19 +70,17 @@ void Scala::loading(){
     }
   }
 
-  this->reorganize_data(clouds);
-
   //---------------------------
+  return clouds;
 }
-
-void Scala::reorganize_data(vector<Cloud*> clouds){
-  Cloud* cloud_final = new Cloud();
-  cloud_final->path = clouds[0]->path;
+Cloud* Scala::loading_reoganizeData(vector<Cloud*> clouds){
+  Cloud* cloud_scala = new Cloud();
+  cloud_scala->path = clouds[0]->path;
   Subset* subset;
   //---------------------------
 
   //ieme common subset
-  for(int i=0; i<clouds[0]->nb_subset; i++){
+  for(int i=0; i<clouds[0]->subset.size(); i++){
 
     //We accumulate 2 frame in one
     if(i == 0 || i % 2 == 0){
@@ -80,7 +100,7 @@ void Scala::reorganize_data(vector<Cloud*> clouds){
     }
 
     if(i % 2 == 0){
-      cloud_final->subset.push_back(*subset);
+      cloud_scala->subset.push_back(*subset);
     }
   }
 
@@ -92,8 +112,35 @@ void Scala::reorganize_data(vector<Cloud*> clouds){
 
   //Load final cloud
   Loader loaderManager;
-  loaderManager.load_cloud_creation(cloud_final);
+  loaderManager.load_cloud_creation(cloud_scala);
   Cloud* cloud = loaderManager.get_createdcloud();
+
+  //---------------------------
+  return cloud;
+}
+void Scala::compute_relativeTimestamp(Cloud* cloud){
+  //---------------------------
+
+  for(int i=0; i<1; i++){
+    Subset* subset = &cloud->subset[i];
+    vector<float>& ts = subset->ts;
+
+    float ts_cpt = ts[0];
+    for(int j=0; j<ts.size(); j++){
+
+      //If not
+      if(ts[j] != ts_cpt){
+        ts_cpt = ts[j];
+      }
+
+      //If the timestamp is the same as before : increment
+      if(ts[j] == ts_cpt){
+        float delay = (1 / (25 * 340)) * 1000000;
+        ts[j] = ts_cpt + j * delay;
+      }
+    }
+
+  }
 
   //---------------------------
 }

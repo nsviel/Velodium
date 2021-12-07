@@ -9,12 +9,8 @@
 #include "../../Engine/Data/Database.h"
 #include "../../Engine/Scene.h"
 
-#include <map>
-#include <ceres/ceres.h>
-
 extern struct Database database;
 
-#include "CT_ICP/truc.h"
 
 //Constructor / Destructor
 CT_ICP::CT_ICP(){

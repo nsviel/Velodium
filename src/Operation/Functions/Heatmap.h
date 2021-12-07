@@ -30,7 +30,9 @@ public:
 
   //Setters / Getters
   inline bool* get_param_Normalized(){ return &normalized;}
-  inline vec2* get_heatmap_range(){return &range;}
+  inline vec2* get_heatmap_range(){return &range_norm;}
+  inline vec2* get_height_range(){return &range_height;}
+  inline int* get_HeatmapField(){return &HMmode;}
 
 private:
   Scene* sceneManager;
@@ -38,7 +40,7 @@ private:
 
   int HMmode;
   bool normalized;
-  vec2 range;
+  vec2 range_norm, range_height;
 };
 
 #endif

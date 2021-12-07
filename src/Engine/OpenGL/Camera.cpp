@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
-
 //Constructor / Destructor
 Camera::Camera(Dimension* dimension){
   this->dimManager = dimension;
@@ -37,13 +36,21 @@ mat4 Camera::compute_viewMat(){
   cam_R = normalize(vec3(cos(horizAngle - M_PI/2.0f), sin(horizAngle - M_PI/2.0f), 0));
 
   //Forward and Up camera
-  if(upView) vertiAngle = -M_PI/2.0f;
+  if(upView){
+    vertiAngle_old = vertiAngle;
+    vertiAngle = -M_PI/2.0f;
+  }
   if(sideView) vertiAngle = 0.0f;
+
   cam_F = vec3(
     cos(vertiAngle) * cos(horizAngle),
     cos(vertiAngle) * sin(horizAngle),
     sin(vertiAngle));
   cam_U = normalize(cross(cam_R, cam_F));
+
+  if(upView){
+    vertiAngle = vertiAngle_old;
+  }
 
   //Target camera
   vec3 cam_target = cam_pos + cam_F;
@@ -231,17 +238,6 @@ void Camera::compute_positionalZoom(float yoffset){
     vec3 cam_forwardMove = cam_F * yoffset * cam_speed * vec3(0.1,0.1,0.1);
     cam_pos += cam_forwardMove;
   }
-
-  //---------------------------
-}
-void Camera::update_viewport(){
-  //---------------------------
-
-  dimManager->update_window_dim();
-  vec2 dim = dimManager->get_glDim();
-  vec2 pos = dimManager->get_glPos();
-
-  glViewport(pos.x, pos.y, dim.x, dim.y);
 
   //---------------------------
 }

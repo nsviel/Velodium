@@ -28,6 +28,7 @@ public:
   void compute_opticalZoom(float value);
   void compute_positionalZoom(float value);
   void update_viewport();
+  void update_viewport(int loop_cpt);
 
   //Accessors
   inline void set_fov(float value){this->fov = value;}
@@ -56,7 +57,7 @@ public:
 private:
   Dimension* dimManager;
 
-  float horizAngle, vertiAngle;
+  float horizAngle, vertiAngle, vertiAngle_old;
   float fov, cam_speed;
   float deltaTime;
   float zoom_UpView;

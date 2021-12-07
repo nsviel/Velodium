@@ -235,15 +235,21 @@ void GUI_control::control_keyboard_movement(){
       // Z key
       if(io.KeysDown[87]){
         vec3 translation = vec3(transCoef,0,0);
+
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // S key
       if(io.KeysDown[83]){
         vec3 translation = vec3(-transCoef,0,0);
+
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // D key
@@ -252,43 +258,60 @@ void GUI_control::control_keyboard_movement(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // Q key
       if(io.KeysDown[65]){
         vec3 translation = vec3(0,-transCoef,0);
+
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // A key
       if(io.KeysDown[81]){
         vec3 translation = vec3(0,0,transCoef);
+
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // E key
       if(io.KeysDown[69]){
         vec3 translation = vec3(0,0,-transCoef);
+
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // 7 key
       if(io.KeysDown[327]){
         float r = rotatDegree*M_PI/180;
         vec3 rotation = vec3(0,0,r);
+
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+
         break;
       }
       // 9 key
       if(io.KeysDown[329]){
         float r = rotatDegree*M_PI/180;
         vec3 rotation = vec3(0,0,-r);
+
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
         sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_glyphs(subset);
+        
         break;
       }
 
