@@ -113,7 +113,7 @@ void GUI::Gui_loop(){
   //---------------------------
 
   gui_consol->design_consol();
-  gui_controlManager->Gui_control();
+  gui_controlManager->make_control();
   gui_menuBarManager->design_MenuBar();
   gui_leftPanelManager->design_leftPanel();
   gui_winManager->window_Draw();

@@ -6,13 +6,12 @@ class Velodyne;
 #include "../../common.h"
 
 
-
-class GUI_velodyne
+class GUI_Velodyne
 {
 public:
   //Constructor / Destructor
-  GUI_velodyne();
-  ~GUI_velodyne();
+  GUI_Velodyne();
+  ~GUI_Velodyne();
 
 public:
   //Main function

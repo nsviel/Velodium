@@ -8,12 +8,12 @@ class SLAM_optim_ceres;
 class SLAM_optim_gn;
 
 
-class GUI_slam
+class GUI_Slam
 {
 public:
   //Constructor / Destructor
-  GUI_slam();
-  ~GUI_slam();
+  GUI_Slam();
+  ~GUI_Slam();
 
 public:
   void design_SLAM();

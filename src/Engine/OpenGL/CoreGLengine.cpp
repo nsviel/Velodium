@@ -256,16 +256,16 @@ void CoreGLengine::loop(){
     glEnable(GL_DEPTH_TEST);
 
 
-    int nb_viewport = viewportManager->get_number_viewport();
-    for(int i=0; i<nb_viewport; i++){
+    int nb_viewport = cameraManager->get_number_viewport();
+    for(int i=0; i<1; i++){
       this->loop_camera(i);
 
-      if(i==0){
+      /*if(i==0){
         cameraManager->input_projView(0);
       }
       if(i==1){
         cameraManager->input_projView(2);
-      }
+      }*/
 
       shaderManager->use();
       mat4 mvp = cameraManager->compute_mvpMatrix();
@@ -276,7 +276,7 @@ void CoreGLengine::loop(){
       guiManager->Gui_loop();
 
     }
-    viewportManager->update_viewport(0);
+
 
     /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_DEPTH_TEST);
@@ -313,9 +313,8 @@ void CoreGLengine::loop_begin(){
 void CoreGLengine::loop_camera(int viewport_ID){
   //---------------------------
 
-  viewportManager->update_viewport(viewport_ID);
+  cameraManager->viewport_update(viewport_ID);
   cameraManager->input_cameraMouseCommands();
-  cameraManager->input_cameraKeyCommands();
 
   //---------------------------
 }

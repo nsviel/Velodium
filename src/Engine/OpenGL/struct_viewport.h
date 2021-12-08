@@ -8,22 +8,23 @@ struct Viewport_obj{
   glm::vec2 pos;
   glm::vec2 dim;
 
-  glm::vec3 cam_F;
-  glm::vec3 cam_R;
-  glm::vec3 cam_U;
-  glm::vec3 cam_pos;
+  glm::vec3 cam_F; // Front
+  glm::vec3 cam_R; // Right
+  glm::vec3 cam_U; // Up
+  glm::vec3 cam_P; // Position
 
   float angle_azimuth;
   float angle_elevati;
+  float angle_elevati_old;
 
   float fov;
   float cam_speed;
-  float zoom_UpView;
+  float zoom_topView;
 
   bool proj_persp;
   bool proj_ortho;
 
-  bool upView;
+  bool topView;
   bool sideView;
 
   bool cameraMovON;

@@ -4,16 +4,16 @@
 
 
 //Constructor / Destructor
-GUI_scala::GUI_scala(){
+GUI_Scala::GUI_Scala(){
   //---------------------------
 
   this->scalaManager = new Scala();
 
   //---------------------------
 }
-GUI_scala::~GUI_scala(){}
+GUI_Scala::~GUI_Scala(){}
 
-void GUI_scala::design_Scala(){
+void GUI_Scala::design_Scala(){
   //---------------------------
 
   if(ImGui::Button("Load in directory", ImVec2(100,0))){

@@ -5,6 +5,7 @@
 #include "../../Engine/Engine.h"
 #include "../../Engine/Data/Database.h"
 #include "../../Engine/OpenGL/Camera.h"
+#include "../../Engine/OpenGL/struct_viewport.h"
 #include "../../Engine/Configuration/Dimension.h"
 
 #include "../../Operation/Transformation/Attribut.h"
@@ -43,14 +44,15 @@ GUI_control::GUI_control(Engine* engine){
 GUI_control::~GUI_control(){}
 
 //Main function
-void GUI_control::Gui_control(){
+void GUI_control::make_control(){
   //---------------------------
 
   this->control_mouse();
   this->control_frameSelection();
   this->control_keyboard_oneAction();
-  this->control_keyboard_movement();
+  this->control_keyboard_translation();
   this->control_keyboard_ctrlAction();
+  this->control_keyboard_camMove();
 
   //---------------------------
 }
@@ -60,6 +62,7 @@ void GUI_control::control_mouse(){
   Cloud* cloud = database.cloud_selected;
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
+  Viewport_obj* view = cameraManager->get_current_viewport();
   //----------------------------
 
   this->control_mouse_wheel();
@@ -79,15 +82,14 @@ void GUI_control::control_mouse(){
     glfwSetCursorPos(window, glMiddle.x, glMiddle.y);
 
     //Enable camera movement
-    cameraManager->set_cameraMovON(true);
-
+    view->cameraMovON = true;
   }
   if(ImGui::IsMouseReleased(1) && cameraManager->is_cameraMovON()){
     //Restaure cursor position
     dimManager->set_cursorPos(cursorPos);
 
     //Disable camera movement
-    cameraManager->set_cameraMovON(false);
+    view->cameraMovON = false;
   }
   if(io.MouseDown[1] && !io.WantCaptureMouse){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -142,6 +144,7 @@ void GUI_control::control_frameSelection(){
 
   //----------------------------
 }
+
 void GUI_control::control_keyboard_oneAction(){
   Cloud* cloud = database.cloud_selected;
   ImGuiIO io = ImGui::GetIO();
@@ -218,7 +221,7 @@ void GUI_control::control_keyboard_oneAction(){
 
   //----------------------------
 }
-void GUI_control::control_keyboard_movement(){
+void GUI_control::control_keyboard_translation(){
   Cloud* cloud = database.cloud_selected;
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -311,7 +314,7 @@ void GUI_control::control_keyboard_movement(){
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
         sceneManager->update_subset_location(subset);
         sceneManager->update_subset_glyphs(subset);
-        
+
         break;
       }
 
@@ -338,4 +341,47 @@ void GUI_control::control_keyboard_ctrlAction(){
   }
 
   //----------------------------
+}
+void GUI_control::control_keyboard_camMove(){
+  ImGuiIO io = ImGui::GetIO();
+  Viewport_obj* view = cameraManager->get_current_viewport();
+  //----------------------------
+
+  if(view->cameraMovON){
+    float delta = 0.00016;
+    float camSpeed = view->cam_speed * delta;
+    float fastSpeed = view->cam_speed * delta * 4;
+
+    for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
+      if(io.MouseDown[1] && !io.WantCaptureMouse){
+
+        //Shift speed up
+        if(io.KeysDown[340]){
+          camSpeed = fastSpeed;
+        }
+
+        //Z key or Up key
+        if(io.KeysDown[87] || io.KeysDown[265]){
+          view->cam_P += view->cam_F * camSpeed;
+        }
+
+        //S key or Down key
+        if(io.KeysDown[83] || io.KeysDown[264]){
+          view->cam_P -= view->cam_F * camSpeed;
+        }
+
+        //Q key or Right key
+        if(io.KeysDown[65] || io.KeysDown[263]){
+          view->cam_P -= view->cam_R * camSpeed;
+        }
+
+        //D key or Left key
+        if(io.KeysDown[68] || io.KeysDown[262]){
+          view->cam_P += view->cam_R * camSpeed;
+        }
+      }
+    }
+  }
+
+  //---------------------------
 }

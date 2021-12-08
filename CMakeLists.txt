@@ -32,9 +32,10 @@ set(ALL_LIBS
   OpenMP::OpenMP_CXX
   Eigen3::Eigen
   glfw
-  tsl::robin_map
-  -fopenmp
-  -lGLEW)
+  tsl::robin_map # Fast unordored map
+  -fopenmp  # Multithreading
+  -lGLEW
+)
 
 #Optional libraries
 if(WITH_PCL)
@@ -54,7 +55,9 @@ set(OTHERS_LIBS
   -ljsoncpp
   -ldl
   -lboost_iostreams
-  -llz4)
+  -llz4
+  -lssh #SSH connexion libray
+)
 
 
 #Header libraries

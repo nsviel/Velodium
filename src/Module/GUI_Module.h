@@ -4,8 +4,8 @@
 #include "Velodyne/GUI_Velodyne.h"
 #include "Scala/GUI_Scala.h"
 #include "CloudPlayer/GUI_CloudPlayer.h"
-#include "SLAM/GUI/GUI_slam.h"
-#include "Network/GUI_Sender.h"
+#include "SLAM/GUI/GUI_Slam.h"
+#include "Network/GUI_Network.h"
 
 #include "../common.h"
 
@@ -15,11 +15,11 @@ class GUI_module
 public:
   //Constructor / Destructor
   GUI_module(Camera* cameraManager){
-    this->gui_veloManager = new GUI_velodyne();
-    this->gui_scalaManager = new GUI_scala();
+    this->gui_veloManager = new GUI_Velodyne();
+    this->gui_scalaManager = new GUI_Scala();
     this->gui_odomManager = new GUI_CloudPlayer(cameraManager);
-    this->gui_slamManager = new GUI_slam();
-    this->gui_senderManager = new GUI_Sender();
+    this->gui_slamManager = new GUI_Slam();
+    this->gui_senderManager = new GUI_Network();
 
     this->module_velodyne = true;
     this->module_CloudPlayer = true;
@@ -68,7 +68,7 @@ public:
       // Network stuff management
       if(module_velodyne){
         if(ImGui::BeginTabItem("Network")){
-          gui_senderManager->design_Sender();
+          gui_senderManager->design_Network();
           ImGui::EndTabItem();
         }
       }
@@ -79,11 +79,11 @@ public:
   }
 
 private:
-  GUI_velodyne* gui_veloManager;
-  GUI_scala* gui_scalaManager;
+  GUI_Velodyne* gui_veloManager;
+  GUI_Scala* gui_scalaManager;
   GUI_CloudPlayer* gui_odomManager;
-  GUI_slam* gui_slamManager;
-  GUI_Sender* gui_senderManager;
+  GUI_Slam* gui_slamManager;
+  GUI_Network* gui_senderManager;
 
   bool module_velodyne;
   bool module_CloudPlayer;

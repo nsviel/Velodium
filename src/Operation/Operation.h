@@ -28,6 +28,7 @@ public:
   void saving();
   void allSaving();
   void convertIscale();
+  string get_filePath();
 
   inline void set_spaceSampling(float value){this->spaceSampling = value;}
   inline void set_nbLineSampling(int value){this->nbLineSampling = value;}

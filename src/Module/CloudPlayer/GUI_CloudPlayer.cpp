@@ -42,11 +42,13 @@ void GUI_CloudPlayer::playCloud(){
   //---------------------------
 
   //Play / Stop frame display
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if (ImGui::Button(ICON_FA_PLAY "##36")){
     if(cloud != nullptr){
       playerManager->playCloud_start();
     }
   }
+  ImGui::PopStyleColor(1);
   ImGui::SameLine();
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     if(cloud != nullptr){
@@ -97,6 +99,7 @@ void GUI_CloudPlayer::playCloud(){
     }
   }
   ImGui::SameLine();
+  //Dicrectory path selection & display
   if(ImGui::Button("...##23")){
     playerManager->playCloud_selectDirSave();
   }

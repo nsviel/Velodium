@@ -5,19 +5,18 @@
 #include "../../../extern/imgui/imgui.h"
 
 
-
 //Constructor / Destructor
-GUI_velodyne::GUI_velodyne(){
+GUI_Velodyne::GUI_Velodyne(){
   //---------------------------
 
   this->veloManager = new Velodyne();
 
   //---------------------------
 }
-GUI_velodyne::~GUI_velodyne(){}
+GUI_Velodyne::~GUI_Velodyne(){}
 
 //Main function
-void GUI_velodyne::design_Velodyne(){
+void GUI_Velodyne::design_Velodyne(){
   //---------------------------
 
   this->State();
@@ -29,7 +28,7 @@ void GUI_velodyne::design_Velodyne(){
 }
 
 //Subfunctions
-void GUI_velodyne::State(){
+void GUI_Velodyne::State(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "State");
   //---------------------------
 
@@ -103,7 +102,7 @@ void GUI_velodyne::State(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_velodyne::Capture(){
+void GUI_Velodyne::Capture(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Capture data");
   //---------------------------
 
@@ -156,7 +155,7 @@ void GUI_velodyne::Capture(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_velodyne::Recording(){
+void GUI_Velodyne::Recording(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recording");
   //---------------------------
 
@@ -219,7 +218,7 @@ void GUI_velodyne::Recording(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_velodyne::Parameters(){
+void GUI_Velodyne::Parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
 

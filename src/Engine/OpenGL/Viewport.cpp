@@ -43,7 +43,6 @@ void Viewport::update_viewport(int loop_cpt){
   }
 
   cameraManager->input_cameraMouseCommands();
-  cameraManager->input_cameraKeyCommands();
 
   //---------------------------
 }

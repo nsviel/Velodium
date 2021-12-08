@@ -6,12 +6,12 @@ class Scala;
 #include "../../common.h"
 
 
-class GUI_scala
+class GUI_Scala
 {
 public:
   //Constructor / Destructor
-  GUI_scala();
-  ~GUI_scala();
+  GUI_Scala();
+  ~GUI_Scala();
 
 public:
   void design_Scala();

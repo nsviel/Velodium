@@ -417,3 +417,23 @@ void Operation::allSaving(){
 
   //---------------------------
 }
+string Operation::get_filePath(){
+  //---------------------------
+
+  string path_str = "";
+
+  //Zenity window
+  string zenity = "zenity --file-selection 2> /dev/null";
+  FILE *file = popen(zenity.c_str(), "r");
+  char filename[32768];
+  const char* path_char = fgets(filename, 32768, file);
+
+
+  //Check if not empty
+  if ((path_char != NULL) && (path_char[0] != '\0')){
+    path_str = string(path_char);
+  }
+
+  //---------------------------
+  return path_str;
+}

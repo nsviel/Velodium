@@ -27,14 +27,17 @@ public:
 
 public:
   //Main function
-  void Gui_control();
+  void make_control();
 
   //Subfunctions
+  void control_frameSelection();
+
   void control_mouse();
   void control_mouse_wheel();
-  void control_frameSelection();
+
   void control_keyboard_oneAction();
-  void control_keyboard_movement();
+  void control_keyboard_translation();
+  void control_keyboard_camMove();
   void control_keyboard_ctrlAction();
 
   inline float* get_transCoef(){return &move_trans_speed;}

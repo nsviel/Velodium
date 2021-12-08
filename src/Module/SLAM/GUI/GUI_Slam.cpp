@@ -1,4 +1,4 @@
-#include "GUI_slam.h"
+#include "GUI_Slam.h"
 
 #include "../CT_ICP.h"
 #include "../CT_ICP/SLAM_optim_ceres.h"
@@ -12,7 +12,7 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-GUI_slam::GUI_slam(){
+GUI_Slam::GUI_Slam(){
   //---------------------------
 
   this->cticpManager = new CT_ICP();
@@ -23,10 +23,10 @@ GUI_slam::GUI_slam(){
 
   //---------------------------
 }
-GUI_slam::~GUI_slam(){}
+GUI_Slam::~GUI_Slam(){}
 
 //Main function
-void GUI_slam::design_SLAM(){
+void GUI_Slam::design_SLAM(){
   //---------------------------
 
   this->compute();
@@ -36,7 +36,7 @@ void GUI_slam::design_SLAM(){
   //---------------------------
 }
 
-void GUI_slam::compute(){
+void GUI_Slam::compute(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
@@ -54,7 +54,7 @@ void GUI_slam::compute(){
 
   //---------------------------
 }
-void GUI_slam::parameters(){
+void GUI_Slam::parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
@@ -107,7 +107,7 @@ void GUI_slam::parameters(){
     ImGui::Separator();
   }
 }
-void GUI_slam::statistics(){
+void GUI_Slam::statistics(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
@@ -133,18 +133,28 @@ void GUI_slam::statistics(){
   }
 
   //SLAM time computation
-  ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "Optim duration: %.2f ms", time_slam);
+  ImGui::Text("Computation:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time_slam);
 
   //SLAM results
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "Tb [m]: %.3f %.3f %.3f", trans_b(0), trans_b(1), trans_b(2));
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "Te [m]: %.3f %.3f %.3f", trans_e(0), trans_e(1), trans_e(2));
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "Rb [°]: %.3f %.3f %.3f", rotat_b.x, rotat_b.y, rotat_b.z);
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "Re [°]: %.3f %.3f %.3f", rotat_e.x, rotat_e.y, rotat_e.z);
+  ImGui::Text("Tb [m]:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_b(0), trans_b(1), trans_b(2));
+  ImGui::Text("Te [m]:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_e(0), trans_e(1), trans_e(2));
+  ImGui::Text("Rb [°]:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_b.x, rotat_b.y, rotat_b.z);
+  ImGui::Text("Re [°]:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_e.x, rotat_e.y, rotat_e.z);
 
   //---------------------------
 }
 
-vec3 GUI_slam::compute_anglesFromTransformationMatrix(const mat4& mat){
+vec3 GUI_Slam::compute_anglesFromTransformationMatrix(const mat4& mat){
   vec3 angles;
   //---------------------------
 
