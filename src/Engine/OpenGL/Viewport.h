@@ -22,9 +22,10 @@ public:
 
 private:
   Dimension* dimManager;
-  Camera* camera;
+  Camera* cameraManager;
 
   vector<int> viewport_vec;
+  vec2 pos, dim;
   int nb_viewport;
 };
 

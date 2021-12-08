@@ -302,7 +302,7 @@ void GUI_windows::window_camera(){
     //Zoom - Field Of View
     float fov_value = cameraManager->get_fov();
     if(ImGui::SliderFloat("FOV (°)", &fov_value, 100.0f, 1.0f)){
-      cameraManager->set_fov(fov_value);
+      cameraManager->set_cameraFOV(fov_value);
     }
     static float cam_speed = configuration.CAM_MoveSpeed;
     if(ImGui::DragFloat("speed (m/s)", &cam_speed, 0.01, 0, 20, "%.2f")){
@@ -355,8 +355,8 @@ void GUI_windows::window_camera(){
     ImGui::DragFloat3("Pos", floatArray, 0.01f, -100.0f, 100.0f);
 
     //Camera angles
-    float HAngle = cameraManager->get_horizAngle();
-    float VAngle = cameraManager->get_vertiAngle();
+    float HAngle = cameraManager->get_angle_azimuth();
+    float VAngle = cameraManager->get_angle_elevati();
     ImGui::Text("Horizontal angle : %.2f°", HAngle * 180 / M_PI);
     ImGui::Text("Vertical angle : %.2f°", VAngle * 180 / M_PI);
 
@@ -405,7 +405,7 @@ void GUI_windows::window_camera(){
 
         mat4 mvMatrix = orientation * translation;
         vec3 camPos = vec3(dP[0][3], dP[1][3], dP[2][3]);
-        cameraManager->set_camPos(camPos);
+        cameraManager->set_cameraPos(camPos);
         cameraManager->set_desiredViewMatrix(mvMatrix);
 
         dPoseInit = true;

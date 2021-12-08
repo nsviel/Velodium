@@ -275,9 +275,8 @@ void CoreGLengine::loop(){
       engineManager->loop();
       guiManager->Gui_loop();
 
-      glFlush();
     }
-
+    viewportManager->update_viewport(0);
 
     /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_DEPTH_TEST);

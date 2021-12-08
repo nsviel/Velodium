@@ -84,7 +84,7 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
         vec3 camPos_new = vec3(x, y, z);
 
         camera_moved = vec3(trans_b(0), trans_b(1), 0);
-        cameraManager->set_camPos(camPos_new);
+        cameraManager->set_cameraPos(camPos_new);
       }
 
     }

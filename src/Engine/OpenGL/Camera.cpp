@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+
+
 #include "../Configuration/Dimension.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,18 +12,20 @@ Camera::Camera(Dimension* dimension){
   this->dimManager = dimension;
   //---------------------------
 
-  this->cam_speed = configuration.CAM_MoveSpeed;
+  viewMain.cam_speed = configuration.CAM_MoveSpeed;
   this->cam_pos = vec3(configuration.CAM_InitialPos, configuration.CAM_InitialPos, configuration.CAM_InitialPos);
-  this->horizAngle = M_PI + M_PI/4;// Initial horizontal angle
-  this->vertiAngle = - M_PI/6;// Initial vertical angle
+  this->angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
+  this->angle_elevati = - M_PI/6;// Initial vertical angle
   this->fov = configuration.CAM_FOV;
   this->cameraMovON = false;
-  this->upView = false;
-  this->perspeView = true;
-  this->orthoView = false;
+  this->topView = false;
+  this->proj_persp = true;
+  this->proj_ortho = false;
   this->desiredPose = false;
   this->sideView = false;
-  this->zoom_UpView = 0;
+  this->zoom_topView = 0;
+
+
 
   //---------------------------
 }
@@ -33,23 +37,23 @@ mat4 Camera::compute_viewMat(){
   //---------------------------
 
   //Rigth camera
-  cam_R = normalize(vec3(cos(horizAngle - M_PI/2.0f), sin(horizAngle - M_PI/2.0f), 0));
+  cam_R = normalize(vec3(cos(angle_azimuth - M_PI/2.0f), sin(angle_azimuth - M_PI/2.0f), 0));
 
   //Forward and Up camera
-  if(upView){
-    vertiAngle_old = vertiAngle;
-    vertiAngle = -M_PI/2.0f;
+  if(topView){
+    angle_elevati_old = angle_elevati;
+    angle_elevati = -M_PI/2.0f;
   }
-  if(sideView) vertiAngle = 0.0f;
+  if(sideView) angle_elevati = 0.0f;
 
   cam_F = vec3(
-    cos(vertiAngle) * cos(horizAngle),
-    cos(vertiAngle) * sin(horizAngle),
-    sin(vertiAngle));
+    cos(angle_elevati) * cos(angle_azimuth),
+    cos(angle_elevati) * sin(angle_azimuth),
+    sin(angle_elevati));
   cam_U = normalize(cross(cam_R, cam_F));
 
-  if(upView){
-    vertiAngle = vertiAngle_old;
+  if(topView){
+    angle_elevati = angle_elevati_old;
   }
 
   //Target camera
@@ -71,15 +75,15 @@ mat4 Camera::compute_projMat(){
   //---------------------------
 
   //Compute projection matrix
-  if(perspeView){
+  if(proj_persp){
     vec2 glDim = dimManager->get_glDim();
     projMat = perspective(radians(fov), (float)glDim.x / (float)glDim.y, configuration.CAM_NearClip, configuration.CAM_FarClip);
   }
-  else if(orthoView){
-    projMat = ortho(-5.f - zoom_UpView, 5.f + zoom_UpView, -5.f - zoom_UpView, 5.f + zoom_UpView, -1000.0f, 1000.0f);
+  else if(proj_ortho){
+    projMat = ortho(-5.f - zoom_topView, 5.f + zoom_topView, -5.f - zoom_topView, 5.f + zoom_topView, -1000.0f, 1000.0f);
   }
-  else if(upView){
-    projMat = ortho(-5.f - zoom_UpView, 5.f + zoom_UpView, -5.f - zoom_UpView, 5.f + zoom_UpView, -1000.0f, 1000.0f);
+  else if(topView){
+    projMat = ortho(-5.f - zoom_topView, 5.f + zoom_topView, -5.f - zoom_topView, 5.f + zoom_topView, -1000.0f, 1000.0f);
   }
 
   //---------------------------
@@ -128,7 +132,7 @@ void Camera::input_cameraKeyCommands(){
   if(cameraMovON){
     float delta = 0.016;
     float CAMspeed = cam_speed * delta;
-    float fastSpeed = cam_speed * delta * 4;
+    float fastSpeed = cam_speed * delta * 10;
     //--------------------
 
     //Keystrocks
@@ -149,8 +153,8 @@ void Camera::input_cameraKeyCommands(){
       cam_pos -= cam_R * CAMspeed;
     }
 
-    //UpView keystrocks
-    if(upView){
+    //topView keystrocks
+    if(topView){
       if(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS){
         cam_pos += cam_U * CAMspeed;
       }
@@ -172,36 +176,36 @@ void Camera::input_cameraMouseCommands(){
 
     // Compute new orientation
     vec2 glMid = dimManager->get_glMiddle();
-    horizAngle += configuration.CAM_MouseSpeed * float(glMid.x - curPos.x);
-    vertiAngle += configuration.CAM_MouseSpeed * float(glMid.y - curPos.y);
+    angle_azimuth += configuration.CAM_MouseSpeed * float(glMid.x - curPos.x);
+    angle_elevati += configuration.CAM_MouseSpeed * float(glMid.y - curPos.y);
 
     //Limites of camera rotation
-    if(vertiAngle > 1.57) vertiAngle = 1.57;
-    if(vertiAngle < -1.57) vertiAngle = -1.57;
-    if(horizAngle > 2*M_PI) horizAngle = 0;
-    if(horizAngle < 2*(-M_PI)) horizAngle = 0;
+    if(angle_elevati > 1.57) angle_elevati = 1.57;
+    if(angle_elevati < -1.57) angle_elevati = -1.57;
+    if(angle_azimuth > 2*M_PI) angle_azimuth = 0;
+    if(angle_azimuth < 2*(-M_PI)) angle_azimuth = 0;
   }
 
   //---------------------------
 }
 void Camera::input_projView(int projView){
-  this->perspeView = false;
-  this->orthoView = false;
-  this->upView = false;
+  this->proj_persp = false;
+  this->proj_ortho = false;
+  this->topView = false;
   this->sideView = false;
   //---------------------------
 
   switch(projView){
     case 0:{ //Perspective
-      this->perspeView = true;
+      this->proj_persp = true;
       break;
     }
     case 1:{ //Orthographic
-      this->orthoView = true;
+      this->proj_ortho = true;
       break;
     }
     case 2:{ //Ortho up
-      this->upView = true;
+      this->topView = true;
       break;
     }
     case 3:{ //Ortho side
@@ -225,7 +229,7 @@ void Camera::compute_opticalZoom(float yoffset){
     if(fov >= configuration.CAM_FOV) fov = configuration.CAM_FOV;
 
     //Ortho zoom
-    zoom_UpView -= yoffset * 0.1;
+    zoom_topView -= yoffset * 0.1;
   }
 
   //---------------------------

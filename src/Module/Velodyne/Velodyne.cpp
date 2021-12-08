@@ -299,7 +299,7 @@ void Velodyne::lidar_set_rpm(int value){
   //---------------------------
   sleep(1);
 }
-void Velodyne::lidar_set_fov_min(int value){
+void Velodyne::lidar_set_cameraFOV_min(int value){
   this->fov_min = value;
   //---------------------------
 
@@ -309,7 +309,7 @@ void Velodyne::lidar_set_fov_min(int value){
   //---------------------------
   sleep(1);
 }
-void Velodyne::lidar_set_fov_max(int value){
+void Velodyne::lidar_set_cameraFOV_max(int value){
   this->fov_max = value;
   //---------------------------
 

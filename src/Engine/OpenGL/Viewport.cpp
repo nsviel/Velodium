@@ -7,7 +7,7 @@
 Viewport::Viewport(Dimension* dimension){
   //---------------------------
 
-  Camera* cameraManager = new Camera(dimension);
+  cameraManager = new Camera(dimension);
 
   this->dimManager = dimension;
   this->nb_viewport = 2;
@@ -42,7 +42,8 @@ void Viewport::update_viewport(int loop_cpt){
 
   }
 
-
+  cameraManager->input_cameraMouseCommands();
+  cameraManager->input_cameraKeyCommands();
 
   //---------------------------
 }

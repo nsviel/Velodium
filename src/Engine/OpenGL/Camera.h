@@ -3,6 +3,8 @@
 
 class Dimension;
 
+#include "struct_viewport.h"
+
 #include "../../common.h"
 
 class Camera
@@ -31,19 +33,20 @@ public:
   void update_viewport(int loop_cpt);
 
   //Accessors
-  inline void set_fov(float value){this->fov = value;}
   inline void set_desiredViewMatrix(mat4 value){this->dviewMat = value;}
-  inline void set_camPos(vec3 value){this->cam_pos = value;}
   inline void set_desiredPoseON(bool value){this->desiredPose = value;}
+
+  inline void set_cameraFOV(float value){this->fov = value;}
   inline void set_cameraMovON(bool value){this->cameraMovON = value;}
   inline void set_cameraSpeed(float value){this->cam_speed = value;}
+  inline void set_cameraPos(vec3 value){this->cam_pos = value;}
 
   //Getters
   inline mat4 get_viewMat(){return compute_viewMat();}
   inline mat4 get_projMat(){return compute_projMat();}
   inline mat4 get_mvpMatrix(){return compute_mvpMatrix();}
-  inline float get_horizAngle(){return horizAngle;}
-  inline float get_vertiAngle(){return vertiAngle;}
+  inline float get_angle_azimuth(){return angle_azimuth;}
+  inline float get_angle_elevati(){return angle_elevati;}
   inline float get_fov(){return fov;}
   inline vec3 get_camPos(){return cam_pos;}
   inline vec3 get_camTarget(){return cam_pos + cam_F;}
@@ -56,18 +59,33 @@ public:
 
 private:
   Dimension* dimManager;
+  Viewport_obj viewMain;
+  Viewport_obj viewMap;
 
-  float horizAngle, vertiAngle, vertiAngle_old;
-  float fov, cam_speed;
-  float deltaTime;
-  float zoom_UpView;
-  bool perspeView, orthoView;
-  bool upView, sideView;
+  vec2 pos;
+  vec2 dim;
+
+  vec3 cam_F;
+  vec3 cam_R;
+  vec3 cam_U;
+  vec3 cam_pos;
+
+  float angle_azimuth;
+  float angle_elevati;
+  float angle_elevati_old;
+
+  float fov;
+  float cam_speed;
+  float zoom_topView;
+
+  bool proj_persp;
+  bool proj_ortho;
+  bool topView;
+  bool sideView;
+
   bool cameraMovON;
   bool desiredPose;
   mat4 dviewMat;
-  vec3 cam_F, cam_R, cam_U;
-  vec3 cam_pos;
 };
 
 #endif

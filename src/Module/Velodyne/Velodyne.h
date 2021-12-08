@@ -39,8 +39,8 @@ public:
   void lidar_get_status();
   bool lidar_get_is_connected();
   void lidar_set_rpm(int value);
-  void lidar_set_fov_min(int fov_min);
-  void lidar_set_fov_max(int fov_max);
+  void lidar_set_cameraFOV_min(int fov_min);
+  void lidar_set_cameraFOV_max(int fov_max);
 
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
