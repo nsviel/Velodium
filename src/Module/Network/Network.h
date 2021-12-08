@@ -19,7 +19,6 @@ public:
   ~Network();
 
 public:
-  void ssh_connexion();
   void sftp_sendFile();
   void sftp_createDirectory(string dirName);
 

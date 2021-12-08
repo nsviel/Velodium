@@ -1,6 +1,7 @@
 #include "GUI_Network.h"
 
 #include "Network.h"
+#include "MQTT.h"
 
 
 //Constructor / Destructor
@@ -8,12 +9,23 @@ GUI_Network::GUI_Network(){
   //---------------------------
 
   this->netManager = new Network();
+  this->mqttManager = new MQTT();
 
   //---------------------------
 }
 GUI_Network::~GUI_Network(){}
 
 void GUI_Network::design_Network(){
+  //---------------------------
+
+  this->connexion_ssh();
+  this->connexion_mqtt();
+
+  //---------------------------
+}
+
+void GUI_Network::connexion_ssh(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "SSH connexion");
   //---------------------------
 
   int* adress_ID = netManager->get_ssh_adress_ID();
@@ -23,7 +35,7 @@ void GUI_Network::design_Network(){
   if(*ssh_connected == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Connexion", ImVec2(150,0))){
-      netManager->ssh_connexion();
+      netManager->ssh_startConnexion();
     }
     ImGui::PopStyleColor(1);
   }else{
@@ -54,4 +66,27 @@ void GUI_Network::design_Network(){
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", path_target.c_str());
 
   //---------------------------
+  ImGui::Separator();
+}
+void GUI_Network::connexion_mqtt(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
+  //---------------------------
+
+  bool* ssh_connected = netManager->get_ssh_connected();
+  if(*ssh_connected == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Connexion##1", ImVec2(150,0))){
+      mqttManager->mqtt_startConnexion();
+    }
+    ImGui::PopStyleColor(1);
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(175, 0, 0, 255));
+    if(ImGui::Button("Deconnexion##1", ImVec2(150,0))){
+      mqttManager->mqtt_stopConnexion();
+    }
+    ImGui::PopStyleColor(1);
+  }
+
+  //---------------------------
+  ImGui::Separator();
 }

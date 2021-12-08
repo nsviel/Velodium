@@ -26,20 +26,6 @@ Network::~Network(){
   //---------------------------
 }
 
-void Network::ssh_connexion(){
-  //---------------------------
-
-  //SSH allocation
-  this->ssh_startConnexion();
-
-  // Verify the server's identity
-  this->ssh_verify_knownhost();
-
-  // Authenticate ourselves
-  this->ssh_autentification();
-
-  //---------------------------
-}
 void Network::sftp_sendFile(){
   //---------------------------
 
@@ -72,7 +58,6 @@ void Network::sftp_sendFile(){
   }
 
   //Open local file and write on remote
-  say(path_source);
   ifstream fin(path_source, ios::binary);
   while (fin){
     constexpr size_t max_xfer_buf_size = 10240;
@@ -157,6 +142,12 @@ void Network::ssh_startConnexion(){
     return;
   }
 
+  // Verify the server's identity
+  this->ssh_verify_knownhost();
+
+  // Authenticate ourselves
+  this->ssh_autentification();
+
   //---------------------------
 }
 void Network::ssh_stopConnexion(){
@@ -169,18 +160,29 @@ void Network::ssh_stopConnexion(){
   //---------------------------
 }
 void Network::ssh_autentification(){
+  int nb_tentatives = 3;
   //---------------------------
 
-  char* password = getpass("Password: ");
-  int rc = ssh_userauth_password(SSH, NULL, password);
-  if (rc != SSH_AUTH_SUCCESS){
-    fprintf(stderr, "Error authenticating with password: %s\n", ssh_get_error(SSH));
-    ssh_disconnect(SSH);
-    ssh_free(SSH);
-    exit(-1);
-  }else{
-    cout<<"Identification OK."<<endl;
-    ssh_connected = true;
+  bool sucess;
+  for(int i=0; i<nb_tentatives; i++){
+    char* password = getpass("Password: ");
+    int rc = ssh_userauth_password(SSH, NULL, password);
+
+    if (rc != SSH_AUTH_SUCCESS){
+      fprintf(stderr, "Error authenticating with password: %s\n", ssh_get_error(SSH));
+      cout<<"New tentative: "<<to_string(i + 1)<<"/"<<to_string(nb_tentatives)<<endl;
+      sucess = false;
+    }else{
+      cout<<"Identification OK."<<endl;
+      ssh_connected = true;
+      sucess = true;
+      break;
+    }
+  }
+
+  if(sucess == false){
+    cout<<"Exit program..."<<endl;
+    exit(0);
   }
 
   //---------------------------
