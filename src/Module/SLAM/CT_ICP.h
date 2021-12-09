@@ -21,12 +21,14 @@ public:
 
 public:
   void compute_slam();
+  void set_nb_thread(int value);
 
   inline SLAM_normal* get_SLAM_normal(){return normalManager;}
   inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}
   inline SLAM_optim_gn* get_SLAM_optim_gn(){return gnManager;}
-  inline float* get_sampling_width(){return &sampling_width;}
-  inline float* get_mapVoxel_width(){return &map_voxel_width;}
+  inline float* get_voxel_size_gridMap(){return &voxel_size_gridMap;}
+  inline float* get_voxel_size_localMap(){return &voxel_size_localMap;}
+  inline float* get_voxel_size_slamMap(){return &voxel_size_slamMap;}
   inline bool* get_verbose(){return &verbose;}
   inline bool* get_slamMap_voxelized(){return &slamMap_voxelized;}
 
@@ -39,9 +41,9 @@ private:
   void init_distortion(Frame* frame);
 
   void compute_gridSampling(Subset* subset);
-  void compute_normal(Subset* subset);
   void compute_optimization(Frame* frame, Frame* frame_m1);
 
+  void add_pointsToSubset(Subset* subset);
   void add_pointsToSlamMap(Subset* subset);
   void add_pointsToLocalMap(Frame* frame);
 
@@ -50,11 +52,16 @@ private:
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
   Scene* sceneManager;
-  voxelMap* map;
 
-  float sampling_width;
-  float map_voxel_width;
-  int map_max_voxelNbPoints, frame_max;
+  voxelMap* map;
+  slamMap* gmap;
+
+  float voxel_size_gridMap;
+  float voxel_size_localMap;
+  float voxel_size_slamMap;
+  int map_max_voxelNbPoints;
+  int frame_max;
+  int nb_thread;
   bool frame_all;
   bool solver_GN, solver_ceres;
   bool verbose, slamMap_voxelized;

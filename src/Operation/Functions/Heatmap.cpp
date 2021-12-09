@@ -99,6 +99,11 @@ void Heatmap::compute_subset_heatmap_ON(Subset* subset){
       vector<float> z_vec = attribManager->get_z_vector(subset->xyz);
       //TODO: normalize by z min max of the overall cloud
 
+      //Check for preventing too much near range
+      if(range_height.x + 1 > range_height.y){
+        range_height.x = range_height.y - 1;
+      }
+
       vector<float> z_vec_norm = fct_normalize(z_vec, range_height);
       vector<float>& z_vec_n = z_vec_norm;
       this->compute_heatmap_color(subset, z_vec_n);

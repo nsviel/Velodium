@@ -32,10 +32,10 @@ GUI_windows::GUI_windows(Engine* engine){
   //---------------------------
 
   this->cameraManager = engineManager->get_CameraManager();
+  this->heatmapManager = engineManager->get_heatmapManager();
 
   this->selectionManager = new Selection(engineManager->get_dimManager(), cameraManager);
   this->sceneManager = new Scene();
-  this->heatmapManager = new Heatmap();
   this->filterManager = new Filter();
   this->glyphManager = new Glyphs();
   this->opeManager = new Operation();
@@ -465,7 +465,10 @@ void GUI_windows::window_heatmap(){
     //Height range configuration
     if(*HMmode == 0){
       vec2* range = heatmapManager->get_height_range();
-      ImGui::DragFloatRange2("Height range", &range->x, &range->y, 0.01f, -20.0f, 50.0f, "%.2f", "%.2f");
+      if(ImGui::DragFloatRange2("Height range", &range->x, &range->y, 0.01f, -20.0f, 50.0f, "%.2f", "%.2f")){
+        heatmapManager->compute_subset_heatmap_ON(subset);
+        sceneManager->update_subset_color(subset);
+      }
     }
 
     //Display color palette

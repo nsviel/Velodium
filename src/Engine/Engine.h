@@ -14,6 +14,7 @@ class Glyphs;
 class Camera;
 class Dimension;
 class GUI;
+class Heatmap;
 
 #include "../common.h"
 
@@ -37,6 +38,7 @@ public:
   inline Glyphs* get_glyphManager(){return glyphManager;}
   inline Dimension* get_dimManager(){return dimManager;}
   inline Camera* get_CameraManager(){return cameraManager;}
+  inline Heatmap* get_heatmapManager(){return heatmapManager;}
 
 private:
   Dimension* dimManager;
@@ -44,6 +46,7 @@ private:
   Glyphs* glyphManager;
   Camera* cameraManager;
   GUI* guiManager;
+  Heatmap* heatmapManager;
 
   uint modelID, comID;
 };

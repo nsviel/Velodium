@@ -2,6 +2,7 @@
 #define VOXELMAP_STRUCT_H
 
 #include <Eigen/Dense>
+#include <glm/glm.hpp>
 #include <tsl/robin_map.h>
 #include <queue>
 
@@ -14,6 +15,8 @@ struct Comparator {
 using priority_queue_iNN = std::priority_queue<iNN, std::vector<iNN>, Comparator>;
 
 typedef tsl::robin_map<std::string, std::vector<Eigen::Vector3d>> voxelMap;
+typedef tsl::robin_map<std::string, std::vector<Eigen::Vector4d>> gridMap;
+typedef tsl::robin_map<std::string, std::vector<glm::vec3>> slamMap;
 
 
 #endif

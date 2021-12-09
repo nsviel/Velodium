@@ -144,10 +144,6 @@ void GUI_menuBar::MenuBar_icons(){
   //ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 10);
   if(ImGui::Button(ICON_FA_EYE, ImVec2(iconSize,iconSize))){
     if(sceneManager->is_atLeastOnecloud()){
-      //Apply heatmap
-      Cloud* cloud = database.cloud_selected;
-      heatmapManager->set_Heatmap(cloud);
-
       //Heatmap window
       bool* ptr = gui_winManager->get_show_heatmap();
       *ptr = !*ptr;

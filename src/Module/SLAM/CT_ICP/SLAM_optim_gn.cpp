@@ -15,6 +15,7 @@ SLAM_optim_gn::SLAM_optim_gn(){
   normalManager = new SLAM_normal();
 
   this->iter_max = 5;
+  this->nb_thread = 8;
 
   //---------------------------
 }
@@ -22,7 +23,6 @@ SLAM_optim_gn::~SLAM_optim_gn(){}
 
 //Main functions
 void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
-  tic();
   //---------------------------
 
   for (int iter=0; iter < iter_max; iter++) {
@@ -44,56 +44,51 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
   }
 
   //---------------------------
-  frame->time_slam = toc();
 }
 
-void SLAM_optim_gn::frame_update(Frame* frame){
+//Subfunctions
+void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
 
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  //Retrieve parameters
+  Eigen::Matrix3d gn_rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
+  Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
 
-  for (int i=0; i<frame->xyz.size(); i++){
+  Eigen::Matrix3d gn_rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
+  Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
-    float ts_n = frame->ts_n[i];
-    Eigen::Vector3d& point = frame->xyz[i];
+  //Update parameters
+  frame->rotat_b = gn_rotat_b * frame->rotat_b;
+  frame->trans_b = gn_trans_b + frame->trans_b;
 
-    //Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-    point = point + trans_e;
-  }
+  frame->rotat_e = gn_rotat_e * frame->rotat_e;
+  frame->trans_e = gn_trans_e + frame->trans_e;
 
   //---------------------------
-  frame->xyz_raw = frame->xyz;
 }
-void SLAM_optim_gn::frame_distort(Frame* frame){
+void SLAM_optim_gn::update_keypoints(Frame* frame){
   //---------------------------
 
+  //Update keypoints
   Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
   Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
   Eigen::Vector3d trans_b = frame->trans_b;
   Eigen::Vector3d trans_e = frame->trans_e;
 
-  // Distorts the frame (put all raw_points in the coordinate frame of the pose at the end of the acquisition)
-  Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
-  Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
-
-  for (int i=0; i < frame->xyz.size(); i++) {
-
+  #pragma omp parallel for num_threads(nb_thread)
+  for(int i=0; i<frame->xyz.size(); i++){
+    Eigen::Vector3d point_raw = frame->xyz_raw[i];
     float ts_n = frame->ts_n[i];
-    Eigen::Vector3d& point = frame->xyz_raw[i];
 
-    Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
+    Eigen::Matrix3d R = q.normalized().toRotationMatrix();
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
-    // Distort Raw Keypoints
-    point = quat_e_inv * (quat_n * point + t) + trans_e_inv;
+    frame->xyz[i] = R * point_raw + t;
   }
 
   //---------------------------
 }
-
-//Subfunctions
 void SLAM_optim_gn::compute_constraints(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b){
   //---------------------------
 
@@ -131,6 +126,7 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
   int nb_residual = 0;
   //---------------------------
 
+  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
     Eigen::Vector3d point_raw = frame->xyz_raw[i];
@@ -192,52 +188,12 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
   }
 
   // Normalize equation
+  #pragma omp parallel for num_threads(nb_thread)
   for (int i=0; i < 12; i++) {
       for (int j=0; j < 12; j++) {
           J(i, j) = J(i, j) / nb_residual;
       }
       b(i) = b(i) / nb_residual;
-  }
-
-  //---------------------------
-}
-void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
-  //---------------------------
-
-  //Retrieve parameters
-  Eigen::Matrix3d gn_rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
-  Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
-
-  Eigen::Matrix3d gn_rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
-  Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
-
-  //Update parameters
-  frame->rotat_b = gn_rotat_b * frame->rotat_b;
-  frame->trans_b = gn_trans_b + frame->trans_b;
-
-  frame->rotat_e = gn_rotat_e * frame->rotat_e;
-  frame->trans_e = gn_trans_e + frame->trans_e;
-
-  //---------------------------
-}
-void SLAM_optim_gn::update_keypoints(Frame* frame){
-  //---------------------------
-
-  //Update keypoints
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
-
-  for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3d point_raw = frame->xyz_raw[i];
-    float ts_n = frame->ts_n[i];
-
-    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
-    Eigen::Matrix3d R = q.normalized().toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-    frame->xyz[i] = R * point_raw + t;
   }
 
   //---------------------------

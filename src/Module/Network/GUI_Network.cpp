@@ -72,8 +72,8 @@ void GUI_Network::connexion_mqtt(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
   //---------------------------
 
-  bool* ssh_connected = netManager->get_ssh_connected();
-  if(*ssh_connected == false){
+  bool* mqtt_connected = mqttManager->get_mqtt_connected();
+  if(*mqtt_connected == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Connexion##1", ImVec2(150,0))){
       mqttManager->mqtt_startConnexion();

@@ -47,7 +47,9 @@ void GUI_Slam::compute(){
     if(cloud != nullptr){
       sceneManager.update_cloud_reset(cloud);
       cticpManager->compute_slam();
+
       sceneManager.update_cloud_location(cloud);
+      sceneManager.update_cloud_glyphs(cloud);
     }
   }
   ImGui::PopStyleColor(1);
@@ -59,19 +61,28 @@ void GUI_Slam::parameters(){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
 
-    //
+    //Display infos in terminal
     bool* slam_verbose = cticpManager->get_verbose();
     ImGui::Checkbox("Verbose", slam_verbose);
 
+    //Make a voxelized slam map
+    bool* slamMap_voxelized = cticpManager->get_slamMap_voxelized();
+    ImGui::Checkbox("Voxelized map", slamMap_voxelized);
+
     //Subsampling voxel width
-    float* sampling_width = cticpManager->get_sampling_width();
+    float* sampling_width = cticpManager->get_voxel_size_gridMap();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Subsample grid size", sampling_width, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Grid sampling voxel size", sampling_width, 0.1f, 1.0f, "%.3f");
 
     //Width of the local map voxel
-    float* map_width = cticpManager->get_mapVoxel_width();
+    float* localMap_width = cticpManager->get_voxel_size_localMap();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Map voxel size", map_width, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Local map voxel size", localMap_width, 0.1f, 1.0f, "%.3f");
+
+    //Width of the local map voxel
+    float* slamMap_width = cticpManager->get_voxel_size_slamMap();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("SLAM map voxel size", slamMap_width, 0.1f, 1.0f, "%.3f");
 
     //Number of optimization iterations
     static int iter_max = 5;
@@ -100,7 +111,7 @@ void GUI_Slam::parameters(){
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
       SLAM_normal* normalManager = cticpManager->get_SLAM_normal();
-      normalManager->set_nb_thread(nb_thread);
+      cticpManager->set_nb_thread(nb_thread);
     }
 
     //---------------------------

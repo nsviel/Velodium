@@ -22,11 +22,9 @@ public:
 public:
   void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
-  void frame_update(Frame* frame);
-  void frame_distort(Frame* frame);
-
   inline int* get_iter_max(){return &iter_max;}
   inline void set_iter_max(int value){iter_max = value;}
+  inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
   void compute_constraints(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b);
@@ -41,6 +39,7 @@ private:
   SLAM_normal* normalManager;
 
   int iter_max;
+  int nb_thread;
 };
 
 

@@ -27,6 +27,7 @@ struct Subset{ //Cloud subset / part
 
   //Main data
   std::vector<glm::vec3> xyz;
+  std::vector<glm::vec3> xyz_voxel;
   std::vector<glm::vec4> RGB;
   std::vector<glm::vec3> N;
   std::vector<float> I;

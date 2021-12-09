@@ -38,8 +38,6 @@ struct Cloud{ //Global set of the cloud
   std::vector<Subset> subset_voxel;
   std::vector<Subset> subset_buffer;
   std::vector<Subset> subset_init;
-
-  voxelMap slamMap;
 };
 
 #endif

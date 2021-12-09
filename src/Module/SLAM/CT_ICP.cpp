@@ -24,12 +24,15 @@ CT_ICP::CT_ICP(){
   this->solver_ceres = false;
   this->solver_GN = true;
   this->verbose = false;
-  this->sampling_width = 1;
-  this->map_voxel_width = 1;
   this->map_max_voxelNbPoints = 20;
   this->frame_max = 0;
   this->frame_all = true;
+  this->nb_thread = 8;
   this->slamMap_voxelized = false;
+
+  this->voxel_size_gridMap = 1;
+  this->voxel_size_localMap = 1;
+  this->voxel_size_slamMap = 0.5;
 
   //---------------------------
 }
@@ -38,6 +41,8 @@ CT_ICP::~CT_ICP(){}
 void CT_ICP::compute_slam(){
   Cloud* cloud = database.cloud_selected;
   map = new voxelMap();
+  gmap = new slamMap();
+
   if(cloud == nullptr) return;
   if(frame_all) frame_max = cloud->nb_subset;
   //---------------------------
@@ -48,8 +53,8 @@ void CT_ICP::compute_slam(){
     Frame* frame_m1 = &cloud->subset[i-1].frame;
     Frame* frame_m2 = &cloud->subset[i-2].frame;
     frame->ID = i;
-
     tic();
+    //--------------
 
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame, frame_m1, frame_m2);
@@ -58,18 +63,37 @@ void CT_ICP::compute_slam(){
     this->compute_gridSampling(subset);
     this->compute_optimization(frame, frame_m1);
 
+    this->add_pointsToSubset(subset);
     this->add_pointsToSlamMap(subset);
     this->add_pointsToLocalMap(frame);
 
-
+    //--------------
     float duration = toc();
+    frame->time_slam = duration;
     if(verbose){
-      cout<<"Compute SLAM for " << subset->name.c_str() <<" in "<< duration << " ms" << endl;
+      cout<<"Compute SLAM frame " << subset->name.c_str() <<" in "<< duration << " ms" << endl;
+    }
+  }
+
+  if(slamMap_voxelized){
+    for(int i=0; i<frame_max; i++){
+      Subset* subset = &cloud->subset[i];
+      subset->xyz = subset->xyz_voxel;
     }
   }
 
   //---------------------------
   delete map;
+  delete gmap;
+}
+void CT_ICP::set_nb_thread(int value){
+  //---------------------------
+
+  this->nb_thread = value;
+  normalManager->set_nb_thread(nb_thread);
+  gnManager->set_nb_thread(nb_thread);
+
+  //---------------------------
 }
 
 void CT_ICP::init_frameTimestamp(Subset* subset){
@@ -152,64 +176,72 @@ void CT_ICP::init_distortion(Frame* frame){
   //---------------------------
 
   if(frame->ID > 1){
-    gnManager->frame_distort(frame);
+    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Vector3d trans_e = frame->trans_e;
+
+    // Distorts the frame (put all raw_points in the coordinate frame of the pose at the end of the acquisition)
+    Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
+    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
+
+    for (int i=0; i < frame->xyz.size(); i++) {
+
+      float ts_n = frame->ts_n[i];
+      Eigen::Vector3d& point = frame->xyz_raw[i];
+
+      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+      // Distort Raw Keypoints
+      point = quat_e_inv * (quat_n * point + t) + trans_e_inv;
+    }
   }
 
   //---------------------------
 }
 
 void CT_ICP::compute_gridSampling(Subset* subset){
+  Frame* frame = &subset->frame;
   //---------------------------
 
-  vector<Eigen::Vector3d>& frame_xyz = subset->frame.xyz;
-  vector<Eigen::Vector3d>& frame_raw = subset->frame.xyz_raw;
-  vector<float>& frame_ts_n = subset->frame.ts_n;
+  vector<Eigen::Vector3d>& frame_xyz = frame->xyz;
+  vector<Eigen::Vector3d>& frame_raw = frame->xyz_raw;
+  vector<float>& frame_ts_n = frame->ts_n;
 
   //Subsample the scan with voxels
-  std::map<string, std::vector<glm::vec4>> grid;
+  gridMap grid;
   for (int j=0; j<subset->xyz.size(); j++){
-    vec3 xyz = subset->xyz[j];
+    Eigen::Vector3d xyz = glm_to_eigen_vec3_d(subset->xyz[j]);
     float ts_n = subset->ts_n[j];
 
-    int kx = static_cast<int>(xyz.x / sampling_width);
-    int ky = static_cast<int>(xyz.y / sampling_width);
-    int kz = static_cast<int>(xyz.z / sampling_width);
-
+    int kx = static_cast<int>(xyz(0) / voxel_size_gridMap);
+    int ky = static_cast<int>(xyz(1) / voxel_size_gridMap);
+    int kz = static_cast<int>(xyz(2) / voxel_size_gridMap);
     string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
-    vec4 point = vec4(xyz.x, xyz.y, xyz.z, ts_n);
+
+    Eigen::Vector4d point(xyz(0), xyz(1), xyz(2), ts_n);
     grid[voxel_id].push_back(point);
   }
 
-  //Take one random point inside each voxel
+  //Clear vectors
   frame_xyz.clear();
   frame_raw.clear();
   frame_ts_n.clear();
 
-  int cpt =0;
-  for (const auto &n: grid) {
-    if (n.second.size() > 0) {
-      cpt++;
+  //Take one point inside each voxel
+  gridMap::iterator it;
+  for(auto it = grid.begin(); it != grid.end(); ++it) {
+    if (it->second.size() > 0) {
+      Eigen::Vector4d point = it->second[0];
+      Eigen::Vector3d xyz(point(0), point(1), point(2));
+      float ts_n = point(3);
 
-      vec4 point = n.second[0];
-      vec3 xyz = vec3(point.x, point.y, point.z);
-      float ts_n = point[3];
-
-      Eigen::Vector3d xyz_eig = glm_to_eigen_vec3_d(xyz);
-      frame_xyz.push_back(xyz_eig);
-      frame_raw.push_back(xyz_eig);
+      frame_xyz.push_back(xyz);
       frame_ts_n.push_back(ts_n);
     }
   }
-
-  //---------------------------
-}
-void CT_ICP::compute_normal(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  if(frame->ID > 1){
-    normalManager->compute_frameNormal(frame, map);
-  }
+  frame_raw = frame_xyz;
 
   //---------------------------
 }
@@ -227,7 +259,7 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 }
 
-void CT_ICP::add_pointsToSlamMap(Subset* subset){
+void CT_ICP::add_pointsToSubset(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -244,6 +276,7 @@ void CT_ICP::add_pointsToSlamMap(Subset* subset){
   subset->root = eigen_to_glm_vec3_d(root);
 
   //Update subset position
+  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<subset->xyz.size(); i++){
     Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
     float ts_n = subset->ts_n[i];
@@ -252,17 +285,51 @@ void CT_ICP::add_pointsToSlamMap(Subset* subset){
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
     point = R * point + t;
 
-    if(slamMap_voxelized){
-      //TODO: voxelized SLAM map
-    }else{
-      subset->xyz[i] = eigen_to_glm_vec3_d(point);
-    }
-
+    subset->xyz[i] = eigen_to_glm_vec3_d(point);
   }
 
   //---------------------------
   sceneManager->update_subset_location(subset);
   sceneManager->update_subset_color(subset);
+}
+void CT_ICP::add_pointsToSlamMap(Subset* subset){
+  //---------------------------
+
+  //Insert points into cloud global slam map
+  if(slamMap_voxelized){
+
+    for (int i=0; i<subset->xyz.size(); i++){
+      vec3 point = subset->xyz[i];
+
+      int kx = static_cast<int>(point.x / voxel_size_slamMap);
+      int ky = static_cast<int>(point.y / voxel_size_slamMap);
+      int kz = static_cast<int>(point.z / voxel_size_slamMap);
+      string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
+
+      //if the voxel already exists
+      if(gmap->find(voxel_id) != gmap->end()){
+        //Get corresponding voxel
+        vector<vec3>& voxel_xyz = gmap->find(voxel_id).value();
+
+        //If the voxel is not full
+        if (voxel_xyz.size() < map_max_voxelNbPoints){
+          voxel_xyz.push_back(point);
+          subset->xyz_voxel.push_back(point);
+        }
+      }
+      //else create it
+      else{
+        vector<vec3> vec;
+
+        vec.push_back(point);
+        subset->xyz_voxel.push_back(point);
+
+        gmap->insert({voxel_id, vec});
+      }
+    }
+  }
+
+  //---------------------------
 }
 void CT_ICP::add_pointsToLocalMap(Frame* frame){
   //---------------------------
@@ -270,9 +337,9 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
 
-    int vx = static_cast<int>(point(0) / map_voxel_width);
-    int vy = static_cast<int>(point(1) / map_voxel_width);
-    int vz = static_cast<int>(point(2) / map_voxel_width);
+    int vx = static_cast<int>(point(0) / voxel_size_localMap);
+    int vy = static_cast<int>(point(1) / voxel_size_localMap);
+    int vz = static_cast<int>(point(2) / voxel_size_localMap);
 
     //Search for pre-existing voxel in local map
     string voxel_id = to_string(vx) + " " + to_string(vy) + " " + to_string(vz);

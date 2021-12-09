@@ -10,6 +10,8 @@
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Camera.h"
 
+#include "../Operation/Functions/Heatmap.h"
+
 Database database;
 
 
@@ -23,6 +25,7 @@ Engine::Engine(Dimension* dim, Camera* control){
 
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
+  this->heatmapManager = new Heatmap();
 
   glyphManager->init();
 

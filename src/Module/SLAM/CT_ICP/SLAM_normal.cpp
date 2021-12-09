@@ -10,7 +10,7 @@ SLAM_normal::SLAM_normal(){
   //---------------------------
 
   this->size_voxelMap = 1;
-  this->nb_threads = 8;
+  this->nb_thread = 8;
 
   //---------------------------
 }
@@ -27,7 +27,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   a2D.clear(); a2D.resize(size);
 
   //Compute normal for each point
-  #pragma omp parallel for num_threads(nb_threads)
+  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
 
     // Neighborhood search
@@ -148,6 +148,7 @@ void SLAM_normal::compute_normals_reorientToOrigin(Frame* frame){
   //---------------------------
 
   float dist_XYZ, dist_N;
+  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<XYZ.size(); i++){
     Eigen::Vector3d origine = Eigen::Vector3d::Zero();
 

@@ -17,7 +17,7 @@ public:
   //Main function
   void compute_frameNormal(Frame* frame, voxelMap* map);
 
-  inline void set_nb_thread(int value){this->nb_threads = value;}
+  inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
   //Sub functions
@@ -31,7 +31,7 @@ private:
   vector<float> a2D;
 
   float size_voxelMap;
-  int nb_threads;
+  int nb_thread;
 };
 
 

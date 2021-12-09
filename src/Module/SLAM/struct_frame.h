@@ -24,6 +24,7 @@ struct Frame{ //SLAM stuff
   Eigen::Matrix3d rotat_e;
   Eigen::Vector3d trans_e;
 
+  //Reset all variables
   void reset(){
     xyz.clear();
     xyz_raw.clear();

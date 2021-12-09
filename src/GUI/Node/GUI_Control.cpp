@@ -26,12 +26,12 @@ GUI_control::GUI_control(Engine* engine){
 
   this->cameraManager = engineManager->get_CameraManager();
   this->dimManager = engineManager->get_dimManager();
+  this->heatmapManager = engineManager->get_heatmapManager();
 
   this->selectionManager = new Selection(dimManager, cameraManager);
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
   this->extractionManager = new Extraction();
-  this->heatmapManager = new Heatmap();
   this->attribManager = new Attribut();
   this->opeManager = new Operation();
 

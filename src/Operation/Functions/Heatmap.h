@@ -15,11 +15,10 @@ public:
 
 public:
   //Main functions
-  void set_Heatmap_all(bool heatAll);
   void set_Heatmap(Cloud* cloud);
   void set_Heatmap(Cloud* cloud, bool is_heatmap);
-  void set_HeatmapField(int value);
-
+  void set_Heatmap_all(bool heatAll);
+  
   //Heatmap functions
   void compute_subset_heatmap_ON(Subset* subset);
   void compute_subset_heatmap_OFF(Subset* subset);
