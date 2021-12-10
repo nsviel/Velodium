@@ -7,6 +7,8 @@
 #include "Format/file_PTX.h"
 #include "Format/file_PCAP.h"
 #include "Format/file_CSV.h"
+#include "Format/file_OBJ.h"
+#include "Format/file_XYZ.h"
 
 #include "../Engine/Scene.h"
 #include "../Engine/Data/Database.h"
@@ -230,11 +232,13 @@ vector<dataFile*> Loader::load_retrieve_data(string filePath){
     data_vec.push_back(data);
   }
   else if(format == "obj"){
-    dataFile* data = OBJLoader(filePath);
+    fileOBJ objManager;
+    dataFile* data = objManager.Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "xyz"){
-    dataFile* data = XYZLoader(filePath);
+    fileXYZ xyzManager;
+    dataFile* data = xyzManager.Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "csv"){
@@ -348,52 +352,4 @@ bool Loader::save_subset(Subset* subset, string format, string dirPath, string f
   //---------------------------
   console.AddLog("[sucess] Saved at %s", dirPath.c_str());
   return true;
-}
-
-//Specific formats
-dataFile* Loader::OBJLoader(string filePath){
-  std::ifstream infile(filePath);
-  std::string line;
-  float a, b, c;
-  string ID;
-  dataFile* data = new dataFile();
-  //---------------------------
-
-  float R = float(rand()%101)/100;
-  float G = float(rand()%101)/100;
-  float B = float(rand()%101)/100;
-
-  while (std::getline(infile, line)){
-    std::istringstream iss(line);
-    iss >> ID >> a >> b >> c;
-
-    //Data extraction
-    if(ID == "v" ) data->location.push_back(vec3(a, b, c));
-    if(ID == "vn") data->normal.push_back(vec3(a, b, c));
-  }
-
-  //---------------------------
-  return data;
-}
-dataFile* Loader::XYZLoader(string filePath){
-  dataFile* data = new dataFile();
-  //---------------------------
-
-  //Open file
-  std::ifstream infile(filePath);
-
-  //Retrieve data
-  std::string line;
-  float a, b, c, d, e, f;
-  while (std::getline(infile, line)){
-    std::istringstream iss(line);
-    iss >> a >> b >> c >> d >> e >> f;
-
-    //Data extraction
-    data->location.push_back(vec3(a, b, c));
-    data->color.push_back(vec4(d, e, f, 1));
-  }
-
-  //---------------------------
-  return data;
 }

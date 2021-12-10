@@ -32,10 +32,6 @@ public:
   bool save_subset(Subset* subset, string format, string dirPath);
   bool save_subset(Subset* subset, string format, string dirPath, string fileName);
 
-  //Specific formats
-  dataFile* OBJLoader(string pathFile);
-  dataFile* XYZLoader(string pathFile);
-
   inline Cloud* get_createdcloud(){return cloud;}
 
 private:

@@ -51,6 +51,7 @@ void GUI_Slam::compute(){
       sceneManager.update_cloud_location(cloud);
       sceneManager.update_cloud_glyphs(cloud);
     }
+
   }
   ImGui::PopStyleColor(1);
 

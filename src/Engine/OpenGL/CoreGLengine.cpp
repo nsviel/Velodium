@@ -113,7 +113,7 @@ bool CoreGLengine::init_shader(){
   //shaderManager->shader_build("shader_EDL");
   shaderManager->run();*/
 
-  shaderManager = new Shader("../src/Engine/Shader/framebuffer.vs", "../src/Engine/Shader/framebuffer.fs");
+  shaderManager = new Shader("../src/Engine/Shader/shader_mvp.vs", "../src/Engine/Shader/shader_mvp.fs");
   screenShader = new Shader("../src/Engine/Shader/framebuffer_screen.vs", "../src/Engine/Shader/framebuffer_screen.fs");
 
   //---------------------------
@@ -258,23 +258,16 @@ void CoreGLengine::loop(){
 
     int nb_viewport = cameraManager->get_number_viewport();
     for(int i=0; i<1; i++){
-      this->loop_camera(i);
+      guiManager->Gui_loop();
 
-      /*if(i==0){
-        cameraManager->input_projView(0);
-      }
-      if(i==1){
-        cameraManager->input_projView(2);
-      }*/
+      cameraManager->viewport_update(i);
+      cameraManager->input_cameraMouseCommands();
 
       shaderManager->use();
       mat4 mvp = cameraManager->compute_mvpMatrix();
       shaderManager->setMat4("MVP", mvp);
 
-      //this->loop_shader();
       engineManager->loop();
-      guiManager->Gui_loop();
-
     }
 
 
