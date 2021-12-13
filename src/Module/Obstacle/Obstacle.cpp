@@ -1,7 +1,7 @@
 #include "Obstacle.h"
 
 #include "../../Engine/Glyphs.h"
-#include "../../Engine/Object/AABB.h"
+#include "../../Engine/Object/OOBB.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 #include <jsoncpp/json/value.h>
@@ -23,7 +23,7 @@ void Obstacle::run(){
 
   string path = "/home/aither/Desktop/pred_thresh_0.4_1616100800400.json";
   this->parse_json(path);
-  this->build_aabb();
+  this->build_obstacleGlyph();
 
   //---------------------------
 }
@@ -73,8 +73,8 @@ void Obstacle::parse_json(string path){
 
   //---------------------------
 }
-void Obstacle::build_aabb(){
-  AABB aabbManager;
+void Obstacle::build_obstacleGlyph(){
+  OOBB oobbManager;
   Transforms transformManager;
   //---------------------------
 
@@ -86,18 +86,9 @@ void Obstacle::build_aabb(){
     vec3 So = detect_dime[i];
     mat4 transf = transformManager.compute_transformMatrix(To, Ro, So);
 
-    aabbManager.update_obstacle(glyph, transf);
+    oobbManager.update_oobb(glyph, transf);
     glyphManager->update_glyph_location(glyph);
   }
-
-
-  //Obstacle test AABB
-  /*Glyph* obstacle = aabbManager.obj_obstacle();
-  this->create_glyph(obstacle);
-  Transforms transformManager;
-  vec3 radian = transformManager.fct_degreeToRadian(vec3(50,80,0));
-  mat4 transf = transformManager.compute_transformMatrix(0.5,0.5,0.5, radian.x,radian.y,radian.z);
-*/
 
   //---------------------------
 }

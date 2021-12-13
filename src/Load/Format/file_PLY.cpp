@@ -394,7 +394,6 @@ void filePLY::Loader_data_binary_auto(std::ifstream& file){
     for (auto i: fct_sortByIndexes(data_out->timestamp)){
       ts.push_back(data_out->timestamp[i]);
       pos.push_back(data_out->location[i]);
-      pos.push_back(data_out->location[i]);
     }
 
     data_out->location = pos;

@@ -30,7 +30,9 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
 
   vector<vector<Eigen::Vector3d>> kNN_vec;
   kNN_vec.resize(frame->xyz.size());
-  #pragma omp parallel for num_threads(nb_thread)
+  //Multithreading at risk !
+  //TODO: find why.
+  #pragma omp parallel for num_threads(4)
   for(int i=0; i<frame->xyz.size(); i++){
     std::shared_lock lock(mutex_);
     vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i], map);

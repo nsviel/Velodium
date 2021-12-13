@@ -16,7 +16,7 @@ public:
 public:
   void run();
   void parse_json(string path);
-  void build_aabb();
+  void build_obstacleGlyph();
 
 private:
   Glyphs* glyphManager;

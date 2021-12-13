@@ -3,6 +3,7 @@
 #include "Object/Grid.h"
 #include "Object/Axis.h"
 #include "Object/AABB.h"
+#include "Object/OOBB.h"
 #include "Object/Mark.h"
 #include "Object/Normal.h"
 
@@ -330,8 +331,8 @@ Glyph* Glyphs::create_glyph_instance(string name){
     glyph = aabbManager.obj_aabb();
   }
   if(name == "obstacle"){
-    AABB aabbManager;
-    glyph = aabbManager.obj_obstacle();
+    OOBB oobbManager;
+    glyph = oobbManager.obj_oobb();
   }
   if(name == "selection"){
     Mark markManager;
