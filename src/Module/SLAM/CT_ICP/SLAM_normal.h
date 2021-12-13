@@ -5,6 +5,9 @@
 
 #include "../../../common.h"
 
+#include <mutex>
+#include <shared_mutex>
+
 
 class SLAM_normal
 {
@@ -32,6 +35,7 @@ private:
 
   float size_voxelMap;
   int nb_thread;
+  mutable std::shared_mutex mutex_;
 };
 
 

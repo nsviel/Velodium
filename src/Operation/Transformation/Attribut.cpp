@@ -544,7 +544,8 @@ void Attribut::compute_normals_Hough(Subset* subset){
 
   //---------------------------
   float duration = toc();
-  console.AddLog("Normal for %s computed in %.2f ms", subset->name.c_str(), duration);
+  string log = "Normal for " +  subset->name + " computed " + to_string(duration) + " ms";
+  console.AddLog("#", log);
 }
 void Attribut::compute_normals_sphere(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
@@ -583,7 +584,8 @@ void Attribut::compute_normals_sphere(Subset* subset){
 
   //---------------------------
   float duration = toc();
-  console.AddLog("Normal for %s computed in %.2f ms", subset->name.c_str(), duration);
+  string log = "Normal for " +  subset->name + " computed " + to_string(duration) + " ms";
+  console.AddLog("#", log);
 }
 void Attribut::compute_normals_planXaxis(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
@@ -683,7 +685,8 @@ void Attribut::compute_normals_planFitting(Subset* subset){
 
   //---------------------------
   float duration = toc();
-  console.AddLog("Normal for %s computed in %.2f ms", subset->name.c_str(), duration);
+  string log = "Normal for " +  subset->name + " computed " + to_string(duration) + " ms";
+  console.AddLog("#", log);
 }
 void Attribut::compute_normals_invert(){
   if(sceneManager->is_atLeastOnecloud()){

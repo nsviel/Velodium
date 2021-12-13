@@ -6,6 +6,7 @@
 #include "CloudPlayer/GUI_CloudPlayer.h"
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Network/GUI_Network.h"
+#include "Obstacle/GUI_Obstacle.h"
 
 #include "../common.h"
 
@@ -20,10 +21,13 @@ public:
     this->gui_odomManager = new GUI_CloudPlayer(cameraManager);
     this->gui_slamManager = new GUI_Slam();
     this->gui_senderManager = new GUI_Network();
+    this->gui_obstacleManager = new GUI_Obstacle();
 
-    this->module_velodyne = true;
+    this->module_velodyne = false;
     this->module_CloudPlayer = true;
     this->module_slam = true;
+    this->module_obstacle = true;
+    this->module_scala = false;
   }
   ~GUI_module();
 
@@ -31,6 +35,14 @@ public:
   void display_moduleTabs(){
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
+
+      // SLAM
+      if(module_obstacle){
+        if(ImGui::BeginTabItem("Obstacle")){
+          gui_obstacleManager->design_Obstacle();
+          ImGui::EndTabItem();
+        }
+      }
 
       // SLAM
       if(module_slam){
@@ -58,7 +70,7 @@ public:
       }
 
       // Scala LiDAR management
-      if(module_velodyne){
+      if(module_scala){
         if(ImGui::BeginTabItem("Scala")){
           gui_scalaManager->design_Scala();
           ImGui::EndTabItem();
@@ -84,11 +96,13 @@ private:
   GUI_CloudPlayer* gui_odomManager;
   GUI_Slam* gui_slamManager;
   GUI_Network* gui_senderManager;
+  GUI_Obstacle* gui_obstacleManager;
 
   bool module_velodyne;
   bool module_CloudPlayer;
   bool module_slam;
-
+  bool module_obstacle;
+  bool module_scala;
 };
 
 #endif

@@ -110,7 +110,7 @@ void GUI_fileManager::info_cloud(Cloud* cloud){
 
   //Additional info
   ImGui::Text("Format: %s", cloud->format.c_str());
-  ImGui::Text("Frames: %d", cloud->nb_subset);
+  ImGui::Text("Frames: %d", (int)cloud->subset.size());
   ImGui::Text("Points: %d", cloud->nb_point);
 
   //---------------------------
@@ -124,7 +124,7 @@ void GUI_fileManager::info_subset(Subset* subset){
   sceneManager->update_subset_dataFormat(subset);
 
   //Additional info
-  ImGui::Text("Points: %d", subset->nb_point);
+  ImGui::Text("Points: %d", (int)subset->xyz.size());
   ImGui::Text("Format: %s", subset->dataFormat.c_str());
   ImGui::Text("COM (%.2f, %.2f, %.2f)", COM.x, COM.y, COM.z);
   ImGui::Text("Z [%.2f; %.2f]", subset->min.z, subset->max.z);

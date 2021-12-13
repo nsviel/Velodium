@@ -42,7 +42,8 @@ void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
   //---------------------------
   float duration = toc();
   int size_filtered = subset->xyz.size();
-  console.AddLog("Filter by angle (%.2f°) %s : %i -> %i points (%.2f ms)", angleMax, cloud->subset[0].name.c_str(), size_before, size_filtered, duration);
+  string log = "Filter by angle (" + to_string(angleMax) + "°) : " + to_string(size_before) + " -> " + to_string(size_filtered) + " points (" + to_string(duration) + " ms)";
+  console.AddLog("ok", log);
 }
 void Filter::filter_sphereCleaning(){
   list<Cloud*>* list_Cloud = database.list_cloud;

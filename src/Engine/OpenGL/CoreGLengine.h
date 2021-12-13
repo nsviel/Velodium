@@ -12,6 +12,7 @@ class Configuration;
 
 #include "../../common.h"
 
+
 class CoreGLengine
 {
 public:
@@ -36,8 +37,9 @@ public:
 private:
   Configuration* configManager;
   GLFWwindow* window;
-  Shader* shaderManager;
-  Shader*screenShader;
+  Shader* mvpShader;
+  Shader* edlShader;
+  Shader* fboShader;
   Engine* engineManager;
   Camera* cameraManager;
   Viewport* viewportManager;
@@ -55,6 +57,11 @@ private:
   GLuint texture_color_ID;
   GLuint texture_depth_ID;
   GLuint texture_postProcess_ID;
+
+
+  GLuint quad_vao, quad_vbo;
+  unsigned int FBO;
+  unsigned int texture;
 };
 
 #endif

@@ -40,6 +40,7 @@ private:
 
   int iter_max;
   int nb_thread;
+  int nb_residual;
 };
 
 

@@ -49,7 +49,8 @@ void pcl_functions::compute_normals_PCL(Subset* subset){
 
   //---------------------------
   float duration = toc();
-  console.AddLog("Normal for %s computed in %.2f ms", subset->name.c_str(), duration);
+  string log = "Normal for " + subset->name + " computed in " + duration + " ms";
+  console.AddLog("#", log);
 }
 void pcl_functions::Plane_cloud(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;

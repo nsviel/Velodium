@@ -23,39 +23,12 @@ Glyphs::~Glyphs(){}
 void Glyphs::init(){
   //---------------------------
 
-  //Grid objects
-  Grid gridManager;
-  Glyph* grid = gridManager.obj_grid();
-  Glyph* subgrid = gridManager.obj_subgrid();
-  Glyph* planegrid = gridManager.obj_planegrid();
-
-  this->create_glyph(grid);
-  this->create_glyph(subgrid);
-  this->create_glyph(planegrid);
-
-  //Axis object
-  Axis axisManager;
-  Glyph* axis = axisManager.obj_axis();
-  this->create_glyph(axis);
-
-  //AABB stuff
-  AABB aabbManager;
-  Glyph* aabb = aabbManager.obj_aabb();
-  this->create_glyph(aabb);
-
-  //Misc mark stuff
-  Mark markManager;
-  Glyph* selection = markManager.obj_frameSelection();
-  this->create_glyph(selection);
-
-  //Obstacle test AABB
-  /*Glyph* obstacle = aabbManager.obj_obstacle();
-  this->create_glyph(obstacle);
-  Transforms transformManager;
-  vec3 radian = transformManager.fct_degreeToRadian(vec3(50,80,0));
-  mat4 transf = transformManager.compute_transformMatrix(0.5,0.5,0.5, radian.x,radian.y,radian.z);
-  aabbManager.update_obstacle(obstacle, transf);
-  this->update_glyph_location(obstacle);*/
+  this->create_glyph_instance("grid");
+  this->create_glyph_instance("subgrid");
+  this->create_glyph_instance("planegrid");
+  this->create_glyph_instance("axis");
+  this->create_glyph_instance("aabb");
+  this->create_glyph_instance("selection");
 
   //---------------------------
 }
@@ -332,16 +305,46 @@ void Glyphs::update_glyph_MinMax(Glyph* glyph){
 }
 
 //Glyph creation / supression
-Glyph* Glyphs::create_glyph(Glyph* glyph){
-  vector<vec3>& XYZ = glyph->location;
-  vector<vec4>& RGB = glyph->color;
+Glyph* Glyphs::create_glyph_instance(string name){
+  Glyph* glyph;
   //---------------------------
 
+  if(name == "grid"){
+    Grid gridManager;
+    glyph = gridManager.obj_grid();
+  }
+  if(name == "subgrid"){
+    Grid gridManager;
+    glyph = gridManager.obj_subgrid();
+  }
+  if(name == "planegrid"){
+    Grid gridManager;
+    glyph = gridManager.obj_planegrid();
+  }
+  if(name == "axis"){
+    Axis axisManager;
+    glyph = axisManager.obj_axis();
+  }
+  if(name == "aabb"){
+    AABB aabbManager;
+    glyph = aabbManager.obj_aabb();
+  }
+  if(name == "obstacle"){
+    AABB aabbManager;
+    glyph = aabbManager.obj_obstacle();
+  }
+  if(name == "selection"){
+    Mark markManager;
+    glyph = markManager.obj_frameSelection();
+  }
+
+  //OpenGL stuff
   GLuint VAO;
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
 
   //Vertices
+  vector<vec3>& XYZ = glyph->location;
   GLuint locationVBO;
   glGenBuffers(1, &locationVBO);
   glBindBuffer(GL_ARRAY_BUFFER, locationVBO);
@@ -350,6 +353,7 @@ Glyph* Glyphs::create_glyph(Glyph* glyph){
   glEnableVertexAttribArray(0);
 
   //Color
+  vector<vec4>& RGB = glyph->color;
   GLuint colorVBO;
   glGenBuffers(1, &colorVBO);
   glBindBuffer(GL_ARRAY_BUFFER, colorVBO);

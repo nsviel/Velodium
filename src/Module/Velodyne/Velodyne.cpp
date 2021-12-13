@@ -173,17 +173,19 @@ void Velodyne::lidar_start(){
   if(rot_freq <= 0){
     int err = system("curl -s --connect-timeout 1 --data rpm=600 http://192.168.1.201/cgi/setting");
     sleep(1);
-    
+
     rot_freq = 10;
     rot_rpm = 600;
 
     is_rotating = true;
 
-    console.AddLog("LiDAR activated at %d rpm", rot_rpm);
+    string log = "LiDAR activated at " + to_string(rot_rpm) + " rpm";
+    console.AddLog("#", log);
   }
   //If LiDAR running display the state
   else{
-    console.AddLog("LiDAR running at %d rpm", rot_rpm);
+    string log = "LiDAR running at " + to_string(rot_rpm) + " rpm";
+    console.AddLog("#", log);
   }
 
   //---------------------------
@@ -199,7 +201,7 @@ void Velodyne::lidar_stop(){
     is_rotating = false;
     is_capturing = false;
 
-    console.AddLog("LiDAR desactivated");
+    console.AddLog("#", "LiDAR desactivated");
 
     sleep(1);
   }
@@ -251,9 +253,13 @@ void Velodyne::lidar_get_status(){
   rot_rpm = motor_rpm.asUInt();
   rot_freq = rot_rpm / 60;
 
-  console.AddLog("[ok] Motor state: %s", motor_state.asString().c_str());
-  console.AddLog("[ok] Motor RPM: %d rpm", motor_rpm.asUInt());
-  console.AddLog("[ok] Laser state: %s", laser_state.asString().c_str());
+  string log_sta = "Motor state: " + motor_state.asString();
+  string log_rpm = "Motor RPM: " + to_string(motor_rpm.asUInt()) + " rpm";
+  string log_las = "Laser state: " + laser_state.asString();
+
+  console.AddLog("#", log_sta);
+  console.AddLog("#", log_rpm);
+  console.AddLog("#", log_las);
 
   if(rot_freq <= 0){
     is_rotating = false;
@@ -271,7 +277,7 @@ bool Velodyne::lidar_get_is_connected(){
   int err = system("curl -s --connect-timeout 1 http://192.168.1.201/");
 
   if(err == 7168){
-    console.AddLog("[error] LiDAR not connected");
+    console.AddLog("error", "LiDAR not connected");
     this->is_connected = false;
     connected = false;
   }else{

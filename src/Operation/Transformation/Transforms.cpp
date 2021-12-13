@@ -219,7 +219,7 @@ void Transforms::make_centering(Cloud* cloud){
   this->make_translation(cloud, vec3(0,0,-min[2]));
 
   //---------------------------
-  console.AddLog("[success] Point cloud centered");
+  console.AddLog("#", "Point cloud centered");
 }
 void Transforms::make_elevation(Cloud* cloud, float Z){
   vector<vec3>& XYZ_ini = cloud->subset_init[0].xyz;
@@ -404,6 +404,41 @@ vec3 Transforms::fct_degreeToRadian(vec3 degree){
 
   //---------------------------
   return radian;
+}
+mat4 Transforms::compute_transformMatrix(vec3 trans, vec3 rotat, vec3 scale){
+  glm::mat4 transMat(1.0);
+  glm::mat4 Rx(1.0);
+  glm::mat4 Ry(1.0);
+  glm::mat4 Rz(1.0);
+  glm::mat4 Sc(1.0);
+  //---------------------------
+
+  Sc[0][0] = scale.x;
+  Sc[1][1] = scale.y;
+  Sc[2][2] = scale.z;
+
+  Rx[1][1] = cos(rotat.x);
+  Rx[2][1] = sin(rotat.x);
+  Rx[1][2] = -sin(rotat.x);
+  Rx[2][2] = cos(rotat.x);
+
+  Ry[0][0] = cos(rotat.y);
+  Ry[0][2] = sin(rotat.y);
+  Ry[2][0] = -sin(rotat.y);
+  Ry[2][2] = cos(rotat.y);
+
+  Rz[0][0] = cos(rotat.z);
+  Rz[1][0] = sin(rotat.z);
+  Rz[0][1] = -sin(rotat.z);
+  Rz[1][1] = cos(rotat.z);
+
+  transMat = Sc * Rx * Ry * Rz;
+  transMat[0][3] = trans.x;
+  transMat[1][3] = trans.y;
+  transMat[2][3] = trans.z;
+
+  //---------------------------
+  return transMat;
 }
 mat4 Transforms::compute_transformMatrix(float tx, float ty, float tz, float rx, float ry, float rz){
   glm::mat4 transMat(1.0);

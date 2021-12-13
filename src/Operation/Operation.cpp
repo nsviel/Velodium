@@ -102,7 +102,7 @@ void Operation::reset(){
   sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
-  console.AddLog("Reset scene...");
+  console.AddLog("#", "Reset scene...");
 }
 
 //Loading functions

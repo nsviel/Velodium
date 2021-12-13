@@ -26,14 +26,21 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   NN.clear(); NN.resize(size);
   a2D.clear(); a2D.resize(size);
 
-  //Compute normal for each point
+  //Compute all point kNN
+
+  vector<vector<Eigen::Vector3d>> kNN_vec;
+  kNN_vec.resize(frame->xyz.size());
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
+    std::shared_lock lock(mutex_);
+    vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i], map);
+    kNN_vec[i] = kNN;
+  }
 
-    // Neighborhood search
-    Eigen::Vector3d point = frame->xyz[i];
-
-    vector<Eigen::Vector3d> kNN = compute_kNN_search(point, map);
+  //Compute all point normal
+  #pragma omp parallel for num_threads(nb_thread)
+  for(int i=0; i<frame->xyz.size(); i++){
+    vector<Eigen::Vector3d>& kNN = kNN_vec[i];
 
     //Compute kNN normals
     if(kNN.size() != 0){
@@ -51,6 +58,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
     }
   }
 
+  //Reoriente normals
   if(Nxyz.size() == frame->xyz.size()){
     //Reoriente all normal
     this->compute_normals_reorientToOrigin(frame);
@@ -86,21 +94,24 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
         //Search for pre-existing voxel in local map
         string voxel_id = to_string(vi) + " " + to_string(vj) + " " + to_string(vk);
 
-        //If we found something
+        //If we found a voxel with at least one point
         if (map->find(voxel_id) != map->end()){
           vector<Eigen::Vector3d>& voxel_ijk = map->find(voxel_id).value();
 
+          //We store all NN voxel point
           for (int i=0; i < voxel_ijk.size(); i++) {
-
             Eigen::Vector3d neighbor = voxel_ijk[i];
             float distance = (neighbor - point).norm();
 
             //If the voxel is full
             if (priority_queue.size() == max_number_neighbors) {
-              if (distance < std::get<0>(priority_queue.top())) {
+              float dist_lastPtVoxel = std::get<0>(priority_queue.top());
+
+              if (distance < dist_lastPtVoxel) {
                 priority_queue.pop();
                 priority_queue.emplace(distance, neighbor);
               }
+
             } else{
               priority_queue.emplace(distance, neighbor);
             }

@@ -116,14 +116,14 @@ void GUI_Velodyne::Capture(){
     if(ImGui::Button("Capture", ImVec2(150,0))){
 
       if(*is_rotating == false){
-        console.AddLog("[error] LiDAR is not started");
+        console.AddLog("error", "LiDAR is not started");
       }else{
         *is_capturing = true;
 
         veloManager->lidar_startNewCapture();
         veloManager->run_capture();
 
-        console.AddLog("Data capture ON");
+        console.AddLog("#", "Data capture ON");
       }
 
     }
@@ -134,7 +134,7 @@ void GUI_Velodyne::Capture(){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
     if(ImGui::Button("Stop##2", ImVec2(150,0))){
       *is_capturing = false;
-      console.AddLog("Data capture OFF");
+      console.AddLog("#", "Data capture OFF");
     }
     ImGui::PopStyleColor(1);
 
@@ -170,10 +170,10 @@ void GUI_Velodyne::Recording(){
     if(ImGui::Button("Recording", ImVec2(150,0))){
 
       if(*is_rotating && *is_capturing){
-        console.AddLog("[sucess] LiDAR recording...");
+        console.AddLog("#", "LiDAR recording...");
         *is_recording = true;
       }else{
-        console.AddLog("[error] LiDAR is not capturing");
+        console.AddLog("error", "LiDAR is not capturing");
         *is_recording = false;
       }
 
@@ -185,7 +185,7 @@ void GUI_Velodyne::Recording(){
     if(ImGui::Button("Stop##3", ImVec2(150,0))){
 
       *is_recording = false;
-      console.AddLog("Data recording OFF");
+      console.AddLog("#", "Data recording OFF");
 
     }
     ImGui::PopStyleColor(1);

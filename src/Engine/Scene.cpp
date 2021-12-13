@@ -47,7 +47,8 @@ void Scene::removeCloud(Cloud* cloud){
     this->selection_setCloud(oID);
 
     //---------------------------
-    console.AddLog("Cloud %s removed", name.c_str());
+    string log = "Cloud "+ name +" removed";
+    console.AddLog("#", log);
   }
   if(database.list_cloud->size() == 0){
     Glyphs glyphManager;

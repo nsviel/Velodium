@@ -329,6 +329,7 @@ void filePLY::Loader_data_binary(std::ifstream& file){
   data_out->size = data_out->location.size();
 }
 void filePLY::Loader_data_binary_auto(std::ifstream& file){
+  //Adapt automatically to the property field name
   int DATA_BLOCK_SIZE = 16000;
   //---------------------------
 
@@ -373,7 +374,7 @@ void filePLY::Loader_data_binary_auto(std::ifstream& file){
       }
 
       //Intensity
-      if(property_name[j] == "scalar_Scalar_field"){
+      if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
         float Is = data_columns[j][i];
         data_out->intensity.push_back(Is);
       }
@@ -389,12 +390,17 @@ void filePLY::Loader_data_binary_auto(std::ifstream& file){
   //Reorder points in function of their timestamp
   vector<vec3> pos;
   vector<float> ts;
-  for (auto i: fct_sortByIndexes(data_out->timestamp)){
-    ts.push_back(data_out->timestamp[i]);
-    pos.push_back(data_out->location[i]);
+  if(data_out->timestamp.size() != 0){
+    for (auto i: fct_sortByIndexes(data_out->timestamp)){
+      ts.push_back(data_out->timestamp[i]);
+      pos.push_back(data_out->location[i]);
+      pos.push_back(data_out->location[i]);
+    }
+
+    data_out->location = pos;
+    data_out->timestamp = ts;
   }
-  data_out->location = pos;
-  data_out->timestamp = ts;
+
   data_out->size = data_out->location.size();
 
   //---------------------------

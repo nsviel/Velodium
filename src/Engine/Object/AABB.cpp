@@ -43,8 +43,14 @@ Glyph* AABB::obj_obstacle(){
   obstacle->permanent = false;
   obstacle->color_unique = obstacle_color;
 
+  //Box color
   for(int i=0; i<24; i++){
     obstacle->color.push_back(obstacle_color);
+  }
+
+  //Arrow color
+  for(int i=0; i<6; i++){
+    obstacle->color.push_back(vec4(0,0,1,1));
   }
 
   //---------------------------
@@ -78,8 +84,8 @@ void AABB::update_aabb(Glyph* aabb, Subset* subset){
 void AABB::update_obstacle(Glyph* obstacle, mat4 transformation){
   vector<vec3>& XYZ = obstacle->location;
   vector<vec4>& RGB = obstacle->color;
-  vec3 min = vec3(0, 0, 0);
-  vec3 max = vec3(1, 1, 1);
+  vec3 min = vec3(-0.5f, -0.5f, -0.5f);
+  vec3 max = vec3(0.5f, 0.5f, 0.5f);
   //---------------------------
 
   //location
@@ -138,6 +144,22 @@ vector<vec3> AABB::build_box(vec3 min, vec3 max){
     XYZ.push_back(l1);
     XYZ.push_back(l2);
   }
+
+  //Arrow direction
+  l1 = vec3(min.x*3/4, (max.y+min.y)/2, max.z);
+  l2 = vec3(max.x*3/4, (max.y+min.y)/2, max.z);
+  XYZ.push_back(l1);
+  XYZ.push_back(l2);
+
+  l1 = vec3(max.x*3/4, (max.y+min.y)/2, max.z);
+  l2 = vec3(max.x*3/4-max.x/4, (max.y+min.y)/2-max.y/4, max.z);
+  XYZ.push_back(l1);
+  XYZ.push_back(l2);
+
+  l1 = vec3(max.x*3/4, (max.y+min.y)/2, max.z);
+  l2 = vec3(max.x*3/4-max.x/4, (max.y+min.y)/2+max.y/4, max.z);
+  XYZ.push_back(l1);
+  XYZ.push_back(l2);
 
   //---------------------------
   return XYZ;

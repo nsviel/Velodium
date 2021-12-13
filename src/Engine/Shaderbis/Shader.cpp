@@ -39,7 +39,7 @@ bool Shader::shader_build(string name){
 	glDeleteShader(fs);
 
 	//---------------------------
-	console.AddLog("[sucess] Shaders Initialized...");
+	console.AddLog("sucess" ,"Shaders Initialized...");
 	return true;
 }
 void Shader::run(){

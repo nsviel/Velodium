@@ -61,7 +61,7 @@ bool CoreGLengine::init_OGL(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
   }
-  glfwWindowHint(GLFW_SAMPLES, configuration.WINDOW_MultiSample);
+  //glfwWindowHint(GLFW_SAMPLES, configuration.WINDOW_MultiSample);
   glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
@@ -75,18 +75,18 @@ bool CoreGLengine::init_OGL(){
   }
 
   glfwMakeContextCurrent(window);
-  glfwSetInputMode(window,GLFW_STICKY_KEYS,GL_TRUE);
+  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
   glfwSetWindowTitle(window, configuration.WINDOW_Title);
 
   //OpenGL stuff
   glViewport(0, 0, gl_width, gl_height);
   glPointSize(1);
   glLineWidth(1);
-  glEnable(GL_MULTISAMPLE);
+  /*glEnable(GL_MULTISAMPLE);
   glEnable(GL_BLEND);
   glEnable(GL_DEPTH_TEST);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glDepthFunc(GL_LESS);
+  glDepthFunc(GL_LESS);*/
 
   //GLEW
   glewInit();
@@ -107,14 +107,9 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_shader(){
   //---------------------------
 
-  //MVP shader
-  /*this->shaderManager = new Shader();
-  shaderManager->shader_build("shader_mvp");
-  //shaderManager->shader_build("shader_EDL");
-  shaderManager->run();*/
-
-  shaderManager = new Shader("../src/Engine/Shader/shader_mvp.vs", "../src/Engine/Shader/shader_mvp.fs");
-  screenShader = new Shader("../src/Engine/Shader/framebuffer_screen.vs", "../src/Engine/Shader/framebuffer_screen.fs");
+  mvpShader = new Shader("../src/Engine/Shader/shader_mvp.vs", "../src/Engine/Shader/shader_mvp.fs");
+  edlShader = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
+  fboShader = new Shader("../src/Engine/Shader/shader_fbo.vs", "../src/Engine/Shader/shader_fbo.fs");
 
   //---------------------------
   return true;
@@ -141,90 +136,7 @@ void CoreGLengine::trucEDL(){
 
 
 
-  /*glGenFramebuffers(1, &fbo_pass_1);
-  glGenFramebuffers(1, &fbo_pass_2);
-  glGenTextures(1, &texture_color_ID);
-  glGenTextures(1, &texture_depth_ID);
-  glGenTextures(1, &texture_postProcess_ID);
 
-  /*double edl_strength = 100.0;
-  double edl_distance = 1.0;
-  double z_far = 10000.0;
-  double z_near = 0.1;
-
-  GLuint program_ID = shaderManager->get_program_ID();
-
-  auto a_loc = glGetUniformLocation(program_ID, "A");
-  auto b_loc = glGetUniformLocation(program_ID, "B");
-  auto a = -(z_far + z_near) / (z_far - z_near);
-  auto b = -2 * (z_far * z_near) / (z_far - z_near);
-  glUniform1f(a_loc, (float) a);
-  glUniform1f(b_loc, (float) b);
-
-  auto edl_strength_loc = glGetUniformLocation(program_ID, "EDL_STRENGTH");
-  auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
-  auto with_edl_loc = glGetUniformLocation(program_ID, "WITH_EDL");
-
-  glUniform1f(edl_strength_loc, (float) edl_strength);
-  glUniform1f(edl_dist_loc, (float) edl_distance);
-  glUniform1i(with_edl_loc, true);*/
-
-
-  //Quad stuff
-  float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-      // positions   // texCoords
-      -1.0f,  1.0f,  0.0f, 1.0f,
-      -1.0f, -1.0f,  0.0f, 0.0f,
-       1.0f, -1.0f,  1.0f, 0.0f,
-
-      -1.0f,  1.0f,  0.0f, 1.0f,
-       1.0f, -1.0f,  1.0f, 0.0f,
-       1.0f,  1.0f,  1.0f, 1.0f
-  };
-  unsigned int quadVAO, quadVBO;
-  glGenVertexArrays(1, &quadVAO);
-  glGenBuffers(1, &quadVBO);
-  glBindVertexArray(quadVAO);
-  glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
-
-  // shader configuration
-  // --------------------
-  shaderManager->use();
-  shaderManager->setInt("texture1", 0);
-
-  screenShader->use();
-  screenShader->setInt("screenTexture", 0);
-
-
-      glGenFramebuffers(1, &fbo_pass_1);
-      glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1);
-      // create a color attachment texture
-      unsigned int textureColorbuffer;
-      glGenTextures(1, &textureColorbuffer);
-      glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-      // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-      unsigned int rbo;
-      glGenRenderbuffers(1, &rbo);
-      glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, gl_width, gl_height); // use a single renderbuffer object for both a depth AND stencil buffer.
-      glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
-      // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-          cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-      glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-      // draw as wireframe
-      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 //Engine loop
@@ -247,37 +159,111 @@ void CoreGLengine::trucEDL(){
 void CoreGLengine::loop(){
   //---------------------------
 
-  do{
+  //Quad stuff
+  vector<vec2> quad_xy;
+  quad_xy.push_back(vec2(-1.0f,  1.0f));
+  quad_xy.push_back(vec2(-1.0f,  -1.0f));
+  quad_xy.push_back(vec2(1.0f,  -1.0f));
+  quad_xy.push_back(vec2(-1.0f,  1.0f));
+  quad_xy.push_back(vec2(1.0f,  -1.0f));
+  quad_xy.push_back(vec2(1.0f,  1.0f));
 
-    glfwPollEvents();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  vector<vec2> quad_uv;
+  quad_uv.push_back(vec2(0.0f,  1.0f));
+  quad_uv.push_back(vec2(0.0f,  0.0f));
+  quad_uv.push_back(vec2(1.0f,  0.0f));
+  quad_uv.push_back(vec2(0.0f,  1.0f));
+  quad_uv.push_back(vec2(1.0f,  0.0f));
+  quad_uv.push_back(vec2(1.0f,  1.0f));
+
+  glGenBuffers(1, &quad_vbo);
+
+  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
+  glBufferData(GL_ARRAY_BUFFER, quad_xy.size()*sizeof(glm::vec2), &quad_xy[0], GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
+  glEnableVertexAttribArray(0);
+
+  glBufferData(GL_ARRAY_BUFFER, quad_uv.size()*sizeof(glm::vec2), &quad_uv[0], GL_STATIC_DRAW);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
+  glEnableVertexAttribArray(1);
+
+  glGenFramebuffers(1, &FBO);
+  glGenTextures(1, &texture);
+
+  do{
+    vec2 dim = dimManager->get_glDim();int gl_width = dim.x;
+    int gl_height = dim.y;
+
+
+    //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+
+    //FBO
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //Texture
+
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_width, gl_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+
+
 
 
     int nb_viewport = cameraManager->get_number_viewport();
     for(int i=0; i<1; i++){
       guiManager->Gui_loop();
 
-      cameraManager->viewport_update(i);
+      cameraManager->viewport_update(0);
       cameraManager->input_cameraMouseCommands();
 
-      shaderManager->use();
+      mvpShader->use();
       mat4 mvp = cameraManager->compute_mvpMatrix();
-      shaderManager->setMat4("MVP", mvp);
+      mvpShader->setMat4("MVP", mvp);
 
       engineManager->loop();
     }
 
 
-    /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0); // unbind your FBO to set the default framebuffer
+
+    //glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT);
+
+
+    fboShader->use(); // shader program for rendering the quad
+
+    glActiveTexture( GL_TEXTURE0);
+    glBindVertexArray(quad_vao);
+    glBindTexture(GL_TEXTURE_2D, texture); // color attachment texture
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+
+
+
+
+    /*
     glDisable(GL_DEPTH_TEST);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
 
-    screenShader->use();
+    edlShader->use();
 
 
 
@@ -287,6 +273,7 @@ void CoreGLengine::loop(){
     glDrawArrays(GL_TRIANGLES, 0, 6);*/
 
     glfwSwapBuffers(window);
+    glfwPollEvents();
   }
   while(!glfwWindowShouldClose(window));
 
@@ -315,7 +302,7 @@ void CoreGLengine::loop_shader(){
   //---------------------------
 
   mat4 mvp = cameraManager->compute_mvpMatrix();
-  shaderManager->setMat4("MVP", mvp);
+  mvpShader->setMat4("MVP", mvp);
 
   //---------------------------
 }

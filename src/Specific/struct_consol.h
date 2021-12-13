@@ -3,6 +3,12 @@
 
 #include "../../extern/imgui/imgui.h"
 
+#include <string>
+#include <tuple>
+#include <vector>
+
+using namespace std;
+
 /**
  * \brief UI consol
  * \struct ConsoleApp struct_consol.h "UI consol structure"
@@ -14,16 +20,17 @@
 //clear: ClearLog();
 struct ConsoleApp{
   char                  InputBuf[256];
-  ImVector<char*>       Items;
-  ImVector<const char*> Commands;
+  vector<tuple<string, string>> Items;
+  ImVector<char*> Commands;
+  ImVector<const char*> allCommands;
   bool                  AutoScroll;
   bool                  ScrollToBottom;
 
   ConsoleApp(){
     ClearLog();
     memset(InputBuf, 0, sizeof(InputBuf));
-    Commands.push_back("HELP");
-    Commands.push_back("CLEAR");
+    allCommands.push_back("HELP");
+    allCommands.push_back("CLEAR");
     AutoScroll = true;
     ScrollToBottom = false;
   }
@@ -38,15 +45,16 @@ struct ConsoleApp{
   static void  Strtrim(char* str)                                  { char* str_end = str + strlen(str); while (str_end > str && str_end[-1] == ' ') str_end--; *str_end = 0; }
 
   void NumberOfLog(){
-    std::cout<<"Number of consol logs: "<<Items.Size<<std::endl;
+    std::cout<<"Number of consol logs: "<<Items.size()<<std::endl;
   }
   void ClearLog(){
-    for (int i = 0; i < Items.Size; i++){
-      free(Items[i]);
+    for(int i=0; i<Commands.Size; i++){
+      free(Commands[i]);
     }
+    Commands.clear();
     Items.clear();
   }
-  void AddLog(const char* fmt, ...) IM_FMTARGS(2){
+  void AddCommand(const char* fmt, ...) IM_FMTARGS(2){
     // FIXME-OPT
     char buf[1024];
     va_list args;
@@ -54,7 +62,12 @@ struct ConsoleApp{
     vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
     buf[IM_ARRAYSIZE(buf)-1] = 0;
     va_end(args);
-    Items.push_back(Strdup(buf));
+    Commands.push_back(Strdup(buf));
+  }
+  void AddLog(string code, string item){
+    tuple <string, string> tuple;
+    tuple = make_tuple(code, item);
+    Items.push_back(tuple);
   }
 
   void Draw(){
@@ -66,31 +79,37 @@ struct ConsoleApp{
     }
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4,1)); // Tighten spacing
-    for (int i = 0; i < Items.Size; i++){
-      const char* item = Items[i];
+    for (int i = 0; i < Items.size(); i++){
+      string code = get<0>(Items[i]);
+      string item = get<1>(Items[i]);
 
       //Item color
-      bool pop_color = false;
-      if (strstr(item, "[error]")){
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));
-        pop_color = true;
+      if (code == "error"){
+        ImGui::Text("[");ImGui::SameLine();
+        ImGui::TextColored(ImVec4(1.0f,0.0f,0.0f,1.0f), "error");ImGui::SameLine();
+        ImGui::Text("]");ImGui::SameLine();
       }
-      if (strstr(item, "[sucess]")){
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 1.0f, 0.4f, 1.0f));
-        pop_color = true;
+      if (code == "sucess"){
+        ImGui::Text("[");ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "sucess");ImGui::SameLine();
+        ImGui::Text("]");ImGui::SameLine();
       }
-      if (strstr(item, "[ok]")){
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.8f, 0.4f, 1.0f));
-        pop_color = true;
+      if (code == "ok"){
+        ImGui::Text("[");ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "ok");ImGui::SameLine();
+        ImGui::Text("]");ImGui::SameLine();
       }
-      else if (strncmp(item, "# ", 2) == 0){
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.8f, 0.6f, 1.0f));
-        pop_color = true;
+      if (code == "#"){
+        ImGui::Text("[");ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.0f,0.0f,1.0f,1.0f), "#");ImGui::SameLine();
+        ImGui::Text("]");ImGui::SameLine();
       }
-      ImGui::TextUnformatted(item);
-      if (pop_color){
-        ImGui::PopStyleColor();
-      }
+
+      ImGui::Text("%s", item.c_str());
+    }
+
+    for (int i = 0; i < Commands.Size; i++){
+      ImGui::TextUnformatted(Commands[i]);
     }
 
     //Scrolling
@@ -124,19 +143,19 @@ struct ConsoleApp{
     ImGui::End();
   }
   void ExecCommand(const char* command_line){
-    AddLog("# %s\n", command_line);
+    AddCommand("# %s\n", command_line);
 
     // Process command
     if (Stricmp(command_line, "CLEAR") == 0){
       ClearLog();
     }
     else if (Stricmp(command_line, "HELP") == 0){
-      AddLog("Commands:");
-      for (int i = 0; i < Commands.Size; i++)
-        AddLog("- %s", Commands[i]);
+      AddCommand("Commands:");
+      for (int i = 0; i < allCommands.Size; i++)
+        AddCommand("- %s", allCommands[i]);
     }
     else{
-      AddLog("Unknown command: '%s'\n", command_line);
+      AddCommand("Unknown command: '%s'\n", command_line);
     }
 
     // On commad input, we scroll to bottom even if AutoScroll==false
@@ -164,13 +183,13 @@ struct ConsoleApp{
 
         // Build a list of candidates
         ImVector<const char*> candidates;
-        for (int i = 0; i < Commands.Size; i++)
-          if (Strnicmp(Commands[i], word_start, (int)(word_end-word_start)) == 0)
-            candidates.push_back(Commands[i]);
+        for (int i = 0; i < allCommands.Size; i++)
+          if (Strnicmp(allCommands[i], word_start, (int)(word_end-word_start)) == 0)
+            candidates.push_back(allCommands[i]);
 
         if (candidates.Size == 0){
           // No match
-          AddLog("No match for \"%.*s\"!\n", (int)(word_end-word_start), word_start);
+          AddCommand("No match for \"%.*s\"!\n", (int)(word_end-word_start), word_start);
         }
         else if (candidates.Size == 1){
           // Single match. Delete the beginning of the word and replace it entirely so we've got nice casing
@@ -204,9 +223,9 @@ struct ConsoleApp{
           }
 
           // List matches
-          AddLog("Possible matches:\n");
+          AddCommand("Possible matches:\n");
           for (int i = 0; i < candidates.Size; i++){
-            AddLog("- %s\n", candidates[i]);
+            AddCommand("- %s\n", candidates[i]);
           }
         }
 

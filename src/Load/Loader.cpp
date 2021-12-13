@@ -35,7 +35,8 @@ bool Loader::load_cloud(string filePath){
 
   //Check file existence
   if(is_file_exist(filePath) == false){
-    console.AddLog("[error] File doesn't exists: %s", filePath.c_str());
+    string log = "File doesn't exists: "+ filePath;
+    console.AddLog("error", log);
     return false;
   }
 
@@ -46,7 +47,8 @@ bool Loader::load_cloud(string filePath){
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  console.AddLog("[sucess] Loaded %s", filePath.c_str());
+  string log = "Loaded "+ filePath;
+  console.AddLog("sucess", log);
   return true;
 }
 bool Loader::load_cloud_byFrame(vector<string> path_vec){
@@ -64,7 +66,7 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  console.AddLog("[sucess] Loaded all frames");
+  console.AddLog("sucess" ,"Loaded all frames");
   return true;
 }
 bool Loader::load_cloud_silent(string filePath){
@@ -72,7 +74,8 @@ bool Loader::load_cloud_silent(string filePath){
 
   //Check file existence
   if(is_file_exist(filePath) == false){
-    console.AddLog("[error] File doesn't exists: %s", filePath.c_str());
+    string log = "File doesn't exists: " + filePath;
+    console.AddLog("error", log);
     return false;
   }
 
@@ -91,7 +94,7 @@ bool Loader::load_cloud_part(string filePath, int lmin, int lmax){
 
   //Check file existence
   if(is_file_exist(filePath) == false){
-    console.AddLog("[error] File doesn't exists");
+    console.AddLog("error", "File doesn't exists");
     return false;
   }
 
@@ -103,7 +106,7 @@ bool Loader::load_cloud_part(string filePath, int lmin, int lmax){
     data_vec.push_back(data);
   }
   else{
-    console.AddLog("[error] Failing loading point cloud");
+    console.AddLog("error", "Failing loading point cloud");
     return false;
   }
 
@@ -246,7 +249,7 @@ vector<dataFile*> Loader::load_retrieve_data(string filePath){
     data_vec = csvManager.Loader(filePath);
   }
   else{
-    console.AddLog("[error] File format not recognized");
+    console.AddLog("error", "File format not recognized");
   }
 
   //---------------------------
@@ -289,12 +292,13 @@ bool Loader::save_cloud(Cloud* cloud, string filePath){
 
   //Say if save is successfull
   if(!sucess){
-    console.AddLog("[error] Failing saving point cloud");
+    console.AddLog("error", "Failing saving point cloud");
     return false;
   }
 
   //---------------------------
-  console.AddLog("[sucess] Saved %s", filePath.c_str());
+  string log = "Saved" + filePath;
+  console.AddLog("sucess", log);
   return true;
 }
 bool Loader::save_subset(Subset* subset, string format, string dirPath){
@@ -317,12 +321,13 @@ bool Loader::save_subset(Subset* subset, string format, string dirPath){
 
   //Say if save is successfull
   if(!sucess){
-    console.AddLog("[error] Failing saving point cloud");
+    console.AddLog("error", "Failing saving point cloud");
     return false;
   }
 
   //---------------------------
-  console.AddLog("[sucess] Saved at %s", dirPath.c_str());
+  string log = "Saved at " + dirPath;
+  console.AddLog("sucess", log);
   return true;
 }
 bool Loader::save_subset(Subset* subset, string format, string dirPath, string fileName){
@@ -345,11 +350,12 @@ bool Loader::save_subset(Subset* subset, string format, string dirPath, string f
 
   //Say if save is successfull
   if(!sucess){
-    console.AddLog("[error] Failing saving point cloud");
+    console.AddLog("error", "Failing saving point cloud");
     return false;
   }
 
   //---------------------------
-  console.AddLog("[sucess] Saved at %s", dirPath.c_str());
+  string log = "Saved at " + dirPath;
+  console.AddLog("sucess", log);
   return true;
 }

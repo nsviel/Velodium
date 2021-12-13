@@ -36,14 +36,8 @@ public:
   void update_glyph_color(Glyph* glyph);
   void update_glyph_color(Glyph* glyph, vec3 RGB);
 
-  //Glyph declaration
-  void obj_normals(Cloud* cloud);
-  void obj_aabb(Cloud* cloud);
-  string obj_pointsAtLocation(vector<vec3>& pos, float r, vec4 color);
-  string obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 color);
-
   //Glyph creation / supression
-  Glyph* create_glyph(Glyph* glyph);
+  Glyph* create_glyph_instance(string name);
   void create_glyph_alone(Glyph& glyph);
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
   Glyph* create_glyph_fromFile(string path);

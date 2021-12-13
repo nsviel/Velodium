@@ -50,7 +50,8 @@ void Sampling::sampling_random(Subset* subset){
 
   //---------------------------
   sceneManager->update_subset_location(subset);
-  console.AddLog("Random sampling %s : %i -> %i points (%.2f ms)", subset->name.c_str(), size_before, size_filtered, duration);
+  string log = "Random sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  console.AddLog("ok", log);
 }
 void Sampling::sampling_spaceRadius_PCL(Subset* subset){
   int size_before = subset->nb_point;
@@ -77,7 +78,8 @@ void Sampling::sampling_spaceRadius_PCL(Subset* subset){
   //---------------------------
   float duration = toc();
   int size_filtered = subset->xyz.size();
-  console.AddLog("Space sampling %s : %i -> %i points (%.2f ms)", subset->name.c_str(), size_before, size_filtered, duration);
+  string log = "Space sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  console.AddLog("ok", log);
 }
 void Sampling::sampling_outlier(Subset* subset){
   int size_before = subset->nb_point;
@@ -102,7 +104,8 @@ void Sampling::sampling_outlier(Subset* subset){
 
   float duration = toc();
   int size_filtered = subset->xyz.size();
-  console.AddLog("Filter outliers %s : %i -> %i points (%.2f ms)", subset->name.c_str(), size_before, size_filtered, duration);
+  string log = "Filter outliers " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  console.AddLog("ok", log);
 }
 void Sampling::sampling_statistical(Subset* subset){
   //http://pointclouds.org/documentation/tutorials/statistical_outlier.php
@@ -126,7 +129,8 @@ void Sampling::sampling_statistical(Subset* subset){
 
   float duration = toc();
   int size_filtered = subset->xyz.size();
-  console.AddLog("Statistical sampling %s : %i -> %i points (%.2f ms)", subset->name.c_str(), size_before, size_filtered, duration);
+  string log = "Statistical sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  console.AddLog("ok", log);
 }
 void Sampling::sampling_spaceRadius(Subset* subset, float radius){
   tic();
@@ -182,7 +186,8 @@ void Sampling::sampling_spaceRadius(Subset* subset, float radius){
 
   float duration = toc();
   int size_filtered = subset->xyz.size();
-  console.AddLog("Space sampling (%.2f°) %s : %i -> %i points (%.2f ms)", radius, subset->name.c_str(), size_before, size_filtered, duration);
+  string log = "Space sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  console.AddLog("ok", log);
 }
 
 #endif

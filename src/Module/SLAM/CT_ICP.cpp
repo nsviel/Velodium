@@ -71,7 +71,9 @@ void CT_ICP::compute_slam(){
     float duration = toc();
     frame->time_slam = duration;
     if(verbose){
-      cout<<"Compute SLAM frame " << subset->name.c_str() <<" in "<< duration << " ms" << endl;
+      cout<<"[sucess] SLAM - "<<subset->name.c_str();
+      cout<<" "<<to_string(i)<<"/"<< frame_max;
+      cout<< " [" <<duration<< " ms]"<<endl;
     }
   }
 
