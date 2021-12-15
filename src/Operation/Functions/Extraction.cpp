@@ -4,10 +4,6 @@
 
 #include "../../Load/Loader.h"
 #include "../../Engine/Scene.h"
-#include "../../Engine/Data/Database.h"
-
-extern struct Database database;
-
 
 
 //Constructor / destructor
@@ -150,15 +146,15 @@ void Extraction::fct_cutCloud(Subset* subset){
   //---------------------------
 }
 void Extraction::fct_cutCloud_all(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
-  Cloud* cloud_selected = database.cloud_selected;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  Cloud* cloud_selected = sceneManager->get_cloud_selected();
   vec3& max = cloud_selected->max;
   vec3& min = cloud_selected->min;
   //---------------------------
 
-  for(int i=0;i<list_Cloud->size();i++){
+  for(int i=0;i<list_cloud->size();i++){
     //Select ieme Point Cloud
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     vector<vec3>& XYZ = subset->xyz;
@@ -364,7 +360,7 @@ void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
   //---------------------------
 }
 void Extraction::set_AABB_min(vec3 min_in){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = &cloud->subset[cloud->subset_selected];
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   //---------------------------
@@ -396,7 +392,7 @@ void Extraction::set_AABB_min(vec3 min_in){
   this->fct_highlighting(subset, subset_init);
 }
 void Extraction::set_AABB_max(vec3 max_in){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = &cloud->subset[cloud->subset_selected];
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   //---------------------------

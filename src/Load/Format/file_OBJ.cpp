@@ -1,5 +1,7 @@
 #include "file_OBJ.h"
 
+#include <fstream>
+
 
 //Constructor / Destructor
 fileOBJ::fileOBJ(){}

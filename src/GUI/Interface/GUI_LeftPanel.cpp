@@ -1,17 +1,14 @@
 #include "GUI_LeftPanel.h"
-#include "GUI_windows.h"
 
+#include "../Windows/GUI_windows.h"
 #include "../Node/GUI_FileManager.h"
 
 #include "../../Module/GUI_Module.h"
 
 #include "../../Engine/Engine.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/Configuration/Dimension.h"
 
 #include "../../../extern/imgui/imgui.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -41,6 +38,7 @@ void GUI_leftPanel::design_leftPanel(){
 
   //----------------------------
 }
+
 void GUI_leftPanel::panel_top(){
   vec2 guiDim_tP = dimManager->get_guiDim_tP();
   vec2 winDim = dimManager->get_winDim();

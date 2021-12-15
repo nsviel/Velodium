@@ -3,7 +3,6 @@
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/struct_viewport.h"
 #include "../../Engine/Configuration/Dimension.h"
@@ -15,8 +14,6 @@
 #include "../../Operation/Functions/Heatmap.h"
 
 #include "../../../extern/imgui/imgui.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -59,7 +56,7 @@ void GUI_control::make_control(){
 
 //Subfunctions
 void GUI_control::control_mouse(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
   Viewport_obj* view = cameraManager->get_current_viewport();
@@ -104,7 +101,7 @@ void GUI_control::control_mouse(){
   //---------------------------
 }
 void GUI_control::control_mouse_wheel(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   static int PCrotMode = 2;
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -123,7 +120,7 @@ void GUI_control::control_mouse_wheel(){
   //----------------------------
 }
 void GUI_control::control_frameSelection(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -146,7 +143,7 @@ void GUI_control::control_frameSelection(){
 }
 
 void GUI_control::control_keyboard_oneAction(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
   //----------------------------
@@ -173,7 +170,7 @@ void GUI_control::control_keyboard_oneAction(){
       bool atLeastOne = selectionManager->mark_supressSelectedPoints_all();
 
       if(atLeastOne == false){
-        Cloud* cloud = database.cloud_selected;
+        Cloud* cloud = sceneManager->get_cloud_selected();
         sceneManager->removeCloud(cloud);
       }
       break;
@@ -222,7 +219,7 @@ void GUI_control::control_keyboard_oneAction(){
   //----------------------------
 }
 void GUI_control::control_keyboard_translation(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 

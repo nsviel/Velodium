@@ -3,11 +3,7 @@
 #include "../Transformation/Attribut.h"
 
 #include "../../Engine/Scene.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Specific/fct_maths.h"
-
-extern struct Database database;
-
 
 
 //Constructor / destructor
@@ -76,11 +72,11 @@ void Heatmap::set_Heatmap(Cloud* cloud, bool is_heatmap){
   sceneManager->update_cloud_color(cloud);
 }
 void Heatmap::set_Heatmap_all(bool heatAll){
-  list<Cloud*>* list = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
 
     cloud->heatmap = heatAll;
     this->set_Heatmap(cloud);

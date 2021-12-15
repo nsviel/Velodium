@@ -18,7 +18,7 @@ Glyph* OOBB::obj_oobb(){
   //Create glyph
   obstacle->name = "obstacle";
   obstacle->draw_width = 4;
-  obstacle->visibility = true;
+  obstacle->visibility = false;
   obstacle->draw_type = "line";
   obstacle->permanent = false;
   obstacle->color_unique = oobb_color;

@@ -408,10 +408,19 @@ Subset* Scene::get_subset_selected(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  if(cloud != nullptr){
+    Subset* subset = &cloud->subset[cloud->subset_selected];
+    return subset;
+  }
+  else{
+    return nullptr;
+  }
 
   //---------------------------
-  return subset;
+
+}
+Cloud* Scene::get_cloud_selected(){
+  return database.cloud_selected;
 }
 Cloud* Scene::get_othercloud(){
   Cloud* cloud;

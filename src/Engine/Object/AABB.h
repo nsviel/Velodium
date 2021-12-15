@@ -2,6 +2,8 @@
 #define AABB_H
 
 #include "../../common.h"
+#include "../Data/struct_glyph.h"
+#include "../Data/struct_cloud.h"
 
 
 class AABB

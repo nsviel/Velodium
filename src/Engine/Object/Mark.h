@@ -2,6 +2,7 @@
 #define MARK_H
 
 #include "../../common.h"
+#include "../Data/struct_glyph.h"
 
 
 class Mark

@@ -1,5 +1,7 @@
 #include "file_XYZ.h"
 
+#include <fstream>
+
 
 //Constructor / Destructor
 fileXYZ::fileXYZ(){}

@@ -15,16 +15,22 @@ public:
 
 public:
   void run();
-  void parse_json(string path);
-  void build_obstacleGlyph();
+
+  void parse_json(Cloud* cloud, vector<string> paths_pr, string data);
+  void build_obstacleGlyph_gt(Cloud* cloud);
+  void build_obstacleGlyph_pr(Cloud* cloud);
+
+  void select_dir_path();
+
+  inline string get_dir_path(){return dir_path;}
 
 private:
   Glyphs* glyphManager;
 
-  vector<string> detect_name;
-  vector<vec3> detect_posi;
-  vector<vec3> detect_dime;
-  vector<float> detect_head;
+  string dir_path;
+  string dir_predi;
+  string dir_grThr;
+  string dir_frame;
 };
 
 #endif

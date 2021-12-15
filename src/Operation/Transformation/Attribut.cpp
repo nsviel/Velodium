@@ -3,13 +3,10 @@
 #include "../Optimization/Fitting.h"
 
 #include "../../Engine/Scene.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_display.h"
 
 #include "../../../extern/NormalHough/Normals.h"
-
-extern struct Database database;
 
 
 //Constructor / destructor
@@ -26,11 +23,11 @@ Attribut::~Attribut(){}
 
 //General
 void Attribut::compute_cloudAttributs_all(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for(int i=0;i<list_Cloud->size();i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0;i<list_cloud->size();i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
     this->compute_cloudAttributs(subset);
   }
@@ -337,14 +334,14 @@ void Attribut::make_supressPoints(vector<vec3>& vec, vector<int>& idx){
   vec = vec_b;
 }
 void Attribut::cloudsData(){
-  list<Cloud*>* list = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   ofstream myfile;
   myfile.open ("Clouds_Name-Is_Ic_It_cosIt_R.txt");
   myfile << "\n";
-  for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
     Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
 
@@ -397,11 +394,11 @@ void Attribut::set_pointCloudColor(Subset* subset, vec4 RGBA){
   sceneManager->update_subset_color(subset);
 }
 void Attribut::set_colorRGB_all(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for(int i=0;i<list_Cloud->size();i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0;i<list_cloud->size();i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
     this->set_colorRGB(subset);
   }
@@ -419,11 +416,11 @@ void Attribut::set_colorRGB(Subset* subset){
   sceneManager->update_subset_color(subset);
 }
 void Attribut::set_colorI_all(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for(int i=0;i<list_Cloud->size();i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0;i<list_cloud->size();i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
     this->set_colorI(subset);
   }
@@ -690,7 +687,7 @@ void Attribut::compute_normals_planFitting(Subset* subset){
 }
 void Attribut::compute_normals_invert(){
   if(sceneManager->is_atLeastOnecloud()){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = &cloud->subset[cloud->subset_selected];
     Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
     vector<vec3>& normals = subset->N;
@@ -748,7 +745,7 @@ void Attribut::compute_checkForNan(Subset* subset){
 //Intensity
 void Attribut::compute_intensityInversion(){
   if(sceneManager->is_atLeastOnecloud()){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = &cloud->subset[cloud->subset_selected];
     //---------------------------
 
@@ -805,7 +802,7 @@ void Attribut::fct_convert2048to255(Subset* subset){
 }
 void Attribut::fct_moins(){
   if(sceneManager->is_atLeastOnecloud()){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = &cloud->subset[cloud->subset_selected];
     vector<float>& Is = subset->I;
     vector<vec3>& XYZ = subset->xyz;
@@ -822,7 +819,7 @@ void Attribut::fct_moins(){
   }
 }
 void Attribut::fct_IsRange(vec2 range){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = &cloud->subset[cloud->subset_selected];
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   vector<float>& Is = subset->I;
@@ -842,7 +839,7 @@ void Attribut::fct_IsRange(vec2 range){
   sceneManager->update_subset_color(subset);
 }
 vec2 Attribut::get_IsRange(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = &cloud->subset[cloud->subset_selected];
   vector<float>& Is = subset->I;
   //---------------------------

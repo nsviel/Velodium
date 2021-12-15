@@ -2,6 +2,8 @@
 
 #include "../CSV/CSV_state.h"
 
+#include <fstream>
+
 
 //Constructor / Destructor
 fileCSV::fileCSV(){}
@@ -61,7 +63,6 @@ vector<dataFile*> fileCSV::Loader(string pathFile){
         cpt_point++;
       }
     }
-    sayVec(data->timestamp);
 
     //End of row line
     cloud.push_back(data);

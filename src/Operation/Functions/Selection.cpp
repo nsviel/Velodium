@@ -7,15 +7,12 @@
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Glyphs.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Load/Loader.h"
 #include "../../Specific/fct_maths.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -53,7 +50,7 @@ void Selection::update(){
 }
 void Selection::validate(){
   if(sceneManager->is_atLeastOnecloud()){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = &cloud->subset[cloud->subset_selected];
     list<int>& idx = subset->highlighted;
     //---------------------------
@@ -86,12 +83,12 @@ void Selection::selectionPoint(vec3 point){
   //---------------------------
 }
 void Selection::mark_pointCreation(vec3 point){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   float err = selectSensibility;
   //---------------------------
 
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     vector<vec3>& XYZ = subset->xyz;
@@ -151,13 +148,13 @@ void Selection::mark_pointCreation(vec3 point){
   //---------------------------
 }
 bool Selection::mark_pointSupression(vec3 point){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   float err = selectSensibility;
   //---------------------------
 
   //For each cloud
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     vector<vec3>& XYZ = subset->xyz;
@@ -225,11 +222,11 @@ void Selection::mark_pointColor(Cloud* ptMark, int num){
   //---------------------------
 }
 void Selection::mark_supressAll(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     list<int>& idx = subset->highlighted;
@@ -239,12 +236,12 @@ void Selection::mark_supressAll(){
   //---------------------------
 }
 bool Selection::mark_supressSelectedPoints_all(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   bool atLeastOne = false;
   //---------------------------
 
-  for(int i=0;i<list_Cloud->size();i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0;i<list_cloud->size();i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     vector<int>& idx = subset->selected;
@@ -273,13 +270,13 @@ void Selection::mark_supressSelectedPoints(Cloud* cloud){
   }
 }
 void Selection::mark_pointLocation(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //Reposionning of ptMark if cloud move
   int cpt = 0;
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     list<int>& idx = subset->highlighted;
@@ -367,9 +364,9 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     point2.y = pt;
   }
 
-  list<Cloud*>* list_Cloud = database.list_cloud;
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
 
     for(int j=0; j<cloud->nb_subset; j++){
       Subset* subset = &cloud->subset[j];
@@ -432,7 +429,7 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   //---------------------------
 }
 void Selection::mouse_cloudPicking(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   vec3 point = coordTransManager->CursorToGround();
@@ -484,8 +481,7 @@ void Selection::update_glDims(){
 
 //Plane
 void Selection::mark_planeCreation(){
-  Cloud* cloud = database.cloud_selected;
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
   list<int>& idx = subset->highlighted;
@@ -538,12 +534,12 @@ void Selection::mark_planeABpoints(Cloud* cloud){
   //---------------------------
 }
 void Selection::mark_planeLocation(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //For each Cloud insert plane
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     list<int>& idx = subset->highlighted;
@@ -556,8 +552,8 @@ void Selection::mark_planeLocation(){
 
   //Reposionning of plane if cloud move
   int cpt = 0;
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     list<int>& idx = subset->highlighted;

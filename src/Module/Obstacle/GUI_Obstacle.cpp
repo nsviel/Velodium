@@ -20,5 +20,13 @@ void GUI_Obstacle::design_Obstacle(){
     obstacleManager->run();
   }
 
+  //Prediction directory
+  if(ImGui::Button("...##1")){
+    obstacleManager->select_dir_path();
+  }
+  ImGui::SameLine();
+  string dir_path = obstacleManager->get_dir_path();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
+
   //---------------------------
 }

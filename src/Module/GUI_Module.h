@@ -23,10 +23,10 @@ public:
     this->gui_senderManager = new GUI_Network();
     this->gui_obstacleManager = new GUI_Obstacle();
 
-    this->module_velodyne = false;
+    this->module_velodyne = true;
     this->module_CloudPlayer = true;
     this->module_slam = true;
-    this->module_obstacle = true;
+    this->module_obstacle = false;
     this->module_scala = false;
   }
   ~GUI_module();

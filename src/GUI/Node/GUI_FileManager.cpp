@@ -1,12 +1,11 @@
 #include "GUI_FileManager.h"
 
-#include "../Interface/GUI_windows.h"
+#include "../Windows/GUI_windows.h"
 
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Scene.h"
-#include "../../Engine/Data/Database.h"
 
-extern struct Database database;
+#include "../../../extern/IconsFontAwesome5.h"
 
 
 //Constructor / Destructor
@@ -23,6 +22,7 @@ GUI_fileManager::~GUI_fileManager(){}
 
 //Subfunctions
 void GUI_fileManager::fileManager(){
+  Cloud* cloud_selected = sceneManager->get_cloud_selected();
   vec2 guiDim_tP = dimManager->get_guiDim_tP();
   vec2 winDim = dimManager->get_winDim();
   //-------------------------------
@@ -31,7 +31,7 @@ void GUI_fileManager::fileManager(){
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar;
 
   //Get list of all loaded files
-  list<Cloud*>* list_cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
 
   static ImGuiTableFlags flags = ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable;
 
@@ -49,14 +49,14 @@ void GUI_fileManager::fileManager(){
     ImGui::TableNextRow();
     ImGui::TableNextColumn();
 
-    sceneManager->update_cloud_oID(database.list_cloud);
+    sceneManager->update_cloud_oID(list_cloud);
 
     static int is_selected = 0;
     for(int i=0; i<list_cloud->size(); i++){
       Cloud* cloud = *next(list_cloud->begin(),i);
 
       ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-      if(database.cloud_selected->oID == i){
+      if(cloud_selected->oID == i){
         node_flags = node_flags | ImGuiTreeNodeFlags_Selected;
       }
       bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);

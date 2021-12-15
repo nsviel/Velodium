@@ -1,12 +1,11 @@
 #include "GUI_MenuBar.h"
-#include "GUI_windows.h"
 #include "GUI_LeftPanel.h"
 
+#include "../Windows/GUI_windows.h"
 #include "../Node/GUI_Option.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
 
@@ -16,10 +15,9 @@
 #include "../../Operation/Transformation/Transforms.h"
 
 #include "../../../extern/imgui/imgui.h"
+#include "../../../extern/IconsFontAwesome5.h"
 
 #include <sys/sysinfo.h>
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -58,7 +56,7 @@ void GUI_menuBar::design_MenuBar(){
 
 //Subfunctions
 void GUI_menuBar::MenuBar_menus(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //-------------------------
 
   if (ImGui::BeginMenu("File")){
@@ -168,7 +166,7 @@ void GUI_menuBar::MenuBar_icons(){
   ImGui::PopStyleColor(1);
 }
 void GUI_menuBar::MenuBar_subsetSelected(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //-------------------------
 
   if(cloud != nullptr){
@@ -208,7 +206,7 @@ void GUI_menuBar::MenuBar_fastScene(){
   //---------------------------
 }
 void GUI_menuBar::MenuBar_Operations(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   //Functions

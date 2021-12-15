@@ -8,6 +8,9 @@
 
 #include "../common.h"
 
+#include "Data/Database.h"
+extern struct Database database;
+
 class Data;
 
 
@@ -51,6 +54,7 @@ public:
   vector<string> get_nameByOrder();
   Subset* get_visibleSubset();
   Subset* get_subset_selected();
+  Cloud* get_cloud_selected();
   Cloud* get_othercloud();
   Cloud* get_cloudByName(string name);
   Cloud* get_cloudByOID(int ID);
@@ -62,6 +66,12 @@ public:
   bool is_atLeastMinNbcloud(int nbMin);
   bool is_listcloudEmpty();
   bool is_atLeastOnecloud();
+
+  inline list<Glyph*>* get_list_glyph(){return database.list_glyph;}
+  inline list<Cloud*>* get_list_cloud(){return database.list_cloud;}
+  inline int* get_list_ID_cloud(){return &database.ID_cloud;}
+  inline int* get_list_ID_glyph(){return &database.ID_glyph;}
+  inline void set_selected_cloud(Cloud* cloud){database.cloud_selected = cloud;}
 
 private:
   Data* dataManager;

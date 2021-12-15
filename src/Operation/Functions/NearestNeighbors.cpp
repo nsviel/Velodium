@@ -3,8 +3,6 @@
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
 
-#include <flann/flann.hpp>
-
 
 //Constructor / Destructor
 NearestNeighbors::NearestNeighbors(){}

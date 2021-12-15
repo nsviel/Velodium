@@ -46,13 +46,13 @@ void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
   console.AddLog("ok", log);
 }
 void Filter::filter_sphereCleaning(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   float r = sphereDiameter/2;
   float err = r/20;
   //---------------------------
 
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = &cloud->subset[cloud->subset_selected];
 
     if(subset->name.find("Sphere") != std::string::npos){

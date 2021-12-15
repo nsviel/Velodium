@@ -4,12 +4,9 @@
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Glyphs.h"
-#include "../../Engine/Data/Database.h"
 
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -26,7 +23,7 @@ Fitting::~Fitting(){}
 
 //Sphere fitting
 void Fitting::Sphere_cloudToCenter_all(){
-  list<Cloud*>* list_cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //--------------------------
 
   for(int i=0; i<list_cloud->size(); i++){
@@ -135,7 +132,7 @@ vec3 Fitting::Sphere_FindCenter(Subset* subset){
 
 //Plane fitting
 void Fitting::Plane_cloud_all(){
-  list<Cloud*>* list_cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //--------------------------
 
   /*#ifdef PCL_FUNCTIONS_H

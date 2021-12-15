@@ -3,6 +3,11 @@
 
 #include "../../common.h"
 
+#include <flann/flann.hpp>
+#include <Eigen/Dense>
+
+using namespace Eigen;
+
 
 class NearestNeighbors
 {

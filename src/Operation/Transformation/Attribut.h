@@ -1,9 +1,14 @@
 #ifndef ATTRIBUT_H
 #define ATTRIBUT_H
 
+#include "../../common.h"
+
+#include <Eigen/Dense>
+
+using namespace Eigen;
+
 class Scene;
 
-#include "../../common.h"
 
 class Attribut
 {

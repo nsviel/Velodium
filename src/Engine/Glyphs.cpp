@@ -1,5 +1,7 @@
 #include "Glyphs.h"
 
+#include "Scene.h"
+
 #include "Object/Grid.h"
 #include "Object/Axis.h"
 #include "Object/AABB.h"
@@ -15,6 +17,7 @@
 Glyphs::Glyphs(){
   //---------------------------
 
+  Scene* sceneManager = new Scene();
 
   //---------------------------
 }
@@ -34,10 +37,11 @@ void Glyphs::init(){
   //---------------------------
 }
 void Glyphs::drawing(){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->visibility){
       glBindVertexArray(glyph->VAO);
@@ -91,6 +95,25 @@ void Glyphs::drawing(Subset* subset){
       glBindVertexArray(0);
     }
 
+    //OOBB - ground thruth
+    vector<Glyph*>& oobb_gt = subset->obstacle.gt_oobb;
+    for(int i=0; i<oobb_gt.size(); i++){
+      glBindVertexArray(oobb_gt[i]->VAO);
+      glLineWidth(oobb_gt[i]->draw_width);
+      glDrawArrays(GL_LINES, 0, oobb_gt[i]->location.size());
+      glLineWidth(1);
+      glBindVertexArray(0);
+    }
+
+    //OOBB - prediction
+    vector<Glyph*>& oobb_pr = subset->obstacle.pr_oobb;
+    for(int i=0; i<oobb_pr.size(); i++){
+      glBindVertexArray(oobb_pr[i]->VAO);
+      glLineWidth(oobb_pr[i]->draw_width);
+      glDrawArrays(GL_LINES, 0, oobb_pr[i]->location.size());
+      glLineWidth(1);
+      glBindVertexArray(0);
+    }
   }
 
   //---------------------------
@@ -98,11 +121,13 @@ void Glyphs::drawing(Subset* subset){
   glDisableVertexAttribArray(1);
 }
 void Glyphs::reset(){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //Remove non permanent glyphs
-  for(int i=0; i<database.list_glyph->size(); i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0; i<list_glyph->size(); i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->permanent == false){
       this->remove_glyph(glyph->ID);
@@ -115,8 +140,8 @@ void Glyphs::reset(){
   aabb->location.clear();
   this->update_glyph_location(aabb);
 
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     this->update(cloud);
   }
 
@@ -186,10 +211,11 @@ void Glyphs::update(Cloud* cloud){
   //---------------------------
 }
 void Glyphs::update_glyph(string name){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
-  for(int i=0; i<database.list_glyph->size(); i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0; i<list_glyph->size(); i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == name){
       this->update_glyph_location(glyph);
@@ -200,10 +226,11 @@ void Glyphs::update_glyph(string name){
   //---------------------------
 }
 void Glyphs::update_glyph(string name, vector<vec3> new_loc){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
-  for(int i=0; i<database.list_glyph->size(); i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0; i<list_glyph->size(); i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == name){
       glyph->location = new_loc;
@@ -307,6 +334,8 @@ void Glyphs::update_glyph_MinMax(Glyph* glyph){
 
 //Glyph creation / supression
 Glyph* Glyphs::create_glyph_instance(string name){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
+  int* ID_glyph = sceneManager->get_list_ID_glyph();
   Glyph* glyph;
   //---------------------------
 
@@ -365,14 +394,15 @@ Glyph* Glyphs::create_glyph_instance(string name){
   glyph->VAO = VAO;
   glyph->VBO_location = locationVBO;
   glyph->VBO_color = colorVBO;
-  glyph->ID = database.ID_glyph++;
+  glyph->ID = *ID_glyph++;
 
-  database.list_glyph->push_back(glyph);
+  list_glyph->push_back(glyph);
 
   //---------------------------
   return glyph;
 }
 void Glyphs::create_glyph_alone(Glyph& glyph){
+  int* ID_glyph = sceneManager->get_list_ID_glyph();
   vector<vec3>& XYZ = glyph.location;
   vector<vec4>& RGB = glyph.color;
   //---------------------------
@@ -400,12 +430,14 @@ void Glyphs::create_glyph_alone(Glyph& glyph){
   glyph.VAO = VAO;
   glyph.VBO_location = locationVBO;
   glyph.VBO_color = colorVBO;
-  glyph.ID = database.ID_glyph++;
+  glyph.ID = *ID_glyph++;
 
   //---------------------------
 }
 Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   Glyph* glyph = new Glyph();
+  int* ID_glyph = sceneManager->get_list_ID_glyph();
   unsigned int VAO;
   uint colorVBO, locationVBO;
   //---------------------------
@@ -436,10 +468,10 @@ Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, b
   glyph->name = "...";
   glyph->draw_type = mode;
   glyph->draw_width = 1;
-  glyph->ID = database.ID_glyph++;
+  glyph->ID = *ID_glyph++;
   glyph->permanent = perma;
 
-  database.list_glyph->push_back(glyph);
+  list_glyph->push_back(glyph);
 
   //---------------------------
   return glyph;
@@ -474,10 +506,12 @@ Glyph* Glyphs::create_glyph_fromFile(string filePath){
   return glyph;
 }
 Glyph* Glyphs::create_glyph_fromFile(string path, vec3 pos, string mode, bool perma){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   Glyph* glyph = create_glyph_fromFile(path);
+  int* ID_glyph = sceneManager->get_list_ID_glyph();
   //---------------------------
 
-  glyph->ID = database.ID_glyph++;
+  glyph->ID = *ID_glyph++;
   glyph->draw_type = mode;
   glyph->permanent = perma;
 
@@ -488,16 +522,18 @@ Glyph* Glyphs::create_glyph_fromFile(string path, vec3 pos, string mode, bool pe
   transformManager.make_positionning_glyph(glyph->location, glyph->COM, pos);
   this->update_glyph_MinMax(glyph);
   this->update_glyph_location(glyph);
-  database.list_glyph->push_back(glyph);
+  list_glyph->push_back(glyph);
 
   //---------------------------
   return glyph;
 }
 Glyph* Glyphs::create_glyph_fromFile(string path, vec3 pos, string mode, bool perma, int point_size){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   Glyph* glyph = create_glyph_fromFile(path);
+  int* ID_glyph = sceneManager->get_list_ID_glyph();
   //---------------------------
 
-  glyph->ID = database.ID_glyph++;
+  glyph->ID = *ID_glyph++;
   glyph->draw_type = mode;
   glyph->draw_width = point_size;
   glyph->permanent = perma;
@@ -509,7 +545,7 @@ Glyph* Glyphs::create_glyph_fromFile(string path, vec3 pos, string mode, bool pe
   transformManager.make_positionning_glyph(glyph->location, glyph->COM, pos);
   this->update_glyph_MinMax(glyph);
   this->update_glyph_location(glyph);
-  database.list_glyph->push_back(glyph);
+  list_glyph->push_back(glyph);
 
   //---------------------------
   return glyph;
@@ -530,30 +566,32 @@ void Glyphs::create_glyph_fromCloud(Subset* subset){
   //---------------------------
 }
 void Glyphs::remove_glyph(int ID){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->ID == ID){
       delete glyph;
-      list<Glyph*>::iterator it = next(database.list_glyph->begin(), i);
-      database.list_glyph->erase(it);
+      list<Glyph*>::iterator it = next(list_glyph->begin(), i);
+      list_glyph->erase(it);
     }
   }
 
   //---------------------------
 }
 void Glyphs::remove_glyph(string ID){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == ID){
       delete glyph;
-      list<Glyph*>::iterator it = next(database.list_glyph->begin(), i);
-      database.list_glyph->erase(it);
+      list<Glyph*>::iterator it = next(list_glyph->begin(), i);
+      list_glyph->erase(it);
     }
   }
 
@@ -591,11 +629,28 @@ void Glyphs::set_glyph_color(string name, vec4 RGB_new){
   //---------------------------
   this->update_glyph_color(glyph);
 }
-void Glyphs::set_size_normal(int size){
+void Glyphs::set_glyph_color(Glyph* glyph, vec3 RGB_new){
+  vector<vec4>& RGB = glyph->color;
+  int size = RGB.size();
   //---------------------------
 
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  RGB.clear();
+
+  //Reactualise color data
+  for(int i=0; i<size; i++){
+    RGB.push_back(vec4(RGB_new, 1.0f));
+  }
+  glyph->color_unique = vec4(RGB_new, 1.0f);
+
+  //---------------------------
+  this->update_glyph_color(glyph);
+}
+void Glyphs::set_size_normal(int size){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  //---------------------------
+
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     for (int j=0; j<cloud->nb_subset; j++){
       Subset* subset = &cloud->subset[j];
 
@@ -607,10 +662,11 @@ void Glyphs::set_size_normal(int size){
   //---------------------------
 }
 void Glyphs::set_visibility(string name, bool value){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
-  for(int i=0; i<database.list_glyph->size(); i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0; i<list_glyph->size(); i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == name){
       glyph->visibility = value;
@@ -620,10 +676,11 @@ void Glyphs::set_visibility(string name, bool value){
   //---------------------------
 }
 void Glyphs::set_visibility_normal(bool value){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     for (int j=0; j<cloud->nb_subset; j++){
       Subset* subset = &cloud->subset[j];
 
@@ -634,10 +691,11 @@ void Glyphs::set_visibility_normal(bool value){
   //---------------------------
 }
 void Glyphs::set_visibility_axisCloud(bool value){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     for (int j=0; j<cloud->nb_subset; j++){
       Subset* subset = &cloud->subset[j];
 
@@ -648,11 +706,12 @@ void Glyphs::set_visibility_axisCloud(bool value){
   //---------------------------
 }
 Glyph* Glyphs::get_glyph(string name){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   Glyph* glyph_out;
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == name){
       glyph_out = glyph;
@@ -663,11 +722,12 @@ Glyph* Glyphs::get_glyph(string name){
   return glyph_out;
 }
 Glyph* Glyphs::get_glyph(int ID){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   Glyph* glyph_out;
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->ID == ID){
       glyph_out = glyph;
@@ -678,11 +738,12 @@ Glyph* Glyphs::get_glyph(int ID){
   return glyph_out;
 }
 vec4* Glyphs::get_glyph_color(string name){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   vec4* color;
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == name){
       color = &glyph->color_unique;
@@ -693,11 +754,12 @@ vec4* Glyphs::get_glyph_color(string name){
   return color;
 }
 bool Glyphs::is_glyph_exist(string name){
+  list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   bool exist = false;
   //---------------------------
 
-  for(int i=0;i<database.list_glyph->size();i++){
-    Glyph* glyph = *next(database.list_glyph->begin(),i);
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->name == name){
       exist = true;

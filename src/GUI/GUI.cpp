@@ -1,11 +1,11 @@
 #include "GUI.h"
 
 #include "Interface/GUI_Consol.h"
-#include "Interface/GUI_windows.h"
 #include "Interface/GUI_MenuBar.h"
 #include "Interface/GUI_LeftPanel.h"
 #include "Node/GUI_Control.h"
 #include "Node/GUI_Option.h"
+#include "Windows/GUI_windows.h"
 
 #include "../Engine/Engine.h"
 #include "../Engine/OpenGL/Camera.h"
@@ -15,6 +15,7 @@
 #include "../../extern/imgui/imgui.h"
 #include "../../extern/imgui/imgui_impl_glfw.h"
 #include "../../extern/imgui/imgui_impl_opengl3.h"
+#include "../../extern/IconsFontAwesome5.h"
 
 #include<thread>
 

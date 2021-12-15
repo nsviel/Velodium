@@ -5,6 +5,8 @@
 #include "../Engine/Data/struct_dataFile.h"
 #include "../Module/Velodyne/UDP/struct_UDPpacket.h"
 
+class Scene;
+
 
 class dataExtraction
 {
@@ -35,6 +37,8 @@ private:
   void extract_Timestamp(Subset& subset, vector<float>& timestampOBJ);
 
 private:
+  Scene* sceneManager;
+
   float Red, Green, Blue;
   int ID, oneFrame_VAO;
   vec4 RGB_rdm;

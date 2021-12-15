@@ -244,11 +244,8 @@ void GUI_Velodyne::Parameters(){
     int fov_min = veloManager->get_fov_min();
     int fov_max = veloManager->get_fov_max();
     ImGui::DragIntRange2("##008", &fov_min, &fov_max, 0, 0, 359, "%d°", "%d°");
-    if(ImGui::Button("Set min", ImVec2(150,0))){
-      veloManager->lidar_set_cameraFOV_min(fov_min);
-    }
-    if(ImGui::Button("Set max", ImVec2(150,0))){
-      veloManager->lidar_set_cameraFOV_max(fov_max);
+    if(ImGui::Button("Set##2", ImVec2(150,0))){
+      veloManager->lidar_set_cameraFOV(fov_min, fov_max);
     }
 
     //---------------------------

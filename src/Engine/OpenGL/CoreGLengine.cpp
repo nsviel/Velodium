@@ -220,8 +220,6 @@ void CoreGLengine::loop(){
 
 
 
-
-
     int nb_viewport = cameraManager->get_number_viewport();
     for(int i=0; i<1; i++){
       guiManager->Gui_loop();

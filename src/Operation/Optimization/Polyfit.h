@@ -1,13 +1,15 @@
 #ifndef _POLYNOMIAL_REGRESSION_H
 #define _POLYNOMIAL_REGRESSION_H
 
-#include <cmath>
-#include <stdexcept>
-#include "Eigen/Dense"
+#include "../../../extern/OptimLib/optim.hpp"
+
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/lu.hpp>
+#include <Eigen/Dense>
+#include <stdexcept>
+#include <cmath>
 
-#include "../../../extern/OptimLib/optim.hpp"
+using namespace Eigen;
 
 /**
  * PURPOSE:

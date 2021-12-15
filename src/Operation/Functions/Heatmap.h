@@ -4,6 +4,8 @@
 class Scene;
 class Attribut;
 
+#include "../../../extern/gnuplot/gnuplot-iostream.h"
+
 #include "../../common.h"
 
 class Heatmap
@@ -18,7 +20,7 @@ public:
   void set_Heatmap(Cloud* cloud);
   void set_Heatmap(Cloud* cloud, bool is_heatmap);
   void set_Heatmap_all(bool heatAll);
-  
+
   //Heatmap functions
   void compute_subset_heatmap_ON(Subset* subset);
   void compute_subset_heatmap_OFF(Subset* subset);

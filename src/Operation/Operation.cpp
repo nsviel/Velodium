@@ -4,7 +4,6 @@
 
 #include "../Engine/Scene.h"
 #include "../Engine/Glyphs.h"
-#include "../Engine/Data/Database.h"
 #include "../Load/Loader.h"
 
 #include "../Specific/fct_transtypage.h"
@@ -12,8 +11,9 @@
 
 #include <experimental/filesystem>
 #include <set>
+#include <Eigen/Dense>
 
-extern struct Database database;
+using namespace Eigen;
 
 
 //Constructor / destructor
@@ -87,8 +87,8 @@ void Operation::fastScene(int mode){
   //---------------------------
 }
 void Operation::reset(){
-  list<Cloud*>* list_Cloud = database.list_cloud;
-  Cloud* cloud = database.cloud_selected;
+  list<Cloud*>* list_Cloud = sceneManager->get_list_cloud();
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   //Reset all clouds
@@ -284,7 +284,9 @@ void Operation::loading_treatment(){
 
       //Load files
       loaderManager->load_cloud(path);
-      Cloud* cloud = database.cloud_selected;
+
+      //Save and remove
+      Cloud* cloud = sceneManager->get_cloud_selected();
       loaderManager->save_cloud(cloud, path);
       sceneManager->removeCloud(cloud);
     }
@@ -385,7 +387,7 @@ void Operation::saving(){
       path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
     }
 
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     loaderManager->save_cloud(cloud, path_str);
   }
 
@@ -407,8 +409,9 @@ void Operation::allSaving(){
       path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
 
     //Save all cloud in the list
-    for(int i=0; i<database.list_cloud->size(); i++){
-      Cloud* cloud = *next(database.list_cloud->begin(),i);
+    list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+    for(int i=0; i<list_cloud->size(); i++){
+      Cloud* cloud = *next(list_cloud->begin(),i);
 
       string pathFile = pathDir + "/" + cloud->name + ".pts";
       loaderManager->save_cloud(cloud, pathFile);

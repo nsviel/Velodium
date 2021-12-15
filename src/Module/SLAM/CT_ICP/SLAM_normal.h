@@ -35,7 +35,7 @@ private:
 
   float size_voxelMap;
   int nb_thread;
-  mutable std::shared_mutex mutex_;
+  std::mutex mutex;
 };
 
 

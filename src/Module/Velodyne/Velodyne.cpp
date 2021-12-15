@@ -7,7 +7,6 @@
 #include "UDP/UDP_server.h"
 #include "UDP/UDP_parser_VLP16.h"
 
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/Scene.h"
 #include "../../Load/Loader.h"
 #include "../../Load/dataExtraction.h"
@@ -16,11 +15,10 @@
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
 
+#include <unistd.h>
 #include <fstream>
 #include <curl/curl.h>
 #include <experimental/filesystem>
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -85,7 +83,7 @@ void Velodyne::onrun_ope(){
   //---------------------------
 
   if(atleastoneframe){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = &cloud->subset[0];
     udpPacket frame_new = *frame;
 
@@ -214,8 +212,9 @@ void Velodyne::lidar_startNewCapture(){
   this->record_n_frame_nb = 0;
   this->subset_selected = 0;
   loaderManager->load_cloud_empty();
-  Cloud* cloud = database.cloud_selected;
-  cloud->name = "capture_" + to_string(database.ID_cloud);
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  int ID = *sceneManager->get_list_ID_cloud();
+  cloud->name = "capture_" + to_string(ID);
 
   //Set timer
   if(timerManager->isRunning()){
@@ -320,6 +319,17 @@ void Velodyne::lidar_set_cameraFOV_max(int value){
   //---------------------------
 
   string command = "curl -s --connect-timeout 1 --data end=" + to_string(fov_max) + " http://192.168.1.201/cgi/setting/fov";
+  int err = system(command.c_str());
+
+  //---------------------------
+  sleep(1);
+}
+void Velodyne::lidar_set_cameraFOV(int min, int max){
+  this->fov_min = min;
+  this->fov_max = max;
+  //---------------------------
+
+  string command = "curl -s --connect-timeout 1 --data start=" + to_string(fov_min) + " --data end=" + to_string(fov_max) + " http://192.168.1.201/cgi/setting/fov";
   int err = system(command.c_str());
 
   //---------------------------

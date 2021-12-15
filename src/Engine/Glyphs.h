@@ -9,6 +9,8 @@
 
 #include "../common.h"
 
+class Scene;
+
 
 class Glyphs
 {
@@ -50,6 +52,7 @@ public:
   //Setters / Getters
   void set_glyph_color(string name, vec4 RGB_new);
   void set_glyph_color(int ID, vec3 RGB);
+  void set_glyph_color(Glyph* glyph, vec3 RGB);
   void set_size_normal(int size);
   void set_visibility(string name, bool value);
   void set_visibility_normal(bool value);
@@ -60,7 +63,7 @@ public:
   bool is_glyph_exist(string name);
 
 private:
-
+  Scene* sceneManager;
 };
 
 #endif

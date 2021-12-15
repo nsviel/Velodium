@@ -4,9 +4,11 @@
 #include "struct_glyph.h"
 
 #include "../../Module/SLAM/struct_frame.h"
+#include "../../Module/Obstacle/struct_obstacle.h"
 
 #include <string>
 #include <vector>
+#include <list>
 
 
 struct Subset{ //Cloud subset / part
@@ -61,6 +63,7 @@ struct Subset{ //Cloud subset / part
 
   //Specific structures
   Frame frame;
+  Obstac obstacle;
 };
 
 #endif

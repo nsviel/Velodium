@@ -3,6 +3,11 @@
 
 #include "../../common.h"
 
+#include <Eigen/Dense>
+
+using namespace Eigen;
+
+
 class SpeudoInverse
 {
 public:

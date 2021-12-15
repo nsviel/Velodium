@@ -5,6 +5,7 @@
 #include "../Engine/Data/struct_dataFile.h"
 
 class dataExtraction;
+class Scene;
 
 
 class Loader
@@ -36,6 +37,7 @@ public:
 
 private:
   dataExtraction* extractManager;
+  Scene* sceneManager;
   Cloud* cloud;
 };
 

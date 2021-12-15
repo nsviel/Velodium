@@ -1,16 +1,17 @@
 #include "dataExtraction.h"
 
-#include "../Engine/Data/Database.h"
 #include "../Engine/Glyphs.h"
+#include "../Engine/Scene.h"
 
 #include <experimental/filesystem>
 #include <random>
 
-extern struct Database database;
 
 //Constructor / Destructor
 dataExtraction::dataExtraction(){
   //---------------------------
+
+  this->sceneManager = new Scene();
 
   this->ID = 0;
 
@@ -227,9 +228,10 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->saveas = absPath + "/../media/data/";
 
   //ID
-  cloud->ID = database.ID_cloud;
-  cloud->oID = database.ID_cloud;
-  database.ID_cloud++;
+  int* list_ID = sceneManager->get_list_ID_cloud();
+  cloud->ID = *list_ID;
+  cloud->oID = *list_ID;
+  *list_ID++;
 
   //---------------------------
 }

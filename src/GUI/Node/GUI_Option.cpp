@@ -5,15 +5,12 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Glyphs.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Operation/Operation.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 #include "../../../extern/imgui/imgui.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -48,7 +45,7 @@ void GUI_option::design_Options(){
 
 //Subfunctions
 void GUI_option::option_glyphs(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiStyle& style = ImGui::GetStyle();
   ImGui::Columns(2);
   //---------------------------
@@ -119,8 +116,8 @@ void GUI_option::option_glyphs(){
 }
 void GUI_option::option_heatmap(){
   if(ImGui::CollapsingHeader("Heatmap")){
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Heatmap
@@ -162,7 +159,7 @@ void GUI_option::option_heatmap(){
 }
 void GUI_option::option_colors(){
   if(ImGui::CollapsingHeader("Colors")){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     int colorEditSize = 150;
     //---------------------------
 
@@ -213,7 +210,7 @@ void GUI_option::option_colors(){
 }
 void GUI_option::option_parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
 

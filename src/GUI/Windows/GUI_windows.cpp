@@ -4,7 +4,6 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Glyphs.h"
-#include "../../Engine/Data/Database.h"
 
 #include "../../Operation/Operation.h"
 #include "../../Operation/Plotting.h"
@@ -22,8 +21,7 @@
 #include "../../Load/Loader_configurator.h"
 
 #include "../../../extern/imgui/imgui.h"
-
-extern struct Database database;
+#include "../../../extern/IconsFontAwesome5.h"
 
 
 //Constructor / Destructor
@@ -223,8 +221,8 @@ void GUI_windows::window_saving(){
 void GUI_windows::window_asciiData(){
   if(show_asciiData){
     ImGui::Begin("Data", &show_asciiData);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
 
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->RGB;
@@ -429,8 +427,8 @@ void GUI_windows::window_camera(){
 void GUI_windows::window_heatmap(){
   if(show_heatmap){
     ImGui::Begin(ICON_FA_EYE " Heatmap", &show_heatmap, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Apply heatMap on one cloud
@@ -487,8 +485,8 @@ void GUI_windows::window_heatmap(){
   }
 }
 void GUI_windows::window_transformation(){
-  Cloud* cloud = database.cloud_selected;
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  Subset* subset = sceneManager->get_subset_selected();
 
   if(show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
@@ -532,7 +530,7 @@ void GUI_windows::window_transformation(){
 
     if(ImGui::Button("Accept##0")){
       if(allClouds){
-        list<Cloud*>* list_cloud = database.list_cloud;
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
         for(int i=0;i<list_cloud->size();i++){
           Cloud* cloud = *next(list_cloud->begin(),i);
           transformManager.fct_adjustPosToScanner(cloud, Z_scan);
@@ -631,8 +629,8 @@ void GUI_windows::window_transformation(){
       if(cloud != nullptr){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
-        Cloud* cloud = database.cloud_selected;
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Cloud* cloud = sceneManager->get_cloud_selected();
+        Subset* subset = sceneManager->get_subset_selected();
 
         sceneManager->update_cloud_reset(cloud);
         transformManager.make_Transformation(subset, vec3(0,0,0), mat);
@@ -654,8 +652,8 @@ void GUI_windows::window_transformation(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        Cloud* cloud = database.cloud_selected;
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Cloud* cloud = sceneManager->get_cloud_selected();
+        Subset* subset = sceneManager->get_subset_selected();
 
         sceneManager->update_cloud_reset(cloud);
         transformManager.make_Transformation(subset, vec3(0,0,0), mat);
@@ -702,8 +700,8 @@ void GUI_windows::window_transformation(){
 void GUI_windows::window_filter(){
   if(show_filtering){
     ImGui::Begin("Filter", &show_filtering,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     int sizeButton = 150;
     //---------------------------
 
@@ -712,7 +710,7 @@ void GUI_windows::window_filter(){
     if(ImGui::Button("Filter by angle", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
 
-        list<Cloud*>* list_cloud = database.list_cloud;
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
         for(int i=0; i<list_cloud->size(); i++){
           Cloud* cloud = *next(list_cloud->begin(),i);
           filterManager->filter_maxAngle(cloud, maxAngle);
@@ -753,8 +751,8 @@ void GUI_windows::window_filter(){
 void GUI_windows::window_fitting(){
   if(show_fitting){
     ImGui::Begin("Fitting", &show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     int sizeButton = 150;
     //---------------------------
 
@@ -791,8 +789,8 @@ void GUI_windows::window_fitting(){
 void GUI_windows::window_normal(){
   if(show_normal){
     ImGui::Begin("Attributs", &show_normal,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -874,7 +872,7 @@ void GUI_windows::window_normal(){
         //---------------------------
 
 
-        list<Cloud*>* list_cloud = database.list_cloud;
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
         for(int i=0;i<list_cloud->size();i++){
           Cloud* cloud = *next(list_cloud->begin(),i);
 
@@ -946,8 +944,8 @@ void GUI_windows::window_normal(){
 void GUI_windows::window_intensity(){
   if(show_intensity){
     ImGui::Begin("Intensity", &show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity functions");
@@ -1057,8 +1055,8 @@ void GUI_windows::window_intensity(){
 void GUI_windows::window_color(){
   if(show_color){
     ImGui::Begin("Color", &show_color, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Color channel
@@ -1074,7 +1072,7 @@ void GUI_windows::window_color(){
       }
     } ImGui::NextColumn();
     if(ImGui::RadioButton("I    ##2", &e, 2)){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
 
@@ -1090,7 +1088,7 @@ void GUI_windows::window_color(){
       }
     } ImGui::NextColumn();
     if(ImGui::RadioButton("RGB  ##2", &e, 4)){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
 
@@ -1108,7 +1106,7 @@ void GUI_windows::window_color(){
       }
     } ImGui::NextColumn();
     if(ImGui::RadioButton("RGB*I##2", &e, 6)){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
 
@@ -1122,7 +1120,7 @@ void GUI_windows::window_color(){
 
     //Color functions
     if(ImGui::Button("Supress color all clouds", ImVec2(150,0))){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
 
@@ -1149,8 +1147,8 @@ void GUI_windows::window_color(){
 void GUI_windows::window_selection(){
   if(show_selection){
     ImGui::Begin("Selection part", &show_selection,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     ImGui::Text("Point");
@@ -1304,8 +1302,8 @@ void GUI_windows::window_selection(){
 void GUI_windows::window_extractCloud(){
   if(show_extractCloud){
     ImGui::Begin("Extract cloud", &show_extractCloud,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Extraction functions
@@ -1389,7 +1387,8 @@ void GUI_windows::window_extractCloud(){
     //Merge and extract two clouds
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Merge and extract two clouds");
     if(ImGui::Button("Merge clouds", ImVec2(150,0))){
-      if(database.list_cloud->size() >= 2){
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+      if(list_cloud->size() >= 2){
         Cloud* cloud_2 = sceneManager->get_othercloud();
         extractionManager->fct_merging_newCloud(cloud, cloud_2);
       }
@@ -1406,8 +1405,8 @@ void GUI_windows::window_extractCloud(){
 void GUI_windows::window_cutCloud(){
   if(show_cutCloud){
     ImGui::Begin("Cut cloud", &show_cutCloud,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     bool* highlightON = extractionManager->get_highlightON();
@@ -1496,13 +1495,13 @@ void GUI_windows::window_cutCloud(){
 void GUI_windows::window_dataOpe(){
   if(show_dataOpe){
     ImGui::Begin("Data", &show_dataOpe,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = database.cloud_selected;
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Write on file");
     if(ImGui::Button("I-R-a all without ref", ImVec2(200,0))){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
 
       //Write data on file
       ofstream file;
@@ -1537,7 +1536,7 @@ void GUI_windows::window_dataOpe(){
       file.close();
     }
     if(ImGui::Button("I all without ref", ImVec2(200,0))){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
 
       //Write data on file
       ofstream file;
@@ -1562,7 +1561,7 @@ void GUI_windows::window_dataOpe(){
       file.close();
     }
     if(ImGui::Button("R-Alpha all without ref", ImVec2(200,0))){
-      list<Cloud*>* list_cloud = database.list_cloud;
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
 
       //Write data on file
       ofstream file;
@@ -1595,9 +1594,9 @@ void GUI_windows::window_dataOpe(){
       file << "--------------------------------"<<"\n";
       //---------------------------
 
-      list<Cloud*>* list = database.list_cloud;
-      for(int i=0; i<list->size(); i++){
-        Cloud* cloud = *next(list->begin(),i);
+      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+      for(int i=0; i<list_cloud->size(); i++){
+        Cloud* cloud = *next(list_cloud->begin(),i);
 
         float R = fct_mean(subset->R);
         float A = fct_mean(subset->It);
@@ -1614,8 +1613,8 @@ void GUI_windows::window_dataOpe(){
       ofstream file;
       file.open ("../../data/data_intensity.txt");
 
-      Cloud* cloud = database.cloud_selected;
-      Subset* subset = &cloud->subset[cloud->subset_selected];
+      Cloud* cloud = sceneManager->get_cloud_selected();
+      Subset* subset = sceneManager->get_subset_selected();
 
       vector<float>& Is = subset->I;
       //---------------------------
@@ -1633,20 +1632,20 @@ void GUI_windows::window_dataOpe(){
       //---------------------
 
       if(cloud != nullptr){
-        list<Cloud*>* list = database.list_cloud;
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
 
         //Intensity
         cout<<"-- Intensity --"<<endl;
-        for(int i=0; i<list->size(); i++){
-          Cloud* cloud = *next(list->begin(),i);
+        for(int i=0; i<list_cloud->size(); i++){
+          Cloud* cloud = *next(list_cloud->begin(),i);
 
           cout<<std::fixed<<std::setprecision(2)<<"& "<<fct_mean(subset->I)<<endl;
         }
 
         //Standard deviation
         cout<<"-- SD --"<<endl;
-        for(int i=0; i<list->size(); i++){
-          Cloud* cloud = *next(list->begin(),i);
+        for(int i=0; i<list_cloud->size(); i++){
+          Cloud* cloud = *next(list_cloud->begin(),i);
 
           cout<<std::fixed<<std::setprecision(3)<<"& "<<fct_std(subset->I)<<endl;
         }
@@ -1660,9 +1659,9 @@ void GUI_windows::window_dataOpe(){
       //---------------------
 
       if(cloud != nullptr){
-        list<Cloud*>* list = database.list_cloud;
-        for(int i=0; i<list->size(); i++){
-          Cloud* cloud = *next(list->begin(),i);
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+        for(int i=0; i<list_cloud->size(); i++){
+          Cloud* cloud = *next(list_cloud->begin(),i);
 
           vector<float>& dist = subset->R;
           if(dist.size() == 0) attribManager->compute_Distances(subset);
@@ -1684,12 +1683,12 @@ void GUI_windows::window_dataOpe(){
       //---------------------
 
       if(cloud != nullptr){
-        list<Cloud*>* list = database.list_cloud;
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
 
         //Distances
         cout<<"-- Distances --"<<endl;
-        for(int i=0; i<list->size(); i++){
-          Cloud* cloud = *next(list->begin(),i);
+        for(int i=0; i<list_cloud->size(); i++){
+          Cloud* cloud = *next(list_cloud->begin(),i);
 
           vector<float>& dist = subset->R;
           if(dist.size() == 0) attribManager->compute_Distances(subset);
@@ -1699,8 +1698,8 @@ void GUI_windows::window_dataOpe(){
 
         //Angle
         cout<<"-- Angles --"<<endl;
-        for(int i=0; i<list->size(); i++){
-          Cloud* cloud = *next(list->begin(),i);
+        for(int i=0; i<list_cloud->size(); i++){
+          Cloud* cloud = *next(list_cloud->begin(),i);
 
           vector<float>& It = subset->It;
           if(It.size() == 0) attribManager->compute_cosIt(subset);
@@ -1816,8 +1815,8 @@ void GUI_windows::window_dataOpe(){
 
 //Cloud infos
 void GUI_windows::window_modifyFileInfo(){
-  Cloud* cloud = database.cloud_selected;
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
 
   if( show_modifyFileInfo == true && cloud != nullptr){
     show_modifyFileInfo = false;
@@ -1825,6 +1824,7 @@ void GUI_windows::window_modifyFileInfo(){
 
   if(show_modifyFileInfo && cloud != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", &show_modifyFileInfo, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Visibility
@@ -1927,6 +1927,8 @@ void GUI_windows::window_modifyFileInfo(){
     }
     ImGui::End();
   }
+
+  //---------------------------
 }
 void GUI_windows::cloud_stats_location(Cloud* cloud){
   Subset* subset = &cloud->subset[cloud->subset_selected];

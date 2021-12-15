@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <random>
 #include <fstream>
+#include <unistd.h>
 
 /**
  * \namespace OpenGL functions

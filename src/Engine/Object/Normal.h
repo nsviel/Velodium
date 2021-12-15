@@ -2,6 +2,8 @@
 #define NORMAL_H
 
 #include "../../common.h"
+#include "../Data/struct_glyph.h"
+#include "../Data/struct_subset.h"
 
 
 class Normal

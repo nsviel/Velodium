@@ -11,18 +11,15 @@
 #include "Format/file_XYZ.h"
 
 #include "../Engine/Scene.h"
-#include "../Engine/Data/Database.h"
-
 #include "../Specific/fct_opengl.h"
 #include "../Specific/fct_transtypage.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
 Loader::Loader(){
   //---------------------------
 
+  this->sceneManager = new Scene();
   this->extractManager = new dataExtraction();
 
   //---------------------------
@@ -256,17 +253,17 @@ vector<dataFile*> Loader::load_retrieve_data(string filePath){
   return data_vec;
 }
 void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //Extract data and put in the engine
   cloud = extractManager->extractData(data_vec);
-  database.list_cloud->push_back(cloud);
-  database.cloud_selected = cloud;
+  list_cloud->push_back(cloud);
 
   //Update list cloud
-  Scene sceneManager;
-  sceneManager.update_cloud_oID(database.list_cloud);
-  sceneManager.update_cloud_glyphs(cloud);
+  sceneManager->set_selected_cloud(cloud);
+  sceneManager->update_cloud_oID(list_cloud);
+  sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
 }

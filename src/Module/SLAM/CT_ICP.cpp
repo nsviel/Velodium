@@ -6,10 +6,7 @@
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
 
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/Scene.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -39,7 +36,7 @@ CT_ICP::CT_ICP(){
 CT_ICP::~CT_ICP(){}
 
 void CT_ICP::compute_slam(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   map = new voxelMap();
   gmap = new slamMap();
 

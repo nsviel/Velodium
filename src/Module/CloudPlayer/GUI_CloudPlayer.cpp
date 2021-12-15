@@ -2,16 +2,14 @@
 
 #include "CloudPlayer.h"
 
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/OpenGL/Camera.h"
+#include "../../Engine/Scene.h"
 #include "../../Operation/Functions/Heatmap.h"
 
 #include "../../../extern/imgui/imgui.h"
+#include "../../../extern/IconsFontAwesome5.h"
 
 #include <thread>
-
-extern struct Database database;
-
 
 
 //Constructor / Destructor
@@ -20,6 +18,7 @@ GUI_CloudPlayer::GUI_CloudPlayer(Camera* cameraManager){
 
   this->playerManager = new CloudPlayer(cameraManager);
   this->heatmapManager = new Heatmap();
+  this->sceneManager = new Scene();
 
   //---------------------------
 }
@@ -38,7 +37,7 @@ void GUI_CloudPlayer::design_CloudPlayer(){
 //Subfunctions
 void GUI_CloudPlayer::playCloud(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Timeline");
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   //Play / Stop frame display
@@ -111,24 +110,22 @@ void GUI_CloudPlayer::playCloud(){
   ImGui::Separator();
 }
 void GUI_CloudPlayer::playCloud_byMouseWheel(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
   //Wheel - rolling stone
   if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
     if(cloud != nullptr){
-      if(cloud->subset[0].ts.size() != 0){
-        int subset_selected = *playerManager->get_frame_ID();
+      int subset_selected = *playerManager->get_frame_ID();
 
-        if(io.MouseWheel > 0){
-          subset_selected++;
-        }else{
-          subset_selected--;
-        }
-
-        playerManager->select_byFrameID(cloud, subset_selected);
+      if(io.MouseWheel > 0){
+        subset_selected++;
+      }else{
+        subset_selected--;
       }
+
+      playerManager->select_byFrameID(cloud, subset_selected);
     }
   }
 
@@ -136,7 +133,7 @@ void GUI_CloudPlayer::playCloud_byMouseWheel(){
 }
 void GUI_CloudPlayer::parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
     bool* cameraRoot = playerManager->get_camera_follow();

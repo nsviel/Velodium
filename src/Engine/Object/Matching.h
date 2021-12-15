@@ -2,6 +2,7 @@
 #define MATCHING_H
 
 #include "../../common.h"
+#include "../Data/struct_glyph.h"
 
 
 class Matching

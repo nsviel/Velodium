@@ -3,6 +3,8 @@
 #include "../../Specific/fct_maths.h"
 #include "../../Operation/Operation.h"
 
+#include <fstream>
+
 
 //Constructor / Destructor
 Network::Network(){

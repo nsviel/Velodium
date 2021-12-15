@@ -14,6 +14,7 @@ class UDP_frame;
 class UDP_server;
 class UDP_parser_VLP16;
 
+class Scene;
 class Loader;
 class dataExtraction;
 class Timer;
@@ -41,6 +42,7 @@ public:
   void lidar_set_rpm(int value);
   void lidar_set_cameraFOV_min(int fov_min);
   void lidar_set_cameraFOV_max(int fov_max);
+  void lidar_set_cameraFOV(int min, int max);
 
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
@@ -57,13 +59,15 @@ public:
   inline string* get_saveas(){return &saveas;}
 
 private:
+  Scene* sceneManager;
   Loader* loaderManager;
+  dataExtraction* extractManager;
+  Timer* timerManager;
+
+  udpPacket* frame;
   UDP_frame* frameManager;
   UDP_server* udpServManager;
   UDP_parser_VLP16* udpParsManager;
-  dataExtraction* extractManager;
-  Timer* timerManager;
-  udpPacket* frame;
 
   int rot_freq;
   int rot_rpm;

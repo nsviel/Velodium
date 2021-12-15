@@ -1,6 +1,8 @@
 #ifndef BundleByClass_H
 #define BundleByClass_H
 
+#include "../../../extern/gnuplot/gnuplot-iostream.h"
+
 #include "../../common.h"
 
 class BundleByClass

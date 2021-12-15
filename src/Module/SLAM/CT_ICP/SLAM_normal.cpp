@@ -27,37 +27,45 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   a2D.clear(); a2D.resize(size);
 
   //Compute all point kNN
-
-  vector<vector<Eigen::Vector3d>> kNN_vec;
+  /*vector<vector<Eigen::Vector3d>> kNN_vec;
   kNN_vec.resize(frame->xyz.size());
-  //Multithreading at risk !
-  //TODO: find why.
-  #pragma omp parallel for num_threads(4)
+  //BEWARE: Multithreading at risk !
+  //Multiple vector writing not correct !
+  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    std::shared_lock lock(mutex_);
+
     vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i], map);
+    std::lock_guard<std::mutex> guard(mutex);
     kNN_vec[i] = kNN;
-  }
+  }*/
 
   //Compute all point normal
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    vector<Eigen::Vector3d>& kNN = kNN_vec[i];
+
+    std::unique_lock guard(mutex);
+    vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i], map);
+    //
+
+    //vector<Eigen::Vector3d>& kNN = kNN_vec[i];
 
     //Compute kNN normals
+
     if(kNN.size() != 0){
       NN[i] = kNN[0];
 
       this->compute_normal(kNN, i);
 
+      //Check orienteation
+      Eigen::Vector3d& trans_b = frame->trans_b;
       Eigen::Vector3d& point_raw = frame->xyz_raw[i];
       Eigen::Vector3d& normal = Nxyz[i];
-      Eigen::Vector3d& trans_b = frame->trans_b;
       if(normal.dot(trans_b - point_raw) < 0){
         normal = -1.0 * normal;
       }
 
     }
+    guard.unlock();
   }
 
   //Reoriente normals
@@ -76,6 +84,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
 
 //Sub function
 vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, voxelMap* map){
+
   priority_queue_iNN priority_queue;
   //---------------------------
 
@@ -89,6 +98,7 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
   int vz = static_cast<int>(point[2] / size_voxelMap);
 
   //Search inside all surrounding voxels
+
   for (int vi = vx - voxel_searchSize; vi <= vx + voxel_searchSize; vi++){
     for (int vj = vy - voxel_searchSize; vj <= vy + voxel_searchSize; vj++){
       for (int vk = vz - voxel_searchSize; vk <= vz + voxel_searchSize; vk++){
@@ -97,33 +107,39 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
         string voxel_id = to_string(vi) + " " + to_string(vj) + " " + to_string(vk);
 
         //If we found a voxel with at least one point
+        vector<Eigen::Vector3d> voxel_ijk;
+
         if (map->find(voxel_id) != map->end()){
-          vector<Eigen::Vector3d>& voxel_ijk = map->find(voxel_id).value();
+          voxel_ijk = map->find(voxel_id).value();
+        }
 
-          //We store all NN voxel point
-          for (int i=0; i < voxel_ijk.size(); i++) {
-            Eigen::Vector3d neighbor = voxel_ijk[i];
-            float distance = (neighbor - point).norm();
 
-            //If the voxel is full
-            if (priority_queue.size() == max_number_neighbors) {
-              float dist_lastPtVoxel = std::get<0>(priority_queue.top());
+        //We store all NN voxel point
+        for (int i=0; i < voxel_ijk.size(); i++) {
+          Eigen::Vector3d neighbor = voxel_ijk[i];
+          float distance = (neighbor - point).norm();
 
-              if (distance < dist_lastPtVoxel) {
-                priority_queue.pop();
-                priority_queue.emplace(distance, neighbor);
-              }
+          //If the voxel is full
+          if (priority_queue.size() == max_number_neighbors) {
+            float dist_lastPtVoxel = std::get<0>(priority_queue.top());
 
-            } else{
+            if (distance < dist_lastPtVoxel) {
+              priority_queue.pop();
               priority_queue.emplace(distance, neighbor);
             }
-          }
 
+          } else{
+            priority_queue.emplace(distance, neighbor);
+          }
         }
+
+
+
 
       }
     }
   }
+
 
   //Retrieve the kNN of the query point
   auto size = priority_queue.size();

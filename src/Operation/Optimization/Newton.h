@@ -5,6 +5,11 @@
 #include "../../Engine/Data/struct_generic.h"
 #include "../../common.h"
 
+#include <Eigen/Dense>
+
+using namespace Eigen;
+
+
 class Newton
 {
 public:

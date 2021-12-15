@@ -21,6 +21,7 @@ public:
   void select_byFrameID(Cloud* cloud, int subset_selected);
   void update_frame_ID(Cloud* cloud);
   void supress_firstSubset(Cloud* cloud);
+  void camera_followUp(Subset* subset);
 
   //Subfunctions
   void playCloud_start();

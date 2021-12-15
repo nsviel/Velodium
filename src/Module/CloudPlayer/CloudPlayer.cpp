@@ -3,13 +3,10 @@
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Specific/timer.h"
 #include "../../Engine/Scene.h"
-#include "../../Engine/Data/Database.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Load/Loader.h"
 
 #include <experimental/filesystem>
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -71,20 +68,8 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
         frame_ID_ts = subset->ts[0];
       }
 
-      //Camera follow up
       if(camera_follow){
-        Frame* frame = &subset->frame;
-        Eigen::Vector3d trans_b = frame->trans_b;
-        vec3 camPos = cameraManager->get_camPos();
-
-        float x = camPos.x + trans_b(0) - camera_moved.x;
-        float y = camPos.y + trans_b(1) - camera_moved.y;
-        float z = camPos.z;
-
-        vec3 camPos_new = vec3(x, y, z);
-
-        camera_moved = vec3(trans_b(0), trans_b(1), 0);
-        cameraManager->set_cameraPos(camPos_new);
+        this->camera_followUp(subset);
       }
 
     }
@@ -138,6 +123,24 @@ void CloudPlayer::supress_firstSubset(Cloud* cloud){
 
   //---------------------------
 }
+void CloudPlayer::camera_followUp(Subset* subset){
+  //---------------------------
+
+  Frame* frame = &subset->frame;
+  Eigen::Vector3d trans_b = frame->trans_b;
+  vec3 camPos = cameraManager->get_camPos();
+
+  float x = camPos.x + trans_b(0) - camera_moved.x;
+  float y = camPos.y + trans_b(1) - camera_moved.y;
+  float z = camPos.z;
+
+  vec3 camPos_new = vec3(x, y, z);
+
+  camera_moved = vec3(trans_b(0), trans_b(1), 0);
+  cameraManager->set_cameraPos(camPos_new);
+
+  //---------------------------
+}
 
 void CloudPlayer::playCloud_start(){
   this->playCloud_isrunning = true;
@@ -149,7 +152,7 @@ void CloudPlayer::playCloud_start(){
     timerManager->setFunc([&](){
       if(sceneManager->is_atLeastOnecloud()){
         subset_selected++;
-        Cloud* cloud = database.cloud_selected;
+        Cloud* cloud = sceneManager->get_cloud_selected();
         this->select_byFrameID(cloud, subset_selected);
       }else{
         timerManager->stop();
@@ -173,12 +176,13 @@ void CloudPlayer::playCloud_pause(){
   //---------------------------
 }
 void CloudPlayer::playCloud_stop(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   this->playCloud_isrunning = false;
   //---------------------------
 
   timerManager->stop();
   subset_selected = 0;
-  this->select_byFrameID(database.cloud_selected, subset_selected);
+  this->select_byFrameID(cloud, subset_selected);
 
   //---------------------------
 }
