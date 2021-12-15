@@ -10,14 +10,20 @@ Dimension::Dimension(GLFWwindow* Window){
 
   this->configManager = new Configuration();
 
-  this->gui_leftPanel_dim = vec2(configManager->parse_json_int("GUI_LeftPanel_widt"), 0);
-  this->gui_topPanel_dim = vec2(0, configuration.GUI_TopPanel_height);
-  this->gui_bottomPanel_dim = vec2(0, configuration.GUI_BotPanel_height);
+  int resolution_height = configManager->parse_json_int("window", "resolution_height");
+  int resolution_width = configManager->parse_json_int("window", "resolution_width");
+  int leftPanel_width = configManager->parse_json_int("gui", "leftPanel_width");
+  int topPanel_height = configManager->parse_json_int("gui", "topPanel_height");
+  int botPanel_height = configManager->parse_json_int("gui", "botPanel_height");
 
-  this->viewport_dim.x = configuration.WINDOW_InitResWidth - configuration.GUI_LeftPanel_width;
-  this->viewport_dim.y = configuration.WINDOW_InitResHeight - configuration.GUI_TopPanel_height - configuration.GUI_BotPanel_height;
+  this->gui_leftPanel_dim = vec2(leftPanel_width, 0);
+  this->gui_topPanel_dim = vec2(0, topPanel_height);
+  this->gui_bottomPanel_dim = vec2(0, botPanel_height);
 
-  this->viewport_pos = vec2(configuration.GUI_LeftPanel_width, configuration.GUI_BotPanel_height);
+  this->viewport_dim.x = resolution_width - leftPanel_width;
+  this->viewport_dim.y = resolution_height - topPanel_height - botPanel_height;
+
+  this->viewport_pos = vec2(leftPanel_width, botPanel_height);
 
   //---------------------------
   this->update_window_dim();

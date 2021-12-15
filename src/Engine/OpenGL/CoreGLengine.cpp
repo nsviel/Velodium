@@ -37,7 +37,7 @@ CoreGLengine::~CoreGLengine(){
 //Engine Initialization
 bool CoreGLengine::init(){
   this->configManager->make_configuration();
-  float backgColor = configuration.WINDOW_BckgColor;
+  float backgColor = configManager->parse_json_float("window", "background_color");
   this->backgColor = vec3(backgColor, backgColor, backgColor);
   //---------------------------
 
@@ -49,13 +49,20 @@ bool CoreGLengine::init(){
   return true;
 }
 bool CoreGLengine::init_OGL(){
-  int gl_width = configuration.WINDOW_InitResWidth - configuration.GUI_LeftPanel_width;
-  int gl_height = configuration.WINDOW_InitResHeight - configuration.GUI_TopPanel_height;
   //---------------------------
+
+  //Dimension
+  int resolution_width = configManager->parse_json_int("window", "resolution_width");
+  int resolution_height = configManager->parse_json_int("window", "resolution_height");
+  int leftPanel_width = configManager->parse_json_int("gui", "leftPanel_width");
+  int topPanel_height = configManager->parse_json_int("gui", "topPanel_height");
+
+  int gl_width = resolution_width - leftPanel_width;
+  int gl_height = resolution_height -topPanel_height;
 
   //GLFW
   glfwInit();
-  if(configuration.GL_ForceVersion){
+  if(0){//configuration.GL_ForceVersion){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
   }
@@ -63,7 +70,7 @@ bool CoreGLengine::init_OGL(){
   glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-  window = glfwCreateWindow(gl_width,gl_height,"window",NULL,NULL);
+  window = glfwCreateWindow(gl_width, gl_height, "window", NULL, NULL);
   if(window == NULL){
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();

@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 class Dimension;
+class Configuration;
 
 #include "struct_viewport.h"
 
@@ -39,7 +40,7 @@ public:
   inline void set_desiredPoseON(bool value){viewMain.desiredPose = value;}
 
   inline void set_cameraFOV(float value){viewMain.fov = value;}
-  inline void set_cameraSpeed(float value){viewMain.cam_speed = value;}
+  inline void set_cameraSpeed(float value){viewMain.speed_move = value;}
   inline void set_cameraPos(vec3 value){viewMain.cam_P = value;}
 
   //Getters
@@ -61,7 +62,9 @@ public:
   inline bool is_cameraMovON(){return viewMain.cameraMovON;}
 
 private:
+  Configuration* configManager;
   Dimension* dimManager;
+
   Viewport_obj viewMain;
   Viewport_obj viewMap;
   Viewport_obj* view;

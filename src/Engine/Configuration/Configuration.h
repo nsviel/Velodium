@@ -25,9 +25,10 @@ public:
 
   //json stuff
   void create_jsonfile();
-  float parse_json_float(string value);
-  string parse_json_string(string value);
-  int parse_json_int(string value);
+  float parse_json_float(string field, string value);
+  string parse_json_string(string field, string value);
+  int parse_json_int(string field, string value);
+  bool parse_json_bool(string field, string value);
 
 
 private:

@@ -6,6 +6,7 @@
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/struct_viewport.h"
 #include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/Configuration/Configuration.h"
 
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Operation.h"
@@ -32,8 +33,9 @@ GUI_control::GUI_control(Engine* engine){
   this->attribManager = new Attribut();
   this->opeManager = new Operation();
 
-  this->move_trans_speed = configuration.TRANSFORM_Trans;
-  this->rotatDegree = configuration.TRANSFORM_Rot;
+  Configuration configManager;
+  this->move_trans_speed = configManager.parse_json_float("transformation", "cloud_translation");
+  this->rotatDegree = configManager.parse_json_float("transformation", "cloud_rotation");
   this->wheel_mode = 0;
 
   //---------------------------
@@ -346,8 +348,8 @@ void GUI_control::control_keyboard_camMove(){
 
   if(view->cameraMovON){
     float delta = 0.00016;
-    float camSpeed = view->cam_speed * delta;
-    float fastSpeed = view->cam_speed * delta * 4;
+    float camSpeed = view->speed_move * delta;
+    float fastSpeed = view->speed_move * delta * 4;
 
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
       if(io.MouseDown[1] && !io.WantCaptureMouse){

@@ -1,8 +1,7 @@
 #include "Camera.h"
 
-
-
 #include "../Configuration/Dimension.h"
+#include "../Configuration/Configuration.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -11,6 +10,8 @@
 Camera::Camera(Dimension* dimension){
   this->dimManager = dimension;
   //---------------------------
+
+  this->configManager = new Configuration();
 
   this->viewport_init();
 
@@ -25,12 +26,15 @@ void Camera::viewport_init(){
   this->nb_viewport = 2;
   this->view = &viewMain;
 
+  float camPos = configManager->parse_json_float("camera", "initial_pos");
+
   //Main viewport
-  viewMain.cam_speed = configuration.CAM_MoveSpeed;
-  viewMain.cam_P = vec3(configuration.CAM_InitialPos, configuration.CAM_InitialPos, configuration.CAM_InitialPos);
+  viewMain.speed_move = configManager->parse_json_float("camera", "speed_move");
+  viewMain.speed_mouse = configManager->parse_json_float("camera", "speed_mouse");
+  viewMain.cam_P = vec3(camPos, camPos, camPos);
   viewMain.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   viewMain.angle_elevati = - M_PI/6;// Initial vertical angle
-  viewMain.fov = configuration.CAM_FOV;
+  viewMain.fov = configManager->parse_json_float("camera", "fov");
   viewMain.cameraMovON = false;
   viewMain.topView = false;
   viewMain.proj_persp = true;
@@ -38,6 +42,8 @@ void Camera::viewport_init(){
   viewMain.desiredPose = false;
   viewMain.sideView = false;
   viewMain.zoom_topView = 0;
+  viewMain.clip_near = configManager->parse_json_float("camera", "clip_near");
+  viewMain.clip_far = configManager->parse_json_float("camera", "clip_far");
 
   //Map viewport
   viewMap.pos = vec2(800,400);
@@ -45,12 +51,14 @@ void Camera::viewport_init(){
   viewMap.cam_P = vec3(0, 0, 0);
   viewMap.angle_azimuth = 0;
   viewMap.angle_elevati = 0;
-  viewMap.fov = configuration.CAM_FOV;
+  viewMap.fov = configManager->parse_json_float("camera", "fov");
   viewMap.proj_persp = false;
   viewMap.proj_ortho = true;
   viewMap.topView = true;
   viewMap.sideView = false;
   viewMap.zoom_topView = 0;
+  viewMap.clip_near = configManager->parse_json_float("camera", "clip_near");
+  viewMap.clip_far = configManager->parse_json_float("camera", "clip_far");
 
   //---------------------------
 }
@@ -119,7 +127,7 @@ mat4 Camera::compute_projMat(){
   //Compute projection matrix
   if(view->proj_persp){
     vec2 glDim = dimManager->get_glDim();
-    projMat = perspective(radians(view->fov), (float)glDim.x / (float)glDim.y, configuration.CAM_NearClip, configuration.CAM_FarClip);
+    projMat = perspective(radians(view->fov), (float)glDim.x / (float)glDim.y, view->clip_near, view->clip_far);
   }
   else if(view->proj_ortho){
     projMat = ortho(-5.f - view->zoom_topView, 5.f + view->zoom_topView, -5.f - view->zoom_topView, 5.f + view->zoom_topView, -1000.0f, 1000.0f);
@@ -178,8 +186,8 @@ void Camera::input_cameraMouseCommands(){
 
     // Compute new orientation
     vec2 glMid = dimManager->get_glMiddle();
-    view->angle_azimuth += configuration.CAM_MouseSpeed * float(glMid.x - curPos.x);
-    view->angle_elevati += configuration.CAM_MouseSpeed * float(glMid.y - curPos.y);
+    view->angle_azimuth += view->speed_mouse * float(glMid.x - curPos.x);
+    view->angle_elevati += view->speed_mouse * float(glMid.y - curPos.y);
 
     //Limites of camera rotation
     if(view->angle_elevati > M_PI/2) view->angle_elevati = M_PI/2;
@@ -228,9 +236,10 @@ void Camera::compute_opticalZoom(float yoffset){
 
   if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
     //Perspective zoom
-    if(view->fov >= 1.0f && view->fov <= configuration.CAM_FOV) view->fov -= yoffset;
+    float camFOV = configManager->parse_json_float("camera", "fov");
+    if(view->fov >= 1.0f && view->fov <= camFOV) view->fov -= yoffset;
     if(view->fov <= 1.0f) view->fov = 1.0f;
-    if(view->fov >= configuration.CAM_FOV) view->fov = configuration.CAM_FOV;
+    if(view->fov >= camFOV) view->fov = camFOV;
 
     //Ortho zoom
     view->zoom_topView -= yoffset * 0.1;
@@ -243,7 +252,7 @@ void Camera::compute_positionalZoom(float yoffset){
   //---------------------------
 
   if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
-    vec3 cam_forwardMove = view->cam_F * yoffset * view->cam_speed * vec3(0.1,0.1,0.1);
+    vec3 cam_forwardMove = view->cam_F * yoffset * view->speed_move * vec3(0.1,0.1,0.1);
     view->cam_P += cam_forwardMove;
   }
 

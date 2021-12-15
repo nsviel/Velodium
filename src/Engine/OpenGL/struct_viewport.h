@@ -18,8 +18,11 @@ struct Viewport_obj{
   float angle_elevati_old;
 
   float fov;
-  float cam_speed;
+  float speed_mouse;
+  float speed_move;
   float zoom_topView;
+  float clip_near;
+  float clip_far;
 
   bool proj_persp;
   bool proj_ortho;

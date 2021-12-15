@@ -12,24 +12,12 @@ Configuration::Configuration(){
 
   this->configFilePath = "config.ini";
   this->jsonPath = "config.json";
-create_jsonfile();
+
   //---------------------------
 }
 Configuration::~Configuration(){}
 
 //Main functions
-void Configuration::make_configuration(){
-  bool exist = is_file_exist(configFilePath.c_str());
-  //---------------------------
-
-  if(exist){
-    this->read_configData();
-  }else{
-    this->initialize_configStruct();
-  }
-
-  //---------------------------
-}
 void Configuration::save_configuration(){
   //---------------------------
 
@@ -126,6 +114,17 @@ bool Configuration::is_file_exist(string fileName){
   return infile.good();
 }
 
+
+void Configuration::make_configuration(){
+  bool exist = is_file_exist(jsonPath.c_str());
+  //---------------------------
+
+  if(exist == false){
+    this->create_jsonfile();
+  }
+
+  //---------------------------
+}
 void Configuration::create_jsonfile(){
   //---------------------------
 
@@ -191,38 +190,58 @@ void Configuration::create_jsonfile(){
 
   //---------------------------
 }
-string Configuration::parse_json_string(string value){
+string Configuration::parse_json_string(string field, string value){
   //---------------------------
 
   std::ifstream ifs(jsonPath);
   Json::Reader reader;
-  Json::Value obj;
-  reader.parse(ifs, obj);
-  string truc = obj[value].asString();
+  Json::Value root;
+  reader.parse(ifs, root);
+
+  const Json::Value& json_field = root[field];
+  string truc = json_field[value].asString();
 
   //---------------------------
   return truc;
 }
-float Configuration::parse_json_float(string value){
+float Configuration::parse_json_float(string field, string value){
   //---------------------------
 
   std::ifstream ifs(jsonPath);
   Json::Reader reader;
-  Json::Value obj;
-  reader.parse(ifs, obj);
-  float truc = obj[value].asFloat();
+  Json::Value root;
+  reader.parse(ifs, root);
+
+  const Json::Value& json_field = root[field];
+  float truc = json_field[value].asFloat();
 
   //---------------------------
   return truc;
 }
-int Configuration::parse_json_int(string value){
+int Configuration::parse_json_int(string field, string value){
   //---------------------------
 
   std::ifstream ifs(jsonPath);
   Json::Reader reader;
-  Json::Value obj;
-  reader.parse(ifs, obj);
-  int truc = obj[value].asInt();
+  Json::Value root;
+  reader.parse(ifs, root);
+
+  const Json::Value& json_field = root[field];
+  int truc = json_field[value].asInt();
+
+  //---------------------------
+  return truc;
+}
+bool Configuration::parse_json_bool(string field, string value){
+  //---------------------------
+
+  std::ifstream ifs(jsonPath);
+  Json::Reader reader;
+  Json::Value root;
+  reader.parse(ifs, root);
+
+  const Json::Value& json_field = root[field];
+  bool truc = json_field[value].asBool();
 
   //---------------------------
   return truc;
