@@ -126,7 +126,6 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
   int nb_residual = 0;
   //---------------------------
 
-  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
     Eigen::Vector3d point_raw = frame->xyz_raw[i];
@@ -147,6 +146,7 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
       for(int j=0; j<3; j++){
         residual += (point[j] - iNN[j]) * iNN_N[j];
       }
+
       nb_residual++;
 
       Eigen::Matrix3d rotat_b = frame->rotat_b;

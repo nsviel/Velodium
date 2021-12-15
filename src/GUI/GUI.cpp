@@ -3,6 +3,7 @@
 #include "Interface/GUI_Consol.h"
 #include "Interface/GUI_MenuBar.h"
 #include "Interface/GUI_LeftPanel.h"
+#include "Interface/struct_consol.h"
 #include "Node/GUI_Control.h"
 #include "Node/GUI_Option.h"
 #include "Windows/GUI_windows.h"
@@ -10,7 +11,6 @@
 #include "../Engine/Engine.h"
 #include "../Engine/OpenGL/Camera.h"
 #include "../Engine/Configuration/Dimension.h"
-#include "../Specific/struct_consol.h"
 
 #include "../../extern/imgui/imgui.h"
 #include "../../extern/imgui/imgui_impl_glfw.h"

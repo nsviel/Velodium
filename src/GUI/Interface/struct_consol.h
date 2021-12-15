@@ -1,7 +1,7 @@
 #ifndef CONSOL_STRUCT_H
 #define CONSOL_STRUCT_H
 
-#include "../../extern/imgui/imgui.h"
+#include "../../../extern/imgui/imgui.h"
 
 #include <string>
 #include <tuple>

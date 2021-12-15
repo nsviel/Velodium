@@ -11,6 +11,9 @@
 
 class Scene;
 
+using namespace std;
+using namespace glm;
+
 
 class Glyphs
 {

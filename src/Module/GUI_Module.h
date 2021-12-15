@@ -26,7 +26,7 @@ public:
     this->module_velodyne = true;
     this->module_CloudPlayer = true;
     this->module_slam = true;
-    this->module_obstacle = false;
+    this->module_obstacle = true;
     this->module_scala = false;
   }
   ~GUI_module();

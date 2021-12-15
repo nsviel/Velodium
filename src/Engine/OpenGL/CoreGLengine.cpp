@@ -11,11 +11,9 @@
 
 #include "../../GUI/GUI.h"
 
-#include <GL/glew.h>
-
-
 #define GLM_ENABLE_EXPERIMENTAL
 #define GL_GLEXT_PROTOTYPES
+
 
 //Constructor / Destructor
 CoreGLengine::CoreGLengine(){

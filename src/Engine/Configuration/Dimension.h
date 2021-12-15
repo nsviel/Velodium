@@ -13,6 +13,12 @@
 
 #include "../../common.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+class Configuration;
+
+
 class Dimension
 {
 public:
@@ -45,6 +51,7 @@ public:
 
 private:
   GLFWwindow* window;
+  Configuration* configManager;
 
   vec2 viewport_dim;
   vec2 viewport_pos;

@@ -1,11 +1,16 @@
 #include "Dimension.h"
 
+#include "Configuration.h"
+
+
 //Constructor / Destructor
 Dimension::Dimension(GLFWwindow* Window){
   this->window = Window;
   //---------------------------
 
-  this->gui_leftPanel_dim = vec2(configuration.GUI_LeftPanel_width, 0);
+  this->configManager = new Configuration();
+
+  this->gui_leftPanel_dim = vec2(configManager->parse_json_int("GUI_LeftPanel_widt"), 0);
   this->gui_topPanel_dim = vec2(0, configuration.GUI_TopPanel_height);
   this->gui_bottomPanel_dim = vec2(0, configuration.GUI_BotPanel_height);
 

@@ -1,12 +1,15 @@
 #include "GUI_Consol.h"
+#include "struct_consol.h"
 
 #include "../../Engine/Engine.h"
 #include "../../Engine/Configuration/Dimension.h"
-#include "../../Specific/struct_config.h"
+#include "../../Engine/Configuration/struct_config.h"
 
 #include "../../../extern/imgui/imgui.h"
 
 #include <thread>
+
+extern struct ConsoleApp console;
 
 
 //Constructor / Destructor

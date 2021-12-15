@@ -18,6 +18,10 @@ class Heatmap;
 
 #include "../common.h"
 
+using namespace std;
+using namespace glm;
+
+
 class Engine
 {
 public:

@@ -1,18 +1,8 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#include <fstream>
-
-/**
- * \file Configuration.h
- * \brief Configuration file management
- * \author Nathan Sanchiz-Viel
- *
- * Keep information in an external file about dimensions, folder paths and so on
- *
- */
-
 #include "../../common.h"
+
 
 class Configuration
 {
@@ -33,8 +23,16 @@ public:
   void read_configData();
   bool is_file_exist(string fileName);
 
+  //json stuff
+  void create_jsonfile();
+  float parse_json_float(string value);
+  string parse_json_string(string value);
+  int parse_json_int(string value);
+
+
 private:
   string configFilePath;
+  string jsonPath;
 
 };
 

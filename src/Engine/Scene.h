@@ -13,6 +13,9 @@ extern struct Database database;
 
 class Data;
 
+using namespace std;
+using namespace glm;
+
 
 class Scene
 {

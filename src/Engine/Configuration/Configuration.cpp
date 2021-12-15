@@ -1,5 +1,9 @@
 #include "Configuration.h"
 
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/json.h>
+#include <fstream>
+
 Config configuration;
 
 //Constructor / Destructor
@@ -7,7 +11,8 @@ Configuration::Configuration(){
   //---------------------------
 
   this->configFilePath = "config.ini";
-
+  this->jsonPath = "config.json";
+create_jsonfile();
   //---------------------------
 }
 Configuration::~Configuration(){}
@@ -119,4 +124,106 @@ void Configuration::read_configData(){
 bool Configuration::is_file_exist(string fileName){
   std::ifstream infile(fileName.c_str());
   return infile.good();
+}
+
+void Configuration::create_jsonfile(){
+  //---------------------------
+
+  std::ifstream ifs(jsonPath);
+  Json::Reader reader;
+  Json::Value root;
+
+  if (reader.parse(ifs, root) == false){
+    //Window
+    Json::Value window;
+    window["title"] = "Velodium";
+    window["resolution_width"] = 1024;
+    window["resolution_height"] = 500;
+    window["resolution_ratio"] = 4.0f/3.0f;
+    window["background_color"] = 0.86f;
+    window["nb_multisample"] = 4;
+    root["window"] = window;
+
+    //GUI
+    Json::Value gui;
+    gui["leftPanel_width"] = 220;
+    gui["leftPanel_mid"] = 200;
+    gui["topPanel_height"] = 18;
+    gui["botPanel_height"] = 100;
+    root["gui"] = gui;
+
+    //OpenGL
+    Json::Value gl;
+    gl["forceVersion"] = false;
+    gl["waitForEvent"] = false;
+    gl["verbose_shader"] = false;
+    gl["verbose_coreGL"] = false;
+    root["opengl"] = gl;
+
+    //Parameters
+    Json::Value transf;
+    transf["path_media"] = "../media/";
+    transf["cloud_translation"] = 0.01;
+    transf["cloud_rotation"] = 5; //Degree
+    transf["cloud_movement"] = true;
+    root["transformation"] = transf;
+
+    //Camera
+    Json::Value camera;
+    camera["fov"] = 65.0f;
+    camera["initial_pos"] = 5.0f;
+    camera["clip_near"] = 0.0001f;
+    camera["clip_far"] = 1000.0f;
+    camera["speed_mouse"] = 0.003f;
+    camera["speed_move"] = 3.0f;
+    camera["speed_zoom"] = 0.1f;
+    root["camera"] = camera;
+
+    //Write all above stuff
+    Json::StyledWriter writer;
+    string strWrite = writer.write(root);
+    ofstream ofs;
+    ofs.open(jsonPath);
+    ofs << strWrite;
+    ofs.close();
+  }
+  ifs.close();
+
+  //---------------------------
+}
+string Configuration::parse_json_string(string value){
+  //---------------------------
+
+  std::ifstream ifs(jsonPath);
+  Json::Reader reader;
+  Json::Value obj;
+  reader.parse(ifs, obj);
+  string truc = obj[value].asString();
+
+  //---------------------------
+  return truc;
+}
+float Configuration::parse_json_float(string value){
+  //---------------------------
+
+  std::ifstream ifs(jsonPath);
+  Json::Reader reader;
+  Json::Value obj;
+  reader.parse(ifs, obj);
+  float truc = obj[value].asFloat();
+
+  //---------------------------
+  return truc;
+}
+int Configuration::parse_json_int(string value){
+  //---------------------------
+
+  std::ifstream ifs(jsonPath);
+  Json::Reader reader;
+  Json::Value obj;
+  reader.parse(ifs, obj);
+  int truc = obj[value].asInt();
+
+  //---------------------------
+  return truc;
 }
