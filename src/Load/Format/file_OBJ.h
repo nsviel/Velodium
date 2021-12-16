@@ -1,8 +1,9 @@
 #ifndef FILE_OBJ_H
 #define FILE_OBJ_H
 
+#include "../struct_dataFile.h"
+
 #include "../../common.h"
-#include "../../Engine/Data/struct_dataFile.h"
 
 
 class fileOBJ

@@ -1,8 +1,9 @@
 #ifndef LOADER_H
 #define LOADER_H
 
+#include "struct_dataFile.h"
+
 #include "../common.h"
-#include "../Engine/Data/struct_dataFile.h"
 
 class dataExtraction;
 class Scene;

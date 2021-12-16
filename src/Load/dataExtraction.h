@@ -1,8 +1,9 @@
 #ifndef DATA_EXTRACTION_H
 #define DATA_EXTRACTION_H
 
+#include "struct_dataFile.h"
+
 #include "../common.h"
-#include "../Engine/Data/struct_dataFile.h"
 #include "../Module/Velodyne/UDP/struct_UDPpacket.h"
 
 class Scene;
@@ -21,12 +22,14 @@ public:
   Subset extractData(udpPacket* data);
   void extractData_frame(Cloud* cloud, dataFile* data);
   void extractData_oneFrame(Cloud* cloud, dataFile* data);
+  void add_subsetData(Subset* subset);
 
 private:
   //Subfunctions
   void check_data(dataFile* data);
+  void check_data(udpPacket* data);
   void init_cloudParameters(Cloud* cloud, vector<dataFile*> data);
-  void init_subsetParameters(Subset& subset, string path, int i);
+  void init_subsetParameters(Subset& subset, string path);
   void init_frameParameters(Subset& subset);
   void init_randomColor();
 

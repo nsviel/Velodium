@@ -64,7 +64,7 @@ void UDP_frame::add_cloudsToFrame(udpPacket* cloud){
   for(int i=0; i<cloud->xyz.size(); i++){
     frame_onrun->xyz.push_back(cloud->xyz[i]);
     frame_onrun->R.push_back(cloud->R[i]);
-    frame_onrun->I.push_back(cloud->I[i]);
+    frame_onrun->I.push_back(cloud->I[i]/255);
     frame_onrun->A.push_back(cloud->A[i]);
     frame_onrun->t.push_back(cloud->t[i]);
   }
@@ -77,7 +77,7 @@ void UDP_frame::end_cloudsToFrame(udpPacket* cloud, int index){
   for(int i=0; i<index; i++){
     frame_onrun->xyz.push_back(cloud->xyz[i]);
     frame_onrun->R.push_back(cloud->R[i]);
-    frame_onrun->I.push_back(cloud->I[i]);
+    frame_onrun->I.push_back(cloud->I[i]/255);
     frame_onrun->A.push_back(cloud->A[i]);
     frame_onrun->t.push_back(cloud->t[i]);
   }
@@ -88,7 +88,7 @@ void UDP_frame::end_cloudsToFrame(udpPacket* cloud, int index){
   for(int i=index; i<cloud->xyz.size(); i++){
     frame_onrun->xyz.push_back(cloud->xyz[i]);
     frame_onrun->R.push_back(cloud->R[i]);
-    frame_onrun->I.push_back(cloud->I[i]);
+    frame_onrun->I.push_back(cloud->I[i]/255);
     frame_onrun->A.push_back(cloud->A[i]);
     frame_onrun->t.push_back(cloud->t[i]);
   }

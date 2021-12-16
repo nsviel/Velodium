@@ -2,6 +2,7 @@
 
 #include "../Engine/Glyphs.h"
 #include "../Engine/Scene.h"
+#include "../Specific/fct_maths.h"
 
 #include <experimental/filesystem>
 #include <random>
@@ -32,7 +33,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     Subset subset;
 
     this->check_data(data[i]);
-    this->init_subsetParameters(subset, data[i]->name, i);
+    this->init_subsetParameters(subset, data[i]->name);
     this->init_frameParameters(subset);
 
     //Subset data
@@ -64,13 +65,16 @@ Subset dataExtraction::extractData(udpPacket* data){
   Subset subset;
   //---------------------------
 
-  this->init_subsetParameters(subset, "frame", 0);
+  this->check_data(data);
+
+  this->init_subsetParameters(subset, data->name);
   this->init_frameParameters(subset);
 
   //Subset data
   this->extract_Location(subset, data->xyz);
   this->extract_Intensity(subset, data->I);
   this->extract_Timestamp(subset, data->t);
+  this->extract_Color(subset, data->rgb);
 
   //Create associated glyphs
   Glyphs glyphManager;
@@ -84,7 +88,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   //---------------------------
 
   this->check_data(data);
-  this->init_subsetParameters(subset, data->name, cloud->nb_subset);
+  this->init_subsetParameters(subset, data->name);
   this->init_frameParameters(subset);
 
   //Subset data
@@ -137,6 +141,29 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
     cloud->subset_init[0] = subset;
     cloud->nb_subset = 1;
   }
+
+  //---------------------------
+}
+void dataExtraction::add_subsetData(Subset* subset){
+  //---------------------------
+
+  glGenVertexArrays(1, &subset->VAO);
+  glBindVertexArray(subset->VAO);
+
+  glGenBuffers(1, &subset->VBO_xyz);
+  glGenBuffers(1, &subset->VBO_rgb);
+
+  //Location
+  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_xyz);
+  glBufferData(GL_ARRAY_BUFFER, subset->xyz.size()*sizeof(glm::vec3), &subset->xyz[0], GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
+  glEnableVertexAttribArray(0);
+
+  //Color
+  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);
+  glBufferData(GL_ARRAY_BUFFER, subset->RGB.size()*sizeof(glm::vec4), &subset->RGB[0], GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+  glEnableVertexAttribArray(1);
 
   //---------------------------
 }
@@ -194,6 +221,38 @@ void dataExtraction::check_data(dataFile* data){
 
   //---------------------------
 }
+void dataExtraction::check_data(udpPacket* data){
+  this->is_color = false;
+  this->is_normal = false;
+  this->is_intensity = false;
+  this->is_timestamp = false;
+  //---------------------------
+
+  //Intensities
+  if(data->I.size() != 0 && data->I.size() == data->xyz.size()){
+    this->is_intensity = true;
+  }
+  if(fct_max(data->I) > 1){
+    for(int i=0; i<data->I.size(); i++){
+      data->I[i] = data->I[i] / 255;
+    }
+  }
+
+  //Timestamp
+  if(data->t.size() != 0 && data->t.size() == data->xyz.size()){
+    this->is_timestamp = true;
+  }
+
+  //Color
+  this->RGB_rdm = vec4(Red, Green, Blue, 1.0f);
+  if(is_intensity){
+    for(int i=0; i<data->I.size(); i++){
+      data->rgb.push_back(vec4(data->I.at(i), data->I.at(i), data->I.at(i), 1.0f));
+    }
+  }
+
+  //---------------------------
+}
 void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   //---------------------------
 
@@ -235,7 +294,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void dataExtraction::init_subsetParameters(Subset& subset, string name, int idx){
+void dataExtraction::init_subsetParameters(Subset& subset, string name){
   //---------------------------
 
   //Subset VAO

@@ -57,16 +57,21 @@ bool CoreGLengine::init_OGL(){
   int leftPanel_width = configManager->parse_json_int("gui", "leftPanel_width");
   int topPanel_height = configManager->parse_json_int("gui", "topPanel_height");
 
-  int gl_width = resolution_width - leftPanel_width;
-  int gl_height = resolution_height -topPanel_height;
+  gl_width = resolution_width - leftPanel_width;
+  gl_height = resolution_height -topPanel_height;
 
   //GLFW
+  bool forceVersion = configManager->parse_json_bool("opengl", "forceVersion");
+  bool coreGL_verbose = configManager->parse_json_bool("opengl", "verbose_coreGL");
+  int nb_multisample = configManager->parse_json_int("opengl", "nb_multisample");
+  string win_title = configManager->parse_json_string("window", "title");
+
   glfwInit();
-  if(0){//configuration.GL_ForceVersion){
+  if(forceVersion){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
   }
-  //glfwWindowHint(GLFW_SAMPLES, configuration.WINDOW_MultiSample);
+  glfwWindowHint(GLFW_SAMPLES, nb_multisample);
   glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
@@ -75,13 +80,13 @@ bool CoreGLengine::init_OGL(){
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
     return false;
-  }else if(configuration.VERBOSE_coreGL){;
+  }else if(coreGL_verbose){;
     std::cout << "GLFW window created" << std::endl;
   }
 
   glfwMakeContextCurrent(window);
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-  glfwSetWindowTitle(window, configuration.WINDOW_Title);
+  glfwSetWindowTitle(window, win_title.c_str());
 
   //OpenGL stuff
   glViewport(0, 0, gl_width, gl_height);
@@ -95,7 +100,7 @@ bool CoreGLengine::init_OGL(){
 
   //GLEW
   glewInit();
-  if(configuration.VERBOSE_coreGL){
+  if(coreGL_verbose){
     std::cout << "GLEW initiated" << std::endl;
   }
 
@@ -135,8 +140,6 @@ bool CoreGLengine::init_object(){
 }
 
 void CoreGLengine::trucEDL(){
-  int gl_width = configuration.WINDOW_InitResWidth;
-  int gl_height = configuration.WINDOW_InitResHeight;
 
 
 
@@ -281,7 +284,6 @@ void CoreGLengine::loop(){
   while(!glfwWindowShouldClose(window));
 
   //---------------------------
-  configManager->save_configuration();
 }
 void CoreGLengine::loop_begin(){
   //---------------------------
@@ -310,10 +312,13 @@ void CoreGLengine::loop_shader(){
   //---------------------------
 }
 void CoreGLengine::loop_end(){
+  bool waitForEvent = configManager->parse_json_bool("opengl", "waitForEvent");
   //---------------------------
 
   glfwSwapBuffers(window);
-  if(configuration.GL_WaitForEvent) glfwWaitEvents();
+  if(waitForEvent){
+    glfwWaitEvents();
+  }
 
   //---------------------------
 }

@@ -3,7 +3,7 @@
 
 #include "../../Engine/Engine.h"
 #include "../../Engine/Configuration/Dimension.h"
-#include "../../Engine/Configuration/struct_config.h"
+#include "../../Engine/Configuration/Configuration.h"
 
 #include "../../../extern/imgui/imgui.h"
 
@@ -19,8 +19,9 @@ GUI_consol::GUI_consol(Engine* renderer){
 
   this->dimManager = engineManager->get_dimManager();
 
+  Configuration configManager;
   this->panel_X = 300;
-  this->panel_Y = configuration.GUI_BotPanel_height;
+  this->panel_Y = configManager.parse_json_int("gui", "botPanel_height");
 
   //----------------------------
 }

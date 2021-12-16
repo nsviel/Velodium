@@ -56,9 +56,9 @@ void Dimension::update_window_dim(){
 void Dimension::update_configuration(){
   //---------------------------
 
-  configuration.GUI_LeftPanel_width = gui_leftPanel_dim.x;
-  configuration.GUI_TopPanel_height = gui_topPanel_dim.y;
-  configuration.GUI_BotPanel_height = gui_bottomPanel_dim.y;
+  configManager->update_jsonfile("gui", "leftPanel_width", to_string(gui_leftPanel_dim.x));
+  configManager->update_jsonfile("gui", "topPanel_height", to_string(gui_topPanel_dim.y));
+  configManager->update_jsonfile("gui", "botPanel_height", to_string(gui_bottomPanel_dim.y));
 
   //---------------------------
 }

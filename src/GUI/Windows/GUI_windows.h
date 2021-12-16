@@ -24,6 +24,7 @@ class Selection;
 class Loader;
 class Plotting;
 class Fitting;
+class Configuration;
 
 class GUI_windows
 {
@@ -96,6 +97,7 @@ private:
   Operation* opeManager;
   Extraction* extractionManager;
   Transforms transformManager;
+  Configuration*configManager;
 
   bool show_loading;
   bool show_asciiData;

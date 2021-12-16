@@ -6,7 +6,6 @@
 #include "UDP/struct_UDPpacket.h"
 
 #include "../../common.h"
-#include "../../Engine/Data/struct_dataFile.h"
 
 #include <thread>
 
@@ -15,9 +14,8 @@ class UDP_server;
 class UDP_parser_VLP16;
 
 class Scene;
-class Loader;
-class dataExtraction;
 class Timer;
+class Capture;
 
 
 class Velodyne
@@ -30,8 +28,6 @@ public:
 public:
   //Recording functions
   void run_capture();
-  void recording_selectDirSave();
-  void onrun_ope();
 
   //LiDAR functions
   void lidar_start();
@@ -44,53 +40,35 @@ public:
   void lidar_set_cameraFOV_max(int fov_max);
   void lidar_set_cameraFOV(int min, int max);
 
+  inline Capture* get_captureManager(){return captureManager;}
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
   inline bool* get_is_capturing(){return &is_capturing;}
   inline bool* get_is_recording(){return &is_recording;}
-  inline bool* get_is_record_t_frame(){return &is_record_t_frame;}
-  inline bool* get_is_record_n_frame(){return &is_record_n_frame;}
-  inline float* get_record_t_frame_max(){return &is_record_t_frame_max;}
-  inline int* get_record_n_frame_max(){return &record_n_frame_max;}
   inline int get_rot_freq(){return rot_freq;}
   inline int get_rot_rpm(){return rot_rpm;}
   inline int get_fov_min(){return fov_min;}
   inline int get_fov_max(){return fov_max;}
-  inline string* get_saveas(){return &saveas;}
 
 private:
   Scene* sceneManager;
-  Loader* loaderManager;
-  dataExtraction* extractManager;
   Timer* timerManager;
+  Capture* captureManager;
 
-  udpPacket* frame;
   UDP_frame* frameManager;
   UDP_server* udpServManager;
   UDP_parser_VLP16* udpParsManager;
 
-  int rot_freq;
-  int rot_rpm;
+  int time_of_capture;
+  int rot_freq, rot_rpm;
   int fov_min, fov_max;
-  int subset_selected;
-  int record_n_frame_nb;
-  int record_n_frame_max;
-  int record_t_frame_sec;
-  float is_record_t_frame_max;
-  bool atleastoneframe;
   bool has_started;
   bool is_capturing;
   bool is_rotating;
   bool is_connected;
   bool is_recording;
-  bool is_record_n_frame;
-  bool is_record_t_frame;
-  string saveas;
-  std::thread m_thread;
-
-  Cloud* cloud;
   bool is_first_run;
-
+  std::thread m_thread;
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Glyphs.h"
+#include "../../Engine/Configuration/Configuration.h"
 
 #include "../../Operation/Operation.h"
 #include "../../Operation/Plotting.h"
@@ -41,6 +42,7 @@ GUI_windows::GUI_windows(Engine* engine){
   this->fitManager = new Fitting();
   this->extractionManager = new Extraction();
   this->plotManager = new Plotting();
+  this->configManager = new Configuration();
 
   //---------------------------
   this->init();
@@ -68,7 +70,7 @@ void GUI_windows::init(){
   this->show_fitting = false;
   this->show_heatmap = false;
 
-  this->cloud_movement = configuration.CLOUD_movement;
+  this->cloud_movement = configManager->parse_json_float("transformation", "cloud_movement");
 
   //---------------------------
 }
@@ -302,7 +304,7 @@ void GUI_windows::window_camera(){
     if(ImGui::SliderFloat("FOV (°)", &fov_value, 100.0f, 1.0f)){
       cameraManager->set_cameraFOV(fov_value);
     }
-    static float cam_speed = configuration.CAM_MoveSpeed;
+    static float cam_speed = configManager->parse_json_float("camera", "speed_move");
     if(ImGui::DragFloat("speed (m/s)", &cam_speed, 0.01, 0, 20, "%.2f")){
       cameraManager->set_cameraSpeed(cam_speed);
     }
@@ -466,6 +468,19 @@ void GUI_windows::window_heatmap(){
       if(ImGui::DragFloatRange2("Height range", &range->x, &range->y, 0.01f, -20.0f, 50.0f, "%.2f", "%.2f")){
         heatmapManager->compute_subset_heatmap_ON(subset);
         sceneManager->update_subset_color(subset);
+      }
+    }
+
+    //Intensity range configuration
+    if(*HMmode == 1){
+      //Set heatmap range
+      vec2 heatmap_range = *heatmapManager->get_heatmap_range();
+      int min = (int) (heatmap_range.x * 255);
+      int max = (int) (heatmap_range.y * 255);
+
+      if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
+        vec2* range = heatmapManager->get_heatmap_range();
+        *range = vec2((float)min / 255, (float)max / 255);
       }
     }
 

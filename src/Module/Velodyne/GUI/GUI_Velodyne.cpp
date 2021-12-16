@@ -1,8 +1,9 @@
 #include "GUI_Velodyne.h"
 
-#include "Velodyne.h"
+#include "../Velodyne.h"
+#include "../Capture.h"
 
-#include "../../../extern/imgui/imgui.h"
+#include "../../../../extern/imgui/imgui.h"
 
 
 //Constructor / Destructor
@@ -10,6 +11,7 @@ GUI_Velodyne::GUI_Velodyne(){
   //---------------------------
 
   this->veloManager = new Velodyne();
+  this->captureManager = veloManager->get_captureManager();
 
   //---------------------------
 }
@@ -19,16 +21,16 @@ GUI_Velodyne::~GUI_Velodyne(){}
 void GUI_Velodyne::design_Velodyne(){
   //---------------------------
 
-  this->State();
-  this->Capture();
-  this->Recording();
-  this->Parameters();
+  this->lidar_State();
+  this->lidar_Capture();
+  this->lidar_Recording();
+  this->lidar_Parameters();
 
   //---------------------------
 }
 
 //Subfunctions
-void GUI_Velodyne::State(){
+void GUI_Velodyne::lidar_State(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "State");
   //---------------------------
 
@@ -102,7 +104,7 @@ void GUI_Velodyne::State(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::Capture(){
+void GUI_Velodyne::lidar_Capture(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Capture data");
   //---------------------------
 
@@ -138,10 +140,7 @@ void GUI_Velodyne::Capture(){
     }
     ImGui::PopStyleColor(1);
 
-  }
-  if(*is_capturing){
-    //Read udp packets
-    veloManager->onrun_ope();
+    captureManager->check_forNewSubset();
   }
 
   //If slam computation at capture time
@@ -155,7 +154,7 @@ void GUI_Velodyne::Capture(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::Recording(){
+void GUI_Velodyne::lidar_Recording(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recording");
   //---------------------------
 
@@ -164,7 +163,6 @@ void GUI_Velodyne::Recording(){
   bool* is_recording = veloManager->get_is_recording();
 
   if(*is_recording == false){
-
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Recording", ImVec2(150,0))){
@@ -192,7 +190,7 @@ void GUI_Velodyne::Recording(){
   }
 
   //Recording options -> number of frame
-  bool* record_nb_frame = veloManager->get_is_record_n_frame();
+  /*bool* record_nb_frame = veloManager->get_is_record_n_frame();
   ImGui::Checkbox("##667", record_nb_frame);
   ImGui::SameLine();
   int* nb_frame = veloManager->get_record_n_frame_max();
@@ -205,20 +203,20 @@ void GUI_Velodyne::Recording(){
   ImGui::SameLine();
   float* t_frame = veloManager->get_record_t_frame_max();
   ImGui::SetNextItemWidth(75);
-  ImGui::SliderFloat("Time interval [s]", t_frame, 0.0f, 1000.0f);
+  ImGui::SliderFloat("Time interval [s]", t_frame, 0.0f, 1000.0f);*/
 
   //Recording path
   if(ImGui::Button("...##24")){
-    veloManager->recording_selectDirSave();
+    captureManager->recording_selectDirSave();
   }
   ImGui::SameLine();
-  string saveas = *veloManager->get_saveas();
+  string saveas = *captureManager->get_path_frameSave();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::Parameters(){
+void GUI_Velodyne::lidar_Parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
 

@@ -4,6 +4,7 @@
 
 #include "../Engine/Scene.h"
 #include "../Engine/Glyphs.h"
+#include "../Engine/Configuration/Configuration.h"
 #include "../Load/Loader.h"
 
 #include "../Specific/fct_transtypage.h"
@@ -28,8 +29,10 @@ Operation::Operation(){
   this->nbLineSampling = 1000000;
 
   //Get absolute executable location
+  Configuration configManager;
   string absPath = std::experimental::filesystem::current_path();
-  this->pathDir = absPath + '/' + configuration.INIT_DefaultDirPath;
+  string iniPath = configManager.parse_json_string("transformation", "path_media");
+  this->pathDir = absPath + '/' + iniPath;
 
   //---------------------------
 }

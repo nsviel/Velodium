@@ -1,7 +1,7 @@
 #ifndef GUI_MODULE_H
 #define GUI_MODULE_H
 
-#include "Velodyne/GUI_Velodyne.h"
+#include "Velodyne/GUI/GUI_Velodyne.h"
 #include "Scala/GUI_Scala.h"
 #include "CloudPlayer/GUI_CloudPlayer.h"
 #include "SLAM/GUI/GUI_Slam.h"

@@ -54,6 +54,9 @@ private:
   uint shader_program_ID, mvpID;
   vec3 backgColor;
 
+  int gl_width;
+  int gl_height;
+
   int loop_cpt;
   uint quadVAO;
   GLuint fbo_pass_1;

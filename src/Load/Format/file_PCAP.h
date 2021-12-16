@@ -1,11 +1,9 @@
 #ifndef FILE_PCAP_H
 #define FILE_PCAP_H
 
+#include "../struct_dataFile.h"
+
 #include "../../common.h"
-
-#include "../../Engine/Data/struct_dataFile.h"
-#include "../../Module/Velodyne/UDP/struct_UDPpacket.h"
-
 
 
 class filePCAP

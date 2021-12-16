@@ -5,6 +5,7 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Glyphs.h"
+#include "../../Engine/Configuration/Configuration.h"
 #include "../../Operation/Operation.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -201,9 +202,11 @@ void GUI_option::option_colors(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Reset", ImVec2(75,0))){
-      this->backgColor->x = configuration.WINDOW_BckgColor;
-      this->backgColor->y = configuration.WINDOW_BckgColor;
-      this->backgColor->z = configuration.WINDOW_BckgColor;
+      Configuration configManager;
+      float bkg_color = configManager.parse_json_float("window", "background_color");
+      this->backgColor->x = bkg_color;
+      this->backgColor->y = bkg_color;
+      this->backgColor->z = bkg_color;
       glyphManager->reset_colors();
     }
   }

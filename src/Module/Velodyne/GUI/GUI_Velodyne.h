@@ -2,8 +2,9 @@
 #define GUI_VELODYNE_H
 
 class Velodyne;
+class Capture;
 
-#include "../../common.h"
+#include "../../../common.h"
 
 
 class GUI_Velodyne
@@ -18,15 +19,14 @@ public:
   void design_Velodyne();
 
   //Subfunctions
-  void Start();
-  void State();
-  void Parameters();
-  void Capture();
-  void Recording();
+  void lidar_State();
+  void lidar_Parameters();
+  void lidar_Capture();
+  void lidar_Recording();
 
 private:
   Velodyne* veloManager;
-
+  Capture* captureManager;
 
 };
 

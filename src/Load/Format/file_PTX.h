@@ -1,9 +1,10 @@
 #ifndef FILE_PTX_H
 #define FILE_PTX_H
 
+#include "../struct_dataFile.h"
+
 #include "../../common.h"
 #include "../../Engine/Data/struct_generic.h"
-#include "../../Engine/Data/struct_dataFile.h"
 
 #include <iomanip>
 #include <fstream>

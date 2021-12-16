@@ -3,13 +3,13 @@
 
 #include "Velodyne.h"
 
+#include "Capture.h"
+
 #include "UDP/UDP_frame.h"
 #include "UDP/UDP_server.h"
 #include "UDP/UDP_parser_VLP16.h"
 
 #include "../../Engine/Scene.h"
-#include "../../Load/Loader.h"
-#include "../../Load/dataExtraction.h"
 #include "../../Specific/timer.h"
 
 #include <jsoncpp/json/value.h>
@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <fstream>
 #include <curl/curl.h>
-#include <experimental/filesystem>
 
 
 //Constructor / Destructor
@@ -28,15 +27,12 @@ Velodyne::Velodyne(){
   this->udpServManager = new UDP_server();
   this->udpParsManager = new UDP_parser_VLP16();
   this->frameManager = new UDP_frame();
-  this->loaderManager = new Loader();
-  this->extractManager = new dataExtraction();
   this->timerManager = new Timer();
+  this->captureManager = new Capture();
 
   this->rot_freq = 0;
   this->fov_min = 0;
   this->fov_max = 359;
-  this->record_n_frame_max = 10;
-  this->is_record_t_frame_max = 10;
 
   this->has_started = false;
   this->is_first_run = true;
@@ -45,17 +41,12 @@ Velodyne::Velodyne(){
   this->is_connected = false;
   this->is_recording = false;
 
-  //Get absolute executable location
-  string absPath = std::experimental::filesystem::current_path();
-  this->saveas = absPath + "/../media/data/";
-
   //---------------------------
 }
 Velodyne::~Velodyne(){}
 
 //Recording functions
 void Velodyne::run_capture(){
-  atleastoneframe = false;
   //---------------------------
 
   m_thread = std::thread([&]() {
@@ -70,86 +61,12 @@ void Velodyne::run_capture(){
       bool frame_rev = frameManager->build_frame(packet_parsed);
 
       if(frame_rev){
-        atleastoneframe = true;
-        frame = frameManager->get_endedFrame();
+        udpPacket* frame = frameManager->get_endedFrame();
+        captureManager->create_subset(frame, is_recording);
       }
     }
   });
   m_thread.detach();
-
-  //---------------------------
-}
-void Velodyne::onrun_ope(){
-  //---------------------------
-
-  if(atleastoneframe){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = &cloud->subset[0];
-    udpPacket frame_new = *frame;
-
-    subset->xyz.clear();
-    subset->I.clear();
-    subset->ts.clear();
-    subset->A.clear();
-    subset->R.clear();
-
-    subset->nb_point = frame_new.xyz.size();
-    subset->root = vec3(0.0);
-
-    for(int j=0; j<frame_new.xyz.size(); j++){
-      subset->xyz.push_back(frame_new.xyz[j]);
-      subset->I.push_back(frame_new.I[j] / 255);
-      subset->ts.push_back(frame_new.t[j]);
-      subset->A.push_back(frame_new.A[j]);
-      subset->R.push_back(frame_new.R[j]);
-
-      float rgb = frame_new.I[j] / 255;
-      subset->RGB.push_back(vec4(rgb,rgb,rgb,1.0f));
-    }
-
-    //Update list cloud
-    Scene sceneManager;
-    sceneManager.update_subset_IntensityToColor(subset);
-    sceneManager.update_subset_location(subset);
-
-    if(is_recording){
-      string fileName = subset->name + "_" + to_string(subset_selected);
-      loaderManager->save_subset(subset, "ply", saveas, fileName);
-      this->subset_selected++;
-      this->record_n_frame_nb++;
-
-      //Option: record n frames
-      if(is_record_n_frame){
-        if(record_n_frame_nb >= record_n_frame_max){
-          is_recording = false;
-        }
-
-      }
-    }
-  }
-
-  //---------------------------
-}
-void Velodyne::recording_selectDirSave(){
-  //---------------------------
-
-  //Get absolute executable location
-  string zenity = "zenity --file-selection --directory --title=Save --filename=" + saveas;
-
-  //Retrieve dir path
-  FILE *file = popen(zenity.c_str(), "r");
-  char filename[1024];
-  char* path_char = fgets(filename, 1024, file);
-
-  //Check if empty
-  if ((path_char != NULL) && (path_char[0] != '\0')) {
-    string path_str(path_char);
-    if (path_str.find('\n')){
-      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
-    }
-
-    this->saveas = path_str + "/";
-  }
 
   //---------------------------
 }
@@ -207,23 +124,17 @@ void Velodyne::lidar_stop(){
   //---------------------------
 }
 void Velodyne::lidar_startNewCapture(){
+  time_of_capture = 0;
   //---------------------------
 
-  this->record_n_frame_nb = 0;
-  this->subset_selected = 0;
-  loaderManager->load_cloud_empty();
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  int ID = *sceneManager->get_list_ID_cloud();
-  cloud->name = "capture_" + to_string(ID);
+  captureManager->new_capture();
 
   //Set timer
   if(timerManager->isRunning()){
     timerManager->stop();
-    record_t_frame_sec = 0;
   }
   timerManager->setFunc([&](){
-		record_t_frame_sec++;
-		cout << record_t_frame_sec << endl;
+		time_of_capture++;
 	});
   timerManager->setInterval(1000);
   timerManager->start();
@@ -234,19 +145,19 @@ void Velodyne::lidar_get_status(){
   //---------------------------
 
   //Download a snapshop statut
-  int err = system("curl -s --connect-timeout 1 http://192.168.1.201/cgi/status.json > snapshot.hdl");
+  int err = system("curl -s --connect-timeout 1 http://192.168.1.201/cgi/status.json &> snapshot.hdl");
 
   std::ifstream ifs("snapshot.hdl");
   Json::Reader reader;
-  Json::Value obj;
+  Json::Value root;
 
-  reader.parse(ifs, obj);
+  reader.parse(ifs, root);
 
-  const Json::Value& motor = obj["motor"];
+  const Json::Value& motor = root["motor"];
   const Json::Value& motor_rpm = motor["rpm"];
   const Json::Value& motor_state = motor["state"];
 
-  const Json::Value& laser = obj["laser"];
+  const Json::Value& laser = root["laser"];
   const Json::Value& laser_state = laser["state"];
 
   rot_rpm = motor_rpm.asUInt();
