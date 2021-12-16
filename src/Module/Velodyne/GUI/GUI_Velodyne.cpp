@@ -34,8 +34,11 @@ void GUI_Velodyne::lidar_State(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "State");
   //---------------------------
 
-  //Start / Stop capturing
+  bool* is_capturing = veloManager->get_is_capturing();
   bool* is_rotating = veloManager->get_is_rotating();
+  bool* is_recording = veloManager->get_is_recording();
+
+  //Start LiDAR button
   if(*is_rotating == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Start##1", ImVec2(150,0))){
@@ -45,13 +48,79 @@ void GUI_Velodyne::lidar_State(){
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop##1", ImVec2(150,0))){
+    if(ImGui::Button("Stop LiDAR", ImVec2(150,0))){
 
       //If the LiDAR is running, stop it
       veloManager->lidar_stop();
     }
     ImGui::PopStyleColor(1);
   }
+
+  //Capturing button
+  if(*is_capturing == false){
+    //Start button
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Capture", ImVec2(150,0))){
+
+      if(*is_rotating == false){
+        console.AddLog("error", "LiDAR is not started");
+      }else{
+        *is_capturing = true;
+
+        veloManager->lidar_startNewCapture();
+        veloManager->run_capture();
+
+        console.AddLog("#", "Data capture ON");
+      }
+
+    }
+    ImGui::PopStyleColor(1);
+  }else{
+    //Stop button
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
+    if(ImGui::Button("Stop capture", ImVec2(150,0))){
+      *is_capturing = false;
+      console.AddLog("#", "Data capture OFF");
+    }
+    ImGui::PopStyleColor(1);
+
+    captureManager->check_forNewSubset();
+  }
+
+  //Recording button
+  if(*is_recording == false){
+    //Start button
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Recording", ImVec2(150,0))){
+
+      if(*is_rotating && *is_capturing){
+        console.AddLog("#", "LiDAR recording...");
+        *is_recording = true;
+      }else{
+        console.AddLog("error", "LiDAR is not capturing");
+        *is_recording = false;
+      }
+
+    }
+    ImGui::PopStyleColor(1);
+  }else{
+    //Stop button
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
+    if(ImGui::Button("Stop recording", ImVec2(150,0))){
+
+      *is_recording = false;
+      console.AddLog("#", "Data recording OFF");
+
+    }
+    ImGui::PopStyleColor(1);
+  }
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Velodyne::lidar_Capture(){
+  //ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Parameters");
+  //---------------------------
 
   //Motor state
   int rot_freq = veloManager->get_rot_freq();
@@ -73,6 +142,7 @@ void GUI_Velodyne::lidar_State(){
   }
 
   //Capture state
+  bool* is_rotating = veloManager->get_is_rotating();
   ImGui::Text("Rotation: ");
   ImGui::SameLine();
   if(*is_rotating){
@@ -104,90 +174,10 @@ void GUI_Velodyne::lidar_State(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::lidar_Capture(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Capture data");
-  //---------------------------
-
-  //Start / Stop capturing
-  bool* is_capturing = veloManager->get_is_capturing();
-  bool* is_rotating = veloManager->get_is_rotating();
-  if(*is_capturing == false){
-
-    //Start button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Capture", ImVec2(150,0))){
-
-      if(*is_rotating == false){
-        console.AddLog("error", "LiDAR is not started");
-      }else{
-        *is_capturing = true;
-
-        veloManager->lidar_startNewCapture();
-        veloManager->run_capture();
-
-        console.AddLog("#", "Data capture ON");
-      }
-
-    }
-    ImGui::PopStyleColor(1);
-
-  }else{
-    //Stop button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop##2", ImVec2(150,0))){
-      *is_capturing = false;
-      console.AddLog("#", "Data capture OFF");
-    }
-    ImGui::PopStyleColor(1);
-
-    captureManager->check_forNewSubset();
-  }
-
-  //If slam computation at capture time
-  //bool* slamON = playerManager->get_camera_follow();
-  //ImGui::Checkbox("SLAM", slamON);
-
-  //Do not record first frame
-  //bool* slamON = playerManager->get_camera_follow();
-  //ImGui::Checkbox("First frame not recorded", slamON);
-
-  //---------------------------
-  ImGui::Separator();
-}
 void GUI_Velodyne::lidar_Recording(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recording");
   //---------------------------
 
-  bool* is_capturing = veloManager->get_is_capturing();
-  bool* is_rotating = veloManager->get_is_rotating();
-  bool* is_recording = veloManager->get_is_recording();
-
-  if(*is_recording == false){
-    //Start button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Recording", ImVec2(150,0))){
-
-      if(*is_rotating && *is_capturing){
-        console.AddLog("#", "LiDAR recording...");
-        *is_recording = true;
-      }else{
-        console.AddLog("error", "LiDAR is not capturing");
-        *is_recording = false;
-      }
-
-    }
-    ImGui::PopStyleColor(1);
-  }else{
-    //Stop button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop##3", ImVec2(150,0))){
-
-      *is_recording = false;
-      console.AddLog("#", "Data recording OFF");
-
-    }
-    ImGui::PopStyleColor(1);
-  }
 
   //Recording options -> number of frame
   /*bool* record_nb_frame = veloManager->get_is_record_n_frame();

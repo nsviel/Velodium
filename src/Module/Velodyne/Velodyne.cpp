@@ -103,6 +103,8 @@ void Velodyne::lidar_start(){
     console.AddLog("#", log);
   }
 
+  //this->lidar_startNewCapture();
+
   //---------------------------
 }
 void Velodyne::lidar_stop(){
