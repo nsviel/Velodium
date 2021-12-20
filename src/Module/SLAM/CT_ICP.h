@@ -20,8 +20,10 @@ public:
   ~CT_ICP();
 
 public:
-  void compute_slam();
+  void compute_slam(Cloud* cloud);
+  void compute_slam_online(Cloud* cloud);
   void set_nb_thread(int value);
+  void reset();
 
   inline SLAM_normal* get_SLAM_normal(){return normalManager;}
   inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}
@@ -47,6 +49,9 @@ private:
   void add_pointsToSlamMap(Subset* subset);
   void add_pointsToLocalMap(Frame* frame);
 
+  void end_slamVoxelization(Cloud* cloud);
+  void end_time(float duration, Frame* frame, Subset* subset);
+
 private:
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
@@ -54,7 +59,7 @@ private:
   Scene* sceneManager;
 
   voxelMap* map;
-  slamMap* gmap;
+  slamMap* map_cloud;
 
   float voxel_size_gridMap;
   float voxel_size_localMap;
@@ -62,6 +67,7 @@ private:
   int map_max_voxelNbPoints;
   int frame_max;
   int nb_thread;
+  int frame_ID;
   bool frame_all;
   bool solver_GN, solver_ceres;
   bool verbose, slamMap_voxelized;

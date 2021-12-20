@@ -13,10 +13,12 @@
 CT_ICP::CT_ICP(){
   //---------------------------
 
-  sceneManager = new Scene();
-  ceresManager = new SLAM_optim_ceres();
-  gnManager = new SLAM_optim_gn();
-  normalManager = new SLAM_normal();
+  this->sceneManager = new Scene();
+  this->ceresManager = new SLAM_optim_ceres();
+  this->gnManager = new SLAM_optim_gn();
+  this->normalManager = new SLAM_normal();
+  this->map = new voxelMap();
+  this->map_cloud = new slamMap();
 
   this->solver_ceres = false;
   this->solver_GN = true;
@@ -24,6 +26,7 @@ CT_ICP::CT_ICP(){
   this->map_max_voxelNbPoints = 20;
   this->frame_max = 0;
   this->frame_all = true;
+  this->frame_ID = 0;
   this->nb_thread = 8;
   this->slamMap_voxelized = false;
 
@@ -35,10 +38,9 @@ CT_ICP::CT_ICP(){
 }
 CT_ICP::~CT_ICP(){}
 
-void CT_ICP::compute_slam(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+void CT_ICP::compute_slam(Cloud* cloud){
   map = new voxelMap();
-  gmap = new slamMap();
+  map_cloud = new slamMap();
 
   if(cloud == nullptr) return;
   if(frame_all) frame_max = cloud->nb_subset;
@@ -66,24 +68,54 @@ void CT_ICP::compute_slam(){
 
     //--------------
     float duration = toc();
-    frame->time_slam = duration;
-    if(verbose){
-      cout<<"[sucess] SLAM - "<<subset->name.c_str();
-      cout<<" "<<to_string(i)<<"/"<< frame_max;
-      cout<< " [" <<duration<< " ms]"<<endl;
-    }
+    this->end_time(duration, frame, subset);
   }
 
-  if(slamMap_voxelized){
-    for(int i=0; i<frame_max; i++){
-      Subset* subset = &cloud->subset[i];
-      subset->xyz = subset->xyz_voxel;
-    }
-  }
+  this->end_slamVoxelization(cloud);
 
   //---------------------------
   delete map;
-  delete gmap;
+  delete map_cloud;
+}
+void CT_ICP::compute_slam_online(Cloud* cloud){
+  int last_subset = cloud->subset.size() - 1;
+  Subset* subset = &cloud->subset[last_subset];
+  Frame* frame = &cloud->subset[last_subset].frame;
+  Frame* frame_m1 = &cloud->subset[last_subset-1].frame;
+  Frame* frame_m2 = &cloud->subset[last_subset-2].frame;
+  frame->ID = last_subset;
+  frame_max = cloud->subset.size();
+  tic();
+  //---------------------------
+
+  this->init_frameTimestamp(subset);
+  this->init_frameChain(frame, frame_m1, frame_m2);
+  this->init_distortion(frame);
+
+  this->compute_gridSampling(subset);
+  this->compute_optimization(frame, frame_m1);
+
+  this->add_pointsToSubset(subset);
+  this->add_pointsToSlamMap(subset);
+  this->add_pointsToLocalMap(frame);
+
+  float duration = toc();
+  this->end_time(duration, frame, subset);
+
+  //---------------------------
+}
+void CT_ICP::reset(){
+  //---------------------------
+
+  this->frame_ID = 0;
+
+  delete map;
+  delete map_cloud;
+
+  this->map = new voxelMap();
+  this->map_cloud = new slamMap();
+
+  //---------------------------
 }
 void CT_ICP::set_nb_thread(int value){
   //---------------------------
@@ -306,9 +338,9 @@ void CT_ICP::add_pointsToSlamMap(Subset* subset){
       string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
 
       //if the voxel already exists
-      if(gmap->find(voxel_id) != gmap->end()){
+      if(map_cloud->find(voxel_id) != map_cloud->end()){
         //Get corresponding voxel
-        vector<vec3>& voxel_xyz = gmap->find(voxel_id).value();
+        vector<vec3>& voxel_xyz = map_cloud->find(voxel_id).value();
 
         //If the voxel is not full
         if (voxel_xyz.size() < map_max_voxelNbPoints){
@@ -323,7 +355,7 @@ void CT_ICP::add_pointsToSlamMap(Subset* subset){
         vec.push_back(point);
         subset->xyz_voxel.push_back(point);
 
-        gmap->insert({voxel_id, vec});
+        map_cloud->insert({voxel_id, vec});
       }
     }
   }
@@ -359,6 +391,31 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
       vec.push_back(point);
       map->insert({voxel_id, vec});
     }
+  }
+
+  //---------------------------
+}
+
+void CT_ICP::end_slamVoxelization(Cloud* cloud){
+  //---------------------------
+
+  if(slamMap_voxelized){
+    for(int i=0; i<frame_max; i++){
+      Subset* subset = &cloud->subset[i];
+      subset->xyz = subset->xyz_voxel;
+    }
+  }
+
+  //---------------------------
+}
+void CT_ICP::end_time(float duration, Frame* frame, Subset* subset){
+  //---------------------------
+verbose = true;
+  frame->time_slam = duration;
+  if(verbose){
+    cout<<"[sucess] SLAM - "<<subset->name.c_str();
+    cout<<" "<<to_string(frame->ID)<<"/"<< frame_max;
+    cout<< " [" <<duration<< " ms]"<<endl;
   }
 
   //---------------------------

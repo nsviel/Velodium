@@ -46,7 +46,7 @@ void GUI_Slam::compute(){
 
     if(cloud != nullptr){
       sceneManager.update_cloud_reset(cloud);
-      cticpManager->compute_slam();
+      cticpManager->compute_slam(cloud);
 
       sceneManager.update_cloud_location(cloud);
       sceneManager.update_cloud_glyphs(cloud);

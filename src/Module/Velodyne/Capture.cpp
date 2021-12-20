@@ -1,5 +1,7 @@
 #include "Capture.h"
 
+#include "../SLAM/CT_ICP.h"
+
 #include "../../Engine/Scene.h"
 #include "../../Load/Loader.h"
 #include "../../Load/dataExtraction.h"
@@ -19,7 +21,7 @@ Capture::Capture(){
   this->sceneManager = new Scene();
 
   this->ID_capture = 0;
-  this->oneFrame = true;
+  this->oneFrame = false;
   this->atLeastOne = false;
   this->path_dirSave = "/../media/data/";;
 
@@ -27,6 +29,7 @@ Capture::Capture(){
 }
 Capture::~Capture(){}
 
+//Synchroneous functions
 void Capture::check_forNewSubset(){
   //---------------------------
 
@@ -34,6 +37,7 @@ void Capture::check_forNewSubset(){
     subset_capture.visibility = true;
 
     //Insert the subset inside the capture cloud
+    //OneFrame : we only keep the current frame capture
     if(oneFrame){
       //Check if at least one subset was created
       if(cloud_capture->subset.size() == 0){
@@ -50,10 +54,11 @@ void Capture::check_forNewSubset(){
       }
       cloud_capture->nb_subset = cloud_capture->subset.size();
     }
+    //Multiple frame : we keep the frame captures in the cloud
     else{
       //We cancel the visibility of the previous subset
       if(cloud_capture->subset.size() > 0){
-        cloud_capture->subset[cloud_capture->subset.size()-1].visibility = false;
+        //cloud_capture->subset[cloud_capture->subset.size()-1].visibility = false;
       }
 
       //We include the new one into the cloud
@@ -62,11 +67,39 @@ void Capture::check_forNewSubset(){
       cloud_capture->nb_subset = cloud_capture->subset.size();
     }
 
+    //Revoir toute cette fonction pour essayer d'intégrer le slam à la capture direct !!!!!
+    CT_ICP cticpManager;
+    cticpManager.compute_slam_online(cloud_capture);
+
+  }
+
+  //---------------------------
+}
+void Capture::recording_selectDirSave(){
+  //---------------------------
+
+  //Get absolute executable location
+  string zenity = "zenity --file-selection --directory --title=Save --filename=" + path_frameSave;
+
+  //Retrieve dir path
+  FILE *file = popen(zenity.c_str(), "r");
+  char filename[1024];
+  char* path_char = fgets(filename, 1024, file);
+
+  //Check if empty
+  if ((path_char != NULL) && (path_char[0] != '\0')) {
+    string path_str(path_char);
+    if (path_str.find('\n')){
+      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
+    }
+
+    this->path_frameSave = path_str + "/";
   }
 
   //---------------------------
 }
 
+//Asynchroneous functions
 void Capture::new_capture(){
   //---------------------------
 
@@ -105,26 +138,3 @@ void Capture::create_subset(udpPacket* frame_in, bool is_recording){
   //---------------------------
   ID_subset++;
 }
-void Capture::recording_selectDirSave(){
-    //---------------------------
-
-    //Get absolute executable location
-    string zenity = "zenity --file-selection --directory --title=Save --filename=" + path_frameSave;
-
-    //Retrieve dir path
-    FILE *file = popen(zenity.c_str(), "r");
-    char filename[1024];
-    char* path_char = fgets(filename, 1024, file);
-
-    //Check if empty
-    if ((path_char != NULL) && (path_char[0] != '\0')) {
-      string path_str(path_char);
-      if (path_str.find('\n')){
-        path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
-      }
-
-      this->path_frameSave = path_str + "/";
-    }
-
-    //---------------------------
-  }
