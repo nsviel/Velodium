@@ -6,7 +6,7 @@
 #include "CloudPlayer/GUI_CloudPlayer.h"
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Network/GUI_Network.h"
-#include "Obstacle/GUI_Obstacle.h"
+#include "Obstacle/GUI/GUI_Obstacle.h"
 
 #include "../common.h"
 
@@ -15,19 +15,23 @@ class GUI_module
 {
 public:
   //Constructor / Destructor
-  GUI_module(Camera* cameraManager){
+  GUI_module(Engine* engineManager){
+    //-------------------------------
+
     this->gui_veloManager = new GUI_Velodyne();
     this->gui_scalaManager = new GUI_Scala();
-    this->gui_odomManager = new GUI_CloudPlayer(cameraManager);
+    this->gui_odomManager = new GUI_CloudPlayer(engineManager->get_CameraManager());
     this->gui_slamManager = new GUI_Slam();
     this->gui_senderManager = new GUI_Network();
-    this->gui_obstacleManager = new GUI_Obstacle();
+    this->gui_obstacleManager = new GUI_Obstacle(engineManager);
 
     this->module_velodyne = true;
     this->module_CloudPlayer = true;
     this->module_slam = true;
     this->module_obstacle = true;
     this->module_scala = false;
+
+    //-------------------------------
   }
   ~GUI_module();
 

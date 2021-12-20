@@ -114,6 +114,13 @@ void GUI_Velodyne::lidar_State(){
     }
     ImGui::PopStyleColor(1);
   }
+  //Recording path
+  if(ImGui::Button("...##24")){
+    captureManager->recording_selectDirSave();
+  }
+  ImGui::SameLine();
+  string saveas = *captureManager->get_path_frameSave();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
   ImGui::Separator();
@@ -175,33 +182,12 @@ void GUI_Velodyne::lidar_Capture(){
   ImGui::Separator();
 }
 void GUI_Velodyne::lidar_Recording(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recording");
+  //ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recording");
   //---------------------------
 
 
-  //Recording options -> number of frame
-  /*bool* record_nb_frame = veloManager->get_is_record_n_frame();
-  ImGui::Checkbox("##667", record_nb_frame);
-  ImGui::SameLine();
-  int* nb_frame = veloManager->get_record_n_frame_max();
-  ImGui::SetNextItemWidth(75);
-  ImGui::SliderInt("Number of frames", nb_frame, 1, 10000);
 
-  //Recording options -> time interval
-  bool* record_t_frame = veloManager->get_is_record_t_frame();
-  ImGui::Checkbox("##668", record_t_frame);
-  ImGui::SameLine();
-  float* t_frame = veloManager->get_record_t_frame_max();
-  ImGui::SetNextItemWidth(75);
-  ImGui::SliderFloat("Time interval [s]", t_frame, 0.0f, 1000.0f);*/
 
-  //Recording path
-  if(ImGui::Button("...##24")){
-    captureManager->recording_selectDirSave();
-  }
-  ImGui::SameLine();
-  string saveas = *captureManager->get_path_frameSave();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
   ImGui::Separator();

@@ -17,7 +17,7 @@
 #include "../../extern/imgui/imgui_impl_opengl3.h"
 #include "../../extern/IconsFontAwesome5.h"
 
-#include<thread>
+#include <thread>
 
 //Consol creation
 ConsoleApp console;

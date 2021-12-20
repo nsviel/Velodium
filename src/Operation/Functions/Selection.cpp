@@ -380,7 +380,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
 
         //Make selection
         for(int j=0; j<XYZ.size(); j++){
-          vec2 projPT = coordTransManager->WorldToCursor(XYZ[j]);
+          vec2 projPT = coordTransManager->WorldToScreen(XYZ[j]);
 
           if(projPT.x >= point1.x && projPT.y >= point1.y && projPT.x <= point2.x && projPT.y <= point2.y){
             RGB[j] = vec4(1.0f,1.0f,1.0f,1.0f);
@@ -407,10 +407,10 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   vec2 point4 = vec2(point2.x, point1.y);
   //---------------------------
 
-  vec3 pt1 = coordTransManager->CursorToWorld(point1);
-  vec3 pt2 = coordTransManager->CursorToWorld(point2);
-  vec3 pt3 = coordTransManager->CursorToWorld(point3);
-  vec3 pt4 = coordTransManager->CursorToWorld(point4);
+  vec3 pt1 = coordTransManager->ScreenToWorld(point1);
+  vec3 pt2 = coordTransManager->ScreenToWorld(point2);
+  vec3 pt3 = coordTransManager->ScreenToWorld(point3);
+  vec3 pt4 = coordTransManager->ScreenToWorld(point4);
 
   //New frame location
   vector<vec3> xyz;

@@ -20,6 +20,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(OpenMP REQUIRED)
 find_package(Ceres REQUIRED)
 find_package(tsl-robin-map REQUIRED)
+find_package(Freetype REQUIRED)
 
 #Denpendancies
 set(ALL_LIBS
@@ -29,6 +30,7 @@ set(ALL_LIBS
   ${GLM_LIBRARY}
   ${OpenMP_CXX_FLAGS}
   ${CERES_LIBRARIES}
+  ${FREETYPE_LIBRARIES}
   OpenMP::OpenMP_CXX
   Eigen3::Eigen
   glfw
@@ -59,9 +61,9 @@ set(OTHERS_LIBS
   -lssh #SSH connexion libray
 )
 
-
 #Header libraries
 include_directories(${CMAKE_SOURCE_DIR}/../extern)
+include_directories (/usr/include/freetype2)
 
 #Source files
 file(GLOB_RECURSE ALL_SOURCES src/*.cpp extern/*.cpp)

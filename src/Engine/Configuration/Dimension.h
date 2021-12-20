@@ -43,6 +43,7 @@ public:
   inline vec2 get_winDim(){return window_dim;}
   inline vec2 get_guiDim_lP(){return gui_leftPanel_dim;}
   inline vec2 get_guiDim_tP(){return gui_topPanel_dim;}
+
   inline void set_glDim(vec2 value){this->viewport_dim = value;}
   inline void set_guiDim_lP(vec2 value){this->gui_leftPanel_dim = value; update_viewport_dim();}
   inline void set_guiDim_tP(vec2 value){this->gui_topPanel_dim = value; update_viewport_dim();}

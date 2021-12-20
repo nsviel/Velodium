@@ -21,7 +21,7 @@ Capture::Capture(){
   this->ID_capture = 0;
   this->oneFrame = true;
   this->atLeastOne = false;
-  this->path_dirSave = "/../media/data/";
+  this->path_dirSave = "/../media/data/";;
 
   //---------------------------
 }

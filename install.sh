@@ -6,7 +6,7 @@
 echo Installation...
 
 #Install dependancies -> Essential
-sudo apt install git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev
+sudo apt install git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev 
 
 
 #Install pcl library - V1.2 is requiered

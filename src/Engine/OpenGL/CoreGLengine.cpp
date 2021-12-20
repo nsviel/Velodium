@@ -198,6 +198,21 @@ void CoreGLengine::loop(){
   glGenFramebuffers(1, &FBO);
   glGenTextures(1, &texture);
 
+  //Text rendering stuff
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+  unsigned int VAO, VBO;
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+  glBindVertexArray(VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
   do{
     vec2 dim = dimManager->get_glDim();int gl_width = dim.x;
     int gl_height = dim.y;
@@ -230,7 +245,6 @@ void CoreGLengine::loop(){
 
     int nb_viewport = cameraManager->get_number_viewport();
     for(int i=0; i<1; i++){
-      guiManager->Gui_loop();
 
       cameraManager->viewport_update(0);
       cameraManager->input_cameraMouseCommands();
@@ -240,6 +254,8 @@ void CoreGLengine::loop(){
       mvpShader->setMat4("MVP", mvp);
 
       engineManager->loop();
+
+      guiManager->Gui_loop();
     }
 
 
