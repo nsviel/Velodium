@@ -9,7 +9,9 @@
 SLAM_normal::SLAM_normal(){
   //---------------------------
 
+  this->max_number_neighbors = 20;
   this->size_voxelMap = 1;
+  this->voxel_searchSize = 1;
   this->nb_thread = 8;
 
   //---------------------------
@@ -49,11 +51,6 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
   priority_queue_iNN priority_queue;
   //---------------------------
 
-  //Parameters
-  int voxel_searchSize = 1;
-  int max_number_neighbors = 20;
-  int threshold_voxel_capacity = 1;
-
   int vx = static_cast<int>(point[0] / size_voxelMap);
   int vy = static_cast<int>(point[1] / size_voxelMap);
   int vz = static_cast<int>(point[2] / size_voxelMap);
@@ -71,24 +68,24 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
 
         if (map->find(voxel_id) != map->end()){
           voxel_ijk = map->find(voxel_id).value();
-        }
 
         //We store all NN voxel point
-        for (int i=0; i < voxel_ijk.size(); i++) {
-          Eigen::Vector3d neighbor = voxel_ijk[i];
-          float distance = (neighbor - point).norm();
+          for (int i=0; i < voxel_ijk.size(); i++) {
+            Eigen::Vector3d neighbor = voxel_ijk[i];
+            float distance = (neighbor - point).norm();
 
-          //If the voxel is full
-          if (priority_queue.size() == max_number_neighbors) {
-            float dist_lastPtVoxel = std::get<0>(priority_queue.top());
+            //If the voxel is full
+            if (priority_queue.size() == max_number_neighbors) {
+              float dist_lastPtVoxel = std::get<0>(priority_queue.top());
 
-            if (distance < dist_lastPtVoxel) {
-              priority_queue.pop();
+              if (distance < dist_lastPtVoxel) {
+                priority_queue.pop();
+                priority_queue.emplace(distance, neighbor);
+              }
+
+            } else{
               priority_queue.emplace(distance, neighbor);
             }
-
-          } else{
-            priority_queue.emplace(distance, neighbor);
           }
         }
 

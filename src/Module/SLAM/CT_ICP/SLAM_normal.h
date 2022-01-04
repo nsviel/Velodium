@@ -21,6 +21,8 @@ public:
   void compute_frameNormal(Frame* frame, voxelMap* map);
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
+  inline int* get_max_number_neighbors(){return &max_number_neighbors;}
+  inline int* get_voxel_searchSize(){return &voxel_searchSize;}
 
 private:
   //Sub functions
@@ -34,6 +36,8 @@ private:
   vector<float> a2D;
 
   float size_voxelMap;
+  int max_number_neighbors;
+  int voxel_searchSize;
   int nb_thread;
   mutex Mutex;
 };

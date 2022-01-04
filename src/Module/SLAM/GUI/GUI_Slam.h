@@ -6,6 +6,7 @@
 class CT_ICP;
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
+class SLAM_normal;
 
 
 class GUI_Slam
@@ -19,8 +20,14 @@ public:
   void design_SLAM();
 
   void compute();
-  void parameters();
   void statistics();
+
+  void parameters();
+  void parameters_general();
+  void parameters_computation();
+  void parameters_localMap();
+  void parameters_normal();
+  void parameters_robustesse();
 
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 
@@ -28,6 +35,7 @@ private:
   CT_ICP* cticpManager;
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
+  SLAM_normal* normalManager;
 
   int item_width;
 };

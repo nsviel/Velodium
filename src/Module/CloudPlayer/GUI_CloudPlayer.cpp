@@ -68,23 +68,13 @@ void GUI_CloudPlayer::playCloud(){
   }
 
   //Display only the ieme cloud
-  playerManager->update_frame_ID(cloud);
-  int* subset_selected = playerManager->get_frame_ID();
-  int* frame_max_ID = playerManager->get_frame_max_ID();
-  bool* all_frame_visible = playerManager->get_all_frame_visible();
-  if(ImGui::SliderInt("##666", subset_selected, 0, *frame_max_ID)){
-    if(cloud != nullptr){
-      *all_frame_visible = false;
-      playerManager->select_byFrameID(cloud, *subset_selected);
-    }
-  }
-  ImGui::SameLine();
-  float* frame_ID_ts = playerManager->get_frame_ID_ts();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", *frame_ID_ts);
+  this->subset_selection_bar();
 
   //Range of displayed frames
+  int* subset_selected = playerManager->get_frame_ID();
   int* frame_max_nb = playerManager->get_frame_max_nb();
   int* frame_range = playerManager->get_frame_display_range();
+  ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, *frame_max_nb)){
     if(cloud != nullptr){
       playerManager->select_byFrameID(cloud, *subset_selected);
@@ -130,6 +120,31 @@ void GUI_CloudPlayer::playCloud_byMouseWheel(){
   }
 
   //----------------------------
+}
+void GUI_CloudPlayer::subset_selection_bar(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  if(cloud != nullptr){
+    playerManager->update_frame_ID(cloud);
+    int* subset_selected = playerManager->get_frame_ID();
+    int* frame_max_ID = playerManager->get_frame_max_ID();
+    bool* all_frame_visible = playerManager->get_all_frame_visible();
+
+    ImGui::SetNextItemWidth(140);
+    if(ImGui::SliderInt("##666", subset_selected, 0, *frame_max_ID)){
+      if(cloud != nullptr){
+        *all_frame_visible = false;
+        playerManager->select_byFrameID(cloud, *subset_selected);
+      }
+    }
+    ImGui::SameLine();
+
+    Subset* subset = sceneManager->get_subset_selected();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", subset->ts[0]);
+  }
+
+  //---------------------------
 }
 void GUI_CloudPlayer::parameter(){
   if(ImGui::CollapsingHeader("Parameters")){

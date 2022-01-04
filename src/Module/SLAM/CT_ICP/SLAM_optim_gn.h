@@ -16,13 +16,15 @@ class SLAM_optim_gn
 {
 public:
   //Constructor / Destructor
-  SLAM_optim_gn();
+  SLAM_optim_gn(SLAM_normal* normal);
   ~SLAM_optim_gn();
 
 public:
   void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
   inline int* get_iter_max(){return &iter_max;}
+  inline int* get_nb_residual_min(){return &nb_residual_min;}
+  inline float* get_PTP_distance_max(){return &PTP_distance_max;}
   inline void set_iter_max(int value){iter_max = value;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
 
@@ -38,9 +40,13 @@ private:
 private:
   SLAM_normal* normalManager;
 
+  float lambda_location;
+  float lambda_displacement;
+  float PTP_distance_max;
   int iter_max;
   int nb_thread;
   int nb_residual;
+  int nb_residual_min;
   mutex Mutex;
 };
 

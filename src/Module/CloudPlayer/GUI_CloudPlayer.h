@@ -23,6 +23,7 @@ public:
   //Subfunctions
   void playCloud();
   void playCloud_byMouseWheel();
+  void subset_selection_bar();
   void parameter();
 
 private:

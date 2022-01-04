@@ -20,11 +20,25 @@ namespace{
     //---------------------------
     return dist;
   }
+  float fct_distance_origin(Eigen::Vector3d pt1){
+    //Euclidean distance
+    float dist;
+    //---------------------------
+
+    dist = sqrt(pow(pt1(0), 2) + pow(pt1(1), 2) + pow(pt1(2), 2));
+
+    //---------------------------
+    return dist;
+  }
   float fct_distance(Eigen::Vector3d pt1, Eigen::Vector3d pt2){
     //Euclidean distance
     //---------------------------
 
-    float dist = sqrt(pow(pt1(0) - pt2(0), 2) + pow(pt1(1) - pt2(1), 2) + pow(pt1(2) - pt2(2), 2));
+    float X = pt1(0) - pt2(0);
+    float Y = pt1(1) - pt2(1);
+    float Z = pt1(2) - pt2(2);
+
+    float dist = sqrt(pow(X, 2) + pow(Y, 2) + pow(Z, 2));
 
     //---------------------------
     return dist;

@@ -22,6 +22,8 @@ public:
 public:
   void compute_slam(Cloud* cloud);
   void compute_slam_online(Cloud* cloud);
+
+  float AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
   void set_nb_thread(int value);
   void reset();
 
@@ -31,8 +33,16 @@ public:
   inline float* get_voxel_size_gridMap(){return &voxel_size_gridMap;}
   inline float* get_voxel_size_localMap(){return &voxel_size_localMap;}
   inline float* get_voxel_size_slamMap(){return &voxel_size_slamMap;}
+  inline float* get_min_subset_distance(){return &min_subset_distance;}
+  inline float* get_max_subset_distance(){return &max_subset_distance;}
+  inline float* get_max_voxel_distance(){return &max_voxel_distance;}
+  inline float* get_min_voxel_distance(){return &min_voxel_distance;}
+  inline float* get_thres_min_distance(){return &thres_min_distance;}
+  inline float* get_thres_trans_norm(){return &thres_trans_norm;}
+  inline float* get_thres_rotat_norm(){return &thres_rotat_norm;}
   inline bool* get_verbose(){return &verbose;}
   inline bool* get_slamMap_voxelized(){return &slamMap_voxelized;}
+  inline int* get_map_max_voxelNbPoints(){return &map_max_voxelNbPoints;}
 
   inline void set_frame_max(int value){frame_max = value;}
   inline void set_frame_all(bool value){frame_all = value;}
@@ -44,11 +54,13 @@ private:
 
   void compute_gridSampling(Subset* subset);
   void compute_optimization(Frame* frame, Frame* frame_m1);
+  void compute_assessRegistration(Frame* frame, Frame* frame_m1);
 
   void add_pointsToSubset(Subset* subset);
   void add_pointsToSlamMap(Subset* subset);
   void add_pointsToLocalMap(Frame* frame);
 
+  void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
   void end_slamVoxelization(Cloud* cloud);
   void end_time(float duration, Frame* frame, Subset* subset);
 
@@ -64,6 +76,13 @@ private:
   float voxel_size_gridMap;
   float voxel_size_localMap;
   float voxel_size_slamMap;
+  float min_subset_distance;
+  float max_subset_distance;
+  float max_voxel_distance;
+  float min_voxel_distance;
+  float thres_min_distance;
+  float thres_trans_norm;
+  float thres_rotat_norm;
   int map_max_voxelNbPoints;
   int frame_max;
   int nb_thread;

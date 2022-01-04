@@ -6,6 +6,7 @@
 class GUI_windows;
 class GUI_option;
 class GUI_leftPanel;
+class GUI_CloudPlayer;
 
 class Scene;
 class Engine;
@@ -29,7 +30,7 @@ public:
   void MenuBar_menus();
   void MenuBar_icons();
   void MenuBar_appInfo();
-  void MenuBar_subsetSelected();
+  void MenuBar_subsetSelection();
   void MenuBar_fastScene();
   void MenuBar_Operations();
 
@@ -37,6 +38,7 @@ private:
   GUI_windows* gui_winManager;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanelManager;
+  GUI_CloudPlayer* playerManager;
 
   Scene* sceneManager;
   Engine* engineManager;

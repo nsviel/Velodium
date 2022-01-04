@@ -16,7 +16,7 @@ class SLAM_optim_ceres
 {
 public:
   //Constructor / Destructor
-  SLAM_optim_ceres();
+  SLAM_optim_ceres(SLAM_normal* normal);
   ~SLAM_optim_ceres();
 
 public:

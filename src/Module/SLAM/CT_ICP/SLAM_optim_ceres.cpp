@@ -9,10 +9,9 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-SLAM_optim_ceres::SLAM_optim_ceres(){
+SLAM_optim_ceres::SLAM_optim_ceres(SLAM_normal* normal){
+  this->normalManager = normal;
   //---------------------------
-
-  normalManager = new SLAM_normal();
 
   this->iter_max = 1;
 

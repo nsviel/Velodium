@@ -4,6 +4,8 @@
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_Option.h"
 
+#include "../../Module/CloudPlayer/GUI_CloudPlayer.h"
+
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Data/struct_generic.h"
@@ -32,8 +34,8 @@ GUI_menuBar::GUI_menuBar(Engine* engine, GUI_windows* winManager, GUI_option* op
   this->heatmapManager = new Heatmap();
   this->texManager = new Textures();
   this->extractionManager = new Extraction();
-
   this->opeManager = new Operation();
+  this->playerManager = new GUI_CloudPlayer(engineManager->get_CameraManager());
 
   //---------------------------
 }
@@ -46,7 +48,7 @@ void GUI_menuBar::design_MenuBar(){
 
     this->MenuBar_menus();
     this->MenuBar_icons();
-    this->MenuBar_subsetSelected();
+    this->MenuBar_subsetSelection();
     this->MenuBar_appInfo();
 
     //-------------------------
@@ -165,17 +167,10 @@ void GUI_menuBar::MenuBar_icons(){
   ImGui::PopStyleVar(2);
   ImGui::PopStyleColor(1);
 }
-void GUI_menuBar::MenuBar_subsetSelected(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 
-  if(cloud != nullptr){
-    int subset_selected = cloud->subset_selected;
-    int subset_max = cloud->nb_subset;
-
-    ImGui::SetNextItemWidth(100);
-    ImGui::SliderInt("##666", &subset_selected, 0, subset_max);
-  }
+  playerManager->subset_selection_bar();
 
   //-------------------------
 }

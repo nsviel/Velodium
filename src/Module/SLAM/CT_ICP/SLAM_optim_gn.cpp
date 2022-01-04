@@ -9,13 +9,16 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-SLAM_optim_gn::SLAM_optim_gn(){
+SLAM_optim_gn::SLAM_optim_gn(SLAM_normal* normal){
+  this->normalManager = normal;
   //---------------------------
-
-  normalManager = new SLAM_normal();
 
   this->iter_max = 5;
   this->nb_thread = 8;
+  this->nb_residual_min = 100;
+  this->PTP_distance_max = 0.5f;
+  this->lambda_location = 0.001;
+  this->lambda_displacement =  0.001;
 
   //---------------------------
 }
@@ -37,6 +40,8 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
 
     //Solve
     Eigen::VectorXd X = J.ldlt().solve(b);
+
+    say(X.norm());
 
     //Update
     this->update_frame(frame, X);
@@ -92,10 +97,6 @@ void SLAM_optim_gn::update_keypoints(Frame* frame){
 void SLAM_optim_gn::compute_constraints(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b){
   //---------------------------
 
-  //SLAM_optim_gn with Traj constraints
-  float beta_location_consistency = 0.001;
-  float beta_constant_velocity =  0.001;
-
   //Add constraints in trajectory
   if (frame->ID > 1){
     Eigen::Vector3d trans_b = frame->trans_b;
@@ -104,20 +105,20 @@ void SLAM_optim_gn::compute_constraints(Frame* frame, Frame* frame_m1, Eigen::Ma
     Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
     Eigen::Vector3d diff_traj = trans_b - trans_e_m1;
-    J(3, 3) = J(3, 3) + beta_location_consistency;
-    J(4, 4) = J(4, 4) + beta_location_consistency;
-    J(5, 5) = J(5, 5) + beta_location_consistency;
-    b(3) = b(3) - beta_location_consistency * diff_traj(0);
-    b(4) = b(4) - beta_location_consistency * diff_traj(1);
-    b(5) = b(5) - beta_location_consistency * diff_traj(2);
+    J(3, 3) = J(3, 3) + lambda_location;
+    J(4, 4) = J(4, 4) + lambda_location;
+    J(5, 5) = J(5, 5) + lambda_location;
+    b(3) = b(3) - lambda_location * diff_traj(0);
+    b(4) = b(4) - lambda_location * diff_traj(1);
+    b(5) = b(5) - lambda_location * diff_traj(2);
 
     Eigen::Vector3d diff_ego = trans_e - trans_b - trans_e_m1 + trans_b_m1;
-    J(9, 9) = J(9, 9) + beta_constant_velocity;
-    J(10, 10) = J(10, 10) + beta_constant_velocity;
-    J(11, 11) = J(11, 11) + beta_constant_velocity;
-    b(9) = b(9) - beta_constant_velocity * diff_ego(0);
-    b(10) = b(10) - beta_constant_velocity * diff_ego(1);
-    b(11) = b(11) - beta_constant_velocity * diff_ego(2);
+    J(9, 9) = J(9, 9) + lambda_displacement;
+    J(10, 10) = J(10, 10) + lambda_displacement;
+    J(11, 11) = J(11, 11) + lambda_displacement;
+    b(9) = b(9) - lambda_displacement * diff_ego(0);
+    b(10) = b(10) - lambda_displacement * diff_ego(1);
+    b(11) = b(11) - lambda_displacement * diff_ego(2);
   }
 
   //---------------------------
@@ -139,7 +140,8 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
       PTP_distance += normal[j] * (point[j] - iNN[j]);
     }
 
-    if (abs(PTP_distance) < 0.5 && isnan(a2D) == false) {
+    if (abs(PTP_distance) < PTP_distance_max && isnan(a2D) == false) {
+      //Compute normal of the iNN point
       Eigen::Vector3d iNN_N = a2D * a2D * normal;
 
       float residual = 0;
@@ -182,7 +184,7 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
     }
   }
 
-  if (nb_residual < 100) {
+  if (nb_residual < nb_residual_min) {
       cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
       cout << "[CT_ICP]Number_of_residuals : " << nb_residual << endl;
   }
