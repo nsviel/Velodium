@@ -2,11 +2,10 @@
 
 #include "Scene.h"
 #include "Glyphs.h"
-#include "Data/Database.h"
 
+#include "Data/Database.h"
 #include "Configuration/Dimension.h"
 #include "Configuration/Configuration.h"
-
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Camera.h"
 

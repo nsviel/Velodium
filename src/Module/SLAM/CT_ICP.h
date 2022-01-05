@@ -37,9 +37,11 @@ public:
   inline float* get_max_subset_distance(){return &max_subset_distance;}
   inline float* get_max_voxel_distance(){return &max_voxel_distance;}
   inline float* get_min_voxel_distance(){return &min_voxel_distance;}
-  inline float* get_thres_min_distance(){return &thres_min_distance;}
-  inline float* get_thres_trans_norm(){return &thres_trans_norm;}
-  inline float* get_thres_rotat_norm(){return &thres_rotat_norm;}
+  inline float* get_thres_ego_trans(){return &thres_ego_trans;}
+  inline float* get_thres_ego_rotat(){return &thres_ego_rotat;}
+  inline float* get_thres_pose_trans(){return &thres_pose_trans;}
+  inline float* get_thres_pose_rotat(){return &thres_pose_rotat;}
+  inline float* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
   inline bool* get_verbose(){return &verbose;}
   inline bool* get_slamMap_voxelized(){return &slamMap_voxelized;}
   inline int* get_map_max_voxelNbPoints(){return &map_max_voxelNbPoints;}
@@ -62,7 +64,7 @@ private:
 
   void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
   void end_slamVoxelization(Cloud* cloud);
-  void end_time(float duration, Frame* frame, Subset* subset);
+  void end_statistics(float duration, Frame* frame, Subset* subset);
 
 private:
   SLAM_optim_ceres* ceresManager;
@@ -76,14 +78,20 @@ private:
   float voxel_size_gridMap;
   float voxel_size_localMap;
   float voxel_size_slamMap;
+
   float min_subset_distance;
   float max_subset_distance;
   float max_voxel_distance;
   float min_voxel_distance;
-  float thres_min_distance;
-  float thres_trans_norm;
-  float thres_rotat_norm;
+
+  float thres_ego_trans;
+  float thres_ego_rotat;
+  float thres_pose_trans;
+  float thres_pose_rotat;
+  float thres_optimMinNorm;
+
   int map_max_voxelNbPoints;
+  int map_size_old;
   int frame_max;
   int nb_thread;
   int frame_ID;

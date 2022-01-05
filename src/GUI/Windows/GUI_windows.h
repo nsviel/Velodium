@@ -8,6 +8,9 @@
 
 #include <iomanip>
 
+class WIN_modifyFileInfo;
+class WIN_loading;
+
 class Engine;
 class Camera;
 class Fusion;
@@ -39,8 +42,6 @@ public:
   void window_Draw();
 
   //General windows
-  void window_loading();
-  void window_saving();
   void window_asciiData();
   void window_camera();
   void window_transformation();
@@ -55,29 +56,6 @@ public:
   void window_dataOpe();
   void window_heatmap();
 
-  //Cloud infos
-  void window_modifyFileInfo();
-  void cloud_stats_location(Cloud* cloud);
-  void cloud_stats_intensity(Cloud* cloud);
-  void cloud_stats_distance(Cloud* cloud);
-  void cloud_stats_cosIt(Cloud* cloud);
-
-  inline bool* get_show_asciiData(){return &show_asciiData;}
-  inline bool* get_show_selection(){return &show_selection;}
-  inline bool* get_show_camera(){return &show_camera;}
-  inline bool* get_show_heatmap(){return &show_heatmap;}
-  inline bool* get_show_transformation(){return &show_transformation;}
-  inline bool* get_show_filtering(){return &show_filtering;}
-  inline bool* get_show_fitting(){return &show_fitting;}
-  inline bool* get_show_saving(){return &show_saving;}
-  inline bool* get_show_loading(){return &show_loading;}
-  inline bool* get_show_modifyFileInfo(){return &show_modifyFileInfo;}
-  inline bool* get_show_extractCloud(){return &show_extractCloud;}
-  inline bool* get_show_cutCloud(){return &show_cutCloud;}
-  inline bool* get_show_normal(){return &show_normal;}
-  inline bool* get_show_intensity(){return &show_intensity;}
-  inline bool* get_show_color(){return &show_color;}
-  inline bool* get_show_dataOpe(){return &show_dataOpe;}
   inline bool* get_cloud_movement(){return &cloud_movement;}
 
 private:
@@ -99,23 +77,9 @@ private:
   Transforms transformManager;
   Configuration*configManager;
 
-  bool show_loading;
-  bool show_asciiData;
-  bool show_selection;
-  bool show_openOptions;
-  bool show_camera;
-  bool show_transformation;
-  bool show_filtering;
-  bool show_fitting;
-  bool show_saving;
-  bool show_modifyFileInfo;
-  bool show_heatmap;
-  bool show_extractCloud;
-  bool show_cutCloud;
-  bool show_normal;
-  bool show_intensity;
-  bool show_color;
-  bool show_dataOpe;
+  WIN_loading* loadingManager;
+  WIN_modifyFileInfo* fileinfoManager;
+
   bool cloud_movement;
 };
 

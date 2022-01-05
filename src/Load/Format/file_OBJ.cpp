@@ -4,11 +4,11 @@
 
 
 //Constructor / Destructor
-fileOBJ::fileOBJ(){}
-fileOBJ::~fileOBJ(){}
+file_OBJ::file_OBJ(){}
+file_OBJ::~file_OBJ(){}
 
 //Main function
-dataFile* fileOBJ::Loader(string filePath){
+dataFile* file_OBJ::Loader(string filePath){
   std::ifstream infile(filePath);
   std::string line;
   float a, b, c;

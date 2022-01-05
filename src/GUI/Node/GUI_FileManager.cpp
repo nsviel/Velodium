@@ -1,11 +1,14 @@
 #include "GUI_FileManager.h"
 
+#include "../Windows/Window_tab.h"
 #include "../Windows/GUI_windows.h"
 
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Scene.h"
 
 #include "../../../extern/IconsFontAwesome5.h"
+
+extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
@@ -147,8 +150,7 @@ void GUI_fileManager::info_iconAction(Cloud* cloud){
   ImGui::SameLine(ImGui::GetWindowWidth()-60);
   if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
     sceneManager->selection_setCloud(cloud);
-    bool* ptr = gui_winManager->get_show_modifyFileInfo();
-    *ptr = !*ptr;
+    window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
   }
   ImGui::PopID();
   ImGui::PopStyleColor();

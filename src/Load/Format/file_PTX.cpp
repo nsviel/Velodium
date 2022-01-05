@@ -1,7 +1,7 @@
 #include "file_PTX.h"
 
 //Constructor / Destructor
-filePTX::filePTX(){
+file_PTX::file_PTX(){
   //---------------------------
 
   this->option_separateCloud = false;
@@ -14,10 +14,10 @@ filePTX::filePTX(){
 
   //---------------------------
 }
-filePTX::~filePTX(){}
+file_PTX::~file_PTX(){}
 
 //Main functions
-dataFile* filePTX::Loader(string pathFile){
+dataFile* file_PTX::Loader(string pathFile){
   list_ptxCloud = new list<PTXCloud*>;
   PTXCloud* cloud = new PTXCloud;
   data_out = new dataFile();
@@ -70,7 +70,7 @@ dataFile* filePTX::Loader(string pathFile){
   data_out->size = data_out->location.size();
   return data_out;
 }
-bool filePTX::Exporter(string path){
+bool file_PTX::Exporter(string path){
   //---------------------------
 
   //Create file
@@ -153,7 +153,7 @@ bool filePTX::Exporter(string path){
 }
 
 //Subfunctions
-void filePTX::Loader_header(PTXCloud* cloud){
+void file_PTX::Loader_header(PTXCloud* cloud){
   //---------------------------
 
   //Scanner registered position
@@ -178,7 +178,7 @@ void filePTX::Loader_header(PTXCloud* cloud){
 
   //---------------------------
 }
-void filePTX::Loader_data(PTXCloud* cloud){
+void file_PTX::Loader_data(PTXCloud* cloud){
   //---------------------------
 
   if(PC_line > 9){
@@ -208,7 +208,7 @@ void filePTX::Loader_data(PTXCloud* cloud){
 
   //---------------------------
 }
-void filePTX::Loader_assembling(){
+void file_PTX::Loader_assembling(){
   //Assemble into an unique cloud
   //---------------------------
 
@@ -223,7 +223,7 @@ void filePTX::Loader_assembling(){
   }
   //---------------------------
 }
-void filePTX::Loader_cloudTransformation(){
+void file_PTX::Loader_cloudTransformation(){
   cout<<"---> Apply ptx cloud transformation"<<endl;
   //---------------------------
 
@@ -244,7 +244,7 @@ void filePTX::Loader_cloudTransformation(){
 
   //---------------------------
 }
-void filePTX::Loader_scannerAtOrigin(){
+void file_PTX::Loader_scannerAtOrigin(){
   cout<<"---> Set cloud origin at scanner position"<<endl;
   //---------------------------
 

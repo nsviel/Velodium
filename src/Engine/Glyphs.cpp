@@ -480,7 +480,7 @@ Glyph* Glyphs::create_glyph_fromFile(string filePath){
   //---------------------------
 
   //Load data
-  filePTS ptsManager;
+  file_PTS ptsManager;
   dataFile* data = ptsManager.Loader(filePath);
 
   //Extract data

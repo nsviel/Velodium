@@ -6,12 +6,12 @@
 #include "../../common.h"
 
 
-class fileOBJ
+class file_OBJ
 {
 public:
   //Constructor / Destructor
-  fileOBJ();
-  ~fileOBJ();
+  file_OBJ();
+  ~file_OBJ();
 
 public:
   dataFile* Loader(string filePath);

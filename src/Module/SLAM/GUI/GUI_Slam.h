@@ -24,7 +24,7 @@ public:
 
   void parameters();
   void parameters_general();
-  void parameters_computation();
+  void parameters_optimization();
   void parameters_localMap();
   void parameters_normal();
   void parameters_robustesse();

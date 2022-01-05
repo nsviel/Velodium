@@ -1,5 +1,9 @@
 #include "GUI_windows.h"
 
+#include "Window_tab.h"
+#include "WIN_loading.h"
+#include "WIN_modifyFileInfo.h"
+
 #include "../../Engine/Engine.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/OpenGL/Camera.h"
@@ -19,10 +23,11 @@
 #include "../../Specific/fct_display.h"
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
-#include "../../Load/Loader_configurator.h"
 
 #include "../../../extern/imgui/imgui.h"
 #include "../../../extern/IconsFontAwesome5.h"
+
+Window_tab window_tab;
 
 
 //Constructor / Destructor
@@ -37,12 +42,17 @@ GUI_windows::GUI_windows(Engine* engine){
   this->sceneManager = new Scene();
   this->filterManager = new Filter();
   this->glyphManager = new Glyphs();
+
   this->opeManager = new Operation();
+
   this->attribManager = new Attribut();
   this->fitManager = new Fitting();
   this->extractionManager = new Extraction();
   this->plotManager = new Plotting();
   this->configManager = new Configuration();
+
+  this->loadingManager = new WIN_loading();
+  this->fileinfoManager = new WIN_modifyFileInfo();
 
   //---------------------------
   this->init();
@@ -53,22 +63,22 @@ GUI_windows::~GUI_windows(){}
 void GUI_windows::init(){
   //---------------------------
 
-  this->show_loading = false;
-  this->show_saving = false;
-  this->show_asciiData = false;
-  this->show_camera = false;
-  this->show_modifyFileInfo = false;
-  this->show_transformation = false;
-  this->show_extractCloud = false;
-  this->show_cutCloud = false;
-  this->show_filtering = false;
-  this->show_normal = false;
-  this->show_intensity = false;
-  this->show_color = false;
-  this->show_dataOpe = false;
-  this->show_selection = false;
-  this->show_fitting = false;
-  this->show_heatmap = false;
+  window_tab.show_loading = false;
+  window_tab.show_saving = false;
+  window_tab.show_asciiData = false;
+  window_tab.show_camera = false;
+  window_tab.show_modifyFileInfo = false;
+  window_tab.show_transformation = false;
+  window_tab.show_extractCloud = false;
+  window_tab.show_cutCloud = false;
+  window_tab.show_filtering = false;
+  window_tab.show_normal = false;
+  window_tab.show_intensity = false;
+  window_tab.show_color = false;
+  window_tab.show_dataOpe = false;
+  window_tab.show_selection = false;
+  window_tab.show_fitting = false;
+  window_tab.show_heatmap = false;
 
   this->cloud_movement = configManager->parse_json_float("transformation", "cloud_movement");
 
@@ -77,11 +87,8 @@ void GUI_windows::init(){
 void GUI_windows::window_Draw(){
   //---------------------------
 
-  this->window_loading();
-  this->window_saving();
   this->window_camera();
   this->window_heatmap();
-  this->window_modifyFileInfo();
   this->window_asciiData();
   this->window_transformation();
   this->window_selection();
@@ -94,135 +101,17 @@ void GUI_windows::window_Draw(){
   this->window_dataOpe();
   this->window_fitting();
 
+  loadingManager->window_loading();
+  loadingManager->window_saving();
+  fileinfoManager->window_modifyFileInfo();
+
   //---------------------------
 }
 
 //General windows
-void GUI_windows::window_loading(){
-  if(show_loading){
-    ImGui::Begin("Load", &show_loading, ImGuiWindowFlags_AlwaysAutoResize);
-    Loader_configurator loadconfigManager;
-    //---------------------------
-
-    //File format
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"File format");
-    static int format = 3;
-    ImGui::RadioButton("pts", &format, 0);
-    ImGui::SameLine();
-    ImGui::RadioButton("ptx", &format, 1);
-
-    //Data to  retrieve
-    static bool IdataON = true;
-    if(ImGui::Checkbox("intensity", &IdataON)){
-      loadconfigManager.load_option(0, 0, IdataON);
-    }
-    ImGui::SameLine();
-    static bool RGBdataON = true;
-    if(ImGui::Checkbox("color", &RGBdataON)){
-      loadconfigManager.load_option(0, 1, RGBdataON);
-    }
-    ImGui::SameLine();
-    static bool NdataON = false;
-    if(ImGui::Checkbox("normal", &NdataON)){
-      loadconfigManager.load_option(0, 2, NdataON);
-    }
-    ImGui::Separator();
-
-    //Intensity data format
-    if(IdataON){
-      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scaling");
-      static int Idata = 2;
-      static bool osef = false;
-      if(ImGui::RadioButton("[0;1]", &Idata, 0)){
-        loadconfigManager.load_option(0, 3, osef);
-      }
-      ImGui::SameLine();
-      if(ImGui::RadioButton("[0;255]", &Idata, 1)){
-        loadconfigManager.load_option(0, 4, osef);
-      }
-      ImGui::SameLine();
-      if(ImGui::RadioButton("[-2048;2048]", &Idata, 2)){
-        loadconfigManager.load_option(0, 5, osef);
-      }
-      ImGui::Separator();
-    }
-
-    //PTX
-    if(format == 1){
-      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"ptx file format options");
-      static int ptxMode = 1;
-      if(ImGui::RadioButton("Scanner at origin", &ptxMode, 0)){
-        loadconfigManager.load_option(2, 0, true);
-        loadconfigManager.load_option(2, 1, false);
-        loadconfigManager.load_option(2, 2, false);
-      }
-      static bool cloudTransfo = false;
-      if(ImGui::RadioButton("Apply cloud transformation", &ptxMode, 1)){
-        loadconfigManager.load_option(2, 0, false);
-        loadconfigManager.load_option(2, 1, true);
-        loadconfigManager.load_option(2, 2, false);
-      }
-      static bool separateClouds = true;
-      if(ImGui::RadioButton("Separate clouds", &ptxMode, 2)){
-        loadconfigManager.load_option(2, 0, false);
-        loadconfigManager.load_option(2, 1, false);
-        loadconfigManager.load_option(2, 2, true);
-      }
-      static bool notUseZValue = false;
-      if(ImGui::Checkbox("Not use Z value", &notUseZValue)){
-        loadconfigManager.load_option(2, 3, notUseZValue);
-      }
-      ImGui::Separator();
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Load")){
-      opeManager->loading();
-      show_loading = false;
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Close")){
-      show_loading = false;
-    }
-    ImGui::End();
-  }
-}
-void GUI_windows::window_saving(){
-  if(show_saving){
-    ImGui::Begin("Save", &show_saving,ImGuiWindowFlags_AlwaysAutoResize);
-    static bool all = false;
-    //---------------------------
-
-    /*ImGui::Text("Intensity scale");
-    static int e = 3;
-    if(ImGui::RadioButton("[0;1]", &e, 1)){
-      loadconfigManager.save_option(e);
-    }
-    if(ImGui::RadioButton("[0;255]", &e, 2)){
-      loadconfigManager.save_option(e);
-    }
-    if(ImGui::RadioButton("[-2048;2048]", &e, 3)){
-      loadconfigManager.save_option(e);
-    }*/
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Save")){
-      opeManager->saving();
-      show_saving = false;
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Save all")){
-      opeManager->allSaving();
-      show_saving = false;
-    }
-    ImGui::End();
-  }
-}
 void GUI_windows::window_asciiData(){
-  if(show_asciiData){
-    ImGui::Begin("Data", &show_asciiData);
+  if(window_tab.show_asciiData){
+    ImGui::Begin("Data", &window_tab.show_asciiData);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
 
@@ -295,8 +184,8 @@ void GUI_windows::window_asciiData(){
   }
 }
 void GUI_windows::window_camera(){
-  if(show_camera){
-    ImGui::Begin(ICON_FA_CAMERA " Camera", &show_camera,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_camera){
+    ImGui::Begin(ICON_FA_CAMERA " Camera", &window_tab.show_camera,ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
 
     //Zoom - Field Of View
@@ -421,14 +310,14 @@ void GUI_windows::window_camera(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_camera = false;
+      window_tab.show_camera = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_heatmap(){
-  if(show_heatmap){
-    ImGui::Begin(ICON_FA_EYE " Heatmap", &show_heatmap, ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_heatmap){
+    ImGui::Begin(ICON_FA_EYE " Heatmap", &window_tab.show_heatmap, ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -494,7 +383,7 @@ void GUI_windows::window_heatmap(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_heatmap = false;
+      window_tab.show_heatmap = false;
     }
     ImGui::End();
   }
@@ -503,8 +392,8 @@ void GUI_windows::window_transformation(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = sceneManager->get_subset_selected();
 
-  if(show_transformation && cloud != nullptr){
-    ImGui::Begin("Transformation", &show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_transformation && cloud != nullptr){
+    ImGui::Begin("Transformation", &window_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
 
     //Z scanner
@@ -707,14 +596,14 @@ void GUI_windows::window_transformation(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_transformation = false;
+      window_tab.show_transformation = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_filter(){
-  if(show_filtering){
-    ImGui::Begin("Filter", &show_filtering,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_filtering){
+    ImGui::Begin("Filter", &window_tab.show_filtering,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     int sizeButton = 150;
@@ -758,14 +647,14 @@ void GUI_windows::window_filter(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_filtering = false;
+      window_tab.show_filtering = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_fitting(){
-  if(show_fitting){
-    ImGui::Begin("Fitting", &show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_fitting){
+    ImGui::Begin("Fitting", &window_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     int sizeButton = 150;
@@ -796,14 +685,14 @@ void GUI_windows::window_fitting(){
 
     //---------------------------
     if(ImGui::Button("Close")){
-      show_fitting = false;
+      window_tab.show_fitting = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_normal(){
-  if(show_normal){
-    ImGui::Begin("Attributs", &show_normal,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_normal){
+    ImGui::Begin("Attributs", &window_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -951,14 +840,14 @@ void GUI_windows::window_normal(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_normal = false;
+      window_tab.show_normal = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_intensity(){
-  if(show_intensity){
-    ImGui::Begin("Intensity", &show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_intensity){
+    ImGui::Begin("Intensity", &window_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -1062,14 +951,14 @@ void GUI_windows::window_intensity(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_intensity = false;
+      window_tab.show_intensity = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_color(){
-  if(show_color){
-    ImGui::Begin("Color", &show_color, ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_color){
+    ImGui::Begin("Color", &window_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -1154,14 +1043,14 @@ void GUI_windows::window_color(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_color = false;
+      window_tab.show_color = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_selection(){
-  if(show_selection){
-    ImGui::Begin("Selection part", &show_selection,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_selection){
+    ImGui::Begin("Selection part", &window_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -1309,14 +1198,14 @@ void GUI_windows::window_selection(){
 
     //---------------------------
     if(ImGui::Button("Close")){
-      show_selection = false;
+      window_tab.show_selection = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_extractCloud(){
-  if(show_extractCloud){
-    ImGui::Begin("Extract cloud", &show_extractCloud,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_extractCloud){
+    ImGui::Begin("Extract cloud", &window_tab.show_extractCloud,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -1412,14 +1301,14 @@ void GUI_windows::window_extractCloud(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_extractCloud = false;
+      window_tab.show_extractCloud = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_cutCloud(){
-  if(show_cutCloud){
-    ImGui::Begin("Cut cloud", &show_cutCloud,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_cutCloud){
+    ImGui::Begin("Cut cloud", &window_tab.show_cutCloud,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -1502,14 +1391,14 @@ void GUI_windows::window_cutCloud(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_cutCloud = false;
+      window_tab.show_cutCloud = false;
     }
     ImGui::End();
   }
 }
 void GUI_windows::window_dataOpe(){
-  if(show_dataOpe){
-    ImGui::Begin("Data", &show_dataOpe,ImGuiWindowFlags_AlwaysAutoResize);
+  if(window_tab.show_dataOpe){
+    ImGui::Begin("Data", &window_tab.show_dataOpe,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -1822,218 +1711,8 @@ void GUI_windows::window_dataOpe(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      show_dataOpe = false;
+      window_tab.show_dataOpe = false;
     }
     ImGui::End();
   }
-}
-
-//Cloud infos
-void GUI_windows::window_modifyFileInfo(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
-
-  if( show_modifyFileInfo == true && cloud != nullptr){
-    show_modifyFileInfo = false;
-  }
-
-  if(show_modifyFileInfo && cloud != nullptr){
-    ImGui::Begin(ICON_FA_COMMENT " Point cloud", &show_modifyFileInfo, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    Subset* subset = sceneManager->get_subset_selected();
-    //---------------------------
-
-    //Visibility
-    static bool visible = true;
-    if(ImGui::Checkbox("Visibility", &visible)){
-      sceneManager->set_cloudVisibility(cloud, visible);
-    }
-    ImGui::SameLine();
-
-    //Uniform cloud color
-    static vec4 color_PC;
-    ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
-    flags |= ImGuiColorEditFlags_AlphaBar;
-    if(ImGui::ColorEdit4("Color", (float*)&color_PC, flags)){
-      if(cloud != nullptr){
-        attribManager->set_pointCloudColor(subset, color_PC);
-      }
-    }
-    ImGui::Separator();
-
-    //Name
-    ImGui::Columns(2);
-    static char str[256];
-    strcpy(str, subset->name.c_str());
-    ImGui::Text("Name ");
-    ImGui::NextColumn();
-    if(ImGui::InputText("##1", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue)){
-      subset->name = str;
-    }
-    ImGui::NextColumn();
-
-    //Format
-    strcpy(str, cloud->format.c_str());
-    ImGui::Text("Format ");
-    ImGui::NextColumn();
-    if(ImGui::InputText("##2", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue)){
-      cloud->format = str;
-    }
-    ImGui::NextColumn();
-
-    //Root pos
-    vec3& PCroot = subset->root;
-    ImGui::Text("Root ");
-    ImGui::NextColumn();
-    ImGui::Text("%.2f, %.2f, %.2f", PCroot.x, PCroot.y, PCroot.z);
-    ImGui::SameLine();
-    if(ImGui::Button("R", ImVec2(15,0))){
-      PCroot = vec3(0,0,0);
-    }
-    ImGui::NextColumn();
-
-    //Attributs
-    ImGui::TextWrapped("Attrib ");
-    ImGui::NextColumn();
-    ImGui::TextWrapped("%s", subset->dataFormat.c_str());
-    ImGui::Columns(1);
-    ImGui::Separator();
-
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Functions");
-    if(ImGui::Button("Supress color", ImVec2(100,0))){
-      subset->has_color = !subset->has_color;
-      if(subset->RGB.size() == 0) subset->has_color = false;
-      sceneManager->update_subset_dataFormat(subset);
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Supress normal", ImVec2(100,0))){
-      subset->N.clear();
-      sceneManager->update_subset_dataFormat(subset);
-    }
-    if(ImGui::Button("Transformation", ImVec2(100,0))){
-      show_transformation = !show_transformation;
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Data", ImVec2(100,0))){
-      show_asciiData = true;
-    }
-    ImGui::Separator();
-
-    //Statistics
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Statistics");
-    if(ImGui::Button("Location", ImVec2(100,0))){
-      this->cloud_stats_location(cloud);
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Intensity", ImVec2(100,0))){
-      this->cloud_stats_intensity(cloud);
-    }
-    if(ImGui::Button("Distance", ImVec2(100,0))){
-      this->cloud_stats_distance(cloud);
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("cos(It)", ImVec2(100,0))){
-      this->cloud_stats_cosIt(cloud);
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      show_modifyFileInfo = false;
-    }
-    ImGui::End();
-  }
-
-  //---------------------------
-}
-void GUI_windows::cloud_stats_location(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
-  vector<vec3>& XYZ = subset->xyz;
-  vec3 XYZ_COM = subset->COM;
-  vec3 XYZ_Min = subset->min;
-  vec3 XYZ_Max = subset->max;
-  //---------------------------
-
-  vector<float> X, Y, Z;
-  for(int i=0; i<XYZ.size(); i++){
-    X.push_back(XYZ[i].x);
-    Y.push_back(XYZ[i].y);
-    Z.push_back(XYZ[i].z);
-  }
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  if(XYZ.size() != 0){
-    cout<<"___XYZ___"<<endl;
-    cout<<"COM: "<<XYZ_COM.x<<" "<<XYZ_COM.y<<" "<<XYZ_COM.z<<endl;
-    cout<<"Min: "<<XYZ_Min.x<<" "<<XYZ_Min.y<<" "<<XYZ_Min.z<<endl;
-    cout<<"Max: "<<XYZ_Max.x<<" "<<XYZ_Max.y<<" "<<XYZ_Max.z<<endl;
-    cout<<"Xaxis: min "<<fct_min(X)<<" <-> max "<<fct_max(X)<<" <-> mean "<<fct_mean(X)<<endl;
-    cout<<"Yaxis: min "<<fct_min(Y)<<" <-> max "<<fct_max(Y)<<" <-> mean "<<fct_mean(Y)<<endl;
-    cout<<"Zaxis: min "<<fct_min(Z)<<" <-> max "<<fct_max(Z)<<" <-> mean "<<fct_mean(Z)<<endl;
-    cout<<"__________"<<endl;
-  }
-}
-void GUI_windows::cloud_stats_intensity(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
-  vector<float>& Is = subset->I;
-  //---------------------------
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  if(Is.size() != 0){
-    cout<<"___Is___"<<endl;
-    cout<<"Min : "<<fct_min(Is)<<endl;
-    cout<<"Max : "<<fct_max(Is)<<endl;
-    cout<<"Mean : "<<fct_mean(Is)<<endl;
-    cout<<"Var : "<<fct_var(Is)<<endl;
-    cout<<"Std : "<<fct_std(Is)<<endl;
-    cout<<"CV : "<<fct_cv(Is)<<endl;
-    cout<<"__________"<<endl;
-  }
-}
-void GUI_windows::cloud_stats_distance(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
-  vector<float>& dist = subset->R;
-  //---------------------------
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  //Distance
-  if(dist.size() == 0){
-    attribManager->compute_Distances(subset);
-  }
-  cout<<"___Dist___"<<endl;
-  cout<<"Min : "<<fct_min(dist)<<endl;
-  cout<<"Max : "<<fct_max(dist)<<endl;
-  cout<<"std : "<<fct_std(dist)<<endl;
-  cout<<"Mean : "<<fct_mean(dist)<<endl;
-  cout<<"__________"<<endl;
-}
-void GUI_windows::cloud_stats_cosIt(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
-  vector<float>& cosIt =  subset->cosIt;
-  vector<float>& It =  subset->It;
-  //---------------------------
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  //Angle d'incidence
-  if(cosIt.size() == 0 || It.size() == 0){
-    attribManager->compute_cosIt(subset);
-  }
-  cout<<"___cosIt___"<<endl;
-  cout<<"Min : "<<fct_min(cosIt)<<endl;
-  cout<<"Max : "<<fct_max(cosIt)<<endl;
-  cout<<"Mean : "<<fct_mean(cosIt)<<endl;
-
-  cout<<"___It___"<<endl;
-  cout<<"Min : "<<fct_min(It)<<endl;
-  cout<<"Max : "<<fct_max(It)<<endl;
-  cout<<"std : "<<fct_std(It)<<endl;
-  cout<<"Mean : "<<fct_mean(It)<<endl;
-  cout<<"__________"<<endl;
 }

@@ -371,6 +371,10 @@ void dataExtraction::extract_Timestamp(Subset& subset, vector<float>& timestampO
   if(is_timestamp){
     subset.ts = timestampOBJ;
   }
+  else{
+    vector<float> ts (subset.xyz.size(), 0);
+    subset.ts = ts;
+  }
 
   //---------------------------
 }

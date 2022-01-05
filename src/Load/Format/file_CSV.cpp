@@ -6,11 +6,11 @@
 
 
 //Constructor / Destructor
-fileCSV::fileCSV(){}
-fileCSV::~fileCSV(){}
+file_CSV::file_CSV(){}
+file_CSV::~file_CSV(){}
 
 //Main function
-vector<dataFile*> fileCSV::Loader(string pathFile){
+vector<dataFile*> file_CSV::Loader(string pathFile){
   vector<dataFile*> cloud;
   //---------------------------
 

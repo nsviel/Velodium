@@ -4,7 +4,7 @@
 
 
 //Constructor / Destructor
-filePTS::filePTS(){
+file_PTS::file_PTS(){
   //---------------------------
 
   this->nbptMax = 40000000;
@@ -16,10 +16,10 @@ filePTS::filePTS(){
 
   //---------------------------
 }
-filePTS::~filePTS(){}
+file_PTS::~file_PTS(){}
 
 //Main functions
-dataFile* filePTS::Loader(string pathFile){
+dataFile* file_PTS::Loader(string pathFile){
   data_out = new dataFile();
   data_out->name = "";
   data_out->path = pathFile;
@@ -53,7 +53,7 @@ dataFile* filePTS::Loader(string pathFile){
   //---------------------------
   return data_out;
 }
-dataFile* filePTS::Loader(string pathFile, int lmin, int lmax){
+dataFile* file_PTS::Loader(string pathFile, int lmin, int lmax){
   data_out = new dataFile();
   //---------------------------
 
@@ -93,7 +93,7 @@ dataFile* filePTS::Loader(string pathFile, int lmin, int lmax){
   return data_out;
 }
 
-bool filePTS::Exporter(string path, Cloud* cloud){
+bool file_PTS::Exporter(string path, Cloud* cloud){
   //---------------------------
 
   //Create file
@@ -154,7 +154,7 @@ bool filePTS::Exporter(string path, Cloud* cloud){
 }
 
 //Subfunctions
-void filePTS::Loader_init(){
+void file_PTS::Loader_init(){
   //---------------------------
 
   this->config = -1;
@@ -166,7 +166,7 @@ void filePTS::Loader_init(){
 
   //---------------------------
 }
-void filePTS::Loader_nbColumns(){
+void file_PTS::Loader_nbColumns(){
   //Extraction of each column
   bool endLoop = false;
   string line_loop = line;
@@ -185,7 +185,7 @@ void filePTS::Loader_nbColumns(){
 
   //---------------------------
 }
-void filePTS::Loader_configuration(){
+void file_PTS::Loader_configuration(){
   //---------------------------
 
   switch(line_columns.size()){
@@ -307,7 +307,7 @@ void filePTS::Loader_configuration(){
   //---------------------------
   endParameters = true;
 }
-void filePTS::Loader_data(int FILE_config){
+void file_PTS::Loader_data(int FILE_config){
   std::istringstream iss(line);
   float x,y,z,r,g,b,I,nx,ny,nz;
   //---------------------------
@@ -360,7 +360,7 @@ void filePTS::Loader_data(int FILE_config){
 }
 
 //Checking functions
-bool filePTS::check_header(string pathFile){
+bool file_PTS::check_header(string pathFile){
   string line;
   ifstream FILE(pathFile);
   getline(FILE, line);
@@ -385,7 +385,7 @@ bool filePTS::check_header(string pathFile){
   }
   return false;
 }
-int filePTS::check_configuration(string pathFile){
+int file_PTS::check_configuration(string pathFile){
   string line_loop;
   ifstream FILE(pathFile);
   //---------------------------
@@ -565,7 +565,7 @@ int filePTS::check_configuration(string pathFile){
   }
   return config;
 }
-int filePTS::check_size(string pathFile, bool FILE_hasHeader){
+int file_PTS::check_size(string pathFile, bool FILE_hasHeader){
   //---------------------------
 
   int FILE_size = get_fileSize(pathFile);

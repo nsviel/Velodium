@@ -4,11 +4,11 @@
 
 
 //Constructor / Destructor
-fileXYZ::fileXYZ(){}
-fileXYZ::~fileXYZ(){}
+file_XYZ::file_XYZ(){}
+file_XYZ::~file_XYZ(){}
 
 //Main function
-dataFile* fileXYZ::Loader(string filePath){
+dataFile* file_XYZ::Loader(string filePath){
   dataFile* data = new dataFile();
   //---------------------------
 

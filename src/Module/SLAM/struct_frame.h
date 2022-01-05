@@ -7,7 +7,6 @@
 
 struct Frame{ //SLAM stuff
   int ID;
-  float time_slam;
 
   std::vector<Eigen::Vector3d> xyz;
   std::vector<Eigen::Vector3d> xyz_raw;
@@ -23,6 +22,11 @@ struct Frame{ //SLAM stuff
   //End pose
   Eigen::Matrix3d rotat_e;
   Eigen::Vector3d trans_e;
+
+  //Stats
+  float time_slam;
+  int map_size_abs;
+  int map_size_rlt;
 
   //Reset all variables
   void reset(){

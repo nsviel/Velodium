@@ -6,11 +6,11 @@
 
 
 //Constructor / Destructor
-filePLY::filePLY(){}
-filePLY::~filePLY(){}
+file_PLY::file_PLY(){}
+file_PLY::~file_PLY(){}
 
 //Main functions
-dataFile* filePLY::Loader(string pathFile){
+dataFile* file_PLY::Loader(string pathFile){
   data_out = new dataFile();
   data_out->name = "";
   data_out->path = pathFile;
@@ -56,7 +56,7 @@ dataFile* filePLY::Loader(string pathFile){
   //---------------------------
   return data_out;
 }
-bool filePLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
+bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
   //---------------------------
 
   //Check for file format ending
@@ -105,7 +105,7 @@ bool filePLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
   //---------------------------
   return true;
 }
-bool filePLY::Exporter_subset(string dirPath, string ply_format, Subset* subset){
+bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset){
   string filePath = dirPath + subset->name + ".ply";
   //---------------------------
 
@@ -147,7 +147,7 @@ bool filePLY::Exporter_subset(string dirPath, string ply_format, Subset* subset)
   //---------------------------
   return true;
 }
-bool filePLY::Exporter_subset(string dirPath, string ply_format, Subset* subset, string fileName){
+bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset, string fileName){
   string filePath = dirPath + fileName + ".ply";
   //---------------------------
 
@@ -191,7 +191,7 @@ bool filePLY::Exporter_subset(string dirPath, string ply_format, Subset* subset,
 }
 
 //Loader subfunctions
-void filePLY::Loader_header(std::ifstream& file){
+void file_PLY::Loader_header(std::ifstream& file){
   //---------------------------
 
   // Separate the header
@@ -254,7 +254,7 @@ void filePLY::Loader_header(std::ifstream& file){
 
   //---------------------------
 }
-void filePLY::Loader_data_ascii(std::ifstream& file){
+void file_PLY::Loader_data_ascii(std::ifstream& file){
   //---------------------------
 
   //Retrieve data
@@ -283,7 +283,7 @@ void filePLY::Loader_data_ascii(std::ifstream& file){
   //---------------------------
   data_out->size = data_out->location.size();
 }
-void filePLY::Loader_data_binary(std::ifstream& file){
+void file_PLY::Loader_data_binary(std::ifstream& file){
   int DATA_BLOCK_SIZE = 16000;
   //---------------------------
 
@@ -328,7 +328,7 @@ void filePLY::Loader_data_binary(std::ifstream& file){
   //---------------------------
   data_out->size = data_out->location.size();
 }
-void filePLY::Loader_data_binary_auto(std::ifstream& file){
+void file_PLY::Loader_data_binary_auto(std::ifstream& file){
   //Adapt automatically to the property field name
   int DATA_BLOCK_SIZE = 16000;
   //---------------------------
@@ -406,7 +406,7 @@ void filePLY::Loader_data_binary_auto(std::ifstream& file){
 }
 
 //Exporter subfunctions
-void filePLY::Exporter_header(std::ofstream& file, string format, Subset* subset){
+void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
   point_number = XYZ.size();
   property_number = 4;
@@ -449,7 +449,7 @@ void filePLY::Exporter_header(std::ofstream& file, string format, Subset* subset
 
   //---------------------------
 }
-void filePLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
+void file_PLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<vec4>& RGB = subset->RGB;
   vector<vec3>& N = subset->N;
@@ -485,7 +485,7 @@ void filePLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
 
   //---------------------------
 }
-void filePLY::Exporter_data_binary(std::ofstream& file, Subset* subset){
+void file_PLY::Exporter_data_binary(std::ofstream& file, Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<vec4>& RGB = subset->RGB;
   vector<vec3>& N = subset->N;

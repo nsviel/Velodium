@@ -10,12 +10,12 @@
 #include <fstream>
 
 
-class filePTX
+class file_PTX
 {
 public:
   //Constructor / Destructor
-  filePTX();
-  ~filePTX();
+  file_PTX();
+  ~file_PTX();
 
 public:
   //Main functions

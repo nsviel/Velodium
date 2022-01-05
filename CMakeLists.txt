@@ -51,6 +51,7 @@ endif()
 #Others libraries
 set(OTHERS_LIBS
   tins #packet crafting and sniffing library
+  -lglog
   -lstdc++fs
   -lblas
   -llapack

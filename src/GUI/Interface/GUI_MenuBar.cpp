@@ -1,6 +1,7 @@
 #include "GUI_MenuBar.h"
 #include "GUI_LeftPanel.h"
 
+#include "../Windows/Window_tab.h"
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_Option.h"
 
@@ -20,6 +21,8 @@
 #include "../../../extern/IconsFontAwesome5.h"
 
 #include <sys/sysinfo.h>
+
+extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
@@ -63,17 +66,10 @@ void GUI_menuBar::MenuBar_menus(){
 
   if (ImGui::BeginMenu("File")){
     if (ImGui::MenuItem("Open")){
-      bool* show_loading = gui_winManager->get_show_loading();
-      *show_loading = true;
+      window_tab.show_loading = true;
     }
-    if (ImGui::MenuItem("Open frames")){
-      opeManager->loading_frames();
-    }
-    if (ImGui::MenuItem("Save as")){
-      opeManager->saving();
-    }
-    if (ImGui::MenuItem("Save all")){
-      opeManager->allSaving();
+    if (ImGui::MenuItem("Save")){
+      window_tab.show_saving = true;
     }
     if(ImGui::MenuItem("Remove cloud", "Suppr")){
       sceneManager->removeCloud(cloud);
@@ -132,8 +128,7 @@ void GUI_menuBar::MenuBar_icons(){
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 150);
   if(ImGui::Button(ICON_FA_COMMENT, ImVec2(iconSize,iconSize))){
     if(sceneManager->is_atLeastOnecloud()){
-      bool* ptr = gui_winManager->get_show_modifyFileInfo();
-      *ptr = !*ptr;
+      window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
     }
   }
   if(ImGui::IsItemHovered()){
@@ -145,8 +140,7 @@ void GUI_menuBar::MenuBar_icons(){
   if(ImGui::Button(ICON_FA_EYE, ImVec2(iconSize,iconSize))){
     if(sceneManager->is_atLeastOnecloud()){
       //Heatmap window
-      bool* ptr = gui_winManager->get_show_heatmap();
-      *ptr = !*ptr;
+      window_tab.show_heatmap = !window_tab.show_heatmap;
     }
   }
   if(ImGui::IsItemHovered()){
@@ -156,8 +150,7 @@ void GUI_menuBar::MenuBar_icons(){
   //Camera
   //ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 2);
   if(ImGui::Button(ICON_FA_CAMERA, ImVec2(iconSize,iconSize))){
-    bool* ptr = gui_winManager->get_show_camera();
-    *ptr = !*ptr;
+    window_tab.show_camera = !window_tab.show_camera;
   }
   if(ImGui::IsItemHovered()){
     ImGui::SetTooltip("Camera");
@@ -206,32 +199,25 @@ void GUI_menuBar::MenuBar_Operations(){
 
   //Functions
   if(ImGui::Button("Filter", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_filtering();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_filtering = !window_tab.show_filtering;
   }
   if(ImGui::Button("Intensity", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_intensity();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_intensity = !window_tab.show_intensity;
   }
   if(ImGui::Button("Color", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_color();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_color = !window_tab.show_color;
   }
   if(ImGui::Button("Normal", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_normal();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_normal = !window_tab.show_normal;
   }
   if(ImGui::Button("Extract cloud", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_extractCloud();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_extractCloud = !window_tab.show_extractCloud;
   }
   if(ImGui::Button("Cut cloud", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_cutCloud();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_cutCloud = !window_tab.show_cutCloud;
   }
   if(ImGui::Button("Transformation", ImVec2(150,0))){
-    bool* bool_ptr = gui_winManager->get_show_transformation();
-    *bool_ptr = !*bool_ptr;
+    window_tab.show_transformation = !window_tab.show_transformation;
   }
 
   if(ImGui::CollapsingHeader("Modules")){

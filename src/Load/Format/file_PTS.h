@@ -9,12 +9,12 @@
 #include <fstream>
 
 
-class filePTS
+class file_PTS
 {
 public:
   //Constructor / Destructor
-  filePTS();
-  ~filePTS();
+  file_PTS();
+  ~file_PTS();
 
 public:
   //Main functions

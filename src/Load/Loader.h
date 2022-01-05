@@ -8,6 +8,14 @@
 class dataExtraction;
 class Scene;
 
+class file_PTS;
+class file_PLY;
+class file_PTX;
+class file_CSV;
+class file_OBJ;
+class file_XYZ;
+class file_PCAP;
+
 
 class Loader
 {
@@ -35,11 +43,22 @@ public:
   bool save_subset(Subset* subset, string format, string dirPath, string fileName);
 
   inline Cloud* get_createdcloud(){return cloud;}
+  inline file_PTS* get_ptsManager(){return ptsManager;}
+  inline file_PTX* get_ptxManager(){return ptxManager;}
+  inline file_PCAP* get_pcapManager(){return pcapManager;}
 
 private:
   dataExtraction* extractManager;
   Scene* sceneManager;
   Cloud* cloud;
+
+  file_PTS* ptsManager;
+  file_PLY* plyManager;
+  file_PTX* ptxManager;
+  file_CSV* csvManager;
+  file_OBJ* objManager;
+  file_XYZ* xyzManager;
+  file_PCAP *pcapManager;
 };
 
 #endif

@@ -6,12 +6,12 @@
 #include "../../common.h"
 
 
-class fileCSV
+class file_CSV
 {
 public:
   //Constructor / Destructor
-  fileCSV();
-  ~fileCSV();
+  file_CSV();
+  ~file_CSV();
 
 public:
   vector<dataFile*> Loader(string pathFile);

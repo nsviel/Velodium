@@ -39,9 +39,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
     this->compute_constraints(frame, frame_m1, J, b);
 
     //Solve
-    Eigen::VectorXd X = J.ldlt().solve(b);
-
-    say(X.norm());
+    X = J.ldlt().solve(b);
 
     //Update
     this->update_frame(frame, X);
@@ -53,21 +51,29 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
 
 //Subfunctions
 void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
+  bool sucess = true;
   //---------------------------
 
+  //CHeck for good optimization
+  if (nb_residual < nb_residual_min) {
+    sucess = false;
+  }
+
   //Retrieve parameters
-  Eigen::Matrix3d gn_rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
-  Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
+  if(sucess){
+    Eigen::Matrix3d gn_rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
+    Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
 
-  Eigen::Matrix3d gn_rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
-  Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
+    Eigen::Matrix3d gn_rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
+    Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
-  //Update parameters
-  frame->rotat_b = gn_rotat_b * frame->rotat_b;
-  frame->trans_b = gn_trans_b + frame->trans_b;
+    //Update parameters
+    frame->rotat_b = gn_rotat_b * frame->rotat_b;
+    frame->trans_b = gn_trans_b + frame->trans_b;
 
-  frame->rotat_e = gn_rotat_e * frame->rotat_e;
-  frame->trans_e = gn_trans_e + frame->trans_e;
+    frame->rotat_e = gn_rotat_e * frame->rotat_e;
+    frame->trans_e = gn_trans_e + frame->trans_e;
+  }
 
   //---------------------------
 }
@@ -124,7 +130,7 @@ void SLAM_optim_gn::compute_constraints(Frame* frame, Frame* frame_m1, Eigen::Ma
   //---------------------------
 }
 void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b){
-  int nb_residual = 0;
+  nb_residual = 0;
   //---------------------------
 
   for(int i=0; i<frame->xyz.size(); i++){
@@ -185,8 +191,9 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
   }
 
   if (nb_residual < nb_residual_min) {
-      cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
-      cout << "[CT_ICP]Number_of_residuals : " << nb_residual << endl;
+    cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
+    cout << "[CT_ICP]Number_of_residuals : " << nb_residual << endl;
+    return;
   }
 
   // Normalize equation

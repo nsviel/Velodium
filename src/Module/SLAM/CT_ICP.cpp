@@ -26,9 +26,11 @@ CT_ICP::CT_ICP(){
   this->frame_all = true;
   this->slamMap_voxelized = false;
 
-  this->thres_min_distance = 5.0f;
-  this->thres_trans_norm = 0.005;
-  this->thres_rotat_norm = 0.05;
+  this->thres_ego_trans = 2.0f;
+  this->thres_ego_rotat = 15;
+  this->thres_pose_trans = 3.0f;
+  this->thres_pose_rotat = 15.0f;
+  this->thres_optimMinNorm = 0.1;
 
   this->min_subset_distance = 5.0f;
   this->max_subset_distance = 100.0f;
@@ -37,6 +39,7 @@ CT_ICP::CT_ICP(){
   this->min_voxel_distance = 0.05;
   this->frame_max = 0;
   this->frame_ID = 0;
+  this->map_size_old = 0;
   this->nb_thread = 8;
 
   this->voxel_size_gridMap = 1;
@@ -79,7 +82,7 @@ void CT_ICP::compute_slam(Cloud* cloud){
 
     //--------------
     float duration = toc();
-    this->end_time(duration, frame, subset);
+    this->end_statistics(duration, frame, subset);
     this->end_clearTooFarVoxels(frame->trans_e);
   }
 
@@ -112,7 +115,7 @@ void CT_ICP::compute_slam_online(Cloud* cloud){
   this->add_pointsToLocalMap(frame);
 
   float duration = toc();
-  this->end_time(duration, frame, subset);
+  this->end_statistics(duration, frame, subset);
 
   //---------------------------
 }
@@ -143,6 +146,9 @@ void CT_ICP::set_nb_thread(int value){
 float CT_ICP::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &rotb){
   float norm = ((rota * rotb.transpose()).trace() - 1) / 2;
   norm = std::acos(norm) * 180 / M_PI;
+  if(isnan(norm)){
+    norm = 0;
+  }
   return norm;
 }
 
@@ -315,111 +321,53 @@ void CT_ICP::compute_assessRegistration(Frame* frame, Frame* frame_m1){
   bool sucess = true;
   //---------------------------
 
-  float relative_distance = (frame->trans_e - frame->trans_b).norm();
-  if(relative_distance > thres_min_distance){
+  //Test 1: check ego distance
+  float ego_trans = (frame->trans_e - frame->trans_b).norm();
+  if(ego_trans > thres_ego_trans){
+    cout<<"[error] Ego translation too important ";
+    cout<<"["<<ego_trans<<"/"<<thres_ego_trans<<"]"<<endl;
     sucess = false;
   }
 
-  float diff_trans = (frame_m1->trans_b - frame->trans_b).norm() + (frame_m1->trans_e - frame->trans_e).norm();
-  float diff_rotat = AngularDistance(frame_m1->rotat_b, frame->rotat_b) + AngularDistance(frame_m1->rotat_e, frame->rotat_e);
-  if(diff_trans > thres_trans_norm){
+  //Test 2: Ego angular distance
+  float ego_rotat = AngularDistance(frame->rotat_b, frame->rotat_e);
+  if(ego_rotat > thres_ego_rotat){
+    cout<<"[error] Ego rotation too important ";
+    cout<<"["<<ego_rotat<<"/"<<thres_ego_rotat<<"]"<<endl;
     sucess = false;
   }
-  if(diff_rotat > thres_rotat_norm){
+
+  //Test 3: check relative distance and orientation between two poses
+  if(frame->ID > 2){
+    float diff_trans = (frame->trans_b - frame_m1->trans_b).norm() + (frame->trans_e - frame_m1->trans_e).norm();
+    float diff_rotat = AngularDistance(frame_m1->rotat_b, frame->rotat_b) + AngularDistance(frame_m1->rotat_e, frame->rotat_e);
+    if(diff_trans > thres_pose_trans){
+      cout<<"[error] Pose translation too important ";
+      cout<<"["<<diff_trans<<"/"<<thres_pose_trans<<"]"<<endl;
+      sucess = false;
+    }
+    if(diff_rotat > thres_pose_rotat){
+      cout<<"[error] Pose rotation too important ";
+      cout<<"["<<diff_rotat<<"/"<<thres_pose_rotat<<"]"<<endl;
+      sucess = false;
+    }
+  }
+
+  //Test 4: check if ICP has converged
+  float Xscore = gnManager->get_Xscore();
+  if(Xscore > thres_optimMinNorm){
+    cout<<"[error] Optimization score too important ";
+    cout<<"["<<Xscore<<"/"<<thres_optimMinNorm<<"]"<<endl;
     sucess = false;
   }
 
-
-
-  /*bool success = summary.success;
-  if (summary.robust_level == 0
-    && (summary.relative_orientation > options_.robust_threshold_relative_orientation
-    || summary.ego_orientation > options_.robust_threshold_ego_orientation)) {
-      if (summary.robust_level < options_.robust_num_attempts_when_rotation) {
-          summary.error_message = "Large rotations require at a robust_level of at least 1 (got:" +
-                                  std::to_string(summary.robust_level) + ").";
-          return false;
-      }
+  //If unsucess, reinitialize transformations
+  if(sucess == false){
+    frame->rotat_b = frame_m1->rotat_b;
+    frame->trans_b = frame_m1->trans_b;
+    frame->rotat_e = frame_m1->rotat_b;
+    frame->trans_e = frame_m1->trans_b;
   }
-
-  if (summary.relative_distance > options_.robust_relative_trans_threshold) {
-      summary.error_message = "The relative distance is too important";
-      return false;
-  }
-
-  // Only do neighbor assessment if enough motion
-  bool do_neighbor_assessment = summary.distance_correction > 0.1;
-  do_neighbor_assessment |= summary.relative_distance > options_.robust_neighborhood_min_dist;
-  do_neighbor_assessment |= summary.relative_orientation > options_.robust_neighborhood_min_orientation;
-
-  if (do_neighbor_assessment && registered_frames_ > options_.init_num_frames) {
-      if (options_.robust_registration) {
-          const double kSizeVoxelMap = options_.ct_icp_options.size_voxel_map;
-          Voxel voxel;
-          double ratio_empty_voxel = 0;
-          double ratio_half_full_voxel = 0;
-
-          for (auto &point: points) {
-              voxel = Voxel::Coordinates(point.pt, kSizeVoxelMap);
-              if (voxel_map_.find(voxel) == voxel_map_.end())
-                  ratio_empty_voxel += 1;
-              if (voxel_map_.find(voxel) != voxel_map_.end() &&
-                  voxel_map_.at(voxel).NumPoints() > options_.max_num_points_in_voxel / 2) {
-                  // Only count voxels which have at least
-                  ratio_half_full_voxel += 1;
-              }
-          }
-
-          ratio_empty_voxel /= points.size();
-          ratio_half_full_voxel /= points.size();
-
-          if (log_stream != nullptr)
-              *log_stream << "[Quality Assessment] Keypoint Ratio of voxel half occupied: " <<
-                          ratio_half_full_voxel << std::endl
-                          << "[Quality Assessment] Keypoint Ratio of empty voxel " <<
-                          ratio_empty_voxel << std::endl;
-          if (ratio_half_full_voxel < options_.robust_full_voxel_threshold ||
-              ratio_empty_voxel > options_.robust_empty_voxel_threshold) {
-              success = false;
-              if (ratio_empty_voxel > options_.robust_empty_voxel_threshold)
-                  summary.error_message = "[Odometry::AssessRegistration] Ratio of empty voxels " +
-                                          std::to_string(ratio_empty_voxel) + "above threshold.";
-              else
-                  summary.error_message = "[Odometry::AssessRegistration] Ratio of half full voxels " +
-                                          std::to_string(ratio_half_full_voxel) + "below threshold.";
-
-          }
-      }
-  }
-
-  if (summary.relative_distance > options_.distance_error_threshold) {
-      if (log_stream != nullptr)
-          *log_stream << "Error in ego-motion distance !" << std::endl;
-      return false;
-  }
-
-
-
-
-  auto increase_robustness_level = [&]() {
-    previous_frame = summary.frame;
-    // Handle the failure cases
-    trajectory_[index_frame] = initial_estimate;
-    ct_icp_options.voxel_neighborhood = std::min(++ct_icp_options.voxel_neighborhood,
-                                                 options_.robust_max_voxel_neighborhood);
-    ct_icp_options.ls_max_num_iters += 30;
-    if (ct_icp_options.max_num_residuals > 0)
-        ct_icp_options.max_num_residuals = ct_icp_options.max_num_residuals * 2;
-    ct_icp_options.num_iters_icp = min(ct_icp_options.num_iters_icp + 20, 50);
-    ct_icp_options.threshold_orientation_norm = max(
-            ct_icp_options.threshold_orientation_norm / 10, 1.e-5);
-    ct_icp_options.threshold_translation_norm = max(
-            ct_icp_options.threshold_orientation_norm / 10, 1.e-4);
-    sample_voxel_size = std::max(sample_voxel_size / 1.5, min_voxel_size);
-
-    ct_icp_options.ls_sigma *= 1.2;
-    ct_icp_options.max_dist_to_plane_ct_icp *= 1.5;
-};*/
 
   //---------------------------
 }
@@ -580,10 +528,15 @@ void CT_ICP::end_slamVoxelization(Cloud* cloud){
 
   //---------------------------
 }
-void CT_ICP::end_time(float duration, Frame* frame, Subset* subset){
+void CT_ICP::end_statistics(float duration, Frame* frame, Subset* subset){
   //---------------------------
 
+  //Fill stats
   frame->time_slam = duration;
+  frame->map_size_abs = map->size();
+  frame->map_size_rlt = map->size() - map_size_old;
+  this->map_size_old = map->size();
+
   if(verbose){
     cout<<"[sucess] SLAM - "<<subset->name.c_str();
     cout<<" "<<to_string(frame->ID)<<"/"<< frame_max;

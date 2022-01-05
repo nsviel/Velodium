@@ -64,7 +64,7 @@ void GUI_Slam::parameters(){
     //---------------------------
 
     this->parameters_general();
-    this->parameters_computation();
+    this->parameters_optimization();
     this->parameters_localMap();
     this->parameters_normal();
     this->parameters_robustesse();
@@ -84,16 +84,25 @@ void GUI_Slam::parameters_general(){
 
     //Make a voxelized slam map
     bool* slamMap_voxelized = cticpManager->get_slamMap_voxelized();
-    ImGui::Checkbox("Voxelized map", slamMap_voxelized);
+    ImGui::Checkbox("Visual voxelized map", slamMap_voxelized);
 
-    //---------------------------
-    ImGui::TreePop();
-  }
-}
-void GUI_Slam::parameters_computation(){
-  if(ImGui::TreeNode("Computation")){
-    Cloud* cloud = database.cloud_selected;
-    //---------------------------
+    //Width of the SLAM map voxel
+    if(*slamMap_voxelized){
+      float* slamMap_width = cticpManager->get_voxel_size_slamMap();
+      ImGui::SetNextItemWidth(item_width);
+      ImGui::InputFloat("Voxel size voxelized map", slamMap_width, 0.1f, 1.0f, "%.3f");
+    }
+
+    //Number of threads
+    static int nb_thread = 8;
+    ImGui::SetNextItemWidth(item_width);
+    if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
+      SLAM_normal* normalManager = cticpManager->get_SLAM_normal();
+      cticpManager->set_nb_thread(nb_thread);
+    }
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Number of threads for optimization and normal computation");
+    }
 
     //Subsampling voxel width
     float* sampling_width = cticpManager->get_voxel_size_gridMap();
@@ -101,22 +110,6 @@ void GUI_Slam::parameters_computation(){
     ImGui::InputFloat("Grid sampling voxel size", sampling_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
-    }
-
-    //Width of the SLAM map voxel
-    float* slamMap_width = cticpManager->get_voxel_size_slamMap();
-    ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("SLAM map voxel size", slamMap_width, 0.1f, 1.0f, "%.3f");
-
-    //Number of optimization iterations
-    static int iter_max = 5;
-    ImGui::SetNextItemWidth(item_width);
-    if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
-      ceresManager->set_iter_max(iter_max);
-      gnManager->set_iter_max(iter_max);
-    }
-    if(ImGui::IsItemHovered()){
-      ImGui::SetTooltip("Number of iteration for the optimization algorithm");
     }
 
     //Number of frame computed
@@ -133,15 +126,24 @@ void GUI_Slam::parameters_computation(){
       ImGui::SliderInt("Number frame", &frame_max, 0, 0);
     }
 
-    //Number of thread for the normal computation
-    static int nb_thread = 8;
+    //---------------------------
+    ImGui::TreePop();
+  }
+}
+void GUI_Slam::parameters_optimization(){
+  if(ImGui::TreeNode("Optimization")){
+    Cloud* cloud = database.cloud_selected;
+    //---------------------------
+
+    //Number of optimization iterations
+    static int iter_max = 5;
     ImGui::SetNextItemWidth(item_width);
-    if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
-      SLAM_normal* normalManager = cticpManager->get_SLAM_normal();
-      cticpManager->set_nb_thread(nb_thread);
+    if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
+      ceresManager->set_iter_max(iter_max);
+      gnManager->set_iter_max(iter_max);
     }
     if(ImGui::IsItemHovered()){
-      ImGui::SetTooltip("Number of threads for the optimization algorithm");
+      ImGui::SetTooltip("Number of iteration for the optimization algorithm");
     }
 
     //Maximum point to plane distance for optimization
@@ -150,6 +152,14 @@ void GUI_Slam::parameters_computation(){
     ImGui::InputFloat("Max PTP distance", PTP_distance_max, 0.01f, 4.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Maximum point to plane distance for optimization");
+    }
+
+    //Minimal requiered number of residual
+    int* nb_residual_min = gnManager->get_nb_residual_min();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::SliderInt("Minimal number residual", nb_residual_min, 10, 500);
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("The minimum number of residuals for a valid ICP problem");
     }
 
     //---------------------------
@@ -244,38 +254,45 @@ void GUI_Slam::parameters_robustesse(){
   if(ImGui::TreeNode("Robustesse")){
     //---------------------------
 
-    //Maximum displacement between two poses
-    float* thres_min_distance = cticpManager->get_thres_min_distance();
+    //Minimal optimization score
+    float* thres_optimMinNorm = cticpManager->get_thres_optimMinNorm();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max distance movement", thres_min_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Minimal threshold", thres_optimMinNorm, 0.001f, 1.0f, "%.3f");
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Minimal optimization score to obtain to validate ICP");
+    }
+
+    //Maximum displacement in a frame
+    float* thres_ego_trans = cticpManager->get_thres_ego_trans();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("Max ego translation", thres_ego_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The motion of the sensor between two frames which is considered erroneous");
     }
 
-    //Translation diff
-    float* thres_trans_norm = cticpManager->get_thres_trans_norm();
+    //Maximum rotation in a frame
+    float* thres_ego_rotat = cticpManager->get_thres_ego_rotat();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max translation norm", thres_trans_norm, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Max ego rotation", thres_ego_rotat, 0.1f, 1.0f, "%.3f");
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("The motion of the sensor between two frames which is considered erroneous");
+    }
+
+    //Maximum displacement between two poses
+    float* thres_pose_trans = cticpManager->get_thres_pose_trans();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("Max pose translation", thres_pose_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Threshold on distance changes (in m) for early termination of the ICP");
     }
 
-    //Rotation diff
-    float* thres_rotat_norm = cticpManager->get_thres_rotat_norm();
+    //Maximum rotation between two poses
+    float* thres_pose_rotat = cticpManager->get_thres_pose_rotat();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max rotation norm", thres_rotat_norm, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Max pose rotation", thres_pose_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Threshold on orientation changes (in degrees) for early termination of the ICP");
     }
-
-    //Number of optimization iterations
-    int* nb_residual_min = gnManager->get_nb_residual_min();
-    ImGui::SetNextItemWidth(item_width);
-    ImGui::SliderInt("Minimal number residual", nb_residual_min, 10, 500);
-    if(ImGui::IsItemHovered()){
-      ImGui::SetTooltip("The minimum number of residuals for a valid ICP problem");
-    }
-
 
     //---------------------------
     ImGui::TreePop();
@@ -290,6 +307,8 @@ void GUI_Slam::statistics(){
   vec3 rotat_b(0,0,0);
   vec3 rotat_e(0,0,0);
   float time_slam = 0;
+  int map_size_abs = 0;
+  int map_size_rlt = 0;
 
   if(cloud != nullptr){
     Frame* frame = &cloud->subset[cloud->subset_selected].frame;
@@ -304,14 +323,18 @@ void GUI_Slam::statistics(){
     rotat_e = compute_anglesFromTransformationMatrix(mat_e);
 
     time_slam = frame->time_slam;
+    map_size_abs = frame->map_size_abs;
+    map_size_rlt = frame->map_size_rlt;
   }
 
   //SLAM time computation
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Time");
   ImGui::Text("Computation:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time_slam);
 
   //SLAM results
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Values");
   ImGui::Text("Tb [m]:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_b(0), trans_b(1), trans_b(2));
@@ -324,6 +347,16 @@ void GUI_Slam::statistics(){
   ImGui::Text("Re [°]:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_e.x, rotat_e.y, rotat_e.z);
+
+  //Local map data
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Local map");
+  ImGui::Text("Nb voxel abs: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_abs);
+  ImGui::Text("Nb voxel rlt: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
+
 
   //---------------------------
 }

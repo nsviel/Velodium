@@ -9,12 +9,12 @@
 #include <fstream>
 
 
-class filePLY
+class file_PLY
 {
 public:
   //Constructor / Destructor
-  filePLY();
-  ~filePLY();
+  file_PLY();
+  ~file_PLY();
 
 public:
   //Main functions

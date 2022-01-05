@@ -22,6 +22,14 @@ Loader::Loader(){
   this->sceneManager = new Scene();
   this->extractManager = new dataExtraction();
 
+  this->ptsManager = new file_PTS();
+  this->plyManager = new file_PLY();
+  this->ptxManager = new file_PTX();
+  this->csvManager = new file_CSV();
+  this->objManager = new file_OBJ();
+  this->xyzManager = new file_XYZ();
+  this->pcapManager = new file_PCAP();
+
   //---------------------------
 }
 Loader::~Loader(){}
@@ -53,9 +61,8 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   //---------------------------
 
   //Retrieve data
-  filePLY plyManager;
   for(int i=0; i<path_vec.size(); i++){
-    dataFile* data = plyManager.Loader(path_vec[i]);
+    dataFile* data = plyManager->Loader(path_vec[i]);
     data_vec.push_back(data);
   }
 
@@ -98,8 +105,7 @@ bool Loader::load_cloud_part(string filePath, int lmin, int lmax){
   //Check file format
   string format = filePath.substr(filePath.find_last_of(".") + 1);
   if(format == "pts"){
-    filePTS ptsManager;
-    dataFile* data = ptsManager.Loader(filePath);
+    dataFile* data = ptsManager->Loader(filePath);
     data_vec.push_back(data);
   }
   else{
@@ -206,44 +212,36 @@ vector<dataFile*> Loader::load_retrieve_data(string filePath){
   //---------------------------
 
   if     (format == "pts"){
-    filePTS ptsManager;
-    dataFile* data = ptsManager.Loader(filePath);
+    dataFile* data = ptsManager->Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "ptx"){
-    filePTX ptxManager;
-    dataFile* data = ptxManager.Loader(filePath);
+    dataFile* data = ptxManager->Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "pcap"){
-    filePCAP pcapManager;
-    data_vec = pcapManager.Loader(filePath);
+    data_vec = pcapManager->Loader(filePath);
   }
   else if(format == "pcd"){
     #ifdef FILE_PCD_H
-    filePCD pcdManager;
-    dataFile* data = pcdManager.Loader(filePath);
+    dataFile* data = pcdManager->Loader(filePath);
     data_vec.push_back(data);
     #endif
   }
   else if(format == "ply"){
-    filePLY plyManager;
-    dataFile* data = plyManager.Loader(filePath);
+    dataFile* data = plyManager->Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "obj"){
-    fileOBJ objManager;
-    dataFile* data = objManager.Loader(filePath);
+    dataFile* data = objManager->Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "xyz"){
-    fileXYZ xyzManager;
-    dataFile* data = xyzManager.Loader(filePath);
+    dataFile* data = xyzManager->Loader(filePath);
     data_vec.push_back(data);
   }
   else if(format == "csv"){
-    fileCSV csvManager;
-    data_vec = csvManager.Loader(filePath);
+    data_vec = csvManager->Loader(filePath);
   }
   else{
     console.AddLog("error", "File format not recognized");
@@ -278,13 +276,11 @@ bool Loader::save_cloud(Cloud* cloud, string filePath){
   if(format.at(0) == '/') format = "pts";
 
   if     (format == "pts"){
-    filePTS ptsManager;
-    sucess = ptsManager.Exporter(filePath, cloud);
+    sucess = ptsManager->Exporter(filePath, cloud);
   }
   else if(format == "ply"){
     string format = "binary";
-    filePLY plyManager;
-    sucess = plyManager.Exporter_cloud(filePath, format, cloud);
+    sucess = plyManager->Exporter_cloud(filePath, format, cloud);
   }
 
   //Say if save is successfull
@@ -306,14 +302,12 @@ bool Loader::save_subset(Subset* subset, string format, string dirPath){
   if(format.at(0) == '/') format = "ply";
 
   //Check file format
-  if     (format == "pts"){
-    filePTS ptsManager;
-    sucess = ptsManager.Exporter(dirPath, cloud);
+  if     (format == "pts"){;
+    sucess = ptsManager->Exporter(dirPath, cloud);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    filePLY plyManager;
-    sucess = plyManager.Exporter_subset(dirPath, ply_format, subset);
+    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
   }
 
   //Say if save is successfull
@@ -336,13 +330,11 @@ bool Loader::save_subset(Subset* subset, string format, string dirPath, string f
 
   //Check file format
   if     (format == "pts"){
-    filePTS ptsManager;
-    sucess = ptsManager.Exporter(dirPath, cloud);
+    sucess = ptsManager->Exporter(dirPath, cloud);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    filePLY plyManager;
-    sucess = plyManager.Exporter_subset(dirPath, ply_format, subset, fileName);
+    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset, fileName);
   }
 
   //Say if save is successfull

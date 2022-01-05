@@ -297,6 +297,8 @@ void Operation::loading_treatment(){
 
   //---------------------------
 }
+
+//Other functions
 vector<string> Operation::get_directoryAllFilePath(string path){
   vector<string> allpath;
   //---------------------------
@@ -434,10 +436,14 @@ string Operation::get_filePath(){
   char filename[32768];
   const char* path_char = fgets(filename, 32768, file);
 
-
   //Check if not empty
   if ((path_char != NULL) && (path_char[0] != '\0')){
     path_str = string(path_char);
+  }
+
+  //Check if there is a /n
+  if(path_str.find('\n')){
+    path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
   }
 
   //---------------------------
