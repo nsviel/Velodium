@@ -71,7 +71,13 @@ void Camera::viewport_update(int ID){
     view->dim = dimManager->get_glDim();
     view->pos = dimManager->get_glPos();
 
+    vec2 glDim = dimManager->get_glDim();
+    vec2 lp = dimManager->get_guiDim_lP();
+    //glViewport(0, 0, winDim[0], winDim[1]);
+
     glViewport(view->pos[0], view->pos[1], view->dim[0], view->dim[1]);
+    //glViewport(view->pos[0], view->pos[1], 500, 500);
+    //glViewport(40, 40, view->dim[0], view->dim[1]);
   }
   //Map viewport
   else if(ID == 1){

@@ -48,6 +48,9 @@ void Dimension::update_window_dim(){
 
   glfwGetWindowSize(window, &width, &height);
   window_dim = vec2(width, height);
+
+
+
   this->update_viewport_dim();
   this->update_configuration();
 

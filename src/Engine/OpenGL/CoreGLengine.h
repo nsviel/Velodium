@@ -30,7 +30,6 @@ public:
   bool init_object();
   bool init_shader();
 
-  void trucEDL();
 
   //GL loop
   void loop();
@@ -66,8 +65,6 @@ private:
   GLuint texture_depth_ID;
   GLuint texture_postProcess_ID;
 
-
-  GLuint quad_vao, quad_vbo;
   unsigned int FBO;
   unsigned int texture;
 };

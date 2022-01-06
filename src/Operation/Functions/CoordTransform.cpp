@@ -23,14 +23,14 @@ vec2 CoordTransform::WorldToScreen(vec3 point){
   vec2 pt_out;
   //---------------------------
 
-  vec4 viewport(glPos.x, 0, glDim.x, glDim.y);
+  vec4 viewport(0, 0, glDim.x, glDim.y);
 
   vec3 projected = glm::project(point, viewMat, projMat, viewport);
   pt_out.x = projected.x;
   pt_out.y = glDim.y - projected.y;
 
   //Check if point is inside the screen
-  if(projected.z > 1.0f || pt_out.x < glPos.x || pt_out.x > glPos.x + glDim.x || pt_out.y < 10 || pt_out.y > glDim.y){
+  if(projected.z > 1.0f || pt_out.x < 0 || pt_out.x > glDim.x || pt_out.y < 0 || pt_out.y > glDim.y){
     pt_out = vec2(-1.0f, -1.0f);
   }
 

@@ -140,7 +140,7 @@ void GUI_control::control_frameSelection(){
       pt2 = dimManager->get_cursorPos_gl();
       selectionManager->mouse_drawFrame(pt1, pt2);
     }
-    if(ImGui::IsMouseReleased(0) && !io.WantCaptureMouse){
+    if(ImGui::IsMouseReleased(0)){
       selectionManager->mouse_frameSelection(pt1, pt2);
     }
   }
