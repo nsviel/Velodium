@@ -18,6 +18,7 @@ WIN_loading::WIN_loading(){
   this->loaderManager = opeManager->get_loaderManager();
 
   this->item_width = 150;
+  this->file_selected = false;
   this->file_path = "path/to/file";
 
   //---------------------------
@@ -32,7 +33,8 @@ void WIN_loading::window_loading(){
     //---------------------------
 
     this->loading_action();
-    this->loading_fileFormat();
+    this->loading_fileSelection();
+    this->loading_dataFormat();
 
     //---------------------------
     ImGui::Separator();
@@ -86,24 +88,57 @@ void WIN_loading::loading_action(){
     opeManager->loading_frames();
   }
 
+  //---------------------------
+  ImGui::Separator();
+}
+void WIN_loading::loading_fileSelection(){
+  //---------------------------
+
   //Get info for a specified file
   if (ImGui::Button("Select file", ImVec2(item_width, 0))){
     file_path = opeManager->get_filePath();
     this->loading_retrieve_info(file_path);
+    file_selected = true;
   }
-  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", file_path.c_str());
-  if (ImGui::Button("Open selected", ImVec2(item_width, 0))){
-    file_PCAP* pcapManager = loaderManager->get_pcapManager();
-    pcapManager->Loader(file_path);
-    say("ok");
-  }
-  if (ImGui::Button("Open selected limited", ImVec2(item_width, 0))){
-    file_PCAP* pcapManager = loaderManager->get_pcapManager();
-    pcapManager->Loader(file_path, 100);
-    say("ok");
+
+  if(file_selected){
+    //Display file path
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", file_path.c_str());
+
+    //File format
+    static int format = 3;
+    if(file_format == "pts"){
+      format = 0;
+    }
+    else if(file_format == "ptx"){
+      format = 1;
+    }
+    else if(file_format == "pcap"){
+      format = 2;
+    }
+    ImGui::RadioButton("pts", &format, 0);
+    ImGui::SameLine();
+    ImGui::RadioButton("ptx", &format, 1);
+    ImGui::SameLine();
+    ImGui::RadioButton("pcap", &format, 2);
+
+    //File format options
+    if(format == 1){
+      this->loading_file_ptx();
+    }
+    if(format == 2){
+      this->loading_file_pcap();
+    }
+
+    //Open selected file
+    if (ImGui::Button("Load selected", ImVec2(item_width, 0))){
+      file_PCAP* pcapManager = loaderManager->get_pcapManager();
+      loaderManager->load_cloud(file_path);
+    }
   }
 
   //---------------------------
+  ImGui::Separator();
 }
 void WIN_loading::loading_retrieve_info(string file_path){
   file_PCAP* pcapManager = loaderManager->get_pcapManager();
@@ -112,36 +147,6 @@ void WIN_loading::loading_retrieve_info(string file_path){
   this->file_format = file_path.substr(file_path.find_last_of(".") + 1);
 
   //---------------------------
-}
-void WIN_loading::loading_fileFormat(){
-  if(ImGui::CollapsingHeader("File format")){
-    //---------------------------
-
-    //File format selection
-    static int file_format = 3;
-    ImGui::RadioButton("pts", &file_format, 0);
-    ImGui::SameLine();
-    ImGui::RadioButton("ptx", &file_format, 1);
-    ImGui::SameLine();
-    ImGui::RadioButton("pcap", &file_format, 2);
-    ImGui::Separator();
-
-    //File format options
-    if(ImGui::TreeNode("Format options")){
-      if(file_format == 1){
-        this->loading_file_ptx();
-      }
-      if(file_format == 2){
-        this->loading_file_pcap();
-      }
-      ImGui::TreePop();
-    }
-
-    //Data format options
-    this->loading_dataFormat();
-
-    //---------------------------
-  }
 }
 void WIN_loading::loading_dataFormat(){
   if(ImGui::TreeNode("Data format")){
@@ -243,15 +248,20 @@ void WIN_loading::loading_file_pcap(){
   }
 
   //Get number of packets
-  int nb_packet = 1000000;
+  static int nb_packet = 1000000;
   if (ImGui::Button("Get number packet", ImVec2(item_width, 0))){
     nb_packet = pcapManager->get_file_length(file_path);
+    cout<<"There are "<<nb_packet<<" packets in file"<<endl;
   }
 
   //Range of loaded packets
   int* ID_b = pcapManager->get_packet_beg();
   int* ID_e = pcapManager->get_packet_end();
-  ImGui::DragIntRange2("Packet range", ID_b, ID_e, 1, 0, nb_packet, "%d", "%d");
+  ImGui::SetNextItemWidth(item_width);
+  string ID_max = "/" + to_string(nb_packet);
+  if(ImGui::DragIntRange2(ID_max.c_str(), ID_b, ID_e, 1000, 0, nb_packet, "%d", "%d", nb_packet)){
+    *pcapManager->get_packet_range_on() = true;
+  }
 
   //---------------------------
 }

@@ -21,8 +21,8 @@ public:
 
   //Sub functions
   void loading_action();
-  void loading_fileFormat();
   void loading_dataFormat();
+  void loading_fileSelection();
   void loading_retrieve_info(string file_path);
   void loading_file_ptx();
   void loading_file_pcap();
@@ -36,6 +36,7 @@ private:
 
   string file_path;
   string file_format;
+  bool file_selected;
   int item_width;
 };
 

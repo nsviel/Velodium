@@ -53,6 +53,7 @@ void Scene::removeCloud(Cloud* cloud){
   if(database.list_cloud->size() == 0){
     Glyphs glyphManager;
     glyphManager.reset();
+    database.cloud_selected = nullptr;
   }
 
   //---------------------------

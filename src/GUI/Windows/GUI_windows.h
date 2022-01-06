@@ -10,6 +10,7 @@
 
 class WIN_modifyFileInfo;
 class WIN_loading;
+class WIN_camera;
 
 class Engine;
 class Camera;
@@ -77,6 +78,7 @@ private:
   Transforms transformManager;
   Configuration*configManager;
 
+  WIN_camera* wincamManager;
   WIN_loading* loadingManager;
   WIN_modifyFileInfo* fileinfoManager;
 

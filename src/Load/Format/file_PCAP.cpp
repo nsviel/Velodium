@@ -12,6 +12,9 @@
 using namespace Tins;
 vector<vector<int>> file_packets;
 size_t lenght(0);
+int loop_beg(0);
+int loop_end(0);
+int loop_cpt(0);
 
 
 //Constructor / Destructor
@@ -19,7 +22,7 @@ file_PCAP::file_PCAP(){
   //---------------------------
 
   this->LiDAR_model = "vlp16";
-  this->packet_max = 0;
+  this->packet_range_on = false;
   this->packet_beg = 0;
   this->packet_end = 0;
 
@@ -31,87 +34,9 @@ file_PCAP::~file_PCAP(){}
 bool parse_packets(const PDU& packet){
   //---------------------------
 
-  //Retrieve data packet
-  const RawPDU raw = packet.rfind_pdu<RawPDU>();
-  vector<uint8_t> buffer = raw.payload();
-
-  //Convert into decimal vector
-  vector<int> packet_dec;
-  for(int i =0; i < buffer.size(); i++){
-    std::bitset<8> octet(buffer[i]);
-
-    int octet_32 = octet.to_ulong();
-    packet_dec.push_back(octet_32);
-  }
-
-  //Store the packet
-  file_packets.push_back(packet_dec);
-
-  lenght++;
-  if(lenght == 100)return false;
-  //---------------------------
-  return true;
-}
-bool count_packets(const PDU &){
-    lenght++;
-    return true;
-}
-
-//Main function
-vector<dataFile*> file_PCAP::Loader(string pathFile){
-  data_vec.clear();
-  file_packets.clear();
-  //---------------------------
-
-  //Check if vlp16 or hdl32
-  if (pathFile.find("HDL32") != string::npos){
-    this->LiDAR_model = "hdl32";
-  }else{
-    this->LiDAR_model = "vlp16";
-  }
-
-  //Open file
-  FileSniffer sniffer(pathFile);
-  sniffer.sniff_loop(parse_packets);
-  say(lenght);
-
-  //Parse data
-  if(LiDAR_model == "vlp16"){
-    this->Loader_vlp16(pathFile);
-  }
-  else if(LiDAR_model == "hdl32"){
-    this->Loader_hdl32(pathFile);
-  }
-
-  //---------------------------
-  return data_vec;
-}
-vector<dataFile*> file_PCAP::Loader(string pathFile, int nb_packet){
-  data_vec.clear();
-  file_packets.clear();
-  //---------------------------
-
-  //Check if vlp16 or hdl32
-  if (pathFile.find("HDL32") != string::npos){
-    this->LiDAR_model = "hdl32";
-  }else{
-    this->LiDAR_model = "vlp16";
-  }
-
-  say(pathFile);
-
-  //Read UDP packets
-  vector<Tins::Packet> vt;
-  Sniffer sniffer(pathFile);sayHello();
-  while (vt.size() != nb_packet) {
-    vt.push_back(sniffer.next_packet());
-  }
-
-  sayHello();
-  sayVec(vt);
-
-  for (const auto& packet : vt) {
-    const RawPDU raw = packet.pdu()->rfind_pdu<RawPDU>();
+  if(loop_cpt >= loop_beg && loop_cpt < loop_end){
+    //Retrieve data packet
+    const RawPDU raw = packet.rfind_pdu<RawPDU>();
     vector<uint8_t> buffer = raw.payload();
 
     //Convert into decimal vector
@@ -127,8 +52,42 @@ vector<dataFile*> file_PCAP::Loader(string pathFile, int nb_packet){
     file_packets.push_back(packet_dec);
   }
 
-sayHello();
-  say(file_packets.size());
+  loop_cpt++;
+
+  //---------------------------
+  return true;
+}
+bool count_packets(const PDU &){
+    lenght++;
+    return true;
+}
+
+//Main function
+vector<dataFile*> file_PCAP::Loader(string pathFile){
+  data_vec.clear();
+  file_packets.clear();
+  //---------------------------
+
+  //Set up parameters
+  loop_cpt = 0;
+  if(packet_range_on){
+    loop_beg = packet_beg;
+    loop_end = packet_end;
+  }else{
+    loop_beg = 0;
+    loop_end = get_file_length(pathFile);
+  }
+
+  //Check if vlp16 or hdl32
+  if (pathFile.find("HDL32") != string::npos){
+    this->LiDAR_model = "hdl32";
+  }else{
+    this->LiDAR_model = "vlp16";
+  }
+
+  //Sniff UDP packets
+  FileSniffer sniffer(pathFile);
+  sniffer.sniff_loop(parse_packets);
 
   //Parse data
   if(LiDAR_model == "vlp16"){

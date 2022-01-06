@@ -65,10 +65,10 @@ void GUI_menuBar::MenuBar_menus(){
   //-------------------------
 
   if (ImGui::BeginMenu("File")){
-    if (ImGui::MenuItem("Open")){
+    if (ImGui::MenuItem("Open options", "o")){
       window_tab.show_loading = true;
     }
-    if (ImGui::MenuItem("Save")){
+    if (ImGui::MenuItem("Save options")){
       window_tab.show_saving = true;
     }
     if(ImGui::MenuItem("Remove cloud", "Suppr")){

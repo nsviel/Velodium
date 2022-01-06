@@ -1,5 +1,7 @@
 #include "GUI_Control.h"
 
+#include "../Windows/Window_tab.h"
+
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
@@ -15,6 +17,8 @@
 #include "../../Operation/Functions/Heatmap.h"
 
 #include "../../../extern/imgui/imgui.h"
+
+extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
@@ -215,6 +219,11 @@ void GUI_control::control_keyboard_oneAction(){
     if(ImGui::IsKeyPressed(78) && !io.WantCaptureMouse){
       opeManager->allSaving();
       sceneManager->removeCloud_all();
+    }
+
+    //o key - Open options
+    if(ImGui::IsKeyPressed(79)){
+      window_tab.show_loading = true;
     }
   }
 
