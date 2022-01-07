@@ -6,6 +6,7 @@
 
 #include "../Engine.h"
 #include "../Shader/Shader.h"
+#include "../Shader/PP_edl.h"
 #include "../Configuration/Dimension.h"
 #include "../Configuration/Configuration.h"
 
@@ -40,8 +41,10 @@ bool CoreGLengine::init(){
   //---------------------------
 
   this->init_OGL();
-  this->init_shader();
   this->init_object();
+  this->init_fbo();
+  this->init_quad();
+  this->init_shader();
 
   //---------------------------
   return true;
@@ -107,9 +110,12 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_shader(){
   //---------------------------
 
-  mvpShader = new Shader("../src/Engine/Shader/shader_mvp.vs", "../src/Engine/Shader/shader_mvp.fs");
-  edlShader = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
-  fboShader = new Shader("../src/Engine/Shader/shader_fbo.vs", "../src/Engine/Shader/shader_fbo.fs");
+  shader_scene = new Shader("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
+  shader_screen = new Shader("../src/Engine/Shader/shader_screen.vs", "../src/Engine/Shader/shader_screen.fs");
+  shader_edl = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
+
+  edlManager->setup_edl(shader_edl);
+  edlManager->setup_textures(tex_color_ID, tex_depth_ID);
 
   //---------------------------
   return true;
@@ -123,6 +129,7 @@ bool CoreGLengine::init_object(){
   this->engineManager = new Engine(dimManager, cameraManager);
   this->fboManager = new Framebuffer();
   this->guiManager = new GUI(engineManager);
+  this->edlManager = new PP_edl();
   guiManager->Gui_bkgColor(&backgColor);
 
   //---------------------------
@@ -160,8 +167,8 @@ void CoreGLengine::init_quad(){
   glGenBuffers(1, &quad_vbo_uv);
   glBindBuffer(GL_ARRAY_BUFFER, quad_vbo_uv);
   glBufferData(GL_ARRAY_BUFFER, quad_uv.size()*sizeof(glm::vec2), &quad_uv[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
+  glEnableVertexAttribArray(2);
 
   //---------------------------
 }
@@ -171,34 +178,49 @@ void CoreGLengine::init_fbo(){
   dimManager->update_window_dim();
   vec2 gl_dim = dimManager->get_gl_dim();
 
-  //Init texture
+  //Init textures
   glGenTextures(1, &texture_ID);
   glBindTexture(GL_TEXTURE_2D, texture_ID);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
   glBindTexture(GL_TEXTURE_2D ,0);
 
-  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_ID);
-  //glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, GL_RGB, gl_width, gl_height, GL_TRUE);
-  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+  glGenTextures(1, &tex_color_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glGenTextures(1, &tex_depth_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  glGenTextures(1, &tex_edl_ID);
+  glBindTexture(GL_TEXTURE_2D, tex_edl_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
   //Init FBO
-  glGenFramebuffers(1, &fbo_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_ID);
+  glGenFramebuffers(1, &fbo_1_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_ID, 0);
+  //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_color_ID, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex_depth_ID, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, texture_ID, 0);
-  //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_ID);
+  glGenFramebuffers(1, &fbo_2_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_edl_ID, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
 }
 
 void CoreGLengine::loop(){
   //---------------------------
-
-  this->init_fbo();
-  this->init_quad();
 
   do{
     //First pass
@@ -207,7 +229,7 @@ void CoreGLengine::loop(){
 
     //Drawing block
     mat4 mvp = cameraManager->compute_mvpMatrix();
-    mvpShader->setMat4("MVP", mvp);
+    shader_scene->setMat4("MVP", mvp);
     cameraManager->viewport_update(0);
     cameraManager->input_cameraMouseCommands();
     engineManager->loop();
@@ -225,7 +247,7 @@ void CoreGLengine::loop(){
 void CoreGLengine::loop_pass_1(){
   //---------------------------
 
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
@@ -234,7 +256,7 @@ void CoreGLengine::loop_pass_1(){
   glBindTexture(GL_TEXTURE_2D, texture_ID);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
-  mvpShader->use();
+  shader_scene->use();
 
   //---------------------------
 }
@@ -253,7 +275,7 @@ void CoreGLengine::loop_pass_2(){
   this->update_gl_quad();
 
   //Shader program for rendering the quad
-  fboShader->use();
+  shader_screen->use();
 
   //Quad & texture drawing
   glActiveTexture(GL_TEXTURE0);
@@ -278,7 +300,7 @@ void CoreGLengine::loop_shader(){
   //---------------------------
 
   mat4 mvp = cameraManager->compute_mvpMatrix();
-  mvpShader->setMat4("MVP", mvp);
+  shader_scene->setMat4("MVP", mvp);
 
   //---------------------------
 }

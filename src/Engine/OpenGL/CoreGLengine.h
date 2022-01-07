@@ -9,6 +9,7 @@ class GUI;
 class Engine;
 class Framebuffer;
 class Configuration;
+class PP_edl;
 
 #include "../../common.h"
 
@@ -45,15 +46,17 @@ public:
 private:
   Configuration* configManager;
   GLFWwindow* window;
-  Shader* mvpShader;
-  Shader* edlShader;
-  Shader* fboShader;
   Engine* engineManager;
   Camera* cameraManager;
   Viewport* viewportManager;
   Dimension* dimManager;
   Framebuffer* fboManager;
   GUI* guiManager;
+  PP_edl* edlManager;
+
+  Shader* shader_scene;
+  Shader* shader_screen;
+  Shader* shader_edl;
 
   vec3 backgColor;
   int gl_width;
@@ -61,8 +64,12 @@ private:
 
   GLuint quad_vao;
   GLuint quad_vbo;
-  GLuint fbo_ID;
+  GLuint fbo_1_ID;
+  GLuint fbo_2_ID;
   GLuint texture_ID;
+  GLuint tex_color_ID;
+  GLuint tex_depth_ID;
+  GLuint tex_edl_ID;
 };
 
 #endif
