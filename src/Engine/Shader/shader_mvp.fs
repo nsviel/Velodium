@@ -5,5 +5,5 @@ out vec4 color_fragment;
 
 void main()
 {
-    color_fragment = vec4(color_vertex);
+  color_fragment = vec4(color_vertex);
 }

@@ -468,7 +468,7 @@ vec3 Selection::mouse_cameraPt(){
   return X;
 }
 void Selection::update_glDims(){
-  vec2 glDim = dimManager->get_glDim();
+  vec2 glDim = dimManager->get_gl_dim();
   //---------------------------
 
   this->gui_X= ImGui::GetWindowSize().x;

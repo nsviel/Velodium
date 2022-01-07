@@ -28,7 +28,7 @@ public:
 public:
   //Main functions
   void update_window_dim();
-  void update_viewport_dim();
+  void update_gl_dim();
   void update_configuration();
 
   //Subfunctions
@@ -38,28 +38,28 @@ public:
   void set_cursorPos(vec2 pos);
 
   inline GLFWwindow* get_window(){return window;}
-  inline vec2 get_glDim(){return viewport_dim;}
-  inline vec2 get_glPos(){return viewport_pos;}
-  inline vec2 get_winDim(){return window_dim;}
-  inline vec2 get_guiDim_lP(){return gui_leftPanel_dim;}
-  inline vec2 get_guiDim_tP(){return gui_topPanel_dim;}
+  inline vec2 get_gl_dim(){return gl_dim;}
+  inline vec2 get_gl_pos(){return gl_pos;}
+  inline vec2 get_win_dim(){return window_dim;}
+  inline float get_gui_leftPanel_width(){return gui_leftPanel_width;}
+  inline float get_gui_topPanel_height(){return gui_topPanel_height;}
 
-  inline void set_glDim(vec2 value){this->viewport_dim = value;}
-  inline void set_guiDim_lP(vec2 value){this->gui_leftPanel_dim = value; update_viewport_dim();}
-  inline void set_guiDim_tP(vec2 value){this->gui_topPanel_dim = value; update_viewport_dim();}
-  inline void set_winDim(vec2 value){this->window_dim = value; update_viewport_dim();}
-  inline void set_guiDim_bP(vec2 value){this->gui_bottomPanel_dim = value; update_viewport_dim();}
+  inline void get_gl_dim(vec2 value){this->gl_dim = value;}
+  inline void set_win_dim(vec2 value){this->window_dim = value; update_gl_dim();}
+  inline void set_gui_leftPanel_width(float value){this->gui_leftPanel_width = value; update_gl_dim();}
+  inline void set_gui_topPanel_height(float value){this->gui_topPanel_height = value; update_gl_dim();}
+  inline void set_gui_bottomPanel_height(float value){this->gui_bottomPanel_height = value; update_gl_dim();}
 
 private:
   GLFWwindow* window;
   Configuration* configManager;
 
-  vec2 viewport_dim;
-  vec2 viewport_pos;
+  vec2 gl_pos;
+  vec2 gl_dim;
   vec2 window_dim;
-  vec2 gui_leftPanel_dim;
-  vec2 gui_topPanel_dim;
-  vec2 gui_bottomPanel_dim;
+  float gui_leftPanel_width;
+  float gui_topPanel_height;
+  float gui_bottomPanel_height;
 };
 
 #endif

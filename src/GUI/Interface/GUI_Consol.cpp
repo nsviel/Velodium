@@ -29,14 +29,14 @@ GUI_consol::~GUI_consol(){}
 
 //Main function
 void GUI_consol::design_consol(){
-  vec2 dim_leftPanel = dimManager->get_guiDim_lP();
-  vec2 winDim = dimManager->get_winDim();
+  float gui_leftPanel_w = dimManager->get_gui_leftPanel_width();
+  vec2 winDim = dimManager->get_win_dim();
   //----------------------------
 
   //Options
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus;
-  ImGui::SetNextWindowPos(ImVec2(dim_leftPanel.x, winDim.y - panel_Y));
-  ImGui::SetNextWindowSize(ImVec2(winDim.x - dim_leftPanel.x, panel_Y));
+  ImGui::SetNextWindowPos(ImVec2(gui_leftPanel_w, winDim.y - panel_Y));
+  ImGui::SetNextWindowSize(ImVec2(winDim.x - gui_leftPanel_w, panel_Y));
   ImGui::Begin("BottomPanel##outer", NULL, window_flags);{
 
     //Update panel dimension
@@ -46,8 +46,8 @@ void GUI_consol::design_consol(){
     //Set inner window
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
     window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize;
-    ImGui::SetNextWindowPos(ImVec2(dim_leftPanel.x, winDim.y - panel_Y + 1));
-    ImGui::SetNextWindowSize(ImVec2(winDim.x - dim_leftPanel.x, panel_Y - 1));
+    ImGui::SetNextWindowPos(ImVec2(gui_leftPanel_w, winDim.y - panel_Y + 1));
+    ImGui::SetNextWindowSize(ImVec2(winDim.x - gui_leftPanel_w, panel_Y - 1));
     ImGui::Begin("BottomPanel##inner", NULL, window_flags);{
 
       //Draw console

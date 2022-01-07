@@ -18,8 +18,8 @@ CoordTransform::~CoordTransform(){}
 vec2 CoordTransform::WorldToScreen(vec3 point){
   mat4 projMat = cameraManager->get_projMat();
   mat4 viewMat = cameraManager->get_viewMat();
-  vec2 glPos = dimManager->get_glPos();
-  vec2 glDim = dimManager->get_glDim();
+  vec2 glPos = dimManager->get_gl_pos();
+  vec2 glDim = dimManager->get_gl_dim();
   vec2 pt_out;
   //---------------------------
 
@@ -38,7 +38,7 @@ vec2 CoordTransform::WorldToScreen(vec3 point){
   return pt_out;
 }
 vec3 CoordTransform::ScreenToWorld(vec2 cursorPos){
-  vec2 glDim = dimManager->get_glDim();
+  vec2 glDim = dimManager->get_gl_dim();
   float gui_X = ImGui::GetWindowSize().x;
   float gui_Y = ImGui::GetWindowSize().y;
   float gl_X = glDim.x;
@@ -72,7 +72,7 @@ vec3 CoordTransform::ScreenToWorld(vec2 cursorPos){
 }
 vec3 CoordTransform::CursorToGround(){
   vec2 cursorPos = dimManager->get_cursorPos();
-  vec2 glDim = dimManager->get_glDim();
+  vec2 glDim = dimManager->get_gl_dim();
   float gui_X = ImGui::GetWindowSize().x;
   float gui_Y = ImGui::GetWindowSize().y;
   float gl_X = glDim.x;

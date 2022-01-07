@@ -134,8 +134,8 @@ void GUI::Gui_Dimensions(){
   //---------------------------
 
   gui_consol->set_panel_X(*leftPanel_X);
-  dimManager->set_guiDim_lP(vec2(*leftPanel_X, 0));
-  dimManager->set_guiDim_bP(vec2(0, *bottomPanel_Y));
+  dimManager->set_gui_leftPanel_width(*leftPanel_X);
+  dimManager->set_gui_bottomPanel_height(*bottomPanel_Y);
 
   //---------------------------
 }

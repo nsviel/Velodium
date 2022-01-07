@@ -42,28 +42,28 @@ void GUI_leftPanel::design_leftPanel(){
 }
 
 void GUI_leftPanel::panel_top(){
-  vec2 guiDim_tP = dimManager->get_guiDim_tP();
-  vec2 winDim = dimManager->get_winDim();
+  float topPanel_h = dimManager->get_gui_topPanel_height();
+  vec2 winDim = dimManager->get_win_dim();
   ImVec2 lp_min = ImVec2(10, 10);
-  ImVec2 lp_max = ImVec2(500, winDim.y - guiDim_tP.y);
+  ImVec2 lp_max = ImVec2(500, winDim.y - topPanel_h);
   //----------------------------
 
   //Options
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus;
-  ImGui::SetNextWindowPos(ImVec2(0, guiDim_tP.y));
-  ImGui::SetNextWindowSize(ImVec2(panel_X, panel_Y - guiDim_tP.y));
+  ImGui::SetNextWindowPos(ImVec2(0, topPanel_h));
+  ImGui::SetNextWindowSize(ImVec2(panel_X, panel_Y - topPanel_h));
   ImGui::SetNextWindowSizeConstraints(lp_min, lp_max);
   ImGui::Begin("LeftPanel##topOuter", NULL, window_flags);{
 
     //Update panel dimension
     panel_X = ImGui::GetWindowSize().x;
-    panel_Y = ImGui::GetWindowSize().y + guiDim_tP.y;
+    panel_Y = ImGui::GetWindowSize().y + topPanel_h;
 
     //Set inner window
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
     window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
-    ImGui::SetNextWindowPos(ImVec2(0, guiDim_tP.y));
-    ImGui::SetNextWindowSize(ImVec2(panel_X - 1, panel_Y - guiDim_tP.y - 1));
+    ImGui::SetNextWindowPos(ImVec2(0, topPanel_h));
+    ImGui::SetNextWindowSize(ImVec2(panel_X - 1, panel_Y - topPanel_h - 1));
     ImGui::Begin("LeftPanel##topInner", NULL, window_flags);{
 
     //File management
@@ -80,13 +80,11 @@ void GUI_leftPanel::panel_top(){
 void GUI_leftPanel::panel_bot(){
   //----------------------------
 
-
-
   //Parameters
-  vec2 guiDim_tP = dimManager->get_guiDim_tP();
-  vec2 winDim = dimManager->get_winDim();
+  float topPanel_h = dimManager->get_gui_topPanel_height();
+  vec2 winDim = dimManager->get_win_dim();
   ImVec2 lp_min = ImVec2(10, 10);
-  ImVec2 lp_max = ImVec2(500, winDim.y - guiDim_tP.y);
+  ImVec2 lp_max = ImVec2(500, winDim.y - topPanel_h);
 
   //Options
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus;

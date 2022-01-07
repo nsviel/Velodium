@@ -21,8 +21,6 @@ CoreGLengine::CoreGLengine(){
 
   this->configManager = new Configuration();
 
-  this->loop_cpt = 0;
-
   //---------------------------
 }
 CoreGLengine::~CoreGLengine(){
@@ -75,7 +73,7 @@ bool CoreGLengine::init_OGL(){
   glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-  window = glfwCreateWindow(gl_width, gl_height, "window", NULL, NULL);
+  window = glfwCreateWindow(resolution_width, resolution_height, "window", NULL, NULL);
   if(window == NULL){
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
@@ -89,7 +87,6 @@ bool CoreGLengine::init_OGL(){
   glfwSetWindowTitle(window, win_title.c_str());
 
   //OpenGL stuff
-  glViewport(0, 0, gl_width, gl_height);
   glPointSize(1);
   glLineWidth(1);
   glEnable(GL_MULTISAMPLE);
@@ -131,59 +128,9 @@ bool CoreGLengine::init_object(){
   //---------------------------
   return true;
 }
-
-
-//Engine loop
-/*void CoreGLengine::loop(){
+void CoreGLengine::init_quad(){
   //---------------------------
 
-  do{
-    this->loop_begin();
-    this->loop_camera();
-    engineManager->loop();
-    guiManager->Gui_loop();
-    this->loop_shader();;
-    this->loop_end();
-  }
-  while(!glfwWindowShouldClose(window));
-
-  //---------------------------
-  configManager->save_configuration();
-}*/
-void CoreGLengine::loop(){
-  //---------------------------
-
-  //Init texture
-  GLuint texture_ID;
-  glGenTextures(1, &texture_ID);
-  glBindTexture(GL_TEXTURE_2D, texture_ID);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_width, gl_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-  glBindTexture(GL_TEXTURE_2D ,0);
-
-  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_ID);
-  //glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, GL_RGB, gl_width, gl_height, GL_TRUE);
-  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-
-  //Init RBO
-  GLuint rbo_ID;
-  glGenRenderbuffers(1, &rbo_ID);
-  glBindRenderbuffer(GL_RENDERBUFFER, rbo_ID);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, gl_width, gl_height);
-  //glRenderbufferStorageMultisample (GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT32, gl_width, gl_height);
-  glBindRenderbuffer(GL_RENDERBUFFER,0);
-
-
-  //Init FBO
-  GLuint fbo_ID;
-  glGenFramebuffers(1, &fbo_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_ID);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_ID, 0);
-  //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, texture_ID, 0);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //Init quad
   vector<vec2> quad_xy;
   quad_xy.push_back(vec2(-1.0f,  1.0f));
   quad_xy.push_back(vec2(-1.0f,  -1.0f));
@@ -200,11 +147,9 @@ void CoreGLengine::loop(){
   quad_uv.push_back(vec2(1.0f,  0.0f));
   quad_uv.push_back(vec2(1.0f,  1.0f));
 
-  GLuint quad_vao;
   glGenVertexArrays(1, &quad_vao);
   glBindVertexArray(quad_vao);
 
-  GLuint quad_vbo;
   glGenBuffers(1, &quad_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
   glBufferData(GL_ARRAY_BUFFER, quad_xy.size()*sizeof(glm::vec2), &quad_xy[0], GL_STATIC_DRAW);
@@ -218,58 +163,106 @@ void CoreGLengine::loop(){
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
   glEnableVertexAttribArray(1);
 
+  //---------------------------
+}
+void CoreGLengine::init_fbo(){
+  //---------------------------
+
+  dimManager->update_window_dim();
+  vec2 gl_dim = dimManager->get_gl_dim();
+
+  //Init texture
+  glGenTextures(1, &texture_ID);
+  glBindTexture(GL_TEXTURE_2D, texture_ID);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+  glBindTexture(GL_TEXTURE_2D ,0);
+
+  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_ID);
+  //glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, GL_RGB, gl_width, gl_height, GL_TRUE);
+  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+
+  //Init FBO
+  glGenFramebuffers(1, &fbo_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_ID);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_ID, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, texture_ID, 0);
+  //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_ID);
+
+  //---------------------------
+}
+
+void CoreGLengine::loop(){
+  //---------------------------
+
+  this->init_fbo();
+  this->init_quad();
+
   do{
     //First pass
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo_ID);
-    glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //---------------------------
+    this->loop_pass_1();
 
-
-    //Writing block
-    mvpShader->use();
+    //Drawing block
     mat4 mvp = cameraManager->compute_mvpMatrix();
     mvpShader->setMat4("MVP", mvp);
     cameraManager->viewport_update(0);
     cameraManager->input_cameraMouseCommands();
-
     engineManager->loop();
 
-
     //Second pass
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0.0f,0.4f,0.0f,1.0f);
-    glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT );
-
-
-    vec2 winDim = dimManager->get_winDim();
-    glViewport(0, 0, winDim[0], winDim[1]);
-
-    fboShader->use(); // shader program for rendering the quad
-
-    glActiveTexture( GL_TEXTURE0);
-    glBindVertexArray(quad_vao);
-    //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_ID);
-    glBindTexture(GL_TEXTURE_2D, texture_ID);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+    //---------------------------
+    this->loop_pass_2();
     guiManager->Gui_loop();
-
-    glfwSwapBuffers(window);
-    glfwPollEvents();
+    this->loop_end();
   }
   while(!glfwWindowShouldClose(window));
 
   //---------------------------
 }
-void CoreGLengine::loop_begin(){
+void CoreGLengine::loop_pass_1(){
   //---------------------------
 
-  glfwPollEvents();
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_ID);
   glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
+
+  vec2 gl_dim = dimManager->get_gl_dim();
+  glBindTexture(GL_TEXTURE_2D, texture_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+  mvpShader->use();
+
+  //---------------------------
+}
+void CoreGLengine::loop_pass_2(){
+  //---------------------------
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT );
+
+  //Viewport
+  vec2 win_dim = dimManager->get_win_dim();
+  glViewport(0, 0, win_dim[0], win_dim[1]);
+
+  //Update OpenGL quad window
+  this->update_gl_quad();
+
+  //Shader program for rendering the quad
+  fboShader->use();
+
+  //Quad & texture drawing
+  glActiveTexture(GL_TEXTURE0);
+  glBindVertexArray(quad_vao);
+  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_ID);
+  glBindTexture(GL_TEXTURE_2D, texture_ID);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   //---------------------------
 }
@@ -294,9 +287,45 @@ void CoreGLengine::loop_end(){
   //---------------------------
 
   glfwSwapBuffers(window);
+  glfwPollEvents();
   if(waitForEvent){
     glfwWaitEvents();
   }
+
+  //---------------------------
+}
+
+void CoreGLengine::update_gl_quad(){
+  //---------------------------
+
+  vec2 gl_pos = dimManager->get_gl_pos();
+  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 win_dim = dimManager->get_win_dim();
+
+  vec2 tl, br, tr, bl;
+  bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
+  bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+
+  br.x = 1;
+  br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+
+  tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
+  tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+
+  tr.x = 1;
+  tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+
+  vector<vec2> quad_xy;
+  quad_xy.push_back(tl);
+  quad_xy.push_back(bl);
+  quad_xy.push_back(br);
+
+  quad_xy.push_back(tl);
+  quad_xy.push_back(br);
+  quad_xy.push_back(tr);
+
+  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
+  glBufferData(GL_ARRAY_BUFFER, quad_xy.size() * sizeof(glm::vec2), &quad_xy[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }

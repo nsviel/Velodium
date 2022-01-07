@@ -68,16 +68,11 @@ void Camera::viewport_update(int ID){
   //Main viewport
   if(ID == 0){
     dimManager->update_window_dim();
-    view->dim = dimManager->get_glDim();
-    view->pos = dimManager->get_glPos();
+    view->dim = dimManager->get_gl_dim();
+    view->pos = dimManager->get_gl_pos();
 
-    vec2 glDim = dimManager->get_glDim();
-    vec2 lp = dimManager->get_guiDim_lP();
-    //glViewport(0, 0, winDim[0], winDim[1]);
-
-    glViewport(view->pos[0], view->pos[1], view->dim[0], view->dim[1]);
-    //glViewport(view->pos[0], view->pos[1], 500, 500);
-    //glViewport(40, 40, view->dim[0], view->dim[1]);
+    vec2 gl_dim = dimManager->get_gl_dim();
+    glViewport(0, 0, gl_dim[0], gl_dim[1]);
   }
   //Map viewport
   else if(ID == 1){
@@ -132,7 +127,7 @@ mat4 Camera::compute_projMat(){
 
   //Compute projection matrix
   if(view->proj_persp){
-    vec2 glDim = dimManager->get_glDim();
+    vec2 glDim = dimManager->get_gl_dim();
     projMat = perspective(radians(view->fov), (float)glDim.x / (float)glDim.y, view->clip_near, view->clip_far);
   }
   else if(view->proj_ortho){

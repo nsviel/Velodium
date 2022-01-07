@@ -1,31 +1,16 @@
 #include "Shader.h"
 
+#include <fstream>
+
+
 //Constructor / Destructor
-Shader::Shader(){
-	//---------------------------
-
-	this->shader_dir = "../src/Engine/Shader/";
-
-	//---------------------------
-}
-Shader::~Shader(){
-	//---------------------------
-
-	glDeleteProgram(ID_program);
-
-	//---------------------------
-}
-
-//Main function
-bool Shader::shader_build(string name){
+Shader::Shader(string vertex_path, string fragme_path){
 	//---------------------------
 
 	// Create the shaders program
 	ID_program = glCreateProgram();
 
 	// Compile & check Shaders-
-	string vertex_path = shader_dir + name + ".vs";
-	string fragme_path = shader_dir + name + ".fs";
 	GLuint vs = shader_compilation(vertex_path, GL_VERTEX_SHADER);
 	GLuint fs = shader_compilation(fragme_path, GL_FRAGMENT_SHADER);
 
@@ -40,17 +25,23 @@ bool Shader::shader_build(string name){
 
 	//---------------------------
 	console.AddLog("sucess" ,"Shaders Initialized...");
-	return true;
 }
-void Shader::run(){
+Shader::~Shader(){
+	//---------------------------
+
+	glDeleteProgram(ID_program);
+
+	//---------------------------
+}
+
+//Functions
+void Shader::use(){
 	//---------------------------
 
 	glUseProgram(ID_program);
 
 	//---------------------------
 }
-
-//Subfunctions
 GLuint Shader::shader_compilation(string file_path, GLenum shaderType){
 	GLuint shaderID = glCreateShader(shaderType);
 	//---------------------------

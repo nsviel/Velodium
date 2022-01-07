@@ -26,8 +26,8 @@ GUI_fileManager::~GUI_fileManager(){}
 //Subfunctions
 void GUI_fileManager::fileManager(){
   Cloud* cloud_selected = sceneManager->get_cloud_selected();
-  vec2 guiDim_tP = dimManager->get_guiDim_tP();
-  vec2 winDim = dimManager->get_winDim();
+  float guiDim_tP = dimManager->get_gui_topPanel_height();
+  vec2 winDim = dimManager->get_win_dim();
   //-------------------------------
 
   //Model tab

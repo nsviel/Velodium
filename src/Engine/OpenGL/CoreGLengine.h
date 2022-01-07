@@ -29,14 +29,18 @@ public:
   bool init_OGL();
   bool init_object();
   bool init_shader();
-
+  void init_quad();
+  void init_fbo();
 
   //GL loop
   void loop();
-  void loop_begin();
+  void loop_pass_1();
+  void loop_pass_2();
   void loop_camera(int viewport_ID);
   void loop_shader();
   void loop_end();
+
+  void update_gl_quad();
 
 private:
   Configuration* configManager;
@@ -51,22 +55,14 @@ private:
   Framebuffer* fboManager;
   GUI* guiManager;
 
-  uint shader_program_ID, mvpID;
   vec3 backgColor;
-
   int gl_width;
   int gl_height;
 
-  int loop_cpt;
-  uint quadVAO;
-  GLuint fbo_pass_1;
-  GLuint fbo_pass_2;
-  GLuint texture_color_ID;
-  GLuint texture_depth_ID;
-  GLuint texture_postProcess_ID;
-
-  unsigned int FBO;
-  unsigned int texture;
+  GLuint quad_vao;
+  GLuint quad_vbo;
+  GLuint fbo_ID;
+  GLuint texture_ID;
 };
 
 #endif
