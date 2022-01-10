@@ -16,8 +16,8 @@ public:
   void setup_textures(GLuint tex_color, GLuint tex_depth);
 
 private:
-  GLuint texture_color_ID;
-  GLuint texture_depth_ID;
+  GLuint tex_color_ID;
+  GLuint tex_depth_ID;
 };
 
 #endif

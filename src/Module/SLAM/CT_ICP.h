@@ -21,7 +21,7 @@ public:
 
 public:
   void compute_slam(Cloud* cloud);
-  void compute_slam_online(Cloud* cloud);
+  void compute_slam_online(Cloud* cloud, int i);
 
   float AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
   void set_nb_thread(int value);
@@ -58,10 +58,10 @@ private:
   void compute_optimization(Frame* frame, Frame* frame_m1);
   void compute_assessRegistration(Frame* frame, Frame* frame_m1);
 
-  void add_pointsToSubset(Subset* subset);
   void add_pointsToSlamMap(Subset* subset);
   void add_pointsToLocalMap(Frame* frame);
 
+  void end_updateSubsetLocation(Subset* subset);
   void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
   void end_slamVoxelization(Cloud* cloud);
   void end_statistics(float duration, Frame* frame, Subset* subset);

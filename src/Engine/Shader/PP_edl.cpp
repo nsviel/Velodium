@@ -34,9 +34,18 @@ void PP_edl::setup_edl(Shader* shader){
   glUniform1f(edl_dist_loc, (float)edl_distance);
   glUniform1i(with_edl_loc, (int)with_edl);
 
+  auto color_texture_loc = glGetUniformLocation(shader->get_program_ID(), "tex_color");
+  auto depth_texture_loc = glGetUniformLocation(shader->get_program_ID(), "tex_depth");
+  //glUniform1i(color_texture_loc, tex_color_ID);
+  //glUniform1i(depth_texture_loc, tex_depth_ID);
+
+  say(floor(1));
+  say(ceil(1));
+  say(fract(1.0f));
+
   //---------------------------
 }
 void PP_edl::setup_textures(GLuint tex_color, GLuint tex_depth){
-  this->texture_color_ID = tex_color;
-  this->texture_depth_ID = tex_depth;
+  this->tex_color_ID = tex_color;
+  this->tex_depth_ID = tex_depth;
 }

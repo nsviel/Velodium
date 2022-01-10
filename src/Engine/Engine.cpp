@@ -85,6 +85,7 @@ void Engine::draw_clouds(){
 
         //Display vertices
         if(subset->visibility){
+          sceneManager->update_subset_location(subset);
           glBindVertexArray(subset->VAO);
           glDrawArrays(GL_POINTS, 0, subset->xyz.size());
           glBindVertexArray(0);

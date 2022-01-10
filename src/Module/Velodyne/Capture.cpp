@@ -69,7 +69,7 @@ void Capture::check_forNewSubset(){
 
     //Revoir toute cette fonction pour essayer d'intégrer le slam à la capture direct !!!!!
     CT_ICP cticpManager;
-    cticpManager.compute_slam_online(cloud_capture);
+    cticpManager.compute_slam_online(cloud_capture, cloud_capture->nb_subset-1);
 
   }
 

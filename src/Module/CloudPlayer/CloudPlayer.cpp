@@ -1,5 +1,7 @@
 #include "CloudPlayer.h"
 
+#include "../SLAM/CT_ICP.h"
+
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Specific/timer.h"
 #include "../../Engine/Scene.h"
@@ -17,6 +19,7 @@ CloudPlayer::CloudPlayer(Camera* camManager){
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
   this->timerManager = new Timer();
+  this->slamManager = new CT_ICP();
 
   this->subset_selected = 0;
   this->frame_max_ID = 0;
@@ -26,6 +29,8 @@ CloudPlayer::CloudPlayer(Camera* camManager){
   this->frequency = 10;
   this->all_frame_visible = false;
   this->playCloud_isrunning = false;
+  this->with_restart = false;
+  this->with_slam = true;
   this->camera_follow = false;
   this->camera_moved = vec3(0, 0, 0);
 
@@ -43,11 +48,23 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
   //---------------------------
 
   //If frame desired ID is superior to the number of subset restart it
-  if(frame_id >= cloud->nb_subset){
-    frame_id = 0;
+  if(with_restart){
+    if(frame_id >= cloud->nb_subset){
+      frame_id = 0;
+    }
+
+    if(frame_id < 0){
+      frame_id = cloud->nb_subset - 1;
+    }
   }
-  if(frame_id < 0){
-    frame_id = cloud->nb_subset - 1;
+  if(!with_restart){
+    if(frame_id >= cloud->nb_subset){
+      frame_id = cloud->nb_subset - 1;
+    }
+
+    if(frame_id < 0){
+      frame_id = 0;
+    }
   }
 
   //Set visibility parameter for each cloud subset
@@ -57,7 +74,6 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
     //If several frame displayed
     if(i >= frame_id - frame_display_range && i < frame_id && i >= 0){
       subset->visibility = true;
-
     }
     //Selected frame
     else if(i == frame_id){
@@ -68,8 +84,14 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
         frame_ID_ts = subset->ts[0];
       }
 
+      //If camera follow up option activated
       if(camera_follow){
         this->camera_followUp(subset);
+      }
+
+      //If with slam option is activated
+      if(with_slam && playCloud_isrunning){
+        slamManager->compute_slam_online(cloud, i);
       }
 
     }

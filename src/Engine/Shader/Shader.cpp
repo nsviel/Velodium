@@ -24,7 +24,6 @@ Shader::Shader(string vertex_path, string fragme_path){
 	glDeleteShader(fs);
 
 	//---------------------------
-	console.AddLog("sucess" ,"Shaders Initialized...");
 }
 Shader::~Shader(){
 	//---------------------------

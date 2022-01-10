@@ -22,7 +22,7 @@ CT_ICP::CT_ICP(){
 
   this->solver_ceres = false;
   this->solver_GN = true;
-  this->verbose = true;
+  this->verbose = false;
   this->frame_all = true;
   this->slamMap_voxelized = false;
 
@@ -76,14 +76,15 @@ void CT_ICP::compute_slam(Cloud* cloud){
     this->compute_optimization(frame, frame_m1);
     this->compute_assessRegistration(frame, frame_m1);
 
-    this->add_pointsToSubset(subset);
     this->add_pointsToSlamMap(subset);
     this->add_pointsToLocalMap(frame);
+
+    this->end_updateSubsetLocation(subset);
+    this->end_clearTooFarVoxels(frame->trans_e);
 
     //--------------
     float duration = toc();
     this->end_statistics(duration, frame, subset);
-    this->end_clearTooFarVoxels(frame->trans_e);
   }
 
   this->end_slamVoxelization(cloud);
@@ -92,16 +93,15 @@ void CT_ICP::compute_slam(Cloud* cloud){
   delete map;
   delete map_cloud;
 }
-void CT_ICP::compute_slam_online(Cloud* cloud){
-  int last_subset = cloud->subset.size() - 1;
-  Subset* subset = &cloud->subset[last_subset];
-  Frame* frame = &cloud->subset[last_subset].frame;
-  Frame* frame_m1 = &cloud->subset[last_subset-1].frame;
-  Frame* frame_m2 = &cloud->subset[last_subset-2].frame;
-  frame->ID = last_subset;
-  frame_max = cloud->subset.size();
+void CT_ICP::compute_slam_online(Cloud* cloud, int i){
   tic();
   //---------------------------
+
+  Subset* subset = &cloud->subset[i];
+  Frame* frame = &cloud->subset[i].frame;
+  Frame* frame_m1 = &cloud->subset[i-1].frame;
+  Frame* frame_m2 = &cloud->subset[i-2].frame;
+  frame->ID = i;
 
   this->init_frameTimestamp(subset);
   this->init_frameChain(frame, frame_m1, frame_m2);
@@ -109,15 +109,16 @@ void CT_ICP::compute_slam_online(Cloud* cloud){
 
   this->compute_gridSampling(subset);
   this->compute_optimization(frame, frame_m1);
+  this->compute_assessRegistration(frame, frame_m1);
 
-  this->add_pointsToSubset(subset);
-  this->add_pointsToSlamMap(subset);
   this->add_pointsToLocalMap(frame);
 
-  float duration = toc();
-  this->end_statistics(duration, frame, subset);
+  this->end_updateSubsetLocation(subset);
+  this->end_clearTooFarVoxels(frame->trans_e);
 
   //---------------------------
+  float duration = toc();
+  this->end_statistics(duration, frame, subset);
 }
 
 //Support functions
@@ -372,39 +373,6 @@ void CT_ICP::compute_assessRegistration(Frame* frame, Frame* frame_m1){
   //---------------------------
 }
 
-void CT_ICP::add_pointsToSubset(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
-
-  //Update frame root
-  Eigen::Vector3d root = glm_to_eigen_vec3_d(subset->root);
-  Eigen::Matrix3d R = quat_b.toRotationMatrix();
-  Eigen::Vector3d t = trans_b;
-  root = R * root + t;
-  subset->root = eigen_to_glm_vec3_d(root);
-
-  //Update subset position
-  #pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<subset->xyz.size(); i++){
-    Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
-    float ts_n = subset->ts_n[i];
-
-    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-    point = R * point + t;
-
-    subset->xyz[i] = eigen_to_glm_vec3_d(point);
-  }
-
-  //---------------------------
-  sceneManager->update_subset_location(subset);
-  sceneManager->update_subset_color(subset);
-}
 void CT_ICP::add_pointsToSlamMap(Subset* subset){
   //---------------------------
 
@@ -496,6 +464,38 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
   //---------------------------
 }
 
+void CT_ICP::end_updateSubsetLocation(Subset* subset){
+  Frame* frame = &subset->frame;
+  //---------------------------
+
+  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+  Eigen::Vector3d trans_b = frame->trans_b;
+  Eigen::Vector3d trans_e = frame->trans_e;
+
+  //Update frame root
+  Eigen::Vector3d root = glm_to_eigen_vec3_d(subset->root);
+  Eigen::Matrix3d R = quat_b.toRotationMatrix();
+  Eigen::Vector3d t = trans_b;
+  root = R * root + t;
+  subset->root = eigen_to_glm_vec3_d(root);
+
+  //Update subset position
+  #pragma omp parallel for num_threads(nb_thread)
+  for(int i=0; i<subset->xyz.size(); i++){
+    Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
+    float ts_n = subset->ts_n[i];
+
+    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    point = R * point + t;
+
+    subset->xyz[i] = eigen_to_glm_vec3_d(point);
+  }
+
+  //---------------------------
+  sceneManager->update_subset_location(subset);
+}
 void CT_ICP::end_clearTooFarVoxels(Eigen::Vector3d &current_location){
   vector<string> voxels_to_erase;
   //---------------------------
@@ -542,6 +542,9 @@ void CT_ICP::end_statistics(float duration, Frame* frame, Subset* subset){
     cout<<" "<<to_string(frame->ID)<<"/"<< frame_max;
     cout<< " [" <<duration<< " ms]"<<endl;
   }
+
+  string result = "SLAM " + subset->name + " - " + to_string(frame->ID) + " [" + to_string((int)duration) + " ms]";
+  console.AddLog("#", result);
 
   //---------------------------
 }

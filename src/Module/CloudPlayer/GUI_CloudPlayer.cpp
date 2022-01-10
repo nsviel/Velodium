@@ -38,6 +38,7 @@ void GUI_CloudPlayer::design_CloudPlayer(){
 void GUI_CloudPlayer::playCloud(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Timeline");
   Cloud* cloud = sceneManager->get_cloud_selected();
+  Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
   //Play / Stop frame display
@@ -150,6 +151,12 @@ void GUI_CloudPlayer::parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
+
+    bool* with_slam = playerManager->get_with_slam();
+    ImGui::Checkbox("SLAM each frame", with_slam);
+
+    bool* with_restart = playerManager->get_with_restart();
+    ImGui::Checkbox("Loop when end", with_restart);
 
     bool* cameraRoot = playerManager->get_camera_follow();
     ImGui::Checkbox("Camera follow up", cameraRoot);

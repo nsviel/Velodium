@@ -7,6 +7,7 @@ class Camera;
 class Scene;
 class Heatmap;
 class Timer;
+class CT_ICP;
 
 
 class CloudPlayer
@@ -40,6 +41,8 @@ public:
   inline bool* get_all_frame_visible(){return &all_frame_visible;}
   inline bool* get_playCloud_isrunning(){return &playCloud_isrunning;}
   inline bool* get_camera_follow(){return &camera_follow;}
+  inline bool* get_with_slam(){return &with_slam;}
+  inline bool* get_with_restart(){return &with_restart;}
   inline string* get_saveas(){return &saveas;}
 
 private:
@@ -47,6 +50,7 @@ private:
   Heatmap* heatmapManager;
   Camera* cameraManager;
   Timer* timerManager;
+  CT_ICP* slamManager;
 
   int cpt;
   int frame_display_range;
@@ -56,7 +60,9 @@ private:
   float frame_ID_ts;
   bool all_frame_visible;
   bool playCloud_isrunning;
+  bool with_restart;
   bool camera_follow;
+  bool with_slam;
   string saveas;
   vec3 camera_moved;
 };

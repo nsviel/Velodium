@@ -71,7 +71,7 @@ struct ConsoleApp{
   }
 
   void Draw(){
-    const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing(); // 1 separator, 1 input text
+    const float footer_height_to_reserve = 0;// ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing(); // 1 separator, 1 input text
     ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar); // Leave room for 1 separator + 1 InputText
     if (ImGui::BeginPopupContextWindow()){
       if (ImGui::Selectable("Clear")) ClearLog();
@@ -124,7 +124,7 @@ struct ConsoleApp{
 
     // Command-line
     bool reclaim_focus = false;
-    if (ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf), ImGuiInputTextFlags_EnterReturnsTrue|ImGuiInputTextFlags_CallbackCompletion|ImGuiInputTextFlags_CallbackHistory, &TextEditCallbackStub, (void*)this)){
+    /*if (ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf), ImGuiInputTextFlags_EnterReturnsTrue|ImGuiInputTextFlags_CallbackCompletion|ImGuiInputTextFlags_CallbackHistory, &TextEditCallbackStub, (void*)this)){
       char* s = InputBuf;
       Strtrim(s);
       if (s[0]){
@@ -132,7 +132,7 @@ struct ConsoleApp{
       }
       strcpy(s, "");
       reclaim_focus = true;
-    }
+    }*/
 
     // Auto-focus on window apparition
     ImGui::SetItemDefaultFocus();
@@ -151,8 +151,13 @@ struct ConsoleApp{
     }
     else if (Stricmp(command_line, "HELP") == 0){
       AddCommand("Commands:");
-      for (int i = 0; i < allCommands.Size; i++)
+      for (int i = 0; i < allCommands.Size; i++){
         AddCommand("- %s", allCommands[i]);
+      }
+    }
+    else if (Stricmp(command_line, "open") == 0){
+      AddCommand("Commands:");
+
     }
     else{
       AddCommand("Unknown command: '%s'\n", command_line);
