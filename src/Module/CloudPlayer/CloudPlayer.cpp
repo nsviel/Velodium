@@ -98,7 +98,6 @@ void CloudPlayer::select_byFrameID(Cloud* cloud, int frame_id){
     //All other frames
     else{
       subset->visibility = false;
-
     }
   }
 

@@ -22,7 +22,7 @@ void PP_edl::setup_edl(Shader* shader){
   auto a_loc = glGetUniformLocation(program_ID, "A");
   auto b_loc = glGetUniformLocation(program_ID, "B");
   auto a = -(clip_far + clip_near) / (clip_far - clip_near);
-  auto b = -2 * (clip_far * clip_near) / (clip_far - clip_near);
+  auto b = (-2 * clip_far * clip_near) / (clip_far - clip_near);
   glUniform1f(a_loc, (float) a);
   glUniform1f(b_loc, (float) b);
 
@@ -34,14 +34,10 @@ void PP_edl::setup_edl(Shader* shader){
   glUniform1f(edl_dist_loc, (float)edl_distance);
   glUniform1i(with_edl_loc, (int)with_edl);
 
-  auto color_texture_loc = glGetUniformLocation(shader->get_program_ID(), "tex_color");
-  auto depth_texture_loc = glGetUniformLocation(shader->get_program_ID(), "tex_depth");
-  //glUniform1i(color_texture_loc, tex_color_ID);
-  //glUniform1i(depth_texture_loc, tex_depth_ID);
-
-  say(floor(1));
-  say(ceil(1));
-  say(fract(1.0f));
+  auto color_texture_loc = glGetUniformLocation(program_ID, "tex_color");
+  auto depth_texture_loc = glGetUniformLocation(program_ID, "tex_depth");
+  glUniform1i(color_texture_loc, 0);
+  glUniform1i(depth_texture_loc, 1);
 
   //---------------------------
 }

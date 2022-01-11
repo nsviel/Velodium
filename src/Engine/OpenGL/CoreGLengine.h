@@ -37,8 +37,8 @@ public:
   void loop();
   void loop_pass_1();
   void loop_pass_2();
-  void loop_camera(int viewport_ID);
-  void loop_shader();
+  void loop_drawScene();
+  void loop_drawQuad();
   void loop_end();
 
   void update_gl_quad();

@@ -107,25 +107,6 @@ bool CoreGLengine::init_OGL(){
   //---------------------------
   return true;
 }
-bool CoreGLengine::init_shader(){
-  //---------------------------
-
-  shader_scene = new Shader("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
-  //shader_screen = new Shader("../src/Engine/Shader/shader_screen.vs", "../src/Engine/Shader/shader_screen.fs");
-  //shader_edl = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
-  shader_screen = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
-
-
-  edlManager->setup_textures(tex_color_ID, tex_depth_ID);
-  edlManager->setup_edl(shader_screen);
-
-  //Integration en cours
-  //voir fbo_2_ID
-  //voir appel aux texture dans edl
-
-  //---------------------------
-  return true;
-}
 bool CoreGLengine::init_object(){
   //---------------------------
 
@@ -179,24 +160,16 @@ void CoreGLengine::init_quad(){
   //---------------------------
 }
 void CoreGLengine::init_fbo(){
-  //---------------------------
-
   dimManager->update_window_dim();
   vec2 gl_dim = dimManager->get_gl_dim();
+  //---------------------------
 
   //Init textures
-  glGenTextures(1, &texture_ID);
-  glBindTexture(GL_TEXTURE_2D, texture_ID);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-  glBindTexture(GL_TEXTURE_2D ,0);
-
   glGenTextures(1, &tex_color_ID);
   glBindTexture(GL_TEXTURE_2D, tex_color_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glBindTexture(GL_TEXTURE_2D ,0);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
   glGenTextures(1, &tex_depth_ID);
   glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
@@ -205,29 +178,39 @@ void CoreGLengine::init_fbo(){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  glBindTexture(GL_TEXTURE_2D ,0);
 
   glGenTextures(1, &tex_edl_ID);
   glBindTexture(GL_TEXTURE_2D, tex_edl_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glBindTexture(GL_TEXTURE_2D ,0);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
   //Init FBO
   glGenFramebuffers(1, &fbo_1_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
-  //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_ID, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_color_ID, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex_depth_ID, 0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   glGenFramebuffers(1, &fbo_2_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_edl_ID, 0);
+
+  //Debind objects
+  glBindTexture(GL_TEXTURE_2D ,0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
+}
+bool CoreGLengine::init_shader(){
+  //---------------------------
+
+  shader_scene = new Shader("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
+  shader_screen = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
+
+  edlManager->setup_edl(shader_screen);
+
+  //---------------------------
+  return true;
 }
 
 void CoreGLengine::loop(){
@@ -237,19 +220,16 @@ void CoreGLengine::loop(){
     //First pass
     //---------------------------
     this->loop_pass_1();
-
-    //Drawing block
-    mat4 mvp = cameraManager->compute_mvpMatrix();
-    shader_scene->setMat4("MVP", mvp);
-    cameraManager->viewport_update(0);
-    cameraManager->input_cameraMouseCommands();
-    engineManager->loop();
+    this->loop_drawScene();
 
     //Second pass
     //---------------------------
     this->loop_pass_2();
-    guiManager->Gui_loop();
+    this->loop_drawQuad();
 
+    //GUI and end
+    //---------------------------
+    guiManager->Gui_loop();
     this->loop_end();
   }
   while(!glfwWindowShouldClose(window));
@@ -259,48 +239,59 @@ void CoreGLengine::loop(){
 void CoreGLengine::loop_pass_1(){
   //---------------------------
 
+  //Set FBO
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
+  //Update texture dimensions
   vec2 gl_dim = dimManager->get_gl_dim();
-  //glBindTexture(GL_TEXTURE_2D, texture_ID);
-  //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-  shader_scene->use();
-
-  glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, tex_color_ID);
-  glActiveTexture(GL_TEXTURE0 + 1);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
+  //Set active shader
+  shader_scene->use();
 
   //---------------------------
 }
 void CoreGLengine::loop_pass_2(){
   //---------------------------
 
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  //Set FBO
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
   glDisable(GL_DEPTH_TEST);
 
+  //Set active shader
+  shader_screen->use();
 
-  auto color_texture_loc = glGetUniformLocation(shader_screen->get_program_ID(), "tex_color");
-  auto depth_texture_loc = glGetUniformLocation(shader_screen->get_program_ID(), "tex_depth");
-  glUniform1i(color_texture_loc, tex_color_ID);
-  glUniform1i(depth_texture_loc, tex_depth_ID);
-
+  //Set active textures
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, tex_color_ID);
   glActiveTexture(GL_TEXTURE0 + 1);
   glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
 
+  //---------------------------
+}
+void CoreGLengine::loop_drawScene(){
+  //---------------------------
 
-  //Shader program for rendering the quad
-  shader_screen->use();
+  mat4 mvp = cameraManager->compute_mvpMatrix();
+  shader_scene->setMat4("MVP", mvp);
+  cameraManager->viewport_update(0);
+  cameraManager->input_cameraMouseCommands();
+  engineManager->loop();
 
+  //---------------------------
+}
+void CoreGLengine::loop_drawQuad(){
+  //---------------------------
+
+  //Set FBO
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
 
   //Viewport
   vec2 win_dim = dimManager->get_win_dim();
@@ -309,34 +300,11 @@ void CoreGLengine::loop_pass_2(){
   //Update OpenGL quad window
   this->update_gl_quad();
 
-
-  //Quad & texture drawing
-  //glActiveTexture(GL_TEXTURE0);
-  //glBindTexture(GL_TEXTURE_2D, texture_ID);
-
-
   //Draw screen quad
   glBindVertexArray(quad_vao);
-  //glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_ID);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-  //---------------------------
-}
-void CoreGLengine::loop_camera(int viewport_ID){
-  //---------------------------
-
-  cameraManager->viewport_update(viewport_ID);
-  cameraManager->input_cameraMouseCommands();
-
-  //---------------------------
-}
-void CoreGLengine::loop_shader(){
-  //---------------------------
-
-  mat4 mvp = cameraManager->compute_mvpMatrix();
-  shader_scene->setMat4("MVP", mvp);
 
   //---------------------------
 }

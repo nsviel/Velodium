@@ -74,8 +74,8 @@ void Configuration::create_jsonfile(){
     Json::Value camera;
     camera["fov"] = 65.0f;
     camera["initial_pos"] = 5.0f;
-    camera["clip_near"] = 0.0001f;
-    camera["clip_far"] = 1000.0f;
+    camera["clip_near"] = 0.1f;
+    camera["clip_far"] = 10000.0f;
     camera["speed_mouse"] = 0.003f;
     camera["speed_move"] = 3.0f;
     camera["speed_zoom"] = 0.1f;
