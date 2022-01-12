@@ -1,22 +1,22 @@
 #include "PP_edl.h"
 
-#include "Shader.h"
 
-
-PP_edl::PP_edl(){}
-PP_edl::~PP_edl(){}
-
-void PP_edl::setup_edl(Shader* shader){
-  auto program_ID = shader->get_program_ID();
-  glUseProgram(program_ID);
+PP_edl::PP_edl(){
   //---------------------------
 
-  //parameters
-  bool with_edl = true;
-  double edl_strength = 100.0;
-  double edl_distance = 1.0;
-  double clip_far = 10000.0;
-  double clip_near = 0.1;
+  this->with_edl = true;
+  this->edl_strength = 500.0;
+  this->edl_distance = 1.0;
+  this->clip_far = 10000.0;
+  this->clip_near = 0.1;
+
+  //---------------------------
+}
+PP_edl::~PP_edl(){}
+
+void PP_edl::setup_edl(GLuint program_ID){
+  glUseProgram(program_ID);
+  //---------------------------
 
   //Set parameters to shader
   auto a_loc = glGetUniformLocation(program_ID, "A");

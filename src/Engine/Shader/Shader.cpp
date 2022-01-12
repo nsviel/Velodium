@@ -1,71 +1,52 @@
 #include "Shader.h"
 
+#include "PP_edl.h"
+
 #include <fstream>
+
+#include "ShaderObject.h"
 
 
 //Constructor / Destructor
-Shader::Shader(string vertex_path, string fragme_path){
+Shader::Shader(){
 	//---------------------------
 
-	// Create the shaders program
-	ID_program = glCreateProgram();
-
-	// Compile & check Shaders-
-	GLuint vs = shader_compilation(vertex_path, GL_VERTEX_SHADER);
-	GLuint fs = shader_compilation(fragme_path, GL_FRAGMENT_SHADER);
-
-	//Link program
-	glLinkProgram(ID_program);
-
-	//Detach shaders for keep memory ressources
-	glDetachShader(ID_program, vs);
-	glDeleteShader(vs);
-	glDetachShader(ID_program, fs);
-	glDeleteShader(fs);
+	this->edlManager = new PP_edl();
 
 	//---------------------------
 }
-Shader::~Shader(){
+Shader::~Shader(){}
+
+void Shader::init(){
 	//---------------------------
 
-	glDeleteProgram(ID_program);
+	shader_scene = new ShaderObject("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
+	shader_screen = new ShaderObject("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
+
+	edlManager->setup_edl(shader_screen->get_program_ID());
 
 	//---------------------------
 }
 
-//Functions
-void Shader::use(){
+void Shader::use(string shader_name){
 	//---------------------------
 
-	glUseProgram(ID_program);
-
-	//---------------------------
-}
-GLuint Shader::shader_compilation(string file_path, GLenum shaderType){
-	GLuint shaderID = glCreateShader(shaderType);
-	//---------------------------
-
-	//Read shader
-	std::ifstream shaderStream(file_path.c_str(), std::ios::in);
-	string shaderCode;
-	if(shaderStream.is_open()){
-		std::stringstream sstr;
-		sstr << shaderStream.rdbuf();
-		shaderCode = sstr.str();
-		shaderStream.close();
+	if(shader_name == "scene"){
+		shader_scene->use();
+	}
+	else if(shader_name == "screen"){
+		shader_screen->use();
 	}
 
-	//Compile shader
-	int sucess, InfoLogLength;
-	char const* sourcePointer = shaderCode.c_str();
-	glShaderSource(shaderID, 1, &sourcePointer , NULL);
-	glCompileShader(shaderID);
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &sucess);
-	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	//---------------------------
+}
+void Shader::use_screen(){
+	shader_screen->use();
+}
+void Shader::use_scene(){
+	//---------------------------
 
-	//Bind to program
-	glAttachShader(ID_program, shaderID);
+	shader_scene->use();
 
 	//---------------------------
-	return shaderID;
 }

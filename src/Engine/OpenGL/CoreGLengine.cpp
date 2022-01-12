@@ -6,7 +6,7 @@
 
 #include "../Engine.h"
 #include "../Shader/Shader.h"
-#include "../Shader/PP_edl.h"
+#include "../Shader/ShaderObject.h"
 #include "../Configuration/Dimension.h"
 #include "../Configuration/Configuration.h"
 
@@ -20,7 +20,7 @@
 CoreGLengine::CoreGLengine(){
   //---------------------------
 
-  this->configManager = new Configuration();
+
 
   //---------------------------
 }
@@ -35,11 +35,9 @@ CoreGLengine::~CoreGLengine(){
 
 //Engine Initialization
 bool CoreGLengine::init(){
-  this->configManager->make_configuration();
-  float backgColor = configManager->parse_json_float("window", "background_color");
-  this->backgColor = vec3(backgColor, backgColor, backgColor);
   //---------------------------
 
+  this->init_config();
   this->init_OGL();
   this->init_object();
   this->init_fbo();
@@ -48,6 +46,17 @@ bool CoreGLengine::init(){
 
   //---------------------------
   console.AddLog("sucess" ,"Program initialized...");
+  return true;
+}
+bool CoreGLengine::init_config(){
+  this->configManager = new Configuration();
+  //---------------------------
+
+  this->configManager->make_configuration();
+  float backgColor = configManager->parse_json_float("window", "background_color");
+  this->backgColor = vec3(backgColor, backgColor, backgColor);
+
+  //---------------------------
   return true;
 }
 bool CoreGLengine::init_OGL(){
@@ -110,13 +119,13 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_object(){
   //---------------------------
 
+  this->shaderManager = new Shader();
   this->dimManager = new Dimension(window);
   this->cameraManager = new Camera(dimManager);
   this->viewportManager = new Viewport(dimManager);
-  this->engineManager = new Engine(dimManager, cameraManager);
+  this->engineManager = new Engine(dimManager, cameraManager, shaderManager);
   this->fboManager = new Framebuffer();
   this->guiManager = new GUI(engineManager);
-  this->edlManager = new PP_edl();
   guiManager->Gui_bkgColor(&backgColor);
 
   //---------------------------
@@ -164,12 +173,17 @@ void CoreGLengine::init_fbo(){
   vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------
 
+  //Init FBO 1
+  glGenFramebuffers(1, &fbo_1_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
+
   //Init textures
   glGenTextures(1, &tex_color_ID);
   glBindTexture(GL_TEXTURE_2D, tex_color_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_color_ID, 0);
 
   glGenTextures(1, &tex_depth_ID);
   glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
@@ -178,22 +192,16 @@ void CoreGLengine::init_fbo(){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-
-  glGenTextures(1, &tex_edl_ID);
-  glBindTexture(GL_TEXTURE_2D, tex_edl_ID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-
-  //Init FBO
-  glGenFramebuffers(1, &fbo_1_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_color_ID, 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex_depth_ID, 0);
 
+  //Init FBO 2
+  glGenTextures(1, &tex_edl_ID);
   glGenFramebuffers(1, &fbo_2_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_edl_ID, 0);
+
+  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex_edl_ID);
+  glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, gl_dim.x+10000, gl_dim.y, false);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex_edl_ID, 0);
 
   //Debind objects
   glBindTexture(GL_TEXTURE_2D ,0);
@@ -204,10 +212,7 @@ void CoreGLengine::init_fbo(){
 bool CoreGLengine::init_shader(){
   //---------------------------
 
-  shader_scene = new Shader("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
-  shader_screen = new Shader("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
-
-  edlManager->setup_edl(shader_screen);
+  shaderManager->init();
 
   //---------------------------
   return true;
@@ -253,7 +258,10 @@ void CoreGLengine::loop_pass_1(){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
   //Set active shader
-  shader_scene->use();
+  shaderManager->use("scene");
+  mat4 mvp = cameraManager->compute_mvpMatrix();
+  ShaderObject* shader_scene = shaderManager->get_shader_scene();
+  shader_scene->setMat4("MVP", mvp);
 
   //---------------------------
 }
@@ -265,7 +273,7 @@ void CoreGLengine::loop_pass_2(){
   glDisable(GL_DEPTH_TEST);
 
   //Set active shader
-  shader_screen->use();
+  shaderManager->use("screen");
 
   //Set active textures
   glActiveTexture(GL_TEXTURE0);
@@ -278,8 +286,6 @@ void CoreGLengine::loop_pass_2(){
 void CoreGLengine::loop_drawScene(){
   //---------------------------
 
-  mat4 mvp = cameraManager->compute_mvpMatrix();
-  shader_scene->setMat4("MVP", mvp);
   cameraManager->viewport_update(0);
   cameraManager->input_cameraMouseCommands();
   engineManager->loop();

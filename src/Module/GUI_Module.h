@@ -40,6 +40,14 @@ public:
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
 
+      // Network stuff management
+      if(module_velodyne){
+        if(ImGui::BeginTabItem("Network")){
+          gui_senderManager->design_Network();
+          ImGui::EndTabItem();
+        }
+      }
+      
       // SLAM
       if(module_obstacle){
         if(ImGui::BeginTabItem("Obstacle")){
@@ -77,14 +85,6 @@ public:
       if(module_scala){
         if(ImGui::BeginTabItem("Scala")){
           gui_scalaManager->design_Scala();
-          ImGui::EndTabItem();
-        }
-      }
-
-      // Network stuff management
-      if(module_velodyne){
-        if(ImGui::BeginTabItem("Network")){
-          gui_senderManager->design_Network();
           ImGui::EndTabItem();
         }
       }

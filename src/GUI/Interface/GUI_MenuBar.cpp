@@ -198,6 +198,9 @@ void GUI_menuBar::MenuBar_Operations(){
   //---------------------------
 
   //Functions
+  if(ImGui::Button("Shader", ImVec2(150,0))){
+    window_tab.show_shader = !window_tab.show_shader;
+  }
   if(ImGui::Button("Filter", ImVec2(150,0))){
     window_tab.show_filtering = !window_tab.show_filtering;
   }

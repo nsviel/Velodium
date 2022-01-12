@@ -11,6 +11,7 @@
 class WIN_modifyFileInfo;
 class WIN_loading;
 class WIN_camera;
+class WIN_shader;
 
 class Engine;
 class Camera;
@@ -81,6 +82,7 @@ private:
   WIN_camera* wincamManager;
   WIN_loading* loadingManager;
   WIN_modifyFileInfo* fileinfoManager;
+  WIN_shader* shaderManager;
 
   bool cloud_movement;
 };

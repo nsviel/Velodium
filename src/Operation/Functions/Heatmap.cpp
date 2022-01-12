@@ -32,13 +32,15 @@ void Heatmap::set_Heatmap(Cloud* cloud){
     Subset* subset = &cloud->subset[i];
 
     //Apply heatmap
-    if(is_heatmap == false){
+    if(!is_heatmap){
       this->compute_subset_heatmap_ON(subset);
+      cloud->subset_buffer[i].RGB = subset->RGB;
     }
 
     //Reverse heatmap
-    if(is_heatmap == true){
+    if(is_heatmap){
       this->compute_subset_heatmap_OFF(subset);
+      cloud->subset_buffer[i].RGB = cloud->subset_init[i].RGB;
     }
   }
 

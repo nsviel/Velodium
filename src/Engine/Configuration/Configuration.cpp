@@ -63,12 +63,13 @@ void Configuration::create_jsonfile(){
     root["opengl"] = gl;
 
     //Parameters
-    Json::Value transf;
-    transf["path_media"] = "../media/";
-    transf["cloud_translation"] = 0.01;
-    transf["cloud_rotation"] = 5; //Degree
-    transf["cloud_movement"] = true;
-    root["transformation"] = transf;
+    Json::Value param;
+    param["path_media"] = "../media/";
+    param["cloud_translation"] = 0.01;
+    param["cloud_rotation"] = 5; //Degree
+    param["cloud_movement"] = true;
+    param["point_size"] = 3;
+    root["parameter"] = param;
 
     //Camera
     Json::Value camera;
@@ -85,7 +86,7 @@ void Configuration::create_jsonfile(){
     Json::StyledWriter writer;
     string strWrite = writer.write(root);
     ofstream ofs;
-    ofs.open(jsonPath);
+    ofs.open(jsonPath.c_str());
     ofs << strWrite;
     ofs.close();
   }

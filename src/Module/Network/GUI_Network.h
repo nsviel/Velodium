@@ -3,6 +3,8 @@
 
 class Network;
 class MQTT;
+class SFTP;
+class SSH;
 
 #include "../../common.h"
 
@@ -23,7 +25,8 @@ public:
 private:
   Network* netManager;
   MQTT* mqttManager;
-
+  SFTP* sftpManager;
+  SSH* sshManager;
 };
 
 #endif

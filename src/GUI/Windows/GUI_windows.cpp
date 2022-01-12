@@ -4,6 +4,7 @@
 #include "WIN_loading.h"
 #include "WIN_modifyFileInfo.h"
 #include "WIN_camera.h"
+#include "WIN_shader.h"
 
 #include "../../Engine/Engine.h"
 #include "../../Engine/Scene.h"
@@ -55,6 +56,7 @@ GUI_windows::GUI_windows(Engine* engine){
   this->wincamManager = new WIN_camera(cameraManager);
   this->loadingManager = new WIN_loading();
   this->fileinfoManager = new WIN_modifyFileInfo();
+  this->shaderManager = new WIN_shader(engineManager->get_shaderManager());
 
   //---------------------------
   this->init();
@@ -81,6 +83,7 @@ void GUI_windows::init(){
   window_tab.show_selection = false;
   window_tab.show_fitting = false;
   window_tab.show_heatmap = false;
+  window_tab.show_shader = false;
 
   this->cloud_movement = configManager->parse_json_float("transformation", "cloud_movement");
 
@@ -106,6 +109,7 @@ void GUI_windows::window_Draw(){
   loadingManager->window_loading();
   loadingManager->window_saving();
   fileinfoManager->window_modifyFileInfo();
+  shaderManager->window_shader();
 
   //---------------------------
 }

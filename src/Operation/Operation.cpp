@@ -425,6 +425,7 @@ void Operation::allSaving(){
 
   //---------------------------
 }
+
 string Operation::get_filePath(){
   //---------------------------
 
@@ -439,6 +440,32 @@ string Operation::get_filePath(){
   //Check if not empty
   if ((path_char != NULL) && (path_char[0] != '\0')){
     path_str = string(path_char);
+  }
+
+  //Check if there is a /n
+  if(path_str.find('\n')){
+    path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
+  }
+
+  //---------------------------
+  return path_str;
+}
+string Operation::get_filePath(string path){
+  string path_str;
+  //---------------------------
+
+  //Zenity window
+  string zenity = "zenity --file-selection --filename=" + path + " 2> /dev/null";
+  FILE *file = popen(zenity.c_str(), "r");
+  char filename[32768];
+  const char* path_char = fgets(filename, 32768, file);
+
+  //Check if not empty
+  if ((path_char != NULL) && (path_char[0] != '\0')){
+    path_str = string(path_char);
+  }
+  else if(path_char == NULL){
+    path_str = path;
   }
 
   //Check if there is a /n

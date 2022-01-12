@@ -40,8 +40,8 @@ public:
   void control_keyboard_camMove();
   void control_keyboard_ctrlAction();
 
-  inline float* get_transCoef(){return &move_trans_speed;}
-  inline float* get_rotatDegree(){return &rotatDegree;}
+  inline float* get_transCoef(){return &cloud_trans_speed;}
+  inline float* get_rotatDegree(){return &cloud_rotat_degree;}
   inline int* get_mouseWheelMode(){return &wheel_mode;}
 
 private:
@@ -58,9 +58,8 @@ private:
   Selection* selectionManager;
   Heatmap* heatmapManager;
 
-  float transCoef;
-  float move_trans_speed;
-  float rotatDegree;
+  float cloud_trans_speed;
+  float cloud_rotat_degree;
   int wheel_mode;
 };
 

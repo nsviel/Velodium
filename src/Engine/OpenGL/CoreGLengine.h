@@ -9,7 +9,6 @@ class GUI;
 class Engine;
 class Framebuffer;
 class Configuration;
-class PP_edl;
 
 #include "../../common.h"
 
@@ -27,6 +26,7 @@ public:
 
 public:
   bool init();
+  bool init_config();
   bool init_OGL();
   bool init_object();
   bool init_shader();
@@ -52,11 +52,7 @@ private:
   Dimension* dimManager;
   Framebuffer* fboManager;
   GUI* guiManager;
-  PP_edl* edlManager;
-
-  Shader* shader_scene;
-  Shader* shader_screen;
-  Shader* shader_edl;
+  Shader* shaderManager;
 
   vec3 backgColor;
   int gl_width;

@@ -38,8 +38,8 @@ GUI_control::GUI_control(Engine* engine){
   this->opeManager = new Operation();
 
   Configuration configManager;
-  this->move_trans_speed = configManager.parse_json_float("transformation", "cloud_translation");
-  this->rotatDegree = configManager.parse_json_float("transformation", "cloud_rotation");
+  this->cloud_trans_speed = configManager.parse_json_float("parameter", "cloud_translation");
+  this->cloud_rotat_degree = configManager.parse_json_float("parameter", "cloud_rotation");
   this->wheel_mode = 0;
 
   //---------------------------
@@ -237,10 +237,11 @@ void GUI_control::control_keyboard_translation(){
   for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
     if(!io.MouseDown[1] && !io.WantCaptureMouse && cloud != nullptr){
       Subset* subset = &cloud->subset[cloud->subset_selected];
+      float transCoef = cloud_trans_speed;
 
       //Shift speed up
       if(io.KeysDown[340]){
-        transCoef = move_trans_speed * 5;
+        transCoef = cloud_trans_speed * 5;
       }
 
       // Z key
@@ -305,7 +306,7 @@ void GUI_control::control_keyboard_translation(){
       }
       // 7 key
       if(io.KeysDown[327]){
-        float r = rotatDegree*M_PI/180;
+        float r = cloud_rotat_degree*M_PI/180;
         vec3 rotation = vec3(0,0,r);
 
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
@@ -316,7 +317,7 @@ void GUI_control::control_keyboard_translation(){
       }
       // 9 key
       if(io.KeysDown[329]){
-        float r = rotatDegree*M_PI/180;
+        float r = cloud_rotat_degree*M_PI/180;
         vec3 rotation = vec3(0,0,-r);
 
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
@@ -326,7 +327,7 @@ void GUI_control::control_keyboard_translation(){
         break;
       }
 
-      transCoef = move_trans_speed;
+      transCoef = cloud_trans_speed;
     }
   }
 

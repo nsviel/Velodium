@@ -4,6 +4,7 @@
 #include "Glyphs.h"
 
 #include "Data/Database.h"
+#include "Shader/Shader.h"
 #include "Configuration/Dimension.h"
 #include "Configuration/Configuration.h"
 #include "OpenGL/CoreGLengine.h"
@@ -15,8 +16,9 @@ Database database;
 
 
 //Constructor / Destructor
-Engine::Engine(Dimension* dim, Camera* control){
+Engine::Engine(Dimension* dim, Camera* control, Shader* shader){
   this->dimManager = dim;
+  this->shaderManager = shader;
   this->cameraManager = control;
   //---------------------------
 

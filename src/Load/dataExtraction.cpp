@@ -2,6 +2,7 @@
 
 #include "../Engine/Glyphs.h"
 #include "../Engine/Scene.h"
+#include "../Engine/Configuration/Configuration.h"
 #include "../Specific/fct_maths.h"
 
 #include <experimental/filesystem>
@@ -12,6 +13,7 @@
 dataExtraction::dataExtraction(){
   //---------------------------
 
+  this->configManager = new Configuration();
   this->sceneManager = new Scene();
 
   this->ID = 0;
@@ -280,7 +282,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->nb_subset = data.size();
   cloud->subset_selected = 0;
   cloud->heatmap = false;
-  cloud->point_size = 1;
+  cloud->point_size = configManager->parse_json_int("parameter", "point_size");
 
   //Save path
   string absPath = std::experimental::filesystem::current_path();

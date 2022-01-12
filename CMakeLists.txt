@@ -21,6 +21,7 @@ find_package(OpenMP REQUIRED)
 find_package(Ceres REQUIRED)
 find_package(tsl-robin-map REQUIRED)
 find_package(Freetype REQUIRED)
+find_package(libssh REQUIRED)
 
 #Denpendancies
 set(ALL_LIBS

@@ -15,6 +15,7 @@ class Camera;
 class Dimension;
 class GUI;
 class Heatmap;
+class Shader;
 
 #include "../common.h"
 
@@ -26,7 +27,7 @@ class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Dimension* dim, Camera* control);
+  Engine(Dimension* dim, Camera* control, Shader* shader);
   ~Engine();
 
 public:
@@ -43,6 +44,7 @@ public:
   inline Dimension* get_dimManager(){return dimManager;}
   inline Camera* get_CameraManager(){return cameraManager;}
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
+  inline Shader* get_shaderManager(){return shaderManager;}
 
 private:
   Dimension* dimManager;
@@ -51,6 +53,7 @@ private:
   Camera* cameraManager;
   GUI* guiManager;
   Heatmap* heatmapManager;
+  Shader* shaderManager;
 
   uint modelID, comID;
 };

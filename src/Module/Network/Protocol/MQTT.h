@@ -1,7 +1,7 @@
-#ifndef MQTT_H
-#define MQTT_H
+#ifndef PROTOCOL_MQTT_H
+#define PROTOCOL_MQTT_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 
 class MQTT

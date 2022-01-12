@@ -7,6 +7,7 @@
 #include "../Module/Velodyne/UDP/struct_UDPpacket.h"
 
 class Scene;
+class Configuration;
 
 
 class dataExtraction
@@ -41,6 +42,7 @@ private:
 
 private:
   Scene* sceneManager;
+  Configuration* configManager;
 
   float Red, Green, Blue;
   int ID, oneFrame_VAO;
