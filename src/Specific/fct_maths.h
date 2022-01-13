@@ -30,6 +30,16 @@ namespace{
     //---------------------------
     return dist;
   }
+  float fct_distance_origin(glm::vec3 pt1){
+    //Euclidean distance
+    float dist;
+    //---------------------------
+
+    dist = sqrt(pow(pt1.x, 2) + pow(pt1.y, 2) + pow(pt1.z, 2));
+
+    //---------------------------
+    return dist;
+  }
   float fct_distance(Eigen::Vector3d pt1, Eigen::Vector3d pt2){
     //Euclidean distance
     //---------------------------

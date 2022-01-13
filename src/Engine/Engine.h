@@ -16,6 +16,7 @@ class Dimension;
 class GUI;
 class Heatmap;
 class Shader;
+class Filter;
 
 #include "../common.h"
 
@@ -45,6 +46,7 @@ public:
   inline Camera* get_CameraManager(){return cameraManager;}
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
+  inline Filter* get_filterManager(){return filterManager;}
 
 private:
   Dimension* dimManager;
@@ -54,6 +56,7 @@ private:
   GUI* guiManager;
   Heatmap* heatmapManager;
   Shader* shaderManager;
+  Filter* filterManager;
 
   uint modelID, comID;
 };

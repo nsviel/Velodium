@@ -5,8 +5,8 @@
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
-
 #include "../../Engine/Scene.h"
+#include "../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / Destructor
@@ -84,7 +84,7 @@ void CT_ICP::compute_slam(Cloud* cloud){
 
     //--------------
     float duration = toc();
-    this->end_statistics(duration, frame, subset);
+    this->end_statistics(duration, frame, frame_m1, subset);
   }
 
   this->end_slamVoxelization(cloud);
@@ -118,7 +118,7 @@ void CT_ICP::compute_slam_online(Cloud* cloud, int i){
 
   //---------------------------
   float duration = toc();
-  this->end_statistics(duration, frame, subset);
+  this->end_statistics(duration, frame, frame_m1, subset);
 }
 
 //Support functions
@@ -528,7 +528,7 @@ void CT_ICP::end_slamVoxelization(Cloud* cloud){
 
   //---------------------------
 }
-void CT_ICP::end_statistics(float duration, Frame* frame, Subset* subset){
+void CT_ICP::end_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset){
   //---------------------------
 
   //Fill stats
@@ -537,12 +537,36 @@ void CT_ICP::end_statistics(float duration, Frame* frame, Subset* subset){
   frame->map_size_rlt = map->size() - map_size_old;
   this->map_size_old = map->size();
 
+  //Transformation parameters
+  vec3 trans_abs = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
+  vec3 trans_rlt;
+  trans_rlt.x = frame->trans_b(0) - frame_m1->trans_b(0);
+  trans_rlt.y = frame->trans_b(1) - frame_m1->trans_b(1);
+  trans_rlt.z = frame->trans_b(2) - frame_m1->trans_b(2);
+
+  Transforms transformManager;
+  vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
+  vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
+  vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
+
+  vec3 rotat_rlt;
+  rotat_rlt.x = f0_rotat.x - f0_rotat.x;
+  rotat_rlt.y = f0_rotat.y - f1_rotat.y;
+  rotat_rlt.z = f0_rotat.z - f1_rotat.z;
+
+  frame->trans_abs = trans_abs;
+  frame->rotat_abs = rotat_abs;
+  frame->trans_rlt = trans_rlt;
+  frame->rotat_rlt = rotat_rlt;
+
+  //Terminal result
   if(verbose){
     cout<<"[sucess] SLAM - "<<subset->name.c_str();
     cout<<" "<<to_string(frame->ID)<<"/"<< frame_max;
     cout<< " [" <<duration<< " ms]"<<endl;
   }
 
+  //Consol result
   string result = "SLAM " + subset->name + " - " + to_string(frame->ID) + " [" + to_string((int)duration) + " ms]";
   console.AddLog("#", result);
 

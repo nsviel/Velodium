@@ -11,6 +11,7 @@
 #include "OpenGL/Camera.h"
 
 #include "../Operation/Functions/Heatmap.h"
+#include "../Operation/Transformation/Filter.h"
 
 Database database;
 
@@ -27,6 +28,7 @@ Engine::Engine(Dimension* dim, Camera* control, Shader* shader){
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
   this->heatmapManager = new Heatmap();
+  this->filterManager = new Filter();
 
   glyphManager->init();
 

@@ -302,27 +302,22 @@ void GUI_Slam::statistics(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
-  Eigen::Vector3d trans_b = Eigen::Vector3d::Zero();
-  Eigen::Vector3d trans_e = Eigen::Vector3d::Zero();
-  vec3 rotat_b(0,0,0);
-  vec3 rotat_e(0,0,0);
-  float time_slam = 0;
+  float time = 0;
+  vec3 trans_abs = vec3(0, 0, 0);
+  vec3 rotat_abs = vec3(0, 0, 0);
+  vec3 trans_rlt = vec3(0, 0, 0);
+  vec3 rotat_rlt = vec3(0, 0, 0);
   int map_size_abs = 0;
   int map_size_rlt = 0;
 
   if(cloud != nullptr){
     Frame* frame = &cloud->subset[cloud->subset_selected].frame;
 
-    trans_b = frame->trans_b;
-    trans_e = frame->trans_e;
-
-    mat4 mat_b = eigen_to_glm_mat4(frame->rotat_b);
-    mat4 mat_e = eigen_to_glm_mat4(frame->rotat_e);
-
-    rotat_b = compute_anglesFromTransformationMatrix(mat_b);
-    rotat_e = compute_anglesFromTransformationMatrix(mat_e);
-
-    time_slam = frame->time_slam;
+    time = frame->time_slam;
+    trans_abs = frame->trans_abs;
+    rotat_abs = frame->rotat_abs;
+    trans_rlt = frame->trans_rlt;
+    rotat_rlt = frame->rotat_rlt;
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
   }
@@ -331,22 +326,24 @@ void GUI_Slam::statistics(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Time");
   ImGui::Text("Computation:");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time_slam);
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);
 
-  //SLAM results
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Values");
-  ImGui::Text("Tb [m]:");
+  //SLAM results - absolut transformation parameters
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Transformation");
+  ImGui::Text("T abs [m]:");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_b(0), trans_b(1), trans_b(2));
-  ImGui::Text("Te [m]:");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_abs.x, trans_abs.y, trans_abs.z);
+  ImGui::Text("R abs [°]:");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_e(0), trans_e(1), trans_e(2));
-  ImGui::Text("Rb [°]:");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_abs.x, rotat_abs.y, rotat_abs.z);
+
+  //SLAM results - relative transformation parameters
+  ImGui::Text("T rlt [m]:");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_b.x, rotat_b.y, rotat_b.z);
-  ImGui::Text("Re [°]:");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_rlt.x, trans_rlt.y, trans_rlt.z);
+  ImGui::Text("R rlt [°]:");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_e.x, rotat_e.y, rotat_e.z);
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_rlt.x, rotat_rlt.y, rotat_rlt.z);
 
   //Local map data
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Local map");
@@ -356,7 +353,6 @@ void GUI_Slam::statistics(){
   ImGui::Text("Nb voxel rlt: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
-
 
   //---------------------------
 }

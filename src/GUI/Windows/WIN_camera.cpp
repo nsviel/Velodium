@@ -31,7 +31,7 @@ void WIN_camera::window_camera(){
 
     this->parameters();
     this->information();
-    
+
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
@@ -106,9 +106,9 @@ void WIN_camera::information(){
   ImGui::DragFloat3("Pos", floatArray, 0.01f, -100.0f, 100.0f);
 
   //Camera angles
-  float HAngle = cameraManager->get_angle_azimuth();
+  float* HAngle = cameraManager->get_angle_azimuth();
   float VAngle = cameraManager->get_angle_elevati();
-  ImGui::Text("Horizontal angle : %.2f°", HAngle * 180 / M_PI);
+  ImGui::Text("Horizontal angle : %.2f°", *HAngle * 180 / M_PI);
   ImGui::Text("Vertical angle : %.2f°", VAngle * 180 / M_PI);
 
   //---------------------------

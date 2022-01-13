@@ -38,7 +38,7 @@ GUI_menuBar::GUI_menuBar(Engine* engine, GUI_windows* winManager, GUI_option* op
   this->texManager = new Textures();
   this->extractionManager = new Extraction();
   this->opeManager = new Operation();
-  this->playerManager = new GUI_CloudPlayer(engineManager->get_CameraManager());
+  this->playerManager = new GUI_CloudPlayer(engineManager);
 
   //---------------------------
 }
@@ -202,7 +202,7 @@ void GUI_menuBar::MenuBar_Operations(){
     window_tab.show_shader = !window_tab.show_shader;
   }
   if(ImGui::Button("Filter", ImVec2(150,0))){
-    window_tab.show_filtering = !window_tab.show_filtering;
+    window_tab.show_filter = !window_tab.show_filter;
   }
   if(ImGui::Button("Intensity", ImVec2(150,0))){
     window_tab.show_intensity = !window_tab.show_intensity;

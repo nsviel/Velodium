@@ -119,7 +119,7 @@ void Attribut::compute_cosIt(Subset* subset){
     compute_Distances(subset);
   }
   if(N.size() == 0){
-    cout<<"No normal for cosIt computation"<<endl;
+    //cout<<"No normal for cosIt computation"<<endl;
     return;
   }
 

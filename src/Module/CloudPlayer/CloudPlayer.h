@@ -38,9 +38,8 @@ public:
   inline int* get_frame_max_nb(){return &frame_max_nb;}
   inline int* get_frame_display_range(){return &frame_display_range;}
   inline float* get_frame_ID_ts(){return &frame_ID_ts;}
-  inline bool* get_all_frame_visible(){return &all_frame_visible;}
-  inline bool* get_playCloud_isrunning(){return &playCloud_isrunning;}
-  inline bool* get_camera_follow(){return &camera_follow;}
+  inline bool* get_player_isrunning(){return &player_isrunning;}
+  inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
   inline bool* get_with_restart(){return &with_restart;}
   inline string* get_saveas(){return &saveas;}
@@ -52,19 +51,20 @@ private:
   Timer* timerManager;
   CT_ICP* slamManager;
 
+  string saveas;
+  float frame_ID_ts;
   int cpt;
   int frame_display_range;
   int frequency;
   int subset_selected;
   int frame_max_ID, frame_max_nb;
-  float frame_ID_ts;
-  bool all_frame_visible;
-  bool playCloud_isrunning;
+
+  bool player_isrunning;
   bool with_restart;
-  bool camera_follow;
+  bool with_camera_follow;
   bool with_slam;
-  string saveas;
-  vec3 camera_moved;
+  bool with_camera_top;
+  bool with_camera_root;
 };
 
 #endif

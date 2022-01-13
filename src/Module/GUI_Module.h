@@ -20,7 +20,7 @@ public:
 
     this->gui_veloManager = new GUI_Velodyne();
     this->gui_scalaManager = new GUI_Scala();
-    this->gui_odomManager = new GUI_CloudPlayer(engineManager->get_CameraManager());
+    this->gui_odomManager = new GUI_CloudPlayer(engineManager);
     this->gui_slamManager = new GUI_Slam();
     this->gui_senderManager = new GUI_Network();
     this->gui_obstacleManager = new GUI_Obstacle(engineManager);
@@ -47,7 +47,7 @@ public:
           ImGui::EndTabItem();
         }
       }
-      
+
       // SLAM
       if(module_obstacle){
         if(ImGui::BeginTabItem("Obstacle")){

@@ -12,6 +12,7 @@ class WIN_modifyFileInfo;
 class WIN_loading;
 class WIN_camera;
 class WIN_shader;
+class WIN_filter;
 
 class Engine;
 class Camera;
@@ -50,7 +51,6 @@ public:
   void window_selection();
   void window_extractCloud();
   void window_cutCloud();
-  void window_filter();
   void window_fitting();
   void window_normal();
   void window_intensity();
@@ -65,7 +65,6 @@ private:
   Engine* engineManager;
   Camera* cameraManager;
   Fusion* fusionManager;
-  Filter* filterManager;
   Scene* sceneManager;
   Attribut* attribManager;
   Radiometry* radioManager;
@@ -83,6 +82,7 @@ private:
   WIN_loading* loadingManager;
   WIN_modifyFileInfo* fileinfoManager;
   WIN_shader* shaderManager;
+  WIN_filter* filterManager;
 
   bool cloud_movement;
 };

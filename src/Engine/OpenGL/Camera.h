@@ -42,12 +42,13 @@ public:
   inline void set_cameraFOV(float value){viewMain.fov = value;}
   inline void set_cameraSpeed(float value){viewMain.speed_move = value;}
   inline void set_cameraPos(vec3 value){viewMain.cam_P = value;}
+  inline void set_camForward(vec3 value){viewMain.cam_F = value;}
 
   //Getters
   inline mat4 get_viewMat(){return compute_viewMat();}
   inline mat4 get_projMat(){return compute_projMat();}
   inline mat4 get_mvpMatrix(){return compute_mvpMatrix();}
-  inline float get_angle_azimuth(){return viewMain.angle_azimuth;}
+  inline float* get_angle_azimuth(){return &viewMain.angle_azimuth;}
   inline float get_angle_elevati(){return viewMain.angle_elevati;}
   inline float get_fov(){return viewMain.fov;}
   inline vec3 get_camPos(){return viewMain.cam_P;}

@@ -64,7 +64,7 @@ private:
   void end_updateSubsetLocation(Subset* subset);
   void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
   void end_slamVoxelization(Cloud* cloud);
-  void end_statistics(float duration, Frame* frame, Subset* subset);
+  void end_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset);
 
 private:
   SLAM_optim_ceres* ceresManager;

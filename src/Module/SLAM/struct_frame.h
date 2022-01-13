@@ -27,6 +27,10 @@ struct Frame{ //SLAM stuff
   float time_slam;
   int map_size_abs;
   int map_size_rlt;
+  glm::vec3 trans_abs;
+  glm::vec3 rotat_abs;
+  glm::vec3 trans_rlt;
+  glm::vec3 rotat_rlt;
 
   //Reset all variables
   void reset(){

@@ -91,3 +91,37 @@ void Filter::filter_sphereCleaning(){
 
   //---------------------------
 }
+void Filter::filter_subset_cylinder(Subset* subset){
+  vector<vec3>& XYZ = subset->xyz;
+  vector<int> idx;
+  //---------------------------
+
+  //Check points condition
+  for(int i=0; i<XYZ.size(); i++){
+    vec3 point = XYZ[i];
+    float dist = fct_distance(point, subset->root);
+
+    if(dist < cyl_r_min || dist > cyl_r_max || point.z < cyl_z_min){
+      idx.push_back(i);
+    }
+
+  }
+
+  //Supress non valid points
+  int idx_size = idx.size();
+  attribManager->make_supressPoints(subset, idx);
+
+  //---------------------------
+  string result = "Cylinder filtering: " + to_string(idx_size) + " supressed";
+  console.AddLog("#", result);
+}
+void Filter::filter_cloud_cylinder(Cloud* cloud){
+  //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = &cloud->subset[i];
+    this->filter_subset_cylinder(subset);
+  }
+
+  //---------------------------
+}

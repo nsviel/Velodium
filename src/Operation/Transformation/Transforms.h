@@ -46,6 +46,7 @@ public:
   mat4 compute_transformMatrix(float tx, float ty, float tz, float rx, float ry, float rz);
   mat4 compute_transformMatrix(vec3 trans, vec3 rotat, vec3 scale);
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
+  vec3 compute_anglesFromTransformationMatrix(const Eigen::Matrix3d& mat);
   vec3 compute_translFromTransformationMatrix(const mat4& mat);
   vec3 compute_translationsError(Cloud* cloud);
   vec3 compute_anglesError(Cloud* cloud);

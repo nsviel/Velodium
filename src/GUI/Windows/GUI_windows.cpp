@@ -5,6 +5,7 @@
 #include "WIN_modifyFileInfo.h"
 #include "WIN_camera.h"
 #include "WIN_shader.h"
+#include "WIN_filter.h"
 
 #include "../../Engine/Engine.h"
 #include "../../Engine/Scene.h"
@@ -16,7 +17,6 @@
 #include "../../Operation/Plotting.h"
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
-#include "../../Operation/Transformation/Filter.h"
 #include "../../Operation/Functions/Selection.h"
 #include "../../Operation/Optimization/Polyfit.h"
 #include "../../Operation/Optimization/Fitting.h"
@@ -42,7 +42,6 @@ GUI_windows::GUI_windows(Engine* engine){
 
   this->selectionManager = new Selection(engineManager->get_dimManager(), cameraManager);
   this->sceneManager = new Scene();
-  this->filterManager = new Filter();
   this->glyphManager = new Glyphs();
 
   this->opeManager = new Operation();
@@ -57,6 +56,7 @@ GUI_windows::GUI_windows(Engine* engine){
   this->loadingManager = new WIN_loading();
   this->fileinfoManager = new WIN_modifyFileInfo();
   this->shaderManager = new WIN_shader(engineManager->get_shaderManager());
+  this->filterManager = new WIN_filter(engineManager->get_filterManager());
 
   //---------------------------
   this->init();
@@ -75,7 +75,7 @@ void GUI_windows::init(){
   window_tab.show_transformation = false;
   window_tab.show_extractCloud = false;
   window_tab.show_cutCloud = false;
-  window_tab.show_filtering = false;
+  window_tab.show_filter = false;
   window_tab.show_normal = false;
   window_tab.show_intensity = false;
   window_tab.show_color = false;
@@ -98,7 +98,6 @@ void GUI_windows::window_Draw(){
   this->window_selection();
   this->window_extractCloud();
   this->window_cutCloud();
-  this->window_filter();
   this->window_normal();
   this->window_intensity();
   this->window_color();
@@ -110,6 +109,7 @@ void GUI_windows::window_Draw(){
   loadingManager->window_saving();
   fileinfoManager->window_modifyFileInfo();
   shaderManager->window_shader();
+  filterManager->window_filter();
 
   //---------------------------
 }
@@ -471,57 +471,6 @@ void GUI_windows::window_transformation(){
     ImGui::Separator();
     if(ImGui::Button("Close")){
       window_tab.show_transformation = false;
-    }
-    ImGui::End();
-  }
-}
-void GUI_windows::window_filter(){
-  if(window_tab.show_filtering){
-    ImGui::Begin("Filter", &window_tab.show_filtering,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
-    int sizeButton = 150;
-    //---------------------------
-
-    //Filter by angle
-    static int maxAngle = 80;
-    if(ImGui::Button("Filter by angle", ImVec2(sizeButton,0))){
-      if(cloud != nullptr){
-
-        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-          filterManager->filter_maxAngle(cloud, maxAngle);
-          sceneManager->update_cloud_location(cloud);
-        }
-
-      }
-    }
-    ImGui::SameLine();
-    ImGui::PushItemWidth(100);
-    ImGui::DragInt("##1", &maxAngle, 1, 0, 90, "%d°");
-
-    //GUI_sampling* samplingManager = new GUI_sampling();
-    //samplingManager->sampling_gui(cloud);
-    //delete samplingManager;
-
-    //Sphere filtering
-    if(ImGui::Button("Clean sphere cloud", ImVec2(sizeButton,0))){
-      if(cloud != nullptr){
-        filterManager->filter_sphereCleaning();
-      }
-    }
-    ImGui::SameLine();
-    static float sphereDiameter = 0.139f;
-    ImGui::PushItemWidth(100);
-    if(ImGui::DragFloat("##6", &sphereDiameter, 0.0001, 0, 2, "%.5f")){
-      filterManager->set_sphereDiameter(sphereDiameter);
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      window_tab.show_filtering = false;
     }
     ImGui::End();
   }

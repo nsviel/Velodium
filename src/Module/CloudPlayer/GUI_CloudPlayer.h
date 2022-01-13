@@ -4,16 +4,17 @@
 #include "../../common.h"
 
 class Scene;
-class Camera;
+class Engine;
 class CloudPlayer;
 class Heatmap;
+class Filter;
 
 
 class GUI_CloudPlayer
 {
 public:
   //Constructor / Destructor
-  GUI_CloudPlayer(Camera* cameraManager);
+  GUI_CloudPlayer(Engine* engineManager);
   ~GUI_CloudPlayer();
 
 public:
@@ -30,6 +31,7 @@ private:
   Scene* sceneManager;
   CloudPlayer* playerManager;
   Heatmap* heatmapManager;
+  Filter* filterManager;
 
 };
 

@@ -253,8 +253,12 @@ void Camera::compute_positionalZoom(float yoffset){
   //---------------------------
 
   if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+    //Perspective zoom
     vec3 cam_forwardMove = view->cam_F * yoffset * view->speed_move * vec3(0.1,0.1,0.1);
     view->cam_P += cam_forwardMove;
+
+    //Ortho zoom
+    view->zoom_topView -= yoffset * 0.1;
   }
 
   //---------------------------

@@ -9,7 +9,7 @@ struct Window_tab{
   bool show_openOptions;
   bool show_camera;
   bool show_transformation;
-  bool show_filtering;
+  bool show_filter;
   bool show_fitting;
   bool show_saving;
   bool show_modifyFileInfo;

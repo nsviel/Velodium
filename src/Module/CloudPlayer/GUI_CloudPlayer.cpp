@@ -2,9 +2,10 @@
 
 #include "CloudPlayer.h"
 
-#include "../../Engine/OpenGL/Camera.h"
+#include "../../Engine/Engine.h"
 #include "../../Engine/Scene.h"
 #include "../../Operation/Functions/Heatmap.h"
+#include "../../Operation/Transformation/Filter.h"
 
 #include "../../../extern/imgui/imgui.h"
 #include "../../../extern/IconsFontAwesome5.h"
@@ -13,10 +14,11 @@
 
 
 //Constructor / Destructor
-GUI_CloudPlayer::GUI_CloudPlayer(Camera* cameraManager){
+GUI_CloudPlayer::GUI_CloudPlayer(Engine* engineManager){
   //---------------------------
 
-  this->playerManager = new CloudPlayer(cameraManager);
+  this->filterManager = engineManager->get_filterManager();
+  this->playerManager = new CloudPlayer(engineManager->get_CameraManager());
   this->heatmapManager = new Heatmap();
   this->sceneManager = new Scene();
 
@@ -130,12 +132,10 @@ void GUI_CloudPlayer::subset_selection_bar(){
     playerManager->update_frame_ID(cloud);
     int* subset_selected = playerManager->get_frame_ID();
     int* frame_max_ID = playerManager->get_frame_max_ID();
-    bool* all_frame_visible = playerManager->get_all_frame_visible();
 
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", subset_selected, 0, *frame_max_ID)){
       if(cloud != nullptr){
-        *all_frame_visible = false;
         playerManager->select_byFrameID(cloud, *subset_selected);
       }
     }
@@ -150,6 +150,7 @@ void GUI_CloudPlayer::subset_selection_bar(){
 void GUI_CloudPlayer::parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     bool* with_slam = playerManager->get_with_slam();
@@ -158,8 +159,14 @@ void GUI_CloudPlayer::parameter(){
     bool* with_restart = playerManager->get_with_restart();
     ImGui::Checkbox("Loop when end", with_restart);
 
-    bool* cameraRoot = playerManager->get_camera_follow();
+    bool* cameraRoot = playerManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", cameraRoot);
+
+    if (ImGui::Button("Cylinder cleaning", ImVec2(120,0))){
+      if(cloud != nullptr){
+        filterManager->filter_cloud_cylinder(cloud);
+      }
+    }
 
     if (ImGui::Button("Supress first subset", ImVec2(120,0))){
       if(cloud != nullptr){
