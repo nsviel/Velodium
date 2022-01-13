@@ -18,7 +18,7 @@ public:
 
 public:
   void sftp_sendFile(ssh_session& ssh, string path_src, string path_trg);
-  void sftp_createDirectory(string dirName);
+  void sftp_createDirectory(ssh_session& ssh, string dirName);
 
 private:
   sftp_session sftp;

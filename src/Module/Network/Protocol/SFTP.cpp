@@ -14,13 +14,16 @@ SFTP::SFTP(){
 SFTP::~SFTP(){}
 
 void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
+  sftp = sftp_new(ssh);
   //---------------------------
 
-  sftp = sftp_new(ssh);
+  //CHeck SFTP connexion
   if (sftp == NULL){
     fprintf(stderr, "Error allocating SFTP SSH: %s\n", ssh_get_error(ssh));
     return;
   }
+
+  //Init SFTP
   int rc = sftp_init(sftp);
   if (rc != SSH_OK){
     fprintf(stderr, "Error initializing SFTP SSH.\n");
@@ -32,8 +35,7 @@ void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
   int access_type = O_WRONLY | O_CREAT | O_TRUNC;
   sftp_file file = sftp_open(sftp, path_trg.c_str(), access_type, S_IRWXU);
   if (file == NULL){
-    fprintf(stderr, "Can't open file for writing: %s\n",
-            ssh_get_error(ssh));
+    fprintf(stderr, "Can't open file for writing: %s\n", ssh_get_error(ssh));
     return;
   }
 
@@ -56,28 +58,24 @@ void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
   //Close and stop transfert
   rc = sftp_close(file);
   if (rc != SSH_OK){
-    fprintf(stderr, "Can't close the written file: %s\n",
-            ssh_get_error(ssh));
+    fprintf(stderr, "Can't close the written file: %s\n", ssh_get_error(ssh));
     return;
   }
 
   //---------------------------
   sftp_free(sftp);
 }
-void SFTP::sftp_createDirectory(string dirName){
+void SFTP::sftp_createDirectory(ssh_session& ssh, string dirName){
+  sftp = sftp_new(ssh);
   //---------------------------
-/*
-  //Check if ssh is established
-  if(ssh_connected == false){
-    cout<<"SSH not connected."<<endl;
+
+  //Check STFP connexion
+  if (sftp == NULL){
+    fprintf(stderr, "Error allocating SFTP SSH: %s\n", ssh_get_error(ssh));
     return;
   }
 
-  sftp_session sftp = sftp_new(SSH);
-  if (sftp == NULL){
-    fprintf(stderr, "Error allocating SFTP SSH: %s\n", ssh_get_error(SSH));
-    return;
-  }
+  //Init STFP connexion
   int rc = sftp_init(sftp);
   if (rc != SSH_OK){
     fprintf(stderr, "Error initializing SFTP SSH.\n");
@@ -90,6 +88,6 @@ void SFTP::sftp_createDirectory(string dirName){
   if (rc != SSH_OK){
     fprintf(stderr, "Can't create directory.\n");
   }
-*/
+
   //---------------------------
 }

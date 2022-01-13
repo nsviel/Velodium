@@ -27,6 +27,7 @@ public:
 
 public:
   //Main functions
+  void update();
   void update_window_dim();
   void update_gl_dim();
   void update_configuration();
@@ -43,12 +44,14 @@ public:
   inline vec2 get_win_dim(){return window_dim;}
   inline float get_gui_leftPanel_width(){return gui_leftPanel_width;}
   inline float get_gui_topPanel_height(){return gui_topPanel_height;}
+  inline bool get_is_resized(){return is_resized;}
+  inline void set_is_resized(bool value){this->is_resized = value;}
 
   inline void get_gl_dim(vec2 value){this->gl_dim = value;}
-  inline void set_win_dim(vec2 value){this->window_dim = value; update_gl_dim();}
-  inline void set_gui_leftPanel_width(float value){this->gui_leftPanel_width = value; update_gl_dim();}
-  inline void set_gui_topPanel_height(float value){this->gui_topPanel_height = value; update_gl_dim();}
-  inline void set_gui_bottomPanel_height(float value){this->gui_bottomPanel_height = value; update_gl_dim();}
+  inline void set_win_dim(vec2 value){this->window_dim = value;}
+  inline void set_gui_leftPanel_width(float value){this->gui_leftPanel_width = value;}
+  inline void set_gui_topPanel_height(float value){this->gui_topPanel_height = value;}
+  inline void set_gui_bottomPanel_height(float value){this->gui_bottomPanel_height = value;}
 
 private:
   GLFWwindow* window;
@@ -60,6 +63,7 @@ private:
   float gui_leftPanel_width;
   float gui_topPanel_height;
   float gui_bottomPanel_height;
+  bool is_resized;
 };
 
 #endif

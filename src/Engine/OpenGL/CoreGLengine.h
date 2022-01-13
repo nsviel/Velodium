@@ -42,6 +42,8 @@ public:
   void loop_end();
 
   void update_gl_quad();
+  void update_texture();
+  void update_shader();
 
 private:
   Configuration* configManager;
@@ -55,6 +57,7 @@ private:
   Shader* shaderManager;
 
   vec3 backgColor;
+  bool flag_resized;
   int gl_width;
   int gl_height;
 

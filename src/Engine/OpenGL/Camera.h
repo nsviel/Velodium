@@ -18,6 +18,7 @@ public:
   //Viewport stuff
   void viewport_init();
   void viewport_update(int ID);
+  void viewport_reset();
 
   //MVP matrices
   mat4 compute_viewMat();

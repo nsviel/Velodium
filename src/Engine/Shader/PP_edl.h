@@ -3,11 +3,13 @@
 
 #include "../../common.h"
 
+class Dimension;
+
 
 class PP_edl
 {
 public:
-  PP_edl();
+  PP_edl(Dimension* dim);
   ~PP_edl();
 
   void setup_edl(GLuint program_ID);
@@ -20,6 +22,8 @@ public:
   inline float* get_edl_clip_near(){return &clip_near;}
 
 private:
+  Dimension* dimManager;
+
   GLuint tex_color_ID;
   GLuint tex_depth_ID;
 

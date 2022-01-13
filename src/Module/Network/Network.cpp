@@ -16,8 +16,8 @@ Network::Network(){
   this->sftpManager = new SFTP();
   this->sshManager = new SSH();
 
-  this->path_source = "/home/aither/Desktop/frame_0001.ply";
-  this->path_target = "/home/*/Desktop/";
+  this->path_source = "/home/aither/Desktop/Point_cloud/frame_0001.ply";
+  this->path_target = "/home/aither/Desktop/";
   this->name_file = "frame_0001.ply";
 
   //---------------------------

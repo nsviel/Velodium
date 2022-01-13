@@ -1,17 +1,18 @@
 #include "Shader.h"
 
 #include "PP_edl.h"
-
-#include <fstream>
+#include "ShaderObject.h"
 
 #include "ShaderObject.h"
 
+#include "../Configuration/Dimension.h"
+
 
 //Constructor / Destructor
-Shader::Shader(){
+Shader::Shader(Dimension* dimManager){
 	//---------------------------
 
-	this->edlManager = new PP_edl();
+	this->edlManager = new PP_edl(dimManager);
 
 	//---------------------------
 }
@@ -22,6 +23,13 @@ void Shader::init(){
 
 	shader_scene = new ShaderObject("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
 	shader_screen = new ShaderObject("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
+
+	edlManager->setup_edl(shader_screen->get_program_ID());
+
+	//---------------------------
+}
+void Shader::update(){
+	//---------------------------
 
 	edlManager->setup_edl(shader_screen->get_program_ID());
 

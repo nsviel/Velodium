@@ -26,12 +26,11 @@ void Camera::viewport_init(){
   this->nb_viewport = 2;
   this->view = &viewMain;
 
-  float camPos = configManager->parse_json_float("camera", "initial_pos");
-
   //Main viewport
+  float camPos = configManager->parse_json_float("camera", "initial_pos");
+  viewMain.cam_P = vec3(camPos, camPos, camPos);
   viewMain.speed_move = configManager->parse_json_float("camera", "speed_move");
   viewMain.speed_mouse = configManager->parse_json_float("camera", "speed_mouse");
-  viewMain.cam_P = vec3(camPos, camPos, camPos);
   viewMain.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   viewMain.angle_elevati = - M_PI/6;// Initial vertical angle
   viewMain.fov = configManager->parse_json_float("camera", "fov");
@@ -78,6 +77,16 @@ void Camera::viewport_update(int ID){
   else if(ID == 1){
     glViewport(viewMap.pos[0], viewMap.pos[1], viewMap.dim[0], viewMap.dim[1]);
   }
+
+  //---------------------------
+}
+void Camera::viewport_reset(){
+  //---------------------------
+
+  float camPos = configManager->parse_json_float("camera", "initial_pos");
+  viewMain.cam_P = vec3(camPos, camPos, camPos);
+  viewMain.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
+  viewMain.angle_elevati = - M_PI/6;// Initial vertical angle
 
   //---------------------------
 }

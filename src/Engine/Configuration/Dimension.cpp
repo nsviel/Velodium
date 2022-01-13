@@ -24,12 +24,36 @@ Dimension::Dimension(GLFWwindow* Window){
   this->gl_dim.y = resolution_height - topPanel_height - botPanel_height;
   this->gl_pos = vec2(leftPanel_width, botPanel_height);
 
+  this->is_resized = true;
+
   //---------------------------
   this->update_window_dim();
+  this->update_gl_dim();
 }
 Dimension::~Dimension(){}
 
 //Main functions
+void Dimension::update(){
+  int width, height;
+  //---------------------------
+
+  //Check window size
+  glfwGetWindowSize(window, &width, &height);
+  if(width != window_dim.x || height != window_dim.y){
+    this->update_window_dim();
+    is_resized = true;
+  }
+
+  //Check panel sizes
+  width = window_dim.x - gui_leftPanel_width;
+  height = window_dim.y - gui_topPanel_height - gui_bottomPanel_height;
+  if(width != gl_dim.x || height != gl_dim.y){
+    this->update_gl_dim();
+    is_resized = true;
+  }
+
+  //---------------------------
+}
 void Dimension::update_gl_dim(){
   //---------------------------
 
@@ -47,9 +71,6 @@ void Dimension::update_window_dim(){
 
   glfwGetWindowSize(window, &width, &height);
   window_dim = vec2(width, height);
-
-  this->update_gl_dim();
-  this->update_configuration();
 
   //---------------------------
 }

@@ -100,12 +100,10 @@ bool CoreGLengine::init_OGL(){
   glfwSetWindowTitle(window, win_title.c_str());
 
   //OpenGL stuff
-  glPointSize(1);
-  glLineWidth(1);
   //glEnable(GL_MULTISAMPLE);
   //glEnable(GL_BLEND);
-  //glEnable(GL_DEPTH_TEST);
   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  //glEnable(GL_POINT_SMOOTH); // circle points / square points
 
   //GLEW
   glewInit();
@@ -119,8 +117,8 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_object(){
   //---------------------------
 
-  this->shaderManager = new Shader();
   this->dimManager = new Dimension(window);
+  this->shaderManager = new Shader(dimManager);
   this->cameraManager = new Camera(dimManager);
   this->viewportManager = new Viewport(dimManager);
   this->engineManager = new Engine(dimManager, cameraManager, shaderManager);
@@ -244,18 +242,18 @@ void CoreGLengine::loop(){
 void CoreGLengine::loop_pass_1(){
   //---------------------------
 
+  //Check for window resizing
+  dimManager->update();
+  flag_resized = dimManager->get_is_resized();
+
   //Set FBO
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
-  //Update texture dimensions
-  vec2 gl_dim = dimManager->get_gl_dim();
-  glBindTexture(GL_TEXTURE_2D, tex_color_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  this->update_shader();
+  this->update_texture();
 
   //Set active shader
   shaderManager->use("scene");
@@ -307,16 +305,20 @@ void CoreGLengine::loop_drawQuad(){
   this->update_gl_quad();
 
   //Draw screen quad
-  glBindVertexArray(quad_vao);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  if(!flag_resized){
+    glBindVertexArray(quad_vao);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  }
 
   //---------------------------
 }
 void CoreGLengine::loop_end(){
   bool waitForEvent = configManager->parse_json_bool("opengl", "waitForEvent");
   //---------------------------
+
+  dimManager->set_is_resized(false);
 
   glfwSwapBuffers(window);
   glfwPollEvents();
@@ -330,34 +332,59 @@ void CoreGLengine::loop_end(){
 void CoreGLengine::update_gl_quad(){
   //---------------------------
 
-  vec2 gl_pos = dimManager->get_gl_pos();
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 win_dim = dimManager->get_win_dim();
+  if(flag_resized){
+    vec2 gl_pos = dimManager->get_gl_pos();
+    vec2 gl_dim = dimManager->get_gl_dim();
+    vec2 win_dim = dimManager->get_win_dim();
 
-  vec2 tl, br, tr, bl;
-  bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+    vec2 tl, br, tr, bl;
+    bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
+    bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
 
-  br.x = 1;
-  br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+    br.x = 1;
+    br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
 
-  tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+    tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
+    tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
 
-  tr.x = 1;
-  tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+    tr.x = 1;
+    tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
 
-  vector<vec2> quad_xy;
-  quad_xy.push_back(tl);
-  quad_xy.push_back(bl);
-  quad_xy.push_back(br);
+    vector<vec2> quad_xy;
+    quad_xy.push_back(tl);
+    quad_xy.push_back(bl);
+    quad_xy.push_back(br);
 
-  quad_xy.push_back(tl);
-  quad_xy.push_back(br);
-  quad_xy.push_back(tr);
+    quad_xy.push_back(tl);
+    quad_xy.push_back(br);
+    quad_xy.push_back(tr);
 
-  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-  glBufferData(GL_ARRAY_BUFFER, quad_xy.size() * sizeof(glm::vec2), &quad_xy[0],  GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
+    glBufferData(GL_ARRAY_BUFFER, quad_xy.size() * sizeof(glm::vec2), &quad_xy[0],  GL_DYNAMIC_DRAW);
+  }
+
+  //---------------------------
+}
+void CoreGLengine::update_texture(){
+  //---------------------------
+
+  if(flag_resized){
+    //Update texture dimensions
+    vec2 gl_dim = dimManager->get_gl_dim();
+    glBindTexture(GL_TEXTURE_2D, tex_color_ID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  }
+
+  //---------------------------
+}
+void CoreGLengine::update_shader(){
+  //---------------------------
+
+  if(flag_resized){
+    shaderManager->update();
+  }
 
   //---------------------------
 }

@@ -1,5 +1,6 @@
 #include "GUI_CloudPlayer.h"
 
+#include "Online.h"
 #include "CloudPlayer.h"
 
 #include "../../Engine/Engine.h"
@@ -10,17 +11,16 @@
 #include "../../../extern/imgui/imgui.h"
 #include "../../../extern/IconsFontAwesome5.h"
 
-#include <thread>
-
 
 //Constructor / Destructor
 GUI_CloudPlayer::GUI_CloudPlayer(Engine* engineManager){
   //---------------------------
 
   this->filterManager = engineManager->get_filterManager();
-  this->playerManager = new CloudPlayer(engineManager->get_CameraManager());
+  this->playerManager = new CloudPlayer();
   this->heatmapManager = new Heatmap();
   this->sceneManager = new Scene();
+  this->onlineManager = new Online(engineManager->get_CameraManager());
 
   //---------------------------
 }
@@ -31,7 +31,8 @@ void GUI_CloudPlayer::design_CloudPlayer(){
   //---------------------------
 
   this->playCloud();
-  this->parameter();
+  this->parameter_offline();
+  this->parameter_online();
 
   //---------------------------
 }
@@ -147,20 +148,14 @@ void GUI_CloudPlayer::subset_selection_bar(){
 
   //---------------------------
 }
-void GUI_CloudPlayer::parameter(){
+void GUI_CloudPlayer::parameter_offline(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
-    bool* with_slam = playerManager->get_with_slam();
-    ImGui::Checkbox("SLAM each frame", with_slam);
-
     bool* with_restart = playerManager->get_with_restart();
     ImGui::Checkbox("Loop when end", with_restart);
-
-    bool* cameraRoot = playerManager->get_with_camera_follow();
-    ImGui::Checkbox("Camera follow up", cameraRoot);
 
     if (ImGui::Button("Cylinder cleaning", ImVec2(120,0))){
       if(cloud != nullptr){
@@ -213,6 +208,28 @@ void GUI_CloudPlayer::parameter(){
       *range = vec2((float)min / 255, (float)max / 255);
       heatmapManager->set_Heatmap(cloud, heatmap);
     }
+
+    //---------------------------
+    ImGui::Separator();
+  }
+}
+void GUI_CloudPlayer::parameter_online(){
+  if(ImGui::CollapsingHeader("Online parameters")){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
+    //---------------------------
+
+    bool* with_slam = onlineManager->get_with_slam();
+    ImGui::Checkbox("SLAM each frame", with_slam);
+
+    bool* cameraRoot = onlineManager->get_with_camera_follow();
+    ImGui::Checkbox("Camera follow up", cameraRoot);
+
+    bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
+    ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
+
+    bool* withHeatmap = onlineManager->get_with_heatmap();
+    ImGui::Checkbox("Heatmap", withHeatmap);
 
     //---------------------------
     ImGui::Separator();

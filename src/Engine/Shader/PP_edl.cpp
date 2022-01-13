@@ -1,8 +1,12 @@
 #include "PP_edl.h"
 
+#include "../Configuration/Dimension.h"
 
-PP_edl::PP_edl(){
+
+PP_edl::PP_edl(Dimension* dim){
   //---------------------------
+
+  this->dimManager = dim;
 
   this->with_edl = true;
   this->edl_strength = 500.0;
@@ -38,6 +42,12 @@ void PP_edl::setup_edl(GLuint program_ID){
   auto depth_texture_loc = glGetUniformLocation(program_ID, "tex_depth");
   glUniform1i(color_texture_loc, 0);
   glUniform1i(depth_texture_loc, 1);
+
+  vec2 gl_dim = dimManager->get_gl_dim();
+  auto egl_width_loc = glGetUniformLocation(program_ID, "GL_WIDTH");
+  auto edl_height_loc = glGetUniformLocation(program_ID, "GL_HEIGHT");
+  glUniform1i(egl_width_loc, gl_dim.x);
+  glUniform1i(edl_height_loc, gl_dim.y);
 
   //---------------------------
 }

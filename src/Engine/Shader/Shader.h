@@ -5,15 +5,19 @@
 
 class PP_edl;
 class ShaderObject;
+class Dimension;
+
 
 class Shader
 {
 public:
-  Shader();
+  Shader(Dimension* dimManager);
   ~Shader();
 
 public:
   void init();
+  void update();
+
   void use(string shader_name);
   void use_scene();
   void use_screen();
