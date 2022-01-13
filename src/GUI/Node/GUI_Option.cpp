@@ -234,6 +234,17 @@ void GUI_option::option_parameters(){
       }
     }
 
+    //Point shape
+    static int point_shape = 0;
+    if(ImGui::Combo("Point shape", &point_shape, "Quad\0Circle\0")){
+      if(point_shape == 0){
+        glDisable(GL_POINT_SMOOTH);
+      }
+      else if(point_shape == 1){
+        glEnable(GL_POINT_SMOOTH);
+      }
+    }
+
     //Point size
     ImGui::Columns(2);
     ImGui::AlignTextToFramePadding();
