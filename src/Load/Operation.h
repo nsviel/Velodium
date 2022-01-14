@@ -1,11 +1,12 @@
 #ifndef OPERATION_H
 #define OPERATION_H
 
+#include "../common.h"
+
 class Scene;
 class Loader;
-class Glyphs;
+class Saver;
 
-#include "../common.h"
 
 class Operation
 {
@@ -15,22 +16,31 @@ public:
   ~Operation();
 
 public:
-  void reset();
-  void fastScene(int mode);
+  //Loading function
   void loading();
   void loading_frames();
   void loading_directoryFrames(string path);
-  void selectDirectory(string& path);
   void loading_sampling();
   void loading_treatment();
-  vector<string> get_directoryAllFilePath(string path);
-  void samplingLoader(string path);
-  void saving();
-  void allSaving();
-  void convertIscale();
+  void loading_sampledCloud(string path);
+  void loading_fastScene(int mode);
 
+  //Saving functions
+  void saving();
+  void saving_allCloud();
+  void saving_frameRange();
+
+  //Specific functions
+  void convertIscale();
+  void selectDirectory(string& path);
   string get_filePath();
   string get_filePath(string path);
+  vector<string> get_directoryAllFilePath(string path);
+
+  //Zenity stuff
+  vector<string> zenity_loading();
+  string zenity_saving();
+  string zenity_directory();
 
   inline void set_spaceSampling(float value){this->spaceSampling = value;}
   inline void set_nbLineSampling(int value){this->nbLineSampling = value;}
@@ -39,11 +49,11 @@ public:
 private:
   Scene* sceneManager;
   Loader* loaderManager;
-  Glyphs* glyphManager;
+  Saver* saverManager;
 
   float spaceSampling;
   int nbLineSampling;
-  string pathDir;
+  string path_current_dir;
   uint modelID, comID;
 };
 

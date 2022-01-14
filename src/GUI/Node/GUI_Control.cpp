@@ -2,6 +2,8 @@
 
 #include "../Windows/Window_tab.h"
 
+#include "../../Load/Operation.h"
+
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
@@ -11,7 +13,6 @@
 #include "../../Engine/Configuration/Configuration.h"
 
 #include "../../Operation/Transformation/Attribut.h"
-#include "../../Operation/Operation.h"
 #include "../../Operation/Functions/Selection.h"
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -190,7 +191,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //R key - Reset
     if (ImGui::IsKeyPressed(82) && !io.WantCaptureMouse){
-      opeManager->reset();
+      engineManager->reset();
       break;
     }
 
@@ -217,7 +218,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //N key - Save all & remove all & load new
     if(ImGui::IsKeyPressed(78) && !io.WantCaptureMouse){
-      opeManager->allSaving();
+      opeManager->saving_allCloud();
       sceneManager->removeCloud_all();
     }
 

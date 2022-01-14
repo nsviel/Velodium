@@ -1,4 +1,4 @@
-#include "Online.h"
+#include "OnlinePlayer.h"
 
 #include "../SLAM/CT_ICP.h"
 
@@ -8,7 +8,7 @@
 
 
 //Constructor / Destructor
-Online::Online(Camera* camManager){
+OnlinePlayer::OnlinePlayer(Camera* camManager){
   //---------------------------
 
   this->cameraManager = camManager;
@@ -24,10 +24,10 @@ Online::Online(Camera* camManager){
 
   //---------------------------
 }
-Online::~Online(){}
+OnlinePlayer::~OnlinePlayer(){}
 
 //Main function
-void Online::make_thing(Subset* subset){
+void OnlinePlayer::make_thing(Subset* subset){
   //---------------------------
 
   //If camera follow up option activated
@@ -37,12 +37,12 @@ void Online::make_thing(Subset* subset){
 
   //If with slam option is activated
   if(with_slam){
-    //slamManager->compute_slam_online(cloud, i);
+    //slamManager->compute_slam_OnlinePlayer(cloud, i);
   }
 
   //---------------------------
 }
-void Online::camera_followUp(Subset* subset){
+void OnlinePlayer::camera_followUp(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 

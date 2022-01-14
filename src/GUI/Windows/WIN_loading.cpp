@@ -1,7 +1,8 @@
 #include "WIN_loading.h"
 
-#include "../../Operation/Operation.h"
+#include "../../Load/Operation.h"
 #include "../../Load/Loader.h"
+
 #include "../../Load/Format/file_PTS.h"
 #include "../../Load/Format/file_PTX.h"
 #include "../../Load/Format/file_PCAP.h"
@@ -67,7 +68,7 @@ void WIN_loading::window_saving(){
     }
     ImGui::SameLine();
     if(ImGui::Button("Save all")){
-      opeManager->allSaving();
+      opeManager->saving_allCloud();
       *open = false;
     }
     ImGui::End();
@@ -113,20 +114,25 @@ void WIN_loading::loading_fileSelection(){
     else if(file_format == "ptx"){
       format = 1;
     }
-    else if(file_format == "pcap"){
+    else if(file_format == "ply"){
       format = 2;
+    }
+    else if(file_format == "pcap"){
+      format = 3;
     }
     ImGui::RadioButton("pts", &format, 0);
     ImGui::SameLine();
     ImGui::RadioButton("ptx", &format, 1);
     ImGui::SameLine();
-    ImGui::RadioButton("pcap", &format, 2);
+    ImGui::RadioButton("ply", &format, 2);
+    ImGui::SameLine();
+    ImGui::RadioButton("pcap", &format, 3);
 
     //File format options
     if(format == 1){
       this->loading_file_ptx();
     }
-    if(format == 2){
+    if(format == 3){
       this->loading_file_pcap();
     }
 
@@ -274,7 +280,11 @@ void WIN_loading::saving_action(){
   }
 
   if (ImGui::Button("Save all", ImVec2(item_width, 0))){
-    opeManager->allSaving();
+    opeManager->saving_allCloud();
+  }
+
+  if (ImGui::Button("Save frames range", ImVec2(item_width, 0))){
+    opeManager->saving_frameRange();
   }
 
   //---------------------------

@@ -1,7 +1,7 @@
 #ifndef FILE_XYZ_H
 #define FILE_XYZ_H
 
-#include "../struct_dataFile.h"
+#include "struct_dataFile.h"
 
 #include "../../common.h"
 

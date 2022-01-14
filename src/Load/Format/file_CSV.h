@@ -1,7 +1,7 @@
 #ifndef FILE_CSV_H
 #define FILE_CSV_H
 
-#include "../struct_dataFile.h"
+#include "struct_dataFile.h"
 
 #include "../../common.h"
 

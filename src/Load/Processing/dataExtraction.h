@@ -1,10 +1,10 @@
 #ifndef DATA_EXTRACTION_H
 #define DATA_EXTRACTION_H
 
-#include "struct_dataFile.h"
+#include "../Format/struct_dataFile.h"
 
-#include "../common.h"
-#include "../Module/Velodyne/UDP/struct_UDPpacket.h"
+#include "../../common.h"
+#include "../../Module/Velodyne/UDP/struct_UDPpacket.h"
 
 class Scene;
 class Configuration;

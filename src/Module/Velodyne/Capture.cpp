@@ -4,7 +4,8 @@
 
 #include "../../Engine/Scene.h"
 #include "../../Load/Loader.h"
-#include "../../Load/dataExtraction.h"
+#include "../../Load/Saver.h"
+#include "../../Load/Processing/dataExtraction.h"
 #include "../../Specific/timer.h"
 #include "../../Specific/fct_display.h"
 
@@ -130,7 +131,8 @@ void Capture::create_subset(udpPacket* frame_in, bool is_recording){
   subset_capture = extractManager->extractData(&frame);
 
   if(is_recording){
-    loaderManager->save_subset(&subset_capture, "ply", path_frameSave);
+    Saver saverManager;
+    saverManager.save_subset(&subset_capture, "ply", path_frameSave);
   }
 
   this->atLeastOne = true;

@@ -1,5 +1,5 @@
-#ifndef GUI_CLOUDPLAYER_H
-#define GUI_CLOUDPLAYER_H
+#ifndef GUI_PLAYER_H
+#define GUI_PLAYER_H
 
 #include "../../common.h"
 
@@ -8,15 +8,15 @@ class Engine;
 class CloudPlayer;
 class Heatmap;
 class Filter;
-class Online;
+class OnlinePlayer;
 
 
-class GUI_CloudPlayer
+class GUI_Player
 {
 public:
   //Constructor / Destructor
-  GUI_CloudPlayer(Engine* engineManager);
-  ~GUI_CloudPlayer();
+  GUI_Player(Engine* engineManager);
+  ~GUI_Player();
 
 public:
   //Main function
@@ -34,7 +34,7 @@ private:
   CloudPlayer* playerManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
-  Online* onlineManager;
+  OnlinePlayer* onlineManager;
 };
 
 #endif

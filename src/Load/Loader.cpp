@@ -1,6 +1,6 @@
 #include "Loader.h"
 
-#include "dataExtraction.h"
+#include "Processing/dataExtraction.h"
 
 #include "Format/file_PTS.h"
 #include "Format/file_PLY.h"
@@ -34,7 +34,7 @@ Loader::Loader(){
 }
 Loader::~Loader(){}
 
-//Loading function
+//Main functions
 bool Loader::load_cloud(string filePath){
   //---------------------------
 
@@ -206,6 +206,7 @@ bool Loader::load_cloud_oneFrame(){
   return true;
 }
 
+//Sub-functions
 vector<dataFile*> Loader::load_retrieve_data(string filePath){
   string format = filePath.substr(filePath.find_last_of(".") + 1);
   vector<dataFile*> data_vec;
@@ -264,87 +265,4 @@ void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
   sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
-}
-
-//Saving function
-bool Loader::save_cloud(Cloud* cloud, string filePath){
-  string format = filePath.substr(filePath.find_last_of(".") + 1);
-  bool sucess = false;
-  //---------------------------
-
-  //Check file format
-  if(format.at(0) == '/') format = "pts";
-
-  if     (format == "pts"){
-    sucess = ptsManager->Exporter(filePath, cloud);
-  }
-  else if(format == "ply"){
-    string format = "binary";
-    sucess = plyManager->Exporter_cloud(filePath, format, cloud);
-  }
-
-  //Say if save is successfull
-  if(!sucess){
-    console.AddLog("error", "Failing saving point cloud");
-    return false;
-  }
-
-  //---------------------------
-  string log = "Saved" + filePath;
-  console.AddLog("sucess", log);
-  return true;
-}
-bool Loader::save_subset(Subset* subset, string format, string dirPath){
-  bool sucess = false;
-  //---------------------------
-
-  //If no format, add default ply
-  if(format.at(0) == '/') format = "ply";
-
-  //Check file format
-  if     (format == "pts"){;
-    sucess = ptsManager->Exporter(dirPath, cloud);
-  }
-  else if(format == "ply"){
-    string ply_format = "binary";
-    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
-  }
-
-  //Say if save is successfull
-  if(!sucess){
-    console.AddLog("error", "Failing saving point cloud");
-    return false;
-  }
-
-  //---------------------------
-  string log = "Saved at " + dirPath;
-  console.AddLog("sucess", log);
-  return true;
-}
-bool Loader::save_subset(Subset* subset, string format, string dirPath, string fileName){
-  bool sucess = false;
-  //---------------------------
-
-  //If no format, add default ply
-  if(format.at(0) == '/') format = "ply";
-
-  //Check file format
-  if     (format == "pts"){
-    sucess = ptsManager->Exporter(dirPath, cloud);
-  }
-  else if(format == "ply"){
-    string ply_format = "binary";
-    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset, fileName);
-  }
-
-  //Say if save is successfull
-  if(!sucess){
-    console.AddLog("error", "Failing saving point cloud");
-    return false;
-  }
-
-  //---------------------------
-  string log = "Saved at " + dirPath;
-  console.AddLog("sucess", log);
-  return true;
 }

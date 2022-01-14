@@ -2,7 +2,7 @@
 
 #include "../../Specific/timer.h"
 #include "../../Engine/Scene.h"
-#include "../../Load/Loader.h"
+#include "../../Load/Saver.h"
 
 #include <experimental/filesystem>
 
@@ -179,13 +179,13 @@ void CloudPlayer::playCloud_stop(){
   //---------------------------
 }
 void CloudPlayer::playCloud_save(Cloud* cloud){
-  Loader loaderManager;
+  Saver saverManager;
   //---------------------------
 
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = &cloud->subset[i];
-    loaderManager.save_subset(subset, "ply", saveas);
+    saverManager.save_subset(subset, "ply", saveas);
   }
 
   //---------------------------

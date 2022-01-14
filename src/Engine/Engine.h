@@ -36,6 +36,7 @@ public:
   void init_database();
   void loop();
   void Exit();
+  void reset();
 
   //Subfunctions
   void draw_clouds();

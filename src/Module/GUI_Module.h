@@ -3,7 +3,7 @@
 
 #include "Velodyne/GUI/GUI_Velodyne.h"
 #include "Scala/GUI_Scala.h"
-#include "CloudPlayer/GUI_CloudPlayer.h"
+#include "CloudPlayer/GUI_Player.h"
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Network/GUI_Network.h"
 #include "Obstacle/GUI/GUI_Obstacle.h"
@@ -20,7 +20,7 @@ public:
 
     this->gui_veloManager = new GUI_Velodyne();
     this->gui_scalaManager = new GUI_Scala();
-    this->gui_odomManager = new GUI_CloudPlayer(engineManager);
+    this->gui_odomManager = new GUI_Player(engineManager);
     this->gui_slamManager = new GUI_Slam();
     this->gui_senderManager = new GUI_Network();
     this->gui_obstacleManager = new GUI_Obstacle(engineManager);
@@ -97,7 +97,7 @@ public:
 private:
   GUI_Velodyne* gui_veloManager;
   GUI_Scala* gui_scalaManager;
-  GUI_CloudPlayer* gui_odomManager;
+  GUI_Player* gui_odomManager;
   GUI_Slam* gui_slamManager;
   GUI_Network* gui_senderManager;
   GUI_Obstacle* gui_obstacleManager;

@@ -1,5 +1,5 @@
-#ifndef ONLINE_H
-#define ONLINE_H
+#ifndef OnlinePlayer_H
+#define OnlinePlayer_H
 
 #include "../../common.h"
 
@@ -8,12 +8,12 @@ class Heatmap;
 class Camera;
 
 
-class Online
+class OnlinePlayer
 {
 public:
   //Constructor / Destructor
-  Online(Camera* camManager);
-  ~Online();
+  OnlinePlayer(Camera* camManager);
+  ~OnlinePlayer();
 
 public:
   void make_thing(Subset* subset);

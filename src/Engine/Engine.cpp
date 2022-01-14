@@ -70,6 +70,24 @@ void Engine::Exit(){
   GLFWwindow* window = glfwGetCurrentContext();
   glfwSetWindowShouldClose(window, true);
 }
+void Engine::reset(){
+  list<Cloud*>* list_Cloud = sceneManager->get_list_cloud();
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Reset all clouds
+  for(int i=0; i<list_Cloud->size(); i++){
+    Cloud* cloud = *next(list_Cloud->begin(),i);
+    sceneManager->update_cloud_reset(cloud);
+  }
+
+  //Reset all functions
+  glyphManager->reset();
+  sceneManager->update_cloud_glyphs(cloud);
+
+  //---------------------------
+  console.AddLog("#", "Reset scene...");
+}
 
 //Subfunctions
 void Engine::draw_clouds(){

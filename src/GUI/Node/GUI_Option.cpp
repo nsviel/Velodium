@@ -2,11 +2,13 @@
 
 #include "../Node/GUI_Control.h"
 
+#include "../../Load/Operation.h"
+
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Configuration/Configuration.h"
-#include "../../Operation/Operation.h"
+
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"

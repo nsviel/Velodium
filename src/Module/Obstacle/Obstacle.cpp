@@ -1,10 +1,11 @@
 #include "Obstacle.h"
 
+#include "../../Load/Operation.h"
+#include "../../Operation/Transformation/Transforms.h"
+
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Object/OOBB.h"
-#include "../../Operation/Transformation/Transforms.h"
-#include "../../Operation/Operation.h"
 
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>

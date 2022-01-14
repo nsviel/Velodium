@@ -10,5 +10,6 @@ extern struct ConsoleApp console;
 //Namespaces
 using namespace std;
 using namespace glm;
+using namespace Eigen;
 
 #endif

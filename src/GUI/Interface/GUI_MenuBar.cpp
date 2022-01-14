@@ -5,14 +5,14 @@
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_Option.h"
 
-#include "../../Module/CloudPlayer/GUI_CloudPlayer.h"
+#include "../../Load/Operation.h"
+#include "../../Module/CloudPlayer/GUI_Player.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
 
-#include "../../Operation/Operation.h"
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -38,7 +38,7 @@ GUI_menuBar::GUI_menuBar(Engine* engine, GUI_windows* winManager, GUI_option* op
   this->texManager = new Textures();
   this->extractionManager = new Extraction();
   this->opeManager = new Operation();
-  this->playerManager = new GUI_CloudPlayer(engineManager);
+  this->playerManager = new GUI_Player(engineManager);
 
   //---------------------------
 }
@@ -88,7 +88,7 @@ void GUI_menuBar::MenuBar_menus(){
       }
     }
     if(ImGui::MenuItem("Reset scene","r")){
-      opeManager->reset();
+      engineManager->reset();
     }
 
     ImGui::Separator();
@@ -172,23 +172,23 @@ void GUI_menuBar::MenuBar_fastScene(){
 
   //Two Buddha point cloud to register
   if(ImGui::Button("Buddha", ImVec2(100,0))){
-    opeManager->fastScene(0);
+    opeManager->loading_fastScene(0);
   }
   //Two Torus point cloud to register
   if(ImGui::Button("Torus", ImVec2(100,0))){
-    opeManager->fastScene(1);
+    opeManager->loading_fastScene(1);
   }
   if(ImGui::Button("PCAP file", ImVec2(100,0))){
-    opeManager->fastScene(2);
+    opeManager->loading_fastScene(2);
   }
   if(ImGui::Button("Frames move", ImVec2(100,0))){
-    opeManager->fastScene(3);
+    opeManager->loading_fastScene(3);
   }
   if(ImGui::Button("More frames", ImVec2(100,0))){
-    opeManager->fastScene(4);
+    opeManager->loading_fastScene(4);
   }
   if(ImGui::Button("Scala", ImVec2(100,0))){
-    opeManager->fastScene(5);
+    opeManager->loading_fastScene(5);
   }
 
   //---------------------------

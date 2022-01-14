@@ -5,7 +5,7 @@
 #include "Protocol/SSH.h"
 
 #include "../../Specific/fct_maths.h"
-#include "../../Operation/Operation.h"
+#include "../../Load/Operation.h"
 
 
 //Constructor / Destructor

@@ -99,11 +99,9 @@ bool CoreGLengine::init_OGL(){
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
   glfwSetWindowTitle(window, win_title.c_str());
 
-  //OpenGL stuff
-  //glEnable(GL_MULTISAMPLE);
-  //glEnable(GL_BLEND);
-  //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  //glEnable(GL_POINT_SMOOTH); // circle points / square points
+  //Enable OpenGL alpha channel for RGB
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   //GLEW
   glewInit();

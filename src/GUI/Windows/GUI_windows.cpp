@@ -7,13 +7,14 @@
 #include "WIN_shader.h"
 #include "WIN_filter.h"
 
+#include "../../Load/Operation.h"
+
 #include "../../Engine/Engine.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Configuration/Configuration.h"
 
-#include "../../Operation/Operation.h"
 #include "../../Operation/Plotting.h"
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"

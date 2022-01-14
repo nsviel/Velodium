@@ -37,7 +37,7 @@ void WIN_shader::window_shader(){
 
     ImGui::SetNextItemWidth(item_width);
     float* edl_strength = edlManager->get_edl_strength();
-    if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 1000.0f)){
+    if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 5000.0f)){
       ShaderObject* shader_screen = shaderManager->get_shader_screen();
       edlManager->setup_edl(shader_screen->get_program_ID());
     }

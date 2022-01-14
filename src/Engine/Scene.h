@@ -1,20 +1,12 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-/**
- * \file Scene.h
- * \brief Point cloud management
- */
-
 #include "../common.h"
 
 #include "Data/Database.h"
 extern struct Database database;
 
 class Data;
-
-using namespace std;
-using namespace glm;
 
 
 class Scene

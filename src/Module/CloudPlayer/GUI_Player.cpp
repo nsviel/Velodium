@@ -1,6 +1,6 @@
-#include "GUI_CloudPlayer.h"
+#include "GUI_Player.h"
 
-#include "Online.h"
+#include "OnlinePlayer.h"
 #include "CloudPlayer.h"
 
 #include "../../Engine/Engine.h"
@@ -13,21 +13,21 @@
 
 
 //Constructor / Destructor
-GUI_CloudPlayer::GUI_CloudPlayer(Engine* engineManager){
+GUI_Player::GUI_Player(Engine* engineManager){
   //---------------------------
 
   this->filterManager = engineManager->get_filterManager();
   this->playerManager = new CloudPlayer();
   this->heatmapManager = new Heatmap();
   this->sceneManager = new Scene();
-  this->onlineManager = new Online(engineManager->get_CameraManager());
+  this->onlineManager = new OnlinePlayer(engineManager->get_CameraManager());
 
   //---------------------------
 }
-GUI_CloudPlayer::~GUI_CloudPlayer(){}
+GUI_Player::~GUI_Player(){}
 
 //Main function
-void GUI_CloudPlayer::design_CloudPlayer(){
+void GUI_Player::design_CloudPlayer(){
   //---------------------------
 
   this->playCloud();
@@ -38,7 +38,7 @@ void GUI_CloudPlayer::design_CloudPlayer(){
 }
 
 //Subfunctions
-void GUI_CloudPlayer::playCloud(){
+void GUI_Player::playCloud(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Timeline");
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = sceneManager->get_subset_selected();
@@ -103,7 +103,7 @@ void GUI_CloudPlayer::playCloud(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_CloudPlayer::playCloud_byMouseWheel(){
+void GUI_Player::playCloud_byMouseWheel(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -125,7 +125,7 @@ void GUI_CloudPlayer::playCloud_byMouseWheel(){
 
   //----------------------------
 }
-void GUI_CloudPlayer::subset_selection_bar(){
+void GUI_Player::subset_selection_bar(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
@@ -148,7 +148,7 @@ void GUI_CloudPlayer::subset_selection_bar(){
 
   //---------------------------
 }
-void GUI_CloudPlayer::parameter_offline(){
+void GUI_Player::parameter_offline(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
@@ -213,8 +213,8 @@ void GUI_CloudPlayer::parameter_offline(){
     ImGui::Separator();
   }
 }
-void GUI_CloudPlayer::parameter_online(){
-  if(ImGui::CollapsingHeader("Online parameters")){
+void GUI_Player::parameter_online(){
+  if(ImGui::CollapsingHeader("OnlinePlayer parameters")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------

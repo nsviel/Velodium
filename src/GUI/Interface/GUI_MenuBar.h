@@ -6,7 +6,7 @@
 class GUI_windows;
 class GUI_option;
 class GUI_leftPanel;
-class GUI_CloudPlayer;
+class GUI_Player;
 
 class Scene;
 class Engine;
@@ -38,7 +38,7 @@ private:
   GUI_windows* gui_winManager;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanelManager;
-  GUI_CloudPlayer* playerManager;
+  GUI_Player* playerManager;
 
   Scene* sceneManager;
   Engine* engineManager;

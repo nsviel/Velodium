@@ -1,9 +1,9 @@
 #include "dataExtraction.h"
 
-#include "../Engine/Glyphs.h"
-#include "../Engine/Scene.h"
-#include "../Engine/Configuration/Configuration.h"
-#include "../Specific/fct_maths.h"
+#include "../../Engine/Glyphs.h"
+#include "../../Engine/Scene.h"
+#include "../../Engine/Configuration/Configuration.h"
+#include "../../Specific/fct_maths.h"
 
 #include <experimental/filesystem>
 #include <random>
