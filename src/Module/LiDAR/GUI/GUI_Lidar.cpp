@@ -1,24 +1,39 @@
-#include "GUI_Velodyne.h"
+#include "GUI_Lidar.h"
 
-#include "../Velodyne.h"
-#include "../Capture.h"
-
-#include "../../../../../extern/imgui/imgui.h"
+#include "../Scala/Scala.h"
+#include "../Velodyne/Velodyne.h"
+#include "../Velodyne/Capture.h"
 
 
 //Constructor / Destructor
-GUI_Velodyne::GUI_Velodyne(){
+GUI_Lidar::GUI_Lidar(){
   //---------------------------
 
+  this->scalaManager = new Scala();
   this->veloManager = new Velodyne();
   this->captureManager = veloManager->get_captureManager();
 
   //---------------------------
 }
-GUI_Velodyne::~GUI_Velodyne(){}
+GUI_Lidar::~GUI_Lidar(){}
 
 //Main function
-void GUI_Velodyne::design_Velodyne(){
+void GUI_Lidar::design_Scala(){
+  if(ImGui::CollapsingHeader("Scala")){
+    //---------------------------
+
+    if(ImGui::Button("Load in directory", ImVec2(100,0))){
+      scalaManager->loading("");
+    }
+
+    if(ImGui::Button("Load fast", ImVec2(100,0))){
+      scalaManager->loading("/home/aither/Desktop/Velodium/media/scala");
+    }
+
+    //---------------------------
+  }
+}
+void GUI_Lidar::design_Velodyne(){
   //---------------------------
 
   this->lidar_State();
@@ -30,7 +45,7 @@ void GUI_Velodyne::design_Velodyne(){
 }
 
 //Subfunctions
-void GUI_Velodyne::lidar_State(){
+void GUI_Lidar::lidar_State(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "State");
   //---------------------------
 
@@ -125,7 +140,7 @@ void GUI_Velodyne::lidar_State(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::lidar_Capture(){
+void GUI_Lidar::lidar_Capture(){
   //ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Parameters");
   //---------------------------
 
@@ -181,7 +196,7 @@ void GUI_Velodyne::lidar_Capture(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::lidar_Recording(){
+void GUI_Lidar::lidar_Recording(){
   //ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recording");
   //---------------------------
 
@@ -192,7 +207,7 @@ void GUI_Velodyne::lidar_Recording(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Velodyne::lidar_Parameters(){
+void GUI_Lidar::lidar_Parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
 

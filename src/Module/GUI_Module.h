@@ -1,8 +1,7 @@
 #ifndef GUI_MODULE_H
 #define GUI_MODULE_H
 
-#include "LiDAR/Velodyne/GUI/GUI_Velodyne.h"
-#include "LiDAR/Scala/GUI/GUI_Scala.h"
+#include "LiDAR/GUI/GUI_Lidar.h"
 #include "CloudPlayer/GUI/GUI_Player.h"
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Network/GUI/GUI_Network.h"
@@ -18,8 +17,7 @@ public:
   GUI_module(Engine* engineManager){
     //-------------------------------
 
-    this->gui_veloManager = new GUI_Velodyne();
-    this->gui_scalaManager = new GUI_Scala();
+    this->gui_lidarManager = new GUI_Lidar();
     this->gui_odomManager = new GUI_Player(engineManager);
     this->gui_slamManager = new GUI_Slam();
     this->gui_senderManager = new GUI_Network();
@@ -48,22 +46,6 @@ public:
         }
       }
 
-      // SLAM
-      if(module_obstacle){
-        if(ImGui::BeginTabItem("Obstacle")){
-          gui_obstacleManager->design_Obstacle();
-          ImGui::EndTabItem();
-        }
-      }
-
-      // SLAM
-      if(module_slam){
-        if(ImGui::BeginTabItem("SLAM")){
-          gui_slamManager->design_SLAM();
-          ImGui::EndTabItem();
-        }
-      }
-
       // Velodyne data management
       if(module_CloudPlayer){
         if(ImGui::BeginTabItem("Player")){
@@ -73,18 +55,27 @@ public:
       }
       gui_odomManager->playCloud_byMouseWheel();
 
-      // Velodyne data management
-      if(module_velodyne){
-        if(ImGui::BeginTabItem("Velodyne")){
-          gui_veloManager->design_Velodyne();
+      // SLAM
+      if(module_slam){
+        if(ImGui::BeginTabItem("SLAM")){
+          gui_slamManager->design_SLAM();
           ImGui::EndTabItem();
         }
       }
 
-      // Scala LiDAR management
-      if(module_scala){
-        if(ImGui::BeginTabItem("Scala")){
-          gui_scalaManager->design_Scala();
+      // LiDAR management
+      if(module_velodyne){
+        if(ImGui::BeginTabItem("LiDAR")){
+          gui_lidarManager->design_Velodyne();
+          gui_lidarManager->design_Scala();
+          ImGui::EndTabItem();
+        }
+      }
+
+      // Obstacle detection
+      if(module_obstacle){
+        if(ImGui::BeginTabItem("Obstacle")){
+          gui_obstacleManager->design_Obstacle();
           ImGui::EndTabItem();
         }
       }
@@ -95,8 +86,7 @@ public:
   }
 
 private:
-  GUI_Velodyne* gui_veloManager;
-  GUI_Scala* gui_scalaManager;
+  GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_odomManager;
   GUI_Slam* gui_slamManager;
   GUI_Network* gui_senderManager;
