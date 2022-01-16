@@ -1,6 +1,6 @@
 #include "GUI_Scala.h"
 
-#include "Scala.h"
+#include "../Scala.h"
 
 
 //Constructor / Destructor

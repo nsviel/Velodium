@@ -1,8 +1,8 @@
 #include "Scala.h"
 
-#include "../../Load/Operation.h"
-#include "../../Load/Loader.h"
-#include "../../Engine/Scene.h"
+#include "../../../Load/Operation.h"
+#include "../../../Load/Loader.h"
+#include "../../../Engine/Scene.h"
 
 //1 frame = 2 lidar scans = 2046 points
 //1024 points per scan with 25Hz rotation and 3 faisceau up and down

@@ -40,12 +40,15 @@ void WIN_modifyFileInfo::window_modifyFileInfo(){
     ImGui::SameLine();
 
     //Uniform cloud color
-    static vec4 color_PC;
+    vec4 color_PC(0.0f);
+    if(cloud != nullptr){
+      color_PC = cloud->unicolor;
+    }
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
     flags |= ImGuiColorEditFlags_AlphaBar;
     if(ImGui::ColorEdit4("Color", (float*)&color_PC, flags)){
       if(cloud != nullptr){
-        attribManager->set_pointCloudColor(subset, color_PC);
+        attribManager->set_cloud_color(cloud, color_PC);
       }
     }
     ImGui::Separator();

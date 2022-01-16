@@ -1,11 +1,11 @@
 #ifndef GUI_MODULE_H
 #define GUI_MODULE_H
 
-#include "Velodyne/GUI/GUI_Velodyne.h"
-#include "Scala/GUI_Scala.h"
-#include "CloudPlayer/GUI_Player.h"
+#include "LiDAR/Velodyne/GUI/GUI_Velodyne.h"
+#include "LiDAR/Scala/GUI/GUI_Scala.h"
+#include "CloudPlayer/GUI/GUI_Player.h"
 #include "SLAM/GUI/GUI_Slam.h"
-#include "Network/GUI_Network.h"
+#include "Network/GUI/GUI_Network.h"
 #include "Obstacle/GUI/GUI_Obstacle.h"
 
 #include "../common.h"

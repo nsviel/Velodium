@@ -20,7 +20,9 @@ public:
   //Main functions
   dataFile* Loader(string pathFile);
   dataFile* Loader(string pathFile, int lmin, int lmax);
+
   bool Exporter(string pathFile, Cloud* cloud);
+  bool Exporter(string pathFile, Subset* subset);
 
   inline void set_IdataFormat(int value){this->IdataFormat = value;}
   inline void set_retrievingIntensity(bool value){this->retrieve_I = value;}

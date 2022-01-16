@@ -1,7 +1,7 @@
 #ifndef CAPTURE_H
 #define CAPTURE_H
 
-#include "../../common.h"
+#include "../../../common.h"
 #include "UDP/struct_UDPpacket.h"
 
 #include <thread>

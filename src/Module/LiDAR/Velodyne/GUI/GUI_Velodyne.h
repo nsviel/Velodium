@@ -4,7 +4,7 @@
 class Velodyne;
 class Capture;
 
-#include "../../../common.h"
+#include "../../../../common.h"
 
 
 class GUI_Velodyne

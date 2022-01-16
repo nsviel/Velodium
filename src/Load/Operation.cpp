@@ -236,7 +236,7 @@ void Operation::saving(){
 
   //---------------------------
 }
-void Operation::saving_frameRange(){
+void Operation::saving_frameRange(int frame_b, int frame_e){
   //---------------------------
 
   //Select saving path
@@ -244,7 +244,10 @@ void Operation::saving_frameRange(){
 
   //Save current cloud
   Cloud* cloud = sceneManager->get_cloud_selected();
-  saverManager->save_cloud(cloud, path_saving);
+  for(int i=frame_b; i<frame_e; i++){
+    Subset* subset = &cloud->subset[i];
+    saverManager->save_subset(subset, ".ply", path_saving);
+  }
 
   //---------------------------
 }

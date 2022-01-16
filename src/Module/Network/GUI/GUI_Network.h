@@ -6,7 +6,7 @@ class MQTT;
 class SFTP;
 class SSH;
 
-#include "../../common.h"
+#include "../../../common.h"
 
 
 class GUI_Network

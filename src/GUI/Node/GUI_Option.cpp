@@ -197,7 +197,7 @@ void GUI_option::option_colors(){
     if(ImGui::ColorEdit4("Point cloud", (float*)&color_PC, ImGuiColorEditFlags_AlphaBar)){
       if(sceneManager->is_atLeastOnecloud()){
         Subset* subset = &cloud->subset[cloud->subset_selected];
-        attribManager->set_pointCloudColor(subset, color_PC);
+        attribManager->set_subset_color(subset, color_PC);
       }
     }
 

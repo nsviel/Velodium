@@ -37,9 +37,10 @@ bool Saver::save_cloud(Cloud* cloud, string filePath){
   bool sucess = false;
   //---------------------------
 
-  //Check file format
+  //If no format, add default ply
   if(format.at(0) == '/') format = "pts";
 
+  //Check file format
   if     (format == "pts"){
     sucess = ptsManager->Exporter(filePath, cloud);
   }
@@ -67,8 +68,8 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath){
   if(format.at(0) == '/') format = "ply";
 
   //Check file format
-  if     (format == "pts"){;
-    //sucess = ptsManager->Exporter(dirPath, cloud);
+  if     (format == "pts"){
+    sucess = ptsManager->Exporter(dirPath, subset);
   }
   else if(format == "ply"){
     string ply_format = "binary";
@@ -95,7 +96,7 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath, string fi
 
   //Check file format
   if     (format == "pts"){
-    //sucess = ptsManager->Exporter(dirPath, cloud);
+    sucess = ptsManager->Exporter(dirPath, subset);
   }
   else if(format == "ply"){
     string ply_format = "binary";

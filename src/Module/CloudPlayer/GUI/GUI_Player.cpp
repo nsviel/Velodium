@@ -1,15 +1,15 @@
 #include "GUI_Player.h"
 
-#include "OnlinePlayer.h"
-#include "CloudPlayer.h"
+#include "../OnlinePlayer.h"
+#include "../CloudPlayer.h"
 
-#include "../../Engine/Engine.h"
-#include "../../Engine/Scene.h"
-#include "../../Operation/Functions/Heatmap.h"
-#include "../../Operation/Transformation/Filter.h"
+#include "../../../Engine/Engine.h"
+#include "../../../Engine/Scene.h"
+#include "../../../Operation/Functions/Heatmap.h"
+#include "../../../Operation/Transformation/Filter.h"
 
-#include "../../../extern/imgui/imgui.h"
-#include "../../../extern/IconsFontAwesome5.h"
+#include "../../../../extern/imgui/imgui.h"
+#include "../../../../extern/IconsFontAwesome5.h"
 
 
 //Constructor / Destructor

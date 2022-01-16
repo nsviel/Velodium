@@ -377,7 +377,19 @@ vector<float> Attribut::get_z_vector(vector<vec3>& xyz){
 }
 
 //Color
-void Attribut::set_pointCloudColor(Subset* subset, vec4 RGBA){
+void Attribut::set_cloud_color(Cloud* cloud, vec4 RGBA){
+  //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = &cloud->subset[i];
+    this->set_subset_color(subset, RGBA);
+  }
+
+  cloud->unicolor = RGBA;
+
+  //---------------------------
+}
+void Attribut::set_subset_color(Subset* subset, vec4 RGBA){
   vector<vec4>& RGB = subset->RGB;
   vector<float>& Is = subset->I;
   //---------------------------

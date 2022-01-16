@@ -4,7 +4,7 @@
 #include "../Format/struct_dataFile.h"
 
 #include "../../common.h"
-#include "../../Module/Velodyne/UDP/struct_UDPpacket.h"
+#include "../../Module/LiDAR/Velodyne/UDP/struct_UDPpacket.h"
 
 class Scene;
 class Configuration;

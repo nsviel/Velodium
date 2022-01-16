@@ -28,7 +28,7 @@ public:
   //Saving functions
   void saving();
   void saving_allCloud();
-  void saving_frameRange();
+  void saving_frameRange(int frame_b, int frame_e);
 
   //Specific functions
   void convertIscale();

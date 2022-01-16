@@ -1,13 +1,13 @@
 #include "Capture.h"
 
-#include "../SLAM/CT_ICP.h"
+#include "../../SLAM/CT_ICP.h"
 
-#include "../../Engine/Scene.h"
-#include "../../Load/Loader.h"
-#include "../../Load/Saver.h"
-#include "../../Load/Processing/dataExtraction.h"
-#include "../../Specific/timer.h"
-#include "../../Specific/fct_display.h"
+#include "../../../Engine/Scene.h"
+#include "../../../Load/Loader.h"
+#include "../../../Load/Saver.h"
+#include "../../../Load/Processing/dataExtraction.h"
+#include "../../../Specific/timer.h"
+#include "../../../Specific/fct_display.h"
 
 #include <experimental/filesystem>
 #include <filesystem>

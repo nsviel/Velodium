@@ -61,16 +61,6 @@ void WIN_loading::window_saving(){
     this->saving_configuration();
 
     //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Save")){
-      opeManager->saving();
-      *open = false;
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Save all")){
-      opeManager->saving_allCloud();
-      *open = false;
-    }
     ImGui::End();
   }
 }
@@ -283,8 +273,10 @@ void WIN_loading::saving_action(){
     opeManager->saving_allCloud();
   }
 
+  static int frame_b = 0;
+  static int frame_e = 100;
   if (ImGui::Button("Save frames range", ImVec2(item_width, 0))){
-    opeManager->saving_frameRange();
+    opeManager->saving_frameRange(frame_b, frame_e);
   }
 
   //---------------------------

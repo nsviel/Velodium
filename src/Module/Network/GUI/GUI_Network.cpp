@@ -1,9 +1,9 @@
 #include "GUI_Network.h"
 
-#include "Network.h"
-#include "Protocol/MQTT.h"
-#include "Protocol/SFTP.h"
-#include "Protocol/SSH.h"
+#include "../Network.h"
+#include "../Protocol/MQTT.h"
+#include "../Protocol/SFTP.h"
+#include "../Protocol/SSH.h"
 
 
 //Constructor / Destructor

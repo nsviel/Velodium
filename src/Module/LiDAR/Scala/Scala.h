@@ -1,7 +1,7 @@
 #ifndef SCALA_H
 #define SCALA_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 
 class Scala

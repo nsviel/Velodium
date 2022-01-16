@@ -1,18 +1,18 @@
-#ifndef UDP_PARSER_VLP16_H
-#define UDP_PARSER_VLP16_H
+#ifndef UDP_PARSER_HDL32_H
+#define UDP_PARSER_HDL32_H
 
 // Server side implementation of UDP client-server model
 
-#include "../../../common.h"
+#include "../../../../common.h"
 #include "struct_UDPpacket.h"
 
 
-class UDP_parser_VLP16
+class UDP_parser_HDL32
 {
 public:
   //Constructor / Destructor
-  UDP_parser_VLP16();
-  ~UDP_parser_VLP16();
+  UDP_parser_HDL32();
+  ~UDP_parser_HDL32();
 
 public:
   //Main functions

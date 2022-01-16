@@ -36,7 +36,8 @@ public:
   vector<float> get_z_vector(vector<vec3>& xyz);
 
   //Color
-  void set_pointCloudColor(Subset* subset, vec4 RGBA);
+  void set_cloud_color(Cloud* cloud, vec4 RGBA);
+  void set_subset_color(Subset* subset, vec4 RGBA);
   void set_enhancedColor(Subset* subset);
   void set_randomizeAllPointsColor(Subset* subset);
   void set_restoreInitialColor(Subset* subset);

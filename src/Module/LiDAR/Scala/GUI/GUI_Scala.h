@@ -3,7 +3,7 @@
 
 class Scala;
 
-#include "../../common.h"
+#include "../../../../common.h"
 
 
 class GUI_Scala
