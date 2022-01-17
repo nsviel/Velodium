@@ -13,15 +13,14 @@
 
 
 //Constructor / Destructor
-GUI_leftPanel::GUI_leftPanel(Engine* renderer, GUI_windows* winManager){
-  this->gui_winManager = winManager;
+GUI_leftPanel::GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_module* module){
+  this->gui_winManager = window;
   this->engineManager = renderer;
+  this->gui_moduleManager = module;
   //-------------------------------
 
   this->dimManager = engineManager->get_dimManager();
-
-  this->gui_moduleManager = new GUI_module(engineManager);
-  this->gui_fileManager = new GUI_fileManager(dimManager, winManager);
+  this->gui_fileManager = new GUI_fileManager(dimManager, gui_winManager);
 
   Configuration configManager;
   this->panel_X = configManager.parse_json_int("gui", "leftPanel_width");

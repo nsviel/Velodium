@@ -1,23 +1,29 @@
-#ifndef OnlinePlayer_H
-#define OnlinePlayer_H
+#ifndef PLAYER_ONLINE_H
+#define PLAYER_ONLINE_H
 
 #include "../../common.h"
 
 class CT_ICP;
 class Heatmap;
 class Camera;
+class Engine;
+class Filter;
 
 
-class OnlinePlayer
+class Player_online
 {
 public:
   //Constructor / Destructor
-  OnlinePlayer(Camera* camManager);
-  ~OnlinePlayer();
+  Player_online(Engine* engineManager);
+  ~Player_online();
 
 public:
-  void make_thing(Subset* subset);
+  void compute_onlineOpe(Cloud* cloud, int i);
+  void reset();
+
   void camera_followUp(Subset* subset);
+  void camera_position(Subset* subset);
+  void camera_orientation(Subset* subset);
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
@@ -27,7 +33,11 @@ public:
 private:
   Heatmap* heatmapManager;
   Camera* cameraManager;
-  CT_ICP* slamManager;
+  CT_ICP* cticpManager;
+  Filter* filterManager;
+
+  vec2 camera_moved_trans;
+  float camera_moved_rotat;
 
   bool with_camera_follow;
   bool with_slam;

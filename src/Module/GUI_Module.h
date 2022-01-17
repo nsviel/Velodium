@@ -2,7 +2,7 @@
 #define GUI_MODULE_H
 
 #include "LiDAR/GUI/GUI_Lidar.h"
-#include "CloudPlayer/GUI/GUI_Player.h"
+#include "Player/GUI/GUI_Player.h"
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Network/GUI/GUI_Network.h"
 #include "Obstacle/GUI/GUI_Obstacle.h"
@@ -24,7 +24,7 @@ public:
     this->gui_obstacleManager = new GUI_Obstacle(engineManager);
 
     this->module_velodyne = true;
-    this->module_CloudPlayer = true;
+    this->module_player = true;
     this->module_slam = true;
     this->module_obstacle = true;
     this->module_scala = false;
@@ -47,9 +47,9 @@ public:
       }
 
       // Velodyne data management
-      if(module_CloudPlayer){
+      if(module_player){
         if(ImGui::BeginTabItem("Player")){
-          gui_odomManager->design_CloudPlayer();
+          gui_odomManager->design_player_cloud();
           ImGui::EndTabItem();
         }
       }
@@ -85,6 +85,8 @@ public:
     }
   }
 
+  inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
+
 private:
   GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_odomManager;
@@ -93,7 +95,7 @@ private:
   GUI_Obstacle* gui_obstacleManager;
 
   bool module_velodyne;
-  bool module_CloudPlayer;
+  bool module_player;
   bool module_slam;
   bool module_obstacle;
   bool module_scala;

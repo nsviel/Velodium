@@ -44,6 +44,7 @@ public:
   inline void set_cameraSpeed(float value){viewMain.speed_move = value;}
   inline void set_cameraPos(vec3 value){viewMain.cam_P = value;}
   inline void set_camForward(vec3 value){viewMain.cam_F = value;}
+  inline void set_angle_azimuth(float value){viewMain.angle_azimuth = value;}
 
   //Getters
   inline mat4 get_viewMat(){return compute_viewMat();}

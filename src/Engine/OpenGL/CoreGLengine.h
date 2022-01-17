@@ -35,6 +35,7 @@ public:
 
   //GL loop
   void loop();
+  void loop_gui();
   void loop_pass_1();
   void loop_pass_2();
   void loop_drawScene();

@@ -31,6 +31,8 @@ public:
 
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 
+  inline CT_ICP* get_cticpManager(){return cticpManager;}
+
 private:
   CT_ICP* cticpManager;
   SLAM_optim_ceres* ceresManager;

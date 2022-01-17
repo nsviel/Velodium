@@ -1,7 +1,7 @@
 #include "GUI_Player.h"
 
-#include "../OnlinePlayer.h"
-#include "../CloudPlayer.h"
+#include "../Player_online.h"
+#include "../Player_cloud.h"
 
 #include "../../../Engine/Engine.h"
 #include "../../../Engine/Scene.h"
@@ -17,22 +17,28 @@ GUI_Player::GUI_Player(Engine* engineManager){
   //---------------------------
 
   this->filterManager = engineManager->get_filterManager();
-  this->playerManager = new CloudPlayer();
   this->heatmapManager = new Heatmap();
   this->sceneManager = new Scene();
-  this->onlineManager = new OnlinePlayer(engineManager->get_CameraManager());
+  this->onlineManager = new Player_online(engineManager);
+  this->playerManager = new Player_cloud(onlineManager);
 
   //---------------------------
 }
 GUI_Player::~GUI_Player(){}
 
 //Main function
-void GUI_Player::design_CloudPlayer(){
+void GUI_Player::design_player_cloud(){
   //---------------------------
 
   this->playCloud();
   this->parameter_offline();
   this->parameter_online();
+
+  //---------------------------
+}
+void GUI_Player::design_player_online(){
+  //---------------------------
+
 
   //---------------------------
 }
@@ -48,27 +54,27 @@ void GUI_Player::playCloud(){
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if (ImGui::Button(ICON_FA_PLAY "##36")){
     if(cloud != nullptr){
-      playerManager->playCloud_start();
+      playerManager->player_start();
     }
   }
   ImGui::PopStyleColor(1);
   ImGui::SameLine();
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     if(cloud != nullptr){
-      playerManager->playCloud_pause();
+      playerManager->player_pause();
     }
   }
   ImGui::SameLine();
   if (ImGui::Button(ICON_FA_STOP "##37")){
     if(cloud != nullptr){
-      playerManager->playCloud_stop();
+      playerManager->player_stop();
     }
   }
   ImGui::SameLine();
   int freq = *playerManager->get_frequency();
   ImGui::SetNextItemWidth(40);
   if(ImGui::SliderInt("Frequency", &freq, 1, 25)){
-    playerManager->play_setFrequency(freq);
+    playerManager->player_setFrequency(freq);
   }
 
   //Display only the ieme cloud
@@ -77,7 +83,7 @@ void GUI_Player::playCloud(){
   //Range of displayed frames
   int* subset_selected = playerManager->get_frame_ID();
   int* frame_max_nb = playerManager->get_frame_max_nb();
-  int* frame_range = playerManager->get_frame_display_range();
+  int* frame_range = playerManager->get_player_frame_range();
   ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, *frame_max_nb)){
     if(cloud != nullptr){
@@ -88,13 +94,13 @@ void GUI_Player::playCloud(){
   //Recording
   if (ImGui::Button(ICON_FA_CIRCLE "##37")){
     if(cloud != nullptr){
-      playerManager->playCloud_save(cloud);
+      playerManager->player_save(cloud);
     }
   }
   ImGui::SameLine();
   //Dicrectory path selection & display
   if(ImGui::Button("...##23")){
-    playerManager->playCloud_selectDirSave();
+    playerManager->player_selectDirSave();
   }
   ImGui::SameLine();
   string saveas = *playerManager->get_saveas();
@@ -111,6 +117,7 @@ void GUI_Player::playCloud_byMouseWheel(){
   //Wheel - rolling stone
   if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
     if(cloud != nullptr){
+      playerManager->update_frame_ID(cloud);
       int subset_selected = *playerManager->get_frame_ID();
 
       if(io.MouseWheel > 0){
@@ -214,7 +221,7 @@ void GUI_Player::parameter_offline(){
   }
 }
 void GUI_Player::parameter_online(){
-  if(ImGui::CollapsingHeader("OnlinePlayer parameters")){
+  if(ImGui::CollapsingHeader("Player_online parameters")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------

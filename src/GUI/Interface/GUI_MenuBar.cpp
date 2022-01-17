@@ -6,7 +6,7 @@
 #include "../Node/GUI_Option.h"
 
 #include "../../Load/Operation.h"
-#include "../../Module/CloudPlayer/GUI/GUI_Player.h"
+#include "../../Module/Player/GUI/GUI_Player.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"

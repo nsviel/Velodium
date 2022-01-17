@@ -8,6 +8,7 @@
 #include "../../common.h"
 
 class Scene;
+class Glyphs;
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
 
@@ -67,10 +68,12 @@ private:
   void end_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset);
 
 private:
+  Scene* sceneManager;
+  Glyphs* glyphManager;
+  
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
-  Scene* sceneManager;
 
   voxelMap* map;
   slamMap* map_cloud;

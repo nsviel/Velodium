@@ -30,6 +30,8 @@ Engine::Engine(Dimension* dim, Camera* control, Shader* shader){
   this->heatmapManager = new Heatmap();
   this->filterManager = new Filter();
 
+  this->is_reset = false;
+
   glyphManager->init();
 
   //---------------------------
@@ -86,6 +88,7 @@ void Engine::reset(){
   sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
+  this->is_reset = true;
   console.AddLog("#", "Reset scene...");
 }
 

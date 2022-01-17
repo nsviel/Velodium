@@ -25,6 +25,7 @@ struct Frame{ //SLAM stuff
 
   //Stats
   float time_slam;
+  bool is_slamed;
   int map_size_abs;
   int map_size_rlt;
   glm::vec3 trans_abs;

@@ -319,6 +319,7 @@ void dataExtraction::init_frameParameters(Subset& subset){
   frame->time_slam = 0;
   frame->map_size_abs = 0;
   frame->map_size_rlt = 0;
+  frame->is_slamed = false;
 
   frame->rotat_b = Eigen::Matrix3d::Identity();
   frame->rotat_e = Eigen::Matrix3d::Identity();

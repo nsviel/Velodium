@@ -14,7 +14,7 @@ class GUI_leftPanel
 {
 public:
   //Constructor / Destructor
-  GUI_leftPanel(Engine* renderer, GUI_windows* winManager);
+  GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_module* module);
   ~GUI_leftPanel();
 
 public:

@@ -41,6 +41,7 @@ public:
   //Subfunctions
   void draw_clouds();
 
+  inline bool* get_is_reset(){return &is_reset;}
   inline Scene* get_SceneManager(){return sceneManager;}
   inline Glyphs* get_glyphManager(){return glyphManager;}
   inline Dimension* get_dimManager(){return dimManager;}
@@ -59,6 +60,7 @@ private:
   Shader* shaderManager;
   Filter* filterManager;
 
+  bool is_reset;
   uint modelID, comID;
 };
 

@@ -6,6 +6,7 @@
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Engine/Scene.h"
+#include "../../Engine/Glyphs.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 
@@ -14,6 +15,7 @@ CT_ICP::CT_ICP(){
   //---------------------------
 
   this->sceneManager = new Scene();
+  this->glyphManager = new Glyphs();
   this->normalManager = new SLAM_normal();
   this->ceresManager = new SLAM_optim_ceres(normalManager);
   this->gnManager = new SLAM_optim_gn(normalManager);
@@ -52,6 +54,7 @@ CT_ICP::~CT_ICP(){}
 
 //Main functions
 void CT_ICP::compute_slam(Cloud* cloud){
+  /*I should probably say something here about what the hell this function is doing*/
   map = new voxelMap();
   map_cloud = new slamMap();
 
@@ -94,36 +97,46 @@ void CT_ICP::compute_slam(Cloud* cloud){
   delete map_cloud;
 }
 void CT_ICP::compute_slam_online(Cloud* cloud, int i){
-  tic();
-  //---------------------------
-
   Subset* subset = &cloud->subset[i];
-  Frame* frame = &cloud->subset[i].frame;
-  Frame* frame_m1 = &cloud->subset[i-1].frame;
-  Frame* frame_m2 = &cloud->subset[i-2].frame;
-  frame->ID = i;
+  Frame* frame = &subset->frame;
 
-  this->init_frameTimestamp(subset);
-  this->init_frameChain(frame, frame_m1, frame_m2);
-  this->init_distortion(frame);
+  if(frame->is_slamed == false){
+    tic();
+    //---------------------------
 
-  this->compute_gridSampling(subset);
-  this->compute_optimization(frame, frame_m1);
-  this->compute_assessRegistration(frame, frame_m1);
+    Frame* frame_m1 = &cloud->subset[i-1].frame;
+    Frame* frame_m2 = &cloud->subset[i-2].frame;
+    frame->ID = i;
 
-  this->add_pointsToLocalMap(frame);
+    this->init_frameTimestamp(subset);
+    this->init_frameChain(frame, frame_m1, frame_m2);
+    this->init_distortion(frame);
 
-  this->end_updateSubsetLocation(subset);
-  this->end_clearTooFarVoxels(frame->trans_e);
+    this->compute_gridSampling(subset);
+    this->compute_optimization(frame, frame_m1);
+    this->compute_assessRegistration(frame, frame_m1);
 
-  //---------------------------
-  float duration = toc();
-  this->end_statistics(duration, frame, frame_m1, subset);
+    this->add_pointsToLocalMap(frame);
+
+    this->end_updateSubsetLocation(subset);
+    this->end_clearTooFarVoxels(frame->trans_e);
+
+    //---------------------------
+    float duration = toc();
+    this->end_statistics(duration, frame, frame_m1, subset);
+    glyphManager->update(subset);
+  }
 }
 
 //Support functions
 void CT_ICP::reset(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Frame* frame = &cloud->subset[i].frame;
+    frame->is_slamed = false;
+  }
 
   this->frame_ID = 0;
 
@@ -479,6 +492,7 @@ void CT_ICP::end_updateSubsetLocation(Subset* subset){
   Eigen::Vector3d t = trans_b;
   root = R * root + t;
   subset->root = eigen_to_glm_vec3_d(root);
+  frame->is_slamed = true;
 
   //Update subset position
   #pragma omp parallel for num_threads(nb_thread)
@@ -540,9 +554,13 @@ void CT_ICP::end_statistics(float duration, Frame* frame, Frame* frame_m1, Subse
   //Transformation parameters
   vec3 trans_abs = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
   vec3 trans_rlt;
-  trans_rlt.x = frame->trans_b(0) - frame_m1->trans_b(0);
-  trans_rlt.y = frame->trans_b(1) - frame_m1->trans_b(1);
-  trans_rlt.z = frame->trans_b(2) - frame_m1->trans_b(2);
+  if(frame->ID == 0){
+    trans_rlt = vec3(0, 0, 0);
+  }else{
+    trans_rlt.x = frame->trans_b(0) - frame_m1->trans_b(0);
+    trans_rlt.y = frame->trans_b(1) - frame_m1->trans_b(1);
+    trans_rlt.z = frame->trans_b(2) - frame_m1->trans_b(2);
+  }
 
   Transforms transformManager;
   vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
@@ -550,9 +568,14 @@ void CT_ICP::end_statistics(float duration, Frame* frame, Frame* frame_m1, Subse
   vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
 
   vec3 rotat_rlt;
-  rotat_rlt.x = f0_rotat.x - f0_rotat.x;
-  rotat_rlt.y = f0_rotat.y - f1_rotat.y;
-  rotat_rlt.z = f0_rotat.z - f1_rotat.z;
+  if(frame->ID == 0){
+    rotat_rlt = vec3(0, 0, 0);
+  }
+  else{
+    rotat_rlt.x = f0_rotat.x - f0_rotat.x;
+    rotat_rlt.y = f0_rotat.y - f1_rotat.y;
+    rotat_rlt.z = f0_rotat.z - f1_rotat.z;
+  }
 
   frame->trans_abs = trans_abs;
   frame->rotat_abs = rotat_abs;

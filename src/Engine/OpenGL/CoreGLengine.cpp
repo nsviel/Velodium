@@ -230,10 +230,24 @@ void CoreGLengine::loop(){
 
     //GUI and end
     //---------------------------
-    guiManager->Gui_loop();
+    this->loop_gui();
     this->loop_end();
   }
   while(!glfwWindowShouldClose(window));
+
+  //---------------------------
+}
+void CoreGLengine::loop_gui(){
+  //---------------------------
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  guiManager->Gui_loop();
+
+  bool* is_reset = engineManager->get_is_reset();
+  if(*is_reset){
+    guiManager->Gui_reset();
+    *is_reset = false;
+  }
 
   //---------------------------
 }

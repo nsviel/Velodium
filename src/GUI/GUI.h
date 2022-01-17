@@ -9,6 +9,7 @@ class GUI_option;
 class GUI_menuBar;
 class GUI_leftPanel;
 class GUI_consol;
+class GUI_module;
 
 class Engine;
 class Camera;
@@ -28,6 +29,8 @@ public:
   void Gui_style();
   void Gui_font();
   void Gui_loop();
+  void Gui_render();
+  void Gui_reset();
 
   //Subfunctions
   void Gui_Dimensions();
@@ -40,6 +43,7 @@ private:
   GUI_menuBar* gui_menuBarManager;
   GUI_leftPanel* gui_leftPanelManager;
   GUI_consol* gui_consol;
+  GUI_module* gui_moduleManager;
 
   Engine* engineManager;
   Camera* cameraManager;

@@ -5,10 +5,10 @@
 
 class Scene;
 class Engine;
-class CloudPlayer;
+class Player_cloud;
 class Heatmap;
 class Filter;
-class OnlinePlayer;
+class Player_online;
 
 
 class GUI_Player
@@ -20,7 +20,8 @@ public:
 
 public:
   //Main function
-  void design_CloudPlayer();
+  void design_player_cloud();
+  void design_player_online();
 
   //Subfunctions
   void playCloud();
@@ -31,10 +32,10 @@ public:
 
 private:
   Scene* sceneManager;
-  CloudPlayer* playerManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
-  OnlinePlayer* onlineManager;
+  Player_cloud* playerManager;
+  Player_online* onlineManager;
 };
 
 #endif
