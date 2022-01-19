@@ -120,7 +120,7 @@ bool CoreGLengine::init_object(){
   this->cameraManager = new Camera(dimManager);
   this->viewportManager = new Viewport(dimManager);
   this->engineManager = new Engine(dimManager, cameraManager, shaderManager);
-  this->fboManager = new Framebuffer();
+  this->fboManager = new Framebuffer(dimManager);
   this->guiManager = new GUI(engineManager);
   guiManager->Gui_bkgColor(&backgColor);
 

@@ -30,9 +30,10 @@ private:
   Attribut* attribManager;
 
   float sphereDiameter;
-  float cyl_r_min = 5;
-  float cyl_r_max = 15;
-  float cyl_z_min = -3;
+  float cyl_r_min;
+  float cyl_r_max;
+  float cyl_z_min;
+  bool verbose;
 };
 
 #endif

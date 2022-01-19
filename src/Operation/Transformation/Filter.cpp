@@ -14,7 +14,11 @@ Filter::Filter(){
   this->sceneManager = new Scene();
   this->attribManager = new Attribut();
 
+  this->verbose = false;
   this->sphereDiameter = 0.139f;
+  this->cyl_r_min = 5;
+  this->cyl_r_max = 30;
+  this->cyl_z_min = -3;
 
   //---------------------------
 }
@@ -41,9 +45,11 @@ void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
 
   //---------------------------
   float duration = toc();
-  int size_filtered = subset->xyz.size();
-  string log = "Filter by angle (" + to_string(angleMax) + "°) : " + to_string(size_before) + " -> " + to_string(size_filtered) + " points (" + to_string(duration) + " ms)";
-  console.AddLog("ok", log);
+  if(verbose){
+    int size_filtered = subset->xyz.size();
+    string log = "Filter by angle (" + to_string(angleMax) + "°) : " + to_string(size_before) + " -> " + to_string(size_filtered) + " points (" + to_string(duration) + " ms)";
+    console.AddLog("ok", log);
+  }
 }
 void Filter::filter_sphereCleaning(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -112,8 +118,10 @@ void Filter::filter_subset_cylinder(Subset* subset){
   attribManager->make_supressPoints(subset, idx);
 
   //---------------------------
-  string result = "Cylinder filtering: " + to_string(idx_size) + " supressed";
-  console.AddLog("#", result);
+  if(verbose){
+    string result = "Cylinder filtering: " + to_string(idx_size) + " supressed";
+    console.AddLog("#", result);
+  }
 }
 void Filter::filter_cloud_cylinder(Cloud* cloud){
   //---------------------------

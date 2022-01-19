@@ -1,32 +1,32 @@
-#ifndef DEF_FRAMEBUFFER
-#define DEF_FRAMEBUFFER
+#ifndef FRAMEBUFFER_H
+#define FRAMEBUFFER_H
 
 #include "../../common.h"
+
+class Dimension;
+
 
 class Framebuffer
 {
 public:
-  Framebuffer();
+  Framebuffer(Dimension* dim);
   ~Framebuffer();
 
 public:
-  void letsgo();
-  void letsmid();
-  void letstop();
-
-  void display();
-  void create_FBO();
-  void create_Texture();
-  void create_DepthRenderBuffer();
-  void create_bckgrndQuad();
-  void readScreenPixels(int width, int height);
+  void init_rendering_fbo_1();
+  void init_rendering_fbo_2();
 
 private:
-  GLuint quadVAO;
-  GLuint ID_fbo;
-  GLuint ID_texture;
-  GLuint ID_depthBuffer;
-  int width, height;
+  Dimension* dimManager;
+
+  GLuint quad_vao;
+  GLuint quad_vbo;
+  GLuint fbo_1_ID;
+  GLuint fbo_2_ID;
+  GLuint texture_ID;
+  GLuint tex_color_ID;
+  GLuint tex_depth_ID;
+  GLuint tex_edl_ID;
 };
 
 #endif

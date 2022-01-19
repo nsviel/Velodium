@@ -39,7 +39,7 @@ GUI::GUI(Engine* engine){
   this->gui_controlManager = new GUI_control(engineManager);
   this->gui_optionManager = new GUI_option(engineManager, gui_controlManager);
   this->gui_leftPanelManager = new GUI_leftPanel(engineManager, gui_winManager, gui_moduleManager);
-  this->gui_menuBarManager = new GUI_menuBar(engineManager, gui_winManager, gui_optionManager, gui_leftPanelManager);
+  this->gui_menuBarManager = new GUI_menuBar(engineManager, gui_winManager, gui_optionManager, gui_leftPanelManager, gui_moduleManager->get_gui_player());
   this->gui_consol = new GUI_consol(engineManager);
 
   //---------------------------

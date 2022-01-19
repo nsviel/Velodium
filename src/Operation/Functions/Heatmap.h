@@ -19,6 +19,7 @@ public:
   //Main functions
   void set_Heatmap(Cloud* cloud);
   void set_Heatmap(Cloud* cloud, bool is_heatmap);
+  void set_Heatmap(Subset* subset, Subset* subset_buffer, bool is_heatmap);
   void set_Heatmap_all(bool heatAll);
 
   //Heatmap functions

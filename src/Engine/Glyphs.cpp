@@ -177,7 +177,7 @@ void Glyphs::reset_colors(){
 void Glyphs::update(Subset* subset){
   //---------------------------
 
-  this->update_glyph_object("aabb", subset);
+  //this->update_glyph_object("aabb", subset);
 
   Axis axisManager;
   axisManager.update_axis_cloud(subset);

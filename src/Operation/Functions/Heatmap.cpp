@@ -73,6 +73,24 @@ void Heatmap::set_Heatmap(Cloud* cloud, bool is_heatmap){
   //---------------------------
   sceneManager->update_cloud_color(cloud);
 }
+void Heatmap::set_Heatmap(Subset* subset, Subset* subset_buffer, bool is_heatmap){
+  //---------------------------
+
+  //Apply heatmap
+  if(is_heatmap == true){
+    this->compute_subset_heatmap_ON(subset);
+    subset_buffer->RGB = subset->RGB;
+  }
+
+  //Reverse heatmap
+  if(is_heatmap == false){
+    this->compute_subset_heatmap_OFF(subset);
+    subset_buffer->RGB = subset->RGB;
+  }
+
+  //---------------------------
+  sceneManager->update_subset_color(subset);
+}
 void Heatmap::set_Heatmap_all(bool heatAll){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------

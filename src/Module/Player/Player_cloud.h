@@ -22,6 +22,7 @@ public:
   void supress_firstSubset(Cloud* cloud);
 
   //Subfunctions
+  void player_runtime();
   void player_start();
   void player_pause();
   void player_stop();
@@ -36,6 +37,7 @@ public:
   inline int* get_player_frame_range(){return &frame_display_range;}
   inline float* get_frame_ID_ts(){return &frame_ID_ts;}
   inline bool* get_player_isrunning(){return &player_isrunning;}
+  inline bool* get_player_ispaused(){return &player_ispaused;}
   inline bool* get_with_restart(){return &player_returnToZero;}
   inline string* get_saveas(){return &saveas;}
 
@@ -53,7 +55,9 @@ private:
   int frame_display_range;
 
   bool player_isrunning;
+  bool player_ispaused;
   bool player_returnToZero;
+  bool player_flag_1s;
   int player_frequency;
 };
 

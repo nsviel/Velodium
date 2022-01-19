@@ -2,7 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "../../../extern/std_image.h"
+#include "../../../extern/stb_image/stb_image.h"
 
 
 //Constructor / Destructor

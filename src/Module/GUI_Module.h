@@ -18,7 +18,7 @@ public:
     //-------------------------------
 
     this->gui_lidarManager = new GUI_Lidar();
-    this->gui_odomManager = new GUI_Player(engineManager);
+    this->gui_playerManager = new GUI_Player(engineManager);
     this->gui_slamManager = new GUI_Slam();
     this->gui_senderManager = new GUI_Network();
     this->gui_obstacleManager = new GUI_Obstacle(engineManager);
@@ -49,11 +49,11 @@ public:
       // Velodyne data management
       if(module_player){
         if(ImGui::BeginTabItem("Player")){
-          gui_odomManager->design_player_cloud();
+          gui_playerManager->design_player_cloud();
           ImGui::EndTabItem();
         }
       }
-      gui_odomManager->playCloud_byMouseWheel();
+      gui_playerManager->player_mouse();
 
       // SLAM
       if(module_slam){
@@ -86,10 +86,11 @@ public:
   }
 
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
+  inline GUI_Player* get_gui_player(){return gui_playerManager;}
 
 private:
   GUI_Lidar* gui_lidarManager;
-  GUI_Player* gui_odomManager;
+  GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;
   GUI_Network* gui_senderManager;
   GUI_Obstacle* gui_obstacleManager;

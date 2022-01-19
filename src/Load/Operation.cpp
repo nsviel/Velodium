@@ -380,8 +380,15 @@ vector<string> Operation::zenity_loading(){
         }
 
         path_vec.push_back(path_file);
+
+        //Supress retrieved path from path list
         path_str = path_str.substr(path_str.find('|')+1);
       }
+    }
+
+    //Retrieve the last selected path
+    if (path_str.find('\n')){
+      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
     }
     path_vec.push_back(path_str);
   }

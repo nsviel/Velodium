@@ -24,9 +24,9 @@ public:
   void design_player_online();
 
   //Subfunctions
-  void playCloud();
-  void playCloud_byMouseWheel();
-  void subset_selection_bar();
+  void player_run();
+  void player_mouse();
+  void player_selection();
   void parameter_offline();
   void parameter_online();
 

@@ -21,10 +21,12 @@ Player_cloud::Player_cloud(Player_online* online){
   this->frame_max_ID = 0;
   this->frame_max_nb = 0;
   this->frame_ID_ts = 0;
-  this->frame_display_range = 0;
+  this->frame_display_range = 15;
   this->player_frequency = 10;
   this->player_isrunning = false;
+  this->player_ispaused = false;
   this->player_returnToZero = false;
+  this->player_flag_1s = false;
 
   //Get absolute executable location
   string absPath = std::experimental::filesystem::current_path();
@@ -60,6 +62,7 @@ void Player_cloud::select_byFrameID(Cloud* cloud, int frame_id){
   //Set visibility parameter for each cloud subset
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = &cloud->subset[i];
+    Frame* frame = &subset->frame;
 
     //If selected frame
     if(i == frame_id){
@@ -75,7 +78,7 @@ void Player_cloud::select_byFrameID(Cloud* cloud, int frame_id){
       onlineManager->compute_onlineOpe(cloud, i);
     }
     //If several frame displayed
-    else if(i >= frame_id - frame_display_range && i < frame_id && i >= 0){
+    else if(i >= frame_id - frame_display_range && i < frame_id && i >= 0 && frame->is_slamed){
       subset->visibility = true;
     }
     //All other frames
@@ -129,8 +132,23 @@ void Player_cloud::supress_firstSubset(Cloud* cloud){
 }
 
 //Player functions
+void Player_cloud::player_runtime(){
+  //Continually running, wait for flag to proceed
+  //---------------------------
+
+  if(player_flag_1s){
+    subset_selected++;
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    this->select_byFrameID(cloud, subset_selected);
+
+    player_flag_1s = false;
+  }
+
+  //---------------------------
+}
 void Player_cloud::player_start(){
   this->player_isrunning = true;
+  this->player_ispaused = false;
   //---------------------------
 
   if(timerManager->isRunning() == false){
@@ -138,9 +156,7 @@ void Player_cloud::player_start(){
     float increment = (1 / (float)player_frequency) * 1000;
     timerManager->setFunc([&](){
       if(sceneManager->is_atLeastOnecloud()){
-        subset_selected++;
-        Cloud* cloud = sceneManager->get_cloud_selected();
-        this->select_byFrameID(cloud, subset_selected);
+        player_flag_1s = true;
       }else{
         timerManager->stop();
         subset_selected = 0;
@@ -156,6 +172,7 @@ void Player_cloud::player_start(){
 }
 void Player_cloud::player_pause(){
   this->player_isrunning = false;
+  this->player_ispaused = true;
   //---------------------------
 
   timerManager->stop();
@@ -165,6 +182,7 @@ void Player_cloud::player_pause(){
 void Player_cloud::player_stop(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   this->player_isrunning = false;
+  this->player_ispaused = false;
   //---------------------------
 
   timerManager->stop();

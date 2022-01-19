@@ -110,6 +110,13 @@ void Scene::update_cloud_reset(Cloud* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = &cloud->subset[i];
 
+    //Reinitialize visibility
+    if(i == 0){
+      subset->visibility = true;
+    }else{
+      subset->visibility = false;
+    }
+
     //Reinitialize main data
     subset->xyz = cloud->subset_init[i].xyz;
     subset->RGB = cloud->subset_init[i].RGB;

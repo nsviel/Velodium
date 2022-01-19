@@ -26,11 +26,12 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_menuBar::GUI_menuBar(Engine* engine, GUI_windows* winManager, GUI_option* options, GUI_leftPanel* leftPanel){
-  this->optionManager = options;
-  this->gui_winManager = winManager;
-  this->engineManager = engine;
-  this->gui_leftPanelManager = leftPanel;
+GUI_menuBar::GUI_menuBar(Engine* eng, GUI_windows* win, GUI_option* opt, GUI_leftPanel* lpa, GUI_Player* ply){
+  this->optionManager = opt;
+  this->gui_winManager = win;
+  this->engineManager = eng;
+  this->gui_leftPanelManager = lpa;
+  this->playerManager = ply;
   //---------------------------
 
   this->sceneManager = new Scene();
@@ -38,7 +39,6 @@ GUI_menuBar::GUI_menuBar(Engine* engine, GUI_windows* winManager, GUI_option* op
   this->texManager = new Textures();
   this->extractionManager = new Extraction();
   this->opeManager = new Operation();
-  this->playerManager = new GUI_Player(engineManager);
 
   //---------------------------
 }
@@ -163,7 +163,7 @@ void GUI_menuBar::MenuBar_icons(){
 void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 
-  playerManager->subset_selection_bar();
+  playerManager->player_selection();
 
   //-------------------------
 }

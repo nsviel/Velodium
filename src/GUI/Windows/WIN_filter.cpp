@@ -29,7 +29,7 @@ void WIN_filter::window_filter(){
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
-    //Cylinder filtering
+    //Cylinder cleaning filter
     if (ImGui::Button("Cylinder cleaning", ImVec2(item_width,0))){
       if(cloud != nullptr){
         filterManager->filter_cloud_cylinder(cloud);

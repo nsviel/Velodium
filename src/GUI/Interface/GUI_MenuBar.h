@@ -19,7 +19,7 @@ class GUI_menuBar
 {
 public:
   //Constructor / Destructor
-  GUI_menuBar(Engine* engine, GUI_windows* winManager, GUI_option* options, GUI_leftPanel* leftPanel);
+  GUI_menuBar(Engine* eng, GUI_windows* win, GUI_option* opt, GUI_leftPanel* lpa, GUI_Player* ply);
   ~GUI_menuBar();
 
 public:

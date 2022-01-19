@@ -30,9 +30,9 @@ GUI_Player::~GUI_Player(){}
 void GUI_Player::design_player_cloud(){
   //---------------------------
 
-  this->playCloud();
-  this->parameter_offline();
+  this->player_run();
   this->parameter_online();
+  this->parameter_offline();
 
   //---------------------------
 }
@@ -44,14 +44,20 @@ void GUI_Player::design_player_online(){
 }
 
 //Subfunctions
-void GUI_Player::playCloud(){
+void GUI_Player::player_run(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Timeline");
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
   //Play / Stop frame display
-  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  playerManager->player_runtime();
+  bool is_playing = *playerManager->get_player_isrunning();
+  if(is_playing == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
   if (ImGui::Button(ICON_FA_PLAY "##36")){
     if(cloud != nullptr){
       playerManager->player_start();
@@ -59,10 +65,17 @@ void GUI_Player::playCloud(){
   }
   ImGui::PopStyleColor(1);
   ImGui::SameLine();
+  bool is_paused = *playerManager->get_player_ispaused();
+  if(is_paused){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     if(cloud != nullptr){
       playerManager->player_pause();
     }
+  }
+  if(is_paused){
+    ImGui::PopStyleColor(1);
   }
   ImGui::SameLine();
   if (ImGui::Button(ICON_FA_STOP "##37")){
@@ -78,7 +91,7 @@ void GUI_Player::playCloud(){
   }
 
   //Display only the ieme cloud
-  this->subset_selection_bar();
+  this->player_selection();
 
   //Range of displayed frames
   int* subset_selected = playerManager->get_frame_ID();
@@ -109,7 +122,7 @@ void GUI_Player::playCloud(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Player::playCloud_byMouseWheel(){
+void GUI_Player::player_mouse(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -132,7 +145,7 @@ void GUI_Player::playCloud_byMouseWheel(){
 
   //----------------------------
 }
-void GUI_Player::subset_selection_bar(){
+void GUI_Player::player_selection(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
@@ -156,7 +169,7 @@ void GUI_Player::subset_selection_bar(){
   //---------------------------
 }
 void GUI_Player::parameter_offline(){
-  if(ImGui::CollapsingHeader("Parameters")){
+  if(ImGui::CollapsingHeader("Offline params")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -221,7 +234,10 @@ void GUI_Player::parameter_offline(){
   }
 }
 void GUI_Player::parameter_online(){
-  if(ImGui::CollapsingHeader("Player_online parameters")){
+  bool* with_online = onlineManager->get_with_online();
+  ImGui::Checkbox("Online processing", with_online);
+
+  if(ImGui::CollapsingHeader("Online params")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -229,14 +245,40 @@ void GUI_Player::parameter_online(){
     bool* with_slam = onlineManager->get_with_slam();
     ImGui::Checkbox("SLAM each frame", with_slam);
 
-    bool* cameraRoot = onlineManager->get_with_camera_follow();
-    ImGui::Checkbox("Camera follow up", cameraRoot);
+    bool* with_camera_follow = onlineManager->get_with_camera_follow();
+    ImGui::Checkbox("Camera follow up", with_camera_follow);
 
-    bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
-    ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
+    bool* with_save_image = onlineManager->get_with_save_image();
+    ImGui::Checkbox("Save image", with_save_image);
 
     bool* withHeatmap = onlineManager->get_with_heatmap();
+    bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
     ImGui::Checkbox("Heatmap", withHeatmap);
+    if(*withHeatmap){
+      ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
+    }
+    if(*heatmap_rltHeight){
+      vec2* height_range = onlineManager->get_heatmap_height_range();
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
+    }
+
+    //Cylinder cleaning filter
+    bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
+    ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
+    if(*cylinderFilter){
+      float* r_min = filterManager->get_cyl_r_min();
+      float* r_max = filterManager->get_cyl_r_max();
+      float* z_min = filterManager->get_cyl_z_min();
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
+    }
 
     //---------------------------
     ImGui::Separator();
