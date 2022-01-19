@@ -6,12 +6,11 @@
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Transformation/Filter.h"
 #include "../../Engine/OpenGL/Camera.h"
+#include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Engine.h"
 #include "../../Specific/fct_maths.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../../../extern/stb_image/stb_image_write.h"
+#include "../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
@@ -20,20 +19,22 @@ Player_online::Player_online(Engine* engineManager){
 
   this->cameraManager = engineManager->get_CameraManager();
   this->filterManager = engineManager->get_filterManager();
+  this->renderManager = engineManager->get_renderManager();
   this->dimManager = engineManager->get_dimManager();
+  this->cticpManager = engineManager->get_cticpManager();
   this->heatmapManager = new Heatmap();
-  this->cticpManager = new CT_ICP();
 
   this->HM_height_range = vec2(-2.25, 1.75);
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
-  this->camera_distFromLidarPos = 5;
+  this->camera_distPos = 5;
+  this->screenshot_path = "/home/aither/Desktop/truc";
 
   this->with_camera_top = false;
   this->with_camera_follow = true;
   this->with_camera_root = false;
 
-  this->with_online = false;
+  this->with_online = true;
   this->with_slam = true;
   this->with_cylinder_cleaning = true;
   this->with_heatmap = true;
@@ -104,7 +105,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
     }
 
     if(with_save_image){
-      this->save_image();
+      renderManager->render_screenshot(screenshot_path);
     }
   }
 
@@ -116,25 +117,37 @@ void Player_online::camera_followUp(Cloud* cloud, int i){
 
   Frame* frame = &cloud->subset[i].frame;
 
-  if(frame->ID >= 2){
+  if(frame->ID >= 4){
     Frame* frame_m1 = &cloud->subset[i-1].frame;
+    Frame* frame_m2 = &cloud->subset[i-2].frame;
+    Frame* frame_m3 = &cloud->subset[i-3].frame;
 
-    vec3 pos = frame->trans_abs;
+    vec3 pos_m0 = frame->trans_abs;
     vec3 pos_m1 = frame_m1->trans_abs;
+    vec3 pos_m2 = frame_m2->trans_abs;
+    vec3 pos_m3 = frame_m3->trans_abs;
 
-    vec3 E = pos - pos_m1;
-    vec3 C = pos_m1 - camera_distFromLidarPos / fct_distance_origin(E) * E;
+    vec3 E = vec3(0,0,0);
+    for(int i=0; i<3; i++){
+      E[i] += pos_m0[i];
+      E[i] += pos_m1[i];
+      E[i] += pos_m2[i];
+      E[i] += pos_m3[i];
 
-    if(E != vec3(0,0,0)){
-      //Camera pose
-      vec3 camPos = cameraManager->get_camPos();
-      vec3 camPos_new = vec3(C.x, C.y, camPos.z);
-      cameraManager->set_cameraPos(camPos_new);
-
-      //Camera orientation
-      float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
-      cameraManager->set_angle_azimuth(cam_angle);
+      E[i] = E[i] / 4;
     }
+
+    E = pos_m0 - E;
+    vec3 C = pos_m1 - camera_distPos * (E / fct_distance_origin(E));
+
+    //Camera pose
+    vec3 camPos = cameraManager->get_camPos();
+    vec3 camPos_new = vec3(C.x, C.y, camPos.z);
+    cameraManager->set_cameraPos(camPos_new);
+
+    //Camera orientation
+    float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
+    cameraManager->set_angle_azimuth(cam_angle);
   }
 
   //this->camera_position(subset);
@@ -196,27 +209,6 @@ void Player_online::camera_orientation(Subset* subset){
 
   camera_moved_rotat = rotat_abs_rad;
   cameraManager->set_angle_azimuth(hAngle_new);
-
-  //---------------------------
-}
-void Player_online::save_image(){
-  //---------------------------
-
-  GLFWwindow* window = dimManager->get_window();
-  string path = "/home/aither/Desktop/truc";
-
-  int width, height;
-  glfwGetFramebufferSize(window, &width, &height);
-  GLsizei nrChannels = 3;
-  GLsizei stride = nrChannels * width;
-  stride += (stride % 4) ? (4 - stride % 4) : 0;
-  GLsizei bufferSize = stride * height;
-  std::vector<char> buffer(bufferSize);
-  glPixelStorei(GL_PACK_ALIGNMENT, 4);
-  glReadBuffer(GL_FRONT);
-  glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
-  stbi_flip_vertically_on_write(true);
-  stbi_write_png(path.c_str(), width, height, nrChannels, buffer.data(), stride);
 
   //---------------------------
 }

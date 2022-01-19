@@ -17,6 +17,8 @@ class GUI;
 class Heatmap;
 class Shader;
 class Filter;
+class Renderer;
+class CT_ICP;
 
 #include "../common.h"
 
@@ -28,7 +30,7 @@ class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Dimension* dim, Camera* control, Shader* shader);
+  Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render);
   ~Engine();
 
 public:
@@ -41,7 +43,6 @@ public:
   //Subfunctions
   void draw_clouds();
 
-  inline bool* get_is_reset(){return &is_reset;}
   inline Scene* get_SceneManager(){return sceneManager;}
   inline Glyphs* get_glyphManager(){return glyphManager;}
   inline Dimension* get_dimManager(){return dimManager;}
@@ -49,6 +50,8 @@ public:
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
   inline Filter* get_filterManager(){return filterManager;}
+  inline Renderer* get_renderManager(){return renderManager;}
+  inline CT_ICP* get_cticpManager(){return cticpManager;}
 
 private:
   Dimension* dimManager;
@@ -59,8 +62,9 @@ private:
   Heatmap* heatmapManager;
   Shader* shaderManager;
   Filter* filterManager;
+  Renderer* renderManager;
+  CT_ICP* cticpManager;
 
-  bool is_reset;
   uint modelID, comID;
 };
 

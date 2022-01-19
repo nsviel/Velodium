@@ -1,5 +1,5 @@
-#ifndef _POLYNOMIAL_REGRESSION_H
-#define _POLYNOMIAL_REGRESSION_H
+#ifndef POLYFIT_H
+#define POLYFIT_H
 
 #include "../../../extern/OptimLib/optim.hpp"
 

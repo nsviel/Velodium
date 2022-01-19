@@ -51,6 +51,7 @@ public:
   inline void set_frame_all(bool value){frame_all = value;}
 
 private:
+  void init_frameID(Frame* frame, int i);
   void init_frameTimestamp(Subset* subset);
   void init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
   void init_distortion(Frame* frame);
@@ -70,7 +71,7 @@ private:
 private:
   Scene* sceneManager;
   Glyphs* glyphManager;
-  
+
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
@@ -95,9 +96,10 @@ private:
 
   int map_max_voxelNbPoints;
   int map_size_old;
+  int map_frame_ID;
+  int map_frame_begin_ID;
   int frame_max;
   int nb_thread;
-  int frame_ID;
   bool frame_all;
   bool solver_GN, solver_ceres;
   bool verbose, slamMap_voxelized;

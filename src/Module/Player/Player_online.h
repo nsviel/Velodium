@@ -9,6 +9,7 @@ class Camera;
 class Engine;
 class Filter;
 class Dimension;
+class Renderer;
 
 
 class Player_online
@@ -24,7 +25,6 @@ public:
   void camera_followUp(Cloud* cloud, int i);
   void camera_position(Subset* subset);
   void camera_orientation(Subset* subset);
-  void save_image();
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
@@ -41,11 +41,13 @@ private:
   CT_ICP* cticpManager;
   Filter* filterManager;
   Dimension* dimManager;
+  Renderer* renderManager;
 
+  string screenshot_path;
   vec2 HM_height_range;
   vec2 camera_moved_trans;
   float camera_moved_rotat;
-  float camera_distFromLidarPos;
+  float camera_distPos;
 
   bool with_online;
   bool with_camera_follow;

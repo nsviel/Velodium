@@ -140,15 +140,6 @@ void GUI::Gui_render(){
 
   //---------------------------
 }
-void GUI::Gui_reset(){
-  //---------------------------
-
-  GUI_Slam* gui_slamManager = gui_moduleManager->get_gui_slamManager();
-  CT_ICP* cticpManager = gui_slamManager->get_cticpManager();
-  cticpManager->reset();
-
-  //---------------------------
-}
 
 //Subfunctions
 void GUI::Gui_Dimensions(){
@@ -162,7 +153,4 @@ void GUI::Gui_Dimensions(){
   dimManager->set_gui_bottomPanel_height(*bottomPanel_Y);
 
   //---------------------------
-}
-void GUI::Gui_bkgColor(vec3* value){
-  gui_optionManager->set_backgroundColorPtr(value);
 }

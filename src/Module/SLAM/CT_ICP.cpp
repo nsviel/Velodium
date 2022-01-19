@@ -40,7 +40,8 @@ CT_ICP::CT_ICP(){
   this->map_max_voxelNbPoints = 20;
   this->min_voxel_distance = 0.05;
   this->frame_max = 0;
-  this->frame_ID = 0;
+  this->map_frame_ID = 0;
+  this->map_frame_begin_ID = 0;
   this->map_size_old = 0;
   this->nb_thread = 8;
 
@@ -54,7 +55,6 @@ CT_ICP::~CT_ICP(){}
 
 //Main functions
 void CT_ICP::compute_slam(Cloud* cloud){
-  /*I should probably say something here about what the hell this function is doing*/
   map = new voxelMap();
   map_cloud = new slamMap();
 
@@ -100,14 +100,14 @@ void CT_ICP::compute_slam_online(Cloud* cloud, int i){
   Subset* subset = &cloud->subset[i];
   Frame* frame = &subset->frame;
 
-  if(frame->is_slamed == false){
+  if(frame->is_slamed == false && i >= map_frame_begin_ID){
     tic();
     //---------------------------
 
     Frame* frame_m1 = &cloud->subset[i-1].frame;
     Frame* frame_m2 = &cloud->subset[i-2].frame;
-    frame->ID = i;
 
+    this->init_frameID(frame, i);
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame, frame_m1, frame_m2);
     this->init_distortion(frame);
@@ -133,18 +133,13 @@ void CT_ICP::reset(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
-    Frame* frame = &cloud->subset[i].frame;
-    frame->is_slamed = false;
-  }
-
-  this->frame_ID = 0;
-
   delete map;
   delete map_cloud;
 
   this->map = new voxelMap();
   this->map_cloud = new slamMap();
+  this->map_frame_ID = 0;
+  this->map_frame_begin_ID = 0;
 
   //---------------------------
 }
@@ -167,6 +162,19 @@ float CT_ICP::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &rotb){
 }
 
 //SLAM sub-functions
+void CT_ICP::init_frameID(Frame* frame, int i){
+  //---------------------------
+
+  if(map_frame_ID == 0){
+    map_frame_begin_ID = i;
+  }
+
+  frame->ID = map_frame_ID;
+
+  map_frame_ID++;
+
+  //---------------------------
+}
 void CT_ICP::init_frameTimestamp(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------

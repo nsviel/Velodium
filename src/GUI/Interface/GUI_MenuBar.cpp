@@ -187,7 +187,7 @@ void GUI_menuBar::MenuBar_fastScene(){
   if(ImGui::Button("More frames", ImVec2(100,0))){
     opeManager->loading_fastScene(4);
   }
-  if(ImGui::Button("Scala", ImVec2(100,0))){
+  if(ImGui::Button("Other frames", ImVec2(100,0))){
     opeManager->loading_fastScene(5);
   }
 

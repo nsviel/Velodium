@@ -30,11 +30,9 @@ public:
   void Gui_font();
   void Gui_loop();
   void Gui_render();
-  void Gui_reset();
 
   //Subfunctions
   void Gui_Dimensions();
-  void Gui_bkgColor(vec3* value);
 
 private:
   GUI_windows* gui_winManager;

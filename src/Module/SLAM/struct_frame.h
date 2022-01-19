@@ -46,6 +46,16 @@ struct Frame{ //SLAM stuff
     this->rotat_e = Eigen::Matrix3d::Identity();
     this->trans_b = Eigen::Vector3d::Zero();
     this->trans_e = Eigen::Vector3d::Zero();
+
+    this->time_slam = 0;
+    this->map_size_abs = 0;
+    this->map_size_rlt = 0;
+    this->is_slamed = false;
+
+    this->trans_abs = glm::vec3(0, 0, 0);
+    this->rotat_abs = glm::vec3(0, 0, 0);
+    this->trans_rlt = glm::vec3(0, 0, 0);
+    this->rotat_rlt = glm::vec3(0, 0, 0);
   }
 };
 

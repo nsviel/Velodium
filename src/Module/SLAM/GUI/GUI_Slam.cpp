@@ -7,16 +7,17 @@
 
 #include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene.h"
+#include "../../../Engine/Engine.h"
 #include "../../../Specific/fct_transtypage.h"
 
 extern struct Database database;
 
 
 //Constructor / Destructor
-GUI_Slam::GUI_Slam(){
+GUI_Slam::GUI_Slam(Engine* engineManager){
   //---------------------------
 
-  this->cticpManager = new CT_ICP();
+  this->cticpManager = engineManager->get_cticpManager();
   this->ceresManager = cticpManager->get_SLAM_optim_ceres();
   this->gnManager = cticpManager->get_SLAM_optim_gn();
   this->normalManager = cticpManager->get_SLAM_normal();

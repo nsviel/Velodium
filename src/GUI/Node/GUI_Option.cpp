@@ -7,6 +7,7 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Glyphs.h"
+#include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Configuration.h"
 
 #include "../../Operation/Transformation/Attribut.h"
@@ -22,6 +23,7 @@ GUI_option::GUI_option(Engine* engine, GUI_control* control){
   this->engineManager = engine;
   //---------------------------
 
+  this->renderManager = engineManager->get_renderManager();
   this->heatmapManager = new Heatmap();
   this->glyphManager = new Glyphs();
   this->sceneManager = new Scene();
@@ -167,8 +169,9 @@ void GUI_option::option_colors(){
     //---------------------------
 
     //Background color
+    vec4* screen_color = renderManager->get_screen_color();
     ImGui::SetNextItemWidth(colorEditSize);
-    ImGui::ColorEdit4("Background", (float*)backgColor);
+    ImGui::ColorEdit4("Background", (float*)screen_color);
 
     //Normals color
     ImGui::SetNextItemWidth(colorEditSize);
@@ -206,9 +209,9 @@ void GUI_option::option_colors(){
     if(ImGui::Button("Reset", ImVec2(75,0))){
       Configuration configManager;
       float bkg_color = configManager.parse_json_float("window", "background_color");
-      this->backgColor->x = bkg_color;
-      this->backgColor->y = bkg_color;
-      this->backgColor->z = bkg_color;
+      vec4* screen_color = renderManager->get_screen_color();
+      *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
+
       glyphManager->reset_colors();
     }
   }
@@ -305,26 +308,30 @@ void GUI_option::option_mode(){
     //Light / Dark mode
     static bool darkMode = false;
     if(ImGui::Checkbox("Dark mode", &darkMode)){
+      vec4* screen_color = renderManager->get_screen_color();
+
       if(darkMode == true){
         glyphManager->set_glyph_color("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
         glyphManager->set_glyph_color("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        *backgColor = vec3(0,0,0);
+        *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
       }else{
         glyphManager->set_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
         glyphManager->set_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        *backgColor = vec3(1.0f,1.0f,1.0f);
+        *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
       }
     }
 
     //Visualization mode
     static bool visualization = false;
     if(ImGui::Checkbox("Visualization", &visualization)){
+      vec4* screen_color = renderManager->get_screen_color();
+
       if(visualization == true){
         glyphManager->set_visibility("axis", false);
         glyphManager->set_visibility("axiscloud", false);
         glyphManager->set_visibility("grid", false);
         glyphManager->set_visibility("aabb", false);
-        *backgColor = vec3(1.0f,1.0f,1.0f);
+        *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
       }else{
         glyphManager->set_visibility("axis", true);
         glyphManager->set_visibility("axiscloud", true);
@@ -332,7 +339,7 @@ void GUI_option::option_mode(){
         glyphManager->set_visibility("aabb", true);
 
         if(darkMode == true){
-          *backgColor = vec3(0,0,0);
+          *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
         }
       }
     }

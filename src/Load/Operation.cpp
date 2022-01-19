@@ -205,17 +205,17 @@ void Operation::loading_fastScene(int mode){
     }
     case 3:{//Frames in movement
       sceneManager->removeCloud_all();
-      this->loading_directoryFrames("../media/frames/");
+      this->loading_directoryFrames("../media/point_cloud/frames/");
       break;
     }
     case 4:{//more Frames in movement
       sceneManager->removeCloud_all();
-      this->loading_directoryFrames("../media/frames_lot/");
+      this->loading_directoryFrames("../media/point_cloud/frames_lot/");
       break;
     }
-    case 5:{//Scala
+    case 5:{//Frame other
       sceneManager->removeCloud_all();
-      this->loading_directoryFrames("../media/frames_lot/");
+      this->loading_directoryFrames("../media/point_cloud/frames_other/");
       break;
     }
   }

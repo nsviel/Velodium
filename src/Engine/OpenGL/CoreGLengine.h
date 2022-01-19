@@ -1,5 +1,5 @@
-#ifndef DEF_SCENEOPENGL
-#define DEF_SCENEOPENGL
+#ifndef COREGLENGINE_H
+#define COREGLENGINE_H
 
 class Dimension;
 class Shader;
@@ -7,7 +7,7 @@ class Camera;
 class Viewport;
 class GUI;
 class Engine;
-class Framebuffer;
+class Renderer;
 class Configuration;
 
 #include "../../common.h"
@@ -26,12 +26,9 @@ public:
 
 public:
   bool init();
-  bool init_config();
   bool init_OGL();
   bool init_object();
-  bool init_shader();
-  void init_quad();
-  void init_fbo();
+  void init_rendering();
 
   //GL loop
   void loop();
@@ -39,12 +36,8 @@ public:
   void loop_pass_1();
   void loop_pass_2();
   void loop_drawScene();
-  void loop_drawQuad();
+  void loop_drawScreen();
   void loop_end();
-
-  void update_gl_quad();
-  void update_texture();
-  void update_shader();
 
 private:
   Configuration* configManager;
@@ -53,23 +46,11 @@ private:
   Camera* cameraManager;
   Viewport* viewportManager;
   Dimension* dimManager;
-  Framebuffer* fboManager;
+  Renderer* renderManager;
   GUI* guiManager;
   Shader* shaderManager;
 
-  vec3 backgColor;
   bool flag_resized;
-  int gl_width;
-  int gl_height;
-
-  GLuint quad_vao;
-  GLuint quad_vbo;
-  GLuint fbo_1_ID;
-  GLuint fbo_2_ID;
-  GLuint texture_ID;
-  GLuint tex_color_ID;
-  GLuint tex_depth_ID;
-  GLuint tex_edl_ID;
 };
 
 #endif

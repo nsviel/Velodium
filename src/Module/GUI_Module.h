@@ -19,7 +19,7 @@ public:
 
     this->gui_lidarManager = new GUI_Lidar();
     this->gui_playerManager = new GUI_Player(engineManager);
-    this->gui_slamManager = new GUI_Slam();
+    this->gui_slamManager = new GUI_Slam(engineManager);
     this->gui_senderManager = new GUI_Network();
     this->gui_obstacleManager = new GUI_Obstacle(engineManager);
 

@@ -3,6 +3,7 @@
 
 #include "../../../common.h"
 
+class Engine;
 class CT_ICP;
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
@@ -13,7 +14,7 @@ class GUI_Slam
 {
 public:
   //Constructor / Destructor
-  GUI_Slam();
+  GUI_Slam(Engine* engineManager);
   ~GUI_Slam();
 
 public:

@@ -10,8 +10,10 @@ class Glyphs;
 class Attribut;
 class Heatmap;
 class Transforms;
+class Renderer;
 
 #include "../../common.h"
+
 
 class GUI_option
 {
@@ -45,6 +47,7 @@ private:
   Glyphs* glyphManager;
   Heatmap* heatmapManager;
   Operation* opeManager;
+  Renderer* renderManager;
 
   vec3* backgColor;
 };

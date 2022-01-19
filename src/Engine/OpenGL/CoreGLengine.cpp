@@ -2,7 +2,7 @@
 
 #include "Camera.h"
 #include "Viewport.h"
-#include "Framebuffer.h"
+#include "Renderer.h"
 
 #include "../Engine.h"
 #include "../Shader/Shader.h"
@@ -20,7 +20,7 @@
 CoreGLengine::CoreGLengine(){
   //---------------------------
 
-
+  this->configManager = new Configuration();
 
   //---------------------------
 }
@@ -35,28 +35,15 @@ CoreGLengine::~CoreGLengine(){
 
 //Engine Initialization
 bool CoreGLengine::init(){
+  configManager->make_configuration();
   //---------------------------
 
-  this->init_config();
   this->init_OGL();
   this->init_object();
-  this->init_fbo();
-  this->init_quad();
-  this->init_shader();
+  this->init_rendering();
 
   //---------------------------
   console.AddLog("sucess" ,"Program initialized...");
-  return true;
-}
-bool CoreGLengine::init_config(){
-  this->configManager = new Configuration();
-  //---------------------------
-
-  this->configManager->make_configuration();
-  float backgColor = configManager->parse_json_float("window", "background_color");
-  this->backgColor = vec3(backgColor, backgColor, backgColor);
-
-  //---------------------------
   return true;
 }
 bool CoreGLengine::init_OGL(){
@@ -65,11 +52,6 @@ bool CoreGLengine::init_OGL(){
   //Dimension
   int resolution_width = configManager->parse_json_int("window", "resolution_width");
   int resolution_height = configManager->parse_json_int("window", "resolution_height");
-  int leftPanel_width = configManager->parse_json_int("gui", "leftPanel_width");
-  int topPanel_height = configManager->parse_json_int("gui", "topPanel_height");
-
-  gl_width = resolution_width - leftPanel_width;
-  gl_height = resolution_height -topPanel_height;
 
   //GLFW
   bool forceVersion = configManager->parse_json_bool("opengl", "forceVersion");
@@ -119,99 +101,23 @@ bool CoreGLengine::init_object(){
   this->shaderManager = new Shader(dimManager);
   this->cameraManager = new Camera(dimManager);
   this->viewportManager = new Viewport(dimManager);
-  this->engineManager = new Engine(dimManager, cameraManager, shaderManager);
-  this->fboManager = new Framebuffer(dimManager);
+  this->renderManager = new Renderer(dimManager);
+  this->engineManager = new Engine(dimManager, cameraManager, shaderManager, renderManager);
   this->guiManager = new GUI(engineManager);
-  guiManager->Gui_bkgColor(&backgColor);
 
   //---------------------------
   return true;
 }
-void CoreGLengine::init_quad(){
+void CoreGLengine::init_rendering(){
   //---------------------------
 
-  vector<vec2> quad_xy;
-  quad_xy.push_back(vec2(-1.0f,  1.0f));
-  quad_xy.push_back(vec2(-1.0f,  -1.0f));
-  quad_xy.push_back(vec2(1.0f,  -1.0f));
-  quad_xy.push_back(vec2(-1.0f,  1.0f));
-  quad_xy.push_back(vec2(1.0f,  -1.0f));
-  quad_xy.push_back(vec2(1.0f,  1.0f));
-
-  vector<vec2> quad_uv;
-  quad_uv.push_back(vec2(0.0f,  1.0f));
-  quad_uv.push_back(vec2(0.0f,  0.0f));
-  quad_uv.push_back(vec2(1.0f,  0.0f));
-  quad_uv.push_back(vec2(0.0f,  1.0f));
-  quad_uv.push_back(vec2(1.0f,  0.0f));
-  quad_uv.push_back(vec2(1.0f,  1.0f));
-
-  glGenVertexArrays(1, &quad_vao);
-  glBindVertexArray(quad_vao);
-
-  glGenBuffers(1, &quad_vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-  glBufferData(GL_ARRAY_BUFFER, quad_xy.size()*sizeof(glm::vec2), &quad_xy[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
-
-  GLuint quad_vbo_uv;
-  glGenBuffers(1, &quad_vbo_uv);
-  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo_uv);
-  glBufferData(GL_ARRAY_BUFFER, quad_uv.size()*sizeof(glm::vec2), &quad_uv[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-  glEnableVertexAttribArray(2);
-
-  //---------------------------
-}
-void CoreGLengine::init_fbo(){
   dimManager->update_window_dim();
-  vec2 gl_dim = dimManager->get_gl_dim();
-  //---------------------------
-
-  //Init FBO 1
-  glGenFramebuffers(1, &fbo_1_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
-
-  //Init textures
-  glGenTextures(1, &tex_color_ID);
-  glBindTexture(GL_TEXTURE_2D, tex_color_ID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_color_ID, 0);
-
-  glGenTextures(1, &tex_depth_ID);
-  glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex_depth_ID, 0);
-
-  //Init FBO 2
-  glGenTextures(1, &tex_edl_ID);
-  glGenFramebuffers(1, &fbo_2_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
-
-  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex_edl_ID);
-  glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, gl_dim.x+10000, gl_dim.y, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex_edl_ID, 0);
-
-  //Debind objects
-  glBindTexture(GL_TEXTURE_2D ,0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //---------------------------
-}
-bool CoreGLengine::init_shader(){
-  //---------------------------
-
+  renderManager->init_rendering_fbo_1();
+  renderManager->init_rendering_fbo_2();
+  renderManager->init_rendering_quad();
   shaderManager->init();
 
   //---------------------------
-  return true;
 }
 
 void CoreGLengine::loop(){
@@ -226,7 +132,7 @@ void CoreGLengine::loop(){
     //Second pass
     //---------------------------
     this->loop_pass_2();
-    this->loop_drawQuad();
+    this->loop_drawScreen();
 
     //GUI and end
     //---------------------------
@@ -240,32 +146,25 @@ void CoreGLengine::loop(){
 void CoreGLengine::loop_gui(){
   //---------------------------
 
+  //Draw GUI on fbo 0
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   guiManager->Gui_loop();
-
-  bool* is_reset = engineManager->get_is_reset();
-  if(*is_reset){
-    guiManager->Gui_reset();
-    *is_reset = false;
-  }
 
   //---------------------------
 }
 void CoreGLengine::loop_pass_1(){
   //---------------------------
 
-  //Check for window resizing
+  //Update things
   dimManager->update();
-  flag_resized = dimManager->get_is_resized();
+  this->flag_resized = dimManager->get_is_resized();
+  if(flag_resized){
+    renderManager->update_texture();
+    shaderManager->update();
+  }
 
   //Set FBO
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
-  glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-
-  this->update_shader();
-  this->update_texture();
+  renderManager->render_fbo_1();
 
   //Set active shader
   shaderManager->use("scene");
@@ -278,18 +177,11 @@ void CoreGLengine::loop_pass_1(){
 void CoreGLengine::loop_pass_2(){
   //---------------------------
 
-  //Set FBO
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
-  glDisable(GL_DEPTH_TEST);
+
+  renderManager->render_fbo_2();
 
   //Set active shader
   shaderManager->use("screen");
-
-  //Set active textures
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, tex_color_ID);
-  glActiveTexture(GL_TEXTURE0 + 1);
-  glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
 
   //---------------------------
 }
@@ -302,26 +194,20 @@ void CoreGLengine::loop_drawScene(){
 
   //---------------------------
 }
-void CoreGLengine::loop_drawQuad(){
+void CoreGLengine::loop_drawScreen(){
   //---------------------------
-
-  //Set FBO
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glClearColor(backgColor.x, backgColor.y, backgColor.z, 1.0f);
 
   //Viewport
   vec2 win_dim = dimManager->get_win_dim();
   glViewport(0, 0, win_dim[0], win_dim[1]);
 
   //Update OpenGL quad window
-  this->update_gl_quad();
-
+  if(flag_resized){
+    renderManager->update_quad();
+  }
   //Draw screen quad
-  if(!flag_resized){
-    glBindVertexArray(quad_vao);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  else{
+    renderManager->render_quad();
   }
 
   //---------------------------
@@ -336,66 +222,6 @@ void CoreGLengine::loop_end(){
   glfwPollEvents();
   if(waitForEvent){
     glfwWaitEvents();
-  }
-
-  //---------------------------
-}
-
-void CoreGLengine::update_gl_quad(){
-  //---------------------------
-
-  if(flag_resized){
-    vec2 gl_pos = dimManager->get_gl_pos();
-    vec2 gl_dim = dimManager->get_gl_dim();
-    vec2 win_dim = dimManager->get_win_dim();
-
-    vec2 tl, br, tr, bl;
-    bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-    bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-
-    br.x = 1;
-    br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-
-    tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-    tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
-
-    tr.x = 1;
-    tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
-
-    vector<vec2> quad_xy;
-    quad_xy.push_back(tl);
-    quad_xy.push_back(bl);
-    quad_xy.push_back(br);
-
-    quad_xy.push_back(tl);
-    quad_xy.push_back(br);
-    quad_xy.push_back(tr);
-
-    glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-    glBufferData(GL_ARRAY_BUFFER, quad_xy.size() * sizeof(glm::vec2), &quad_xy[0],  GL_DYNAMIC_DRAW);
-  }
-
-  //---------------------------
-}
-void CoreGLengine::update_texture(){
-  //---------------------------
-
-  if(flag_resized){
-    //Update texture dimensions
-    vec2 gl_dim = dimManager->get_gl_dim();
-    glBindTexture(GL_TEXTURE_2D, tex_color_ID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-    glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  }
-
-  //---------------------------
-}
-void CoreGLengine::update_shader(){
-  //---------------------------
-
-  if(flag_resized){
-    shaderManager->update();
   }
 
   //---------------------------

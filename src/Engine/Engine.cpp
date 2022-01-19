@@ -8,29 +8,31 @@
 #include "Configuration/Dimension.h"
 #include "Configuration/Configuration.h"
 #include "OpenGL/CoreGLengine.h"
+#include "OpenGL/Renderer.h"
 #include "OpenGL/Camera.h"
 
 #include "../Operation/Functions/Heatmap.h"
 #include "../Operation/Transformation/Filter.h"
+#include "../Module/SLAM/CT_ICP.h"
 
 Database database;
 
 
 //Constructor / Destructor
-Engine::Engine(Dimension* dim, Camera* control, Shader* shader){
+Engine::Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render){
   this->dimManager = dim;
   this->shaderManager = shader;
   this->cameraManager = control;
+  this->renderManager = render;
   //---------------------------
 
   this->init_database();
 
+  this->cticpManager = new CT_ICP();
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
   this->heatmapManager = new Heatmap();
   this->filterManager = new Filter();
-
-  this->is_reset = false;
 
   glyphManager->init();
 
@@ -85,10 +87,10 @@ void Engine::reset(){
 
   //Reset all functions
   glyphManager->reset();
+  cticpManager->reset();
   sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
-  this->is_reset = true;
   console.AddLog("#", "Reset scene...");
 }
 
