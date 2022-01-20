@@ -66,7 +66,6 @@ void Camera::viewport_update(int ID){
 
   //Main viewport
   if(ID == 0){
-    dimManager->update_window_dim();
     view->dim = dimManager->get_gl_dim();
     view->pos = dimManager->get_gl_pos();
 
@@ -192,10 +191,10 @@ void Camera::input_cameraMouseCommands(){
   if(view->cameraMovON){
     //Cursor movement
     vec2 curPos = dimManager->get_cursorPos();
-    dimManager->set_cursorPos(dimManager->get_glMiddle());
+    dimManager->set_cursorPos(dimManager->get_gl_middle());
 
     // Compute new orientation
-    vec2 glMid = dimManager->get_glMiddle();
+    vec2 glMid = dimManager->get_gl_middle();
     view->angle_azimuth += view->speed_mouse * float(glMid.x - curPos.x);
     view->angle_elevati += view->speed_mouse * float(glMid.y - curPos.y);
 

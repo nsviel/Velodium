@@ -143,14 +143,16 @@ void GUI::Gui_render(){
 
 //Subfunctions
 void GUI::Gui_Dimensions(){
-  float* leftPanel_X = gui_leftPanelManager->get_panel_X();
-  float* bottomPanel_X = gui_consol->get_panel_X();
-  float* bottomPanel_Y = gui_consol->get_panel_Y();
+  vec2 lbp_dim = gui_leftPanelManager->get_lbp_dim();
+  vec2 bp_dim = gui_consol->get_bp_dim();
+  ImGuiIO io = ImGui::GetIO();
   //---------------------------
 
-  gui_consol->set_panel_X(*leftPanel_X);
-  dimManager->set_gui_leftPanel_width(*leftPanel_X);
-  dimManager->set_gui_bottomPanel_height(*bottomPanel_Y);
+  //Resing only when mouse dragging
+  if(ImGui::IsMouseDragging(0) && io.WantCaptureMouse){
+    //dimManager->set_gui_leftPanel_width(lbp_dim.x);
+    //dimManager->set_gui_bottomPanel_height(bp_dim.y);
+  }
 
   //---------------------------
 }

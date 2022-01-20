@@ -82,7 +82,7 @@ void GUI_control::control_mouse(){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     //Set cursor to screen middle
-    vec2 glMiddle = dimManager->get_glMiddle();
+    vec2 glMiddle = dimManager->get_gl_middle();
     glfwSetCursorPos(window, glMiddle.x, glMiddle.y);
 
     //Enable camera movement

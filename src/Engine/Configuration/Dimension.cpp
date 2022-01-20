@@ -10,98 +10,107 @@ Dimension::Dimension(GLFWwindow* Window){
 
   this->configManager = new Configuration();
 
-  int resolution_height = configManager->parse_json_int("window", "resolution_height");
-  int resolution_width = configManager->parse_json_int("window", "resolution_width");
-  int leftPanel_width = configManager->parse_json_int("gui", "leftPanel_width");
-  int topPanel_height = configManager->parse_json_int("gui", "topPanel_height");
-  int botPanel_height = configManager->parse_json_int("gui", "botPanel_height");
+  int win_h = configManager->parse_json_int("window", "resolution_height");
+  int win_w = configManager->parse_json_int("window", "resolution_width");
+  int lp_w = configManager->parse_json_int("gui", "leftPanel_width");
+  int tp_h = configManager->parse_json_int("gui", "topPanel_height");
+  int bp_h = configManager->parse_json_int("gui", "botPanel_height");
+  int lp_m = configManager->parse_json_int("gui", "leftPanel_mid");
 
-  this->gui_leftPanel_width = leftPanel_width;
-  this->gui_topPanel_height = topPanel_height;
-  this->gui_bottomPanel_height = botPanel_height;
+  this->gl_dim.x = win_w - lp_w;
+  this->gl_dim.y = win_h - tp_h - bp_h;
+  this->gl_pos = vec2(lp_w, bp_h);
 
-  this->gl_dim.x = resolution_width - leftPanel_width;
-  this->gl_dim.y = resolution_height - topPanel_height - botPanel_height;
-  this->gl_pos = vec2(leftPanel_width, botPanel_height);
+  this->gui_ltp_dim = vec2(lp_w, lp_m - tp_h);
+  this->gui_ltp_pos = vec2(0, tp_h);
+  this->gui_lbp_dim = vec2(lp_w, win_h - lp_m);
+  this->gui_lbp_pos = vec2(0, lp_m);
+  this->gui_lp_mid = lp_m;
+  this->gui_tp_dim = vec2(win_w, tp_h);
+  this->gui_bp_pos = vec2(lp_w, win_h - bp_h);
+  this->gui_bp_dim = vec2(win_w - lp_w, bp_h);
 
   this->is_resized = true;
+  this->with_custom_gl_dim = false;
 
   //---------------------------
-  this->update_window_dim();
-  this->update_gl_dim();
+  this->update();
 }
 Dimension::~Dimension(){}
 
 //Main functions
 void Dimension::update(){
-  int width, height;
   //---------------------------
 
-  //Check window size
-  glfwGetWindowSize(window, &width, &height);
-  if(width != window_dim.x || height != window_dim.y){
-    this->update_window_dim();
-    is_resized = true;
-  }
-
-  //Check panel sizes
-  width = window_dim.x - gui_leftPanel_width;
-  height = window_dim.y - gui_topPanel_height - gui_bottomPanel_height;
-  if(width != gl_dim.x || height != gl_dim.y){
-    this->update_gl_dim();
-    is_resized = true;
-  }
+  this->update_opengl_dim();
+  this->update_window_dim();
 
   //---------------------------
 }
-void Dimension::update_gl_dim(){
+void Dimension::update_opengl_dim(){
   //---------------------------
 
-  int gl_width = window_dim.x - gui_leftPanel_width;
-  int gl_height = window_dim.y - gui_topPanel_height - gui_bottomPanel_height;
+  //Check GL size
+  int gl_w = win_dim.x - gui_ltp_dim.x;
+  int gl_h = win_dim.y - gui_tp_dim.y - gui_bp_dim.y;
 
-  gl_dim = vec2(gl_width, gl_height);
-  gl_pos = vec2(gui_leftPanel_width, gui_bottomPanel_height);
+  if(gl_w != gl_dim.x || gl_h != gl_dim.y && !with_custom_gl_dim){
+
+    this->gl_dim = vec2(gl_w, gl_h);
+    this->gl_pos = vec2(gui_ltp_dim.x, gui_bp_dim.y);
+    this->is_resized = true;
+
+  }
 
   //---------------------------
 }
 void Dimension::update_window_dim(){
-  int width, height;
   //---------------------------
 
-  glfwGetWindowSize(window, &width, &height);
-  window_dim = vec2(width, height);
+  //Check window size
+  int win_w, win_h;
+  glfwGetWindowSize(window, &win_w, &win_h);
+
+  if(win_w != win_dim.x || win_h != win_dim.y){
+
+    this->win_dim = vec2(win_w, win_h);
+    this->gui_bp_pos = vec2(gui_lbp_dim.x, win_h - gui_bp_dim.y);
+    this->gui_ltp_dim.y = gui_lp_mid - gui_tp_dim.y;
+    this->gui_lbp_dim.y = win_h - gui_lp_mid;
+    this->is_resized = true;
+
+  }
 
   //---------------------------
 }
 void Dimension::update_configuration(){
   //---------------------------
 
-  configManager->update_jsonfile("gui", "leftPanel_width", to_string(gui_leftPanel_width));
-  configManager->update_jsonfile("gui", "topPanel_height", to_string(gui_topPanel_height));
-  configManager->update_jsonfile("gui", "botPanel_height", to_string(gui_bottomPanel_height));
+  configManager->update_jsonfile("gui", "leftPanel_width", to_string(gui_ltp_dim.x));
+  configManager->update_jsonfile("gui", "topPanel_height", to_string(gui_tp_dim.y));
+  configManager->update_jsonfile("gui", "botPanel_height", to_string(gui_bp_dim.y));
 
   //---------------------------
 }
 
 //Subfunctions
-vec2 Dimension::get_glMiddle(){
+vec2 Dimension::get_gl_middle(){
   //---------------------------
 
-  int x = gui_leftPanel_width + gl_dim.x/2;
-  int y = gui_topPanel_height + gl_dim.y/2;
-  vec2 middle = vec2(x, y);
+  int x = gui_ltp_dim.x + gl_dim.x/2;
+  int y = gui_tp_dim.y + gl_dim.y/2;
+  vec2 gl_middle = vec2(x, y);
 
   //---------------------------
-  return middle;
+  return gl_middle;
 }
 vec2 Dimension::get_cursorPos_gl(){
   double xpos, ypos;
   //---------------------------
 
   glfwGetCursorPos(window, &xpos, &ypos);
-  xpos = xpos - gui_leftPanel_width;
-  ypos = ypos - gui_topPanel_height;
+  xpos = xpos - gui_ltp_dim.x;
+  ypos = ypos - gui_tp_dim.y;
 
   vec2 pos = vec2(xpos, ypos);
 

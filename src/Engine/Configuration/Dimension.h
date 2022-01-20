@@ -29,40 +29,53 @@ public:
   //Main functions
   void update();
   void update_window_dim();
-  void update_gl_dim();
+  void update_opengl_dim();
   void update_configuration();
 
   //Subfunctions
-  vec2 get_glMiddle();
+  vec2 get_gl_middle();
   vec2 get_cursorPos_gl();
   vec2 get_cursorPos();
   void set_cursorPos(vec2 pos);
 
   inline GLFWwindow* get_window(){return window;}
+  inline vec2* get_gui_ltp_dim(){return &gui_ltp_dim;}
+  inline vec2* get_gui_ltp_pos(){return &gui_ltp_pos;}
+  inline vec2* get_gui_lbp_dim(){return &gui_lbp_dim;}
+  inline vec2* get_gui_lbp_pos(){return &gui_lbp_pos;}
+  inline vec2* get_gui_bp_pos(){return &gui_bp_pos;}
+  inline vec2* get_gui_bp_dim(){return &gui_bp_dim;}
+  inline vec2* get_gui_tp_dim(){return &gui_tp_dim;}
+
+  inline void set_gl_dim(vec2 value){this->gl_dim = value;}
   inline vec2 get_gl_dim(){return gl_dim;}
   inline vec2 get_gl_pos(){return gl_pos;}
-  inline vec2 get_win_dim(){return window_dim;}
-  inline float get_gui_leftPanel_width(){return gui_leftPanel_width;}
-  inline float get_gui_topPanel_height(){return gui_topPanel_height;}
-  inline bool get_is_resized(){return is_resized;}
+  inline vec2 get_win_dim(){return win_dim;}
   inline void set_is_resized(bool value){this->is_resized = value;}
-
-  inline void get_gl_dim(vec2 value){this->gl_dim = value;}
-  inline void set_win_dim(vec2 value){this->window_dim = value;}
-  inline void set_gui_leftPanel_width(float value){this->gui_leftPanel_width = value;}
-  inline void set_gui_topPanel_height(float value){this->gui_topPanel_height = value;}
-  inline void set_gui_bottomPanel_height(float value){this->gui_bottomPanel_height = value;}
+  inline bool get_is_resized(){return is_resized;}
+  inline bool* get_with_custom_gl_dim(){return &with_custom_gl_dim;}
 
 private:
   GLFWwindow* window;
   Configuration* configManager;
 
+  //Rendering
   vec2 gl_pos;
   vec2 gl_dim;
-  vec2 window_dim;
-  float gui_leftPanel_width;
-  float gui_topPanel_height;
-  float gui_bottomPanel_height;
+  vec2 win_dim;
+
+  //GUI
+  vec2 gui_ltp_dim;
+  vec2 gui_ltp_pos;
+  vec2 gui_lbp_dim;
+  vec2 gui_lbp_pos;
+  vec2 gui_tp_dim;
+  vec2 gui_bp_dim;
+  vec2 gui_bp_pos;
+  float gui_lp_mid;
+
+  //Flag
+  bool with_custom_gl_dim;
   bool is_resized;
 };
 

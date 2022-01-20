@@ -41,6 +41,7 @@ private:
   GLuint tex_edl_ID;
 
   vec4 screen_color;
+  bool with_fullscreen;
 };
 
 #endif

@@ -17,6 +17,8 @@ Renderer::Renderer(Dimension* dim){
   float bkg_color = configManager->parse_json_float("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
+  this->with_fullscreen = true;
+
   //---------------------------
 }
 Renderer::~Renderer(){}
@@ -152,7 +154,8 @@ void Renderer::render_quad(){
 }
 void Renderer::render_screenshot(string path){
   GLFWwindow* window = dimManager->get_window();
-  vec2 win_dim = dimManager->get_win_dim();
+  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 gl_pos = dimManager->get_gl_pos();
   //---------------------------
 
   //Parameters
@@ -161,24 +164,24 @@ void Renderer::render_screenshot(string path){
 
   //Configure buffer
   GLsizei nrChannels = 3;
-  GLsizei stride = nrChannels * win_dim.x;
+  GLsizei stride = nrChannels * gl_dim.x;
   stride += (stride % 4) ? (4 - stride % 4) : 0;
-  GLsizei bufferSize = stride * win_dim.y;
+  GLsizei bufferSize = stride * gl_dim.y;
   vector<char> buffer(bufferSize);
 
   //Read pixels
-  glReadPixels(0, 0, win_dim.x, win_dim.y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+  glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
   stbi_flip_vertically_on_write(true);
-  stbi_write_png(path.c_str(), win_dim.x, win_dim.y, nrChannels, buffer.data(), stride);
+  stbi_write_png(path.c_str(), gl_dim.x, gl_dim.y, nrChannels, buffer.data(), stride);
 
   //---------------------------
 }
 
 void Renderer::update_texture(){
+  vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Update texture dimensions
-  vec2 gl_dim = dimManager->get_gl_dim();
   glBindTexture(GL_TEXTURE_2D, tex_color_ID);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glBindTexture(GL_TEXTURE_2D, tex_depth_ID);

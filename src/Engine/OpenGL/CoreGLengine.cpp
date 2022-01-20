@@ -146,6 +146,8 @@ void CoreGLengine::loop(){
 void CoreGLengine::loop_gui(){
   //---------------------------
 
+  dimManager->set_is_resized(false);
+
   //Draw GUI on fbo 0
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   guiManager->Gui_loop();
@@ -215,8 +217,6 @@ void CoreGLengine::loop_drawScreen(){
 void CoreGLengine::loop_end(){
   bool waitForEvent = configManager->parse_json_bool("opengl", "waitForEvent");
   //---------------------------
-
-  dimManager->set_is_resized(false);
 
   glfwSwapBuffers(window);
   glfwPollEvents();

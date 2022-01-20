@@ -6,6 +6,7 @@ class Dimension;
 
 #include "../../common.h"
 
+
 class GUI_consol
 {
 public:
@@ -16,17 +17,16 @@ public:
 public:
   //Main function
   void design_consol();
+  void consol();
+  void update_dimension();
 
-  inline float* get_panel_Y(){return &panel_Y;}
-  inline float* get_panel_X(){return &panel_X;}
-  inline void set_panel_X(float value){this->panel_X = value;}
+  inline vec2 get_bp_dim(){return dim_bp;}
 
 private:
   Engine* engineManager;
   Dimension* dimManager;
 
-  float panel_X;
-  float panel_Y;
+  vec2 dim_bp;
 };
 
 #endif

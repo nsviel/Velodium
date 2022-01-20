@@ -120,9 +120,9 @@ struct ConsoleApp{
 
     ImGui::PopStyleVar();
     ImGui::EndChild();
-    ImGui::Separator();
-
+    
     // Command-line
+    //ImGui::Separator();
     bool reclaim_focus = false;
     /*if (ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf), ImGuiInputTextFlags_EnterReturnsTrue|ImGuiInputTextFlags_CallbackCompletion|ImGuiInputTextFlags_CallbackHistory, &TextEditCallbackStub, (void*)this)){
       char* s = InputBuf;

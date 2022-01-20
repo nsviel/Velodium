@@ -10,6 +10,7 @@ class Dimension;
 
 #include "../../common.h"
 
+
 class GUI_leftPanel
 {
 public:
@@ -22,8 +23,10 @@ public:
   void design_leftPanel();
   void panel_top();
   void panel_bot();
+  void update_dimension();
 
-  inline float* get_panel_X(){return & panel_X;}
+  inline vec2 get_lbp_dim(){return dim_lbp;}
+  inline vec2 get_ltp_dim(){return dim_ltp;}
 
 private:
   GUI_windows* gui_winManager;
@@ -33,11 +36,8 @@ private:
   Engine* engineManager;
   Dimension* dimManager;
 
-  ImVec2 XYmin, XYmax;
-  float panel_Y;
-  float panel_X;
-  bool module_velodyne;
-  bool module_odometry;
+  vec2 dim_lbp;
+  vec2 dim_ltp;
 };
 
 #endif

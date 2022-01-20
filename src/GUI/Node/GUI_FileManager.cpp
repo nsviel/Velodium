@@ -25,9 +25,7 @@ GUI_fileManager::~GUI_fileManager(){}
 
 //Subfunctions
 void GUI_fileManager::fileManager(){
-  Cloud* cloud_selected = sceneManager->get_cloud_selected();
-  float guiDim_tP = dimManager->get_gui_topPanel_height();
-  vec2 winDim = dimManager->get_win_dim();
+  /*Cloud* cloud_selected = sceneManager->get_cloud_selected();
   //-------------------------------
 
   //Model tab
@@ -103,9 +101,123 @@ void GUI_fileManager::fileManager(){
     ImGui::EndTable();
   }
 
+  //-------------------------------
   ImGui::TreePop();
   ImGui::PopStyleColor();
-  ImGui::PopStyleColor();
+  ImGui::PopStyleColor();*/
+
+  tableManager();
+}
+void GUI_fileManager::cloudManager(Cloud* cloud){
+  Cloud* cloud_selected = sceneManager->get_cloud_selected();
+  //-------------------------------
+
+  ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+  if(cloud_selected->oID == cloud->oID){
+    node_flags = node_flags | ImGuiTreeNodeFlags_Selected;
+  }
+  bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
+
+  //If clicked by mouse
+  if(ImGui::IsItemClicked()){
+    sceneManager->selection_setCloud(cloud);
+  }
+
+  //Subset tree node
+  if(open_cloud_node && cloud != nullptr){
+
+    for(int j=0; j<cloud->subset.size(); j++){
+      Subset* subset = &cloud->subset[j];
+
+      if(subset->visibility){
+        node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
+      }else{
+        node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+      }
+
+      bool open_subset_node = ImGui::TreeNodeEx(subset->name.c_str(), node_flags);
+
+      if(open_subset_node){
+        this->info_subset(subset);
+        ImGui::TreePop();
+      }
+
+      //If clicked by mouse
+      if(ImGui::IsItemClicked()){
+        sceneManager->selection_setSubset(cloud, j);
+      }
+    }
+
+    ImGui::TreePop();
+  }
+
+  //-------------------------------
+  ImGui::TreePop();
+}
+void GUI_fileManager::tableManager(){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  //-------------------------------
+
+  static ImVector<int> selection;
+  static ImGuiTableFlags flags;
+  flags |= ImGuiTableFlags_Resizable;
+  flags |= ImGuiTableFlags_Borders;
+  flags |= ImGuiTableFlags_ScrollY;
+  flags |= ImGuiTableFlags_RowBg;
+  flags |= ImGuiTableFlags_SizingFixedFit;
+  flags |= ImGuiTableFlags_NoBordersInBody;
+
+  static ImGuiSelectableFlags flags_selec;
+  flags_selec |= ImGuiSelectableFlags_SpanAllColumns;
+  flags_selec |= ImGuiSelectableFlags_AllowItemOverlap;
+
+  ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(255, 255, 255, 255));
+  ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 255));
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 255, 255, 255));
+  if (ImGui::BeginTable("table_advanced", 3, flags, ImVec2(0, 0), 0)){
+    ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 135);
+    ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 20);
+    ImGui::TableSetupColumn("Info", ImGuiTableColumnFlags_WidthFixed, 20);
+
+    for (int row_i=0; row_i<list_cloud->size(); row_i++){
+      Cloud* cloud = *next(list_cloud->begin(), row_i);
+      ImGui::TableNextRow(ImGuiTableRowFlags_None, 0.5);
+      ImGui::PushItemWidth(-FLT_MIN);flags |= ImGuiTreeNodeFlags_OpenOnArrow;
+      ImGui::PushID(row_i);
+      //----------
+
+      ImGui::Selectable(cloud->name.c_str(), true, flags_selec);
+
+
+      //First column
+      ImGui::TableSetColumnIndex(0);
+      //ImGui::Text("%s", cloud->name.c_str());
+      cloudManager(cloud);
+      //Second column
+      ImGui::TableSetColumnIndex(1);
+      if(ImGui::SmallButton(ICON_FA_TRASH)){
+        sceneManager->removeCloud(cloud);
+      }
+
+      //Third column
+      ImGui::TableSetColumnIndex(2);
+      if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
+        sceneManager->selection_setCloud(cloud);
+        window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
+      }
+
+      //----------
+      ImGui::PopItemWidth();
+      ImGui::PopID();
+    }
+
+    ImGui::EndTable();
+    ImGui::PopStyleColor();
+    ImGui::PopStyleColor();
+    ImGui::PopStyleColor();
+  }
+
+  //-------------------------------
 }
 
 void GUI_fileManager::info_cloud(Cloud* cloud){
@@ -139,10 +251,10 @@ void GUI_fileManager::info_iconAction(Cloud* cloud){
   //---------------------------
 
   //Removal cross
-  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f,1.0f,1.0f,1.0f));
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 0, 0, 255));
   ImGui::PushID(cloud->oID);
-  ImGui::SameLine(ImGui::GetWindowWidth()-40);
-  if(ImGui::SmallButton(ICON_FA_TRASH)){
+  //ImGui::SameLine(ImGui::GetWindowWidth()-40);
+  if(ImGui::Button(ICON_FA_TRASH)){
     sceneManager->removeCloud(cloud);
   }
 

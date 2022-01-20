@@ -105,7 +105,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
     }
 
     if(with_save_image){
-      renderManager->render_screenshot(screenshot_path);
+      this->save_image();
     }
   }
 
@@ -209,6 +209,15 @@ void Player_online::camera_orientation(Subset* subset){
 
   camera_moved_rotat = rotat_abs_rad;
   cameraManager->set_angle_azimuth(hAngle_new);
+
+  //---------------------------
+}
+void Player_online::save_image(){
+  //---------------------------
+
+  renderManager->render_screenshot(screenshot_path);
+  //*dimManager->get_with_custom_gl_dim() = true;
+  //dimManager->set_gl_dim(vec2(1500,1000));
 
   //---------------------------
 }
