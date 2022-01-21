@@ -1,6 +1,5 @@
 build/*
-media/data/data/*
-media/data/graphs/*
+media/data/*
 media/point_cloud/*
 doc
 doc/*
