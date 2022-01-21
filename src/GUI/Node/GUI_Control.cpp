@@ -133,6 +133,7 @@ void GUI_control::control_frameSelection(){
 
   //Frame selection
   static vec2 pt1, pt2;
+  static bool frame_selection = false;
   if(ImGui::IsKeyPressed(341) == false){
     if(ImGui::IsMouseClicked(0) && io.MouseDownDuration[0] < 0.01f && !io.WantCaptureMouse){
       pt1 = dimManager->get_cursorPos_gl();
@@ -140,9 +141,11 @@ void GUI_control::control_frameSelection(){
     if(io.MouseDownDuration[0] >= 0.01f && !io.WantCaptureMouse){
       pt2 = dimManager->get_cursorPos_gl();
       selectionManager->mouse_drawFrame(pt1, pt2);
+      frame_selection = true;
     }
-    if(ImGui::IsMouseReleased(0)){
+    if(ImGui::IsMouseReleased(0) && frame_selection){
       selectionManager->mouse_frameSelection(pt1, pt2);
+      frame_selection = false;
     }
   }
 

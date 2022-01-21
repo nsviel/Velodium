@@ -341,6 +341,14 @@ void dataExtraction::init_randomColor(){
   Green = float(rand()%101)/100;
   Blue = float(rand()%101)/100;
 
+  //First cloud color
+  if(ID == 0){
+    Red = 0.08;
+    Green = 0.3;
+    Blue = 0.44;
+    ID++;
+  }
+
   //---------------------------
 }
 

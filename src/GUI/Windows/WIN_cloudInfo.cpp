@@ -1,4 +1,4 @@
-#include "WIN_modifyFileInfo.h"
+#include "WIN_cloudInfo.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Specific/fct_maths.h"
@@ -11,7 +11,7 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_modifyFileInfo::WIN_modifyFileInfo(){
+WIN_cloudInfo::WIN_cloudInfo(){
   //---------------------------
 
   this->sceneManager = new Scene();
@@ -19,16 +19,16 @@ WIN_modifyFileInfo::WIN_modifyFileInfo(){
 
   //---------------------------
 }
-WIN_modifyFileInfo::~WIN_modifyFileInfo(){}
+WIN_cloudInfo::~WIN_cloudInfo(){}
 
 //Main function
-void WIN_modifyFileInfo::window_modifyFileInfo(){
+void WIN_cloudInfo::window_cloudInfo(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  bool open = window_tab.show_modifyFileInfo;
+  bool* open = &window_tab.show_modifyFileInfo;
   //---------------------------
 
-  if(open && cloud != nullptr){
-    ImGui::Begin(ICON_FA_COMMENT " Point cloud", &open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
+  if(*open && cloud != nullptr){
+    ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
@@ -55,6 +55,7 @@ void WIN_modifyFileInfo::window_modifyFileInfo(){
 
     //Name
     ImGui::Columns(2);
+    ImGui::SetColumnWidth(-1,50);
     static char str[256];
     strcpy(str, subset->name.c_str());
     ImGui::Text("Name ");
@@ -68,8 +69,33 @@ void WIN_modifyFileInfo::window_modifyFileInfo(){
     strcpy(str, cloud->format.c_str());
     ImGui::Text("Format ");
     ImGui::NextColumn();
-    if(ImGui::InputText("##2", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue)){
-      cloud->format = str;
+    static int format = 3;
+    if(cloud->format == "pts"){
+      format = 0;
+    }
+    else if(cloud->format == "ptx"){
+      format = 1;
+    }
+    else if(cloud->format == "ply"){
+      format = 2;
+    }
+    else if(cloud->format == "pcap"){
+      format = 3;
+    }
+    if(ImGui::RadioButton("pts", &format, 0)){
+      cloud->format = "pts";
+    }
+    ImGui::SameLine();
+    if(ImGui::RadioButton("ptx", &format, 1)){
+      cloud->format = "ptx";
+    }
+    ImGui::SameLine();
+    if(ImGui::RadioButton("ply", &format, 2)){
+      cloud->format = "ply";
+    }
+    ImGui::SameLine();
+    if(ImGui::RadioButton("pcap", &format, 3)){
+      cloud->format = "pcap";
     }
     ImGui::NextColumn();
 
@@ -131,7 +157,7 @@ void WIN_modifyFileInfo::window_modifyFileInfo(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      open = false;
+      *open = false;
     }
     ImGui::End();
   }
@@ -140,7 +166,7 @@ void WIN_modifyFileInfo::window_modifyFileInfo(){
 }
 
 //Sub functions
-void WIN_modifyFileInfo::cloud_stats_location(Cloud* cloud){
+void WIN_cloudInfo::cloud_stats_location(Cloud* cloud){
   Subset* subset = &cloud->subset[cloud->subset_selected];
   vector<vec3>& XYZ = subset->xyz;
   vec3 XYZ_COM = subset->COM;
@@ -169,7 +195,7 @@ void WIN_modifyFileInfo::cloud_stats_location(Cloud* cloud){
     cout<<"__________"<<endl;
   }
 }
-void WIN_modifyFileInfo::cloud_stats_intensity(Cloud* cloud){
+void WIN_cloudInfo::cloud_stats_intensity(Cloud* cloud){
   Subset* subset = &cloud->subset[cloud->subset_selected];
   vector<float>& Is = subset->I;
   //---------------------------
@@ -188,7 +214,7 @@ void WIN_modifyFileInfo::cloud_stats_intensity(Cloud* cloud){
     cout<<"__________"<<endl;
   }
 }
-void WIN_modifyFileInfo::cloud_stats_distance(Cloud* cloud){
+void WIN_cloudInfo::cloud_stats_distance(Cloud* cloud){
   Subset* subset = &cloud->subset[cloud->subset_selected];
   vector<float>& dist = subset->R;
   //---------------------------
@@ -207,7 +233,7 @@ void WIN_modifyFileInfo::cloud_stats_distance(Cloud* cloud){
   cout<<"Mean : "<<fct_mean(dist)<<endl;
   cout<<"__________"<<endl;
 }
-void WIN_modifyFileInfo::cloud_stats_cosIt(Cloud* cloud){
+void WIN_cloudInfo::cloud_stats_cosIt(Cloud* cloud){
   Subset* subset = &cloud->subset[cloud->subset_selected];
   vector<float>& cosIt =  subset->cosIt;
   vector<float>& It =  subset->It;

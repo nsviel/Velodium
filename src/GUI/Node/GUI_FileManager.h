@@ -17,7 +17,6 @@ public:
 
 public:
   void fileManager();
-  void tableManager();
   void cloudManager(Cloud* cloud);
 
   void info_cloud(Cloud* cloud);

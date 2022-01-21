@@ -8,7 +8,7 @@
 
 #include <iomanip>
 
-class WIN_modifyFileInfo;
+class WIN_cloudInfo;
 class WIN_loading;
 class WIN_camera;
 class WIN_shader;
@@ -80,7 +80,7 @@ private:
 
   WIN_camera* wincamManager;
   WIN_loading* loadingManager;
-  WIN_modifyFileInfo* fileinfoManager;
+  WIN_cloudInfo* infoManager;
   WIN_shader* shaderManager;
   WIN_filter* filterManager;
 

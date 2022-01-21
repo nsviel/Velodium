@@ -75,6 +75,7 @@ void Dimension::update_window_dim(){
 
     this->win_dim = vec2(win_w, win_h);
     this->gui_bp_pos = vec2(gui_lbp_dim.x, win_h - gui_bp_dim.y);
+    this->gui_bp_dim.x = win_w - gui_lbp_dim.x;
     this->gui_ltp_dim.y = gui_lp_mid - gui_tp_dim.y;
     this->gui_lbp_dim.y = win_h - gui_lp_mid;
     this->is_resized = true;

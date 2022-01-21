@@ -2,7 +2,7 @@
 
 #include "Window_tab.h"
 #include "WIN_loading.h"
-#include "WIN_modifyFileInfo.h"
+#include "WIN_cloudInfo.h"
 #include "WIN_camera.h"
 #include "WIN_shader.h"
 #include "WIN_filter.h"
@@ -55,7 +55,7 @@ GUI_windows::GUI_windows(Engine* engine){
 
   this->wincamManager = new WIN_camera(cameraManager);
   this->loadingManager = new WIN_loading();
-  this->fileinfoManager = new WIN_modifyFileInfo();
+  this->infoManager = new WIN_cloudInfo();
   this->shaderManager = new WIN_shader(engineManager->get_shaderManager());
   this->filterManager = new WIN_filter(engineManager->get_filterManager());
 
@@ -108,7 +108,7 @@ void GUI_windows::window_Draw(){
   wincamManager->window_camera();
   loadingManager->window_loading();
   loadingManager->window_saving();
-  fileinfoManager->window_modifyFileInfo();
+  infoManager->window_cloudInfo();
   shaderManager->window_shader();
   filterManager->window_filter();
 

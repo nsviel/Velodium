@@ -173,12 +173,12 @@ void GUI_option::option_colors(){
     ImGui::SetNextItemWidth(colorEditSize);
     ImGui::ColorEdit4("Background", (float*)screen_color);
 
-    //Normals color
+    /*/Normals color
     ImGui::SetNextItemWidth(colorEditSize);
     vec4* color_normals = glyphManager->get_glyph_color("normal");
     if(ImGui::ColorEdit4("Normals", (float*)color_normals)){
       glyphManager->set_glyph_color("normal", *color_normals);
-    }
+    }*/
 
     //Grid color
     ImGui::SetNextItemWidth(colorEditSize);
@@ -196,11 +196,27 @@ void GUI_option::option_colors(){
 
     //Uniform cloud color
     ImGui::SetNextItemWidth(colorEditSize);
-    static vec4 color_PC;
-    if(ImGui::ColorEdit4("Point cloud", (float*)&color_PC, ImGuiColorEditFlags_AlphaBar)){
+    static vec4 cloud_color;
+    if(cloud != nullptr){
+      cloud_color = cloud->unicolor;
+    }
+    if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
+      if(sceneManager->is_atLeastOnecloud()){
+        attribManager->set_cloud_color(cloud, cloud_color);
+      }
+    }
+
+    //Uniform subset color
+    ImGui::SetNextItemWidth(colorEditSize);
+    static vec4 subset_color;
+    if(cloud != nullptr){
+      Subset* subset = &cloud->subset[cloud->subset_selected];
+      subset_color = subset->unicolor;
+    }
+    if(ImGui::ColorEdit4("Cloud subset", (float*)&subset_color, ImGuiColorEditFlags_AlphaBar)){
       if(sceneManager->is_atLeastOnecloud()){
         Subset* subset = &cloud->subset[cloud->subset_selected];
-        attribManager->set_subset_color(subset, color_PC);
+        attribManager->set_subset_color(subset, subset_color);
       }
     }
 
