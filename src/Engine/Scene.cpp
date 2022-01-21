@@ -272,7 +272,7 @@ void Scene::update_subset_location(Subset* subset){
 }
 void Scene::update_subset_color(Subset* subset){
   //---------------------------
-sayHello();
+
   //Reactualise vertex color data
   vector<vec4>& RGB = subset->RGB;
   glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);

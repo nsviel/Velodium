@@ -271,22 +271,27 @@ void GUI_option::option_parameters(){
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Points size ");
     ImGui::NextColumn();
-    static int cpt_pts = 1;
-    float spacing = style.ItemInnerSpacing.x;
     ImGui::PushButtonRepeat(true);
-    if (ImGui::ArrowButton("##left", ImGuiDir_Left)){
-      cpt_pts--;
-      if(cpt_pts<=1) cpt_pts=1;
-      cloud->point_size = cpt_pts;
+    static int point_size = 1;
+    if(cloud != nullptr){
+      point_size = cloud->point_size;
     }
-    ImGui::SameLine(0.0f, spacing);
-    if (ImGui::ArrowButton("##right", ImGuiDir_Right)){
-      cpt_pts++;
-      cloud->point_size = cpt_pts;
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && cloud != nullptr){
+      cloud->point_size--;
+
+      if(cloud->point_size <= 1){
+        cloud->point_size = 1;
+      }
+    }
+    ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && cloud != nullptr){
+      cloud->point_size++;
+
+      point_size = cloud->point_size;
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
-    ImGui::Text("%d", cpt_pts);
+    ImGui::Text("%d", point_size);
     ImGui::NextColumn();
 
     //Normals size
@@ -294,7 +299,6 @@ void GUI_option::option_parameters(){
     ImGui::Text("Normal size ");
     ImGui::NextColumn();
     static int cpt_nor = 1;
-    float spacing_n = style.ItemInnerSpacing.x;
     ImGui::PushButtonRepeat(true);
     if(ImGui::ArrowButton("##left_n", ImGuiDir_Left)){
       cpt_nor--;
@@ -303,7 +307,7 @@ void GUI_option::option_parameters(){
       }
       glyphManager->set_size_normal(cpt_nor);
     }
-    ImGui::SameLine(0.0f, spacing_n);
+    ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if(ImGui::ArrowButton("##right_n", ImGuiDir_Right)){
       cpt_nor++;
       glyphManager->set_size_normal(cpt_nor);

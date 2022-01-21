@@ -283,6 +283,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->subset_selected = 0;
   cloud->heatmap = false;
   cloud->point_size = configManager->parse_json_int("parameter", "point_size");
+  cloud->unicolor = RGB_rdm;
 
   //Save path
   string absPath = std::experimental::filesystem::current_path();
