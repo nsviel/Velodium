@@ -25,7 +25,8 @@ public:
   void camera_followUp(Cloud* cloud, int i);
   void camera_position(Subset* subset);
   void camera_orientation(Subset* subset);
-  void save_image();
+  void save_image(Subset* subset);
+  void set_save_image_path();
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
@@ -35,6 +36,7 @@ public:
   inline bool* get_with_save_image(){return &with_save_image;}
   inline bool* get_with_online(){return &with_online;}
   inline vec2* get_heatmap_height_range(){return &HM_height_range;}
+  inline string* get_save_image_path(){return &screenshot_path;}
 
 private:
   Heatmap* heatmapManager;

@@ -248,26 +248,44 @@ void GUI_Player::parameter_online(){
     bool* with_camera_follow = onlineManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", with_camera_follow);
 
+    ImGui::Columns(2);
     bool* with_save_image = onlineManager->get_with_save_image();
     ImGui::Checkbox("Save image", with_save_image);
 
+    //Dicrectory path selection & display
+    ImGui::NextColumn();
+    if(*with_save_image){
+      if(ImGui::Button("...##26")){
+        onlineManager->set_save_image_path();
+      }
+      ImGui::SameLine();
+      string saveas = *onlineManager->get_save_image_path();
+      ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
+    }
+    ImGui::NextColumn();
+
     bool* withHeatmap = onlineManager->get_with_heatmap();
-    bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
     ImGui::Checkbox("Heatmap", withHeatmap);
+
+    bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
+    ImGui::NextColumn();
     if(*withHeatmap){
       ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
+
+      if(*heatmap_rltHeight){
+        vec2* height_range = onlineManager->get_heatmap_height_range();
+        ImGui::SetNextItemWidth(100);
+        ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
+        ImGui::SetNextItemWidth(100);
+        ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
+      }
     }
-    if(*heatmap_rltHeight){
-      vec2* height_range = onlineManager->get_heatmap_height_range();
-      ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-      ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
-    }
+    ImGui::NextColumn();
 
     //Cylinder cleaning filter
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
     ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
+    ImGui::NextColumn();
     if(*cylinderFilter){
       float* r_min = filterManager->get_cyl_r_min();
       float* r_max = filterManager->get_cyl_r_max();
@@ -279,6 +297,9 @@ void GUI_Player::parameter_online(){
       ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
     }
+    ImGui::NextColumn();
+
+    ImGui::Columns(1);
 
     //---------------------------
     ImGui::Separator();

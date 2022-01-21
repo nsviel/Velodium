@@ -317,20 +317,7 @@ void dataExtraction::init_frameParameters(Subset& subset){
   Frame* frame = &subset.frame;
   //---------------------------
 
-  frame->time_slam = 0;
-  frame->map_size_abs = 0;
-  frame->map_size_rlt = 0;
-  frame->is_slamed = false;
-
-  frame->rotat_b = Eigen::Matrix3d::Identity();
-  frame->rotat_e = Eigen::Matrix3d::Identity();
-  frame->trans_b = Eigen::Vector3d::Zero();
-  frame->trans_e = Eigen::Vector3d::Zero();
-
-  frame->trans_abs = vec3(0, 0, 0);
-  frame->rotat_abs = vec3(0, 0, 0);
-  frame->trans_rlt = vec3(0, 0, 0);
-  frame->rotat_rlt = vec3(0, 0, 0);
+  frame->reset();
 
   //---------------------------
 }

@@ -25,7 +25,7 @@ public:
   inline int* get_iter_max(){return &iter_max;}
   inline int* get_nb_residual_min(){return &nb_residual_min;}
   inline float* get_PTP_distance_max(){return &PTP_distance_max;}
-  inline float get_Xscore(){return X.norm();}
+  inline float get_opti_score(){return X.norm();}
   inline void set_iter_max(int value){iter_max = value;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
 

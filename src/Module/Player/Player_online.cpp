@@ -9,6 +9,7 @@
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Engine.h"
+#include "../../Load/Operation.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
 
@@ -24,11 +25,11 @@ Player_online::Player_online(Engine* engineManager){
   this->cticpManager = engineManager->get_cticpManager();
   this->heatmapManager = new Heatmap();
 
-  this->HM_height_range = vec2(-2.25, 1.75);
+  this->HM_height_range = vec2(-2.5, 1.75);
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
-  this->screenshot_path = "/home/aither/Desktop/truc";
+  this->screenshot_path = "../media/data/image/";
 
   this->with_camera_top = false;
   this->with_camera_follow = true;
@@ -105,7 +106,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
     }
 
     if(with_save_image){
-      this->save_image();
+      this->save_image(subset);
     }
   }
 
@@ -212,12 +213,24 @@ void Player_online::camera_orientation(Subset* subset){
 
   //---------------------------
 }
-void Player_online::save_image(){
+void Player_online::save_image(Subset* subset){
   //---------------------------
 
-  renderManager->render_screenshot(screenshot_path);
-  //*dimManager->get_with_custom_gl_dim() = true;
-  //dimManager->set_gl_dim(vec2(1500,1000));
+  //string path = screenshot_path + subset->name;
+  string path = screenshot_path + "image";
+
+  renderManager->render_screenshot(path);
+
+  //---------------------------
+}
+void Player_online::set_save_image_path(){
+  //---------------------------
+
+  string path;
+  Operation opeManager;
+  opeManager.selectDirectory(path);
+
+  this->screenshot_path = path + "/";
 
   //---------------------------
 }

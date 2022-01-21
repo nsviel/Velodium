@@ -190,6 +190,9 @@ void GUI_menuBar::MenuBar_fastScene(){
   if(ImGui::Button("Other frames", ImVec2(100,0))){
     opeManager->loading_fastScene(5);
   }
+  if(ImGui::Button("Tunel", ImVec2(100,0))){
+    opeManager->loading_fastScene(6);
+  }
 
   //---------------------------
 }

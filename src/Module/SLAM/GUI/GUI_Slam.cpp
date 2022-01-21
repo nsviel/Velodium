@@ -4,6 +4,8 @@
 #include "../CT_ICP/SLAM_optim_ceres.h"
 #include "../CT_ICP/SLAM_optim_gn.h"
 #include "../CT_ICP/SLAM_normal.h"
+#include "../CT_ICP/SLAM_assessment.h"
+#include "../CT_ICP/SLAM_localMap.h"
 
 #include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene.h"
@@ -21,6 +23,8 @@ GUI_Slam::GUI_Slam(Engine* engineManager){
   this->ceresManager = cticpManager->get_SLAM_optim_ceres();
   this->gnManager = cticpManager->get_SLAM_optim_gn();
   this->normalManager = cticpManager->get_SLAM_normal();
+  this->assessManager = cticpManager->get_assessManager();
+  this->mapManager = cticpManager->get_mapManager();
 
   this->item_width = 100;
 
@@ -84,12 +88,12 @@ void GUI_Slam::parameters_general(){
     ImGui::Checkbox("Verbose", slam_verbose);
 
     //Make a voxelized slam map
-    bool* slamMap_voxelized = cticpManager->get_slamMap_voxelized();
+    bool* slamMap_voxelized = mapManager->get_slamMap_voxelized();
     ImGui::Checkbox("Visual voxelized map", slamMap_voxelized);
 
     //Width of the SLAM map voxel
     if(*slamMap_voxelized){
-      float* slamMap_width = cticpManager->get_voxel_size_slamMap();
+      float* slamMap_width = mapManager->get_voxel_size_slamMap();
       ImGui::SetNextItemWidth(item_width);
       ImGui::InputFloat("Voxel size voxelized map", slamMap_width, 0.1f, 1.0f, "%.3f");
     }
@@ -106,7 +110,7 @@ void GUI_Slam::parameters_general(){
     }
 
     //Subsampling voxel width
-    float* sampling_width = cticpManager->get_voxel_size_gridMap();
+    float* sampling_width = mapManager->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Grid sampling voxel size", sampling_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -174,7 +178,7 @@ void GUI_Slam::parameters_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
 
     //Subset point minimum distance
-    float* min_subset_distance = cticpManager->get_min_subset_distance();
+    float* min_subset_distance = mapManager->get_min_subset_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Min point distance from LiDAR", min_subset_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -182,7 +186,7 @@ void GUI_Slam::parameters_localMap(){
     }
 
     //Subset point maximum distance
-    float* max_subset_distance = cticpManager->get_max_subset_distance();
+    float* max_subset_distance = mapManager->get_max_subset_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Max point distance from LiDAR", max_subset_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -192,7 +196,7 @@ void GUI_Slam::parameters_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Voxel");
 
     //Width of the local map voxel
-    float* localMap_width = cticpManager->get_voxel_size_localMap();
+    float* localMap_width = mapManager->get_voxel_size_localMap();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -200,7 +204,7 @@ void GUI_Slam::parameters_localMap(){
     }
 
     //Mnimun distance between points inside a voxel
-    float* min_voxel_distance = cticpManager->get_min_voxel_distance();
+    float* min_voxel_distance = mapManager->get_min_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Min point dist voxel ", min_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -208,7 +212,7 @@ void GUI_Slam::parameters_localMap(){
     }
 
     //Distance threshold to supress the voxels on run
-    float* max_voxel_distance = cticpManager->get_max_voxel_distance();
+    float* max_voxel_distance = mapManager->get_max_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Max dist from position", max_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -216,7 +220,7 @@ void GUI_Slam::parameters_localMap(){
     }
 
     //Number of point per voxel
-    int* nb_points_per_voxel = cticpManager->get_map_max_voxelNbPoints();
+    int* nb_points_per_voxel = mapManager->get_map_max_voxelNbPoints();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -256,7 +260,7 @@ void GUI_Slam::parameters_robustesse(){
     //---------------------------
 
     //Minimal optimization score
-    float* thres_optimMinNorm = cticpManager->get_thres_optimMinNorm();
+    float* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Minimal threshold", thres_optimMinNorm, 0.001f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -264,7 +268,7 @@ void GUI_Slam::parameters_robustesse(){
     }
 
     //Maximum displacement in a frame
-    float* thres_ego_trans = cticpManager->get_thres_ego_trans();
+    float* thres_ego_trans = assessManager->get_thres_ego_trans();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Max ego translation", thres_ego_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -272,7 +276,7 @@ void GUI_Slam::parameters_robustesse(){
     }
 
     //Maximum rotation in a frame
-    float* thres_ego_rotat = cticpManager->get_thres_ego_rotat();
+    float* thres_ego_rotat = assessManager->get_thres_ego_rotat();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Max ego rotation", thres_ego_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -280,7 +284,7 @@ void GUI_Slam::parameters_robustesse(){
     }
 
     //Maximum displacement between two poses
-    float* thres_pose_trans = cticpManager->get_thres_pose_trans();
+    float* thres_pose_trans = assessManager->get_thres_pose_trans();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Max pose translation", thres_pose_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -288,7 +292,7 @@ void GUI_Slam::parameters_robustesse(){
     }
 
     //Maximum rotation between two poses
-    float* thres_pose_rotat = cticpManager->get_thres_pose_rotat();
+    float* thres_pose_rotat = assessManager->get_thres_pose_rotat();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Max pose rotation", thres_pose_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){

@@ -23,7 +23,14 @@ struct Frame{ //SLAM stuff
   Eigen::Matrix3d rotat_e;
   Eigen::Vector3d trans_e;
 
-  //Stats
+  //Assessment stats
+  float ego_trans;
+  float ego_rotat;
+  float diff_trans;
+  float diff_rotat;
+  float opti_score;
+
+  //Informative stats
   float time_slam;
   bool is_slamed;
   int map_size_abs;
@@ -41,6 +48,12 @@ struct Frame{ //SLAM stuff
     NN.clear();
     a2D.clear();
     ts_n.clear();
+
+    this->ego_trans = 0;
+    this->ego_rotat = 0;
+    this->diff_trans = 0;
+    this->diff_rotat = 0;
+    this->opti_score = 0;
 
     this->rotat_b = Eigen::Matrix3d::Identity();
     this->rotat_e = Eigen::Matrix3d::Identity();

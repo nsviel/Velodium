@@ -5,6 +5,7 @@
 #include "../../Specific/timer.h"
 #include "../../Engine/Scene.h"
 #include "../../Load/Saver.h"
+#include "../../Load/Operation.h"
 
 #include <experimental/filesystem>
 
@@ -206,23 +207,11 @@ void Player_cloud::player_save(Cloud* cloud){
 void Player_cloud::player_selectDirSave(){
   //---------------------------
 
-  //Get absolute executable location
-  string zenity = "zenity --file-selection --directory --title=Save --filename=" + saveas;
+  string path;
+  Operation opeManager;
+  opeManager.selectDirectory(path);
 
-  //Retrieve dir path
-  FILE *file = popen(zenity.c_str(), "r");
-  char filename[1024];
-  char* path_char = fgets(filename, 1024, file);
-
-  //Check if empty
-  if ((path_char != NULL) && (path_char[0] != '\0')) {
-    string path_str(path_char);
-    if (path_str.find('\n')){
-      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
-    }
-
-    this->saveas = path_str + "/";
-  }
+  this->saveas = path + "/";
 
   //---------------------------
 }

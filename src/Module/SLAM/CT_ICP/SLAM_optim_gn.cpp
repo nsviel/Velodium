@@ -26,6 +26,7 @@ SLAM_optim_gn::~SLAM_optim_gn(){}
 
 //Main functions
 void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
+  X = Eigen::VectorXd(0);
   //---------------------------
 
   for (int iter=0; iter < iter_max; iter++) {

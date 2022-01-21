@@ -5,9 +5,12 @@
 
 class Engine;
 class CT_ICP;
+
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
 class SLAM_normal;
+class SLAM_assessment;
+class SLAM_localMap;
 
 
 class GUI_Slam
@@ -36,9 +39,12 @@ public:
 
 private:
   CT_ICP* cticpManager;
+
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
+  SLAM_assessment* assessManager;
+  SLAM_localMap* mapManager;
 
   int item_width;
 };

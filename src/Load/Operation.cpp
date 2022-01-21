@@ -218,6 +218,11 @@ void Operation::loading_fastScene(int mode){
       this->loading_directoryFrames("../media/point_cloud/frames_other/");
       break;
     }
+    case 6:{//Frame other
+      sceneManager->removeCloud_all();
+      loaderManager->load_cloud("/home/aither/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
+      break;
+    }
   }
 
   //---------------------------
