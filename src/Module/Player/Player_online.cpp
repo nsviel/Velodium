@@ -32,12 +32,12 @@ Player_online::Player_online(Engine* engineManager){
   this->screenshot_path = "../media/data/image/";
 
   this->with_camera_top = false;
-  this->with_camera_follow = true;
+  this->with_camera_follow = false;
   this->with_camera_root = false;
 
   this->with_online = true;
   this->with_slam = true;
-  this->with_cylinder_cleaning = true;
+  this->with_cylinder_cleaning = false;
   this->with_heatmap = true;
   this->with_heatmap_rltHeight = true;
   this->with_save_image = false;

@@ -254,6 +254,7 @@ void CT_ICP::compute_assessment(Cloud* cloud, int i){
   //---------------------------
 
   sucess = assessManager->compute_assessment_abs(frame, frame_m1);
+  sucess = assessManager->compute_assessment_rlt(cloud, i);
 
   //If unsucess, reinitialize transformations
   if(sucess == false){

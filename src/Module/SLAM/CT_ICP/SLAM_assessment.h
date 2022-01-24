@@ -33,6 +33,9 @@ private:
   float thres_pose_trans;
   float thres_pose_rotat;
   float thres_optimMinNorm;
+
+  float rlt_numberMean;
+  float rlt_numberPreviousPose;
 };
 
 
