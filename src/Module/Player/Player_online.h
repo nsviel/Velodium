@@ -27,6 +27,7 @@ public:
   void camera_orientation(Subset* subset);
   void save_image(Subset* subset);
   void set_save_image_path();
+  void keep_nFrames(Cloud* cloud);
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
@@ -36,6 +37,7 @@ public:
   inline bool* get_with_save_image(){return &with_save_image;}
   inline bool* get_with_online(){return &with_online;}
   inline vec2* get_heatmap_height_range(){return &HM_height_range;}
+  inline bool* get_with_keepNframes(){return &with_keepNframes;}
   inline string* get_save_image_path(){return &screenshot_path;}
 
 private:
@@ -61,6 +63,7 @@ private:
   bool with_heatmap;
   bool with_heatmap_rltHeight;
   bool with_save_image;
+  bool with_keepNframes;
 };
 
 #endif

@@ -41,6 +41,7 @@ Player_online::Player_online(Engine* engineManager){
   this->with_heatmap = true;
   this->with_heatmap_rltHeight = true;
   this->with_save_image = false;
+  this->with_keepNframes = true;
 
   //---------------------------
 }
@@ -105,8 +106,14 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
       heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
     }
 
+    //With glreadpixel screenshot
     if(with_save_image){
       this->save_image(subset);
+    }
+
+    //With just keep n frames
+    if(with_keepNframes){
+      this->keep_nFrames(cloud);
     }
   }
 
@@ -231,6 +238,12 @@ void Player_online::set_save_image_path(){
   opeManager.selectDirectory(path);
 
   this->screenshot_path = path + "/";
+
+  //---------------------------
+}
+void Player_online::keep_nFrames(Cloud* cloud){
+  //---------------------------
+
 
   //---------------------------
 }
