@@ -221,13 +221,14 @@ void GUI_control::control_keyboard_oneAction(){
 
     //N key - Save all & remove all & load new
     if(ImGui::IsKeyPressed(78) && !io.WantCaptureMouse){
-      opeManager->saving_allCloud();
-      sceneManager->removeCloud_all();
+      //opeManager->saving_allCloud();
+      //sceneManager->removeCloud_all();
     }
 
     //o key - Open options
-    if(ImGui::IsKeyPressed(79)){
-      window_tab.show_loading = true;
+    if(ImGui::IsKeyPressed(79) && !io.WantCaptureMouse){
+      window_tab.show_loading = !window_tab.show_loading;
+      break;
     }
   }
 

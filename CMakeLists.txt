@@ -61,6 +61,8 @@ set(OTHERS_LIBS
   -lboost_iostreams
   -llz4
   -lssh #SSH connexion libray
+  paho-mqttpp3 # MQTT library
+  paho-mqtt3as # async MQTT library
 )
 
 #Header libraries

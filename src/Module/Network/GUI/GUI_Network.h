@@ -19,8 +19,9 @@ public:
 public:
   void design_Network();
 
-  void connexion_ssh();
-  void connexion_mqtt();
+  void ssh_connection();
+  void mqtt_connection();
+  void mqtt_parameter();
 
 private:
   Network* netManager;

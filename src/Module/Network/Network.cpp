@@ -1,6 +1,6 @@
 #include "Network.h"
 
-#include "Protocol/MQTT.h"
+#include "Protocol/MQTT/MQTT.h"
 #include "Protocol/SFTP.h"
 #include "Protocol/SSH.h"
 
