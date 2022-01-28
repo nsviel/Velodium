@@ -6,7 +6,7 @@
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_display.h"
 
-#include "../../../extern/NormalHough/Normals.h"
+#include "NormalHough/Normals.h"
 
 
 //Constructor / destructor

@@ -5,7 +5,8 @@
 #include "../Protocol/SFTP.h"
 #include "../Protocol/SSH.h"
 
-#include "../../../../extern/imgui/imgui_stdlib.h"
+#include "../../../Specific/color.h"
+#include "imgui/imgui_stdlib.h"
 
 
 //Constructor / Destructor

@@ -4,7 +4,7 @@
 #include "../Configuration/Configuration.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../../../extern/stb_image/stb_image_write.h"
+#include "stb_image/stb_image_write.h"
 
 
 //Constructor / Destructor

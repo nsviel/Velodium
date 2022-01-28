@@ -16,10 +16,10 @@
 #include "../Engine/OpenGL/Camera.h"
 #include "../Engine/Configuration/Dimension.h"
 
-#include "../../extern/imgui/imgui.h"
-#include "../../extern/imgui/imgui_impl_glfw.h"
-#include "../../extern/imgui/imgui_impl_opengl3.h"
-#include "../../extern/IconsFontAwesome5.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "IconsFontAwesome5.h"
 
 #include <thread>
 

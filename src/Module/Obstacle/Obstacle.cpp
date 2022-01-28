@@ -18,10 +18,10 @@ Obstacle::Obstacle(){
 
   this->glyphManager = new Glyphs();
 
-  this->dir_path = "../media/detection/";
-  this->dir_predi = "pred/";
-  this->dir_grThr = "gt/";
+  this->dir_path = "../media/data/";
   this->dir_frame = "frame/";
+  this->dir_predi = "prediction/";
+  this->dir_grThr = "groudtruth/";
 
   //---------------------------
 }

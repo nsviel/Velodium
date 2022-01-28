@@ -6,7 +6,7 @@
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Scene.h"
 
-#include "../../../extern/IconsFontAwesome5.h"
+#include "IconsFontAwesome5.h"
 
 extern struct Window_tab window_tab;
 

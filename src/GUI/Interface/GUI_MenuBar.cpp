@@ -17,8 +17,8 @@
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
 
-#include "../../../extern/imgui/imgui.h"
-#include "../../../extern/IconsFontAwesome5.h"
+#include "imgui/imgui.h"
+#include "IconsFontAwesome5.h"
 
 #include <sys/sysinfo.h>
 

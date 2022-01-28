@@ -7,7 +7,7 @@
 #include "../../Engine/Engine.h"
 #include "../../Engine/Configuration/Dimension.h"
 
-#include "../../../extern/imgui/imgui.h"
+#include "imgui/imgui.h"
 
 
 //Constructor / Destructor

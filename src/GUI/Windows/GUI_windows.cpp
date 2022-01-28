@@ -27,8 +27,8 @@
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
 
-#include "../../../extern/imgui/imgui.h"
-#include "../../../extern/IconsFontAwesome5.h"
+#include "imgui/imgui.h"
+#include "IconsFontAwesome5.h"
 
 Window_tab window_tab;
 

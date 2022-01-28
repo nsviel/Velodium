@@ -1,7 +1,7 @@
 #ifndef POLYFIT_H
 #define POLYFIT_H
 
-#include "../../../extern/OptimLib/optim.hpp"
+#include "OptimLib/optim.hpp"
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/lu.hpp>

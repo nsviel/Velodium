@@ -3,7 +3,7 @@
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Configuration/Configuration.h"
 
-#include "../../../extern/IconsFontAwesome5.h"
+#include "IconsFontAwesome5.h"
 
 #include "Window_tab.h"
 extern struct Window_tab window_tab;
