@@ -5,11 +5,15 @@
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Transformation/Filter.h"
+
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Engine.h"
+
 #include "../../Load/Operation.h"
+#include "../../Load/Saver.h"
+
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
 
@@ -24,6 +28,7 @@ Player_online::Player_online(Engine* engineManager){
   this->dimManager = engineManager->get_dimManager();
   this->cticpManager = engineManager->get_cticpManager();
   this->heatmapManager = new Heatmap();
+  this->saverManager = new Saver();
 
   this->HM_height_range = vec2(-2.5, 1.75);
   this->camera_moved_trans = vec2(0, 0);
@@ -37,7 +42,7 @@ Player_online::Player_online(Engine* engineManager){
 
   this->with_online = true;
   this->with_slam = true;
-  this->with_cylinder_cleaning = false;
+  this->with_cylinder_cleaning = true;
   this->with_heatmap = true;
   this->with_heatmap_rltHeight = true;
   this->with_save_image = false;
@@ -113,13 +118,14 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
 
     //With just keep n frames
     if(with_keepNframes){
-      this->keep_nFrames(cloud);
+      this->save_lastFrame(cloud);
     }
   }
 
   //---------------------------
 }
 
+//Camera funtions
 void Player_online::camera_followUp(Cloud* cloud, int i){
   //---------------------------
 
@@ -220,6 +226,8 @@ void Player_online::camera_orientation(Subset* subset){
 
   //---------------------------
 }
+
+//Save functions
 void Player_online::save_image(Subset* subset){
   //---------------------------
 
@@ -230,7 +238,7 @@ void Player_online::save_image(Subset* subset){
 
   //---------------------------
 }
-void Player_online::set_save_image_path(){
+void Player_online::save_image_path(){
   //---------------------------
 
   string path;
@@ -241,9 +249,13 @@ void Player_online::set_save_image_path(){
 
   //---------------------------
 }
-void Player_online::keep_nFrames(Cloud* cloud){
+void Player_online::save_lastFrame(Cloud* cloud){
+  Subset* subset = &cloud->subset[cloud->subset_selected];
   //---------------------------
 
+  saverManager->save_subset(subset, "ply", "/home/aither/Desktop/truc/");
+
+  std::remove ("/home/aither/Desktop/truc/");
 
   //---------------------------
 }

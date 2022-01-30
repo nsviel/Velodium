@@ -10,6 +10,7 @@ class Engine;
 class Filter;
 class Dimension;
 class Renderer;
+class Saver;
 
 
 class Player_online
@@ -22,12 +23,15 @@ public:
 public:
   void compute_onlineOpe(Cloud* cloud, int i);
 
+  //Camera functions
   void camera_followUp(Cloud* cloud, int i);
   void camera_position(Subset* subset);
   void camera_orientation(Subset* subset);
+
+  //Save functions
   void save_image(Subset* subset);
-  void set_save_image_path();
-  void keep_nFrames(Cloud* cloud);
+  void save_image_path();
+  void save_lastFrame(Cloud* cloud);
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
@@ -47,7 +51,9 @@ private:
   Filter* filterManager;
   Dimension* dimManager;
   Renderer* renderManager;
+  Saver* saverManager;
 
+  vector<string> save_path_vec;
   string screenshot_path;
   vec2 HM_height_range;
   vec2 camera_moved_trans;

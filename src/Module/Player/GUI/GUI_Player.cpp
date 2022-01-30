@@ -256,7 +256,7 @@ void GUI_Player::parameter_online(){
     ImGui::NextColumn();
     if(*with_save_image){
       if(ImGui::Button("...##26")){
-        onlineManager->set_save_image_path();
+        onlineManager->save_image_path();
       }
       ImGui::SameLine();
       string saveas = *onlineManager->get_save_image_path();
