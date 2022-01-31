@@ -75,7 +75,7 @@ void WIN_loading::loading_action(){
   }
 
   //Load a set of PLY binary frames
-  if (ImGui::Button("Open PLY frames", ImVec2(item_width, 0))){
+  if (ImGui::Button("Open frames", ImVec2(item_width, 0))){
     opeManager->loading_frames();
   }
 

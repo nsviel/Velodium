@@ -40,10 +40,11 @@ void WIN_cloudInfo::window_cloudInfo(){
     ImGui::SameLine();
 
     //Uniform cloud color
-    vec4 color_PC(0.0f);
+    static vec4 color_PC(0.0f);
     if(cloud != nullptr){
       color_PC = cloud->unicolor;
     }
+
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
     flags |= ImGuiColorEditFlags_AlphaBar;
     if(ImGui::ColorEdit4("Color", (float*)&color_PC, flags)){

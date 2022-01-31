@@ -8,8 +8,8 @@
 #include "../../../Load/Processing/dataExtraction.h"
 #include "../../../Specific/timer.h"
 #include "../../../Specific/fct_display.h"
+#include "../../../Specific/fct_system.h"
 
-#include <experimental/filesystem>
 #include <filesystem>
 
 
@@ -113,9 +113,8 @@ void Capture::new_capture(){
   cloud_capture->name = "Capture_" + to_string(ID_capture);
 
   //Special capture directory
-  string absPath = std::experimental::filesystem::current_path();
-  string dirPath = absPath + path_dirSave + cloud_capture->name;
-  this->path_frameSave = absPath + path_dirSave + cloud_capture->name + "/";
+  string dirPath = get_absolutePath_build() + path_dirSave + cloud_capture->name + "/";
+  this->path_frameSave = dirPath;
   std::filesystem::create_directory(dirPath);
 
   //---------------------------

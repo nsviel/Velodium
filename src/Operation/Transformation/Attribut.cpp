@@ -395,11 +395,7 @@ void Attribut::set_subset_color(Subset* subset, vec4 RGBA){
   //---------------------------
 
   for(int i=0; i<RGB.size(); i++){
-    if(Is.size() != 0){
-      RGB[i] = vec4(RGBA.x*Is[i] , RGBA.y*Is[i], RGBA.z*Is[i], RGBA.w);
-    }else{
-      RGB[i] = vec4(RGBA.x , RGBA.y, RGBA.z, RGBA.w);
-    }
+    RGB[i] = vec4(RGBA.x , RGBA.y, RGBA.z, RGBA.w);
   }
 
   //---------------------------

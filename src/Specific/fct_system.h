@@ -1,10 +1,11 @@
-#ifndef OPENGL_FUNCTIONS_H
-#define OPENGL_FUNCTIONS_H
+#ifndef SYSTEM_FUNCTIONS_H
+#define SYSTEM_FUNCTIONS_H
 
 #include <dirent.h>
 #include <random>
 #include <fstream>
 #include <unistd.h>
+#include <experimental/filesystem>
 
 /**
  * \namespace OpenGL functions
@@ -12,34 +13,18 @@
  */
 
 namespace{
-
-  GLenum glCheckError_(const char *file, int line){
-      GLenum errorCode;
-      while ((errorCode = glGetError()) != GL_NO_ERROR)
-      {
-          std::string error;
-          switch (errorCode)
-          {
-              case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
-              case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
-              case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
-              case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
-              case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
-              case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-              case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
-          }
-          std::cout << error << " | " << file << " (" << line << ")" << std::endl;
-      }
-      return errorCode;
-  }
-  #define glCheckError() glCheckError_(__FILE__, __LINE__)
-
   //Get RAM memory usage
-  unsigned long long getTotalSystemMemory(){
+  unsigned long long get_systemMemory(){
     long pages = sysconf(_SC_PHYS_PAGES);
     long page_size = sysconf(_SC_PAGE_SIZE);
     return pages * page_size;
-}
+  }
+
+  //Get absolute build path
+  string get_absolutePath_build(){
+    string absPath = std::experimental::filesystem::current_path();
+    return absPath;
+  }
 
   //Get size of file - number of points
   int get_fileSize(std::string pathFile){
@@ -136,38 +121,35 @@ namespace{
    }
    return *a ? 1 : *b ? -1 : 0;
  }
-  int directory_numberOfFile(std::string path){
-   DIR *dp;
-   int i = 0;
-   struct dirent *ep;
-   dp = opendir (path.c_str());
+  int get_dir_numberOfFile(std::string path){
+    DIR *dp;
+    int i = 0;
+    struct dirent *ep;
+    dp = opendir (path.c_str());
 
-   if (dp != NULL)
-   {
+    if (dp != NULL){
      while (ep = readdir (dp)){
        i++;
      }
      (void) closedir (dp);
-   }
-   else{
+    }
+    else{
      perror ("Couldn't open the directory");
-   }
+    }
 
-   //Since ./ and ../ are counted
-   i = i-2;
+    //Since ./ and ../ are counted
+    i = i-2;
 
-   printf("There's %d files in the current directory.\n", i);
-
-   return i;
+    return i;
  }
-   bool is_file_exist(std::string& fileName){
-     //---------------------------
+  bool is_file_exist(std::string& fileName){
+    //---------------------------
 
-     std::ifstream infile(fileName.c_str());
+    std::ifstream infile(fileName.c_str());
 
-     //---------------------------
-     return infile.good();
-   }
+    //---------------------------
+    return infile.good();
+  }
 }
 
 #endif

@@ -3,11 +3,11 @@
 #include "Player_online.h"
 
 #include "../../Specific/timer.h"
+#include "../../Specific/fct_system.h"
 #include "../../Engine/Scene.h"
 #include "../../Load/Saver.h"
 #include "../../Load/Operation.h"
 
-#include <experimental/filesystem>
 
 
 //Constructor / Destructor
@@ -30,8 +30,7 @@ Player_cloud::Player_cloud(Player_online* online){
   this->player_flag_1s = false;
 
   //Get absolute executable location
-  string absPath = std::experimental::filesystem::current_path();
-  this->saveas = absPath + "/../media/data/";
+  this->saveas = get_absolutePath_build() + "/../media/data/";
 
   //---------------------------
 }

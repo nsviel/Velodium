@@ -11,7 +11,7 @@
 #include "Format/file_XYZ.h"
 
 #include "../Engine/Scene.h"
-#include "../Specific/fct_opengl.h"
+#include "../Specific/fct_system.h"
 #include "../Specific/fct_transtypage.h"
 
 

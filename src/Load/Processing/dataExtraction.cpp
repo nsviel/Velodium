@@ -4,8 +4,8 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/Configuration/Configuration.h"
 #include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_system.h"
 
-#include <experimental/filesystem>
 #include <random>
 
 
@@ -28,8 +28,8 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
   //---------------------------
 
   //Init cloud parameters
-  this->init_cloudParameters(cloud, data);
   this->init_randomColor();
+  this->init_cloudParameters(cloud, data);
 
   for(int i=0; i<data.size(); i++){
     Subset subset;
@@ -283,11 +283,8 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->subset_selected = 0;
   cloud->heatmap = false;
   cloud->point_size = configManager->parse_json_int("parameter", "point_size");
-  cloud->unicolor = RGB_rdm;
-
-  //Save path
-  string absPath = std::experimental::filesystem::current_path();
-  cloud->saveas = absPath + "/../media/data/";
+  cloud->unicolor = vec4(Red, Green, Blue, 1.0f);
+  cloud->saveas = get_absolutePath_build() + "/../media/data/";
 
   //ID
   int* list_ID = sceneManager->get_list_ID_cloud();

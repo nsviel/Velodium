@@ -10,6 +10,7 @@
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Engine.h"
+#include "../../Engine/Scene.h"
 
 #include "../../Load/Operation.h"
 #include "../../Load/Saver.h"
@@ -29,22 +30,27 @@ Player_online::Player_online(Engine* engineManager){
   this->cticpManager = engineManager->get_cticpManager();
   this->heatmapManager = new Heatmap();
   this->saverManager = new Saver();
+  this->sceneManager = new Scene();
 
   this->HM_height_range = vec2(-2.5, 1.75);
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
   this->screenshot_path = "../media/data/image/";
+  this->savedFrame_ID = 0;
+  this->savedFrame_max = 20;
 
   this->with_camera_top = false;
   this->with_camera_follow = false;
   this->with_camera_root = false;
 
+  this->with_heatmap = true;
+  this->with_heatmap_rltHeight = true;
+  this->with_unicolor = false;
+
   this->with_online = true;
   this->with_slam = true;
   this->with_cylinder_cleaning = true;
-  this->with_heatmap = true;
-  this->with_heatmap_rltHeight = true;
   this->with_save_image = false;
   this->with_keepNframes = true;
 
@@ -93,22 +99,17 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
 
     //If heatmap option
     if(with_heatmap){
-      if(with_heatmap_rltHeight){
-        vec2* HT_range = heatmapManager->get_height_range();
-        HT_range->x = subset->frame.trans_abs.z + HM_height_range.x;
-        HT_range->y = subset->frame.trans_abs.z + HM_height_range.y;
-      }
+      this->color_heatmap(cloud, i);
+    }
 
+    if(with_unicolor){
       //Don't forget to operate the first subset
       if(i == 1){
-        Subset* subset = &cloud->subset[0];
-        Subset* subset_buffer = &cloud->subset_buffer[0];
-        heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
+        Subset* subset_0 = &cloud->subset[0];
+        this->color_unicolor(subset_0, cloud->unicolor);
       }
 
-      //Make heatmap on the current subset
-      Subset* subset_buffer = &cloud->subset_buffer[i];
-      heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
+      this->color_unicolor(subset, cloud->unicolor);
     }
 
     //With glreadpixel screenshot
@@ -253,9 +254,59 @@ void Player_online::save_lastFrame(Cloud* cloud){
   Subset* subset = &cloud->subset[cloud->subset_selected];
   //---------------------------
 
-  saverManager->save_subset(subset, "ply", "/home/aither/Desktop/truc/");
+  string dirPath = "/home/aither/Desktop/truc/";
+  string filePath = dirPath + subset->name + ".ply";
 
-  std::remove ("/home/aither/Desktop/truc/");
+  saverManager->save_subset(subset, "ply", dirPath);
+
+  if(save_path_vec.size() < savedFrame_max){
+    save_path_vec.push_back(filePath);
+    savedFrame_ID++;
+  }else{
+    std::remove (save_path_vec[savedFrame_ID].c_str());
+    save_path_vec[savedFrame_ID] = filePath;
+    savedFrame_ID++;
+  }
+
+  if(savedFrame_ID >= savedFrame_max){
+    savedFrame_ID = 0;
+  }
 
   //---------------------------
+}
+
+//Other functions
+void Player_online::color_heatmap(Cloud* cloud, int i){
+  Subset* subset = &cloud->subset[i];
+  //---------------------------
+
+  if(with_heatmap_rltHeight){
+    vec2* HT_range = heatmapManager->get_height_range();
+    HT_range->x = subset->frame.trans_abs.z + HM_height_range.x;
+    HT_range->y = subset->frame.trans_abs.z + HM_height_range.y;
+  }
+
+  //Don't forget to operate the first subset
+  if(i == 1){
+    Subset* subset = &cloud->subset[0];
+    Subset* subset_buffer = &cloud->subset_buffer[0];
+    heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
+  }
+
+  //Make heatmap on the current subset
+  Subset* subset_buffer = &cloud->subset_buffer[i];
+  heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
+
+  //---------------------------
+}
+void Player_online::color_unicolor(Subset* subset, vec4 color){
+  vector<vec4>& RGB = subset->RGB;
+  //---------------------------
+
+  for(int i=0; i<RGB.size(); i++){
+    RGB[i] = color;
+  }
+
+  //---------------------------
+  sceneManager->update_subset_color(subset);
 }

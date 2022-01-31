@@ -264,13 +264,24 @@ void GUI_Player::parameter_online(){
     }
     ImGui::NextColumn();
 
-    bool* withHeatmap = onlineManager->get_with_heatmap();
-    ImGui::Checkbox("Heatmap", withHeatmap);
-
-    bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
+    //Colorization
+    static int colorization = 0;
+    if(ImGui::RadioButton("Heatmap", &colorization, 0)){
+      *onlineManager->get_with_heatmap() = true;
+      *onlineManager->get_with_unicolor() = false;
+    }
     ImGui::NextColumn();
-    if(*withHeatmap){
+    if(ImGui::RadioButton("Unicolor", &colorization, 1)){
+      *onlineManager->get_with_heatmap() = false;
+      *onlineManager->get_with_unicolor() = true;
+    }
+    ImGui::NextColumn();
+
+    //Option: heatmap with relative height
+    if(colorization == 0){
+      bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
       ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
+      ImGui::NextColumn();
 
       if(*heatmap_rltHeight){
         vec2* height_range = onlineManager->get_heatmap_height_range();
@@ -279,8 +290,8 @@ void GUI_Player::parameter_online(){
         ImGui::SetNextItemWidth(100);
         ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
       }
+      ImGui::NextColumn();
     }
-    ImGui::NextColumn();
 
     //Cylinder cleaning filter
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();

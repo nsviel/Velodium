@@ -7,9 +7,8 @@
 #include "../Engine/Configuration/Configuration.h"
 
 #include "../Specific/fct_transtypage.h"
-#include "../Specific/fct_opengl.h"
+#include "../Specific/fct_system.h"
 
-#include <experimental/filesystem>
 #include <Eigen/Dense>
 #include <set>
 
@@ -27,9 +26,8 @@ Operation::Operation(){
 
   //Get absolute executable location
   Configuration configManager;
-  string path_abs = std::experimental::filesystem::current_path();
   string path_init = configManager.parse_json_string("parameter", "path_media");
-  this->path_current_dir = path_abs + '/' + path_init;
+  this->path_current_dir = get_absolutePath_build() + '/' + path_init;
 
   //---------------------------
 }
@@ -57,8 +55,10 @@ void Operation::loading_frames(){
   vector<string> path_vec = this->zenity_loading();
 
   //Load files
-  loaderManager->load_cloud_byFrame(path_vec);
-
+  if(path_vec.size() != 0){
+    loaderManager->load_cloud_byFrame(path_vec);
+  }
+  
   //---------------------------
 }
 void Operation::loading_directoryFrames(string path){
