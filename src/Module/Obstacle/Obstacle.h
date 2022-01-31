@@ -19,8 +19,6 @@ public:
   void build_obstacleGlyph_gt(Cloud* cloud);
   void build_obstacleGlyph_pr(Cloud* cloud);
 
-  void select_dir_path();
-
   inline Obstacle_IO* get_ioManager(){return ioManager;}
 
 private:

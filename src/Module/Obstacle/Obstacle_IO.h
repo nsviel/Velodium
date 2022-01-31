@@ -3,6 +3,8 @@
 
 #include "../../common.h"
 
+#include <thread>
+
 class Saver;
 
 
@@ -14,10 +16,10 @@ public:
   ~Obstacle_IO();
 
 public:
-  void Load_obstacleData();
+  void load_obstacleData();
   void clean_directories();
   void save_nFrame(Cloud* cloud);
-  void parse_json_obstacle(Cloud* cloud, vector<string> paths, string data);
+  void parse_obstacle_json(Cloud* cloud, vector<string> paths, string data);
   void select_dir_path();
 
   inline string get_dir_path(){return dir_path;}
@@ -32,6 +34,8 @@ private:
   string dir_frame;
   int savedFrame_ID;
   int savedFrame_max;
+
+  std::thread m_thread;
 };
 
 #endif

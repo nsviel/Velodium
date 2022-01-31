@@ -28,15 +28,21 @@ Obstacle_IO::Obstacle_IO(){
 
   this->clean_directories();
 
-  dir_modif_watcher(dir_path);
-
   //---------------------------
 }
 Obstacle_IO::~Obstacle_IO(){}
 
-void Obstacle_IO::Load_obstacleData(){
+void Obstacle_IO::load_obstacleData(){
   Operation opeManager;
   //---------------------------
+
+  sayHello();
+  m_thread = std::thread([&]() {
+    while (true) {
+      dir_modif_watcher(dir_path);
+    }
+  });
+  sayHello();
 
   //load frames
   string path_frame = dir_path + dir_frame;
@@ -47,12 +53,12 @@ void Obstacle_IO::Load_obstacleData(){
   //Load json files - GT
   string path_gt = dir_path + dir_grThr;
   vector<string> paths_gt = opeManager.get_directoryAllFilePath(path_gt);
-  this->parse_json_obstacle(cloud, paths_gt, "gt");
+  this->parse_obstacle_json(cloud, paths_gt, "gt");
 
   //Load json files - predictions
   string path_pr = dir_path + dir_predi;
   vector<string> paths_pr = opeManager.get_directoryAllFilePath(path_pr);
-  this->parse_json_obstacle(cloud, paths_pr, "pr");
+  this->parse_obstacle_json(cloud, paths_pr, "pr");
 
   //---------------------------
 }
@@ -87,7 +93,7 @@ void Obstacle_IO::save_nFrame(Cloud* cloud){
 
   //---------------------------
 }
-void Obstacle_IO::parse_json_obstacle(Cloud* cloud, vector<string> paths, string data){
+void Obstacle_IO::parse_obstacle_json(Cloud* cloud, vector<string> paths, string data){
   //---------------------------
 
   if(paths.size() != cloud->subset.size()) return;

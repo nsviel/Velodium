@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 
-std::string dir_modif_watcher(std::string path){
+void dir_modif_watcher(std::string path){
   std::string event_str;
   //---------------------------
 
@@ -67,7 +67,6 @@ std::string dir_modif_watcher(std::string path){
   ( void ) close( fd );
 
   //---------------------------
-  return event_str;
 }
 
 #endif

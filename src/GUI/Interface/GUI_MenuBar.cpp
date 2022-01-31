@@ -20,6 +20,7 @@
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
 
+#include <thread>
 #include <sys/sysinfo.h>
 
 extern struct Window_tab window_tab;
@@ -247,8 +248,12 @@ void GUI_menuBar::MenuBar_appInfo(){
     struct sysinfo si;
     sysinfo (&si);
     float percentFreeRam = ((float)si.freeram*100) / (float)si.totalram;
-    ImGui::Text("total RAM   : %5.1f MB\n", si.totalram / megabyte);
-    ImGui::Text("free RAM   : %5.1f MB - %.1f%%\n", si.freeram / megabyte, percentFreeRam);
+    ImGui::Text("Total RAM  : %5.1f MB\n", si.totalram / megabyte);
+    ImGui::Text("Free RAM   : %5.1f MB - %.1f%%\n", si.freeram / megabyte, percentFreeRam);
+
+    //Number of concurrency threads
+    const auto processor_count = std::thread::hardware_concurrency();
+    ImGui::Text("Max nb thread   : %d\n", processor_count);
     ImGui::Separator();
 
     //Framerate

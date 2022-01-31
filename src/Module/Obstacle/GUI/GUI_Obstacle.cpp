@@ -36,7 +36,7 @@ void GUI_Obstacle::run(){
   //---------------------------
 
   if(ImGui::Button("run", ImVec2(100,0))){
-    ioManager->Load_obstacleData();
+    ioManager->load_obstacleData();
     obstacleManager->build_obstacleGlyph_gt(cloud);
     obstacleManager->build_obstacleGlyph_pr(cloud);
   }
