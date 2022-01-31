@@ -53,9 +53,11 @@ void Player_cloud::select_byFrameID(Cloud* cloud, int frame_id){
   else{
     if(frame_id >= cloud->nb_subset){
       frame_id = cloud->nb_subset - 1;
+      return;
     }
     if(frame_id < 0){
       frame_id = 0;
+      return;
     }
   }
 

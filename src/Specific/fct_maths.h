@@ -8,6 +8,7 @@
  */
 
 namespace{
+  //---------------------------
 
   //Basic functions
   float fct_distance(glm::vec3 pt1, glm::vec3 pt2){
@@ -410,6 +411,7 @@ namespace{
     return norm;
   }
 
+  //---------------------------
 }
 
 #endif

@@ -10,8 +10,8 @@ class Engine;
 class Filter;
 class Dimension;
 class Renderer;
-class Saver;
 class Scene;
+class Obstacle;
 
 
 class Player_online
@@ -32,7 +32,6 @@ public:
   //Save functions
   void save_image(Subset* subset);
   void save_image_path();
-  void save_lastFrame(Cloud* cloud);
 
   //Other functions
   void color_heatmap(Cloud* cloud, int i);
@@ -58,16 +57,13 @@ private:
   Filter* filterManager;
   Dimension* dimManager;
   Renderer* renderManager;
-  Saver* saverManager;
+  Obstacle* obstacleManager;
 
-  vector<string> save_path_vec;
   string screenshot_path;
   vec2 HM_height_range;
   vec2 camera_moved_trans;
   float camera_moved_rotat;
   float camera_distPos;
-  int savedFrame_ID;
-  int savedFrame_max;
 
   bool with_online;
   bool with_camera_follow;

@@ -96,7 +96,7 @@ void Glyphs::drawing(Subset* subset){
     }
 
     //OOBB - ground thruth
-    vector<Glyph*>& oobb_gt = subset->obstacle.gt_oobb;
+    vector<Glyph*>& oobb_gt = subset->obstacle_gt.oobb;
     for(int i=0; i<oobb_gt.size(); i++){
       glBindVertexArray(oobb_gt[i]->VAO);
       glLineWidth(oobb_gt[i]->draw_width);
@@ -106,7 +106,7 @@ void Glyphs::drawing(Subset* subset){
     }
 
     //OOBB - prediction
-    vector<Glyph*>& oobb_pr = subset->obstacle.pr_oobb;
+    vector<Glyph*>& oobb_pr = subset->obstacle_pr.oobb;
     for(int i=0; i<oobb_pr.size(); i++){
       glBindVertexArray(oobb_pr[i]->VAO);
       glLineWidth(oobb_pr[i]->draw_width);

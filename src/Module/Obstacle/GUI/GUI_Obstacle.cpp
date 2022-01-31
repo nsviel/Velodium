@@ -1,8 +1,11 @@
 #include "GUI_Obstacle.h"
 
 #include "../Obstacle.h"
+#include "../Obstacle_IO.h"
 
 #include "../../../Engine/Scene.h"
+#include "../../../Engine/Engine.h"
+#include "../../../Operation/Functions/CoordTransform.h"
 
 
 //Constructor / Destructor
@@ -11,6 +14,7 @@ GUI_Obstacle::GUI_Obstacle(Engine* engineManager){
 
   this->coordManager = new CoordTransform(engineManager->get_CameraManager(), engineManager->get_dimManager());
   this->obstacleManager = new Obstacle();
+  this->ioManager = obstacleManager->get_ioManager();
   this->sceneManager = new Scene();
 
   //---------------------------
@@ -28,18 +32,21 @@ void GUI_Obstacle::design_Obstacle(){
 }
 
 void GUI_Obstacle::run(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   if(ImGui::Button("run", ImVec2(100,0))){
-    obstacleManager->run();
+    ioManager->Load_obstacleData();
+    obstacleManager->build_obstacleGlyph_gt(cloud);
+    obstacleManager->build_obstacleGlyph_pr(cloud);
   }
 
   //Prediction directory
   if(ImGui::Button("...##1")){
-    obstacleManager->select_dir_path();
+    ioManager->select_dir_path();
   }
   ImGui::SameLine();
-  string dir_path = obstacleManager->get_dir_path();
+  string dir_path = ioManager->get_dir_path();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
 
   //---------------------------
@@ -49,12 +56,12 @@ void GUI_Obstacle::make_obstacleName(Subset* subset){
   label_ID = 0;
   //---------------------------
 
-  Obstac* obstacle = &subset->obstacle;
+  Obstac* obstacle_pr = &subset->obstacle_pr;
 
-  for(int j=0; j<obstacle->pr_name.size(); j++){
-    string name = obstacle->pr_name[j];
-    vec3 position = obstacle->pr_position[j];
-    position.z = obstacle->pr_dimension[j].z;
+  for(int j=0; j<obstacle_pr->name.size(); j++){
+    string name = obstacle_pr->name[j];
+    vec3 position = obstacle_pr->position[j];
+    position.z = obstacle_pr->dimension[j].z;
 
     this->drawText(name, position);
 

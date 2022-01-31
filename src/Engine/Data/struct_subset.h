@@ -65,7 +65,8 @@ struct Subset{ //Cloud subset / part
 
   //Specific structures
   Frame frame;
-  Obstac obstacle;
+  Obstac obstacle_gt;
+  Obstac obstacle_pr;
 };
 
 #endif

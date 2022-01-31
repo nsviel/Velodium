@@ -1,6 +1,11 @@
 #ifndef SYSTEM_FUNCTIONS_H
 #define SYSTEM_FUNCTIONS_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/inotify.h>
 #include <dirent.h>
 #include <random>
 #include <fstream>
@@ -13,6 +18,8 @@
  */
 
 namespace{
+  //---------------------------
+
   //Get RAM memory usage
   unsigned long long get_systemMemory(){
     long pages = sysconf(_SC_PHYS_PAGES);
@@ -150,6 +157,15 @@ namespace{
     //---------------------------
     return infile.good();
   }
+  void clean_directory_files(const char *path){
+    std::vector<std::string> path_vec = list_allFiles(path);
+    for(int i=0; i<path_vec.size(); i++){
+      string path_full = path + path_vec[i];
+      std::remove (path_full.c_str());
+    }
+  }
+
+  //---------------------------
 }
 
 #endif

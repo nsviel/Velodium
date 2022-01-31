@@ -1,13 +1,13 @@
 #ifndef GUI_OBSTACLE_H
 #define GUI_OBSTACLE_H
 
-class Scene;
-class Obstacle;
-class CoordTransform;
-
-#include "../../../Engine/Engine.h"
-#include "../../../Operation/Functions/CoordTransform.h"
 #include "../../../common.h"
+
+class Scene;
+class Engine;
+class Obstacle;
+class Obstacle_IO;
+class CoordTransform;
 
 
 class GUI_Obstacle
@@ -27,6 +27,7 @@ public:
 
 private:
   Obstacle* obstacleManager;
+  Obstacle_IO* ioManager;
   CoordTransform* coordManager;
   Scene* sceneManager;
 

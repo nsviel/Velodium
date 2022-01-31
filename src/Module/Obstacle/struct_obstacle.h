@@ -9,19 +9,11 @@
 
 
 struct Obstac{ //Obstacle detection stuff
-  //Groung thruth
-  std::vector<std::string> gt_name;
-  std::vector<glm::vec3> gt_position;
-  std::vector<glm::vec3> gt_dimension;
-  std::vector<float> gt_heading;
-  std::vector<Glyph*> gt_oobb;
-
-  //Prediction
-  std::vector<std::string> pr_name;
-  std::vector<glm::vec3> pr_position;
-  std::vector<glm::vec3> pr_dimension;
-  std::vector<float> pr_heading;
-  std::vector<Glyph*> pr_oobb;
+  std::vector<std::string> name;
+  std::vector<glm::vec3> position;
+  std::vector<glm::vec3> dimension;
+  std::vector<float> heading;
+  std::vector<Glyph*> oobb;
 };
 
 #endif

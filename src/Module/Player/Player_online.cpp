@@ -1,6 +1,8 @@
 #include "Player_online.h"
 
 #include "../SLAM/CT_ICP.h"
+#include "../Obstacle/Obstacle.h"
+#include "../Obstacle/Obstacle_IO.h"
 
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -13,10 +15,10 @@
 #include "../../Engine/Scene.h"
 
 #include "../../Load/Operation.h"
-#include "../../Load/Saver.h"
 
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
+#include "../../Specific/fct_system.h"
 
 
 //Constructor / Destructor
@@ -29,16 +31,14 @@ Player_online::Player_online(Engine* engineManager){
   this->dimManager = engineManager->get_dimManager();
   this->cticpManager = engineManager->get_cticpManager();
   this->heatmapManager = new Heatmap();
-  this->saverManager = new Saver();
   this->sceneManager = new Scene();
+  this->obstacleManager = new Obstacle();
 
   this->HM_height_range = vec2(-2.5, 1.75);
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
   this->screenshot_path = "../media/data/image/";
-  this->savedFrame_ID = 0;
-  this->savedFrame_max = 20;
 
   this->with_camera_top = false;
   this->with_camera_follow = false;
@@ -97,11 +97,10 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
       filterManager->filter_subset_cylinder(subset);
     }
 
-    //If heatmap option
+    //Colorization options
     if(with_heatmap){
       this->color_heatmap(cloud, i);
     }
-
     if(with_unicolor){
       //Don't forget to operate the first subset
       if(i == 1){
@@ -119,12 +118,14 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
 
     //With just keep n frames
     if(with_keepNframes){
-      this->save_lastFrame(cloud);
+      Obstacle_IO* ioManager = obstacleManager->get_ioManager();
+      ioManager->save_nFrame(cloud);
     }
   }
 
   //---------------------------
 }
+
 
 //Camera funtions
 void Player_online::camera_followUp(Cloud* cloud, int i){
@@ -247,30 +248,6 @@ void Player_online::save_image_path(){
   opeManager.selectDirectory(path);
 
   this->screenshot_path = path + "/";
-
-  //---------------------------
-}
-void Player_online::save_lastFrame(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
-  //---------------------------
-
-  string dirPath = "/home/aither/Desktop/truc/";
-  string filePath = dirPath + subset->name + ".ply";
-
-  saverManager->save_subset(subset, "ply", dirPath);
-
-  if(save_path_vec.size() < savedFrame_max){
-    save_path_vec.push_back(filePath);
-    savedFrame_ID++;
-  }else{
-    std::remove (save_path_vec[savedFrame_ID].c_str());
-    save_path_vec[savedFrame_ID] = filePath;
-    savedFrame_ID++;
-  }
-
-  if(savedFrame_ID >= savedFrame_max){
-    savedFrame_ID = 0;
-  }
 
   //---------------------------
 }
