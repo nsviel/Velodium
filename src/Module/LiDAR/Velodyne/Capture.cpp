@@ -42,8 +42,8 @@ void Capture::check_forNewSubset(){
     if(oneFrame){
       //Check if at least one subset was created
       if(cloud_capture->subset.size() == 0){
-        cloud_capture->subset.push_back(&subset_capture);
-        extractManager->add_subsetData(&subset_capture);
+        cloud_capture->subset.push_back(subset_capture);
+        extractManager->add_subsetData(subset_capture);
       }else{
         Subset* subset = sceneManager->get_subset(cloud_capture, 0);
         subset->xyz = subset_capture->xyz;
@@ -65,7 +65,7 @@ void Capture::check_forNewSubset(){
 
       //We include the new one into the cloud
       cloud_capture->subset.push_back(subset_capture);
-      extractManager->add_subsetData(&subset_capture);
+      extractManager->add_subsetData(subset_capture);
       cloud_capture->nb_subset = cloud_capture->subset.size();
     }
 
@@ -132,7 +132,7 @@ void Capture::create_subset(udpPacket* udp_packet, bool is_recording){
 
   if(is_recording){
     Saver saverManager;
-    saverManager.save_subset(&subset_capture, "ply", path_frameSave);
+    saverManager.save_subset(subset_capture, "ply", path_frameSave);
   }
 
   this->atLeastOne = true;

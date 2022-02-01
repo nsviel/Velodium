@@ -271,7 +271,7 @@ void Player_online::color_heatmap(Cloud* cloud, int i){
   }
 
   //Make heatmap on the current subset
-  Subset* subset_buffer = &cloud->subset_buffer[i];
+  Subset* subset_buffer = sceneManager->get_subset_buffer(cloud, i);
   heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
 
   //---------------------------
@@ -293,8 +293,8 @@ void Player_online::remove_lastFrame(Cloud* cloud, int i){
 
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
-    if(subset->ID < i - nb_frame_max){
-      sceneManager->remove_subset();
+    if(subset->ID <= i - nb_frame_max){
+      sceneManager->remove_subset(cloud, subset);
     }
   }
 

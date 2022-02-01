@@ -23,12 +23,17 @@ void Newton::init(vector<vec3>& XYZ, vector<bool>& DOF){
   }
 }
 vector<float> Newton::algo_Newton(Cloud* cloud_P, Cloud* cloud_Q, vector<bool>& DOF, vector<Uplet> idx){
-  vector<vec3>& XYZ_P_obj = cloud_P->subset[0].xyz;
-  vector<vec3>& XYZ_Q_obj = cloud_Q->subset[0].xyz;
-  vector<vec3>& XYZ_P_buf = cloud_P->subset_buffer[0].xyz;
-  vector<vec3>& XYZ_Q_buf = cloud_Q->subset_buffer[0].xyz;
-  this->init(XYZ_P_buf, DOF);
+  Subset* subset_P = *next(cloud_P->subset.begin(), 0);
+  Subset* subset_Q = *next(cloud_Q->subset.begin(), 0);
+  Subset* subset_P_buf = *next(cloud_P->subset_buffer.begin(), 0);
+  Subset* subset_Q_buf = *next(cloud_Q->subset_buffer.begin(), 0);
   //---------------------
+
+  vector<vec3>& XYZ_P_obj = subset_P->xyz;
+  vector<vec3>& XYZ_Q_obj = subset_Q->xyz;
+  vector<vec3>& XYZ_P_buf = subset_P_buf->xyz;
+  vector<vec3>& XYZ_Q_buf = subset_Q_buf->xyz;
+  this->init(XYZ_P_buf, DOF);
 
   //Compute Jacobian & Speudo-inverse
   MatrixXf J = compute_Jacobian(XYZ_P_buf, DOF);

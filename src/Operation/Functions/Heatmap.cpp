@@ -30,17 +30,19 @@ void Heatmap::set_Heatmap(Cloud* cloud){
   //Apply or reverse heatmap for cloud
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset_buf = sceneManager->get_subset_buffer(cloud, i);
+    Subset* subset_ini = sceneManager->get_subset_init(cloud, i);
 
     //Apply heatmap
     if(!is_heatmap){
       this->compute_subset_heatmap_ON(subset);
-      cloud->subset_buffer[i].RGB = subset->RGB;
+      subset_buf->RGB = subset->RGB;
     }
 
     //Reverse heatmap
     if(is_heatmap){
       this->compute_subset_heatmap_OFF(subset);
-      cloud->subset_buffer[i].RGB = cloud->subset_init[i].RGB;
+      subset_buf->RGB = subset_ini->RGB;
     }
   }
 
@@ -56,36 +58,37 @@ void Heatmap::set_Heatmap(Cloud* cloud, bool is_heatmap){
   //Apply or reverse heatmap for cloud
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset_buf = sceneManager->get_subset_buffer(cloud, i);
 
     //Apply heatmap
     if(is_heatmap == true){
       this->compute_subset_heatmap_ON(subset);
-      cloud->subset_buffer[i].RGB = subset->RGB;
+      subset_buf->RGB = subset->RGB;
     }
 
     //Reverse heatmap
     if(is_heatmap == false){
       this->compute_subset_heatmap_OFF(subset);
-      cloud->subset_buffer[i].RGB = subset->RGB;
+      subset_buf->RGB = subset->RGB;
     }
   }
 
   //---------------------------
   sceneManager->update_cloud_color(cloud);
 }
-void Heatmap::set_Heatmap(Subset* subset, Subset* subset_buffer, bool is_heatmap){
+void Heatmap::set_Heatmap(Subset* subset, Subset* subset_buf, bool is_heatmap){
   //---------------------------
 
   //Apply heatmap
   if(is_heatmap == true){
     this->compute_subset_heatmap_ON(subset);
-    subset_buffer->RGB = subset->RGB;
+    subset_buf->RGB = subset->RGB;
   }
 
   //Reverse heatmap
   if(is_heatmap == false){
     this->compute_subset_heatmap_OFF(subset);
-    subset_buffer->RGB = subset->RGB;
+    subset_buf->RGB = subset->RGB;
   }
 
   //---------------------------

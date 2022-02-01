@@ -80,13 +80,13 @@ void CT_ICP::compute_slam(Cloud* cloud){
   //---------------------------
 }
 void CT_ICP::compute_slam_online(Cloud* cloud, int i){
-  Subset* subset = sceneManager->get_subset(cloud, i);
-  Frame* frame = &subset->frame;
+  Frame* frame = sceneManager->get_frame(cloud, i);
 
   if(frame->is_slamed == false && i >= map_frame_begin_ID){
     tic();
     //---------------------------
 
+    Subset* subset = sceneManager->get_subset(cloud, i);
     Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
     Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
 
@@ -319,14 +319,15 @@ void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, S
 
   Transforms transformManager;
   vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
-  vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
-  vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
 
   vec3 rotat_rlt;
   if(frame->ID == 0){
     rotat_rlt = vec3(0, 0, 0);
   }
   else{
+    vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
+    vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
+
     rotat_rlt.x = f0_rotat.x - f0_rotat.x;
     rotat_rlt.y = f0_rotat.y - f1_rotat.y;
     rotat_rlt.z = f0_rotat.z - f1_rotat.z;

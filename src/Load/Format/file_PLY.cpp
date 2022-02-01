@@ -66,7 +66,7 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
 
   if (ply_format == "ascii"){
     for(int i=0; i<cloud->nb_subset; i++){
-      Subset* subset = sceneManager->get_subset(cloud, i);
+      Subset* subset = *next(cloud->subset.begin(), i);
 
       //Open file
       std::ofstream file(pathFile);
@@ -82,7 +82,7 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
   }
   else if (format == "binary" || format == "binary_little_endian"){
     for(int i=0; i<cloud->nb_subset; i++){
-      Subset* subset = sceneManager->get_subset(cloud, i);
+      Subset* subset = *next(cloud->subset.begin(), i);
       format = "binary_little_endian";
 
       //Open file

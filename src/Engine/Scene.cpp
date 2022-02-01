@@ -64,39 +64,42 @@ void Scene::remove_cloud_all(){
 
   //---------------------------
 }
-void Scene::remove_subset(){
+void Scene::remove_subset(Cloud* cloud, Subset* subset){
   //---------------------------
+
+  //Delete subset iterator in cloud
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset_cloud = *next(cloud->subset.begin(), i);
+
+    if(subset->name == subset_cloud){
+      Subset* subset_buf = get_subset_buffer(cloud, i);
+      Subset* subset_ini = get_subset_init(cloud, i);
+
+      list<Subset*>::iterator it = next(cloud->subset.begin(), i);
+      list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), i);
+      list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), i);
+
+      cloud->subset.erase(it);
+      cloud->subset.erase(it_buf);
+      cloud->subset.erase(it_ini);
+
+      delete subset;
+      delete subset_buf;
+      delete subset_ini;
+
+      break;
+    }
+  }
+
+  //If there is any more subset, remove cloud
+  if(cloud->subset.size() == 0){
+    remove_cloud(cloud);
+  }
 
   //---------------------------
 }
 
-Subset* Scene::get_subset(Cloud* cloud, int i){
-  //---------------------------
-
-  Subset* subset = *next(cloud->subset.begin(), i);
-
-  //---------------------------
-  return subset;
-}
-Subset* Scene::get_subset_buffer(Cloud* cloud, int i){
-  //---------------------------
-
-  Subset* subset = *next(cloud->subset_buffer.begin(), i);
-
-  //---------------------------
-  return subset;
-}
-Frame* Scene::get_frame(Cloud* cloud, int i){
-  //---------------------------
-
-  Subset* subset = *next(cloud->subset.begin(), i);
-  Frame* frame = &subset->frame;
-
-  //---------------------------
-  return frame;
-}
-
-//Updating
+//Updating - cloud
 void Scene::update_cloud_glyphs(Cloud* cloud){
   if(cloud == nullptr)return;
   //---------------------------
@@ -140,6 +143,7 @@ void Scene::update_cloud_reset(Cloud* cloud){
 
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = get_subset(cloud, i);
+    Subset* subset_init = get_subset_init(cloud, i);
 
     //Reinitialize visibility
     if(i == 0){
@@ -149,9 +153,9 @@ void Scene::update_cloud_reset(Cloud* cloud){
     }
 
     //Reinitialize main data
-    subset->xyz = cloud->subset_init[i].xyz;
-    subset->RGB = cloud->subset_init[i].RGB;
-    subset->N = cloud->subset_init[i].N;
+    subset->xyz = subset_init->xyz;
+    subset->RGB = subset_init->RGB;
+    subset->N = subset_init->N;
 
     //Reset additional data
     subset->R.clear();
@@ -217,6 +221,7 @@ void Scene::update_cloud_color(Cloud* cloud){
   //---------------------------
 }
 
+//Updating - subset
 void Scene::update_subset_glyphs(Subset* subset){
   //---------------------------
 
@@ -384,7 +389,49 @@ void Scene::selection_cloudByName(string name){
   //---------------------------
 }
 
-//Specific functions
+//Assesseurs
+Subset* Scene::get_subset(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Subset* Scene::get_subset_buffer(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset_buffer.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Subset* Scene::get_subset_init(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset_init.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Subset* Scene::get_subset_selected_init(){
+  Cloud* cloud = database.cloud_selected;
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset_init.begin(), cloud->subset_selected);
+
+  //---------------------------
+  return subset;
+}
+Frame* Scene::get_frame(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset.begin(), i);
+  Frame* frame = &subset->frame;
+
+  //---------------------------
+  return frame;
+}
 vector<string> Scene::get_nameByOrder(){
   vector<string> nameByOrder;
   //---------------------------
@@ -458,7 +505,7 @@ int Scene::get_subset_selected_ID(){
   //---------------------------
 
   if(cloud != nullptr){
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = get_subset_selected();
     return subset->ID;
   }
   else{
@@ -545,6 +592,7 @@ void Scene::set_cloudVisibility(Cloud* cloud, bool visibleON){
   //---------------------------
 }
 
+//Check state functions
 bool Scene::is_cloudExist(Cloud* cloud_in){
   //---------------------------
 

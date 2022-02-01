@@ -126,7 +126,7 @@ bool Loader::load_cloud_creation(Cloud* cloud_in){
 
   //Take input data
   for(int i=0; i<cloud_in->subset.size(); i++){
-    Subset* subset = &cloud_in->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud_in, i);
     dataFile* data = new dataFile();
     data->path = cloud_in->path;
 

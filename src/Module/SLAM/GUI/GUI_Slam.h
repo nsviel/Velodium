@@ -4,6 +4,7 @@
 #include "../../../common.h"
 
 class Engine;
+class Scene;
 class CT_ICP;
 
 class SLAM_optim_ceres;
@@ -38,6 +39,7 @@ public:
   inline CT_ICP* get_cticpManager(){return cticpManager;}
 
 private:
+  Scene* sceneManager;
   CT_ICP* cticpManager;
 
   SLAM_optim_ceres* ceresManager;

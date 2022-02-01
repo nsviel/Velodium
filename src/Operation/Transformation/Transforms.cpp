@@ -25,7 +25,7 @@ void Transforms::make_translation(Cloud* cloud, vec3 trans){
 
   //Apply
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     if(subset->visibility){
       subset->trans *= translation;
@@ -66,7 +66,7 @@ void Transforms::make_rotation(Cloud* cloud, vec3 COM, vec3 angles){
 
   //Apply
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     if(subset->visibility){
       subset->rotat *= rotation;
@@ -81,7 +81,7 @@ void Transforms::make_scaling(Cloud* cloud, float Sxyz){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     if(subset->visibility){
       //Reverso old scaling
@@ -208,23 +208,27 @@ void Transforms::make_Transformation_normal(vector<vec3>& N, mat4 Transformation
 
 //Specific transformation functions
 void Transforms::make_centering(Cloud* cloud){
-  vec3 COM = cloud->subset[0].COM;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vec3 COM = subset->COM;
   //---------------------------
 
   //Cancel Center of mass from actual position
   this->make_translation(cloud, vec3(-COM.x,-COM.y,-COM.z));
 
   //Set min(Z) as corresponding to 0
-  vec3 min = fct_min_vec3(cloud->subset[0].xyz);
+  vec3 min = fct_min_vec3(subset->xyz);
   this->make_translation(cloud, vec3(0,0,-min[2]));
 
   //---------------------------
   console.AddLog("#", "Point cloud centered");
 }
 void Transforms::make_elevation(Cloud* cloud, float Z){
-  vector<vec3>& XYZ_ini = cloud->subset_init[0].xyz;
-  vector<vec3>& XYZ = cloud->subset[0].xyz;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->subset_selected);
   //---------------------------
+
+  vector<vec3>& XYZ = subset->xyz;
+  vector<vec3>& XYZ_ini = subset_init->xyz;
 
   for(int i=0; i<XYZ.size(); i++){
     XYZ[i].z = XYZ_ini[i].z + Z;
@@ -233,10 +237,11 @@ void Transforms::make_elevation(Cloud* cloud, float Z){
   //---------------------------
 }
 float Transforms::make_orientAxis_X(Cloud* cloud){
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
   //---------------------------
 
   //Retrieve A & B points
-  vector<vec3>& XYZ = cloud->subset[0].xyz;
+  vector<vec3>& XYZ = subset->xyz;
   vec3 A = XYZ[0];
   vec3 B = XYZ[0];
   for(int i=0; i<XYZ.size(); i++){
@@ -255,13 +260,14 @@ float Transforms::make_orientAxis_X(Cloud* cloud){
 
   //Align with x axis
   vec3 rotation = vec3(0, 0, angle);
-  this->make_rotation(cloud, cloud->subset[0].COM, rotation);
+  this->make_rotation(cloud, subset->COM, rotation);
 
   //---------------------------
   return angle;
 }
 void Transforms::make_alignAxis_X(Cloud* cloud){
-  vector<vec3>& XYZ = cloud->subset[0].xyz;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vector<vec3>& XYZ = subset->xyz;
   //---------------------------
 
   for(int i=0; i<XYZ.size(); i++){
@@ -271,6 +277,7 @@ void Transforms::make_alignAxis_X(Cloud* cloud){
   //---------------------------
 }
 float Transforms::make_alignAxisX_AB(Cloud* cloud, vec3 A, vec3 B){
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
   //---------------------------
 
   //Determination of angle with x axis
@@ -280,12 +287,13 @@ float Transforms::make_alignAxisX_AB(Cloud* cloud, vec3 A, vec3 B){
 
   //Align with x axis
   vec3 rotation = vec3(0, 0, angle);
-  this->make_rotation(cloud, cloud->subset[0].COM, rotation);
+  this->make_rotation(cloud, subset->COM, rotation);
 
   //---------------------------
   return angle;
 }
 float Transforms::make_alignAxisY_AB(Cloud* cloud, vec3 A, vec3 B){
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
   //---------------------------
 
   //Determination of angle with x axis
@@ -295,7 +303,7 @@ float Transforms::make_alignAxisY_AB(Cloud* cloud, vec3 A, vec3 B){
 
   //Align with x axis
   vec3 rotation = vec3(0, 0, angle);
-  this->make_rotation(cloud, cloud->subset[0].COM, rotation);
+  this->make_rotation(cloud, subset->COM, rotation);
 
   //---------------------------
   return angle;
@@ -303,7 +311,8 @@ float Transforms::make_alignAxisY_AB(Cloud* cloud, vec3 A, vec3 B){
 
 //Position functions
 void Transforms::make_positionning(Cloud* cloud, vec3 pos){
-  vec3& COM = cloud->subset[0].COM;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vec3& COM = subset->COM;
   //---------------------------
 
   vec3 diff;
@@ -315,7 +324,8 @@ void Transforms::make_positionning(Cloud* cloud, vec3 pos){
   this->make_translation(cloud, diff);
 }
 void Transforms::make_positionning_XY(Cloud* cloud, vec3 pos){
-  vec3& COM = cloud->subset[0].COM;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vec3& COM = subset->COM;
   //---------------------------
 
   vec3 diff;
@@ -358,7 +368,8 @@ void Transforms::make_positionning_glyph(vector<vec3>& XYZ, vec3& COM, vec3 pos)
 
 //Operations
 float Transforms::fct_soilDetermination(Cloud* cloud){
-  vector<vec3>& XYZ = cloud->subset[0].xyz;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vector<vec3>& XYZ = subset->xyz;
   //---------------------------
 
   //Retrieve Z coordinates from XYZ
@@ -383,8 +394,9 @@ float Transforms::fct_soilDetermination(Cloud* cloud){
   return Z_soil;
 }
 void Transforms::fct_adjustPosToScanner(Cloud* cloud, float Z_scan){
-  vector<vec3>& XYZ = cloud->subset[0].xyz;
-  vec3& min = cloud->subset[0].min;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vector<vec3>& XYZ = subset->xyz;
+  vec3& min = subset->min;
   float Z_soil = fct_soilDetermination(cloud);
   //---------------------------
 
@@ -488,8 +500,9 @@ mat4 Transforms::compute_transformMatrix(Subset* subset, vec3 COM, mat4 transfor
   return transMat;
 }
 vec3 Transforms::compute_anglesError(Cloud* cloud){
-  mat4 matReal = cloud->subset[0].transformation;//.RealTransformation;
-  mat4 matIcp = cloud->subset[0].transformation;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  mat4 matReal = subset->transformation;//.RealTransformation;
+  mat4 matIcp = subset->transformation;
   vec3 angleReal = this->compute_anglesFromTransformationMatrix(matReal);
   vec3 angleIcp = this->compute_anglesFromTransformationMatrix(matIcp);
   //---------------------------
@@ -504,8 +517,9 @@ vec3 Transforms::compute_anglesError(Cloud* cloud){
   return error;
 }
 vec3 Transforms::compute_translationsError(Cloud* cloud){
-  mat4 matReal = cloud->subset[0].transformation; //.RealTransformation;
-  mat4 matIcp = cloud->subset[0].transformation;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  mat4 matReal = subset->transformation; //.RealTransformation;
+  mat4 matIcp = subset->transformation;
   vec3 transReal = this->compute_translFromTransformationMatrix(matReal);
   vec3 transIcp = this->compute_translFromTransformationMatrix(matIcp);
   //---------------------------
@@ -563,8 +577,9 @@ vec3 Transforms::compute_translFromTransformationMatrix(const mat4& mat){
   return translation;
 }
 vector<vec3> Transforms::compute_transformcloud_XYZ(Cloud* cloud, mat4 Mat){
-  vec3& COM = cloud->subset[0].COM;
-  vector<vec3> XYZ = cloud->subset[0].xyz;
+  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
+  vec3& COM = subset->COM;
+  vector<vec3> XYZ = subset->xyz;
   //---------------------------
 
   //Application of the Transformation

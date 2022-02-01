@@ -32,7 +32,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
   this->init_cloudParameters(cloud, data);
 
   for(int i=0; i<data.size(); i++){
-    Subset subset;
+    Subset* subset = new Subset();
 
     this->check_data(data[i]);
     this->init_subsetParameters(subset, data[i]->name, i);
@@ -53,11 +53,14 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
 
     //Create associated glyphs
     Glyphs glyphManager;
-    glyphManager.create_glyph_fromCloud(&subset);
+    glyphManager.create_glyph_fromCloud(subset);
 
-    cloud->subset->push_back(subset);
-    cloud->subset_buffer.push_back(subset);
-    cloud->subset_init.push_back(subset);
+    Subset* subset_buf = new Subset(*subset);
+    Subset* subset_ini = new Subset(*subset);
+
+    cloud->subset.push_back(subset);
+    cloud->subset_buffer.push_back(subset_buf);
+    cloud->subset_init.push_back(subset_ini);
   }
 
   //---------------------------
@@ -80,13 +83,13 @@ Subset* dataExtraction::extractData(udpPacket* data, int ID){
 
   //Create associated glyphs
   Glyphs glyphManager;
-  glyphManager.create_glyph_fromCloud(&subset);
+  glyphManager.create_glyph_fromCloud(subset);
 
   //---------------------------
   return subset;
 }
 void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
-  Subset subset;
+  Subset* subset = new Subset();
   //---------------------------
 
   this->check_data(data);
@@ -102,9 +105,9 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
 
   //Create associated glyphs
   Glyphs glyphManager;
-  glyphManager.create_glyph_fromCloud(&subset);
+  glyphManager.create_glyph_fromCloud(subset);
 
-  cloud->subset->push_back(subset);
+  cloud->subset.push_back(subset);
   cloud->subset_init.push_back(subset);
   cloud->subset_buffer.push_back(subset);
   cloud->nb_subset++;
@@ -112,7 +115,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   //---------------------------
 }
 void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
-  Subset subset;
+  Subset* subset = new Subset();
   //---------------------------
 
   this->check_data(data);
@@ -132,15 +135,21 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
   this->extract_Normal(subset, data->normal);
   this->extract_Timestamp(subset, data->timestamp);
 
-  if(cloud->subset->size() == 0){
-    cloud->subset->push_back(subset);
+  if(cloud->subset.size() == 0){
+    cloud->subset.push_back(subset);
     cloud->subset_buffer.push_back(subset);
     cloud->subset_init.push_back(subset);
+
     cloud->nb_subset = 1;
   }else{
-    cloud->subset[0] = subset;
-    cloud->subset_buffer[0] = subset;
-    cloud->subset_init[0] = subset;
+    Subset* subset_m0 = sceneManager->get_subset(cloud, 0);
+    Subset* subset_buffer_m0 = sceneManager->get_subset_buffer(cloud, 0);
+    Subset* subset_init_m0 = sceneManager->get_subset_init(cloud, 0);
+
+    subset_m0 = subset;
+    subset_buffer_m0 = subset;
+    subset_init_m0 = subset;
+
     cloud->nb_subset = 1;
   }
 

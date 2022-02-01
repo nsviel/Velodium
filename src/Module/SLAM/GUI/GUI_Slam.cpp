@@ -19,6 +19,8 @@ extern struct Database database;
 GUI_Slam::GUI_Slam(Engine* engineManager){
   //---------------------------
 
+  this->sceneManager = new Scene();
+
   this->cticpManager = engineManager->get_cticpManager();
   this->ceresManager = cticpManager->get_SLAM_optim_ceres();
   this->gnManager = cticpManager->get_SLAM_optim_gn();
@@ -49,16 +51,13 @@ void GUI_Slam::compute(){
 
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Compute", ImVec2(item_width,0))){
-    Scene sceneManager;
-
     if(cloud != nullptr){
-      sceneManager.update_cloud_reset(cloud);
+      sceneManager->update_cloud_reset(cloud);
       cticpManager->compute_slam(cloud);
 
-      sceneManager.update_cloud_location(cloud);
-      sceneManager.update_cloud_glyphs(cloud);
+      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_cloud_glyphs(cloud);
     }
-
   }
   ImGui::PopStyleColor(1);
 
@@ -304,7 +303,6 @@ void GUI_Slam::parameters_robustesse(){
   }
 }
 void GUI_Slam::statistics(){
-  Cloud* cloud = database.cloud_selected;
   //---------------------------
 
   float time = 0;
@@ -315,8 +313,9 @@ void GUI_Slam::statistics(){
   int map_size_abs = 0;
   int map_size_rlt = 0;
 
-  if(cloud != nullptr){
-    Frame* frame = &cloud->subset[cloud->subset_selected].frame;
+  if(sceneManager->is_atLeastOnecloud()){
+    Subset* subset = sceneManager->get_subset_selected();
+    Frame* frame = &subset->frame;
 
     time = frame->time_slam;
     trans_abs = frame->trans_abs;

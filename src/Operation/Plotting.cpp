@@ -955,6 +955,7 @@ void Plotting::plot_2Dmap(MatrixXf HM, vector<float>& R_map, vector<float>& cosI
   //---------------------------
 }
 void Plotting::plot_PointCloud(Cloud* cloud){
+  Subset* subset = *next(cloud->subset.begin(), 0);
   Gnuplot gp;
   //---------------------------
 
@@ -971,8 +972,8 @@ void Plotting::plot_PointCloud(Cloud* cloud){
   gp << "set yrange [0:1]\n";
   gp << "set zrange [0:1]\n";
 
-  vector<float>& I = cloud->subset[0].I;
-  vector<vec3>& XYZ = cloud->subset[0].xyz;
+  vector<float>& I = subset->I;
+  vector<vec3>& XYZ = subset->xyz;
   vector<float> X, Y, Z;
   for(int i=0; i<XYZ.size(); i++){
     X.push_back(XYZ[i].x);

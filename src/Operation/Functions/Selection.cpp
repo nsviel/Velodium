@@ -52,6 +52,7 @@ void Selection::validate(){
   if(sceneManager->is_atLeastOnecloud()){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset_init = sceneManager->get_subset_selected_init();
     list<int>& idx = subset->highlighted;
     //---------------------------
 
@@ -62,7 +63,7 @@ void Selection::validate(){
       attribManager->compute_normals(subset);
       vec3 rotation = vec3(0, 0, -angle);
       transformManager->make_rotation(cloud, subset->COM, rotation);
-      cloud->subset_init[0].N = subset->N;
+      subset_init->N = subset->N;
       sceneManager->update_cloud_location(cloud);
     }
 
@@ -90,6 +91,7 @@ void Selection::mark_pointCreation(vec3 point){
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset_init = sceneManager->get_subset_selected_init();
 
     vector<vec3>& XYZ = subset->xyz;
 
@@ -98,7 +100,7 @@ void Selection::mark_pointCreation(vec3 point){
          point.y <= XYZ[j].y + err && point.y >= XYZ[j].y - err &&
          point.z <= XYZ[j].z + err && point.z >= XYZ[j].z - err){
         vector<float>& Is = subset->I;
-        const vector<float>& Is_ini = cloud->subset_init[0].I;
+        const vector<float>& Is_ini = subset_init->I;
         vector<float>& It = subset->It;
 
         //Give information about point
@@ -214,7 +216,8 @@ void Selection::mark_pointColor(Cloud* ptMark, int num){
     }
   }
 
-  vector<vec4>& RGB = ptMark->subset[0].RGB;
+  Subset* subset = *next(ptMark->subset.begin(), 0);
+  vector<vec4>& RGB = subset->RGB;
   for(int i=0; i<RGB.size(); i++){
     RGB[i] = vec4(R, G, B, 1.0f);
   }
@@ -364,36 +367,37 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     point2.y = pt;
   }
 
+  //Search and colorize selected points
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
     for(int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = *next(cloud->subset.begin(), i);
+      Subset* subset = *next(cloud->subset.begin(), j);
+      Subset* subset_buf = *next(cloud->subset_buffer.begin(), j);
 
       if(subset->visibility){
         vector<vec3>& XYZ = subset->xyz;
         vector<vec4>& RGB = subset->RGB;
         vector<int>& idx = subset->selected;
-        vector<vec4>& RGB_buf = cloud->subset_buffer[j].RGB;
+        vector<vec4>& RGB_buf = subset_buf->RGB;
         idx.clear();
 
         //Make selection
-        for(int j=0; j<XYZ.size(); j++){
-          vec2 projPT = coordTransManager->WorldToScreen(XYZ[j]);
+        for(int k=0; k<XYZ.size(); k++){
+          vec2 projPT = coordTransManager->WorldToScreen(XYZ[k]);
 
           if(projPT.x >= point1.x && projPT.y >= point1.y && projPT.x <= point2.x && projPT.y <= point2.y){
-            RGB[j] = vec4(1.0f,1.0f,1.0f,1.0f);
-            idx.push_back(j);
+            RGB[k] = vec4(1.0f,1.0f,1.0f,1.0f);
+            idx.push_back(k);
           }else{
-            RGB[j] = RGB_buf[j];
+            RGB[k] = RGB_buf[k];
           }
         }
+
+        sceneManager->update_subset_color(subset);
       }
-
     }
-
-    sceneManager->update_cloud_color(cloud);
   }
 
   //Supress frame glyph

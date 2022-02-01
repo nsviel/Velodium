@@ -20,8 +20,7 @@ void file_JSON::parse_json_obstacle(Cloud* cloud, vector<string> paths, string d
   if(paths.size() != cloud->subset.size()) return;
 
   for(int i=0; i<cloud->subset.size(); i++){
-    //ieme subset
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     //ieme json frame name
     for(int j=0; j<paths.size(); j++){

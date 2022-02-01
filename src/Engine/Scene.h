@@ -20,7 +20,7 @@ public:
   //Remove functions
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
-  void remove_subset();
+  void remove_subset(Cloud* cloud, Subset* subset);
 
   //Update data
   void update_cloud_glyphs(Cloud* cloud);
@@ -50,9 +50,11 @@ public:
   vector<string> get_nameByOrder();
   Subset* get_subset(Cloud* cloud, int i);
   Subset* get_subset_buffer(Cloud* cloud, int i);
+  Subset* get_subset_init(Cloud* cloud, int i);
   Frame* get_frame(Cloud* cloud, int i);
   Subset* get_visibleSubset();
   Subset* get_subset_selected();
+  Subset* get_subset_selected_init();
   Cloud* get_cloud_selected();
   Cloud* get_othercloud();
   Cloud* get_cloudByName(string name);

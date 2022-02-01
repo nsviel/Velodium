@@ -519,6 +519,7 @@ void GUI_windows::window_normal(){
     ImGui::Begin("Attributs", &window_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->subset_selected);
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -552,6 +553,7 @@ void GUI_windows::window_normal(){
       if(cloud != nullptr){
         //---------------------------
         Subset* subset = sceneManager->get_subset_selected();
+        Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->subset_selected);
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);
@@ -574,19 +576,19 @@ void GUI_windows::window_normal(){
           attribManager->compute_normals_planXaxis(subset);
           vec3 rotation = vec3(0, 0, -angle);
           transformManager.make_rotation(cloud, vec3(0,0,0), rotation);
-          cloud->subset_init[0].N = subset->N;
+          subset_init->N = subset->N;
           sceneManager->update_cloud_location(cloud);
         }
 
         if(normalMethod == 5){
           attribManager->compute_normals_planYaxis(subset);
-          cloud->subset_init[0].N = subset->N;
+          subset_init->N = subset->N;
           sceneManager->update_subset_location(subset);
         }
 
         if(normalMethod == 6){
           attribManager->compute_normals_planZaxis(subset);
-          cloud->subset_init[0].N = subset->N;
+          subset_init->N = subset->N;
           sceneManager->update_cloud_location(cloud);
         }
 
@@ -625,19 +627,19 @@ void GUI_windows::window_normal(){
             attribManager->compute_normals_planXaxis(subset);
             vec3 rotation = vec3(0, 0, -angle);
             transformManager.make_rotation(cloud, vec3(0,0,0), rotation);
-            cloud->subset_init[0].N = subset->N;
+            subset_init->N = subset->N;
             sceneManager->update_subset_location(subset);
           }
 
           if(normalMethod == 5){
             attribManager->compute_normals_planYaxis(subset);
-            cloud->subset_init[0].N = subset->N;
+            subset_init->N = subset->N;
             sceneManager->update_subset_location(subset);
           }
 
           if(normalMethod == 6){
             attribManager->compute_normals_planZaxis(subset);
-            cloud->subset_init[0].N = subset->N;
+            subset_init->N = subset->N;
             sceneManager->update_subset_location(subset);
           }
 
@@ -674,6 +676,7 @@ void GUI_windows::window_intensity(){
     ImGui::Begin("Intensity", &window_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset_init = sceneManager->get_subset_selected_init();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity functions");
@@ -708,7 +711,7 @@ void GUI_windows::window_intensity(){
     ImGui::Text("Selection intensity");
     static float min = 0, max = 1;
     if(ImGui::DragFloatRange2("##123321", &min, &max, 0.001f, 0.00f, 1.0f, "%.3f", "%.3f")){
-      subset->I = cloud->subset_init[0].I;
+      subset->I = subset_init->I;
       attribManager->fct_IsRange(vec2(min, max));
     }
 
@@ -744,7 +747,7 @@ void GUI_windows::window_intensity(){
     //Reconvert intensity
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scaling");
     if(ImGui::Button("Restore I initial", ImVec2(200,0))){
-      subset->I = cloud->subset_init[0].I;
+      subset->I = subset_init->I;
       sceneManager->update_subset_IntensityToColor(subset);
     }
     if(ImGui::Button("I:255->2048", ImVec2(100,0))){
@@ -920,7 +923,7 @@ void GUI_windows::window_selection(){
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(cloud != nullptr){
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
+        Subset* subset_init = sceneManager->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
       }
     }
@@ -1040,7 +1043,7 @@ void GUI_windows::window_extractCloud(){
     if(ImGui::Checkbox("Hightligth", highlightON)){
       if(cloud != nullptr){
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
+        Subset* subset_init = sceneManager->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
       }
     }
@@ -1089,7 +1092,7 @@ void GUI_windows::window_extractCloud(){
         //Reset color
         *highlightON = false;
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
+        Subset* subset_init = sceneManager->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
 
         //Extract cloud
@@ -1141,7 +1144,7 @@ void GUI_windows::window_cutCloud(){
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(cloud != nullptr){
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
+        Subset* subset_init = sceneManager->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
       }
     }
@@ -1191,7 +1194,7 @@ void GUI_windows::window_cutCloud(){
         //Reset color
         *highlightON = false;
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
+        Subset* subset_init = sceneManager->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
 
         //Cut cloud
@@ -1204,7 +1207,7 @@ void GUI_windows::window_cutCloud(){
         //Reset color
         *highlightON = false;
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
+        Subset* subset_init = sceneManager->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
 
         //Cut clouds
