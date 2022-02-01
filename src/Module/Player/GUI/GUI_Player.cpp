@@ -95,10 +95,10 @@ void GUI_Player::player_run(){
 
   //Range of displayed frames
   int subset_selected_ID = sceneManager->get_subset_selected_ID();
-  int* frame_max_nb = playerManager->get_frame_max_nb();
+  int frame_max_nb = cloud->nb_subset - 1;
   int* frame_range = playerManager->get_player_frame_range();
   ImGui::SetNextItemWidth(140);
-  if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, *frame_max_nb)){
+  if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, frame_max_nb)){
     if(cloud != nullptr){
       playerManager->select_byFrameID(cloud, subset_selected_ID);
     }
@@ -131,7 +131,6 @@ void GUI_Player::player_mouse(){
   if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
     if(cloud != nullptr){
       int subset_selected_ID = sceneManager->get_subset_selected_ID();
-      playerManager->update_player_params(cloud);
 
       if(io.MouseWheel > 0){
         subset_selected_ID++;
@@ -150,19 +149,18 @@ void GUI_Player::player_selection(){
   //---------------------------
 
   if(cloud != nullptr){
-    playerManager->update_player_params(cloud);
+    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset_first = sceneManager->get_subset(cloud, 0);
+    Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
     int subset_selected_ID = sceneManager->get_subset_selected_ID();
-    int* frame_max_ID = playerManager->get_frame_max_ID();
 
     ImGui::SetNextItemWidth(140);
-    if(ImGui::SliderInt("##666", &subset_selected_ID, 0, *frame_max_ID)){
+    if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
       if(cloud != nullptr){
         playerManager->select_byFrameID(cloud, subset_selected_ID);
       }
     }
     ImGui::SameLine();
-
-    Subset* subset = sceneManager->get_subset_selected();
     ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", subset->ts[0]);
   }
 

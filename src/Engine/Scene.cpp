@@ -27,6 +27,12 @@ void Scene::remove_cloud(Cloud* cloud){
     //Keep trace of the ID order
     this->selection_setCloud(oID);
 
+    //Delete subsets
+    for(int i=0; i<cloud->nb_subset; i++){
+      Subset* subset = *next(cloud->subset.begin(), i);
+      this->remove_subset(cloud, subset);
+    }
+
     //Delete cloud
     delete database.cloud_selected;
 
@@ -71,10 +77,16 @@ void Scene::remove_subset(Cloud* cloud, Subset* subset){
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset_cloud = *next(cloud->subset.begin(), i);
 
-    if(subset->name == subset_cloud){
+    if(subset->ID == subset_cloud->ID){
+      //Supress subset objects
       Subset* subset_buf = get_subset_buffer(cloud, i);
       Subset* subset_ini = get_subset_init(cloud, i);
 
+      delete subset;
+      delete subset_buf;
+      delete subset_ini;
+
+      //Supress subset iterators
       list<Subset*>::iterator it = next(cloud->subset.begin(), i);
       list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), i);
       list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), i);
@@ -82,10 +94,6 @@ void Scene::remove_subset(Cloud* cloud, Subset* subset){
       cloud->subset.erase(it);
       cloud->subset.erase(it_buf);
       cloud->subset.erase(it_ini);
-
-      delete subset;
-      delete subset_buf;
-      delete subset_ini;
 
       break;
     }
@@ -97,6 +105,7 @@ void Scene::remove_subset(Cloud* cloud, Subset* subset){
   }
 
   //---------------------------
+  cloud->nb_subset = cloud->subset.size();
 }
 
 //Updating - cloud
@@ -176,6 +185,8 @@ void Scene::update_cloud_reset(Cloud* cloud){
     //Reset frame
     subset->frame.reset();
   }
+
+  cloud->subset_selected = 0;
 
   //---------------------------
   this->update_cloud_glyphs(cloud);

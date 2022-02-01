@@ -18,11 +18,7 @@ Player_cloud::Player_cloud(Player_online* online){
   this->sceneManager = new Scene();
   this->timerManager = new Timer();
 
-  this->frame_max_ID = 0;
-  this->frame_max_nb = 0;
-  this->frame_ID_ts = 0;
   this->frame_display_range = 15;
-
   this->player_frequency = 10;
   this->player_isrunning = false;
   this->player_ispaused = false;
@@ -40,13 +36,15 @@ Player_cloud::~Player_cloud(){}
 void Player_cloud::select_byFrameID(Cloud* cloud, int frame_ID){
   //---------------------------
 
-  this->select_rangeLimit(cloud, frame_ID);
-  this->select_setVisibility(cloud, frame_ID);
-  onlineManager->compute_onlineOpe(cloud, frame_ID);
+  bool range_ok = select_rangeLimit(cloud, frame_ID);
+  if(range_ok){
+    this->select_setVisibility(cloud, frame_ID);
+    onlineManager->compute_onlineOpe(cloud, frame_ID);
+  }
 
   //---------------------------
 }
-void Player_cloud::select_rangeLimit(Cloud* cloud, int& frame_ID){
+bool Player_cloud::select_rangeLimit(Cloud* cloud, int& frame_ID){
   //---------------------------
 
   //If frame desired ID is superior to the number of subset restart it
@@ -61,27 +59,23 @@ void Player_cloud::select_rangeLimit(Cloud* cloud, int& frame_ID){
   else{
     if(frame_ID >= cloud->nb_subset){
       frame_ID = cloud->nb_subset - 1;
-      return;
+      return false;
     }
     if(frame_ID < 0){
       frame_ID = 0;
-      return;
+      return false;
     }
   }
-
-  //---------------------------
-}
-void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
-  Subset* subset = sceneManager->get_subset(cloud, frame_ID);
-  //---------------------------
 
   //Set visibility parameter for each cloud subset
   cloud->subset_selected = frame_ID;
 
-  //Check if subset has timestamp data
-  if(subset->ts.size() != 0){
-    this->frame_ID_ts = subset->ts[0];
-  }
+  //---------------------------
+  return true;
+}
+void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
+  Subset* subset = sceneManager->get_subset(cloud, frame_ID);
+  //---------------------------
 
   //Unset alll other subset visibility
   for(int i=0; i<cloud->nb_subset; i++){
@@ -97,20 +91,6 @@ void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
       Subset* subset = sceneManager->get_subset(cloud, trained_frame);
       subset->visibility = true;
     }
-  }
-
-  //---------------------------
-}
-void Player_cloud::update_player_params(Cloud* cloud){
-  //---------------------------
-
-  //If no cloud present
-  if(cloud == nullptr){
-    this->frame_max_ID = 0;
-    this->frame_max_nb = 0;
-  }else{
-    this->frame_max_ID = cloud->nb_subset - 1;
-    this->frame_max_nb = cloud->nb_subset;
   }
 
   //---------------------------

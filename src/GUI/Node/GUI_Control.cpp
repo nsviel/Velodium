@@ -255,7 +255,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -265,7 +265,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -275,7 +275,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -285,7 +285,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -295,7 +295,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -305,7 +305,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_translation(subset, translation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -316,7 +316,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }
@@ -327,7 +327,7 @@ void GUI_control::control_keyboard_translation(){
 
         transformManager.make_rotation(subset, vec3(0,0,0), rotation);
         sceneManager->update_subset_location(subset);
-        sceneManager->update_subset_glyphs(subset);
+        sceneManager->update_cloud_glyphs(cloud);
 
         break;
       }

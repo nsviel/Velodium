@@ -18,9 +18,8 @@ public:
 public:
   //Selection function
   void select_byFrameID(Cloud* cloud, int subset_ID);
-  void select_rangeLimit(Cloud* cloud, int& subset_ID);
+  bool select_rangeLimit(Cloud* cloud, int& subset_ID);
   void select_setVisibility(Cloud* cloud, int& subset_ID);
-  void update_player_params(Cloud* cloud);
 
   //Player functions
   void player_runtime();
@@ -32,10 +31,7 @@ public:
   void player_selectDirSave();
 
   inline int* get_frequency(){return &player_frequency;}
-  inline int* get_frame_max_ID(){return &frame_max_ID;}
-  inline int* get_frame_max_nb(){return &frame_max_nb;}
   inline int* get_player_frame_range(){return &frame_display_range;}
-  inline float* get_frame_ID_ts(){return &frame_ID_ts;}
   inline bool* get_player_isrunning(){return &player_isrunning;}
   inline bool* get_player_ispaused(){return &player_ispaused;}
   inline bool* get_with_restart(){return &player_returnToZero;}
@@ -47,9 +43,6 @@ private:
   Player_online* onlineManager;
 
   string saveas;
-  float frame_ID_ts;
-  int frame_max_ID;
-  int frame_max_nb;
   int frame_display_range;
 
   bool player_isrunning;

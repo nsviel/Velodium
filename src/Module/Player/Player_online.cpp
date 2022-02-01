@@ -121,6 +121,10 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
       Obstacle_IO* ioManager = obstacleManager->get_ioManager();
       ioManager->save_nFrame(cloud);
     }
+
+    if(false){
+      this->remove_lastFrame(cloud, i);
+    }
   }
 
   //---------------------------
@@ -287,13 +291,13 @@ void Player_online::color_unicolor(Subset* subset, vec4 color){
   //---------------------------
   sceneManager->update_subset_color(subset);
 }
-void Player_online::remove_lastFrame(Cloud* cloud, int i){
-  int nb_frame_max = 10;
+void Player_online::remove_lastFrame(Cloud* cloud, int frame_ID){
+  int nb_frame_max = 5;
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
-    if(subset->ID <= i - nb_frame_max){
+    if(subset->ID <= frame_ID - nb_frame_max){
       sceneManager->remove_subset(cloud, subset);
     }
   }

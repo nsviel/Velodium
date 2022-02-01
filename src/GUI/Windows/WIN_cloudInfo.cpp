@@ -90,7 +90,6 @@ void WIN_cloudInfo::window_cloudInfo(){
     if(ImGui::RadioButton("ptx", &format, 1)){
       cloud->format = "ptx";
     }
-    ImGui::SameLine();
     if(ImGui::RadioButton("ply", &format, 2)){
       cloud->format = "ply";
     }
