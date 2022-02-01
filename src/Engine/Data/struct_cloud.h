@@ -5,7 +5,7 @@
 #include "../../Module/SLAM/struct_voxelMap.h"
 
 #include <string>
-#include <vector>
+#include <list>
 
 
 struct Cloud{ //Global set of the cloud
@@ -34,10 +34,10 @@ struct Cloud{ //Global set of the cloud
   glm::vec4 unicolor;
 
   //Data
-  std::vector<Subset> subset;
-  std::vector<Subset> subset_voxel;
-  std::vector<Subset> subset_buffer;
-  std::vector<Subset> subset_init;
+  std::list<Subset> subset;
+  std::list<Subset> subset_voxel;
+  std::list<Subset> subset_buffer;
+  std::list<Subset> subset_init;
 };
 
 #endif
