@@ -551,7 +551,7 @@ void GUI_windows::window_normal(){
     if(ImGui::Button("Compute", ImVec2(200,0))){
       if(cloud != nullptr){
         //---------------------------
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);
@@ -919,7 +919,7 @@ void GUI_windows::window_selection(){
     bool* highlightON = extractionManager->get_highlightON();
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(cloud != nullptr){
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
         extractionManager->fct_highlighting(subset, subset_init);
       }
@@ -1039,7 +1039,7 @@ void GUI_windows::window_extractCloud(){
     bool* highlightON = extractionManager->get_highlightON();
     if(ImGui::Checkbox("Hightligth", highlightON)){
       if(cloud != nullptr){
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
         extractionManager->fct_highlighting(subset, subset_init);
       }
@@ -1088,7 +1088,7 @@ void GUI_windows::window_extractCloud(){
       if(cloud != nullptr){
         //Reset color
         *highlightON = false;
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
         extractionManager->fct_highlighting(subset, subset_init);
 
@@ -1140,7 +1140,7 @@ void GUI_windows::window_cutCloud(){
     bool* highlightON = extractionManager->get_highlightON();
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(cloud != nullptr){
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
         extractionManager->fct_highlighting(subset, subset_init);
       }
@@ -1190,7 +1190,7 @@ void GUI_windows::window_cutCloud(){
       if(cloud != nullptr){
         //Reset color
         *highlightON = false;
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
         extractionManager->fct_highlighting(subset, subset_init);
 
@@ -1203,7 +1203,7 @@ void GUI_windows::window_cutCloud(){
       if(cloud != nullptr){
         //Reset color
         *highlightON = false;
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
         extractionManager->fct_highlighting(subset, subset_init);
 

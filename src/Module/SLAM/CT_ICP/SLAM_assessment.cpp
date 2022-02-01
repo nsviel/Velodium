@@ -75,7 +75,7 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   return sucess;
 }
 bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int i){
-  Frame* frame_m0 = &cloud->subset[i].frame;
+  Frame* frame_m0 = sceneManager->get_frame(cloud, i);
   bool sucess = true;
   //---------------------------
 

@@ -25,7 +25,7 @@ void Transforms::make_translation(Cloud* cloud, vec3 trans){
 
   //Apply
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->visibility){
       subset->trans *= translation;
@@ -66,7 +66,7 @@ void Transforms::make_rotation(Cloud* cloud, vec3 COM, vec3 angles){
 
   //Apply
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->visibility){
       subset->rotat *= rotation;
@@ -81,7 +81,7 @@ void Transforms::make_scaling(Cloud* cloud, float Sxyz){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->visibility){
       //Reverso old scaling

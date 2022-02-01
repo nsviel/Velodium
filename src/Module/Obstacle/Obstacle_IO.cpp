@@ -103,7 +103,7 @@ void Obstacle_IO::load_obstacleData(){
   //---------------------------
 }
 void Obstacle_IO::save_nFrame(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
   string filePath = dir_frame + subset->name + ".ply";
@@ -140,7 +140,7 @@ void Obstacle_IO::parse_obstacle_json(Cloud* cloud, vector<string> paths, string
 
   for(int i=0; i<cloud->subset.size(); i++){
     //ieme subset
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
 
     //ieme json frame name
     for(int j=0; j<paths.size(); j++){

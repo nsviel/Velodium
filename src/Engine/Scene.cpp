@@ -70,6 +70,24 @@ void Scene::remove_subset(){
   //---------------------------
 }
 
+Subset* Scene::get_subset(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = &next(cloud->subset.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Frame* Scene::get_frame(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = &next(cloud->subset.begin(), i);
+  Frame* frame = &subset->frame;
+
+  //---------------------------
+  return frame;
+}
+
 //Updating
 void Scene::update_cloud_glyphs(Cloud* cloud){
   if(cloud == nullptr)return;
@@ -85,7 +103,7 @@ void Scene::update_cloud_IntensityToColor(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
 
     vector<float>& Is = subset->I;
     vector<vec4>& RGB = subset->RGB;
@@ -113,7 +131,7 @@ void Scene::update_cloud_reset(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
 
     //Reinitialize visibility
     if(i == 0){
@@ -156,7 +174,7 @@ void Scene::update_cloud_MinMax(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
     this->update_subset_MinMax(subset);
 
     //Cloud
@@ -174,7 +192,7 @@ void Scene::update_cloud_location(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
     this->update_subset_location(subset);
   }
 
@@ -184,7 +202,7 @@ void Scene::update_cloud_color(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
     this->update_subset_color(subset);
   }
 
@@ -312,7 +330,7 @@ void Scene::selection_setSubset(Cloud* cloud, int ID){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
 
     if(i == ID){
       subset->visibility = true;
@@ -403,7 +421,7 @@ Subset* Scene::get_visibleSubset(){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = get_subset(cloud, i);
 
     if(subset->visibility){
       return subset;
@@ -418,7 +436,7 @@ Subset* Scene::get_subset_selected(){
   //---------------------------
 
   if(cloud != nullptr){
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = get_subset(cloud, cloud->subset_selected);
     return subset;
   }
   else{
@@ -432,7 +450,7 @@ int Scene::get_subset_selected_ID(){
   //---------------------------
 
   if(cloud != nullptr){
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     return subset->ID;
   }
   else{

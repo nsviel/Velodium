@@ -60,7 +60,7 @@ Player_online::~Player_online(){}
 
 //Main function
 void Player_online::compute_onlineOpe(Cloud* cloud, int i){
-  Subset* subset = &cloud->subset[i];
+  Subset* subset = sceneManager->get_subset(cloud, i);
   //---------------------------
 
   if(with_online){
@@ -130,7 +130,8 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
 void Player_online::camera_followUp(Cloud* cloud, int i){
   //---------------------------
 
-  Frame* frame = &cloud->subset[i].frame;
+  Subset* subset = sceneManager->get_subset(cloud, i);
+  Frame* frame = &subset->frame;
 
   if(frame->ID >= 4){
     Frame* frame_m1 = &cloud->subset[i-1].frame;
@@ -253,7 +254,7 @@ void Player_online::save_image_path(){
 
 //Other functions
 void Player_online::color_heatmap(Cloud* cloud, int i){
-  Subset* subset = &cloud->subset[i];
+  Subset* subset = sceneManager->get_subset(cloud, i);
   //---------------------------
 
   if(with_heatmap_rltHeight){
@@ -291,7 +292,7 @@ void Player_online::remove_lastFrame(Cloud* cloud, int i){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
     if(subset->ID < i - nb_frame_max){
       sceneManager->remove_subset();
     }

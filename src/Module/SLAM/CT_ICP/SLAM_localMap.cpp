@@ -180,7 +180,7 @@ void SLAM_localMap::end_slamVoxelization(Cloud* cloud, int frame_max){
 
   if(slamMap_voxelized){
     for(int i=0; i<frame_max; i++){
-      Subset* subset = &cloud->subset[i];
+      Subset* subset = sceneManager->get_subset(cloud, i);
       subset->xyz = subset->xyz_voxel;
     }
   }

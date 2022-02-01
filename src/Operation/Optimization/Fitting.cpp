@@ -28,7 +28,7 @@ void Fitting::Sphere_cloudToCenter_all(){
 
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     this->Sphere_cloudToCenter(subset);
   }
 
@@ -139,7 +139,7 @@ void Fitting::Plane_cloud_all(){
   pcl_functions pclManager;
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     pclManager.Plane_cloud(subset);
     sceneManager->update_subset_color(subset);
   }

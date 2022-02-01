@@ -196,7 +196,7 @@ void Glyphs::update(Cloud* cloud){
   this->update_glyph_object("aabb", cloud);
 
   for (int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
 
     Axis axisManager;
     axisManager.update_axis_cloud(subset);
@@ -652,7 +652,7 @@ void Glyphs::set_size_normal(int size){
   for (int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     for (int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = &cloud->subset[j];
+      Subset* subset = &next(cloud->subset.begin(), j);
 
       subset->normal.draw_size = size;
       this->update(subset);
@@ -682,7 +682,7 @@ void Glyphs::set_visibility_normal(bool value){
   for (int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     for (int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = &cloud->subset[j];
+      Subset* subset = &next(cloud->subset.begin(), j);
 
       subset->normal.visibility = value;
     }
@@ -697,7 +697,7 @@ void Glyphs::set_visibility_axisCloud(bool value){
   for (int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     for (int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = &cloud->subset[j];
+      Subset* subset = &next(cloud->subset.begin(), j);
 
       subset->axis.visibility = value;
     }

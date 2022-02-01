@@ -24,7 +24,8 @@ void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Obstac* obstacle_gt = &cloud->subset[i].obstacle_gt;
+    Subset* subset = &next(cloud->subset.begin(), i);
+    Obstac* obstacle_gt = &subset->obstacle_gt;
 
     for(int j=0; j<obstacle_gt->name.size(); j++){
       Glyph* glyph = glyphManager->create_glyph_instance("obstacle");
@@ -49,7 +50,8 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Obstac* obstacle_pr = &cloud->subset[i].obstacle_pr;
+    Subset* subset = &next(cloud->subset.begin(), i);
+    Obstac* obstacle_pr = &subset->obstacle_pr;
 
     for(int j=0; j<obstacle_pr->name.size(); j++){
       Glyph* glyph = glyphManager->create_glyph_instance("obstacle");

@@ -192,7 +192,7 @@ void GUI_Player::parameter_offline(){
     if(ImGui::Button("All frame visible", ImVec2(120,0))){
       if(cloud != nullptr){
         for(int i=0; i<cloud->nb_subset; i++){
-          Subset* subset = &cloud->subset[i];
+          Subset* subset = sceneManager->get_subset(cloud, i);
           subset->visibility = true;
         }
       }

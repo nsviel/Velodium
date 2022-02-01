@@ -241,7 +241,7 @@ void GUI_control::control_keyboard_translation(){
 
   for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
     if(!io.MouseDown[1] && !io.WantCaptureMouse && cloud != nullptr){
-      Subset* subset = &cloud->subset[cloud->subset_selected];
+      Subset* subset = sceneManager->get_subset_selected();
       float transCoef = cloud_trans_speed;
 
       //Shift speed up

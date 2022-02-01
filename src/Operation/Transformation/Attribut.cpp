@@ -28,7 +28,7 @@ void Attribut::compute_cloudAttributs_all(){
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     this->compute_cloudAttributs(subset);
   }
 
@@ -39,7 +39,7 @@ void Attribut::compute_cloudAttributs_list(list<Cloud*>* list){
 
   for(int i=0;i<list->size();i++){
     Cloud* cloud = *next(list->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     this->compute_cloudAttributs(subset);
   }
 
@@ -342,7 +342,7 @@ void Attribut::cloudsData(){
   myfile << "\n";
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
 
     if(subset->name.find("rdm") != std::string::npos){
@@ -381,7 +381,7 @@ void Attribut::set_cloud_color(Cloud* cloud, vec4 RGBA){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
     this->set_subset_color(subset, RGBA);
   }
 
@@ -407,7 +407,7 @@ void Attribut::set_colorRGB_all(){
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     this->set_colorRGB(subset);
   }
 
@@ -429,7 +429,7 @@ void Attribut::set_colorI_all(){
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     this->set_colorI(subset);
   }
 
@@ -696,7 +696,7 @@ void Attribut::compute_normals_planFitting(Subset* subset){
 void Attribut::compute_normals_invert(){
   if(sceneManager->is_atLeastOnecloud()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
     vector<vec3>& normals = subset->N;
     //---------------------------
@@ -754,7 +754,7 @@ void Attribut::compute_checkForNan(Subset* subset){
 void Attribut::compute_intensityInversion(){
   if(sceneManager->is_atLeastOnecloud()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     if(subset->I.size() != 0){
@@ -811,7 +811,7 @@ void Attribut::fct_convert2048to255(Subset* subset){
 void Attribut::fct_moins(){
   if(sceneManager->is_atLeastOnecloud()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     vector<float>& Is = subset->I;
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->RGB;
@@ -828,7 +828,7 @@ void Attribut::fct_moins(){
 }
 void Attribut::fct_IsRange(vec2 range){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   vector<float>& Is = subset->I;
   const vector<float>& Is_ini = subset_init->I;
@@ -848,7 +848,7 @@ void Attribut::fct_IsRange(vec2 range){
 }
 vec2 Attribut::get_IsRange(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   vector<float>& Is = subset->I;
   //---------------------------
 

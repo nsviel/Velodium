@@ -51,7 +51,7 @@ void Selection::update(){
 void Selection::validate(){
   if(sceneManager->is_atLeastOnecloud()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
     list<int>& idx = subset->highlighted;
     //---------------------------
 
@@ -89,7 +89,7 @@ void Selection::mark_pointCreation(vec3 point){
 
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     vector<vec3>& XYZ = subset->xyz;
 
@@ -155,7 +155,7 @@ bool Selection::mark_pointSupression(vec3 point){
   //For each cloud
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     vector<vec3>& XYZ = subset->xyz;
     list<int>& idx = subset->highlighted;
@@ -227,7 +227,7 @@ void Selection::mark_supressAll(){
 
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     list<int>& idx = subset->highlighted;
     idx.clear();
@@ -242,7 +242,7 @@ bool Selection::mark_supressSelectedPoints_all(){
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     vector<int>& idx = subset->selected;
 
@@ -257,7 +257,7 @@ bool Selection::mark_supressSelectedPoints_all(){
 }
 void Selection::mark_supressSelectedPoints(Cloud* cloud){
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
     vector<int>& idx = subset->selected;
     //---------------------------
 
@@ -277,7 +277,7 @@ void Selection::mark_pointLocation(){
   int cpt = 0;
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     list<int>& idx = subset->highlighted;
     vector<vec3>& XYZ = subset->xyz;
@@ -369,7 +369,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
     for(int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = &cloud->subset[j];
+      Subset* subset = &next(cloud->subset.begin(), i);
 
       if(subset->visibility){
         vector<vec3>& XYZ = subset->xyz;
@@ -514,7 +514,7 @@ void Selection::mark_planeCreation(){
   //ID_plane = glyphManager->create_glyph(XYZ, RGB, "triangle", false);
 }
 void Selection::mark_planeABpoints(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
   //Retrieve A & B points
@@ -540,7 +540,7 @@ void Selection::mark_planeLocation(){
   //For each Cloud insert plane
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     list<int>& idx = subset->highlighted;
     if(idx.size() == 2){
@@ -554,7 +554,7 @@ void Selection::mark_planeLocation(){
   int cpt = 0;
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = &cloud->subset[cloud->subset_selected];
+    Subset* subset = sceneManager->get_subset_selected();
 
     list<int>& idx = subset->highlighted;
     vector<vec3>& XYZ = subset->xyz;

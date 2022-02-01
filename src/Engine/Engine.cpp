@@ -108,7 +108,7 @@ void Engine::draw_clouds(){
     //By subset
     if(cloud->visibility){
       for(int j=0; j<cloud->subset.size(); j++){
-        Subset* subset = &cloud->subset[j];
+        Subset* subset = &next(cloud->subset.begin(), j);
 
         //Display vertices
         if(subset->visibility){

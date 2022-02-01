@@ -13,6 +13,8 @@
 Scala::Scala(){
   //---------------------------
 
+  this->sceneManager = new Scene();
+
   //---------------------------
 }
 Scala::~Scala(){}
@@ -61,9 +63,12 @@ vector<Cloud*> Scala::loading_allFile(vector<string> allpath){
       cloud->path = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
-        for(int k=0; k<cloud->subset[j].RGB.size(); k++){
-          cloud->subset[j].RGB[k] = vec4(Red, Green, Blue, 1.0f);
+        Subset* subset = &next(cloud->subset.begin(), j);
+
+        for(int k=0; k<subset->RGB.size(); k++){
+          subset->RGB[k] = vec4(Red, Green, Blue, 1.0f);
         }
+
       }
 
       clouds.push_back(cloud);
@@ -105,7 +110,6 @@ Cloud* Scala::loading_reoganizeData(vector<Cloud*> clouds){
   }
 
   //Remove all old clouds
-  Scene sceneManager;
   for(int i=0; i<clouds.size(); i++){
     delete clouds[i];
   }
@@ -122,7 +126,7 @@ void Scala::compute_relativeTimestamp(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<1; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
     vector<float>& ts = subset->ts;
 
     float ts_cpt = ts[0];

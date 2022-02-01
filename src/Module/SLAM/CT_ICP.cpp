@@ -47,10 +47,9 @@ void CT_ICP::compute_slam(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<frame_max; i++){
-    Subset* subset = &cloud->subset[i];
-    Frame* frame = &cloud->subset[i].frame;
-    Frame* frame_m1 = &cloud->subset[i-1].frame;
-    Frame* frame_m2 = &cloud->subset[i-2].frame;
+    Frame* frame = sceneManager->get_frame(cloud, i);
+    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
+    Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
     frame->ID = i;
     tic();
     //--------------
@@ -80,7 +79,7 @@ void CT_ICP::compute_slam(Cloud* cloud){
   //---------------------------
 }
 void CT_ICP::compute_slam_online(Cloud* cloud, int i){
-  Subset* subset = &cloud->subset[i];
+  Subset* subset = sceneManager->get_subset(cloud, i);
   Frame* frame = &subset->frame;
 
   if(frame->is_slamed == false && i >= map_frame_begin_ID){
@@ -248,8 +247,8 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 }
 void CT_ICP::compute_assessment(Cloud* cloud, int i){
-  Frame* frame = &cloud->subset[i].frame;
-  Frame* frame_m1 = &cloud->subset[i-1].frame;
+  Frame* frame = sceneManager->get_frame(cloud, i);
+  Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
   bool sucess = true;
   //---------------------------
 

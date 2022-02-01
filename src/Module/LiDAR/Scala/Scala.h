@@ -3,6 +3,8 @@
 
 #include "../../../common.h"
 
+class Scene;
+
 
 class Scala
 {
@@ -20,6 +22,7 @@ public:
   void compute_relativeTimestamp(Cloud* cloud);
 
 private:
+  Scene* sceneManager;
 };
 
 #endif

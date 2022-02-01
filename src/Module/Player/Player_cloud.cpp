@@ -85,7 +85,7 @@ void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
 
   //Unset alll other subset visibility
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
     subset->visibility = false;
   }
 
@@ -120,8 +120,9 @@ void Player_cloud::supress_firstSubset(Cloud* cloud){
   //---------------------------
 
   for(int i=1; i<cloud->nb_subset; i++){
-    cloud->subset[i].ID = i - 1;
-    vec.push_back(cloud->subset[i]);
+    Subset* subset = sceneManager->get_subset(cloud, i)
+    subset->ID = i - 1;
+    vec.push_back(subset);
   }
 
   cloud->subset = vec;
@@ -194,7 +195,7 @@ void Player_cloud::player_save(Cloud* cloud){
 
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = &cloud->subset[i];
+    Subset* subset = sceneManager->get_subset(cloud, i);
     saverManager.save_subset(subset, "ply", saveas);
   }
 

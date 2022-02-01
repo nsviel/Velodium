@@ -48,6 +48,8 @@ public:
   void selection_setCloud(Cloud* cloud);
 
   vector<string> get_nameByOrder();
+  Subset* get_subset(Cloud* cloud, int i);
+  Frame* get_frame(Cloud* cloud, int i);
   Subset* get_visibleSubset();
   Subset* get_subset_selected();
   Cloud* get_cloud_selected();

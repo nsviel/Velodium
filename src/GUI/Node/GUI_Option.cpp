@@ -210,12 +210,12 @@ void GUI_option::option_colors(){
     ImGui::SetNextItemWidth(colorEditSize);
     static vec4 subset_color;
     if(cloud != nullptr){
-      Subset* subset = &cloud->subset[cloud->subset_selected];
+      Subset* subset = sceneManager->get_subset_selected();
       subset_color = subset->unicolor;
     }
     if(ImGui::ColorEdit4("Cloud subset", (float*)&subset_color, ImGuiColorEditFlags_AlphaBar)){
       if(sceneManager->is_atLeastOnecloud()){
-        Subset* subset = &cloud->subset[cloud->subset_selected];
+        Subset* subset = sceneManager->get_subset_selected();
         attribManager->set_subset_color(subset, subset_color);
       }
     }

@@ -23,7 +23,7 @@ void BundleByClass::compute_bundleByClass(Cloud* cloud, float stepAngle){
   //---------------------------
 }
 void BundleByClass::compute_bundleByClass_maxAngle(Cloud* cloud, int stepAngle, int maxAngle){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   //---------------------------
 
@@ -180,7 +180,7 @@ void BundleByClass::compute_vectorByClass(vector<vector<float>>& data_X, vector<
 
 //Subfunctions
 void BundleByClass::make_bundle(Cloud* cloud, float stepAngle, int maxAngle){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   //---------------------------
 
@@ -226,7 +226,7 @@ void BundleByClass::make_bundle(Cloud* cloud, float stepAngle, int maxAngle){
   }
 }
 void BundleByClass::make_checking(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   //---------------------------
 
@@ -331,7 +331,7 @@ void BundleByClass::plot_confidenceInterval(){
     //---------------------------
 }
 void BundleByClass::plot_intensityBundle(Cloud* cloud){
-  Subset* subset = &cloud->subset[cloud->subset_selected];
+  Subset* subset = sceneManager->get_subset_selected();
   Subset* subset_init = &cloud->subset_init[cloud->subset_selected];
   //---------------------------
 
