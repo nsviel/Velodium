@@ -21,7 +21,6 @@ public:
   void select_rangeLimit(Cloud* cloud, int& subset_ID);
   void select_setVisibility(Cloud* cloud, int& subset_ID);
   void update_player_params(Cloud* cloud);
-  void supress_firstSubset(Cloud* cloud);
 
   //Player functions
   void player_runtime();

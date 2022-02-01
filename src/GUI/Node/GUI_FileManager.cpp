@@ -108,7 +108,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   if(open_cloud_node && cloud != nullptr){
 
     for(int j=0; j<cloud->subset.size(); j++){
-      Subset* subset = &next(cloud->subset.begin(), j);
+      Subset* subset = *next(cloud->subset.begin(), j);
 
       if(subset->visibility){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;

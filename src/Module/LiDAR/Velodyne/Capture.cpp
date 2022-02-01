@@ -35,23 +35,24 @@ void Capture::check_forNewSubset(){
   //---------------------------
 
   if(atLeastOne){
-    subset_capture.visibility = true;
+    subset_capture->visibility = true;
 
     //Insert the subset inside the capture cloud
     //OneFrame : we only keep the current frame capture
     if(oneFrame){
       //Check if at least one subset was created
       if(cloud_capture->subset.size() == 0){
-        cloud_capture->subset.push_back(subset_capture);
+        cloud_capture->subset.push_back(&subset_capture);
         extractManager->add_subsetData(&subset_capture);
       }else{
-        cloud_capture->subset[0].xyz = subset_capture.xyz;
-        cloud_capture->subset[0].RGB = subset_capture.RGB;
+        Subset* subset = sceneManager->get_subset(cloud_capture, 0);
+        subset->xyz = subset_capture->xyz;
+        subset->RGB = subset_capture->RGB;
 
         //Update subset data
-        sceneManager->update_subset_location(&cloud_capture->subset[0]);
-        sceneManager->update_subset_color(&cloud_capture->subset[0]);
-        sceneManager->update_subset_glyphs(&cloud_capture->subset[0]);
+        sceneManager->update_subset_location(subset);
+        sceneManager->update_subset_color(subset);
+        sceneManager->update_subset_glyphs(subset);
       }
       cloud_capture->nb_subset = cloud_capture->subset.size();
     }

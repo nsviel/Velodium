@@ -47,31 +47,32 @@ void CT_ICP::compute_slam(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<frame_max; i++){
-    Frame* frame = sceneManager->get_frame(cloud, i);
+    Subset* subset = sceneManager->get_subset(cloud, i);
+    Frame* frame_m0 = sceneManager->get_frame(cloud, i);
     Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
     Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
-    frame->ID = i;
+    frame_m0->ID = i;
     tic();
     //--------------
 
     this->init_frameTimestamp(subset);
-    this->init_frameChain(frame, frame_m1, frame_m2);
-    this->init_distortion(frame);
+    this->init_frameChain(frame_m0, frame_m1, frame_m2);
+    this->init_distortion(frame_m0);
 
     mapManager->compute_gridSampling(subset);
 
-    this->compute_optimization(frame, frame_m1);
+    this->compute_optimization(frame_m0, frame_m1);
     this->compute_assessment(cloud, i);
 
     mapManager->add_pointsToSlamMap(subset);
-    mapManager->add_pointsToLocalMap(frame);
-    mapManager->end_clearTooFarVoxels(frame->trans_e);
+    mapManager->add_pointsToLocalMap(frame_m0);
+    mapManager->end_clearTooFarVoxels(frame_m0->trans_e);
 
     this->compute_updateLocation(subset);
 
     //--------------
     float duration = toc();
-    this->compute_statistics(duration, frame, frame_m1, subset);
+    this->compute_statistics(duration, frame_m0, frame_m1, subset);
   }
 
   mapManager->end_slamVoxelization(cloud, frame_max);
@@ -86,8 +87,8 @@ void CT_ICP::compute_slam_online(Cloud* cloud, int i){
     tic();
     //---------------------------
 
-    Frame* frame_m1 = &cloud->subset[i-1].frame;
-    Frame* frame_m2 = &cloud->subset[i-2].frame;
+    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
+    Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
 
     this->init_frameID(frame, i);
     this->init_frameTimestamp(subset);

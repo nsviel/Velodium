@@ -63,7 +63,7 @@ vector<Cloud*> Scala::loading_allFile(vector<string> allpath){
       cloud->path = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
-        Subset* subset = &next(cloud->subset.begin(), j);
+        Subset* subset = *next(cloud->subset.begin(), j);
 
         for(int k=0; k<subset->RGB.size(); k++){
           subset->RGB[k] = vec4(Red, Green, Blue, 1.0f);
@@ -94,7 +94,7 @@ Cloud* Scala::loading_reoganizeData(vector<Cloud*> clouds){
 
     //jeme cloud
     for(int j=0; j<clouds.size(); j++){
-      Subset* subset_scala = &clouds[j]->subset[i];
+      Subset* subset_scala = sceneManager->get_subset(clouds[j], i);
 
       //keme points
       for(int k=0; k<subset_scala->xyz.size(); k++){
@@ -105,7 +105,7 @@ Cloud* Scala::loading_reoganizeData(vector<Cloud*> clouds){
     }
 
     if(i % 2 == 0){
-      cloud_scala->subset.push_back(*subset);
+      cloud_scala->subset.push_back(subset);
     }
   }
 

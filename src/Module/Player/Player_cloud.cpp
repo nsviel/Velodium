@@ -72,7 +72,7 @@ void Player_cloud::select_rangeLimit(Cloud* cloud, int& frame_ID){
   //---------------------------
 }
 void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
-  Subset* subset = &cloud->subset[frame_ID];
+  Subset* subset = sceneManager->get_subset(cloud, frame_ID);
   //---------------------------
 
   //Set visibility parameter for each cloud subset
@@ -94,7 +94,7 @@ void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
     int trained_frame = frame_ID - frame_display_range + i + 1;
 
     if(trained_frame >= 0){
-      Subset* subset = &cloud->subset[trained_frame];
+      Subset* subset = sceneManager->get_subset(cloud, trained_frame);
       subset->visibility = true;
     }
   }
@@ -112,21 +112,6 @@ void Player_cloud::update_player_params(Cloud* cloud){
     this->frame_max_ID = cloud->nb_subset - 1;
     this->frame_max_nb = cloud->nb_subset;
   }
-
-  //---------------------------
-}
-void Player_cloud::supress_firstSubset(Cloud* cloud){
-  vector<Subset> vec;
-  //---------------------------
-
-  for(int i=1; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i)
-    subset->ID = i - 1;
-    vec.push_back(subset);
-  }
-
-  cloud->subset = vec;
-  cloud->nb_subset = cloud->nb_subset - 1;
 
   //---------------------------
 }

@@ -46,16 +46,16 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     this->extract_Timestamp(subset, data[i]->timestamp);
 
     if(i == 0){
-      subset.visibility = true;
+      subset->visibility = true;
     }else{
-      subset.visibility = false;
+      subset->visibility = false;
     }
 
     //Create associated glyphs
     Glyphs glyphManager;
     glyphManager.create_glyph_fromCloud(&subset);
 
-    cloud->subset.push_back(subset);
+    cloud->subset->push_back(subset);
     cloud->subset_buffer.push_back(subset);
     cloud->subset_init.push_back(subset);
   }
@@ -63,8 +63,8 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset dataExtraction::extractData(udpPacket* data, int ID){
-  Subset subset;
+Subset* dataExtraction::extractData(udpPacket* data, int ID){
+  Subset* subset = new Subset();
   //---------------------------
 
   this->check_data(data);
@@ -104,7 +104,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   Glyphs glyphManager;
   glyphManager.create_glyph_fromCloud(&subset);
 
-  cloud->subset.push_back(subset);
+  cloud->subset->push_back(subset);
   cloud->subset_init.push_back(subset);
   cloud->subset_buffer.push_back(subset);
   cloud->nb_subset++;
@@ -121,9 +121,9 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
 
-  subset.VAO = VAO;
-  subset.name = "oneFrame";
-  subset.visibility = true;
+  subset->VAO = VAO;
+  subset->name = "oneFrame";
+  subset->visibility = true;
 
   //Subset data
   this->extract_Location(subset, data->location);
@@ -132,8 +132,8 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
   this->extract_Normal(subset, data->normal);
   this->extract_Timestamp(subset, data->timestamp);
 
-  if(cloud->subset.size() == 0){
-    cloud->subset.push_back(subset);
+  if(cloud->subset->size() == 0){
+    cloud->subset->push_back(subset);
     cloud->subset_buffer.push_back(subset);
     cloud->subset_init.push_back(subset);
     cloud->nb_subset = 1;
@@ -294,25 +294,25 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void dataExtraction::init_subsetParameters(Subset& subset, string name, int ID){
+void dataExtraction::init_subsetParameters(Subset* subset, string name, int ID){
   //---------------------------
 
   //Subset VAO
   uint VAO;
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
-  subset.VAO = VAO;
+  subset->VAO = VAO;
 
   //Other stuff
-  subset.ID = ID;
-  subset.name = name;
-  subset.root = vec3(0.0);
-  subset.dataFormat = " ";
+  subset->ID = ID;
+  subset->name = name;
+  subset->root = vec3(0.0);
+  subset->dataFormat = " ";
 
   //---------------------------
 }
-void dataExtraction::init_frameParameters(Subset& subset){
-  Frame* frame = &subset.frame;
+void dataExtraction::init_frameParameters(Subset* subset){
+  Frame* frame = &subset->frame;
   //---------------------------
 
   frame->reset();
@@ -338,7 +338,7 @@ void dataExtraction::init_randomColor(){
   //---------------------------
 }
 
-void dataExtraction::extract_Location(Subset& subset, vector<vec3>& locationOBJ){
+void dataExtraction::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------
 
@@ -348,51 +348,51 @@ void dataExtraction::extract_Location(Subset& subset, vector<vec3>& locationOBJ)
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
   glEnableVertexAttribArray(0);
 
-  subset.nb_point = locationOBJ.size();
-  subset.VBO_xyz = positionVBO;
-  subset.xyz = locationOBJ;
+  subset->nb_point = locationOBJ.size();
+  subset->VBO_xyz = positionVBO;
+  subset->xyz = locationOBJ;
 
   //Transformation matrices
-  subset.scale = mat4(1.0);
-  subset.trans = mat4(1.0);
-  subset.rotat = mat4(1.0);
-  subset.transformation = mat4(1.0);
+  subset->scale = mat4(1.0);
+  subset->trans = mat4(1.0);
+  subset->rotat = mat4(1.0);
+  subset->transformation = mat4(1.0);
 
   //---------------------------
 }
-void dataExtraction::extract_Intensity(Subset& subset, vector<float>& intensityOBJ){
+void dataExtraction::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
   //---------------------------
 
   if(is_intensity){
-    subset.I = intensityOBJ;
+    subset->I = intensityOBJ;
   }
 
   //---------------------------
 }
-void dataExtraction::extract_Timestamp(Subset& subset, vector<float>& timestampOBJ){
+void dataExtraction::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
   //---------------------------
 
   if(is_timestamp){
-    subset.ts = timestampOBJ;
+    subset->ts = timestampOBJ;
   }
   else{
-    vector<float> ts (subset.xyz.size(), 0);
-    subset.ts = ts;
+    vector<float> ts (subset->xyz.size(), 0);
+    subset->ts = ts;
   }
 
   //---------------------------
 }
-void dataExtraction::extract_Normal(Subset& subset, vector<vec3>& normalOBJ){
+void dataExtraction::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
   uint normalVBO;
   //---------------------------
 
   if(is_normal){
-    subset.N = normalOBJ;
+    subset->N = normalOBJ;
   }
 
   //---------------------------
 }
-void dataExtraction::extract_Color(Subset& subset, vector<vec4>& colorOBJ){
+void dataExtraction::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
   uint colorVBO;
   //---------------------------
 
@@ -403,12 +403,12 @@ void dataExtraction::extract_Color(Subset& subset, vector<vec4>& colorOBJ){
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
   glEnableVertexAttribArray(1);
 
-  subset.VBO_rgb = colorVBO;
-  subset.RGB = colorOBJ;
-  subset.unicolor = RGB_rdm;
+  subset->VBO_rgb = colorVBO;
+  subset->RGB = colorOBJ;
+  subset->unicolor = RGB_rdm;
 
   if(is_color){
-    subset.has_color = true;
+    subset->has_color = true;
   }
 
   //---------------------------

@@ -183,12 +183,6 @@ void GUI_Player::parameter_offline(){
       }
     }
 
-    if (ImGui::Button("Supress first subset", ImVec2(120,0))){
-      if(cloud != nullptr){
-        playerManager->supress_firstSubset(cloud);
-      }
-    }
-
     if(ImGui::Button("All frame visible", ImVec2(120,0))){
       if(cloud != nullptr){
         for(int i=0; i<cloud->nb_subset; i++){

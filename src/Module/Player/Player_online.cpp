@@ -89,7 +89,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
     if(with_cylinder_cleaning){
       //Don't forget to operate the first subset
       if(i == 1){
-        Subset* subset = &cloud->subset[0];
+        Subset* subset_0 = sceneManager->get_subset(cloud, 0);
         filterManager->filter_subset_cylinder(subset);
       }
 
@@ -104,7 +104,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
     if(with_unicolor){
       //Don't forget to operate the first subset
       if(i == 1){
-        Subset* subset_0 = &cloud->subset[0];
+        Subset* subset_0 = sceneManager->get_subset(cloud, 0);
         this->color_unicolor(subset_0, cloud->unicolor);
       }
 
@@ -134,9 +134,9 @@ void Player_online::camera_followUp(Cloud* cloud, int i){
   Frame* frame = &subset->frame;
 
   if(frame->ID >= 4){
-    Frame* frame_m1 = &cloud->subset[i-1].frame;
-    Frame* frame_m2 = &cloud->subset[i-2].frame;
-    Frame* frame_m3 = &cloud->subset[i-3].frame;
+    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
+    Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
+    Frame* frame_m3 = sceneManager->get_frame(cloud, i-3);
 
     vec3 pos_m0 = frame->trans_abs;
     vec3 pos_m1 = frame_m1->trans_abs;
@@ -265,8 +265,8 @@ void Player_online::color_heatmap(Cloud* cloud, int i){
 
   //Don't forget to operate the first subset
   if(i == 1){
-    Subset* subset = &cloud->subset[0];
-    Subset* subset_buffer = &cloud->subset_buffer[0];
+    Subset* subset = sceneManager->get_subset(cloud, 0);
+    Subset* subset_buffer = sceneManager->get_subset_buffer(cloud, 0);
     heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
   }
 

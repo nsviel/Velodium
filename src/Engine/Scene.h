@@ -49,6 +49,7 @@ public:
 
   vector<string> get_nameByOrder();
   Subset* get_subset(Cloud* cloud, int i);
+  Subset* get_subset_buffer(Cloud* cloud, int i);
   Frame* get_frame(Cloud* cloud, int i);
   Subset* get_visibleSubset();
   Subset* get_subset_selected();

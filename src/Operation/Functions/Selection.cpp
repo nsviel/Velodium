@@ -369,7 +369,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
     for(int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = &next(cloud->subset.begin(), i);
+      Subset* subset = *next(cloud->subset.begin(), i);
 
       if(subset->visibility){
         vector<vec3>& XYZ = subset->xyz;

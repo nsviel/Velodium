@@ -34,7 +34,7 @@ private:
   dataExtraction* extractManager;
 
   Cloud* cloud_capture;
-  Subset subset_capture;
+  Subset* subset_capture;
 
   int ID_capture;
   int ID_subset;

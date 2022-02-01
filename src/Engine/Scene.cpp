@@ -73,7 +73,15 @@ void Scene::remove_subset(){
 Subset* Scene::get_subset(Cloud* cloud, int i){
   //---------------------------
 
-  Subset* subset = &next(cloud->subset.begin(), i);
+  Subset* subset = *next(cloud->subset.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Subset* Scene::get_subset_buffer(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset_buffer.begin(), i);
 
   //---------------------------
   return subset;
@@ -81,7 +89,7 @@ Subset* Scene::get_subset(Cloud* cloud, int i){
 Frame* Scene::get_frame(Cloud* cloud, int i){
   //---------------------------
 
-  Subset* subset = &next(cloud->subset.begin(), i);
+  Subset* subset = *next(cloud->subset.begin(), i);
   Frame* frame = &subset->frame;
 
   //---------------------------

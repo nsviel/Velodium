@@ -3,6 +3,7 @@
 
 #include "../../../common.h"
 
+class Scene;
 class SLAM_optim_gn;
 
 
@@ -26,6 +27,7 @@ public:
   inline float* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
 
 private:
+  Scene* sceneManager;
   SLAM_optim_gn* gnManager;
 
   float thres_ego_trans;

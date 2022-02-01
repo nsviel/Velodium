@@ -9,19 +9,19 @@
 namespace{
 
   //EIGEN to GLM
-  Cloud eigen_to_glm(Eigen::MatrixXf cloud_in){
-    Cloud cloud_out;
-    std::vector<glm::vec3>& XYZ = cloud_out.subset[0].xyz;
+  Subset eigen_to_glm(Eigen::MatrixXf mat_in){
+    Subset subset;
+    std::vector<glm::vec3>& XYZ = subset.xyz;
     //---------------------------
 
-    for(int i=0; i<cloud_in.rows(); i++){
-      for(int j=0; j<cloud_in.cols(); j++){
-        XYZ[i][j] = cloud_in(i,j);
+    for(int i=0; i<mat_in.rows(); i++){
+      for(int j=0; j<mat_in.cols(); j++){
+        XYZ[i][j] = mat_in(i,j);
       }
     }
 
     //---------------------------
-    return cloud_out;
+    return subset;
   }
   glm::mat4 eigen_to_glm_mat4(Eigen::Matrix4f mat_eig){
     glm::mat4 mat_glm;

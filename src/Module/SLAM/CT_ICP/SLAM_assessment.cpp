@@ -2,12 +2,15 @@
 
 #include "SLAM_optim_gn.h"
 
+#include "../../../Engine/Scene.h"
 #include "../../../Specific/fct_maths.h"
 
 
 //Constructor / Destructor
 SLAM_assessment::SLAM_assessment(SLAM_optim_gn* gn){
   //---------------------------
+
+  this->sceneManager = new Scene();
 
   this->gnManager = gn;
 
@@ -80,7 +83,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int i){
   //---------------------------
 
   if(frame_m0->ID >= rlt_numberPreviousPose){
-    Frame* frame_m1 = &cloud->subset[i-1].frame;
+    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
 
     //Compute previsou frame stat means
     float sum_ego_trans = 0;
@@ -89,7 +92,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int i){
     float sum_diff_rotat = 0;
     float sum_opti_score = 0;
     for(int j=1; j<rlt_numberPreviousPose; j++){
-      Frame* frame_m = &cloud->subset[i-j].frame;
+      Frame* frame_m = sceneManager->get_frame(cloud, i-j);
 
       if(frame_m->is_slamed){
         sum_ego_trans += frame_m->ego_trans;
