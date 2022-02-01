@@ -20,9 +20,8 @@ public:
 public:
   void design_Obstacle();
 
-  void run();
+  void compute_obstacle();
   void make_obstacleName(Subset* subset);
-
   void drawText(string text, vec3 position);
 
 private:

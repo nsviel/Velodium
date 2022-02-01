@@ -36,6 +36,7 @@ public:
   //Other functions
   void color_heatmap(Cloud* cloud, int i);
   void color_unicolor(Subset* subset, vec4 color);
+  void remove_lastFrame(Cloud* cloud, int i);
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}

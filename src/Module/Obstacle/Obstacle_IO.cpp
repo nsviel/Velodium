@@ -1,23 +1,24 @@
 #include "Obstacle_IO.h"
 
-#include "../../Specific/fct_system.h"
 #include "../../Engine/Scene.h"
 #include "../../Load/Operation.h"
 #include "../../Load/Saver.h"
+
+#include "../../Specific/fct_watcher.h"
+#include "../../Specific/fct_system.h"
 
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
 #include <fstream>
 
 
-#include "notify.h"
-
-
 //Constructor / Destructor
 Obstacle_IO::Obstacle_IO(){
   //---------------------------
 
+  this->sceneManager = new Scene();
   this->saverManager = new Saver();
+  this->opeManager = new Operation();
 
   this->dir_path = get_absolutePath_build() + "/../media/data/capture/";
   this->dir_frame = dir_path + "frame/";
@@ -25,6 +26,8 @@ Obstacle_IO::Obstacle_IO(){
   this->dir_grThr = dir_path + "groundtruth/";
   this->savedFrame_ID = 0;
   this->savedFrame_max = 20;
+  this->thread_predi_ON = false;
+  this->thread_grThr_ON = false;
 
   this->clean_directories();
 
@@ -32,42 +35,70 @@ Obstacle_IO::Obstacle_IO(){
 }
 Obstacle_IO::~Obstacle_IO(){}
 
-void Obstacle_IO::load_obstacleData(){
-  Operation opeManager;
+//Directory watchers
+void Obstacle_IO::start_dirWatcher(){
   //---------------------------
 
-  sayHello();
-  m_thread = std::thread([&]() {
-    while (true) {
-      dir_modif_watcher(dir_path);
+  this->thread_predi_ON = true;
+  this->thread_grThr_ON = true;
+
+  thread_predi = std::thread([&](){
+    while(thread_predi_ON){
+      watcher_created_file(dir_predi, flag_newPred);
     }
   });
-  sayHello();
 
-  //load frames
-  string path_frame = dir_path + dir_frame;
-  opeManager.loading_directoryFrames(path_frame);
-  Scene sceneManager;
-  Cloud* cloud = sceneManager.get_cloud_selected();
+  thread_grThr = std::thread([&](){
+    while(thread_grThr_ON){
+      watcher_created_file(dir_grThr, flag_newGrTh);
+    }
+  });
 
-  //Load json files - GT
-  string path_gt = dir_path + dir_grThr;
-  vector<string> paths_gt = opeManager.get_directoryAllFilePath(path_gt);
-  this->parse_obstacle_json(cloud, paths_gt, "gt");
-
-  //Load json files - predictions
-  string path_pr = dir_path + dir_predi;
-  vector<string> paths_pr = opeManager.get_directoryAllFilePath(path_pr);
-  this->parse_obstacle_json(cloud, paths_pr, "pr");
+  thread_predi.detach();
+  thread_grThr.detach();
 
   //---------------------------
 }
-void Obstacle_IO::clean_directories(){
+void Obstacle_IO::stop_dirWatcher(){
   //---------------------------
 
-  clean_directory_files(dir_frame.c_str());
-  clean_directory_files(dir_predi.c_str());
-  clean_directory_files(dir_grThr.c_str());
+  this->thread_predi_ON = false;
+  this->thread_grThr_ON = false;
+
+  thread_predi.~thread();
+  thread_grThr.~thread();
+
+  //---------------------------
+}
+
+//Other functions
+void Obstacle_IO::load_obstacleData(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  /*
+  //load frames
+  Operation opeManager;
+  string path_frame = dir_path + dir_frame;
+  opeManager->loading_directoryFrames(path_frame);
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  */
+
+  //Load json files - GT
+  if(flag_newPred){
+    string path_gt = dir_path + dir_grThr;
+    vector<string> paths_gt = opeManager->get_directoryAllFilePath(path_gt);
+    this->parse_obstacle_json(cloud, paths_gt, "gt");
+    flag_newPred = false;
+  }
+
+  //Load json files - predictions
+  if(flag_newGrTh){
+    string path_pr = dir_path + dir_predi;
+    vector<string> paths_pr = opeManager->get_directoryAllFilePath(path_pr);
+    this->parse_obstacle_json(cloud, paths_pr, "pr");
+    flag_newGrTh = false;
+  }
 
   //---------------------------
 }
@@ -90,6 +121,15 @@ void Obstacle_IO::save_nFrame(Cloud* cloud){
   if(savedFrame_ID >= savedFrame_max){
     savedFrame_ID = 0;
   }
+
+  //---------------------------
+}
+void Obstacle_IO::clean_directories(){
+  //---------------------------
+
+  clean_directory_files(dir_frame.c_str());
+  clean_directory_files(dir_predi.c_str());
+  clean_directory_files(dir_grThr.c_str());
 
   //---------------------------
 }

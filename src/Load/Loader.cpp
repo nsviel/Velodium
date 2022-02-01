@@ -70,7 +70,8 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  console.AddLog("sucess" ,"Loaded all frames");
+  string log = "Loaded " + to_string(data_vec.size()) + " frames";
+  console.AddLog("sucess", log);
   return true;
 }
 bool Loader::load_cloud_silent(string filePath){

@@ -126,7 +126,6 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
   //---------------------------
 }
 
-
 //Camera funtions
 void Player_online::camera_followUp(Cloud* cloud, int i){
   //---------------------------
@@ -286,4 +285,17 @@ void Player_online::color_unicolor(Subset* subset, vec4 color){
 
   //---------------------------
   sceneManager->update_subset_color(subset);
+}
+void Player_online::remove_lastFrame(Cloud* cloud, int i){
+  int nb_frame_max = 10;
+  //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = &cloud->subset[i];
+    if(subset->ID < i - nb_frame_max){
+      sceneManager->remove_subset();
+    }
+  }
+
+  //---------------------------
 }

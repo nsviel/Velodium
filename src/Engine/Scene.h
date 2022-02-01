@@ -18,8 +18,9 @@ public:
 
 public:
   //Remove functions
-  void removeCloud(Cloud* cloud);
-  void removeCloud_all();
+  void remove_cloud(Cloud* cloud);
+  void remove_cloud_all();
+  void remove_subset();
 
   //Update data
   void update_cloud_glyphs(Cloud* cloud);
@@ -53,6 +54,7 @@ public:
   Cloud* get_othercloud();
   Cloud* get_cloudByName(string name);
   Cloud* get_cloudByOID(int ID);
+  int get_subset_selected_ID();
   int get_orderSelectedcloud();
   int get_listcloudSize();
 

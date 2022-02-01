@@ -25,15 +25,31 @@ void GUI_Obstacle::design_Obstacle(){
   Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
-  this->run();
+  this->compute_obstacle();
   this->make_obstacleName(subset);
 
   //---------------------------
 }
 
-void GUI_Obstacle::run(){
+void GUI_Obstacle::compute_obstacle(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
+
+  bool* is_thread_pred = ioManager->get_is_thread_pred();
+  if(*is_thread_pred == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Start watchers", ImVec2(100,0))){
+      ioManager->start_dirWatcher();
+    }
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
+    if(ImGui::Button("Stop watchers", ImVec2(100,0))){
+      ioManager->stop_dirWatcher();
+    }
+  }
+  ImGui::PopStyleColor(1);
+
+
 
   if(ImGui::Button("run", ImVec2(100,0))){
     ioManager->load_obstacleData();

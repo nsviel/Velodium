@@ -139,7 +139,7 @@ void Operation::loading_sampledCloud(string path){
     extractionManager->merging_addCloud(cloud_base, cloud_toAdd);
 
     //Supress nth added part
-    sceneManager->removeCloud(cloud_toAdd);
+    sceneManager->remove_cloud(cloud_toAdd);
 
     //Space sampling the resulting cloud
     filterManager.spaceSampling(cloud_base, spaceSampling);
@@ -167,7 +167,7 @@ void Operation::loading_treatment(){
     //Save and remove
     Cloud* cloud = sceneManager->get_cloud_selected();
     saverManager->save_cloud(cloud, path);
-    sceneManager->removeCloud(cloud);
+    sceneManager->remove_cloud(cloud);
   }
 
   //---------------------------
@@ -178,7 +178,7 @@ void Operation::loading_fastScene(int mode){
 
   switch(mode){
     case 0:{//Buddha
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
 
       Matrix4f realTransformation;
       realTransformation <<
@@ -193,33 +193,33 @@ void Operation::loading_fastScene(int mode){
       break;
     }
     case 1:{//Torus
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       loaderManager->load_cloud("../media/fastScene/torus_1.ply");
       loaderManager->load_cloud("../media/fastScene/torus_2.ply");
       break;
     }
     case 2:{//PCAP
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       loaderManager->load_cloud("../media/fastScene/pcap_test.pcap");
       break;
     }
     case 3:{//Frames in movement
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       this->loading_directoryFrames("../media/point_cloud/frames/");
       break;
     }
     case 4:{//more Frames in movement
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       this->loading_directoryFrames("../media/point_cloud/frames_lot/");
       break;
     }
     case 5:{//Frame other
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       this->loading_directoryFrames("../media/point_cloud/frames_other/");
       break;
     }
     case 6:{//Frame other
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       loaderManager->load_cloud("/home/aither/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
       break;
     }

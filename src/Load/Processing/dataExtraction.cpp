@@ -35,7 +35,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     Subset subset;
 
     this->check_data(data[i]);
-    this->init_subsetParameters(subset, data[i]->name);
+    this->init_subsetParameters(subset, data[i]->name, i);
     this->init_frameParameters(subset);
 
     //Subset data
@@ -63,13 +63,13 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset dataExtraction::extractData(udpPacket* data){
+Subset dataExtraction::extractData(udpPacket* data, int ID){
   Subset subset;
   //---------------------------
 
   this->check_data(data);
 
-  this->init_subsetParameters(subset, data->name);
+  this->init_subsetParameters(subset, data->name, ID);
   this->init_frameParameters(subset);
 
   //Subset data
@@ -90,7 +90,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   //---------------------------
 
   this->check_data(data);
-  this->init_subsetParameters(subset, data->name);
+  this->init_subsetParameters(subset, data->name, cloud->nb_subset);
   this->init_frameParameters(subset);
 
   //Subset data
@@ -294,7 +294,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void dataExtraction::init_subsetParameters(Subset& subset, string name){
+void dataExtraction::init_subsetParameters(Subset& subset, string name, int ID){
   //---------------------------
 
   //Subset VAO
@@ -304,6 +304,7 @@ void dataExtraction::init_subsetParameters(Subset& subset, string name){
   subset.VAO = VAO;
 
   //Other stuff
+  subset.ID = ID;
   subset.name = name;
   subset.root = vec3(0.0);
   subset.dataFormat = " ";

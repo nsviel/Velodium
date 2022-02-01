@@ -5,7 +5,9 @@
 
 #include <thread>
 
+class Scene;
 class Saver;
+class Operation;
 
 
 class Obstacle_IO
@@ -16,6 +18,9 @@ public:
   ~Obstacle_IO();
 
 public:
+  void start_dirWatcher();
+  void stop_dirWatcher();
+
   void load_obstacleData();
   void clean_directories();
   void save_nFrame(Cloud* cloud);
@@ -23,9 +28,12 @@ public:
   void select_dir_path();
 
   inline string get_dir_path(){return dir_path;}
+  inline bool* get_is_thread_pred(){return &thread_predi_ON;}
 
 private:
+  Scene* sceneManager;
   Saver* saverManager;
+  Operation* opeManager;
 
   vector<string> save_path_vec;
   string dir_path;
@@ -35,7 +43,13 @@ private:
   int savedFrame_ID;
   int savedFrame_max;
 
-  std::thread m_thread;
+  bool thread_predi_ON;
+  bool thread_grThr_ON;
+  bool flag_newPred;
+  bool flag_newGrTh;
+
+  std::thread thread_predi;
+  std::thread thread_grThr;
 };
 
 #endif

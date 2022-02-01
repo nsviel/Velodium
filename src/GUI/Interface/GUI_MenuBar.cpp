@@ -73,10 +73,10 @@ void GUI_menuBar::MenuBar_menus(){
       window_tab.show_saving = true;
     }
     if(ImGui::MenuItem("Remove cloud", "Suppr")){
-      sceneManager->removeCloud(cloud);
+      sceneManager->remove_cloud(cloud);
     }
     if(ImGui::MenuItem("Remove all")){
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
     }
     if(ImGui::MenuItem("Next cloud","tab")){
       sceneManager->selection_setNext();

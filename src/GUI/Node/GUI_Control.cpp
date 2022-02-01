@@ -181,14 +181,14 @@ void GUI_control::control_keyboard_oneAction(){
 
       if(atLeastOne == false){
         Cloud* cloud = sceneManager->get_cloud_selected();
-        sceneManager->removeCloud(cloud);
+        sceneManager->remove_cloud(cloud);
       }
       break;
     }
 
     //Fin key - Delete all
     if (ImGui::IsKeyPressed(269)){
-      sceneManager->removeCloud_all();
+      sceneManager->remove_cloud_all();
       break;
     }
 
@@ -222,7 +222,7 @@ void GUI_control::control_keyboard_oneAction(){
     //N key - Save all & remove all & load new
     if(ImGui::IsKeyPressed(78) && !io.WantCaptureMouse){
       //opeManager->saving_allCloud();
-      //sceneManager->removeCloud_all();
+      //sceneManager->remove_cloud_all();
     }
 
     //o key - Open options

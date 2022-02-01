@@ -120,14 +120,14 @@ void Capture::new_capture(){
   //---------------------------
   ID_capture++;
 }
-void Capture::create_subset(udpPacket* frame_in, bool is_recording){
+void Capture::create_subset(udpPacket* udp_packet, bool is_recording){
   //This function is made for being asynchronous !
-  udpPacket frame = *frame_in;
+  udpPacket upd_frame = *udp_packet;
   //---------------------------
 
   //Convert the udppacket into subset
-  frame.name = "frame_" + to_string(ID_subset);
-  subset_capture = extractManager->extractData(&frame);
+  upd_frame.name = "frame_" + to_string(ID_subset);
+  subset_capture = extractManager->extractData(&upd_frame, ID_subset);
 
   if(is_recording){
     Saver saverManager;

@@ -94,13 +94,13 @@ void GUI_Player::player_run(){
   this->player_selection();
 
   //Range of displayed frames
-  int* subset_selected = playerManager->get_frame_ID();
+  int subset_selected_ID = sceneManager->get_subset_selected_ID();
   int* frame_max_nb = playerManager->get_frame_max_nb();
   int* frame_range = playerManager->get_player_frame_range();
   ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, *frame_max_nb)){
     if(cloud != nullptr){
-      playerManager->select_byFrameID(cloud, *subset_selected);
+      playerManager->select_byFrameID(cloud, subset_selected_ID);
     }
   }
 
@@ -130,16 +130,16 @@ void GUI_Player::player_mouse(){
   //Wheel - rolling stone
   if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
     if(cloud != nullptr){
-      playerManager->update_frame_ID(cloud);
-      int subset_selected = *playerManager->get_frame_ID();
+      int subset_selected_ID = sceneManager->get_subset_selected_ID();
+      playerManager->update_player_params(cloud);
 
       if(io.MouseWheel > 0){
-        subset_selected++;
+        subset_selected_ID++;
       }else{
-        subset_selected--;
+        subset_selected_ID--;
       }
 
-      playerManager->select_byFrameID(cloud, subset_selected);
+      playerManager->select_byFrameID(cloud, subset_selected_ID);
     }
   }
 
@@ -150,14 +150,14 @@ void GUI_Player::player_selection(){
   //---------------------------
 
   if(cloud != nullptr){
-    playerManager->update_frame_ID(cloud);
-    int* subset_selected = playerManager->get_frame_ID();
+    playerManager->update_player_params(cloud);
+    int subset_selected_ID = sceneManager->get_subset_selected_ID();
     int* frame_max_ID = playerManager->get_frame_max_ID();
 
     ImGui::SetNextItemWidth(140);
-    if(ImGui::SliderInt("##666", subset_selected, 0, *frame_max_ID)){
+    if(ImGui::SliderInt("##666", &subset_selected_ID, 0, *frame_max_ID)){
       if(cloud != nullptr){
-        playerManager->select_byFrameID(cloud, *subset_selected);
+        playerManager->select_byFrameID(cloud, subset_selected_ID);
       }
     }
     ImGui::SameLine();

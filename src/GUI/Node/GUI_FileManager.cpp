@@ -73,7 +73,7 @@ void GUI_fileManager::fileManager(){
       //Third column
       ImGui::TableSetColumnIndex(2);
       if(ImGui::SmallButton(ICON_FA_TRASH)){
-        sceneManager->removeCloud(cloud);
+        sceneManager->remove_cloud(cloud);
       }
 
       //----------
@@ -171,7 +171,7 @@ void GUI_fileManager::info_iconAction(Cloud* cloud){
   ImGui::PushID(cloud->oID);
   //ImGui::SameLine(ImGui::GetWindowWidth()-40);
   if(ImGui::Button(ICON_FA_TRASH)){
-    sceneManager->removeCloud(cloud);
+    sceneManager->remove_cloud(cloud);
   }
 
   //Modification window

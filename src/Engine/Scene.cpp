@@ -16,7 +16,7 @@ Scene::~Scene(){
 }
 
 //Remove functions
-void Scene::removeCloud(Cloud* cloud){
+void Scene::remove_cloud(Cloud* cloud){
   //---------------------------
 
   if(is_atLeastOnecloud()){
@@ -54,13 +54,18 @@ void Scene::removeCloud(Cloud* cloud){
 
   //---------------------------
 }
-void Scene::removeCloud_all(){
+void Scene::remove_cloud_all(){
   //---------------------------
 
   while(database.list_cloud->size() != 0){
     Cloud* cloud = *database.list_cloud->begin();
-    this->removeCloud(cloud);
+    this->remove_cloud(cloud);
   }
+
+  //---------------------------
+}
+void Scene::remove_subset(){
+  //---------------------------
 
   //---------------------------
 }
@@ -421,7 +426,20 @@ Subset* Scene::get_subset_selected(){
   }
 
   //---------------------------
+}
+int Scene::get_subset_selected_ID(){
+  Cloud* cloud = database.cloud_selected;
+  //---------------------------
 
+  if(cloud != nullptr){
+    Subset* subset = &cloud->subset[cloud->subset_selected];
+    return subset->ID;
+  }
+  else{
+    return 0;
+  }
+
+  //---------------------------
 }
 Cloud* Scene::get_cloud_selected(){
   return database.cloud_selected;

@@ -1,5 +1,5 @@
-#ifndef OBSTACLE_IOAA_H
-#define OBSTACLE_IOAA_H
+#ifndef NOTIFY_H
+#define NOTIFY_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 
-void dir_modif_watcher(std::string path){
+void watcher_all_directory(std::string path){
   std::string event_str;
   //---------------------------
 
@@ -59,6 +59,37 @@ void dir_modif_watcher(std::string path){
           printf( "The file %s was modified.\n", event->name );
         }
       }
+    }
+    i += EVENT_SIZE + event->len;
+  }
+
+  ( void ) inotify_rm_watch( fd, wd );
+  ( void ) close( fd );
+
+  //---------------------------
+}
+void watcher_created_file(std::string path, bool& flag){
+  std::string event_str;
+  //---------------------------
+
+  int EVENT_SIZE = sizeof (struct inotify_event);
+  int BUF_LEN = 1024 * ( EVENT_SIZE + 16 );
+
+  int fd = inotify_init();
+  int wd = inotify_add_watch(fd, path.c_str(), IN_CREATE);
+
+  char buffer[BUF_LEN];
+  int length = read(fd, buffer, BUF_LEN);
+
+  struct inotify_event *event = ( struct inotify_event * ) &buffer[0];
+
+  int i = 0;
+  while(i < length){
+    struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
+    if ( event->len && event->mask & IN_CREATE ) {
+      event_str = "The file " + (string)event->name + " was created.";
+      printf( "The file %s was created.\n", event->name );
+      flag = true;
     }
     i += EVENT_SIZE + event->len;
   }
