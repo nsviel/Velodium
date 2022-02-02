@@ -16,7 +16,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-class Configuration;
+class config_opengl;
 
 
 class Dimension
@@ -57,7 +57,7 @@ public:
 
 private:
   GLFWwindow* window;
-  Configuration* configManager;
+  config_opengl* configManager;
 
   //Rendering
   vec2 gl_pos;

@@ -19,6 +19,7 @@ class Shader;
 class Filter;
 class Renderer;
 class CT_ICP;
+class Configuration;
 
 #include "../common.h"
 
@@ -30,7 +31,7 @@ class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render);
+  Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render, Configuration* config);
   ~Engine();
 
 public:
@@ -52,6 +53,7 @@ public:
   inline Filter* get_filterManager(){return filterManager;}
   inline Renderer* get_renderManager(){return renderManager;}
   inline CT_ICP* get_cticpManager(){return cticpManager;}
+  inline Configuration* get_configManager(){return configManager;}
 
 private:
   Dimension* dimManager;
@@ -64,6 +66,7 @@ private:
   Filter* filterManager;
   Renderer* renderManager;
   CT_ICP* cticpManager;
+  Configuration* configManager;
 
   uint modelID, comID;
 };

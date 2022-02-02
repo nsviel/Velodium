@@ -49,8 +49,6 @@ void GUI_Obstacle::compute_obstacle(){
   }
   ImGui::PopStyleColor(1);
 
-
-
   if(ImGui::Button("run", ImVec2(100,0))){
     ioManager->load_obstacleData();
     obstacleManager->build_obstacleGlyph_gt(cloud);

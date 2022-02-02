@@ -30,7 +30,7 @@ class Selection;
 class Loader;
 class Plotting;
 class Fitting;
-class Configuration;
+class config_opengl;
 
 class GUI_windows
 {
@@ -75,8 +75,8 @@ private:
   Fitting* fitManager;
   Operation* opeManager;
   Extraction* extractionManager;
-  Transforms transformManager;
-  Configuration*configManager;
+  Transforms* transformManager;
+  config_opengl* configManager;
 
   WIN_camera* wincamManager;
   WIN_loading* loadingManager;

@@ -4,7 +4,7 @@
 #include "../../common.h"
 
 class Camera;
-class Configuration;
+class config_opengl;
 
 
 class WIN_camera
@@ -24,7 +24,7 @@ public:
   void insert_definedPosition();
 
 private:
-  Configuration* configManager;
+  config_opengl* configManager;
   Camera* cameraManager;
 };
 

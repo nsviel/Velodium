@@ -7,6 +7,7 @@
 #include "Network/GUI/GUI_Network.h"
 #include "Obstacle/GUI/GUI_Obstacle.h"
 
+#include "../Engine/Configuration/config_module.h"
 #include "../common.h"
 
 
@@ -30,10 +31,19 @@ public:
     this->module_scala = false;
 
     //-------------------------------
+    this->init_configuration();
   }
   ~GUI_module();
 
 public:
+  void init_configuration(){
+    //-------------------------------
+
+    this->configManager = new config_module();
+    configManager->make_configuration();
+
+    //-------------------------------
+  }
   void display_moduleTabs(){
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
@@ -89,6 +99,8 @@ public:
   inline GUI_Player* get_gui_player(){return gui_playerManager;}
 
 private:
+  config_module* configManager;
+
   GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;

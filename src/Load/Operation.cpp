@@ -4,7 +4,7 @@
 #include "Saver.h"
 
 #include "../Engine/Scene.h"
-#include "../Engine/Configuration/Configuration.h"
+#include "../Engine/Configuration/config_opengl.h"
 
 #include "../Specific/fct_transtypage.h"
 #include "../Specific/fct_system.h"
@@ -25,7 +25,7 @@ Operation::Operation(){
   this->nbLineSampling = 1000000;
 
   //Get absolute executable location
-  Configuration configManager;
+  config_opengl configManager;
   string path_init = configManager.parse_json_string("parameter", "path_media");
   this->path_current_dir = get_absolutePath_build() + '/' + path_init;
 
@@ -58,7 +58,7 @@ void Operation::loading_frames(){
   if(path_vec.size() != 0){
     loaderManager->load_cloud_byFrame(path_vec);
   }
-  
+
   //---------------------------
 }
 void Operation::loading_directoryFrames(string path){
@@ -221,6 +221,11 @@ void Operation::loading_fastScene(int mode){
     case 6:{//Frame other
       sceneManager->remove_cloud_all();
       loaderManager->load_cloud("/home/aither/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
+      break;
+    }
+    case 7:{//Frame for prediction
+      sceneManager->remove_cloud_all();
+      this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture_test/frame/");
       break;
     }
   }

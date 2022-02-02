@@ -3,6 +3,9 @@
 
 #include "../../common.h"
 
+class config_opengl;
+class config_module;
+
 
 class Configuration
 {
@@ -15,19 +18,12 @@ public:
   //Main functions
   void make_configuration();
 
-  //json stuff
-  void create_jsonfile();
-  void update_jsonfile(string field, string title, string value);
-  bool is_file_exist(string fileName);
-
-  float parse_json_float(string field, string value);
-  string parse_json_string(string field, string value);
-  int parse_json_int(string field, string value);
-  bool parse_json_bool(string field, string value);
+  inline config_opengl* get_conf_glManager(){return conf_glManager;}
+  inline config_module* get_conf_modManager(){return conf_modManager;}
 
 private:
-  string jsonPath;
-
+  config_opengl* conf_glManager;
+  config_module* conf_modManager;
 };
 
 #endif

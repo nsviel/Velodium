@@ -7,7 +7,7 @@
 #include "../../Module/LiDAR/Velodyne/UDP/struct_UDPpacket.h"
 
 class Scene;
-class Configuration;
+class config_opengl;
 
 
 class dataExtraction
@@ -42,7 +42,7 @@ private:
 
 private:
   Scene* sceneManager;
-  Configuration* configManager;
+  config_opengl* configManager;
 
   float Red, Green, Blue;
   int ID, oneFrame_VAO;

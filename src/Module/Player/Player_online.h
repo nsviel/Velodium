@@ -12,6 +12,7 @@ class Dimension;
 class Renderer;
 class Scene;
 class Obstacle;
+class config_module;
 
 
 class Player_online
@@ -61,6 +62,7 @@ private:
   Dimension* dimManager;
   Renderer* renderManager;
   Obstacle* obstacleManager;
+  config_module* configManager;
 
   string screenshot_path;
   vec2 HM_height_range;
@@ -81,6 +83,7 @@ private:
   bool with_save_image;
   bool with_keepNframes;
   bool with_remove_lastSubset;
+  bool with_AI_module;
 };
 
 #endif

@@ -8,6 +8,7 @@
 #include "../Shader/Shader.h"
 #include "../Shader/ShaderObject.h"
 #include "../Configuration/Dimension.h"
+#include "../Configuration/config_opengl.h"
 #include "../Configuration/Configuration.h"
 
 #include "../../GUI/GUI.h"
@@ -20,7 +21,6 @@
 CoreGLengine::CoreGLengine(){
   //---------------------------
 
-  this->configManager = new Configuration();
 
   //---------------------------
 }
@@ -35,9 +35,9 @@ CoreGLengine::~CoreGLengine(){
 
 //Engine Initialization
 bool CoreGLengine::init(){
-  configManager->make_configuration();
   //---------------------------
 
+  this->init_configuration();
   this->init_OGL();
   this->init_object();
   this->init_rendering();
@@ -46,18 +46,28 @@ bool CoreGLengine::init(){
   console.AddLog("sucess" ,"Program initialized...");
   return true;
 }
+bool CoreGLengine::init_configuration(){
+  //---------------------------
+
+  this->configManager = new Configuration();
+  this->conf_glManager = configManager->get_conf_glManager();
+  configManager->make_configuration();
+
+  //---------------------------
+  return true;
+}
 bool CoreGLengine::init_OGL(){
   //---------------------------
 
   //Dimension
-  int resolution_width = configManager->parse_json_int("window", "resolution_width");
-  int resolution_height = configManager->parse_json_int("window", "resolution_height");
+  int resolution_width = conf_glManager->parse_json_int("window", "resolution_width");
+  int resolution_height = conf_glManager->parse_json_int("window", "resolution_height");
 
   //GLFW
-  bool forceVersion = configManager->parse_json_bool("opengl", "forceVersion");
-  bool coreGL_verbose = configManager->parse_json_bool("opengl", "verbose_coreGL");
-  int nb_multisample = configManager->parse_json_int("opengl", "nb_multisample");
-  string win_title = configManager->parse_json_string("window", "title");
+  bool forceVersion = conf_glManager->parse_json_bool("opengl", "forceVersion");
+  bool coreGL_verbose = conf_glManager->parse_json_bool("opengl", "verbose_coreGL");
+  int nb_multisample = conf_glManager->parse_json_int("opengl", "nb_multisample");
+  string win_title = conf_glManager->parse_json_string("window", "title");
 
   glfwInit();
   if(forceVersion){
@@ -102,7 +112,7 @@ bool CoreGLengine::init_object(){
   this->cameraManager = new Camera(dimManager);
   this->viewportManager = new Viewport(dimManager);
   this->renderManager = new Renderer(dimManager);
-  this->engineManager = new Engine(dimManager, cameraManager, shaderManager, renderManager);
+  this->engineManager = new Engine(dimManager, cameraManager, shaderManager, renderManager, configManager);
   this->guiManager = new GUI(engineManager);
 
   //---------------------------
@@ -215,7 +225,7 @@ void CoreGLengine::loop_drawScreen(){
   //---------------------------
 }
 void CoreGLengine::loop_end(){
-  bool waitForEvent = configManager->parse_json_bool("opengl", "waitForEvent");
+  bool waitForEvent = conf_glManager->parse_json_bool("opengl", "waitForEvent");
   //---------------------------
 
   glfwSwapBuffers(window);

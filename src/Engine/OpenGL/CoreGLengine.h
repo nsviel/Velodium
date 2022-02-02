@@ -1,6 +1,13 @@
 #ifndef COREGLENGINE_H
 #define COREGLENGINE_H
 
+#include "../../common.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 class Dimension;
 class Shader;
 class Camera;
@@ -8,14 +15,8 @@ class Viewport;
 class GUI;
 class Engine;
 class Renderer;
+class config_opengl;
 class Configuration;
-
-#include "../../common.h"
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 
 class CoreGLengine
@@ -26,6 +27,7 @@ public:
 
 public:
   bool init();
+  bool init_configuration();
   bool init_OGL();
   bool init_object();
   void init_rendering();
@@ -41,6 +43,7 @@ public:
 
 private:
   Configuration* configManager;
+  config_opengl* conf_glManager;
   GLFWwindow* window;
   Engine* engineManager;
   Camera* cameraManager;

@@ -11,6 +11,8 @@
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/config_module.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Scene.h"
 
@@ -34,6 +36,9 @@ Player_online::Player_online(Engine* engineManager){
   this->sceneManager = new Scene();
   this->obstacleManager = new Obstacle();
 
+  Configuration* config = engineManager->get_configManager();
+  this->configManager = config->get_conf_modManager();
+
   this->HM_height_range = vec2(-2.5, 1.75);
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
@@ -42,19 +47,20 @@ Player_online::Player_online(Engine* engineManager){
   this->nb_subset_max = 20;
 
   this->with_camera_top = false;
-  this->with_camera_follow = false;
+  this->with_camera_follow = configManager->parse_json_bool("online", "with_camera_follow");
   this->with_camera_root = false;
 
-  this->with_heatmap = true;
+  this->with_heatmap = configManager->parse_json_bool("online", "with_heatmap");
   this->with_heatmap_rltHeight = true;
-  this->with_unicolor = false;
+  this->with_unicolor = !with_heatmap;
 
   this->with_online = true;
-  this->with_slam = true;
-  this->with_cylinder_cleaning = true;
-  this->with_save_image = false;
-  this->with_keepNframes = true;
-  this->with_remove_lastSubset = true;
+  this->with_slam = configManager->parse_json_bool("online", "with_slam");
+  this->with_cylinder_cleaning = configManager->parse_json_bool("online", "with_cylinder_cleaning");
+  this->with_save_image = configManager->parse_json_bool("online", "with_save_image");
+  this->with_keepNframes = configManager->parse_json_bool("online", "with_keepNframes");
+  this->with_remove_lastSubset = configManager->parse_json_bool("online", "with_remove_lastSubset");
+  this->with_AI_module = configManager->parse_json_bool("online", "with_AI_module");
 
   //---------------------------
 }
@@ -126,6 +132,11 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
     if(with_remove_lastSubset){
       this->remove_subset_last(cloud, ID_subset);
+    }
+
+    //Make AI module stuff
+    if(with_AI_module){
+      obstacleManager->online_run(cloud);
     }
   }
 

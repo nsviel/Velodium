@@ -194,6 +194,9 @@ void GUI_menuBar::MenuBar_fastScene(){
   if(ImGui::Button("Tunel", ImVec2(100,0))){
     opeManager->loading_fastScene(6);
   }
+  if(ImGui::Button("IA module", ImVec2(100,0))){
+    opeManager->loading_fastScene(7);
+  }
 
   //---------------------------
 }

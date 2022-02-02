@@ -11,6 +11,8 @@
 Obstacle::Obstacle(){
   //---------------------------
 
+  this->oobbManager = new OOBB();
+  this->transformManager = new Transforms();
   this->glyphManager = new Glyphs();
   this->ioManager = new Obstacle_IO();
 
@@ -18,9 +20,15 @@ Obstacle::Obstacle(){
 }
 Obstacle::~Obstacle(){}
 
+void Obstacle::online_run(Cloud* cloud){
+  //---------------------------
+
+  ioManager->load_obstacleData();
+  this->build_obstacleGlyph_gt(cloud);
+
+  //---------------------------
+}
 void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
-  OOBB oobbManager;
-  Transforms transformManager;
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
@@ -34,9 +42,9 @@ void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
       vec3 To = obstacle_gt->position[j];
       vec3 Ro = vec3(0, 0, obstacle_gt->heading[j]);
       vec3 So = obstacle_gt->dimension[j];
-      mat4 transf = transformManager.compute_transformMatrix(To, Ro, So);
+      mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
-      oobbManager.update_oobb(glyph, transf);
+      oobbManager->update_oobb(glyph, transf);
       glyphManager->update_glyph_location(glyph);
       obstacle_gt->oobb.push_back(glyph);
     }
@@ -45,8 +53,6 @@ void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
   //---------------------------
 }
 void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
-  OOBB oobbManager;
-  Transforms transformManager;
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
@@ -60,9 +66,9 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
       vec3 To = obstacle_pr->position[j];
       vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
       vec3 So = obstacle_pr->dimension[j];
-      mat4 transf = transformManager.compute_transformMatrix(To, Ro, So);
+      mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
-      oobbManager.update_oobb(glyph, transf);
+      oobbManager->update_oobb(glyph, transf);
       glyphManager->update_glyph_location(glyph);
       obstacle_pr->oobb.push_back(glyph);
     }

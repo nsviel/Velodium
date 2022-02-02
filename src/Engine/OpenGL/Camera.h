@@ -1,12 +1,13 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-class Dimension;
-class Configuration;
-
 #include "struct_viewport.h"
 
 #include "../../common.h"
+
+class Dimension;
+class config_opengl;
+
 
 class Camera
 {
@@ -34,7 +35,6 @@ public:
   //Functions
   void compute_opticalZoom(float value);
   void compute_positionalZoom(float value);
-
 
   //Accessors
   inline void set_desiredViewMatrix(mat4 value){viewMain.dviewMat = value;}
@@ -65,7 +65,7 @@ public:
   inline bool is_cameraMovON(){return viewMain.cameraMovON;}
 
 private:
-  Configuration* configManager;
+  config_opengl* configManager;
   Dimension* dimManager;
 
   Viewport_obj viewMain;

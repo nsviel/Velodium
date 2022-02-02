@@ -7,6 +7,7 @@
 #include "Shader/Shader.h"
 #include "Configuration/Dimension.h"
 #include "Configuration/Configuration.h"
+#include "Configuration/config_opengl.h"
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Renderer.h"
 #include "OpenGL/Camera.h"
@@ -19,11 +20,12 @@ Database database;
 
 
 //Constructor / Destructor
-Engine::Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render){
+Engine::Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render, Configuration* config){
   this->dimManager = dim;
   this->shaderManager = shader;
   this->cameraManager = control;
   this->renderManager = render;
+  this->configManager = config;
   //---------------------------
 
   this->init_database();
@@ -59,7 +61,6 @@ void Engine::init_database(){
   //---------------------------
 }
 void Engine::loop(){
-  Configuration configManager;
   //---------------------------
 
   //Draw glyph stuff

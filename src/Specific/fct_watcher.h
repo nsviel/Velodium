@@ -1,5 +1,5 @@
-#ifndef NOTIFY_H
-#define NOTIFY_H
+#ifndef FCT_WATCHER_H
+#define FCT_WATCHER_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,7 +68,7 @@ void watcher_all_directory(std::string path){
 
   //---------------------------
 }
-void watcher_created_file(std::string path, bool& flag){
+void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   std::string event_str;
   //---------------------------
 
@@ -87,8 +87,12 @@ void watcher_created_file(std::string path, bool& flag){
   while(i < length){
     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
     if ( event->len && event->mask & IN_CREATE ) {
-      event_str = "The file " + (string)event->name + " was created.";
-      printf( "The file %s was created.\n", event->name );
+      //Terminal info
+      //event_str = "The file " + (string)event->name + " was created.";
+      //printf( "The file %s was created.\n", event->name );
+
+      //Output
+      path_full = path + event->name;
       flag = true;
     }
     i += EVENT_SIZE + event->len;

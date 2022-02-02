@@ -1,6 +1,6 @@
 #include "Dimension.h"
 
-#include "Configuration.h"
+#include "config_opengl.h"
 
 
 //Constructor / Destructor
@@ -8,7 +8,7 @@ Dimension::Dimension(GLFWwindow* Window){
   this->window = Window;
   //---------------------------
 
-  this->configManager = new Configuration();
+  this->configManager = new config_opengl();
 
   int win_h = configManager->parse_json_int("window", "resolution_height");
   int win_w = configManager->parse_json_int("window", "resolution_width");

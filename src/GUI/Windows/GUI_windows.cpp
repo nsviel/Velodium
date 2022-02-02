@@ -14,6 +14,7 @@
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/config_opengl.h"
 
 #include "../../Operation/Plotting.h"
 #include "../../Operation/Functions/Extraction.h"
@@ -46,12 +47,14 @@ GUI_windows::GUI_windows(Engine* engine){
   this->glyphManager = new Glyphs();
 
   this->opeManager = new Operation();
-
+  this->transformManager = new Transforms();
   this->attribManager = new Attribut();
   this->fitManager = new Fitting();
   this->extractionManager = new Extraction();
   this->plotManager = new Plotting();
-  this->configManager = new Configuration();
+
+  Configuration* config = engineManager->get_configManager();
+  this->configManager = config->get_conf_glManager();
 
   this->wincamManager = new WIN_camera(cameraManager);
   this->loadingManager = new WIN_loading();
@@ -283,9 +286,9 @@ void GUI_windows::window_transformation(){
     ImGui::PushItemWidth(75);
     if(ImGui::DragFloat("Z", &Zpos, 0.01f)){
       if(cloud != nullptr){
-        transformManager.make_elevation(cloud, Zpos);
+        transformManager->make_elevation(cloud, Zpos);
         sceneManager->update_cloud_location(cloud);
-        Z_approx = transformManager.fct_soilDetermination(cloud);
+        Z_approx = transformManager->fct_soilDetermination(cloud);
       }
     }
     ImGui::SameLine();
@@ -295,15 +298,15 @@ void GUI_windows::window_transformation(){
     static float Z_scan = 0.0f;
     if(ImGui::DragFloat("Scanner height", &Z_scan, 0.05f)){
       if(cloud != nullptr){
-        Z_approx = transformManager.fct_soilDetermination(cloud);
+        Z_approx = transformManager->fct_soilDetermination(cloud);
       }
     }
     ImGui::SameLine();
     static int soilnb_point = 10000;
     if(ImGui::DragInt("Ground pts", &soilnb_point, 100)){
       if(cloud != nullptr){
-        transformManager.set_soilnb_point(soilnb_point);
-        Z_approx = transformManager.fct_soilDetermination(cloud);
+        transformManager->set_soilnb_point(soilnb_point);
+        Z_approx = transformManager->fct_soilDetermination(cloud);
       }
     }
 
@@ -312,15 +315,15 @@ void GUI_windows::window_transformation(){
         list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
         for(int i=0;i<list_cloud->size();i++){
           Cloud* cloud = *next(list_cloud->begin(),i);
-          transformManager.fct_adjustPosToScanner(cloud, Z_scan);
+          transformManager->fct_adjustPosToScanner(cloud, Z_scan);
           sceneManager->update_cloud_location(cloud);
         }
       }
       else{
         if(cloud != nullptr){
-          transformManager.fct_adjustPosToScanner(cloud, Z_scan);
+          transformManager->fct_adjustPosToScanner(cloud, Z_scan);
           sceneManager->update_cloud_location(cloud);
-          Z_approx = transformManager.fct_soilDetermination(cloud);
+          Z_approx = transformManager->fct_soilDetermination(cloud);
         }
       }
     }
@@ -350,7 +353,7 @@ void GUI_windows::window_transformation(){
 
       if(ImGui::Button("Apply real transformation from init", ImVec2(300,0))){
         sceneManager->update_cloud_reset(cloud);
-        transformManager.make_Transformation(subset, vec3(0,0,0), subset->transformation);//transformation.RealTransformation);
+        transformManager->make_Transformation(subset, vec3(0,0,0), subset->transformation);//transformation.RealTransformation);
         sceneManager->update_cloud_location(cloud);
       }
     }
@@ -412,7 +415,7 @@ void GUI_windows::window_transformation(){
         Subset* subset = sceneManager->get_subset_selected();
 
         sceneManager->update_cloud_reset(cloud);
-        transformManager.make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
         sceneManager->update_cloud_location(cloud);
       }
     }
@@ -422,7 +425,7 @@ void GUI_windows::window_transformation(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
         //------------------
-        transformManager.make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
         //sceneManager->update_cloud_location(cloud);
       }
     }
@@ -435,7 +438,7 @@ void GUI_windows::window_transformation(){
         Subset* subset = sceneManager->get_subset_selected();
 
         sceneManager->update_cloud_reset(cloud);
-        transformManager.make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
         sceneManager->update_cloud_location(cloud);
       }
     }
@@ -445,7 +448,7 @@ void GUI_windows::window_transformation(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        transformManager.make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
         //sceneManager->update_cloud_location(cloud);
       }
     }
@@ -460,7 +463,7 @@ void GUI_windows::window_transformation(){
     if(ImGui::Button("Apply##1")){
       if(cloud != nullptr){
         vec3 translation = vec3(trans[0], trans[1], trans[2]);
-        transformManager.make_translation(cloud, translation);
+        transformManager->make_translation(cloud, translation);
         sceneManager->update_cloud_location(cloud);
         trans[0] = 0;
         trans[1] = 0;
@@ -501,8 +504,8 @@ void GUI_windows::window_fitting(){
     //Axis alignement
     if(ImGui::Button("X alignement", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        transformManager.make_orientAxis_X(cloud);
-        transformManager.make_alignAxis_X(cloud);
+        transformManager->make_orientAxis_X(cloud);
+        transformManager->make_alignAxis_X(cloud);
         sceneManager->update_cloud_location(cloud);
       }
     }
@@ -572,10 +575,10 @@ void GUI_windows::window_normal(){
         }
 
         if(normalMethod == 4){
-          float angle = transformManager.make_orientAxis_X(cloud);
+          float angle = transformManager->make_orientAxis_X(cloud);
           attribManager->compute_normals_planXaxis(subset);
           vec3 rotation = vec3(0, 0, -angle);
-          transformManager.make_rotation(cloud, vec3(0,0,0), rotation);
+          transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
           subset_init->N = subset->N;
           sceneManager->update_cloud_location(cloud);
         }
@@ -623,10 +626,10 @@ void GUI_windows::window_normal(){
           }
 
           if(normalMethod == 4){
-            float angle = transformManager.make_orientAxis_X(cloud);
+            float angle = transformManager->make_orientAxis_X(cloud);
             attribManager->compute_normals_planXaxis(subset);
             vec3 rotation = vec3(0, 0, -angle);
-            transformManager.make_rotation(cloud, vec3(0,0,0), rotation);
+            transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
             subset_init->N = subset->N;
             sceneManager->update_subset_location(subset);
           }

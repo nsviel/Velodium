@@ -275,7 +275,13 @@ void GUI_Player::parameter_online(){
     ImGui::NextColumn();
 
     //Colorization
-    static int colorization = 0;
+    int colorization;
+    bool* with_heatmap = onlineManager->get_with_heatmap();
+    if(*with_heatmap){
+      colorization = 0;
+    }else{
+      colorization = 1;
+    }
     if(ImGui::RadioButton("Heatmap", &colorization, 0)){
       *onlineManager->get_with_heatmap() = true;
       *onlineManager->get_with_unicolor() = false;

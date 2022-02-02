@@ -1,7 +1,7 @@
 #include "Renderer.h"
 
 #include "../Configuration/Dimension.h"
-#include "../Configuration/Configuration.h"
+#include "../Configuration/config_opengl.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image/stb_image_write.h"
@@ -12,7 +12,7 @@ Renderer::Renderer(Dimension* dim){
   //---------------------------
 
   this->dimManager = dim;
-  this->configManager = new Configuration();
+  this->configManager = new config_opengl();
 
   float bkg_color = configManager->parse_json_float("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);

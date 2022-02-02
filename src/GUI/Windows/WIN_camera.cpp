@@ -1,7 +1,7 @@
 #include "WIN_camera.h"
 
 #include "../../Engine/OpenGL/Camera.h"
-#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/config_opengl.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -16,7 +16,7 @@ WIN_camera::WIN_camera(Camera* camera){
   //---------------------------
 
   this->cameraManager = camera;
-  this->configManager = new Configuration();
+  this->configManager = new config_opengl();
 
   //---------------------------
 }

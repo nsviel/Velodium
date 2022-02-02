@@ -4,7 +4,7 @@
 #include "../../common.h"
 
 class Dimension;
-class Configuration;
+class config_opengl;
 
 
 class Renderer
@@ -30,7 +30,7 @@ public:
 
 private:
   Dimension* dimManager;
-  Configuration* configManager;
+  config_opengl* configManager;
 
   GLuint quad_vao;
   GLuint quad_vbo;

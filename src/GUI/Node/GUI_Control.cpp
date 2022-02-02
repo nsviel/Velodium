@@ -10,7 +10,7 @@
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/struct_viewport.h"
 #include "../../Engine/Configuration/Dimension.h"
-#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/config_opengl.h"
 
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Selection.h"
@@ -38,7 +38,7 @@ GUI_control::GUI_control(Engine* engine){
   this->attribManager = new Attribut();
   this->opeManager = new Operation();
 
-  Configuration configManager;
+  config_opengl configManager;
   this->cloud_trans_speed = configManager.parse_json_float("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager.parse_json_float("parameter", "cloud_rotation");
   this->wheel_mode = 0;

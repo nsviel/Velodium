@@ -2,7 +2,7 @@
 
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
-#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/config_opengl.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_system.h"
 
@@ -13,7 +13,7 @@
 dataExtraction::dataExtraction(){
   //---------------------------
 
-  this->configManager = new Configuration();
+  this->configManager = new config_opengl();
   this->sceneManager = new Scene();
 
   this->ID = 0;
