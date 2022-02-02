@@ -27,13 +27,13 @@ void Camera::viewport_init(){
   this->view = &viewMain;
 
   //Main viewport
-  float camPos = configManager->parse_json_float("camera", "initial_pos");
+  float camPos = configManager->parse_json_f("camera", "initial_pos");
   viewMain.cam_P = vec3(camPos, camPos, camPos);
-  viewMain.speed_move = configManager->parse_json_float("camera", "speed_move");
-  viewMain.speed_mouse = configManager->parse_json_float("camera", "speed_mouse");
+  viewMain.speed_move = configManager->parse_json_f("camera", "speed_move");
+  viewMain.speed_mouse = configManager->parse_json_f("camera", "speed_mouse");
   viewMain.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   viewMain.angle_elevati = - M_PI/6;// Initial vertical angle
-  viewMain.fov = configManager->parse_json_float("camera", "fov");
+  viewMain.fov = configManager->parse_json_f("camera", "fov");
   viewMain.cameraMovON = false;
   viewMain.topView = false;
   viewMain.proj_persp = true;
@@ -41,8 +41,8 @@ void Camera::viewport_init(){
   viewMain.desiredPose = false;
   viewMain.sideView = false;
   viewMain.zoom_topView = 0;
-  viewMain.clip_near = configManager->parse_json_float("camera", "clip_near");
-  viewMain.clip_far = configManager->parse_json_float("camera", "clip_far");
+  viewMain.clip_near = configManager->parse_json_f("camera", "clip_near");
+  viewMain.clip_far = configManager->parse_json_f("camera", "clip_far");
 
   //Map viewport
   viewMap.pos = vec2(800,400);
@@ -50,14 +50,14 @@ void Camera::viewport_init(){
   viewMap.cam_P = vec3(0, 0, 0);
   viewMap.angle_azimuth = 0;
   viewMap.angle_elevati = 0;
-  viewMap.fov = configManager->parse_json_float("camera", "fov");
+  viewMap.fov = configManager->parse_json_f("camera", "fov");
   viewMap.proj_persp = false;
   viewMap.proj_ortho = true;
   viewMap.topView = true;
   viewMap.sideView = false;
   viewMap.zoom_topView = 0;
-  viewMap.clip_near = configManager->parse_json_float("camera", "clip_near");
-  viewMap.clip_far = configManager->parse_json_float("camera", "clip_far");
+  viewMap.clip_near = configManager->parse_json_f("camera", "clip_near");
+  viewMap.clip_far = configManager->parse_json_f("camera", "clip_far");
 
   //---------------------------
 }
@@ -82,7 +82,7 @@ void Camera::viewport_update(int ID){
 void Camera::viewport_reset(){
   //---------------------------
 
-  float camPos = configManager->parse_json_float("camera", "initial_pos");
+  float camPos = configManager->parse_json_f("camera", "initial_pos");
   viewMain.cam_P = vec3(camPos, camPos, camPos);
   viewMain.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   viewMain.angle_elevati = - M_PI/6;// Initial vertical angle
@@ -245,7 +245,7 @@ void Camera::compute_opticalZoom(float yoffset){
 
   if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
     //Perspective zoom
-    float camFOV = configManager->parse_json_float("camera", "fov");
+    float camFOV = configManager->parse_json_f("camera", "fov");
     if(view->fov >= 1.0f && view->fov <= camFOV) view->fov -= yoffset;
     if(view->fov <= 1.0f) view->fov = 1.0f;
     if(view->fov >= camFOV) view->fov = camFOV;

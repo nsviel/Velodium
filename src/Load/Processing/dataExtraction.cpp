@@ -292,7 +292,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->ID_selected = 0;
   cloud->ID_last = 0;
   cloud->heatmap = false;
-  cloud->point_size = configManager->parse_json_int("parameter", "point_size");
+  cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = vec4(Red, Green, Blue, 1.0f);
   cloud->saveas = get_absolutePath_build() + "/../media/data/";
 

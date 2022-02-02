@@ -42,6 +42,13 @@ void GUI_Player::design_player_online(){
 
   //---------------------------
 }
+void GUI_Player::update(){
+  //---------------------------
+
+  onlineManager->update_configuration();
+
+  //---------------------------
+}
 
 //Subfunctions
 void GUI_Player::player_run(){
@@ -100,7 +107,7 @@ void GUI_Player::player_run(){
     nb_subset_max = cloud->nb_subset - 1;
   }
   ImGui::SetNextItemWidth(140);
-  if(ImGui::DragInt("Displayed frames", player_subset_range, 1, 0, nb_subset_max)){
+  if(ImGui::DragInt("Displayed frames", player_subset_range, 1, 1, nb_subset_max)){
     if(cloud != nullptr){
       playerManager->select_bySubsetID(cloud, cloud->ID_selected);
     }

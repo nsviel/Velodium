@@ -12,6 +12,8 @@
 #include "../../Engine/Engine.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
+#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/config_module.h"
 
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -35,6 +37,8 @@ GUI_menuBar::GUI_menuBar(Engine* eng, GUI_windows* win, GUI_option* opt, GUI_lef
   this->playerManager = ply;
   //---------------------------
 
+  Configuration* config = eng->get_configManager();
+  this->configManager = config->get_conf_modManager();
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
   this->texManager = new Textures();
@@ -168,38 +172,6 @@ void GUI_menuBar::MenuBar_subsetSelection(){
 
   //-------------------------
 }
-void GUI_menuBar::MenuBar_fastScene(){
-  //---------------------------
-
-  //Two Buddha point cloud to register
-  if(ImGui::Button("Buddha", ImVec2(100,0))){
-    opeManager->loading_fastScene(0);
-  }
-  //Two Torus point cloud to register
-  if(ImGui::Button("Torus", ImVec2(100,0))){
-    opeManager->loading_fastScene(1);
-  }
-  if(ImGui::Button("PCAP file", ImVec2(100,0))){
-    opeManager->loading_fastScene(2);
-  }
-  if(ImGui::Button("Frames move", ImVec2(100,0))){
-    opeManager->loading_fastScene(3);
-  }
-  if(ImGui::Button("More frames", ImVec2(100,0))){
-    opeManager->loading_fastScene(4);
-  }
-  if(ImGui::Button("Other frames", ImVec2(100,0))){
-    opeManager->loading_fastScene(5);
-  }
-  if(ImGui::Button("Tunel", ImVec2(100,0))){
-    opeManager->loading_fastScene(6);
-  }
-  if(ImGui::Button("IA module", ImVec2(100,0))){
-    opeManager->loading_fastScene(7);
-  }
-
-  //---------------------------
-}
 void GUI_menuBar::MenuBar_Operations(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
@@ -266,4 +238,46 @@ void GUI_menuBar::MenuBar_appInfo(){
     //---------------------------
     ImGui::EndMenu();
   }
+}
+void GUI_menuBar::MenuBar_fastScene(){
+  //---------------------------
+
+  //Two Buddha point cloud to register
+  if(ImGui::Button("Buddha", ImVec2(100,0))){
+    opeManager->loading_fastScene(0);
+  }
+  //Two Torus point cloud to register
+  if(ImGui::Button("Torus", ImVec2(100,0))){
+    opeManager->loading_fastScene(1);
+  }
+  if(ImGui::Button("PCAP file", ImVec2(100,0))){
+    opeManager->loading_fastScene(2);
+  }
+  if(ImGui::Button("Frames move", ImVec2(100,0))){
+    opeManager->loading_fastScene(3);
+    configManager->choose_configuration(0);
+    gui_leftPanelManager->update();
+  }
+  if(ImGui::Button("More frames", ImVec2(100,0))){
+    opeManager->loading_fastScene(4);
+    configManager->choose_configuration(0);
+    gui_leftPanelManager->update();
+  }
+  if(ImGui::Button("Other frames", ImVec2(100,0))){
+    opeManager->loading_fastScene(5);
+    configManager->choose_configuration(0);
+    gui_leftPanelManager->update();
+  }
+  if(ImGui::Button("Tunel", ImVec2(100,0))){
+    opeManager->loading_fastScene(6);
+    configManager->choose_configuration(0);
+    gui_leftPanelManager->update();
+  }
+  if(ImGui::Button("IA module", ImVec2(100,0))){
+    opeManager->loading_fastScene(7);
+    configManager->choose_configuration(1);
+    gui_leftPanelManager->update();
+  }
+
+  //---------------------------
 }

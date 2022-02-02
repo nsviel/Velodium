@@ -94,6 +94,13 @@ public:
       ImGui::EndTabBar();
     }
   }
+  void update(){
+    //-------------------------------
+
+    gui_playerManager->update();
+
+    //-------------------------------
+  }
 
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
   inline GUI_Player* get_gui_player(){return gui_playerManager;}

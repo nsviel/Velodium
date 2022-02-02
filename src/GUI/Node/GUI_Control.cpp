@@ -39,8 +39,8 @@ GUI_control::GUI_control(Engine* engine){
   this->opeManager = new Operation();
 
   config_opengl configManager;
-  this->cloud_trans_speed = configManager.parse_json_float("parameter", "cloud_translation");
-  this->cloud_rotat_degree = configManager.parse_json_float("parameter", "cloud_rotation");
+  this->cloud_trans_speed = configManager.parse_json_f("parameter", "cloud_translation");
+  this->cloud_rotat_degree = configManager.parse_json_f("parameter", "cloud_rotation");
   this->wheel_mode = 0;
 
   //---------------------------

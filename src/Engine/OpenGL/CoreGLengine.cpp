@@ -60,14 +60,14 @@ bool CoreGLengine::init_OGL(){
   //---------------------------
 
   //Dimension
-  int resolution_width = conf_glManager->parse_json_int("window", "resolution_width");
-  int resolution_height = conf_glManager->parse_json_int("window", "resolution_height");
+  int resolution_width = conf_glManager->parse_json_i("window", "resolution_width");
+  int resolution_height = conf_glManager->parse_json_i("window", "resolution_height");
 
   //GLFW
-  bool forceVersion = conf_glManager->parse_json_bool("opengl", "forceVersion");
-  bool coreGL_verbose = conf_glManager->parse_json_bool("opengl", "verbose_coreGL");
-  int nb_multisample = conf_glManager->parse_json_int("opengl", "nb_multisample");
-  string win_title = conf_glManager->parse_json_string("window", "title");
+  bool forceVersion = conf_glManager->parse_json_b("opengl", "forceVersion");
+  bool coreGL_verbose = conf_glManager->parse_json_b("opengl", "verbose_coreGL");
+  int nb_multisample = conf_glManager->parse_json_i("opengl", "nb_multisample");
+  string win_title = conf_glManager->parse_json_s("window", "title");
 
   glfwInit();
   if(forceVersion){
@@ -225,7 +225,7 @@ void CoreGLengine::loop_drawScreen(){
   //---------------------------
 }
 void CoreGLengine::loop_end(){
-  bool waitForEvent = conf_glManager->parse_json_bool("opengl", "waitForEvent");
+  bool waitForEvent = conf_glManager->parse_json_b("opengl", "waitForEvent");
   //---------------------------
 
   glfwSwapBuffers(window);

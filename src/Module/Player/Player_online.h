@@ -24,6 +24,7 @@ public:
 
 public:
   void compute_onlineOpe(Cloud* cloud, int ID_subset);
+  void update_configuration();
 
   //Camera functions
   void camera_followUp(Cloud* cloud, int i);

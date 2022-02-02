@@ -111,7 +111,7 @@ void config_opengl::update_jsonfile(string field, string title, string value){
 
   //---------------------------
 }
-string config_opengl::parse_json_string(string field, string value){
+string config_opengl::parse_json_s(string field, string value){
   //---------------------------
 
   std::ifstream ifs(path_file);
@@ -127,7 +127,7 @@ string config_opengl::parse_json_string(string field, string value){
   //---------------------------
   return truc;
 }
-float config_opengl::parse_json_float(string field, string value){
+float config_opengl::parse_json_f(string field, string value){
   //---------------------------
 
   std::ifstream ifs(path_file);
@@ -143,7 +143,7 @@ float config_opengl::parse_json_float(string field, string value){
   //---------------------------
   return truc;
 }
-int config_opengl::parse_json_int(string field, string value){
+int config_opengl::parse_json_i(string field, string value){
   //---------------------------
 
   std::ifstream ifs(path_file);
@@ -159,7 +159,7 @@ int config_opengl::parse_json_int(string field, string value){
   //---------------------------
   return truc;
 }
-bool config_opengl::parse_json_bool(string field, string value){
+bool config_opengl::parse_json_b(string field, string value){
   //---------------------------
 
   std::ifstream ifs(path_file);

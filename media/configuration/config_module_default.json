@@ -1,12 +1,12 @@
 {
    "online" : {
-      "with_AI_module" : true,
+      "with_AI_module" : false,
       "with_camera_follow" : false,
-      "with_cylinder_cleaning" : false,
-      "with_heatmap" : false,
+      "with_cylinder_cleaning" : true,
+      "with_heatmap" : true,
       "with_keepNframes" : false,
       "with_remove_lastSubset" : false,
       "with_save_image" : false,
-      "with_slam" : false
+      "with_slam" : true
    }
 }

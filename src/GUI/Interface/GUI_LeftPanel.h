@@ -21,6 +21,8 @@ public:
 public:
   //Main function
   void design_leftPanel();
+  void update();
+
   void panel_top();
   void panel_bot();
   void update_dimension();

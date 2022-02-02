@@ -26,7 +26,7 @@ Operation::Operation(){
 
   //Get absolute executable location
   config_opengl configManager;
-  string path_init = configManager.parse_json_string("parameter", "path_media");
+  string path_init = configManager.parse_json_s("parameter", "path_media");
   this->path_current_dir = get_absolutePath_build() + '/' + path_init;
 
   //---------------------------

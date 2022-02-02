@@ -10,12 +10,12 @@ Dimension::Dimension(GLFWwindow* Window){
 
   this->configManager = new config_opengl();
 
-  int win_h = configManager->parse_json_int("window", "resolution_height");
-  int win_w = configManager->parse_json_int("window", "resolution_width");
-  int lp_w = configManager->parse_json_int("gui", "leftPanel_width");
-  int tp_h = configManager->parse_json_int("gui", "topPanel_height");
-  int bp_h = configManager->parse_json_int("gui", "botPanel_height");
-  int lp_m = configManager->parse_json_int("gui", "leftPanel_mid");
+  int win_h = configManager->parse_json_i("window", "resolution_height");
+  int win_w = configManager->parse_json_i("window", "resolution_width");
+  int lp_w = configManager->parse_json_i("gui", "leftPanel_width");
+  int tp_h = configManager->parse_json_i("gui", "topPanel_height");
+  int bp_h = configManager->parse_json_i("gui", "botPanel_height");
+  int lp_m = configManager->parse_json_i("gui", "leftPanel_mid");
 
   this->gl_dim.x = win_w - lp_w;
   this->gl_dim.y = win_h - tp_h - bp_h;

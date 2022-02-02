@@ -224,7 +224,7 @@ void GUI_option::option_colors(){
     ImGui::Separator();
     if(ImGui::Button("Reset", ImVec2(75,0))){
       config_opengl configManager;
-      float bkg_color = configManager.parse_json_float("window", "background_color");
+      float bkg_color = configManager.parse_json_f("window", "background_color");
       vec4* screen_color = renderManager->get_screen_color();
       *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 

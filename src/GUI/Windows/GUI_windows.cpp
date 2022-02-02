@@ -89,7 +89,7 @@ void GUI_windows::init(){
   window_tab.show_heatmap = false;
   window_tab.show_shader = false;
 
-  this->cloud_movement = configManager->parse_json_float("transformation", "cloud_movement");
+  this->cloud_movement = configManager->parse_json_f("transformation", "cloud_movement");
 
   //---------------------------
 }

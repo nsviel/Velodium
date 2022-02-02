@@ -50,7 +50,7 @@ void WIN_camera::parameters(){
   if(ImGui::SliderFloat("FOV (°)", &fov_value, 100.0f, 1.0f)){
     cameraManager->set_cameraFOV(fov_value);
   }
-  static float cam_speed = configManager->parse_json_float("camera", "speed_move");
+  static float cam_speed = configManager->parse_json_f("camera", "speed_move");
   if(ImGui::DragFloat("speed (m/s)", &cam_speed, 0.01, 0, 20, "%.2f")){
     cameraManager->set_cameraSpeed(cam_speed);
   }

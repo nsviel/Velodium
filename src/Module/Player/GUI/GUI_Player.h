@@ -22,6 +22,7 @@ public:
   //Main function
   void design_player_cloud();
   void design_player_online();
+  void update();
 
   //Subfunctions
   void player_run();

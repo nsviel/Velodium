@@ -34,6 +34,13 @@ void GUI_leftPanel::design_leftPanel(){
 
   //----------------------------
 }
+void GUI_leftPanel::update(){
+  //----------------------------
+
+  gui_moduleManager->update();
+
+  //----------------------------
+}
 
 void GUI_leftPanel::panel_top(){
   //----------------------------

@@ -14,7 +14,7 @@ Renderer::Renderer(Dimension* dim){
   this->dimManager = dim;
   this->configManager = new config_opengl();
 
-  float bkg_color = configManager->parse_json_float("window", "background_color");
+  float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
   this->with_fullscreen = true;

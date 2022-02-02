@@ -14,6 +14,8 @@ class Extraction;
 class Heatmap;
 class Textures;
 class Operation;
+class config_module;
+
 
 class GUI_menuBar
 {
@@ -46,6 +48,8 @@ private:
   Extraction* extractionManager;
   Heatmap* heatmapManager;
   Textures* texManager;
+  config_module* configManager;
 };
+
 
 #endif
