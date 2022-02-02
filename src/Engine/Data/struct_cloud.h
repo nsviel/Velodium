@@ -9,13 +9,16 @@
 
 
 struct Cloud{ //Global set of the cloud
+  //IDs
   GLuint ID; //Permanent cloud ID
   GLuint oID; // List order cloud ID
+
+  int ID_selected; //Actual selected subset ID
+  int ID_last; //Last given subset ID
 
   //Parameters
   int nb_subset;
   int nb_point;
-  int subset_selected;
   int point_size;
   bool visibility;
   bool heatmap;

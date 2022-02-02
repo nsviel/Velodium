@@ -30,7 +30,7 @@ void Scene::remove_cloud(Cloud* cloud){
     //Delete subsets
     for(int i=0; i<cloud->nb_subset; i++){
       Subset* subset = *next(cloud->subset.begin(), i);
-      this->remove_subset(cloud, subset);
+      this->remove_subset(cloud, subset->ID);
     }
 
     //Delete cloud
@@ -70,14 +70,46 @@ void Scene::remove_cloud_all(){
 
   //---------------------------
 }
-void Scene::remove_subset(Cloud* cloud, Subset* subset){
+void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
 
+  //Can just remove last or first subset
+  Subset* subset_first = get_subset(cloud, 0);
+  Subset* subset_last = get_subset(cloud, cloud->nb_subset-1);
+  int oID;
+
+  if(ID == subset_first->ID){
+    oID = 0;
+  }else if(ID == subset_last->ID){
+    oID = cloud->nb_subset-1;
+  }else{
+    return;
+  }
+
+  //Supress subset objects
+  Subset* subset = get_subset(cloud, oID);
+  Subset* subset_buf = get_subset_buffer(cloud, oID);
+  Subset* subset_ini = get_subset_init(cloud, oID);
+
+  delete subset;
+  delete subset_buf;
+  delete subset_ini;
+
+  //Supress subset iterators
+  list<Subset*>::iterator it = next(cloud->subset.begin(), oID);
+  list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), oID);
+  list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), oID);
+
+  cloud->subset.erase(it);
+  cloud->subset_buffer.erase(it_buf);
+  cloud->subset_init.erase(it_ini);
+
+  /*
   //Delete subset iterator in cloud
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset_cloud = *next(cloud->subset.begin(), i);
+    Subset* subset = get_subset(cloud, i);
 
-    if(subset->ID == subset_cloud->ID){
+    if(subset->ID == ID){
       //Supress subset objects
       Subset* subset_buf = get_subset_buffer(cloud, i);
       Subset* subset_ini = get_subset_init(cloud, i);
@@ -92,17 +124,13 @@ void Scene::remove_subset(Cloud* cloud, Subset* subset){
       list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), i);
 
       cloud->subset.erase(it);
-      cloud->subset.erase(it_buf);
-      cloud->subset.erase(it_ini);
+      cloud->subset_buffer.erase(it_buf);
+      cloud->subset_init.erase(it_ini);
 
       break;
     }
   }
-
-  //If there is any more subset, remove cloud
-  if(cloud->subset.size() == 0){
-    remove_cloud(cloud);
-  }
+  */
 
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
@@ -123,7 +151,7 @@ void Scene::update_cloud_IntensityToColor(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     vector<float>& Is = subset->I;
     vector<vec4>& RGB = subset->RGB;
@@ -151,7 +179,7 @@ void Scene::update_cloud_reset(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
     Subset* subset_init = get_subset_init(cloud, i);
 
     //Reinitialize visibility
@@ -186,7 +214,7 @@ void Scene::update_cloud_reset(Cloud* cloud){
     subset->frame.reset();
   }
 
-  cloud->subset_selected = 0;
+  cloud->ID_selected = 0;
 
   //---------------------------
   this->update_cloud_glyphs(cloud);
@@ -197,7 +225,7 @@ void Scene::update_cloud_MinMax(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
     this->update_subset_MinMax(subset);
 
     //Cloud
@@ -215,7 +243,7 @@ void Scene::update_cloud_location(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
     this->update_subset_location(subset);
   }
 
@@ -225,7 +253,7 @@ void Scene::update_cloud_color(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
     this->update_subset_color(subset);
   }
 
@@ -354,7 +382,7 @@ void Scene::selection_setSubset(Cloud* cloud, int ID){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     if(i == ID){
       subset->visibility = true;
@@ -401,6 +429,84 @@ void Scene::selection_cloudByName(string name){
 }
 
 //Assesseurs
+Cloud* Scene::get_cloud_selected(){
+  return database.cloud_selected;
+}
+Cloud* Scene::get_cloud_next(){
+  Cloud* cloud;
+  //---------------------------
+
+  if(database.list_cloud->size() != 0){
+    if(database.cloud_selected->oID + 1 < database.list_cloud->size()){
+      cloud = *next(database.list_cloud->begin(),database.cloud_selected->oID + 1);
+    }else{
+      cloud = *next(database.list_cloud->begin(),0);
+    }
+  }
+
+  //---------------------------
+  return cloud;
+}
+Cloud* Scene::get_cloud_byName(string name){
+  Cloud* cloud_out;
+  //---------------------------
+
+  for (int i=0; i<database.list_cloud->size(); i++){
+    Cloud* cloud = *next(database.list_cloud->begin(),i);
+
+    if(cloud->name == name){
+      cloud_out = cloud;
+    }
+  }
+
+  //---------------------------
+  return cloud_out;
+}
+Cloud* Scene::get_cloud_byoID(int oID){
+  Cloud* cloud_out;
+  //---------------------------
+
+  for (int i=0; i<database.list_cloud->size(); i++){
+    Cloud* cloud = *next(database.list_cloud->begin(),i);
+
+    if(cloud->oID == oID){
+      cloud_out = cloud;
+    }
+  }
+
+  //---------------------------
+  return cloud_out;
+}
+
+Subset* Scene::get_subset_selected(){
+  Cloud* cloud = database.cloud_selected;
+  //---------------------------
+
+  if(cloud != nullptr){
+    Subset* subset = get_subset_byID(cloud, cloud->ID_selected);
+    return subset;
+  }
+  else{
+    return nullptr;
+  }
+
+  //---------------------------
+}
+Subset* Scene::get_subset_selected_init(){
+  Cloud* cloud = database.cloud_selected;
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset_init.begin(), i);
+
+    if(subset->ID == cloud->ID_selected){
+      return subset;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
+}
 Subset* Scene::get_subset(Cloud* cloud, int i){
   //---------------------------
 
@@ -425,15 +531,35 @@ Subset* Scene::get_subset_init(Cloud* cloud, int i){
   //---------------------------
   return subset;
 }
-Subset* Scene::get_subset_selected_init(){
-  Cloud* cloud = database.cloud_selected;
+Subset* Scene::get_subset_byID(Cloud* cloud, int ID){
   //---------------------------
 
-  Subset* subset = *next(cloud->subset_init.begin(), cloud->subset_selected);
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+
+    if(subset->ID == ID){
+      return subset;
+    }
+  }
 
   //---------------------------
-  return subset;
+  return nullptr;
 }
+Subset* Scene::get_subset_buffer_byID(Cloud* cloud, int ID){
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset_buffer.begin(), i);
+
+    if(subset->ID == ID){
+      return subset;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
+}
+
 Frame* Scene::get_frame(Cloud* cloud, int i){
   //---------------------------
 
@@ -442,6 +568,21 @@ Frame* Scene::get_frame(Cloud* cloud, int i){
 
   //---------------------------
   return frame;
+}
+Frame* Scene::get_frame_byID(Cloud* cloud, int ID){
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+
+    if(subset->ID == ID){
+      Frame* frame = &subset->frame;
+      return frame;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
 }
 vector<string> Scene::get_nameByOrder(){
   vector<string> nameByOrder;
@@ -473,7 +614,7 @@ vector<string> Scene::get_nameByOrder(){
     //Reorganize list of cloudes
     list<Cloud*>* list_out = new list<Cloud*>;
     for(int i=0; i<nameByOrder.size(); i++){
-      list_out->push_back(get_cloudByName(nameByOrder[i]));
+      list_out->push_back(get_cloud_byName(nameByOrder[i]));
     }
 
     database.list_cloud = list_out;
@@ -481,97 +622,6 @@ vector<string> Scene::get_nameByOrder(){
 
   //---------------------------
   return nameByOrder;
-}
-Subset* Scene::get_visibleSubset(){
-  Cloud* cloud = database.cloud_selected;
-  //---------------------------
-
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = get_subset(cloud, i);
-
-    if(subset->visibility){
-      return subset;
-    }
-  }
-
-  //---------------------------
-  return nullptr;
-}
-Subset* Scene::get_subset_selected(){
-  Cloud* cloud = database.cloud_selected;
-  //---------------------------
-
-  if(cloud != nullptr){
-    Subset* subset = get_subset(cloud, cloud->subset_selected);
-    return subset;
-  }
-  else{
-    return nullptr;
-  }
-
-  //---------------------------
-}
-int Scene::get_subset_selected_ID(){
-  Cloud* cloud = database.cloud_selected;
-  //---------------------------
-
-  if(cloud != nullptr){
-    Subset* subset = get_subset_selected();
-    return subset->ID;
-  }
-  else{
-    return 0;
-  }
-
-  //---------------------------
-}
-Cloud* Scene::get_cloud_selected(){
-  return database.cloud_selected;
-}
-Cloud* Scene::get_othercloud(){
-  Cloud* cloud;
-  //---------------------------
-
-  if(database.list_cloud->size() != 0){
-    if(database.cloud_selected->oID + 1 < database.list_cloud->size()){
-      cloud = *next(database.list_cloud->begin(),database.cloud_selected->oID + 1);
-    }else{
-      cloud = *next(database.list_cloud->begin(),0);
-    }
-  }
-
-  //---------------------------
-  return cloud;
-}
-Cloud* Scene::get_cloudByName(string name){
-  Cloud* cloud_out;
-  //---------------------------
-
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
-
-    if(cloud->name == name){
-      cloud_out = cloud;
-    }
-  }
-
-  //---------------------------
-  return cloud_out;
-}
-Cloud* Scene::get_cloudByOID(int oID){
-  Cloud* cloud_out;
-  //---------------------------
-
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
-
-    if(cloud->oID == oID){
-      cloud_out = cloud;
-    }
-  }
-
-  //---------------------------
-  return cloud_out;
 }
 int Scene::get_orderSelectedcloud(){
   vector<string> Names = get_nameByOrder();

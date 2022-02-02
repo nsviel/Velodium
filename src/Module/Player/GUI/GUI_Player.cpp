@@ -94,13 +94,15 @@ void GUI_Player::player_run(){
   this->player_selection();
 
   //Range of displayed frames
-  int subset_selected_ID = sceneManager->get_subset_selected_ID();
-  int frame_max_nb = cloud->nb_subset - 1;
-  int* frame_range = playerManager->get_player_frame_range();
+  int* player_subset_range = playerManager->get_player_subset_range();
+  int nb_subset_max = *player_subset_range;
+  if(cloud != nullptr){
+    nb_subset_max = cloud->nb_subset - 1;
+  }
   ImGui::SetNextItemWidth(140);
-  if(ImGui::DragInt("Displayed frames", frame_range, 1, 0, frame_max_nb)){
+  if(ImGui::DragInt("Displayed frames", player_subset_range, 1, 0, nb_subset_max)){
     if(cloud != nullptr){
-      playerManager->select_byFrameID(cloud, subset_selected_ID);
+      playerManager->select_bySubsetID(cloud, cloud->ID_selected);
     }
   }
 
@@ -116,7 +118,7 @@ void GUI_Player::player_run(){
     playerManager->player_selectDirSave();
   }
   ImGui::SameLine();
-  string saveas = *playerManager->get_saveas();
+  string saveas = *playerManager->get_player_saveas();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
@@ -130,7 +132,7 @@ void GUI_Player::player_mouse(){
   //Wheel - rolling stone
   if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
     if(cloud != nullptr){
-      int subset_selected_ID = sceneManager->get_subset_selected_ID();
+      int subset_selected_ID = cloud->ID_selected;
 
       if(io.MouseWheel > 0){
         subset_selected_ID++;
@@ -138,7 +140,7 @@ void GUI_Player::player_mouse(){
         subset_selected_ID--;
       }
 
-      playerManager->select_byFrameID(cloud, subset_selected_ID);
+      playerManager->select_bySubsetID(cloud, subset_selected_ID);
     }
   }
 
@@ -152,16 +154,17 @@ void GUI_Player::player_selection(){
     Subset* subset = sceneManager->get_subset_selected();
     Subset* subset_first = sceneManager->get_subset(cloud, 0);
     Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
-    int subset_selected_ID = sceneManager->get_subset_selected_ID();
+    int subset_selected_ID = cloud->ID_selected;
+    float ts =  subset->ts[0];
 
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
       if(cloud != nullptr){
-        playerManager->select_byFrameID(cloud, subset_selected_ID);
+        playerManager->select_bySubsetID(cloud, subset_selected_ID);
       }
     }
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", subset->ts[0]);
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", ts);
   }
 
   //---------------------------
@@ -232,15 +235,30 @@ void GUI_Player::parameter_online(){
   if(ImGui::CollapsingHeader("Online params")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
+    ImGui::Columns(2);
     //---------------------------
 
     bool* with_slam = onlineManager->get_with_slam();
     ImGui::Checkbox("SLAM each frame", with_slam);
+    ImGui::NextColumn();
 
+    ImGui::NextColumn();
     bool* with_camera_follow = onlineManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", with_camera_follow);
+    ImGui::NextColumn();
 
-    ImGui::Columns(2);
+    ImGui::NextColumn();
+    bool* with_remove_lastSubset = onlineManager->get_with_remove_lastSubset();
+    ImGui::Checkbox("Remove last subset", with_remove_lastSubset);
+    ImGui::NextColumn();
+
+    if(*with_remove_lastSubset){
+      int* nb_subset_max = onlineManager->get_nb_subset_max();
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputInt("Nb subset", nb_subset_max);
+    }
+
+    ImGui::NextColumn();
     bool* with_save_image = onlineManager->get_with_save_image();
     ImGui::Checkbox("Save image", with_save_image);
 
@@ -263,29 +281,30 @@ void GUI_Player::parameter_online(){
       *onlineManager->get_with_unicolor() = false;
     }
     ImGui::NextColumn();
+
+    //Option: heatmap with relative height
+    bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
+    if(colorization == 0){
+      ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
+    }
+
+    ImGui::NextColumn();
     if(ImGui::RadioButton("Unicolor", &colorization, 1)){
       *onlineManager->get_with_heatmap() = false;
       *onlineManager->get_with_unicolor() = true;
     }
     ImGui::NextColumn();
 
-    //Option: heatmap with relative height
-    if(colorization == 0){
-      bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
-      ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
-      ImGui::NextColumn();
-
-      if(*heatmap_rltHeight){
-        vec2* height_range = onlineManager->get_heatmap_height_range();
-        ImGui::SetNextItemWidth(100);
-        ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-        ImGui::SetNextItemWidth(100);
-        ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
-      }
-      ImGui::NextColumn();
+    if(colorization == 0 && *heatmap_rltHeight){
+      vec2* height_range = onlineManager->get_heatmap_height_range();
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
     }
 
     //Cylinder cleaning filter
+    ImGui::NextColumn();
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
     ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
     ImGui::NextColumn();

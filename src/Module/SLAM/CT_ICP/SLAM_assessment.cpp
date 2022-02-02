@@ -77,13 +77,13 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   //---------------------------
   return sucess;
 }
-bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int i){
-  Frame* frame_m0 = sceneManager->get_frame(cloud, i);
+bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int ID){
+  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, ID);
   bool sucess = true;
   //---------------------------
 
   if(frame_m0->ID >= rlt_numberPreviousPose){
-    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
+    Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
 
     //Compute previsou frame stat means
     float sum_ego_trans = 0;
@@ -92,7 +92,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int i){
     float sum_diff_rotat = 0;
     float sum_opti_score = 0;
     for(int j=1; j<rlt_numberPreviousPose; j++){
-      Frame* frame_m = sceneManager->get_frame(cloud, i-j);
+      Frame* frame_m = sceneManager->get_frame_byID(cloud, ID-j);
 
       if(frame_m->is_slamed){
         sum_ego_trans += frame_m->ego_trans;
@@ -108,13 +108,6 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int i){
     sum_diff_trans = rlt_numberMean * sum_diff_trans / rlt_numberPreviousPose;
     sum_diff_rotat = rlt_numberMean * sum_diff_rotat / rlt_numberPreviousPose;
     sum_opti_score = rlt_numberMean * sum_opti_score / rlt_numberPreviousPose;
-
-
-
-
-
-
-
 
     //Test 1: check ego distance
     frame_m0->ego_trans = (frame_m0->trans_e - frame_m0->trans_b).norm();

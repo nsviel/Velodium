@@ -35,7 +35,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     Subset* subset = new Subset();
 
     this->check_data(data[i]);
-    this->init_subsetParameters(subset, data[i]->name, i);
+    this->init_subsetParameters(subset, data[i]->name, cloud->ID_last++);
     this->init_frameParameters(subset);
 
     //Subset data
@@ -93,7 +93,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   //---------------------------
 
   this->check_data(data);
-  this->init_subsetParameters(subset, data->name, cloud->nb_subset);
+  this->init_subsetParameters(subset, data->name, cloud->ID_last++);
   this->init_frameParameters(subset);
 
   //Subset data
@@ -289,7 +289,8 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->visibility = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
-  cloud->subset_selected = 0;
+  cloud->ID_selected = 0;
+  cloud->ID_last = 0;
   cloud->heatmap = false;
   cloud->point_size = configManager->parse_json_int("parameter", "point_size");
   cloud->unicolor = vec4(Red, Green, Blue, 1.0f);

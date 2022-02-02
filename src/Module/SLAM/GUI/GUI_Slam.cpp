@@ -121,8 +121,8 @@ void GUI_Slam::parameters_general(){
       static int frame_max = cloud->nb_subset;
       ImGui::SetNextItemWidth(item_width);
       if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_subset)){
-        cticpManager->set_frame_all(false);
-        cticpManager->set_frame_max(frame_max);
+        cticpManager->set_ID_all(false);
+        cticpManager->set_ID_max(frame_max);
       }
     }else{
       static int frame_max = 0;

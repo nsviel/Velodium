@@ -39,6 +39,7 @@ Player_online::Player_online(Engine* engineManager){
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
   this->screenshot_path = "../media/data/image/";
+  this->nb_subset_max = 20;
 
   this->with_camera_top = false;
   this->with_camera_follow = false;
@@ -53,14 +54,15 @@ Player_online::Player_online(Engine* engineManager){
   this->with_cylinder_cleaning = true;
   this->with_save_image = false;
   this->with_keepNframes = true;
+  this->with_remove_lastSubset = true;
 
   //---------------------------
 }
 Player_online::~Player_online(){}
 
 //Main function
-void Player_online::compute_onlineOpe(Cloud* cloud, int i){
-  Subset* subset = sceneManager->get_subset(cloud, i);
+void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
 
   if(with_online){
@@ -72,23 +74,23 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
     //If with slam option is activated
     if(with_slam){
       //Don't forget to operate the first subset
-      if(i == 1){
+      if(ID_subset == 1){
         cticpManager->compute_slam_online(cloud, 0);
       }
 
       //Make slam on the current subset
-      cticpManager->compute_slam_online(cloud, i);
+      cticpManager->compute_slam_online(cloud, ID_subset);
     }
 
     //If camera follow up option activated
     if(with_camera_follow){
-      this->camera_followUp(cloud, i);
+      this->camera_followUp(cloud, ID_subset);
     }
 
     //If cylinder cleaning option
     if(with_cylinder_cleaning){
       //Don't forget to operate the first subset
-      if(i == 1){
+      if(ID_subset == 1){
         Subset* subset_0 = sceneManager->get_subset(cloud, 0);
         filterManager->filter_subset_cylinder(subset);
       }
@@ -99,11 +101,11 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
 
     //Colorization options
     if(with_heatmap){
-      this->color_heatmap(cloud, i);
+      this->color_heatmap(cloud, ID_subset);
     }
     if(with_unicolor){
       //Don't forget to operate the first subset
-      if(i == 1){
+      if(ID_subset == 1){
         Subset* subset_0 = sceneManager->get_subset(cloud, 0);
         this->color_unicolor(subset_0, cloud->unicolor);
       }
@@ -122,8 +124,8 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
       ioManager->save_nFrame(cloud);
     }
 
-    if(false){
-      this->remove_lastFrame(cloud, i);
+    if(with_remove_lastSubset){
+      this->remove_subset_last(cloud, ID_subset);
     }
   }
 
@@ -131,16 +133,16 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int i){
 }
 
 //Camera funtions
-void Player_online::camera_followUp(Cloud* cloud, int i){
+void Player_online::camera_followUp(Cloud* cloud, int ID_subset){
   //---------------------------
 
-  Subset* subset = sceneManager->get_subset(cloud, i);
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   Frame* frame = &subset->frame;
 
   if(frame->ID >= 4){
-    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
-    Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
-    Frame* frame_m3 = sceneManager->get_frame(cloud, i-3);
+    Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID_subset-1);
+    Frame* frame_m2 = sceneManager->get_frame_byID(cloud, ID_subset-2);
+    Frame* frame_m3 = sceneManager->get_frame_byID(cloud, ID_subset-3);
 
     vec3 pos_m0 = frame->trans_abs;
     vec3 pos_m1 = frame_m1->trans_abs;
@@ -257,8 +259,8 @@ void Player_online::save_image_path(){
 }
 
 //Other functions
-void Player_online::color_heatmap(Cloud* cloud, int i){
-  Subset* subset = sceneManager->get_subset(cloud, i);
+void Player_online::color_heatmap(Cloud* cloud, int ID_subset){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
 
   if(with_heatmap_rltHeight){
@@ -268,14 +270,14 @@ void Player_online::color_heatmap(Cloud* cloud, int i){
   }
 
   //Don't forget to operate the first subset
-  if(i == 1){
-    Subset* subset = sceneManager->get_subset(cloud, 0);
-    Subset* subset_buffer = sceneManager->get_subset_buffer(cloud, 0);
+  if(ID_subset == 1){
+    Subset* subset = sceneManager->get_subset_byID(cloud, 0);
+    Subset* subset_buffer = sceneManager->get_subset_buffer_byID(cloud, 0);
     heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
   }
 
   //Make heatmap on the current subset
-  Subset* subset_buffer = sceneManager->get_subset_buffer(cloud, i);
+  Subset* subset_buffer = sceneManager->get_subset_buffer_byID(cloud, ID_subset);
   heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
 
   //---------------------------
@@ -291,15 +293,11 @@ void Player_online::color_unicolor(Subset* subset, vec4 color){
   //---------------------------
   sceneManager->update_subset_color(subset);
 }
-void Player_online::remove_lastFrame(Cloud* cloud, int frame_ID){
-  int nb_frame_max = 5;
+void Player_online::remove_subset_last(Cloud* cloud, int ID_subset){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
-    if(subset->ID <= frame_ID - nb_frame_max){
-      sceneManager->remove_subset(cloud, subset);
-    }
+  if(ID_subset >= nb_subset_max){
+    sceneManager->remove_subset(cloud, ID_subset - nb_subset_max);
   }
 
   //---------------------------

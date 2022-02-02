@@ -127,7 +127,7 @@ void Filter::filter_cloud_cylinder(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = *next(cloud->subset.begin(), i);
     this->filter_subset_cylinder(subset);
   }
 

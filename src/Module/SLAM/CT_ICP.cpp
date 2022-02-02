@@ -27,9 +27,9 @@ CT_ICP::CT_ICP(){
   this->solver_ceres = false;
   this->solver_GN = true;
   this->verbose = false;
-  this->frame_all = true;
+  this->ID_all = true;
 
-  this->frame_max = 0;
+  this->ID_max = 0;
   this->map_frame_ID = 0;
   this->map_frame_begin_ID = 0;
   this->map_size_old = 0;
@@ -43,10 +43,10 @@ CT_ICP::~CT_ICP(){}
 void CT_ICP::compute_slam(Cloud* cloud){
   mapManager->reset();
   if(cloud == nullptr) return;
-  if(frame_all) frame_max = cloud->nb_subset;
+  if(ID_all) ID_max = sceneManager->get_subset(cloud, cloud->nb_subset-1)->ID;
   //---------------------------
 
-  for(int i=0; i<frame_max; i++){
+  for(int i=0; i<ID_max; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
     Frame* frame_m0 = sceneManager->get_frame(cloud, i);
     Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
@@ -75,22 +75,22 @@ void CT_ICP::compute_slam(Cloud* cloud){
     this->compute_statistics(duration, frame_m0, frame_m1, subset);
   }
 
-  mapManager->end_slamVoxelization(cloud, frame_max);
+  mapManager->end_slamVoxelization(cloud, ID_max);
 
   //---------------------------
 }
-void CT_ICP::compute_slam_online(Cloud* cloud, int i){
-  Frame* frame = sceneManager->get_frame(cloud, i);
+void CT_ICP::compute_slam_online(Cloud* cloud, int ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, ID);
 
-  if(frame->is_slamed == false && i >= map_frame_begin_ID){
+  if(frame->is_slamed == false && ID >= map_frame_begin_ID){
     tic();
     //---------------------------
 
-    Subset* subset = sceneManager->get_subset(cloud, i);
-    Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
-    Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
+    Subset* subset = sceneManager->get_subset_byID(cloud, ID);
+    Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
+    Frame* frame_m2 = sceneManager->get_frame_byID(cloud, ID-2);
 
-    this->init_frameID(frame, i);
+    this->init_frameID(frame, ID);
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame, frame_m1, frame_m2);
     this->init_distortion(frame);
@@ -98,7 +98,7 @@ void CT_ICP::compute_slam_online(Cloud* cloud, int i){
     mapManager->compute_gridSampling(subset);
 
     this->compute_optimization(frame, frame_m1);
-    this->compute_assessment(cloud, i);
+    this->compute_assessment(cloud, ID);
 
     mapManager->add_pointsToLocalMap(frame);
     mapManager->end_clearTooFarVoxels(frame->trans_e);
@@ -113,11 +113,11 @@ void CT_ICP::compute_slam_online(Cloud* cloud, int i){
 }
 
 //SLAM sub-functions
-void CT_ICP::init_frameID(Frame* frame, int i){
+void CT_ICP::init_frameID(Frame* frame, int ID){
   //---------------------------
 
   if(map_frame_ID == 0){
-    map_frame_begin_ID = i;
+    map_frame_begin_ID = ID;
   }
 
   frame->ID = map_frame_ID;
@@ -247,14 +247,14 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
 
   //---------------------------
 }
-void CT_ICP::compute_assessment(Cloud* cloud, int i){
-  Frame* frame = sceneManager->get_frame(cloud, i);
-  Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
+void CT_ICP::compute_assessment(Cloud* cloud, int ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
   bool sucess = true;
   //---------------------------
 
   sucess = assessManager->compute_assessment_abs(frame, frame_m1);
-  sucess = assessManager->compute_assessment_rlt(cloud, i);
+  sucess = assessManager->compute_assessment_rlt(cloud, ID);
 
   //If unsucess, reinitialize transformations
   if(sucess == false){
@@ -341,7 +341,7 @@ void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, S
   //Terminal result
   if(verbose){
     cout<<"[sucess] SLAM - "<<subset->name.c_str();
-    cout<<" "<<to_string(frame->ID)<<"/"<< frame_max;
+    cout<<" "<<to_string(frame->ID)<<"/"<< ID_max;
     cout<< " [" <<duration<< " ms]"<<endl;
   }
 

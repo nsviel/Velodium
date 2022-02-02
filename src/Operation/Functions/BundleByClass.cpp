@@ -9,7 +9,7 @@ BundleByClass::~BundleByClass(){}
 
 //Bundle functions
 void BundleByClass::compute_bundleByClass(Cloud* cloud, float stepAngle){
-  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->subset_selected);
+  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
   this->make_checking(cloud);
@@ -23,8 +23,8 @@ void BundleByClass::compute_bundleByClass(Cloud* cloud, float stepAngle){
   //---------------------------
 }
 void BundleByClass::compute_bundleByClass_maxAngle(Cloud* cloud, int stepAngle, int maxAngle){
-  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
-  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->subset_selected);
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
@@ -180,8 +180,8 @@ void BundleByClass::compute_vectorByClass(vector<vector<float>>& data_X, vector<
 
 //Subfunctions
 void BundleByClass::make_bundle(Cloud* cloud, float stepAngle, int maxAngle){
-  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
-  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->subset_selected);
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
@@ -226,8 +226,8 @@ void BundleByClass::make_bundle(Cloud* cloud, float stepAngle, int maxAngle){
   }
 }
 void BundleByClass::make_checking(Cloud* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
-  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->subset_selected);
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
@@ -331,8 +331,8 @@ void BundleByClass::plot_confidenceInterval(){
     //---------------------------
 }
 void BundleByClass::plot_intensityBundle(Cloud* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->subset_selected);
-  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->subset_selected);
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;

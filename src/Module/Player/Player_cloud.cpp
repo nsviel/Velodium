@@ -9,7 +9,6 @@
 #include "../../Load/Operation.h"
 
 
-
 //Constructor / Destructor
 Player_cloud::Player_cloud(Player_online* online){
   //---------------------------
@@ -18,7 +17,7 @@ Player_cloud::Player_cloud(Player_online* online){
   this->sceneManager = new Scene();
   this->timerManager = new Timer();
 
-  this->frame_display_range = 15;
+  this->player_subset_range = 15;
   this->player_frequency = 10;
   this->player_isrunning = false;
   this->player_ispaused = false;
@@ -26,70 +25,71 @@ Player_cloud::Player_cloud(Player_online* online){
   this->player_flag_1s = false;
 
   //Get absolute executable location
-  this->saveas = get_absolutePath_build() + "/../media/data/";
+  this->player_saveas = get_absolutePath_build() + "/../media/data/";
 
   //---------------------------
 }
 Player_cloud::~Player_cloud(){}
 
 //Selection functions
-void Player_cloud::select_byFrameID(Cloud* cloud, int frame_ID){
+void Player_cloud::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 
-  bool range_ok = select_rangeLimit(cloud, frame_ID);
+  bool range_ok = select_rangeLimit(cloud, ID_subset);
   if(range_ok){
-    this->select_setVisibility(cloud, frame_ID);
-    onlineManager->compute_onlineOpe(cloud, frame_ID);
+    this->select_setVisibility(cloud, ID_subset);
+    onlineManager->compute_onlineOpe(cloud, ID_subset);
   }
 
   //---------------------------
 }
-bool Player_cloud::select_rangeLimit(Cloud* cloud, int& frame_ID){
+bool Player_cloud::select_rangeLimit(Cloud* cloud, int& ID_subset){
+  Subset* subset_first = sceneManager->get_subset(cloud, 0);
+  Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
   //---------------------------
 
   //If frame desired ID is superior to the number of subset restart it
   if(player_returnToZero){
-    if(frame_ID >= cloud->nb_subset){
-      frame_ID = 0;
+    if(ID_subset > subset_last->ID){
+      ID_subset = subset_first->ID;
     }
-    if(frame_ID < 0){
-      frame_ID = cloud->nb_subset - 1;
+    if(ID_subset < subset_first->ID){
+      ID_subset = subset_last->ID;
     }
   }
   else{
-    if(frame_ID >= cloud->nb_subset){
-      frame_ID = cloud->nb_subset - 1;
+    if(ID_subset > subset_last->ID){
+      ID_subset = subset_last->ID;
       return false;
     }
-    if(frame_ID < 0){
-      frame_ID = 0;
+    if(ID_subset < subset_first->ID){
+      ID_subset = subset_first->ID;
       return false;
     }
   }
 
   //Set visibility parameter for each cloud subset
-  cloud->subset_selected = frame_ID;
+  cloud->ID_selected = ID_subset;
 
   //---------------------------
   return true;
 }
-void Player_cloud::select_setVisibility(Cloud* cloud, int& frame_ID){
-  Subset* subset = sceneManager->get_subset(cloud, frame_ID);
+void Player_cloud::select_setVisibility(Cloud* cloud, int& ID_subset){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
 
   //Unset alll other subset visibility
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
-    subset->visibility = false;
+    Subset* subset_loop = sceneManager->get_subset(cloud, i);
+    subset_loop->visibility = false;
   }
 
-  //Set visibility just for wanted susbsets
-  for(int i=0; i<frame_display_range; i++){
-    int trained_frame = frame_ID - frame_display_range + i + 1;
+  //Set visibility just for wanted subsets
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset_loop = sceneManager->get_subset(cloud, i);
 
-    if(trained_frame >= 0){
-      Subset* subset = sceneManager->get_subset(cloud, trained_frame);
-      subset->visibility = true;
+    if(subset_loop->ID > ID_subset - player_subset_range && subset_loop->ID <= ID_subset){
+      subset_loop->visibility = true;
     }
   }
 
@@ -102,9 +102,8 @@ void Player_cloud::player_runtime(){
   //---------------------------
 
   if(player_flag_1s){
-    int subset_selected_ID = sceneManager->get_subset_selected_ID();
     Cloud* cloud = sceneManager->get_cloud_selected();
-    this->select_byFrameID(cloud, subset_selected_ID + 1);
+    this->select_bySubsetID(cloud, cloud->ID_selected + 1);
 
     player_flag_1s = false;
   }
@@ -150,7 +149,7 @@ void Player_cloud::player_stop(){
   //---------------------------
 
   timerManager->stop();
-  this->select_byFrameID(cloud, 0);
+  this->select_bySubsetID(cloud, 0);
 
   //---------------------------
 }
@@ -161,7 +160,7 @@ void Player_cloud::player_save(Cloud* cloud){
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
-    saverManager.save_subset(subset, "ply", saveas);
+    saverManager.save_subset(subset, "ply", player_saveas);
   }
 
   //---------------------------
@@ -173,7 +172,7 @@ void Player_cloud::player_selectDirSave(){
   Operation opeManager;
   opeManager.selectDirectory(path);
 
-  this->saveas = path + "/";
+  this->player_saveas = path + "/";
 
   //---------------------------
 }

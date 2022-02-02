@@ -20,7 +20,7 @@ public:
   //Remove functions
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
-  void remove_subset(Cloud* cloud, Subset* subset);
+  void remove_subset(Cloud* cloud, int ID);
 
   //Update data
   void update_cloud_glyphs(Cloud* cloud);
@@ -47,22 +47,26 @@ public:
   void selection_cloudByName(string name);
   void selection_setCloud(Cloud* cloud);
 
-  vector<string> get_nameByOrder();
+  //Assesseurs
+  Cloud* get_cloud_selected();
+  Cloud* get_cloud_next();
+  Cloud* get_cloud_byName(string name);
+  Cloud* get_cloud_byoID(int oID);
+
+  Subset* get_subset_selected();
+  Subset* get_subset_selected_init();
   Subset* get_subset(Cloud* cloud, int i);
   Subset* get_subset_buffer(Cloud* cloud, int i);
   Subset* get_subset_init(Cloud* cloud, int i);
+  Subset* get_subset_byID(Cloud* cloud, int ID);
+  Subset* get_subset_buffer_byID(Cloud* cloud, int ID);
+
   Frame* get_frame(Cloud* cloud, int i);
-  Subset* get_visibleSubset();
-  Subset* get_subset_selected();
-  Subset* get_subset_selected_init();
-  Cloud* get_cloud_selected();
-  Cloud* get_othercloud();
-  Cloud* get_cloudByName(string name);
-  Cloud* get_cloudByOID(int ID);
-  int get_subset_selected_ID();
+  Frame* get_frame_byID(Cloud* cloud, int ID);
+
   int get_orderSelectedcloud();
   int get_listcloudSize();
-
+  vector<string> get_nameByOrder();
   bool is_cloudExist(Cloud* cloud);
   bool is_cloudNameExist(Cloud* cloud);
   bool is_atLeastMinNbcloud(int nbMin);

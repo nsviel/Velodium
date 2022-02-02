@@ -519,7 +519,7 @@ void GUI_windows::window_normal(){
     ImGui::Begin("Attributs", &window_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
-    Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->subset_selected);
+    Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -553,7 +553,7 @@ void GUI_windows::window_normal(){
       if(cloud != nullptr){
         //---------------------------
         Subset* subset = sceneManager->get_subset_selected();
-        Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->subset_selected);
+        Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);
@@ -1120,7 +1120,7 @@ void GUI_windows::window_extractCloud(){
     if(ImGui::Button("Merge clouds", ImVec2(150,0))){
       list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
       if(list_cloud->size() >= 2){
-        Cloud* cloud_2 = sceneManager->get_othercloud();
+        Cloud* cloud_2 = sceneManager->get_cloud_next();
         extractionManager->fct_merging_newCloud(cloud, cloud_2);
       }
     }
