@@ -6,8 +6,6 @@
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_system.h"
 
-#include <random>
-
 
 //Constructor / Destructor
 dataExtraction::dataExtraction(){
@@ -70,6 +68,7 @@ Subset* dataExtraction::extractData(udpPacket* data, int ID){
   Subset* subset = new Subset();
   //---------------------------
 
+  this->init_randomColor();
   this->check_data(data);
 
   this->init_subsetParameters(subset, data->name, ID);
@@ -92,7 +91,9 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
+  this->init_randomColor();
   this->check_data(data);
+
   this->init_subsetParameters(subset, data->name, cloud->ID_last++);
   this->init_frameParameters(subset);
 
@@ -118,6 +119,7 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
+  this->init_randomColor();
   this->check_data(data);
 
   uint VAO;
@@ -202,9 +204,6 @@ void dataExtraction::check_data(dataFile* data){
     this->is_timestamp = true;
   }
 
-  //Color
-  this->RGB_rdm = vec4(Red, Green, Blue, 1.0f);
-
   //---> if color data
   if(data->color.size() != 0){
     this->is_color = true;
@@ -218,7 +217,7 @@ void dataExtraction::check_data(dataFile* data){
   //---> if no color or intensity data
   else{
     for(int i=0; i<data->location.size(); i++){
-      data->color.push_back(vec4(Red, Green, Blue, 1.0f));
+      data->color.push_back(color_rdm);
     }
   }
 
@@ -255,7 +254,6 @@ void dataExtraction::check_data(udpPacket* data){
   }
 
   //Color
-  this->RGB_rdm = vec4(Red, Green, Blue, 1.0f);
   if(is_intensity){
     for(int i=0; i<data->I.size(); i++){
       data->rgb.push_back(vec4(data->I.at(i), data->I.at(i), data->I.at(i), 1.0f));
@@ -293,7 +291,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->ID_last = 0;
   cloud->heatmap = false;
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
-  cloud->unicolor = vec4(Red, Green, Blue, 1.0f);
+  cloud->unicolor = color_rdm;
   cloud->saveas = get_absolutePath_build() + "/../media/data/";
 
   //ID
@@ -333,15 +331,13 @@ void dataExtraction::init_randomColor(){
   //---------------------------
 
   //---> Compute a random color for each cloud
-  Red = float(rand()%101)/100;
-  Green = float(rand()%101)/100;
-  Blue = float(rand()%101)/100;
+  color_rdm = random_color();
 
   //First cloud color
   if(ID == 0){
-    Red = 0.08;
-    Green = 0.3;
-    Blue = 0.44;
+    color_rdm.x = 0.08;
+    color_rdm.y = 0.3;
+    color_rdm.z = 0.44;
     ID++;
   }
 
@@ -415,7 +411,7 @@ void dataExtraction::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
 
   subset->VBO_rgb = colorVBO;
   subset->RGB = colorOBJ;
-  subset->unicolor = RGB_rdm;
+  subset->unicolor = color_rdm;
 
   if(is_color){
     subset->has_color = true;

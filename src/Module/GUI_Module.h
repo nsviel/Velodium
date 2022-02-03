@@ -11,11 +11,11 @@
 #include "../common.h"
 
 
-class GUI_module
+class GUI_Module
 {
 public:
   //Constructor / Destructor
-  GUI_module(Engine* engineManager){
+  GUI_Module(Engine* engineManager){
     //-------------------------------
 
     this->gui_lidarManager = new GUI_Lidar();
@@ -31,19 +31,10 @@ public:
     this->module_scala = false;
 
     //-------------------------------
-    this->init_configuration();
   }
-  ~GUI_module();
+  ~GUI_Module();
 
 public:
-  void init_configuration(){
-    //-------------------------------
-
-    this->configManager = new config_module();
-    configManager->make_configuration();
-
-    //-------------------------------
-  }
   void display_moduleTabs(){
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
@@ -63,7 +54,6 @@ public:
           ImGui::EndTabItem();
         }
       }
-      gui_playerManager->player_mouse();
 
       // SLAM
       if(module_slam){
@@ -94,20 +84,11 @@ public:
       ImGui::EndTabBar();
     }
   }
-  void update(){
-    //-------------------------------
-
-    gui_playerManager->update();
-
-    //-------------------------------
-  }
 
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
   inline GUI_Player* get_gui_player(){return gui_playerManager;}
 
 private:
-  config_module* configManager;
-
   GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;

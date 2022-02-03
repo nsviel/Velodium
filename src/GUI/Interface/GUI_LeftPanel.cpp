@@ -11,7 +11,7 @@
 
 
 //Constructor / Destructor
-GUI_leftPanel::GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_module* module){
+GUI_leftPanel::GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_Module* module){
   this->gui_winManager = window;
   this->engineManager = renderer;
   this->gui_moduleManager = module;
@@ -37,7 +37,7 @@ void GUI_leftPanel::design_leftPanel(){
 void GUI_leftPanel::update(){
   //----------------------------
 
-  gui_moduleManager->update();
+  //gui_moduleManager->update_module();
 
   //----------------------------
 }

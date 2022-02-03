@@ -20,6 +20,15 @@
 namespace{
   //---------------------------
 
+  //Get a RGB random color
+  glm::vec4 random_color(){
+    float Red = float(rand()%101)/100;
+    float Green = float(rand()%101)/100;
+    float Blue = float(rand()%101)/100;
+    glm::vec4 color = glm::vec4(Red, Green, Blue, 1.0f);
+    return color;
+  }
+
   //Get RAM memory usage
   unsigned long long get_systemMemory(){
     long pages = sysconf(_SC_PHYS_PAGES);

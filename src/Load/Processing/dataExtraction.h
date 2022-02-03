@@ -44,9 +44,8 @@ private:
   Scene* sceneManager;
   config_opengl* configManager;
 
-  float Red, Green, Blue;
   int ID, oneFrame_VAO;
-  vec4 RGB_rdm;
+  vec4 color_rdm;
   bool is_intensity;
   bool is_normal;
   bool is_timestamp;

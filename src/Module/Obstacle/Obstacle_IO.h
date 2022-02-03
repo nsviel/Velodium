@@ -21,7 +21,7 @@ public:
   void start_dirWatcher();
   void stop_dirWatcher();
 
-  void load_obstacleData();
+  bool check_obstacleData();
   void clean_directories();
   void save_nFrame(Cloud* cloud);
   void parse_obstacle_json(Cloud* cloud, string paths, string data);

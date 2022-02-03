@@ -88,8 +88,8 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
     if ( event->len && event->mask & IN_CREATE ) {
       //Terminal info
-      //event_str = "The file " + (string)event->name + " was created.";
-      //printf( "The file %s was created.\n", event->name );
+      event_str = "The file " + (string)event->name + " was created.";
+      printf( "The file %s was created.\n", event->name );
 
       //Output
       path_full = path + event->name;

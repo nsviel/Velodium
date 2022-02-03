@@ -23,8 +23,10 @@ Obstacle::~Obstacle(){}
 void Obstacle::online_run(Cloud* cloud){
   //---------------------------
 
-  ioManager->load_obstacleData();
-  this->build_obstacleGlyph_gt(cloud);
+  bool new_obstacle = ioManager->check_obstacleData();
+  if(new_obstacle){
+    this->build_obstacleGlyph_gt(cloud);
+  }
 
   //---------------------------
 }

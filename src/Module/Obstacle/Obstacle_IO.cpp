@@ -50,7 +50,6 @@ void Obstacle_IO::start_dirWatcher(){
       watcher_created_file(path_predi, path_file_predi, flag_newPred);
     }
   });
-
   thread_grThr = std::thread([&](){
     while(thread_grThr_ON){
       watcher_created_file(path_grThr, path_file_grThr, flag_newGrTh);
@@ -75,7 +74,7 @@ void Obstacle_IO::stop_dirWatcher(){
 }
 
 //Other functions
-void Obstacle_IO::load_obstacleData(){
+bool Obstacle_IO::check_obstacleData(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
@@ -84,15 +83,18 @@ void Obstacle_IO::load_obstacleData(){
   if(flag_newPred){
     this->parse_obstacle_json(cloud, path_file_predi, "pr");
     flag_newPred = false;
+    return true;
   }
 
   //Load json files - GT
   if(flag_newGrTh){
     this->parse_obstacle_json(cloud, path_file_grThr, "gt");
     flag_newGrTh = false;
+    return true;
   }
 
   //---------------------------
+  return false;
 }
 void Obstacle_IO::save_nFrame(Cloud* cloud){
   Subset* subset = sceneManager->get_subset_selected();
@@ -140,7 +142,7 @@ void Obstacle_IO::parse_obstacle_json(Cloud* cloud, string path, string data){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset->name == json_name){
+    if(subset->name == json_name){sayHello();
       //Make stuff
       Obstac* obstacle_gt = &subset->obstacle_gt;
       Obstac* obstacle_pr = &subset->obstacle_pr;

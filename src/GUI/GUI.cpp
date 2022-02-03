@@ -34,7 +34,7 @@ GUI::GUI(Engine* engine){
 
   this->dimManager = engineManager->get_dimManager();
 
-  this->gui_moduleManager = new GUI_module(engineManager);
+  this->gui_moduleManager = new GUI_Module(engineManager);
   this->gui_winManager = new GUI_windows(engineManager);
   this->gui_controlManager = new GUI_control(engineManager);
   this->gui_optionManager = new GUI_option(engineManager, gui_controlManager);

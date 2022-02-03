@@ -2,7 +2,7 @@
 #define GUI_LEFTPANEL_H
 
 class GUI_windows;
-class GUI_module;
+class GUI_Module;
 class GUI_fileManager;
 
 class Engine;
@@ -15,7 +15,7 @@ class GUI_leftPanel
 {
 public:
   //Constructor / Destructor
-  GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_module* module);
+  GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_Module* module);
   ~GUI_leftPanel();
 
 public:
@@ -32,7 +32,7 @@ public:
 
 private:
   GUI_windows* gui_winManager;
-  GUI_module* gui_moduleManager;
+  GUI_Module* gui_moduleManager;
   GUI_fileManager* gui_fileManager;
 
   Engine* engineManager;

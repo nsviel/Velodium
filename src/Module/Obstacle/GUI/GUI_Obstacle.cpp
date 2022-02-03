@@ -30,6 +30,14 @@ void GUI_Obstacle::design_Obstacle(){
 
   //---------------------------
 }
+void GUI_Obstacle::online_run(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  obstacleManager->online_run(cloud);
+
+  //---------------------------
+}
 
 void GUI_Obstacle::compute_obstacle(){
   Cloud* cloud = sceneManager->get_cloud_selected();
@@ -50,7 +58,8 @@ void GUI_Obstacle::compute_obstacle(){
   ImGui::PopStyleColor(1);
 
   if(ImGui::Button("run", ImVec2(100,0))){
-    ioManager->load_obstacleData();
+    ioManager->start_dirWatcher();
+    ioManager->check_obstacleData();
     obstacleManager->build_obstacleGlyph_gt(cloud);
     obstacleManager->build_obstacleGlyph_pr(cloud);
   }
