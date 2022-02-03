@@ -6,7 +6,6 @@
 #include "../../Engine/Scene.h"
 #include "../../Load/Loader.h"
 #include "../../Load/Saver.h"
-#include "../../Load/Processing/dataExtraction.h"
 
 #include "../../Specific/fct_display.h"
 #include "../../Specific/fct_system.h"
@@ -19,32 +18,53 @@ Capture::Capture(){
   this->scalaManager = new Scala();
   this->veloManager = new Velodyne();
   this->loaderManager = new Loader();
-  this->extractManager = new dataExtraction();
   this->sceneManager = new Scene();
 
   this->ID_capture = 0;
-  this->with_justOneFrame = false;
+  this->with_justOneFrame = true;
 
   //---------------------------
 }
 Capture::~Capture(){}
 
 //Main functions
-void Capture::init_new_capture(){
+void Capture::start_new_capture(){
   //---------------------------
 
+  //If lidar hasn't start, start it
+  bool is_rotating = *veloManager->get_is_rotating();
+  if(is_rotating == false){
+    veloManager->lidar_start_motor();
+  }
+  veloManager->lidar_start_watcher();
+
   //Reset variables
-  this->ID_subset = 0;
+  int* ID_subset = veloManager->get_ID_subset();
+  *ID_subset = 0;
 
   //Create new empty cloud
   loaderManager->load_cloud_empty();
   cloud_capture = loaderManager->get_createdcloud();
   cloud_capture->name = "Capture_" + to_string(ID_capture);
+  ID_capture++;
 
   //---------------------------
-  ID_capture++;
+  console.AddLog("#", "Velodyne new capture");
 }
-void Capture::runtime_check_newSubset(){
+void Capture::stop_capture(){
+  //---------------------------
+
+  //Stop watcher
+  bool* is_capturing = veloManager->get_is_capturing();
+  *is_capturing = false;
+
+  //Stop lidar motor
+  veloManager->lidar_stop_motor();
+
+  //---------------------------
+  console.AddLog("#", "Velodyne capture OFF");
+}
+void Capture::runtime_capturing(){
   //---------------------------
 
   //Get subset creation flags

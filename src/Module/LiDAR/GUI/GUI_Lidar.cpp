@@ -36,10 +36,9 @@ void GUI_Lidar::design_Scala(){
 void GUI_Lidar::design_Velodyne(){
   //---------------------------
 
+  captureManager->runtime_capturing();
   this->velo_state();
-  this->velo_connection();
   this->velo_capture();
-  this->velo_record();
   this->velo_parameter();
 
   //---------------------------
@@ -97,104 +96,31 @@ void GUI_Lidar::velo_connection(){
   //---------------------------
 }
 void GUI_Lidar::velo_capture(){
-  bool* is_rotating = veloManager->get_is_rotating();
-  bool* is_capturing = veloManager->get_is_capturing();
+  bool is_capturing = *veloManager->get_is_capturing();
   //---------------------------
 
   //Capturing button
-  if(*is_capturing == false){
+  if(is_capturing == false){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Capture", ImVec2(150,0))){
-
-      //If lidar hasn't start, start it
-      if(*is_rotating == false){
-        veloManager->lidar_start_motor();
-      }
-
-      //Start capturing functions
-      if(*is_rotating == true){
-        *is_capturing = true;
-
-        captureManager->new_capture();
-        veloManager->lidar_start_watcher();
-
-        console.AddLog("#", "Data capture ON");
-      }
-
+      captureManager->start_new_capture();
     }
     ImGui::PopStyleColor(1);
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
     if(ImGui::Button("Stop capture", ImVec2(150,0))){
-      *is_capturing = false;
-      console.AddLog("#", "Data capture OFF");
+      captureManager->stop_capture();
     }
     ImGui::PopStyleColor(1);
-  }
-
-  //Capture state
-  ImGui::SameLine();
-  if(*is_capturing){
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
-  }else{
+    ImGui::SameLine();
     ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%s", "OFF");
   }
 
   //---------------------------
-}
-void GUI_Lidar::velo_record(){
-  //---------------------------
-
-  bool* is_recording = veloManager->get_is_recording();
-  bool* is_capturing = veloManager->get_is_capturing();
-  bool* is_rotating = veloManager->get_is_rotating();
-
-  //Recording button
-  if(*is_recording == false){
-    //Start button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Recording", ImVec2(150,0))){
-      if(*is_rotating && *is_capturing){
-        console.AddLog("#", "LiDAR recording...");
-        *is_recording = true;
-      }else{
-        console.AddLog("error", "LiDAR is not capturing");
-        *is_recording = false;
-      }
-    }
-    ImGui::PopStyleColor(1);
-  }else{
-    //Stop button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop recording", ImVec2(150,0))){
-
-      *is_recording = false;
-      console.AddLog("#", "Data recording OFF");
-
-    }
-    ImGui::PopStyleColor(1);
-  }
-
-  //Capture state
-  ImGui::SameLine();
-  if(*is_recording){
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
-  }else{
-    ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%s", "OFF");
-  }
-
-  //Recording path
-  if(ImGui::Button("...##24")){
-    captureManager->recording_selectDirSave();
-  }
-  ImGui::SameLine();
-  string saveas = *captureManager->get_path_dirSave();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
-
-  //---------------------------
-  ImGui::Separator();
 }
 void GUI_Lidar::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){

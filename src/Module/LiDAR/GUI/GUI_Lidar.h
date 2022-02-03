@@ -24,7 +24,6 @@ public:
   void velo_state();
   void velo_connection();
   void velo_capture();
-  void velo_record();
   void velo_parameter();
 
 private:

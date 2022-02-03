@@ -150,17 +150,16 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
 
   //Initialize parameters
   subset->visibility = true;
-
-  //Insert subset data into GPU
-  extractManager->add_subset_to_gpu(subset);
+  Subset* subset_buffer = new Subset(*subset);
+  Subset* subset_init = new Subset(*subset);
 
   //Insert new subset into cloud lists
   cloud->subset.push_back(subset);
-  cloud->subset_buffer.push_back(subset);
-  cloud->subset_init.push_back(subset);
+  cloud->subset_buffer.push_back(subset_buffer);
+  cloud->subset_init.push_back(subset_init);
 
   //Update number of cloud subset
-  cloud_capture->nb_subset = cloud_capture->subset.size();
+  cloud->nb_subset = cloud->subset.size();
 
   //---------------------------
 }

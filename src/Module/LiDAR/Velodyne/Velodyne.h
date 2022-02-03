@@ -9,12 +9,11 @@
 
 #include <thread>
 
+class dataExtraction;
+
 class UDP_frame;
 class UDP_server;
 class UDP_parser_VLP16;
-
-class Scene;
-class Timer;
 
 
 class Velodyne
@@ -48,15 +47,14 @@ public:
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
   inline bool* get_is_capturing(){return &is_capturing;}
-  inline bool* get_is_recording(){return &is_recording;}
+  inline int* get_ID_subset(){return &ID_subset;}
   inline int get_rot_freq(){return rot_freq;}
   inline int get_rot_rpm(){return rot_rpm;}
   inline int get_fov_min(){return fov_min;}
   inline int get_fov_max(){return fov_max;}
 
 private:
-  Scene* sceneManager;
-  Timer* timerManager;
+  dataExtraction* extractManager;
 
   UDP_frame* frameManager;
   UDP_server* udpServManager;
@@ -71,7 +69,6 @@ private:
   bool is_capturing;
   bool is_rotating;
   bool is_connected;
-  bool is_recording;
   bool is_first_run;
   std::thread thread_capture;
 };

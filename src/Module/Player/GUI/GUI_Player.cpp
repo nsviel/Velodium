@@ -157,7 +157,7 @@ void GUI_Player::player_selection(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  if(cloud != nullptr){
+  if(cloud != nullptr && cloud->nb_subset > 2){
     Subset* subset = sceneManager->get_subset_selected();
     Subset* subset_first = sceneManager->get_subset(cloud, 0);
     Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);

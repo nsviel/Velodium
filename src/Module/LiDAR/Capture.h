@@ -20,8 +20,9 @@ public:
 
 public:
   //Recording functions
-  void init_new_capture();
-  void runtime_check_newSubset();
+  void start_new_capture();
+  void stop_capture();
+  void runtime_capturing();
 
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
@@ -29,7 +30,6 @@ public:
 private:
   Scene* sceneManager;
   Loader* loaderManager;
-  dataExtraction* extractManager;
 
   Cloud* cloud_capture;
   Scala* scalaManager;

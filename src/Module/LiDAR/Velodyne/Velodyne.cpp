@@ -9,8 +9,7 @@
 #include "UDP/UDP_server.h"
 #include "UDP/UDP_parser_VLP16.h"
 
-#include "../../../Engine/Scene.h"
-#include "../../../Specific/fct_timer.h"
+#include "../../../Load/Processing/dataExtraction.h"
 
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
@@ -23,6 +22,8 @@
 //Constructor / Destructor
 Velodyne::Velodyne(){
   //---------------------------
+
+  this->extractManager = new dataExtraction();
 
   this->udpServManager = new UDP_server();
   this->udpParsManager = new UDP_parser_VLP16();
@@ -37,16 +38,17 @@ Velodyne::Velodyne(){
   this->is_capturing = false;
   this->is_rotating = false;
   this->is_connected = false;
-  this->is_recording = false;
-  this->is_newSubset = true;
+  this->is_newSubset = false;
 
   //---------------------------
 }
 Velodyne::~Velodyne(){}
 
-//Recording functions
+//Capturing functions
 void Velodyne::lidar_start_watcher(){
   //---------------------------
+
+  this->is_capturing = true;
 
   thread_capture = std::thread([&]() {
     while (is_capturing) {
@@ -61,7 +63,7 @@ void Velodyne::lidar_start_watcher(){
 
       if(frame_rev){
         udpPacket* frame = frameManager->get_endedFrame();
-        this->create_subset(frame);
+        this->lidar_create_subset(frame);
       }
     }
   });
@@ -78,6 +80,11 @@ void Velodyne::lidar_create_subset(udpPacket* udp_packet){
 
   //Convert the udppacket into subset
   this->subset_capture = extractManager->extractData(&upd_frame, ID_subset);
+
+  //Insert subset data into GPU
+  extractManager->add_subset_to_gpu(subset_capture);
+
+  //Update flags
   this->is_newSubset = true;
   this->ID_subset++;
 
