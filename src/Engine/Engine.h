@@ -9,6 +9,11 @@
  *
  */
 
+#include "../common.h"
+
+using namespace std;
+using namespace glm;
+
 class Scene;
 class Glyphs;
 class Camera;
@@ -20,11 +25,7 @@ class Filter;
 class Renderer;
 class CT_ICP;
 class Configuration;
-
-#include "../common.h"
-
-using namespace std;
-using namespace glm;
+class Module;
 
 
 class Engine
@@ -54,6 +55,7 @@ public:
   inline Renderer* get_renderManager(){return renderManager;}
   inline CT_ICP* get_cticpManager(){return cticpManager;}
   inline Configuration* get_configManager(){return configManager;}
+  inline Module* get_moduleManager(){return moduleManager;}
 
 private:
   Dimension* dimManager;
@@ -67,6 +69,7 @@ private:
   Renderer* renderManager;
   CT_ICP* cticpManager;
   Configuration* configManager;
+  Module* moduleManager;
 
   uint modelID, comID;
 };

@@ -89,7 +89,8 @@ void GUI_menuBar::MenuBar_menus(){
       if(sceneManager->is_atLeastOnecloud()){
         Transforms transformManager;
         transformManager.make_centering(cloud);
-        sceneManager->update_cloud_location(cloud);
+        //Module* moduleManager = engineManager->get_moduleManager();
+        //moduleManager->module_update();
       }
     }
     if(ImGui::MenuItem("Reset scene","r")){
@@ -256,27 +257,27 @@ void GUI_menuBar::MenuBar_fastScene(){
   if(ImGui::Button("Frames move", ImVec2(100,0))){
     opeManager->loading_fastScene(3);
     configManager->choose_configuration(0);
-    gui_leftPanelManager->update();
+    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("More frames", ImVec2(100,0))){
     opeManager->loading_fastScene(4);
     configManager->choose_configuration(0);
-    gui_leftPanelManager->update();
+    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Other frames", ImVec2(100,0))){
     opeManager->loading_fastScene(5);
     configManager->choose_configuration(0);
-    gui_leftPanelManager->update();
+    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Tunel", ImVec2(100,0))){
     opeManager->loading_fastScene(6);
     configManager->choose_configuration(0);
-    gui_leftPanelManager->update();
+    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("IA module", ImVec2(100,0))){
     opeManager->loading_fastScene(7);
     configManager->choose_configuration(1);
-    gui_leftPanelManager->update();
+    //gui_leftPanelManager->update();
   }
 
   //---------------------------

@@ -15,7 +15,6 @@ class UDP_parser_VLP16;
 
 class Scene;
 class Timer;
-class Capture;
 
 
 class Velodyne
@@ -27,20 +26,25 @@ public:
 
 public:
   //Recording functions
-  void run_capture();
+  void lidar_start_watcher();
+  void lidar_create_subset(udpPacket* udp_packet);
 
-  //LiDAR functions
-  void lidar_start();
-  void lidar_stop();
-  void lidar_startNewCapture();
+  //LiDAR motor
+  void lidar_start_motor();
+  void lidar_stop_motor();
+
+  //LiDAR status
   void lidar_get_status();
   bool lidar_get_is_connected();
+
+  //LiDAR parametrization
   void lidar_set_rpm(int value);
   void lidar_set_cameraFOV_min(int fov_min);
   void lidar_set_cameraFOV_max(int fov_max);
   void lidar_set_cameraFOV(int min, int max);
 
-  inline Capture* get_captureManager(){return captureManager;}
+  inline Subset* get_subset_capture(){return subset_capture;}
+  inline bool* get_is_newSubset(){return &is_newSubset;}
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
   inline bool* get_is_capturing(){return &is_capturing;}
@@ -53,22 +57,23 @@ public:
 private:
   Scene* sceneManager;
   Timer* timerManager;
-  Capture* captureManager;
 
   UDP_frame* frameManager;
   UDP_server* udpServManager;
   UDP_parser_VLP16* udpParsManager;
 
-  int time_of_capture;
+  Subset* subset_capture;
+
+  int ID_subset;
   int rot_freq, rot_rpm;
   int fov_min, fov_max;
-  bool has_started;
+  bool is_newSubset;
   bool is_capturing;
   bool is_rotating;
   bool is_connected;
   bool is_recording;
   bool is_first_run;
-  std::thread m_thread;
+  std::thread thread_capture;
 };
 
 #endif

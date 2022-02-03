@@ -15,6 +15,7 @@
 #include "../Operation/Functions/Heatmap.h"
 #include "../Operation/Transformation/Filter.h"
 #include "../Module/SLAM/CT_ICP.h"
+#include "../Module/Module.h"
 
 Database database;
 
@@ -35,6 +36,7 @@ Engine::Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render
   this->glyphManager = new Glyphs();
   this->heatmapManager = new Heatmap();
   this->filterManager = new Filter();
+  this->moduleManager = new Module();
 
   glyphManager->init();
 
@@ -68,6 +70,9 @@ void Engine::loop(){
 
   //Draw clouds
   this->draw_clouds();
+
+  //Module stuff
+  moduleManager->module_runtime();
 
   //---------------------------
 }

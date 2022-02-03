@@ -15,13 +15,12 @@ class GUI_leftPanel
 {
 public:
   //Constructor / Destructor
-  GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_Module* module);
+  GUI_leftPanel(Engine* renderer, GUI_windows* window);
   ~GUI_leftPanel();
 
 public:
   //Main function
   void design_leftPanel();
-  void update();
 
   void panel_top();
   void panel_bot();

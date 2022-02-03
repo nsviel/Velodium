@@ -21,6 +21,8 @@ public:
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
   void remove_subset(Cloud* cloud, int ID);
+  void remove_subset_all(Cloud* cloud);
+  void add_new_subset(Cloud* cloud, Subset* subset);
 
   //Update data
   void update_cloud_glyphs(Cloud* cloud);

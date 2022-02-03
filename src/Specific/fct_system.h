@@ -1,6 +1,11 @@
 #ifndef SYSTEM_FUNCTIONS_H
 #define SYSTEM_FUNCTIONS_H
 
+/**
+ * \namespace System functions
+ * \brief Specific system functions
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -10,15 +15,17 @@
 #include <random>
 #include <fstream>
 #include <unistd.h>
+#include <filesystem>
 #include <experimental/filesystem>
 
-/**
- * \namespace OpenGL functions
- * \brief Specific OpenGL functions
- */
 
 namespace{
   //---------------------------
+
+  //New directory creation
+  void create_new_dir(std::string path){
+    std::filesystem::create_directory(path);
+  }
 
   //Get a RGB random color
   glm::vec4 random_color(){

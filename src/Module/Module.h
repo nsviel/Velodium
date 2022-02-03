@@ -9,39 +9,13 @@ class Module
 {
 public:
   //Constructor / Destructor
-  Module(){
-    //-------------------------------
-
-    this->module_configuration();
-
-    //-------------------------------
-  }
+  Module();
   ~Module();
 
 public:
-  void module_configuration(){
-    //-------------------------------
-
-    this->configManager = new config_module();
-    configManager->make_configuration();
-
-    //-------------------------------
-  }
-  void module_update(){
-    //-------------------------------
-
-    gui_playerManager->update();
-
-    //-------------------------------
-  }
-  void module_runtime(){
-    //-------------------------------
-
-    gui_playerManager->player_mouse();
-    gui_obstacleManager->online_run();
-
-    //-------------------------------
-  }
+  void module_configuration();
+  void module_update();
+  void module_runtime();
 
 private:
   config_module* configManager;

@@ -3,8 +3,6 @@
 #include "PP_edl.h"
 #include "ShaderObject.h"
 
-#include "ShaderObject.h"
-
 #include "../Configuration/Dimension.h"
 
 
@@ -35,7 +33,6 @@ void Shader::update(){
 
 	//---------------------------
 }
-
 void Shader::use(string shader_name){
 	//---------------------------
 
@@ -45,16 +42,6 @@ void Shader::use(string shader_name){
 	else if(shader_name == "screen"){
 		shader_screen->use();
 	}
-
-	//---------------------------
-}
-void Shader::use_screen(){
-	shader_screen->use();
-}
-void Shader::use_scene(){
-	//---------------------------
-
-	shader_scene->use();
 
 	//---------------------------
 }

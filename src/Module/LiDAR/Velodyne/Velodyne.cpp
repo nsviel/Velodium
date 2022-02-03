@@ -1,9 +1,9 @@
 // (!) not more than one curl command per second
 // so just one command per function
+//Input : udp packets
+//Output : Subset pointer
 
 #include "Velodyne.h"
-
-#include "Capture.h"
 
 #include "UDP/UDP_frame.h"
 #include "UDP/UDP_server.h"
@@ -27,29 +27,28 @@ Velodyne::Velodyne(){
   this->udpServManager = new UDP_server();
   this->udpParsManager = new UDP_parser_VLP16();
   this->frameManager = new UDP_frame();
-  this->timerManager = new Timer();
-  this->captureManager = new Capture();
 
+  this->ID_subset = 0;
   this->rot_freq = 0;
   this->fov_min = 0;
   this->fov_max = 359;
 
-  this->has_started = false;
   this->is_first_run = true;
   this->is_capturing = false;
   this->is_rotating = false;
   this->is_connected = false;
   this->is_recording = false;
+  this->is_newSubset = true;
 
   //---------------------------
 }
 Velodyne::~Velodyne(){}
 
 //Recording functions
-void Velodyne::run_capture(){
+void Velodyne::lidar_start_watcher(){
   //---------------------------
 
-  m_thread = std::thread([&]() {
+  thread_capture = std::thread([&]() {
     while (is_capturing) {
       //Get packet in decimal format
       vector<int> packet = udpServManager->read_UDP_packets();
@@ -62,17 +61,31 @@ void Velodyne::run_capture(){
 
       if(frame_rev){
         udpPacket* frame = frameManager->get_endedFrame();
-        captureManager->create_subset(frame, is_recording);
+        this->create_subset(frame);
       }
     }
   });
-  m_thread.detach();
+  thread_capture.detach();
+
+  //---------------------------
+}
+void Velodyne::lidar_create_subset(udpPacket* udp_packet){
+  //---------------------------
+
+  //Free the memory to get synchroneous data
+  udpPacket upd_frame = *udp_packet;
+  upd_frame.name = "frame_" + to_string(ID_subset);
+
+  //Convert the udppacket into subset
+  this->subset_capture = extractManager->extractData(&upd_frame, ID_subset);
+  this->is_newSubset = true;
+  this->ID_subset++;
 
   //---------------------------
 }
 
-//LiDAR functions
-void Velodyne::lidar_start(){
+//LiDAR motor
+void Velodyne::lidar_start_motor(){
   //---------------------------
 
   if(lidar_get_is_connected() == false){
@@ -103,11 +116,9 @@ void Velodyne::lidar_start(){
     console.AddLog("#", log);
   }
 
-  //this->lidar_startNewCapture();
-
   //---------------------------
 }
-void Velodyne::lidar_stop(){
+void Velodyne::lidar_stop_motor(){
   //---------------------------
 
   if(rot_freq > 0){
@@ -125,24 +136,8 @@ void Velodyne::lidar_stop(){
 
   //---------------------------
 }
-void Velodyne::lidar_startNewCapture(){
-  time_of_capture = 0;
-  //---------------------------
 
-  captureManager->new_capture();
-
-  //Set timer
-  if(timerManager->isRunning()){
-    timerManager->stop();
-  }
-  timerManager->setFunc([&](){
-		time_of_capture++;
-	});
-  timerManager->setInterval(1000);
-  timerManager->start();
-
-  //---------------------------
-}
+//LiDAR status
 void Velodyne::lidar_get_status(){
   //---------------------------
 
@@ -201,6 +196,8 @@ bool Velodyne::lidar_get_is_connected(){
   sleep(1);
   return connected;
 }
+
+//LiDAR parametrization
 void Velodyne::lidar_set_rpm(int value){
   //---------------------------
 

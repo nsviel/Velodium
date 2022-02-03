@@ -11,14 +11,14 @@
 
 
 //Constructor / Destructor
-GUI_leftPanel::GUI_leftPanel(Engine* renderer, GUI_windows* window, GUI_Module* module){
+GUI_leftPanel::GUI_leftPanel(Engine* engine, GUI_windows* window){
   this->gui_winManager = window;
-  this->engineManager = renderer;
-  this->gui_moduleManager = module;
+  this->engineManager = engine;
   //-------------------------------
 
   this->dimManager = engineManager->get_dimManager();
   this->gui_fileManager = new GUI_fileManager(dimManager, gui_winManager);
+  this->gui_moduleManager = new GUI_Module(engine);
 
   //-------------------------------
 }
@@ -31,13 +31,6 @@ void GUI_leftPanel::design_leftPanel(){
   this->panel_top();
   this->panel_bot();
   this->update_dimension();
-
-  //----------------------------
-}
-void GUI_leftPanel::update(){
-  //----------------------------
-
-  //gui_moduleManager->update_module();
 
   //----------------------------
 }

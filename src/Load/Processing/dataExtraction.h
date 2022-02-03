@@ -23,7 +23,7 @@ public:
   Subset* extractData(udpPacket* data, int ID);
   void extractData_frame(Cloud* cloud, dataFile* data);
   void extractData_oneFrame(Cloud* cloud, dataFile* data);
-  void add_subsetData(Subset* subset);
+  void add_subset_to_gpu(Subset* subset);
 
 private:
   //Subfunctions

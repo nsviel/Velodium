@@ -157,7 +157,7 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
 
   //---------------------------
 }
-void dataExtraction::add_subsetData(Subset* subset){
+void dataExtraction::add_subset_to_gpu(Subset* subset){
   //---------------------------
 
   glGenVertexArrays(1, &subset->VAO);

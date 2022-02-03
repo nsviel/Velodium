@@ -135,6 +135,35 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
 }
+void Scene::remove_subset_all(Cloud* cloud){
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    this->remove_subset(cloud, subset->ID);
+  }
+
+  //---------------------------
+}
+void Scene::add_new_subset(Cloud* cloud, Subset* subset){
+  //---------------------------
+
+  //Initialize parameters
+  subset->visibility = true;
+
+  //Insert subset data into GPU
+  extractManager->add_subset_to_gpu(subset);
+
+  //Insert new subset into cloud lists
+  cloud->subset.push_back(subset);
+  cloud->subset_buffer.push_back(subset);
+  cloud->subset_init.push_back(subset);
+
+  //Update number of cloud subset
+  cloud_capture->nb_subset = cloud_capture->subset.size();
+
+  //---------------------------
+}
 
 //Updating - cloud
 void Scene::update_cloud_glyphs(Cloud* cloud){

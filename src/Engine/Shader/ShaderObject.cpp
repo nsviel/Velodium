@@ -41,6 +41,7 @@ void ShaderObject::use(){
 	//---------------------------
 }
 void ShaderObject::build_shader(GLuint& ID_program, string path_vs, string path_fs){
+	string path_gs = "../src/Engine/Shader/shader_scene.gs";
 	//---------------------------
 
 	// Create the shaders program
@@ -48,6 +49,7 @@ void ShaderObject::build_shader(GLuint& ID_program, string path_vs, string path_
 
 	// Compile & check Shaders-
 	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
+	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER);
 	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
 
 	//Link program
@@ -56,6 +58,8 @@ void ShaderObject::build_shader(GLuint& ID_program, string path_vs, string path_
 	//Detach shaders for keep memory ressources
 	glDetachShader(ID_program, vs);
 	glDeleteShader(vs);
+	glDetachShader(ID_program, gs);
+	glDeleteShader(gs);
 	glDetachShader(ID_program, fs);
 	glDeleteShader(fs);
 

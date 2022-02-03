@@ -21,10 +21,11 @@ public:
   void design_Velodyne();
 
   //Subfunctions
-  void lidar_State();
-  void lidar_Parameters();
-  void lidar_Capture();
-  void lidar_Recording();
+  void velo_state();
+  void velo_connection();
+  void velo_capture();
+  void velo_record();
+  void velo_parameter();
 
 private:
   Scala* scalaManager;
