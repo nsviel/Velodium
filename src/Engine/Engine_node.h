@@ -26,21 +26,31 @@ public:
 public:
   //Main functions
   void init_objects(){
-    this->dimManager = dim;
-    this->shaderManager = shader;
-    this->cameraManager = control;
-    this->renderManager = render;
-    this->configManager = config;
+    this->dimManager = new Dimension(window);
+    this->shaderManager = new Shader(dimManager);
+    this->cameraManager = new Camera(dimManager);
+    this->renderManager = new Renderer(dimManager);
+    this->configManager = new Configuration();
     this->sceneManager = new Scene();
     this->glyphManager = new Glyphs();
   }
 
-  inline Heatmap* get_heatmapManager(){return heatmapManager;}
-  inline Filter* get_filterManager(){return filterManager;}
+  inline Scene* get_SceneManager(){return sceneManager;}
+  inline Glyphs* get_glyphManager(){return glyphManager;}
+  inline Dimension* get_dimManager(){return dimManager;}
+  inline Camera* get_CameraManager(){return cameraManager;}
+  inline Shader* get_shaderManager(){return shaderManager;}
+  inline Renderer* get_renderManager(){return renderManager;}
+  inline Configuration* get_configManager(){return configManager;}
 
 private:
-  Heatmap* heatmapManager;
-  Filter* filterManager;
+  Dimension* dimManager;
+  Scene* sceneManager;
+  Glyphs* glyphManager;
+  Camera* cameraManager;
+  Shader* shaderManager;
+  Renderer* renderManager;
+  Configuration* configManager;
 };
 
 #endif
