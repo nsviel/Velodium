@@ -13,9 +13,9 @@ class WIN_loading;
 class WIN_camera;
 class WIN_shader;
 class WIN_filter;
+class WIN_heatmap;
 
 class Engine;
-class Camera;
 class Fusion;
 class Filter;
 class Scene;
@@ -25,10 +25,8 @@ class Radiometry;
 class Operation;
 class Extraction;
 class Glyphs;
-class Heatmap;
 class Selection;
 class Loader;
-class Plotting;
 class Fitting;
 class config_opengl;
 
@@ -55,34 +53,30 @@ public:
   void window_normal();
   void window_intensity();
   void window_color();
-  void window_dataOpe();
   void window_heatmap();
 
   inline bool* get_cloud_movement(){return &cloud_movement;}
 
 private:
   Loader loaderManager;
-  Engine* engineManager;
-  Camera* cameraManager;
   Fusion* fusionManager;
   Scene* sceneManager;
   Attribut* attribManager;
   Radiometry* radioManager;
   Glyphs* glyphManager;
-  Heatmap* heatmapManager;
   Selection* selectionManager;
-  Plotting* plotManager;
   Fitting* fitManager;
   Operation* opeManager;
   Extraction* extractionManager;
   Transforms* transformManager;
-  config_opengl* configManager;
 
+  config_opengl* configManager;
   WIN_camera* wincamManager;
   WIN_loading* loadingManager;
   WIN_cloudInfo* infoManager;
   WIN_shader* shaderManager;
   WIN_filter* filterManager;
+  WIN_heatmap* heatmapManager;
 
   bool cloud_movement;
 };

@@ -1,5 +1,6 @@
 #include "Player_online.h"
 
+#include "../Module_node.h"
 #include "../SLAM/CT_ICP.h"
 #include "../Obstacle/Obstacle.h"
 #include "../Obstacle/Obstacle_IO.h"
@@ -12,9 +13,10 @@
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/Dimension.h"
-#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/config_module.h"
 #include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene.h"
 
 #include "../../Load/Operation.h"
@@ -25,22 +27,22 @@
 
 
 //Constructor / Destructor
-Player_online::Player_online(Engine* engineManager){
+Player_online::Player_online(Module_node* node_module){
   //---------------------------
 
-  Operation_node* node_opeManager = engineManager->get_node_opeManager();
-  this->filterManager = node_opeManager->get_filterManager();
-  this->heatmapManager = node_opeManager->get_heatmapManager();
+  Operation_node* node_ope = node_module->get_node_opeManager();
+  Engine_node* node_engine = node_module->get_node_engineManager();
+  Configuration_node* node_config = node_engine->get_node_configManager();
 
-  this->cameraManager = engineManager->get_CameraManager();
-  this->renderManager = engineManager->get_renderManager();
-  this->dimManager = engineManager->get_dimManager();
-  this->cticpManager = engineManager->get_cticpManager();
+  this->filterManager = node_ope->get_filterManager();
+  this->heatmapManager = node_ope->get_heatmapManager();
+  this->cameraManager = node_engine->get_cameraManager();
+  this->renderManager = node_engine->get_renderManager();
+  this->dimManager = node_engine->get_dimManager();
+  this->cticpManager = node_module->get_cticpManager();
+  this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();
   this->obstacleManager = new Obstacle();
-
-  Configuration* config = engineManager->get_configManager();
-  this->configManager = config->get_conf_modManager();
 
   //---------------------------
   this->update_configuration();

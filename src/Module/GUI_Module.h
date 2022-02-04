@@ -54,6 +54,7 @@ public:
           ImGui::EndTabItem();
         }
       }
+      gui_playerManager->player_mouse();
 
       // SLAM
       if(module_slam){

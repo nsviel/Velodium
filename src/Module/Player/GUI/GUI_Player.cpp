@@ -2,6 +2,7 @@
 
 #include "../Player_online.h"
 #include "../Player_cloud.h"
+#include "../../Module_node.h"
 
 #include "../../../Engine/Engine.h"
 #include "../../../Engine/Scene.h"
@@ -17,12 +18,14 @@
 GUI_Player::GUI_Player(Engine* engineManager){
   //---------------------------
 
-  Operation_node* node_opeManager = engineManager->get_node_opeManager();
-  this->filterManager = node_opeManager->get_filterManager();
-  this->heatmapManager = node_opeManager->get_heatmapManager();
+  Operation_node* node_ope = engineManager->get_node_opeManager();
+  Module_node* node_module = engineManager->get_node_moduleManager();
+
+  this->filterManager = node_ope->get_filterManager();
+  this->heatmapManager = node_ope->get_heatmapManager();
+  this->onlineManager = node_module->get_onlineManager();
+  this->playerManager = node_module->get_playerManager();
   this->sceneManager = new Scene();
-  this->onlineManager = new Player_online(engineManager);
-  this->playerManager = new Player_cloud(onlineManager);
 
   //---------------------------
 }

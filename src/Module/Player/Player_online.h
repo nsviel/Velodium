@@ -13,13 +13,14 @@ class Renderer;
 class Scene;
 class Obstacle;
 class config_module;
+class Module_node;
 
 
 class Player_online
 {
 public:
   //Constructor / Destructor
-  Player_online(Engine* engineManager);
+  Player_online(Module_node* node_module);
   ~Player_online();
 
 public:

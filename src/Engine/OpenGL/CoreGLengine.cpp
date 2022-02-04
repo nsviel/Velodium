@@ -5,11 +5,12 @@
 #include "Renderer.h"
 
 #include "../Engine.h"
+#include "../Engine_node.h"
 #include "../Shader/Shader.h"
 #include "../Shader/ShaderObject.h"
 #include "../Configuration/Dimension.h"
 #include "../Configuration/config_opengl.h"
-#include "../Configuration/Configuration.h"
+#include "../Configuration/Configuration_node.h"
 
 #include "../../GUI/GUI.h"
 
@@ -37,7 +38,6 @@ CoreGLengine::~CoreGLengine(){
 bool CoreGLengine::init(){
   //---------------------------
 
-  this->init_configuration();
   this->init_OGL();
   this->init_object();
   this->init_rendering();
@@ -46,29 +46,23 @@ bool CoreGLengine::init(){
   console.AddLog("sucess" ,"Program initialized...");
   return true;
 }
-bool CoreGLengine::init_configuration(){
-  //---------------------------
-
-  this->configManager = new Configuration();
-  this->conf_glManager = configManager->get_conf_glManager();
-  configManager->make_configuration();
-
-  //---------------------------
-  return true;
-}
 bool CoreGLengine::init_OGL(){
   //---------------------------
 
-  //Dimension
+  this->node_engineManager = new Engine_node();
+  Configuration_node* node_config = node_engineManager->get_node_configManager();
+  config_opengl* conf_glManager = node_config->get_conf_glManager();
+
+  //Parametrization
   int resolution_width = conf_glManager->parse_json_i("window", "resolution_width");
   int resolution_height = conf_glManager->parse_json_i("window", "resolution_height");
-
-  //GLFW
   bool forceVersion = conf_glManager->parse_json_b("opengl", "forceVersion");
   bool coreGL_verbose = conf_glManager->parse_json_b("opengl", "verbose_coreGL");
   int nb_multisample = conf_glManager->parse_json_i("opengl", "nb_multisample");
   string win_title = conf_glManager->parse_json_s("window", "title");
+  this->waitForEvent = conf_glManager->parse_json_b("opengl", "waitForEvent");
 
+  //GLFW
   glfwInit();
   if(forceVersion){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
@@ -107,12 +101,12 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_object(){
   //---------------------------
 
-  this->dimManager = new Dimension(window);
-  this->shaderManager = new Shader(dimManager);
-  this->cameraManager = new Camera(dimManager);
-  this->viewportManager = new Viewport(dimManager);
-  this->renderManager = new Renderer(dimManager);
-  this->engineManager = new Engine(dimManager, cameraManager, shaderManager, renderManager, configManager);
+  node_engineManager->init_objects(window);
+  this->dimManager = node_engineManager->get_dimManager();
+  this->shaderManager = node_engineManager->get_shaderManager();
+  this->cameraManager = node_engineManager->get_cameraManager();
+  this->renderManager = node_engineManager->get_renderManager();
+  this->engineManager = new Engine(node_engineManager);
   this->guiManager = new GUI(engineManager);
 
   //---------------------------
@@ -202,7 +196,7 @@ void CoreGLengine::loop_drawScene(){
 
   cameraManager->viewport_update(0);
   cameraManager->input_cameraMouseCommands();
-  engineManager->loop();
+  engineManager->loop_scene();
 
   //---------------------------
 }
@@ -225,7 +219,6 @@ void CoreGLengine::loop_drawScreen(){
   //---------------------------
 }
 void CoreGLengine::loop_end(){
-  bool waitForEvent = conf_glManager->parse_json_b("opengl", "waitForEvent");
   //---------------------------
 
   glfwSwapBuffers(window);

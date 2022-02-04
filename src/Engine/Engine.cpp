@@ -2,39 +2,30 @@
 
 #include "Scene.h"
 #include "Glyphs.h"
-
 #include "Data/Database.h"
-#include "Shader/Shader.h"
-#include "Configuration/Dimension.h"
-#include "Configuration/Configuration.h"
-#include "Configuration/config_opengl.h"
-#include "OpenGL/CoreGLengine.h"
-#include "OpenGL/Renderer.h"
-#include "OpenGL/Camera.h"
 
+#include "Engine_node.h"
+#include "Configuration/Configuration_node.h"
 #include "../Operation/Operation_node.h"
-#include "../Module/SLAM/CT_ICP.h"
-#include "../Module/Module.h"
+#include "../Module/Module_node.h"
 
 Database database;
 
 
 //Constructor / Destructor
-Engine::Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render, Configuration* config){
-  this->dimManager = dim;
-  this->shaderManager = shader;
-  this->cameraManager = control;
-  this->renderManager = render;
-  this->configManager = config;
+Engine::Engine(Engine_node* engine){
   //---------------------------
+
+  this->node_engineManager = engine;
+  this->node_configManager = node_engineManager->get_node_configManager();
 
   this->init_database();
 
-  this->cticpManager = new CT_ICP();
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
-  this->moduleManager = new Module();
+
   this->node_opeManager = new Operation_node();
+  this->node_moduleManager = new Module_node(node_engineManager, node_opeManager);
 
   glyphManager->init();
 
@@ -60,7 +51,7 @@ void Engine::init_database(){
 
   //---------------------------
 }
-void Engine::loop(){
+void Engine::loop_scene(){
   //---------------------------
 
   //Draw glyph stuff
@@ -70,35 +61,10 @@ void Engine::loop(){
   this->draw_clouds();
 
   //Module stuff
-  moduleManager->module_runtime();
+  this->runtime();
 
   //---------------------------
 }
-void Engine::Exit(){
-  GLFWwindow* window = glfwGetCurrentContext();
-  glfwSetWindowShouldClose(window, true);
-}
-void Engine::reset(){
-  list<Cloud*>* list_Cloud = sceneManager->get_list_cloud();
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
-
-  //Reset all clouds
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
-    sceneManager->update_cloud_reset(cloud);
-  }
-
-  //Reset all functions
-  glyphManager->reset();
-  cticpManager->reset();
-  sceneManager->update_cloud_glyphs(cloud);
-
-  //---------------------------
-  console.AddLog("#", "Reset scene...");
-}
-
-//Subfunctions
 void Engine::draw_clouds(){
   list<Cloud*>* list_cloud = database.list_cloud;
   //---------------------------
@@ -132,4 +98,40 @@ void Engine::draw_clouds(){
   //---------------------------
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
+}
+
+//Subfunctions
+void Engine::exit(){
+  //---------------------------
+
+  GLFWwindow* window = glfwGetCurrentContext();
+  glfwSetWindowShouldClose(window, true);
+
+  //---------------------------
+}
+void Engine::reset(){
+  list<Cloud*>* list_Cloud = sceneManager->get_list_cloud();
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Reset all clouds
+  for(int i=0; i<list_Cloud->size(); i++){
+    Cloud* cloud = *next(list_Cloud->begin(),i);
+    sceneManager->update_cloud_reset(cloud);
+  }
+
+  //Reset all functions
+  node_engineManager->reset();
+  node_moduleManager->reset();
+  sceneManager->update_cloud_glyphs(cloud);
+
+  //---------------------------
+  console.AddLog("#", "Reset scene...");
+}
+void Engine::runtime(){
+  //---------------------------
+
+  node_moduleManager->runtime();
+
+  //---------------------------
 }

@@ -16,57 +16,43 @@ using namespace glm;
 
 class Scene;
 class Glyphs;
-class Camera;
-class Dimension;
-class GUI;
-class Shader;
-class Renderer;
-class CT_ICP;
-class Configuration;
-class Module;
-class Operation_node;
 
+class Configuration_node;
+class Module_node;
+class Operation_node;
+class Engine_node;
 
 class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render, Configuration* config);
+  Engine(Engine_node* engine);
   ~Engine();
 
 public:
   //Program functions
   void init_database();
-  void loop();
-  void Exit();
+  void loop_scene();
+  void exit();
   void reset();
+  void runtime();
 
   //Subfunctions
   void draw_clouds();
 
-  inline Scene* get_SceneManager(){return sceneManager;}
-  inline Glyphs* get_glyphManager(){return glyphManager;}
-  inline Dimension* get_dimManager(){return dimManager;}
-  inline Camera* get_CameraManager(){return cameraManager;}
-  inline Shader* get_shaderManager(){return shaderManager;}
-  inline Renderer* get_renderManager(){return renderManager;}
-  inline CT_ICP* get_cticpManager(){return cticpManager;}
-  inline Configuration* get_configManager(){return configManager;}
-  inline Module* get_moduleManager(){return moduleManager;}
+  inline Configuration_node* get_node_configManager(){return node_configManager;}
+  inline Module_node* get_node_moduleManager(){return node_moduleManager;}
   inline Operation_node* get_node_opeManager(){return node_opeManager;}
+  inline Engine_node* get_node_engineManager(){return node_engineManager;}
 
 private:
-  Dimension* dimManager;
   Scene* sceneManager;
   Glyphs* glyphManager;
-  Camera* cameraManager;
-  GUI* guiManager;
-  Shader* shaderManager;
-  Renderer* renderManager;
-  CT_ICP* cticpManager;
-  Configuration* configManager;
-  Module* moduleManager;
+
+  Configuration_node* node_configManager;
+  Module_node* node_moduleManager;
   Operation_node* node_opeManager;
+  Engine_node* node_engineManager;
 
   uint modelID, comID;
 };

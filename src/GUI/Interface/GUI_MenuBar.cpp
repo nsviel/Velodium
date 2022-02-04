@@ -1,7 +1,7 @@
 #include "GUI_MenuBar.h"
 #include "GUI_LeftPanel.h"
 
-#include "../Windows/Window_tab.h"
+#include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_Option.h"
 
@@ -12,7 +12,7 @@
 #include "../../Engine/Engine.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
-#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/config_module.h"
 
 #include "../../Operation/Functions/Extraction.h"
@@ -37,7 +37,7 @@ GUI_menuBar::GUI_menuBar(Engine* eng, GUI_windows* win, GUI_option* opt, GUI_lef
   this->playerManager = ply;
   //---------------------------
 
-  Configuration* config = eng->get_configManager();
+  Configuration_node* config = eng->get_node_configManager();
   this->configManager = config->get_conf_modManager();
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
@@ -99,7 +99,7 @@ void GUI_menuBar::MenuBar_menus(){
 
     ImGui::Separator();
     if (ImGui::MenuItem("Quit")){
-      engineManager->Exit();
+      engineManager->exit();
     }
 
     ImGui::EndMenu();

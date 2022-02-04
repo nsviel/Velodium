@@ -5,6 +5,7 @@
 
 #include "../../Module/GUI_Module.h"
 #include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Configuration/Dimension.h"
 
 #include "imgui/imgui.h"
@@ -16,7 +17,8 @@ GUI_leftPanel::GUI_leftPanel(Engine* engine, GUI_windows* window){
   this->engineManager = engine;
   //-------------------------------
 
-  this->dimManager = engineManager->get_dimManager();
+  Engine_node* node_engineManager = engineManager->get_node_engineManager();
+  this->dimManager = node_engineManager->get_dimManager();
   this->gui_fileManager = new GUI_fileManager(dimManager, gui_winManager);
   this->gui_moduleManager = new GUI_Module(engine);
 

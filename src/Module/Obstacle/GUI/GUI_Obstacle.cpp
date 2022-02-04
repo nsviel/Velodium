@@ -5,6 +5,7 @@
 
 #include "../../../Engine/Scene.h"
 #include "../../../Engine/Engine.h"
+#include "../../../Engine/Engine_node.h"
 #include "../../../Operation/Functions/CoordTransform.h"
 
 
@@ -12,7 +13,8 @@
 GUI_Obstacle::GUI_Obstacle(Engine* engineManager){
   //---------------------------
 
-  this->coordManager = new CoordTransform(engineManager->get_CameraManager(), engineManager->get_dimManager());
+  Engine_node* node_engineManager = engineManager->get_node_engineManager();
+  this->coordManager = new CoordTransform(node_engineManager->get_cameraManager(), node_engineManager->get_dimManager());
   this->obstacleManager = new Obstacle();
   this->ioManager = obstacleManager->get_ioManager();
   this->sceneManager = new Scene();

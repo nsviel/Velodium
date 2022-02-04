@@ -1,6 +1,6 @@
 #include "GUI_FileManager.h"
 
-#include "../Windows/Window_tab.h"
+#include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 
 #include "../../Engine/Configuration/Dimension.h"

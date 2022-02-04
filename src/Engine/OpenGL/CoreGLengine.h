@@ -15,9 +15,7 @@ class Viewport;
 class GUI;
 class Engine;
 class Renderer;
-class config_opengl;
-class Configuration;
-
+class Engine_node;
 
 class CoreGLengine
 {
@@ -27,7 +25,6 @@ public:
 
 public:
   bool init();
-  bool init_configuration();
   bool init_OGL();
   bool init_object();
   void init_rendering();
@@ -42,8 +39,8 @@ public:
   void loop_end();
 
 private:
-  Configuration* configManager;
-  config_opengl* conf_glManager;
+  Engine_node* node_engineManager;
+
   GLFWwindow* window;
   Engine* engineManager;
   Camera* cameraManager;
@@ -53,6 +50,7 @@ private:
   GUI* guiManager;
   Shader* shaderManager;
 
+  bool waitForEvent;
   bool flag_resized;
 };
 

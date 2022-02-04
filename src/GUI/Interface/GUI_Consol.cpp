@@ -2,6 +2,7 @@
 #include "struct_consol.h"
 
 #include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Configuration/Dimension.h"
 
 #include "imgui/imgui.h"
@@ -16,7 +17,8 @@ GUI_consol::GUI_consol(Engine* renderer){
   this->engineManager = renderer;
   //----------------------------
 
-  this->dimManager = engineManager->get_dimManager();
+  Engine_node* node_engineManager = engineManager->get_node_engineManager();
+  this->dimManager = node_engineManager->get_dimManager();
 
   //----------------------------
 }

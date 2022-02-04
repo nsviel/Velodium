@@ -4,7 +4,7 @@
 #include "../../Engine/Shader/ShaderObject.h"
 #include "../../Engine/Shader/PP_edl.h"
 
-#include "Window_tab.h"
+#include "Window_table.h"
 extern struct Window_tab window_tab;
 
 

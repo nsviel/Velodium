@@ -7,6 +7,8 @@
 #include "../CT_ICP/SLAM_assessment.h"
 #include "../CT_ICP/SLAM_localMap.h"
 
+#include "../../Module_node.h"
+
 #include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene.h"
 #include "../../../Engine/Engine.h"
@@ -19,14 +21,15 @@ extern struct Database database;
 GUI_Slam::GUI_Slam(Engine* engineManager){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  Module_node* node_module = engineManager->get_node_moduleManager();
 
-  this->cticpManager = engineManager->get_cticpManager();
+  this->cticpManager = node_module->get_cticpManager();
   this->ceresManager = cticpManager->get_SLAM_optim_ceres();
   this->gnManager = cticpManager->get_SLAM_optim_gn();
   this->normalManager = cticpManager->get_SLAM_normal();
   this->assessManager = cticpManager->get_assessManager();
   this->mapManager = cticpManager->get_mapManager();
+  this->sceneManager = new Scene();
 
   this->item_width = 100;
 

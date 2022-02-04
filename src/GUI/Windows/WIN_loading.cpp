@@ -7,7 +7,7 @@
 #include "../../Load/Format/file_PTX.h"
 #include "../../Load/Format/file_PCAP.h"
 
-#include "Window_tab.h"
+#include "Window_table.h"
 extern struct Window_tab window_tab;
 
 

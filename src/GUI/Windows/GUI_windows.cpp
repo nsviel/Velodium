@@ -1,23 +1,23 @@
 #include "GUI_windows.h"
 
-#include "Window_tab.h"
+#include "Window_table.h"
 #include "WIN_loading.h"
 #include "WIN_cloudInfo.h"
 #include "WIN_camera.h"
 #include "WIN_shader.h"
 #include "WIN_filter.h"
+#include "WIN_heatmap.h"
 
 #include "../../Load/Operation.h"
 
 #include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene.h"
-#include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/Glyphs.h"
-#include "../../Engine/Configuration/Configuration.h"
+#include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/config_opengl.h"
 
 #include "../../Operation/Operation_node.h"
-#include "../../Operation/Plotting.h"
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Functions/Selection.h"
@@ -37,15 +37,13 @@ Window_tab window_tab;
 
 //Constructor / Destructor
 GUI_windows::GUI_windows(Engine* engine){
-  engineManager = engine;
   //---------------------------
 
-  this->cameraManager = engineManager->get_CameraManager();
+  Operation_node* node_opeManager = engine->get_node_opeManager();
+  Engine_node* node_engineManager = engine->get_node_engineManager();
+  Configuration_node* node_configManager = engine->get_node_configManager();
 
-  Operation_node* node_opeManager = engineManager->get_node_opeManager();
-  this->heatmapManager = node_opeManager->get_heatmapManager();
-
-  this->selectionManager = new Selection(engineManager->get_dimManager(), cameraManager);
+  this->selectionManager = new Selection(node_engineManager->get_dimManager(), node_engineManager->get_cameraManager());
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
@@ -54,16 +52,15 @@ GUI_windows::GUI_windows(Engine* engine){
   this->attribManager = new Attribut();
   this->fitManager = new Fitting();
   this->extractionManager = new Extraction();
-  this->plotManager = new Plotting();
 
-  Configuration* config = engineManager->get_configManager();
-  this->configManager = config->get_conf_glManager();
 
-  this->wincamManager = new WIN_camera(cameraManager);
+  this->configManager = node_configManager->get_conf_glManager();
+  this->wincamManager = new WIN_camera(node_engineManager->get_cameraManager());
   this->loadingManager = new WIN_loading();
   this->infoManager = new WIN_cloudInfo();
-  this->shaderManager = new WIN_shader(engineManager->get_shaderManager());
+  this->shaderManager = new WIN_shader(node_engineManager->get_shaderManager());
   this->filterManager = new WIN_filter(node_opeManager->get_filterManager());
+  this->heatmapManager = new WIN_heatmap(node_opeManager->get_heatmapManager());
 
   //---------------------------
   this->init();
@@ -86,7 +83,6 @@ void GUI_windows::init(){
   window_tab.show_normal = false;
   window_tab.show_intensity = false;
   window_tab.show_color = false;
-  window_tab.show_dataOpe = false;
   window_tab.show_selection = false;
   window_tab.show_fitting = false;
   window_tab.show_heatmap = false;
@@ -99,7 +95,6 @@ void GUI_windows::init(){
 void GUI_windows::window_Draw(){
   //---------------------------
 
-  this->window_heatmap();
   this->window_asciiData();
   this->window_transformation();
   this->window_selection();
@@ -108,7 +103,6 @@ void GUI_windows::window_Draw(){
   this->window_normal();
   this->window_intensity();
   this->window_color();
-  this->window_dataOpe();
   this->window_fitting();
 
   wincamManager->window_camera();
@@ -117,6 +111,7 @@ void GUI_windows::window_Draw(){
   infoManager->window_cloudInfo();
   shaderManager->window_shader();
   filterManager->window_filter();
+  heatmapManager->window_heatmap();
 
   //---------------------------
 }
@@ -193,79 +188,6 @@ void GUI_windows::window_asciiData(){
     ImGui::TreePop();
 
     //---------------------------
-    ImGui::End();
-  }
-}
-void GUI_windows::window_heatmap(){
-  if(window_tab.show_heatmap){
-    ImGui::Begin(ICON_FA_EYE " Heatmap", &window_tab.show_heatmap, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
-    //---------------------------
-
-    //Apply heatMap on one cloud
-    if(ImGui::Button("Apply", ImVec2(75,0))){
-      if(cloud != nullptr){
-        heatmapManager->set_Heatmap(cloud);
-      }
-    }
-    ImGui::SameLine();
-
-    //Heatmap all clouds
-    static bool heatAll = false;
-    if(ImGui::Button("Apply all", ImVec2(75,0))){
-      if(cloud != nullptr){
-        heatAll = !heatAll;
-        heatmapManager->set_Heatmap_all(heatAll);
-      }
-    }
-
-    //Select heatmap channel
-    static int style_idx = 0;
-
-    int* HMmode = heatmapManager->get_HeatmapField();
-    ImGui::SetNextItemWidth(75);
-    ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
-    ImGui::SameLine();
-
-    //Normalize palette
-    bool* normalizeON = heatmapManager->get_param_Normalized();
-    ImGui::Checkbox("Normalized", normalizeON);
-
-    //Height range configuration
-    if(*HMmode == 0){
-      vec2* range = heatmapManager->get_height_range();
-      if(ImGui::DragFloatRange2("Height range", &range->x, &range->y, 0.01f, -20.0f, 50.0f, "%.2f", "%.2f")){
-        heatmapManager->compute_subset_heatmap_ON(subset);
-        sceneManager->update_subset_color(subset);
-      }
-    }
-
-    //Intensity range configuration
-    if(*HMmode == 1){
-      //Set heatmap range
-      vec2 heatmap_range = *heatmapManager->get_heatmap_range();
-      int min = (int) (heatmap_range.x * 255);
-      int max = (int) (heatmap_range.y * 255);
-
-      if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-        vec2* range = heatmapManager->get_heatmap_range();
-        *range = vec2((float)min / 255, (float)max / 255);
-      }
-    }
-
-    //Display color palette
-    if(ImGui::Button("Palette", ImVec2(75,0))){
-      if(cloud != nullptr && cloud->heatmap){
-        heatmapManager->plot_colorPalette(subset);
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      window_tab.show_heatmap = false;
-    }
     ImGui::End();
   }
 }
@@ -892,14 +814,12 @@ void GUI_windows::window_selection(){
     static bool selectionPtON = false;
     if(ImGui::Checkbox("Selection mode", &selectionPtON)){
       if(cloud != nullptr && selectionPtON){
-        heatmapManager->set_Heatmap_all(true);
         selectionManager->set_markMode("sphere");
         cloud->point_size = 10;
         cloud_movement = false;
       }
 
       if(!selectionPtON){
-        heatmapManager->set_Heatmap_all(false);
         selectionManager->set_markMode("cube");
         cloud->point_size = 1;
         cloud_movement = true;
@@ -911,7 +831,7 @@ void GUI_windows::window_selection(){
     }
     if(ImGui::Button("Supress all points", ImVec2(200,0))){
       selectionManager->mark_supressSelectedPoints_all();
-      //heatmapManager->set_Heatmap_all(true);
+
     }
     ImGui::Separator();
 
@@ -1225,326 +1145,6 @@ void GUI_windows::window_cutCloud(){
     ImGui::Separator();
     if(ImGui::Button("Close")){
       window_tab.show_cutCloud = false;
-    }
-    ImGui::End();
-  }
-}
-void GUI_windows::window_dataOpe(){
-  if(window_tab.show_dataOpe){
-    ImGui::Begin("Data", &window_tab.show_dataOpe,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
-    //---------------------------
-
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Write on file");
-    if(ImGui::Button("I-R-a all without ref", ImVec2(200,0))){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-
-      //Write data on file
-      ofstream file;
-      file.open ("../../data/data_IRA_woRef.txt");
-      file << "Name "<<"R "<<"alpha "<<"IRAWmean "<<"IRAWstd "<<"ICORmean "<<"ICORstd "<<"\n";
-      file << "--------------------------------"<<"\n";
-
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        if(subset->name.find("Sphere") == std::string::npos &&
-        subset->name.find("Spectralon") == std::string::npos){
-          if(subset->R.size() == 0) attribManager->compute_Distances(subset);
-          if(subset->It.size() == 0) attribManager->compute_cosIt(subset);
-
-          float R = fct_mean(subset->R);
-          float A = fct_mean(subset->It);
-
-          float Irm = fct_mean(subset->I);
-          float Irs = fct_std(subset->I);
-          float Icm = fct_mean(subset->I);
-          float Ics = fct_std(subset->I);
-
-          file <<std::fixed;
-          file <<subset->name<<" ";
-          file <<setprecision(3)<< R<<" "<<A<<" ";
-          file <<setprecision(3)<< Irm<<" "<<Irs<<" ";
-          file <<setprecision(3)<< Icm<<" "<<Ics<<"\n";
-          //---------------------------
-        }
-      }
-      file.close();
-    }
-    if(ImGui::Button("I all without ref", ImVec2(200,0))){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-
-      //Write data on file
-      ofstream file;
-      file.open ("../../data/data_IRA_woRef.txt");
-      file << "Imean "<<"Istd "<<"\n";
-      file << "--------------------------------"<<"\n";
-
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        if(subset->name.find("Sphere") == std::string::npos &&
-        subset->name.find("Spectralon") == std::string::npos){
-
-          float Im = fct_mean(subset->I);
-          float Is = fct_std(subset->I);
-
-          file <<std::fixed;
-          file <<setprecision(3)<< Im<<" "<<Is<<"\n";
-          //---------------------------
-        }
-      }
-      file.close();
-    }
-    if(ImGui::Button("R-Alpha all without ref", ImVec2(200,0))){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-
-      //Write data on file
-      ofstream file;
-      file.open ("../../data/data_IRA_woRef.txt");
-      file << "R "<<"Alpha "<<"\n";
-      file << "--------------------------------"<<"\n";
-
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        if(subset->name.find("Sphere") == std::string::npos &&
-        subset->name.find("Spectralon") == std::string::npos){
-          if(subset->R.size() == 0) attribManager->compute_Distances(subset);
-          if(subset->It.size() == 0) attribManager->compute_cosIt(subset);
-
-          float R = fct_mean(subset->R);
-          float A = fct_mean(subset->It);
-
-          file <<std::fixed;
-          file <<setprecision(3)<< R<<" "<<A<<"\n";
-          //---------------------------
-        }
-      }
-      file.close();
-    }
-    if(ImGui::Button("Write data in file", ImVec2(200,0))){
-      ofstream file;
-      file.open ("../../data/data_allCloud.txt");
-      file << "Name R alpha I"<<"\n";
-      file << "--------------------------------"<<"\n";
-      //---------------------------
-
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-      for(int i=0; i<list_cloud->size(); i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        float R = fct_mean(subset->R);
-        float A = fct_mean(subset->It);
-        float I = fct_mean(subset->I);
-
-        //file <<setprecision(5)<<subset->name<<" "<<R<<" "<<A<<" "<<I<<"\n";
-        file <<setprecision(5)<<R<<" "<<A<<" "<<I<<"\n";
-      }
-
-      //---------------------------
-      file.close();
-    }
-    if(ImGui::Button("Write intensity in file", ImVec2(200,0))){
-      ofstream file;
-      file.open ("../../data/data_intensity.txt");
-
-      Cloud* cloud = sceneManager->get_cloud_selected();
-      Subset* subset = sceneManager->get_subset_selected();
-
-      vector<float>& Is = subset->I;
-      //---------------------------
-
-      for(int i=0; i<Is.size(); i++){
-        file <<setprecision(4)<<Is[i]<<"\n";
-      }
-
-      //---------------------------
-      file.close();
-    }
-
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Write on term");
-    if(ImGui::Button("I Istd all", ImVec2(200,0))){
-      //---------------------
-
-      if(cloud != nullptr){
-        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-
-        //Intensity
-        cout<<"-- Intensity --"<<endl;
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-
-          cout<<std::fixed<<std::setprecision(2)<<"& "<<fct_mean(subset->I)<<endl;
-        }
-
-        //Standard deviation
-        cout<<"-- SD --"<<endl;
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-
-          cout<<std::fixed<<std::setprecision(3)<<"& "<<fct_std(subset->I)<<endl;
-        }
-      }
-
-      //---------------------
-    }
-    if(ImGui::Button("Min-Max R It all", ImVec2(200,0))){
-      vector<float> min_R, min_It;
-      vector<float> max_R, max_It;
-      //---------------------
-
-      if(cloud != nullptr){
-        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-
-          vector<float>& dist = subset->R;
-          if(dist.size() == 0) attribManager->compute_Distances(subset);
-          min_R.push_back(fct_min(dist));
-          max_R.push_back(fct_max(dist));
-
-          vector<float>& It = subset->It;
-          if(It.size() == 0) attribManager->compute_cosIt(subset);
-          min_It.push_back(fct_min(It));;
-          max_It.push_back(fct_max(It));;
-        }
-      }
-
-      //---------------------
-      cout<<"R: Min = "<<fct_min(min_R)<<" | Max = "<<fct_max(max_R)<<endl;
-      cout<<"It: Min = "<<fct_min(min_It)<<" | Max = "<<fct_max(max_It)<<endl;
-    }
-    if(ImGui::Button("R It all", ImVec2(200,0))){
-      //---------------------
-
-      if(cloud != nullptr){
-        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-
-        //Distances
-        cout<<"-- Distances --"<<endl;
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-
-          vector<float>& dist = subset->R;
-          if(dist.size() == 0) attribManager->compute_Distances(subset);
-
-          cout<<std::fixed<<std::setprecision(2)<<"& "<<fct_mean(dist)<<endl;
-        }
-
-        //Angle
-        cout<<"-- Angles --"<<endl;
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-
-          vector<float>& It = subset->It;
-          if(It.size() == 0) attribManager->compute_cosIt(subset);
-
-          cout<<std::fixed<<std::setprecision(2)<<"& "<<fct_mean(It)<<endl;
-        }
-
-      }
-
-      //---------------------
-    }
-
-    if(ImGui::Button("Test regression", ImVec2(200,0))){
-      vector<float> X{
-        1.30806,
-        2.29148,
-        3.28815,
-        4.2841,
-        5.29482,
-        7.32926,
-        9.30038,
-        11.3138,
-        13.3208,
-        15.3293,
-        17.3446,
-        19.3401,
-        21.3557,
-        23.3466,
-        25.3535,
-        27.3686,
-        29.3698};
-      vector<float> Y{
-        0.918878,
-        0.89659,
-        0.869665,
-        0.895808,
-        0.94005,
-        0.938376,
-        0.897884,
-        0.858437,
-        0.825976,
-        0.820597,
-        0.823466,
-        0.827613,
-        0.829898,
-        0.834169,
-        0.836656,
-        0.840727,
-        0.840009};
-      vector<float> X_low{
-        5.29482,
-        7.32926,
-        9.30038,
-        13.3208,
-        15.3293,
-        17.3446,
-        21.3557,
-        23.3466,
-        29.3698};
-      vector<float> Y_low{
-        0.94005,
-        0.938376,
-        0.897884,
-        0.825976,
-        0.820597,
-        0.823466,
-        0.829898,
-        0.834169,
-        0.840009};
-      vector<float> X_short{
-        5.29482,
-        6,
-        7.32926,
-        9.30038};
-      vector<float> Y_short{
-        0.94005,
-        0.94,
-        0.938376,
-        0.897884};
-      int n = 8;
-
-      X = X_low;
-      Y = Y_low;
-
-      vector<float> coeff = polyfit(X, Y, n);
-      vector<float> reg = polyval(X, coeff, n);
-
-      plotManager->set_Xlabel("X");
-      plotManager->set_Ylabel("Y");
-      plotManager->set_Format_data1("with linespoints ls 1 pt 13 ps 0.5 lc rgb 'black' title 'Initial'");
-      plotManager->set_Format_data2("with linespoints ls 1 pt 13 ps 0.5 lc rgb 'red' title 'Regression'");
-      plotManager->plot_Regression(X, Y, reg);
-      //-------------------
-
-      coeff = polyfit_homemade(X, Y, n);
-      reg = polyval(X, coeff, n);
-
-      plotManager->set_Xlabel("X");
-      plotManager->set_Ylabel("Y");
-      plotManager->set_Format_data1("with linespoints ls 1 pt 13 ps 0.5 lc rgb 'black' title 'Initial'");
-      plotManager->set_Format_data2("with linespoints ls 1 pt 13 ps 0.5 lc rgb 'red' title 'Regression'");
-      plotManager->plot_Regression(X, Y, reg);
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      window_tab.show_dataOpe = false;
     }
     ImGui::End();
   }

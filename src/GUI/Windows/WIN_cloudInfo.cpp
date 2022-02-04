@@ -6,7 +6,7 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "Window_tab.h"
+#include "Window_table.h"
 extern struct Window_tab window_tab;
 
 

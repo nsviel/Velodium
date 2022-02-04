@@ -13,6 +13,7 @@
 #include "../Module/SLAM/CT_ICP.h"
 
 #include "../Engine/Engine.h"
+#include "../Engine/Engine_node.h"
 #include "../Engine/OpenGL/Camera.h"
 #include "../Engine/Configuration/Dimension.h"
 
@@ -32,7 +33,8 @@ GUI::GUI(Engine* engine){
   this->engineManager = engine;
   //---------------------------
 
-  this->dimManager = engineManager->get_dimManager();
+  Engine_node* node_engineManager = engineManager->get_node_engineManager();
+  this->dimManager = node_engineManager->get_dimManager();
 
   this->gui_moduleManager = new GUI_Module(engineManager);
   this->gui_winManager = new GUI_windows(engineManager);

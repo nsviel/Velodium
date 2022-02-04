@@ -19,7 +19,6 @@ struct Window_tab{
   bool show_normal;
   bool show_intensity;
   bool show_color;
-  bool show_dataOpe;
   bool show_shader;
   bool cloud_movement;
 };

@@ -6,6 +6,7 @@
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Configuration/config_opengl.h"
@@ -23,7 +24,9 @@ GUI_option::GUI_option(Engine* engine, GUI_control* control){
   this->engineManager = engine;
   //---------------------------
 
-  this->renderManager = engineManager->get_renderManager();
+  Engine_node* node_engineManager = engineManager->get_node_engineManager();
+  this->renderManager = node_engineManager->get_renderManager();
+
   this->heatmapManager = new Heatmap();
   this->glyphManager = new Glyphs();
   this->sceneManager = new Scene();

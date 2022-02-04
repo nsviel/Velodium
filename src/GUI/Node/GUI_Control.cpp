@@ -1,12 +1,13 @@
 #include "GUI_Control.h"
 
-#include "../Windows/Window_tab.h"
+#include "../Windows/Window_table.h"
 
 #include "../../Load/Operation.h"
 
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/struct_viewport.h"
 #include "../../Engine/Configuration/Dimension.h"
@@ -28,8 +29,9 @@ GUI_control::GUI_control(Engine* engine){
   this->engineManager = engine;
   //---------------------------
 
-  this->cameraManager = engineManager->get_CameraManager();
-  this->dimManager = engineManager->get_dimManager();
+  Engine_node* node_engineManager = engineManager->get_node_engineManager();
+  this->cameraManager = node_engineManager->get_cameraManager();
+  this->dimManager = node_engineManager->get_dimManager();
 
   Operation_node* node_opeManager = engineManager->get_node_opeManager();
   this->heatmapManager = node_opeManager->get_heatmapManager();
