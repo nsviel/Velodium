@@ -33,9 +33,9 @@ GUI::GUI(Engine* engine){
   this->engineManager = engine;
   //---------------------------
 
-  Engine_node* node_engineManager = engineManager->get_node_engineManager();
-  this->dimManager = node_engineManager->get_dimManager();
+  Engine_node* node_engine = engineManager->get_node_engineManager();
 
+  this->dimManager = node_engine->get_dimManager();
   this->gui_moduleManager = new GUI_Module(engineManager);
   this->gui_winManager = new GUI_windows(engineManager);
   this->gui_controlManager = new GUI_control(engineManager);
