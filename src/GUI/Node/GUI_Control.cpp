@@ -12,6 +12,7 @@
 #include "../../Engine/Configuration/Dimension.h"
 #include "../../Engine/Configuration/config_opengl.h"
 
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Selection.h"
 #include "../../Operation/Functions/Extraction.h"
@@ -29,7 +30,9 @@ GUI_control::GUI_control(Engine* engine){
 
   this->cameraManager = engineManager->get_CameraManager();
   this->dimManager = engineManager->get_dimManager();
-  this->heatmapManager = engineManager->get_heatmapManager();
+
+  Operation_node* node_opeManager = engineManager->get_node_opeManager();
+  this->heatmapManager = node_opeManager->get_heatmapManager();
 
   this->selectionManager = new Selection(dimManager, cameraManager);
   this->sceneManager = new Scene();

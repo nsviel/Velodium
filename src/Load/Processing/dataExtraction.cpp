@@ -157,29 +157,6 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
 
   //---------------------------
 }
-void dataExtraction::add_subset_to_gpu(Subset* subset){
-  //---------------------------
-
-  glGenVertexArrays(1, &subset->VAO);
-  glBindVertexArray(subset->VAO);
-
-  glGenBuffers(1, &subset->VBO_xyz);
-  glGenBuffers(1, &subset->VBO_rgb);
-
-  //Location
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_xyz);
-  glBufferData(GL_ARRAY_BUFFER, subset->xyz.size()*sizeof(glm::vec3), &subset->xyz[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
-
-  //Color
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);
-  glBufferData(GL_ARRAY_BUFFER, subset->RGB.size()*sizeof(glm::vec4), &subset->RGB[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glEnableVertexAttribArray(1);
-
-  //---------------------------
-}
 
 //Subfunctions
 void dataExtraction::check_data(dataFile* data){

@@ -4,6 +4,7 @@
 #include "../Obstacle/Obstacle.h"
 #include "../Obstacle/Obstacle_IO.h"
 
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Transformation/Filter.h"
@@ -27,12 +28,14 @@
 Player_online::Player_online(Engine* engineManager){
   //---------------------------
 
+  Operation_node* node_opeManager = engineManager->get_node_opeManager();
+  this->filterManager = node_opeManager->get_filterManager();
+  this->heatmapManager = node_opeManager->get_heatmapManager();
+
   this->cameraManager = engineManager->get_CameraManager();
-  this->filterManager = engineManager->get_filterManager();
   this->renderManager = engineManager->get_renderManager();
   this->dimManager = engineManager->get_dimManager();
   this->cticpManager = engineManager->get_cticpManager();
-  this->heatmapManager = new Heatmap();
   this->sceneManager = new Scene();
   this->obstacleManager = new Obstacle();
 

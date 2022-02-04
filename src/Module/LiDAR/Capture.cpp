@@ -31,22 +31,29 @@ Capture::~Capture(){}
 void Capture::start_new_capture(){
   //---------------------------
 
-  //If lidar hasn't start, start it
   bool is_rotating = *veloManager->get_is_rotating();
+  bool is_connected = *veloManager->get_is_connected();
+
+  //If lidar hasn't start, start it
   if(is_rotating == false){
     veloManager->lidar_start_motor();
   }
-  veloManager->lidar_start_watcher();
 
-  //Reset variables
-  int* ID_subset = veloManager->get_ID_subset();
-  *ID_subset = 0;
+  if(is_rotating && is_connected){
+    veloManager->lidar_start_watcher();
 
-  //Create new empty cloud
-  loaderManager->load_cloud_empty();
-  cloud_capture = loaderManager->get_createdcloud();
-  cloud_capture->name = "Capture_" + to_string(ID_capture);
-  ID_capture++;
+    //Reset variables
+    int* ID_subset = veloManager->get_ID_subset();
+    *ID_subset = 0;
+
+    //Create new empty cloud
+    loaderManager->load_cloud_empty();
+    cloud_capture = loaderManager->get_createdcloud();
+    cloud_capture->name = "Capture_" + to_string(ID_capture);
+    ID_capture++;
+  }else{
+    return;
+  }
 
   //---------------------------
   console.AddLog("#", "Velodyne new capture");
@@ -72,12 +79,15 @@ void Capture::runtime_capturing(){
 
   //If flag on, include it in the cloud capture
   if(*velo_new){
-    Subset* subset = veloManager->get_subset_capture();
+    Subset* subset = new Subset(*veloManager->get_subset_capture());
 
     //Remove all other subset
     if(with_justOneFrame){
       sceneManager->remove_subset_all(cloud_capture);
     }
+
+    //Insert subset data into GPU
+    sceneManager->add_subset_to_gpu(subset);
 
     //Insert the subset inside the capture cloud
     sceneManager->add_new_subset(cloud_capture, subset);

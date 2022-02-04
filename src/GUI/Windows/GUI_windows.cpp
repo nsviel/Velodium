@@ -16,6 +16,7 @@
 #include "../../Engine/Configuration/Configuration.h"
 #include "../../Engine/Configuration/config_opengl.h"
 
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Plotting.h"
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -40,7 +41,9 @@ GUI_windows::GUI_windows(Engine* engine){
   //---------------------------
 
   this->cameraManager = engineManager->get_CameraManager();
-  this->heatmapManager = engineManager->get_heatmapManager();
+
+  Operation_node* node_opeManager = engineManager->get_node_opeManager();
+  this->heatmapManager = node_opeManager->get_heatmapManager();
 
   this->selectionManager = new Selection(engineManager->get_dimManager(), cameraManager);
   this->sceneManager = new Scene();
@@ -60,7 +63,7 @@ GUI_windows::GUI_windows(Engine* engine){
   this->loadingManager = new WIN_loading();
   this->infoManager = new WIN_cloudInfo();
   this->shaderManager = new WIN_shader(engineManager->get_shaderManager());
-  this->filterManager = new WIN_filter(engineManager->get_filterManager());
+  this->filterManager = new WIN_filter(node_opeManager->get_filterManager());
 
   //---------------------------
   this->init();

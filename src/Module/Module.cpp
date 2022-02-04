@@ -1,5 +1,7 @@
 #include "Module.h"
 
+#include "GUI_Module.h"
+
 
 //Constructor / Destructor
 Module::Module(){

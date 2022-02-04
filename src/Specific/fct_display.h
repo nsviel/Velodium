@@ -33,6 +33,18 @@ namespace{
       std::cout<<"line."<<i<<" -> "<< truc[i].x <<" "<< truc[i].y <<" "<< truc[i].z <<std::endl;
     }
   }
+  void sayMeanVec3(std::vector<glm::vec3> truc){
+    glm::vec3 mean = glm::vec3(0, 0, 0);
+    for(int i=0; i<truc.size(); i++){
+      mean.x += truc[i].x;
+      mean.y += truc[i].y;
+      mean.z += truc[i].z;
+    }
+    mean.x = mean.x / truc.size();
+    mean.y = mean.y / truc.size();
+    mean.z = mean.z / truc.size();
+    std::cout<< "mean-> " << mean[0] <<" "<< mean[1] <<" "<< mean[2] <<std::endl;
+  }
   void sayVecVec4(std::vector<glm::vec4> truc){
     for(int i=0; i<truc.size(); i++){
       std::cout<<"line."<<i<<" -> "<< truc[i].x <<" "<< truc[i].y <<" "<< truc[i].z <<" "<< truc[i].w <<std::endl;

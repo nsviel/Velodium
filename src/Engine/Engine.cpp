@@ -12,8 +12,7 @@
 #include "OpenGL/Renderer.h"
 #include "OpenGL/Camera.h"
 
-#include "../Operation/Functions/Heatmap.h"
-#include "../Operation/Transformation/Filter.h"
+#include "../Operation/Operation_node.h"
 #include "../Module/SLAM/CT_ICP.h"
 #include "../Module/Module.h"
 
@@ -34,9 +33,8 @@ Engine::Engine(Dimension* dim, Camera* control, Shader* shader, Renderer* render
   this->cticpManager = new CT_ICP();
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
-  this->heatmapManager = new Heatmap();
-  this->filterManager = new Filter();
   this->moduleManager = new Module();
+  this->node_opeManager = new Operation_node();
 
   glyphManager->init();
 

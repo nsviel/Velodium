@@ -108,7 +108,7 @@ void GUI_Lidar::velo_capture(){
     }
     ImGui::PopStyleColor(1);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
+    ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%s", "OFF");
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
@@ -117,7 +117,7 @@ void GUI_Lidar::velo_capture(){
     }
     ImGui::PopStyleColor(1);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%s", "OFF");
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
   }
 
   //---------------------------

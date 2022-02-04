@@ -34,7 +34,7 @@ public:
 
   //LiDAR status
   void lidar_get_status();
-  bool lidar_get_is_connected();
+  void lidar_check_connection();
 
   //LiDAR parametrization
   void lidar_set_rpm(int value);

@@ -5,6 +5,7 @@
 
 #include "../../../Engine/Engine.h"
 #include "../../../Engine/Scene.h"
+#include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/Heatmap.h"
 #include "../../../Operation/Transformation/Filter.h"
 
@@ -16,8 +17,9 @@
 GUI_Player::GUI_Player(Engine* engineManager){
   //---------------------------
 
-  this->filterManager = engineManager->get_filterManager();
-  this->heatmapManager = new Heatmap();
+  Operation_node* node_opeManager = engineManager->get_node_opeManager();
+  this->filterManager = node_opeManager->get_filterManager();
+  this->heatmapManager = node_opeManager->get_heatmapManager();
   this->sceneManager = new Scene();
   this->onlineManager = new Player_online(engineManager);
   this->playerManager = new Player_cloud(onlineManager);

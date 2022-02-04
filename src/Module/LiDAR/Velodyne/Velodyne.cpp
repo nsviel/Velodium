@@ -48,8 +48,7 @@ Velodyne::~Velodyne(){}
 void Velodyne::lidar_start_watcher(){
   //---------------------------
 
-  this->is_capturing = true;
-
+  //Start udp packets watcher
   thread_capture = std::thread([&]() {
     while (is_capturing) {
       //Get packet in decimal format
@@ -70,8 +69,10 @@ void Velodyne::lidar_start_watcher(){
   thread_capture.detach();
 
   //---------------------------
+  this->is_capturing = true;
 }
 void Velodyne::lidar_create_subset(udpPacket* udp_packet){
+  //Asynchroneous function (used by theaded watcher)
   //---------------------------
 
   //Free the memory to get synchroneous data
@@ -80,9 +81,6 @@ void Velodyne::lidar_create_subset(udpPacket* udp_packet){
 
   //Convert the udppacket into subset
   this->subset_capture = extractManager->extractData(&upd_frame, ID_subset);
-
-  //Insert subset data into GPU
-  extractManager->add_subset_to_gpu(subset_capture);
 
   //Update flags
   this->is_newSubset = true;
@@ -95,7 +93,8 @@ void Velodyne::lidar_create_subset(udpPacket* udp_packet){
 void Velodyne::lidar_start_motor(){
   //---------------------------
 
-  if(lidar_get_is_connected() == false){
+  this->lidar_check_connection();
+  if(is_connected == false){
     return;
   }
 
@@ -104,15 +103,13 @@ void Velodyne::lidar_start_motor(){
     is_first_run = false;
   }
 
-  //If LiDAR not running
+  //If LiDAR not running, start it
   if(rot_freq <= 0){
     int err = system("curl -s --connect-timeout 1 --data rpm=600 http://192.168.1.201/cgi/setting");
     sleep(1);
 
     rot_freq = 10;
     rot_rpm = 600;
-
-    is_rotating = true;
 
     string log = "LiDAR activated at " + to_string(rot_rpm) + " rpm";
     console.AddLog("#", log);
@@ -124,6 +121,7 @@ void Velodyne::lidar_start_motor(){
   }
 
   //---------------------------
+  is_rotating = true;
 }
 void Velodyne::lidar_stop_motor(){
   //---------------------------
@@ -133,15 +131,14 @@ void Velodyne::lidar_stop_motor(){
     rot_freq = 0;
     rot_rpm = 0;
 
-    is_rotating = false;
-    is_capturing = false;
-
     console.AddLog("#", "LiDAR desactivated");
 
     sleep(1);
   }
 
   //---------------------------
+  is_rotating = false;
+  is_capturing = false;
 }
 
 //LiDAR status
@@ -184,8 +181,7 @@ void Velodyne::lidar_get_status(){
   //---------------------------
   sleep(1);
 }
-bool Velodyne::lidar_get_is_connected(){
-  bool connected;
+void Velodyne::lidar_check_connection(){
   //---------------------------
 
   int err = system("curl -s --connect-timeout 1 http://192.168.1.201/");
@@ -193,15 +189,12 @@ bool Velodyne::lidar_get_is_connected(){
   if(err == 7168){
     console.AddLog("error", "LiDAR not connected");
     this->is_connected = false;
-    connected = false;
   }else{
     this->is_connected = true;
-    connected = true;
   }
 
   //---------------------------
   sleep(1);
-  return connected;
 }
 
 //LiDAR parametrization

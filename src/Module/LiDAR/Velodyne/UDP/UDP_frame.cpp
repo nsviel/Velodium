@@ -15,10 +15,6 @@ UDP_frame::~UDP_frame(){}
 bool UDP_frame::build_frame(udpPacket* cloud){
   //---------------------------
 
-  sayVec3(cloud->xyz[0]);
-  sayVec3(cloud->xyz[1]);
-  sayVec3(cloud->xyz[2]);
-
   //check if the new cloud begin by a revolution
   // index_frame -1: new frame
   // index_frame 0: frame end and restart at 0
@@ -55,6 +51,7 @@ bool UDP_frame::build_frame(udpPacket* cloud){
   //Then: second and third cases where an end index was found
   else{
     this->end_cloudsToFrame(cloud, index_frame);
+
     return true;
   }
 
