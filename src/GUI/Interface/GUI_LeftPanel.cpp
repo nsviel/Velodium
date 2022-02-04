@@ -3,7 +3,7 @@
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_FileManager.h"
 
-#include "../../Module/GUI_Module.h"
+#include "../../Module/Module_GUI.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Configuration/Dimension.h"
@@ -20,7 +20,7 @@ GUI_leftPanel::GUI_leftPanel(Engine* engine, GUI_windows* window){
   Engine_node* node_engineManager = engineManager->get_node_engineManager();
   this->dimManager = node_engineManager->get_dimManager();
   this->gui_fileManager = new GUI_fileManager(dimManager, gui_winManager);
-  this->gui_moduleManager = new GUI_Module(engine);
+  this->Module_GUIManager = new Module_GUI(engine);
 
   //-------------------------------
 }
@@ -102,7 +102,7 @@ void GUI_leftPanel::panel_bot(){
   ImGui::Begin("LeftPanel##botInner", NULL, window_flags);
 
   //Working areas
-  gui_moduleManager->display_moduleTabs();
+  Module_GUIManager->display_moduleTabs();
 
   ImGui::PopStyleVar();
 

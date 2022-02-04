@@ -8,7 +8,7 @@
 #include "Node/GUI_Option.h"
 #include "Windows/GUI_windows.h"
 
-#include "../Module/GUI_Module.h"
+#include "../Module/Module_GUI.h"
 #include "../Module/SLAM/GUI/GUI_Slam.h"
 #include "../Module/SLAM/CT_ICP.h"
 
@@ -36,12 +36,12 @@ GUI::GUI(Engine* engine){
   Engine_node* node_engine = engineManager->get_node_engineManager();
 
   this->dimManager = node_engine->get_dimManager();
-  this->gui_moduleManager = new GUI_Module(engineManager);
+  this->Module_GUIManager = new Module_GUI(engineManager);
   this->gui_winManager = new GUI_windows(engineManager);
   this->gui_controlManager = new GUI_control(engineManager);
   this->gui_optionManager = new GUI_option(engineManager, gui_controlManager);
   this->gui_leftPanelManager = new GUI_leftPanel(engineManager, gui_winManager);
-  this->gui_menuBarManager = new GUI_menuBar(engineManager, gui_winManager, gui_optionManager, gui_leftPanelManager, gui_moduleManager->get_gui_player());
+  this->gui_menuBarManager = new GUI_menuBar(engineManager, gui_winManager, gui_optionManager, gui_leftPanelManager, Module_GUIManager->get_gui_player());
   this->gui_consol = new GUI_consol(engineManager);
 
   //---------------------------

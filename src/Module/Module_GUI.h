@@ -1,5 +1,5 @@
-#ifndef GUI_MODULE_H
-#define GUI_MODULE_H
+#ifndef Module_GUI_H
+#define Module_GUI_H
 
 #include "LiDAR/GUI/GUI_Lidar.h"
 #include "Player/GUI/GUI_Player.h"
@@ -11,11 +11,11 @@
 #include "../common.h"
 
 
-class GUI_Module
+class Module_GUI
 {
 public:
   //Constructor / Destructor
-  GUI_Module(Engine* engineManager){
+  Module_GUI(Engine* engineManager){
     //-------------------------------
 
     this->gui_lidarManager = new GUI_Lidar();
@@ -32,7 +32,7 @@ public:
 
     //-------------------------------
   }
-  ~GUI_Module();
+  ~Module_GUI();
 
 public:
   void display_moduleTabs(){

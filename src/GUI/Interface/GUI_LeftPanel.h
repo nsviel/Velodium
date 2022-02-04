@@ -2,7 +2,7 @@
 #define GUI_LEFTPANEL_H
 
 class GUI_windows;
-class GUI_Module;
+class Module_GUI;
 class GUI_fileManager;
 
 class Engine;
@@ -31,7 +31,7 @@ public:
 
 private:
   GUI_windows* gui_winManager;
-  GUI_Module* gui_moduleManager;
+  Module_GUI* Module_GUIManager;
   GUI_fileManager* gui_fileManager;
 
   Engine* engineManager;

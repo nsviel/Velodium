@@ -9,7 +9,7 @@ class GUI_option;
 class GUI_menuBar;
 class GUI_leftPanel;
 class GUI_consol;
-class GUI_Module;
+class Module_GUI;
 
 class Engine;
 class Camera;
@@ -41,7 +41,7 @@ private:
   GUI_menuBar* gui_menuBarManager;
   GUI_leftPanel* gui_leftPanelManager;
   GUI_consol* gui_consol;
-  GUI_Module* gui_moduleManager;
+  Module_GUI* Module_GUIManager;
 
   Engine* engineManager;
   Camera* cameraManager;
