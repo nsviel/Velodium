@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Scene;
-class Engine;
+class GUI_node;
 class Obstacle;
 class Obstacle_IO;
 class CoordTransform;
@@ -14,7 +14,7 @@ class GUI_Obstacle
 {
 public:
   //Constructor / Destructor
-  GUI_Obstacle(Engine* engineManager);
+  GUI_Obstacle(GUI_node* node_gui);
   ~GUI_Obstacle();
 
 public:

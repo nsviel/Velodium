@@ -1,26 +1,26 @@
 #include "GUI_LeftPanel.h"
 
+#include "../GUI_node.h"
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_FileManager.h"
 
 #include "../../Module/Module_GUI.h"
-#include "../../Engine/Engine.h"
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/Dimension.h"
 
 #include "imgui/imgui.h"
 
 
 //Constructor / Destructor
-GUI_leftPanel::GUI_leftPanel(Engine* engine, GUI_windows* window){
-  this->gui_winManager = window;
-  this->engineManager = engine;
+GUI_leftPanel::GUI_leftPanel(GUI_node* node_gui){
   //-------------------------------
 
-  Engine_node* node_engineManager = engineManager->get_node_engineManager();
-  this->dimManager = node_engineManager->get_dimManager();
-  this->gui_fileManager = new GUI_fileManager(dimManager, gui_winManager);
-  this->Module_GUIManager = new Module_GUI(engine);
+  Configuration_node* node_config = node_gui->get_node_config();
+
+  this->dimManager = node_config->get_dimManager();
+  this->gui_winManager = node_gui->get_gui_winManager();
+  this->gui_fileManager = node_gui->get_gui_fileManager();
+  this->gui_moduleManager = node_gui->get_gui_moduleManager();
 
   //-------------------------------
 }
@@ -102,7 +102,7 @@ void GUI_leftPanel::panel_bot(){
   ImGui::Begin("LeftPanel##botInner", NULL, window_flags);
 
   //Working areas
-  Module_GUIManager->display_moduleTabs();
+  gui_moduleManager->display_moduleTabs();
 
   ImGui::PopStyleVar();
 

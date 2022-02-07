@@ -142,7 +142,7 @@ void Obstacle_IO::parse_obstacle_json(Cloud* cloud, string path, string data){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset->name == json_name){sayHello();
+    if(subset->name == json_name){
       //Make stuff
       Obstac* obstacle_gt = &subset->obstacle_gt;
       Obstac* obstacle_pr = &subset->obstacle_pr;

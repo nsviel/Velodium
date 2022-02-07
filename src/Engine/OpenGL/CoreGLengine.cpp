@@ -12,6 +12,7 @@
 #include "../Configuration/config_opengl.h"
 #include "../Configuration/Configuration_node.h"
 
+#include "../../GUI/GUI_node.h"
 #include "../../GUI/GUI.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -49,8 +50,7 @@ bool CoreGLengine::init(){
 bool CoreGLengine::init_OGL(){
   //---------------------------
 
-  this->node_engineManager = new Engine_node();
-  Configuration_node* node_config = node_engineManager->get_node_configManager();
+  this->node_config = new Configuration_node();
   config_opengl* conf_glManager = node_config->get_conf_glManager();
 
   //Parametrization
@@ -101,13 +101,13 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_object(){
   //---------------------------
 
-  node_engineManager->init_objects(window);
-  this->dimManager = node_engineManager->get_dimManager();
-  this->shaderManager = node_engineManager->get_shaderManager();
-  this->cameraManager = node_engineManager->get_cameraManager();
-  this->renderManager = node_engineManager->get_renderManager();
-  this->engineManager = new Engine(node_engineManager);
-  this->guiManager = new GUI(engineManager);
+  this->node_engine = new Engine_node(node_config);
+  this->dimManager = node_config->get_dimManager();
+  dimManager->set_window(window);
+  this->shaderManager = node_engine->get_shaderManager();
+  this->cameraManager = node_engine->get_cameraManager();
+  this->renderManager = node_engine->get_renderManager();
+  this->engineManager = new Engine(node_engine);
 
   //---------------------------
   return true;
@@ -115,7 +115,7 @@ bool CoreGLengine::init_object(){
 void CoreGLengine::init_rendering(){
   //---------------------------
 
-  dimManager->update_window_dim();
+  dimManager->update();
   renderManager->init_rendering_fbo_1();
   renderManager->init_rendering_fbo_2();
   renderManager->init_rendering_quad();
@@ -154,6 +154,10 @@ void CoreGLengine::loop_gui(){
 
   //Draw GUI on fbo 0
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  //engineManager->loop_gui();
+
+  GUI_node* node_gui = engineManager->get_node_gui();
+  GUI* guiManager = node_gui->get_guiManager();
   guiManager->Gui_loop();
 
   //---------------------------

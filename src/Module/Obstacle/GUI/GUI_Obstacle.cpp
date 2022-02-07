@@ -4,17 +4,20 @@
 #include "../Obstacle_IO.h"
 
 #include "../../../Engine/Scene.h"
-#include "../../../Engine/Engine.h"
+#include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Configuration/Configuration_node.h"
 #include "../../../Operation/Functions/CoordTransform.h"
 
 
 //Constructor / Destructor
-GUI_Obstacle::GUI_Obstacle(Engine* engineManager){
+GUI_Obstacle::GUI_Obstacle(GUI_node* node_gui){
   //---------------------------
 
-  Engine_node* node_engineManager = engineManager->get_node_engineManager();
-  this->coordManager = new CoordTransform(node_engineManager->get_cameraManager(), node_engineManager->get_dimManager());
+  Engine_node* node_engine = node_gui->get_node_engine();
+  Configuration_node* node_config = node_gui->get_node_config();
+
+  this->coordManager = new CoordTransform(node_engine->get_cameraManager(), node_config->get_dimManager());
   this->obstacleManager = new Obstacle();
   this->ioManager = obstacleManager->get_ioManager();
   this->sceneManager = new Scene();

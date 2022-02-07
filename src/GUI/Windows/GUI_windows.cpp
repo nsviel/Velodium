@@ -8,6 +8,8 @@
 #include "WIN_filter.h"
 #include "WIN_heatmap.h"
 
+#include "../GUI_node.h"
+
 #include "../../Load/Operation.h"
 
 #include "../../Engine/Engine.h"
@@ -36,14 +38,14 @@ Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_windows::GUI_windows(Engine* engine){
+GUI_windows::GUI_windows(GUI_node* node_gui){
   //---------------------------
 
-  Operation_node* node_opeManager = engine->get_node_opeManager();
-  Engine_node* node_engineManager = engine->get_node_engineManager();
-  Configuration_node* node_configManager = engine->get_node_configManager();
+  Operation_node* node_ope = node_gui->get_node_ope();
+  Engine_node* node_engine = node_gui->get_node_engine();
+  Configuration_node* node_config = node_gui->get_node_config();
 
-  this->selectionManager = new Selection(node_engineManager->get_dimManager(), node_engineManager->get_cameraManager());
+  this->selectionManager = new Selection(node_config->get_dimManager(), node_engine->get_cameraManager());
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
@@ -54,13 +56,13 @@ GUI_windows::GUI_windows(Engine* engine){
   this->extractionManager = new Extraction();
 
 
-  this->configManager = node_configManager->get_conf_glManager();
-  this->wincamManager = new WIN_camera(node_engineManager->get_cameraManager());
+  this->configManager = node_config->get_conf_glManager();
+  this->wincamManager = new WIN_camera(node_engine->get_cameraManager());
   this->loadingManager = new WIN_loading();
   this->infoManager = new WIN_cloudInfo();
-  this->shaderManager = new WIN_shader(node_engineManager->get_shaderManager());
-  this->filterManager = new WIN_filter(node_opeManager->get_filterManager());
-  this->heatmapManager = new WIN_heatmap(node_opeManager->get_heatmapManager());
+  this->shaderManager = new WIN_shader(node_engine->get_shaderManager());
+  this->filterManager = new WIN_filter(node_ope->get_filterManager());
+  this->heatmapManager = new WIN_heatmap(node_ope->get_heatmapManager());
 
   //---------------------------
   this->init();

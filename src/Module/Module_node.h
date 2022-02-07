@@ -18,8 +18,8 @@ public:
   Module_node(Engine_node* engine, Operation_node* ope){
     //---------------------------
 
-    this->node_engineManager = engine;
-    this->node_opeManager = ope;
+    this->node_engine = engine;
+    this->node_ope = ope;
     this->init_objects();
 
     //---------------------------
@@ -51,14 +51,14 @@ public:
   }
 
   inline CT_ICP* get_cticpManager(){return cticpManager;}
-  inline Engine_node* get_node_engineManager(){return node_engineManager;}
-  inline Operation_node* get_node_opeManager(){return node_opeManager;}
+  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Operation_node* get_node_ope(){return node_ope;}
   inline Player_online* get_onlineManager(){return onlineManager;}
   inline Player_cloud* get_playerManager(){return playerManager;}
 
 private:
-  Engine_node* node_engineManager;
-  Operation_node* node_opeManager;
+  Engine_node* node_engine;
+  Operation_node* node_ope;
 
   CT_ICP* cticpManager;
   config_module* configManager;

@@ -4,8 +4,7 @@
 
 
 //Constructor / Destructor
-Dimension::Dimension(GLFWwindow* Window){
-  this->window = Window;
+Dimension::Dimension(){
   //---------------------------
 
   this->configManager = new config_opengl();
@@ -34,7 +33,6 @@ Dimension::Dimension(GLFWwindow* Window){
   this->with_custom_gl_dim = false;
 
   //---------------------------
-  this->update();
 }
 Dimension::~Dimension(){}
 

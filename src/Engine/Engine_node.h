@@ -19,29 +19,29 @@ class Engine_node
 {
 public:
   //Constructor / Destructor
-  Engine_node(){
+  Engine_node(Configuration_node* config){
     //---------------------------
-    this->init_configuration();
+
+    this->node_config = config;
+    this->init_objects();
+
     //---------------------------
   }
   ~Engine_node();
 
 public:
   //Main functions
-  void init_configuration(){
+  void init_objects(){
     //---------------------------
-    this->node_configManager = new Configuration_node();
-    //---------------------------
-  }
-  void init_objects(GLFWwindow* window){
-    //---------------------------
-    this->dimManager = new Dimension(window);
+
+    Dimension* dimManager = node_config->get_dimManager();
     this->shaderManager = new Shader(dimManager);
     this->cameraManager = new Camera(dimManager);
     this->renderManager = new Renderer(dimManager);
     this->viewportManager = new Viewport(dimManager);
     this->sceneManager = new Scene();
     this->glyphManager = new Glyphs();
+
     //---------------------------
   }
   void reset(){
@@ -50,18 +50,18 @@ public:
     //---------------------------
   }
 
-  inline Configuration_node* get_node_configManager(){return node_configManager;}
+  inline Configuration_node* get_node_config(){return node_config;}
+  
   inline Scene* get_SceneManager(){return sceneManager;}
   inline Glyphs* get_glyphManager(){return glyphManager;}
-  inline Dimension* get_dimManager(){return dimManager;}
   inline Camera* get_cameraManager(){return cameraManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
   inline Renderer* get_renderManager(){return renderManager;}
   inline Viewport* get_viewportManager(){return viewportManager;}
 
 private:
-  Configuration_node* node_configManager;
-  Dimension* dimManager;
+  Configuration_node* node_config;
+
   Scene* sceneManager;
   Glyphs* glyphManager;
   Camera* cameraManager;

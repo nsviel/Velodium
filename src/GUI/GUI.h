@@ -1,5 +1,5 @@
-#ifndef GUI_H
-#define GUI_H
+#ifndef GUI_MANAGER_H
+#define GUI_MANAGER_H
 
 #include "../common.h"
 
@@ -9,10 +9,8 @@ class GUI_option;
 class GUI_menuBar;
 class GUI_leftPanel;
 class GUI_consol;
-class Module_GUI;
-
-class Engine;
-class Camera;
+class GUI_module;
+class GUI_node;
 class Dimension;
 
 
@@ -20,7 +18,7 @@ class GUI
 {
 public:
   //Constructor / Destructor
-  GUI(Engine* engine);
+  GUI(GUI_node* node_gui);
   ~GUI();
 
 public:
@@ -35,17 +33,14 @@ public:
   void Gui_Dimensions();
 
 private:
+  Dimension* dimManager;
+  GUI_module* gui_moduleManager;
   GUI_windows* gui_winManager;
   GUI_control* gui_controlManager;
   GUI_option* gui_optionManager;
-  GUI_menuBar* gui_menuBarManager;
   GUI_leftPanel* gui_leftPanelManager;
-  GUI_consol* gui_consol;
-  Module_GUI* Module_GUIManager;
-
-  Engine* engineManager;
-  Camera* cameraManager;
-  Dimension* dimManager;
+  GUI_menuBar* gui_menuBarManager;
+  GUI_consol* gui_consolManager;
 };
 
 #endif

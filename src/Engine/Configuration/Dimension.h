@@ -22,7 +22,7 @@ class config_opengl;
 class Dimension
 {
 public:
-  Dimension(GLFWwindow* Window);
+  Dimension();
   ~Dimension();
 
 public:
@@ -38,6 +38,7 @@ public:
   vec2 get_cursorPos();
   void set_cursorPos(vec2 pos);
 
+  inline void set_window(GLFWwindow* value){this->window = value;}
   inline GLFWwindow* get_window(){return window;}
   inline vec2* get_gui_ltp_dim(){return &gui_ltp_dim;}
   inline vec2* get_gui_ltp_pos(){return &gui_ltp_pos;}

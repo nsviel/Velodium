@@ -1,16 +1,17 @@
 #include "GUI_Control.h"
 
+#include "../GUI_node.h"
 #include "../Windows/Window_table.h"
 
 #include "../../Load/Operation.h"
 
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
-#include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/struct_viewport.h"
 #include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/config_opengl.h"
 
 #include "../../Operation/Operation_node.h"
@@ -25,17 +26,17 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_control::GUI_control(Engine* engine){
-  this->engineManager = engine;
+GUI_control::GUI_control(GUI_node* node_gui){
   //---------------------------
 
-  Engine_node* node_engineManager = engineManager->get_node_engineManager();
-  this->cameraManager = node_engineManager->get_cameraManager();
-  this->dimManager = node_engineManager->get_dimManager();
+  Engine_node* node_engine = node_gui->get_node_engine();
+  Operation_node* node_ope = node_gui->get_node_ope();
+  Configuration_node* node_config = node_gui->get_node_config();
+  config_opengl* configManager = node_config->get_conf_glManager();
 
-  Operation_node* node_opeManager = engineManager->get_node_opeManager();
-  this->heatmapManager = node_opeManager->get_heatmapManager();
-
+  this->cameraManager = node_engine->get_cameraManager();
+  this->dimManager = node_config->get_dimManager();
+  this->heatmapManager = node_ope->get_heatmapManager();
   this->selectionManager = new Selection(dimManager, cameraManager);
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
@@ -43,9 +44,8 @@ GUI_control::GUI_control(Engine* engine){
   this->attribManager = new Attribut();
   this->opeManager = new Operation();
 
-  config_opengl configManager;
-  this->cloud_trans_speed = configManager.parse_json_f("parameter", "cloud_translation");
-  this->cloud_rotat_degree = configManager.parse_json_f("parameter", "cloud_rotation");
+  this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
+  this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");
   this->wheel_mode = 0;
 
   //---------------------------
@@ -55,6 +55,9 @@ GUI_control::~GUI_control(){}
 //Main function
 void GUI_control::make_control(){
   //---------------------------
+
+  GLFWwindow* windowe = glfwGetCurrentContext();
+  say(windowe);
 
   this->control_mouse();
   this->control_frameSelection();
@@ -199,7 +202,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //R key - Reset
     if (ImGui::IsKeyPressed(82) && !io.WantCaptureMouse){
-      engineManager->reset();
+      //engineManager->reset();
       break;
     }
 

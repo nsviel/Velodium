@@ -29,12 +29,14 @@ class Selection;
 class Loader;
 class Fitting;
 class config_opengl;
+class GUI_node;
+
 
 class GUI_windows
 {
 public:
   //Constructor / Destructor
-  GUI_windows(Engine* renderer);
+  GUI_windows(GUI_node* node_gui);
   ~GUI_windows();
 
 public:

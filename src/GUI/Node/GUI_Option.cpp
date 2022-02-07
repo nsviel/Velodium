@@ -1,5 +1,6 @@
 #include "GUI_Option.h"
 
+#include "../GUI_node.h"
 #include "../Node/GUI_Control.h"
 
 #include "../../Load/Operation.h"
@@ -19,14 +20,13 @@
 
 
 //Constructor / Destructor
-GUI_option::GUI_option(Engine* engine, GUI_control* control){
-  this->gui_controlManager = control;
-  this->engineManager = engine;
+GUI_option::GUI_option(GUI_node* node_gui){
   //---------------------------
 
-  Engine_node* node_engineManager = engineManager->get_node_engineManager();
-  this->renderManager = node_engineManager->get_renderManager();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
+  this->renderManager = node_engine->get_renderManager();
+  this->gui_controlManager = node_gui->get_gui_controlManager();
   this->heatmapManager = new Heatmap();
   this->glyphManager = new Glyphs();
   this->sceneManager = new Scene();

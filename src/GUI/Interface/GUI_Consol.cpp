@@ -1,24 +1,25 @@
 #include "GUI_Consol.h"
 #include "struct_consol.h"
 
-#include "../../Engine/Engine.h"
-#include "../../Engine/Engine_node.h"
+#include "../../GUI/GUI_node.h"
+#include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/Dimension.h"
 
 #include "imgui/imgui.h"
 
 #include <thread>
 
-extern struct ConsoleApp console;
+//Consol creation
+ConsoleApp console;
 
 
 //Constructor / Destructor
-GUI_consol::GUI_consol(Engine* renderer){
-  this->engineManager = renderer;
+GUI_consol::GUI_consol(GUI_node* node_gui){
   //----------------------------
 
-  Engine_node* node_engineManager = engineManager->get_node_engineManager();
-  this->dimManager = node_engineManager->get_dimManager();
+  node_config = node_gui->get_node_config();
+
+  this->dimManager = node_config->get_dimManager();
 
   //----------------------------
 }
@@ -28,13 +29,15 @@ GUI_consol::~GUI_consol(){}
 void GUI_consol::design_consol(){
   //----------------------------
 
-  this->consol();
+  this->draw_consol();
   this->update_dimension();
 
   //----------------------------
 }
-void GUI_consol::consol(){
+void GUI_consol::draw_consol(){
   //----------------------------
+
+
 
   //Get panel dimension
   vec2 win_dim = dimManager->get_win_dim();

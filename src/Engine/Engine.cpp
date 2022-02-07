@@ -8,6 +8,8 @@
 #include "Configuration/Configuration_node.h"
 #include "../Operation/Operation_node.h"
 #include "../Module/Module_node.h"
+#include "../GUI/GUI_node.h"
+#include "../GUI/GUI.h"
 
 Database database;
 
@@ -16,16 +18,17 @@ Database database;
 Engine::Engine(Engine_node* engine){
   //---------------------------
 
-  this->node_engineManager = engine;
-  this->node_configManager = node_engineManager->get_node_configManager();
+  this->node_engine = engine;
+  this->node_config = node_engine->get_node_config();
 
   this->init_database();
 
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
-  this->node_opeManager = new Operation_node();
-  this->node_moduleManager = new Module_node(node_engineManager, node_opeManager);
+  this->node_ope = new Operation_node();
+  this->node_module = new Module_node(node_engine, node_ope);
+  this->node_gui = new GUI_node(node_engine, node_ope, node_module, node_config);
 
   glyphManager->init();
 
@@ -64,6 +67,10 @@ void Engine::loop_scene(){
   this->runtime();
 
   //---------------------------
+}
+void Engine::loop_gui(){
+  GUI* guiManager = node_gui->get_guiManager();
+  guiManager->Gui_loop();
 }
 void Engine::draw_clouds(){
   list<Cloud*>* list_cloud = database.list_cloud;
@@ -121,8 +128,8 @@ void Engine::reset(){
   }
 
   //Reset all functions
-  node_engineManager->reset();
-  node_moduleManager->reset();
+  node_engine->reset();
+  node_module->reset();
   sceneManager->update_cloud_glyphs(cloud);
 
   //---------------------------
@@ -131,7 +138,7 @@ void Engine::reset(){
 void Engine::runtime(){
   //---------------------------
 
-  node_moduleManager->runtime();
+  node_module->runtime();
 
   //---------------------------
 }

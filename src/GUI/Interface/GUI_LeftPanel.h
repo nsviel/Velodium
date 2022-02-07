@@ -2,8 +2,9 @@
 #define GUI_LEFTPANEL_H
 
 class GUI_windows;
-class Module_GUI;
+class GUI_module;
 class GUI_fileManager;
+class GUI_node;
 
 class Engine;
 class Dimension;
@@ -15,7 +16,7 @@ class GUI_leftPanel
 {
 public:
   //Constructor / Destructor
-  GUI_leftPanel(Engine* renderer, GUI_windows* window);
+  GUI_leftPanel(GUI_node* node_gui);
   ~GUI_leftPanel();
 
 public:
@@ -30,12 +31,11 @@ public:
   inline vec2 get_ltp_dim(){return dim_ltp;}
 
 private:
-  GUI_windows* gui_winManager;
-  Module_GUI* Module_GUIManager;
-  GUI_fileManager* gui_fileManager;
-
-  Engine* engineManager;
   Dimension* dimManager;
+
+  GUI_windows* gui_winManager;
+  GUI_module* gui_moduleManager;
+  GUI_fileManager* gui_fileManager;
 
   vec2 dim_lbp;
   vec2 dim_ltp;

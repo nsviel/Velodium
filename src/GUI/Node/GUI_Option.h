@@ -2,9 +2,9 @@
 #define GUI_OPION_H
 
 class GUI_control;
+class GUI_node;
 
 class Scene;
-class Engine;
 class Operation;
 class Glyphs;
 class Attribut;
@@ -19,7 +19,7 @@ class GUI_option
 {
 public:
   //Constructor / Destructor
-  GUI_option(Engine* renderer, GUI_control* gui_controlManager);
+  GUI_option(GUI_node* node_gui);
   ~GUI_option();
 
 public:
@@ -41,7 +41,6 @@ private:
   GUI_option* gui_optionManager;
 
   Scene* sceneManager;
-  Engine* engineManager;
   Attribut* attribManager;
   Transforms* transformManager;
   Glyphs* glyphManager;

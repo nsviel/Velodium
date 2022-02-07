@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Scene;
-class Engine;
+class GUI_node;
 class Player_cloud;
 class Heatmap;
 class Filter;
@@ -15,7 +15,7 @@ class GUI_Player
 {
 public:
   //Constructor / Destructor
-  GUI_Player(Engine* engineManager);
+  GUI_Player(GUI_node* node_gui);
   ~GUI_Player();
 
 public:

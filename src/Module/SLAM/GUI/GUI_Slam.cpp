@@ -9,6 +9,7 @@
 
 #include "../../Module_node.h"
 
+#include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene.h"
 #include "../../../Engine/Engine.h"
@@ -18,10 +19,10 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-GUI_Slam::GUI_Slam(Engine* engineManager){
+GUI_Slam::GUI_Slam(GUI_node* node_gui){
   //---------------------------
 
-  Module_node* node_module = engineManager->get_node_moduleManager();
+  Module_node* node_module = node_gui->get_node_module();
 
   this->cticpManager = node_module->get_cticpManager();
   this->ceresManager = cticpManager->get_SLAM_optim_ceres();

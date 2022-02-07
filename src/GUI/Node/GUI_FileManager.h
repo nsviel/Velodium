@@ -6,13 +6,13 @@
 class Scene;
 class Dimension;
 class GUI_windows;
-
+class GUI_node;
 
 class GUI_fileManager
 {
 public:
   //Constructor / Destructor
-  GUI_fileManager(Dimension* dim, GUI_windows* win);
+  GUI_fileManager(GUI_node* node_gui);
   ~GUI_fileManager();
 
 public:

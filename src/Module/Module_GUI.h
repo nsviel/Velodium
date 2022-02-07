@@ -1,5 +1,5 @@
-#ifndef Module_GUI_H
-#define Module_GUI_H
+#ifndef GUI_MODULE_H
+#define GUI_MODULE_H
 
 #include "LiDAR/GUI/GUI_Lidar.h"
 #include "Player/GUI/GUI_Player.h"
@@ -7,22 +7,23 @@
 #include "Network/GUI/GUI_Network.h"
 #include "Obstacle/GUI/GUI_Obstacle.h"
 
+#include "../GUI/GUI_node.h"
 #include "../Engine/Configuration/config_module.h"
 #include "../common.h"
 
 
-class Module_GUI
+class GUI_module
 {
 public:
   //Constructor / Destructor
-  Module_GUI(Engine* engineManager){
+  GUI_module(GUI_node* node_gui){
     //-------------------------------
 
     this->gui_lidarManager = new GUI_Lidar();
-    this->gui_playerManager = new GUI_Player(engineManager);
-    this->gui_slamManager = new GUI_Slam(engineManager);
+    this->gui_playerManager = new GUI_Player(node_gui);
+    this->gui_slamManager = new GUI_Slam(node_gui);
     this->gui_senderManager = new GUI_Network();
-    this->gui_obstacleManager = new GUI_Obstacle(engineManager);
+    this->gui_obstacleManager = new GUI_Obstacle(node_gui);
 
     this->module_velodyne = true;
     this->module_player = true;
@@ -32,7 +33,7 @@ public:
 
     //-------------------------------
   }
-  ~Module_GUI();
+  ~GUI_module();
 
 public:
   void display_moduleTabs(){
@@ -87,7 +88,7 @@ public:
   }
 
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
-  inline GUI_Player* get_gui_player(){return gui_playerManager;}
+  inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
 
 private:
   GUI_Lidar* gui_lidarManager;

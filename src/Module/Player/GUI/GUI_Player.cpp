@@ -4,7 +4,7 @@
 #include "../Player_cloud.h"
 #include "../../Module_node.h"
 
-#include "../../../Engine/Engine.h"
+#include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Scene.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/Heatmap.h"
@@ -15,11 +15,11 @@
 
 
 //Constructor / Destructor
-GUI_Player::GUI_Player(Engine* engineManager){
+GUI_Player::GUI_Player(GUI_node* node_gui){
   //---------------------------
 
-  Operation_node* node_ope = engineManager->get_node_opeManager();
-  Module_node* node_module = engineManager->get_node_moduleManager();
+  Operation_node* node_ope = node_gui->get_node_ope();
+  Module_node* node_module = node_gui->get_node_module();
 
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();

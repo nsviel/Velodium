@@ -1,11 +1,14 @@
 #include "GUI_MenuBar.h"
+
 #include "GUI_LeftPanel.h"
 
 #include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 #include "../Node/GUI_Option.h"
+#include "../GUI_node.h"
 
 #include "../../Load/Operation.h"
+#include "../../Module/Module_GUI.h"
 #include "../../Module/Player/GUI/GUI_Player.h"
 
 #include "../../Engine/Scene.h"
@@ -29,16 +32,18 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_menuBar::GUI_menuBar(Engine* eng, GUI_windows* win, GUI_option* opt, GUI_leftPanel* lpa, GUI_Player* ply){
-  this->optionManager = opt;
-  this->gui_winManager = win;
-  this->engineManager = eng;
-  this->gui_leftPanelManager = lpa;
-  this->playerManager = ply;
+GUI_menuBar::GUI_menuBar(GUI_node* node_gui){
   //---------------------------
 
-  Configuration_node* config = eng->get_node_configManager();
-  this->configManager = config->get_conf_modManager();
+  Configuration_node* node_config = node_gui->get_node_config();
+  Module_node* node_module = node_gui->get_node_module();
+  GUI_module* gui_moduleManager = node_gui->get_gui_moduleManager();
+
+  this->optionManager = node_gui->get_gui_optionManager();
+  this->gui_winManager = node_gui->get_gui_winManager();
+  this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
+  this->playerManager = gui_moduleManager->get_gui_playerManager();
+  this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
   this->texManager = new Textures();
@@ -94,12 +99,12 @@ void GUI_menuBar::MenuBar_menus(){
       }
     }
     if(ImGui::MenuItem("Reset scene","r")){
-      engineManager->reset();
+      //engineManager->reset();
     }
 
     ImGui::Separator();
     if (ImGui::MenuItem("Quit")){
-      engineManager->exit();
+      //engineManager->exit();
     }
 
     ImGui::EndMenu();

@@ -7,9 +7,9 @@ class GUI_windows;
 class GUI_option;
 class GUI_leftPanel;
 class GUI_Player;
+class GUI_node;
 
 class Scene;
-class Engine;
 class Extraction;
 class Heatmap;
 class Textures;
@@ -21,7 +21,7 @@ class GUI_menuBar
 {
 public:
   //Constructor / Destructor
-  GUI_menuBar(Engine* eng, GUI_windows* win, GUI_option* opt, GUI_leftPanel* lpa, GUI_Player* ply);
+  GUI_menuBar(GUI_node* node_gui);
   ~GUI_menuBar();
 
 public:
@@ -43,7 +43,6 @@ private:
   GUI_Player* playerManager;
 
   Scene* sceneManager;
-  Engine* engineManager;
   Operation* opeManager;
   Extraction* extractionManager;
   Heatmap* heatmapManager;

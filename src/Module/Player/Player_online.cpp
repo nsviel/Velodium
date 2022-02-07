@@ -30,15 +30,15 @@
 Player_online::Player_online(Module_node* node_module){
   //---------------------------
 
-  Operation_node* node_ope = node_module->get_node_opeManager();
-  Engine_node* node_engine = node_module->get_node_engineManager();
-  Configuration_node* node_config = node_engine->get_node_configManager();
+  Operation_node* node_ope = node_module->get_node_ope();
+  Engine_node* node_engine = node_module->get_node_engine();
+  Configuration_node* node_config = node_engine->get_node_config();
 
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
-  this->dimManager = node_engine->get_dimManager();
+  this->dimManager = node_config->get_dimManager();
   this->cticpManager = node_module->get_cticpManager();
   this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();

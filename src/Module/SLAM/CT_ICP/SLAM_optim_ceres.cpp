@@ -47,10 +47,10 @@ void SLAM_optim_ceres::optim_CERES(Frame* frame, Frame* frame_m1){
 
     //Add some other residual functors
     //this->ceres_addConstraintResidual(ceres_problem, frame, frame_m1, nb_residual);
-sayHello();
+
     //Compute solver
     this->ceres_solve(ceres_problem);
-sayHello();
+
     //Distort for some reason
     this->frame_distort(frame);
     this->frame_update(frame);

@@ -1,5 +1,7 @@
 #include "GUI.h"
 
+#include "GUI_node.h"
+
 #include "Interface/GUI_Consol.h"
 #include "Interface/GUI_MenuBar.h"
 #include "Interface/GUI_LeftPanel.h"
@@ -16,6 +18,7 @@
 #include "../Engine/Engine_node.h"
 #include "../Engine/OpenGL/Camera.h"
 #include "../Engine/Configuration/Dimension.h"
+#include "../Engine/Configuration/Configuration_node.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -24,25 +27,24 @@
 
 #include <thread>
 
-//Consol creation
-ConsoleApp console;
+
 
 
 //Constructor / Destructor
-GUI::GUI(Engine* engine){
-  this->engineManager = engine;
+GUI::GUI(GUI_node* node_gui){
   //---------------------------
 
-  Engine_node* node_engine = engineManager->get_node_engineManager();
+  Configuration_node* node_config = node_gui->get_node_config();
 
-  this->dimManager = node_engine->get_dimManager();
-  this->Module_GUIManager = new Module_GUI(engineManager);
-  this->gui_winManager = new GUI_windows(engineManager);
-  this->gui_controlManager = new GUI_control(engineManager);
-  this->gui_optionManager = new GUI_option(engineManager, gui_controlManager);
-  this->gui_leftPanelManager = new GUI_leftPanel(engineManager, gui_winManager);
-  this->gui_menuBarManager = new GUI_menuBar(engineManager, gui_winManager, gui_optionManager, gui_leftPanelManager, Module_GUIManager->get_gui_player());
-  this->gui_consol = new GUI_consol(engineManager);
+  this->dimManager = node_config->get_dimManager();
+
+  this->gui_moduleManager = node_gui->get_gui_moduleManager();
+  this->gui_winManager = node_gui->get_gui_winManager();
+  this->gui_controlManager = node_gui->get_gui_controlManager();
+  this->gui_optionManager = node_gui->get_gui_optionManager();
+  this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
+  this->gui_menuBarManager = node_gui->get_gui_menuBarManager();
+  this->gui_consolManager = node_gui->get_gui_consolManager();
 
   //---------------------------
   this->Gui_init();
@@ -62,7 +64,7 @@ void GUI::Gui_init(){
   GLFWwindow* window = glfwGetCurrentContext();
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
-
+say(window);
   //---------------------------
 }
 void GUI::Gui_style(){
@@ -122,13 +124,16 @@ void GUI::Gui_loop(){
   ImGui::NewFrame();
   //---------------------------
 
-  gui_consol->design_consol();
+  GLFWwindow* windowe = glfwGetCurrentContext();
+  say(windowe);
+
+  //gui_consolManager->design_consol();
   gui_controlManager->make_control();
-  gui_menuBarManager->design_MenuBar();
+  /*gui_menuBarManager->design_MenuBar();
   gui_leftPanelManager->design_leftPanel();
   gui_winManager->window_Draw();
 
-  this->Gui_Dimensions();
+  this->Gui_Dimensions();*/
 
   //---------------------------
   ImGui::Render();
@@ -146,7 +151,7 @@ void GUI::Gui_render(){
 //Subfunctions
 void GUI::Gui_Dimensions(){
   vec2 lbp_dim = gui_leftPanelManager->get_lbp_dim();
-  vec2 bp_dim = gui_consol->get_bp_dim();
+  vec2 bp_dim = gui_consolManager->get_bp_dim();
   ImGuiIO io = ImGui::GetIO();
   //---------------------------
 

@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Engine;
+class GUI_node;
 class Scene;
 class CT_ICP;
 
@@ -18,7 +18,7 @@ class GUI_Slam
 {
 public:
   //Constructor / Destructor
-  GUI_Slam(Engine* engineManager);
+  GUI_Slam(GUI_node* node_gui);
   ~GUI_Slam();
 
 public:

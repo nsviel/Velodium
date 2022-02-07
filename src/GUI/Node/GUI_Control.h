@@ -1,5 +1,5 @@
-#ifndef GUI_control_H
-#define GUI_control_H
+#ifndef GUI_CONTROL_H
+#define GUI_CONTROL_H
 
 #include "../../Operation/Transformation/Transforms.h"
 
@@ -16,13 +16,14 @@ class Glyphs;
 class Selection;
 class Heatmap;
 class Dimension;
+class GUI_node;
 
 
 class GUI_control
 {
 public:
   //Constructor / Destructor
-  GUI_control(Engine* renderer);
+  GUI_control(GUI_node* node_gui);
   ~GUI_control();
 
 public:

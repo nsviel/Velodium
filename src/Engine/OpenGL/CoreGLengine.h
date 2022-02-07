@@ -16,6 +16,7 @@ class GUI;
 class Engine;
 class Renderer;
 class Engine_node;
+class Configuration_node;
 
 class CoreGLengine
 {
@@ -39,7 +40,8 @@ public:
   void loop_end();
 
 private:
-  Engine_node* node_engineManager;
+  Configuration_node* node_config;
+  Engine_node* node_engine;
 
   GLFWwindow* window;
   Engine* engineManager;
