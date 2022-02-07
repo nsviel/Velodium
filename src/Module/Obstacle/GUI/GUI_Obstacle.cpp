@@ -33,6 +33,7 @@ void GUI_Obstacle::design_Obstacle(){
 
   this->compute_obstacle();
   this->make_obstacleName(subset);
+  this->parameters();
 
   //---------------------------
 }
@@ -133,6 +134,22 @@ void GUI_Obstacle::drawText(string text, vec3 position){
     ImGui::End();
     ImGui::PopStyleColor();
   }
+
+  //---------------------------
+}
+void GUI_Obstacle::parameters(){
+  //---------------------------
+
+  //Dicrectory path selection & display
+  if(ImGui::Button("...##26")){
+    ioManager->save_image_path();
+  }
+  ImGui::SameLine();
+  string saveas = *ioManager->get_save_image_path();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
+
+  bool* with_save_image = onlineManager->get_with_save_image();
+  ImGui::Checkbox("Save image", with_save_image);
 
   //---------------------------
 }

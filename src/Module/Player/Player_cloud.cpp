@@ -22,8 +22,6 @@ Player_cloud::Player_cloud(Player_online* online){
   this->player_ispaused = false;
   this->player_returnToZero = false;
   this->player_flag_1s = false;
-
-  //Get absolute executable location
   this->player_saveas = get_absolutePath_build() + "/../media/data/";
 
   //---------------------------

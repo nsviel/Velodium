@@ -12,6 +12,8 @@
 
 
 struct Subset{ //Cloud subset / part
+  //---------------------------
+
   GLuint VAO;
   GLuint VBO_xyz;
   GLuint VBO_rgb;
@@ -67,6 +69,8 @@ struct Subset{ //Cloud subset / part
   Frame frame;
   Obstac obstacle_gt;
   Obstac obstacle_pr;
+
+  //---------------------------
 };
 
 #endif

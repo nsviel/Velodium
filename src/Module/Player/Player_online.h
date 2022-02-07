@@ -9,7 +9,6 @@ class Camera;
 class Engine;
 class Filter;
 class Dimension;
-class Renderer;
 class Scene;
 class Obstacle;
 class config_module;
@@ -32,10 +31,6 @@ public:
   void camera_position(Subset* subset);
   void camera_orientation(Subset* subset);
 
-  //Save functions
-  void save_image(Subset* subset);
-  void save_image_path();
-
   //Other functions
   void set_cloud_visibility(Cloud* cloud, int& ID_subset);
   void remove_subset_last(Cloud* cloud, int i);
@@ -48,11 +43,9 @@ public:
   inline bool* get_with_heatmap(){return &with_heatmap;}
   inline bool* get_with_heatmap_rltHeight(){return &with_heatmap_rltHeight;}
   inline bool* get_with_unicolor(){return &with_unicolor;}
-  inline bool* get_with_save_image(){return &with_save_image;}
   inline bool* get_with_online(){return &with_online;}
   inline vec2* get_heatmap_height_range(){return &HM_height_range;}
   inline bool* get_with_remove_lastSubset(){return &with_remove_lastSubset;}
-  inline string* get_save_image_path(){return &screenshot_path;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
   inline int* get_visibility_range(){return &visibility_range;}
 
@@ -63,11 +56,9 @@ private:
   CT_ICP* cticpManager;
   Filter* filterManager;
   Dimension* dimManager;
-  Renderer* renderManager;
   Obstacle* obstacleManager;
   config_module* configManager;
 
-  string screenshot_path;
   vec2 HM_height_range;
   vec2 camera_moved_trans;
   float camera_moved_rotat;
@@ -84,7 +75,6 @@ private:
   bool with_heatmap;
   bool with_heatmap_rltHeight;
   bool with_unicolor;
-  bool with_save_image;
   bool with_remove_lastSubset;
 };
 

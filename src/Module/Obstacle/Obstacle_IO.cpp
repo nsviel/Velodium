@@ -1,6 +1,9 @@
 #include "Obstacle_IO.h"
 
+#include "../Module_node.h"
+
 #include "../../Engine/Scene.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Load/Operation.h"
 #include "../../Load/Saver.h"
 
@@ -13,17 +16,21 @@
 
 
 //Constructor / Destructor
-Obstacle_IO::Obstacle_IO(){
+Obstacle_IO::Obstacle_IO(Module_node* node_module){
   //---------------------------
+
+  Engine_node* node_engine = node_module->get_node_engine();
 
   this->sceneManager = new Scene();
   this->saverManager = new Saver();
   this->opeManager = new Operation();
+  this->renderManager = node_engine->get_renderManager();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_frame = path_dir + "frame/";
   this->path_predi = path_dir + "prediction/";
   this->path_grThr = path_dir + "groundtruth/";
+  this->screenshot_path = "../media/data/image/";
   this->savedFrame_ID = 0;
   this->savedFrame_max = 20;
 
@@ -69,6 +76,28 @@ void Obstacle_IO::stop_dirWatcher(){
 
   thread_predi.~thread();
   thread_grThr.~thread();
+
+  //---------------------------
+}
+
+//Save functions
+void Obstacle_IO::save_image(Subset* subset){
+  //---------------------------
+
+  string path = screenshot_path + "image";
+
+  renderManager->render_screenshot(path);
+
+  //---------------------------
+}
+void Obstacle_IO::save_image_path(){
+  //---------------------------
+
+  string path;
+  Operation opeManager;
+  opeManager.selectDirectory(path);
+
+  this->screenshot_path = path + "/";
 
   //---------------------------
 }

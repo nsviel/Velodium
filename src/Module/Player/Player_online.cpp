@@ -38,7 +38,6 @@ Player_online::Player_online(Module_node* node_module){
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->cameraManager = node_engine->get_cameraManager();
-  this->renderManager = node_engine->get_renderManager();
   this->dimManager = node_engine->get_dimManager();
   this->cticpManager = node_module->get_cticpManager();
   this->configManager = node_config->get_conf_modManager();
@@ -106,11 +105,6 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
       this->color_unicolor(subset, cloud->unicolor);
     }
 
-    //With glreadpixel screenshot
-    if(with_save_image){
-      this->save_image(subset);
-    }
-
     if(with_remove_lastSubset){
       this->remove_subset_last(cloud, ID_subset);
     }
@@ -125,7 +119,6 @@ void Player_online::update_configuration(){
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
-  this->screenshot_path = "../media/data/image/";
   this->nb_subset_max = 20;
 
   this->with_camera_top = false;
@@ -139,7 +132,6 @@ void Player_online::update_configuration(){
   this->with_online = true;
   this->with_slam = configManager->parse_json_b("online", "with_slam");
   this->with_cylinder_cleaning = configManager->parse_json_b("online", "with_cylinder_cleaning");
-  this->with_save_image = configManager->parse_json_b("online", "with_save_image");
   this->with_remove_lastSubset = configManager->parse_json_b("online", "with_remove_lastSubset");
 
   //---------------------------
@@ -244,29 +236,6 @@ void Player_online::camera_orientation(Subset* subset){
 
   camera_moved_rotat = rotat_abs_rad;
   cameraManager->set_angle_azimuth(hAngle_new);
-
-  //---------------------------
-}
-
-//Save functions
-void Player_online::save_image(Subset* subset){
-  //---------------------------
-
-  //string path = screenshot_path + subset->name;
-  string path = screenshot_path + "image";
-
-  renderManager->render_screenshot(path);
-
-  //---------------------------
-}
-void Player_online::save_image_path(){
-  //---------------------------
-
-  string path;
-  Operation opeManager;
-  opeManager.selectDirectory(path);
-
-  this->screenshot_path = path + "/";
 
   //---------------------------
 }

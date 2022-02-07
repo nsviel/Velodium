@@ -23,6 +23,7 @@ public:
   void compute_obstacle();
   void make_obstacleName(Subset* subset);
   void drawText(string text, vec3 position);
+  void parameters();
 
 private:
   Obstacle* obstacleManager;
@@ -31,6 +32,7 @@ private:
   Scene* sceneManager;
 
   int label_ID;
+  string screenshot_path;
 };
 
 #endif

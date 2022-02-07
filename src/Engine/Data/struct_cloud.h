@@ -9,6 +9,8 @@
 
 
 struct Cloud{ //Global set of the cloud
+  //---------------------------
+
   //IDs
   GLuint ID; //Permanent cloud ID
   GLuint oID; // List order cloud ID
@@ -41,6 +43,8 @@ struct Cloud{ //Global set of the cloud
   std::list<Subset*> subset_voxel;
   std::list<Subset*> subset_buffer;
   std::list<Subset*> subset_init;
+
+  //---------------------------
 };
 
 #endif

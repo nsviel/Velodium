@@ -8,12 +8,16 @@
 
 
 struct Database{
+  //---------------------------
+
   std::list<Cloud*>* list_cloud;
   std::list<Glyph*>* list_glyph;
 
   Cloud* cloud_selected;
   int ID_cloud;
   int ID_glyph;
+
+  //---------------------------
 };
 
 

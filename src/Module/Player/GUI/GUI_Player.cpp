@@ -269,21 +269,6 @@ void GUI_Player::parameter_online(){
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb subset", nb_subset_max);
     }
-
-    ImGui::NextColumn();
-    bool* with_save_image = onlineManager->get_with_save_image();
-    ImGui::Checkbox("Save image", with_save_image);
-
-    //Dicrectory path selection & display
-    ImGui::NextColumn();
-    if(*with_save_image){
-      if(ImGui::Button("...##26")){
-        onlineManager->save_image_path();
-      }
-      ImGui::SameLine();
-      string saveas = *onlineManager->get_save_image_path();
-      ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
-    }
     ImGui::NextColumn();
 
     //Colorization

@@ -11,6 +11,8 @@
  * \struct Glyph struct_glyph.h "Glyph structure"
  */
 struct Glyph{
+  //---------------------------
+
   GLuint VAO;
   GLuint VBO_location;
   GLuint VBO_color;
@@ -31,6 +33,8 @@ struct Glyph{
   std::vector<glm::vec3> location;
   std::vector<glm::vec3> normal;
   std::vector<glm::vec4> color;
+
+  //---------------------------
 };
 
 #endif

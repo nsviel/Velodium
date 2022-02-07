@@ -14,11 +14,11 @@
 Obstacle::Obstacle(Module_node* node_module){
   //---------------------------
 
+  this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
   this->glyphManager = new Glyphs();
-  this->ioManager = new Obstacle_IO();
 
   //---------------------------
 }

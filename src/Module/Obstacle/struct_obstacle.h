@@ -9,11 +9,15 @@
 
 
 struct Obstac{ //Obstacle detection stuff
+  //---------------------------
+
   std::vector<std::string> name;
   std::vector<glm::vec3> position;
   std::vector<glm::vec3> dimension;
   std::vector<float> heading;
   std::vector<Glyph*> oobb;
+
+  //---------------------------
 };
 
 #endif
