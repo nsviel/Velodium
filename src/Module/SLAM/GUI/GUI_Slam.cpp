@@ -56,7 +56,7 @@ void GUI_Slam::compute(){
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Compute", ImVec2(item_width,0))){
     if(cloud != nullptr){
-      sceneManager->update_cloud_reset(cloud);
+      sceneManager->reset_cloud(cloud);
       cticpManager->compute_slam(cloud);
 
       sceneManager->update_cloud_location(cloud);

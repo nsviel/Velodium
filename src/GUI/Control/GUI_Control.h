@@ -6,7 +6,6 @@
 #include "../../common.h"
 
 class Scene;
-class Engine;
 class Camera;
 class Attribut;
 class Operation;
@@ -48,8 +47,8 @@ public:
 private:
   Transforms transformManager;
 
+  GUI_node* node_gui;
   Dimension* dimManager;
-  Engine* engineManager;
   Camera* cameraManager;
   Scene* sceneManager;
   Attribut* attribManager;

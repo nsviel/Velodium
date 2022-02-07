@@ -16,6 +16,14 @@ Scene::~Scene(){
 }
 
 //Remove functions
+void Scene::exit(){
+  //---------------------------
+
+  GLFWwindow* window = glfwGetCurrentContext();
+  glfwSetWindowShouldClose(window, true);
+
+  //---------------------------
+}
 void Scene::remove_cloud(Cloud* cloud){
   //---------------------------
 
@@ -145,6 +153,8 @@ void Scene::remove_subset_all(Cloud* cloud){
 
   //---------------------------
 }
+
+//Adding functions
 void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   //---------------------------
 
@@ -187,46 +197,8 @@ void Scene::add_subset_to_gpu(Subset* subset){
   //---------------------------
 }
 
-//Updating - cloud
-void Scene::update_cloud_glyphs(Cloud* cloud){
-  if(cloud == nullptr)return;
-  //---------------------------
-
-  this->update_cloud_MinMax(cloud);
-  Glyphs glyphManager;
-  glyphManager.update(cloud);
-
-  //---------------------------
-}
-void Scene::update_cloud_IntensityToColor(Cloud* cloud){
-  //---------------------------
-
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-
-    vector<float>& Is = subset->I;
-    vector<vec4>& RGB = subset->RGB;
-
-    for(int i=0; i<Is.size(); i++){
-      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
-    }
-
-    this->update_subset_color(subset);
-  }
-
-  //---------------------------
-}
-void Scene::update_cloud_oID(list<Cloud*>* list){
-  //---------------------------
-
-  for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
-    if(cloud->oID != i) cloud->oID = i;
-  }
-
-  //---------------------------
-}
-void Scene::update_cloud_reset(Cloud* cloud){
+//Reset functions
+void Scene::reset_cloud(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
@@ -269,6 +241,60 @@ void Scene::update_cloud_reset(Cloud* cloud){
 
   //---------------------------
   this->update_cloud_glyphs(cloud);
+}
+void Scene::reset_cloud_all(){
+  //---------------------------
+
+  //Reset all clouds
+  for(int i=0; i<database.list_cloud->size(); i++){
+    Cloud* cloud = *next(database.list_cloud->begin(),i);
+    this->reset_cloud(cloud);
+  }
+
+  this->update_cloud_glyphs(database.cloud_selected);
+
+  //---------------------------
+  console.AddLog("#", "Reset scene...");
+}
+
+//Updating - cloud
+void Scene::update_cloud_glyphs(Cloud* cloud){
+  if(cloud == nullptr)return;
+  //---------------------------
+
+  this->update_cloud_MinMax(cloud);
+  Glyphs glyphManager;
+  glyphManager.update(cloud);
+
+  //---------------------------
+}
+void Scene::update_cloud_IntensityToColor(Cloud* cloud){
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+
+    vector<float>& Is = subset->I;
+    vector<vec4>& RGB = subset->RGB;
+
+    for(int i=0; i<Is.size(); i++){
+      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
+    }
+
+    this->update_subset_color(subset);
+  }
+
+  //---------------------------
+}
+void Scene::update_cloud_oID(list<Cloud*>* list){
+  //---------------------------
+
+  for(int i=0; i<list->size(); i++){
+    Cloud* cloud = *next(list->begin(),i);
+    if(cloud->oID != i) cloud->oID = i;
+  }
+
+  //---------------------------
 }
 void Scene::update_cloud_MinMax(Cloud* cloud){
   vec3 min_cloud = vec3(100, 100, 100);

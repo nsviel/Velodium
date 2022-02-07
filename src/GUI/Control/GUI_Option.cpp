@@ -1,7 +1,7 @@
 #include "GUI_Option.h"
 
 #include "../GUI_node.h"
-#include "../Node/GUI_Control.h"
+#include "../Control/GUI_Control.h"
 
 #include "../../Load/Operation.h"
 

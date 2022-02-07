@@ -37,17 +37,18 @@ public:
   void MenuBar_Operations();
 
 private:
-  GUI_windows* gui_winManager;
-  GUI_option* optionManager;
-  GUI_leftPanel* gui_leftPanelManager;
-  GUI_Player* playerManager;
-
   Scene* sceneManager;
   Operation* opeManager;
   Extraction* extractionManager;
   Heatmap* heatmapManager;
   Textures* texManager;
   config_module* configManager;
+
+  GUI_node* node_gui;
+  GUI_windows* gui_winManager;
+  GUI_option* optionManager;
+  GUI_leftPanel* gui_leftPanelManager;
+  GUI_Player* playerManager;
 };
 
 

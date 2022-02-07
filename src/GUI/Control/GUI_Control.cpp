@@ -27,13 +27,14 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_control::GUI_control(GUI_node* node_gui){
+GUI_control::GUI_control(GUI_node* node){
+  this->node_gui = node;
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
   Operation_node* node_ope = node_gui->get_node_ope();
   Configuration_node* node_config = node_gui->get_node_config();
   config_opengl* configManager = node_config->get_conf_glManager();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
@@ -167,8 +168,7 @@ void GUI_control::control_keyboard_oneAction(){
   for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
     //Esc key
     if(ImGui::IsKeyPressed(256)){
-      GLFWwindow* window = glfwGetCurrentContext();
-      glfwSetWindowShouldClose(window, true);
+      sceneManager->exit();
     }
 
     //Tab key
@@ -200,7 +200,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //R key - Reset
     if (ImGui::IsKeyPressed(82) && !io.WantCaptureMouse){
-      //engineManager->reset();
+      node_gui->reset();
       break;
     }
 

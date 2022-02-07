@@ -6,14 +6,14 @@
 #include "Interface/GUI_MenuBar.h"
 #include "Interface/GUI_LeftPanel.h"
 #include "Interface/struct_consol.h"
-#include "Node/GUI_Control.h"
-#include "Node/GUI_Option.h"
-#include "Node/GUI_FileManager.h"
+#include "Control/GUI_Control.h"
+#include "Control/GUI_Option.h"
+#include "Control/GUI_FileManager.h"
 #include "Windows/GUI_windows.h"
-#include "../Module/Module_GUI.h"
-#include "../Module/Module_GUI.h"
 
+#include "../Module/Module_GUI.h"
 #include "../Module/Module_node.h"
+
 #include "../Engine/Engine_node.h"
 #include "../Engine/Configuration/Configuration_node.h"
 #include "../Operation/Operation_node.h"
@@ -58,11 +58,16 @@ public:
   void reset(){
     //---------------------------
 
+    node_engine->reset();
+    node_module->reset();
+
     //---------------------------
   }
   void update(){}
   void runtime(){
     //---------------------------
+
+    gui_moduleManager->runtime();
 
     //---------------------------
   }

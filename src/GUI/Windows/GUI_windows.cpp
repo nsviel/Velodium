@@ -278,7 +278,7 @@ void GUI_windows::window_transformation(){
       ImGui::InputTextMultiline("##realTransfo", realTransformation_c, IM_ARRAYSIZE(realTransformation_c), ImVec2(400, ImGui::GetTextLineHeight() * 6), flags);
 
       if(ImGui::Button("Apply real transformation from init", ImVec2(300,0))){
-        sceneManager->update_cloud_reset(cloud);
+        sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), subset->transformation);//transformation.RealTransformation);
         sceneManager->update_cloud_location(cloud);
       }
@@ -340,7 +340,7 @@ void GUI_windows::window_transformation(){
         Cloud* cloud = sceneManager->get_cloud_selected();
         Subset* subset = sceneManager->get_subset_selected();
 
-        sceneManager->update_cloud_reset(cloud);
+        sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
         sceneManager->update_cloud_location(cloud);
       }
@@ -363,7 +363,7 @@ void GUI_windows::window_transformation(){
         Cloud* cloud = sceneManager->get_cloud_selected();
         Subset* subset = sceneManager->get_subset_selected();
 
-        sceneManager->update_cloud_reset(cloud);
+        sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
         sceneManager->update_cloud_location(cloud);
       }

@@ -6,8 +6,8 @@
 #include "Interface/GUI_MenuBar.h"
 #include "Interface/GUI_LeftPanel.h"
 #include "Interface/struct_consol.h"
-#include "Node/GUI_Control.h"
-#include "Node/GUI_Option.h"
+#include "Control/GUI_Control.h"
+#include "Control/GUI_Option.h"
 #include "Windows/GUI_windows.h"
 
 #include "../Module/Module_GUI.h"

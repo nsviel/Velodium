@@ -64,7 +64,16 @@ void Engine::loop_scene(){
   this->draw_clouds();
 
   //Module stuff
-  this->runtime();
+  this->loop_runtime();
+
+  //---------------------------
+}
+void Engine::loop_runtime(){
+  //---------------------------
+
+  node_gui->runtime();
+  node_engine->runtime();
+  node_module->runtime();
 
   //---------------------------
 }
@@ -105,40 +114,4 @@ void Engine::draw_clouds(){
   //---------------------------
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
-}
-
-//Subfunctions
-void Engine::exit(){
-  //---------------------------
-
-  GLFWwindow* window = glfwGetCurrentContext();
-  glfwSetWindowShouldClose(window, true);
-
-  //---------------------------
-}
-void Engine::reset(){
-  list<Cloud*>* list_Cloud = sceneManager->get_list_cloud();
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
-
-  //Reset all clouds
-  for(int i=0; i<list_Cloud->size(); i++){
-    Cloud* cloud = *next(list_Cloud->begin(),i);
-    sceneManager->update_cloud_reset(cloud);
-  }
-
-  //Reset all functions
-  node_engine->reset();
-  node_module->reset();
-  sceneManager->update_cloud_glyphs(cloud);
-
-  //---------------------------
-  console.AddLog("#", "Reset scene...");
-}
-void Engine::runtime(){
-  //---------------------------
-
-  node_module->runtime();
-
-  //---------------------------
 }

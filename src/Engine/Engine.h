@@ -27,10 +27,8 @@ public:
   //Program functions
   void init_database();
   void loop_scene();
+  void loop_runtime();
   void loop_gui();
-  void exit();
-  void reset();
-  void runtime();
 
   //Subfunctions
   void draw_clouds();

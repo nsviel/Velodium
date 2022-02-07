@@ -19,7 +19,7 @@ public:
   GUI_module(GUI_node* node_gui){
     //-------------------------------
 
-    this->gui_lidarManager = new GUI_Lidar();
+    this->gui_lidarManager = new GUI_Lidar(node_gui);
     this->gui_playerManager = new GUI_Player(node_gui);
     this->gui_slamManager = new GUI_Slam(node_gui);
     this->gui_senderManager = new GUI_Network();
@@ -55,7 +55,6 @@ public:
           ImGui::EndTabItem();
         }
       }
-      gui_playerManager->player_mouse();
 
       // SLAM
       if(module_slam){
@@ -85,6 +84,13 @@ public:
       //-------------------------------
       ImGui::EndTabBar();
     }
+  }
+  void runtime(){
+    //-------------------------------
+
+    gui_playerManager->player_mouse();
+
+    //-------------------------------
   }
 
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}

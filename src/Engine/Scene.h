@@ -8,6 +8,8 @@ extern struct Database database;
 
 class Data;
 
+#include <GLFW/glfw3.h>
+
 
 class Scene
 {
@@ -18,18 +20,24 @@ public:
 
 public:
   //Remove functions
+  void exit();
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
   void remove_subset(Cloud* cloud, int ID);
   void remove_subset_all(Cloud* cloud);
+
+  //Add functions
   void add_new_subset(Cloud* cloud, Subset* subset);
   void add_subset_to_gpu(Subset* subset);
+
+  //Reset functions
+  void reset_cloud(Cloud* cloud);
+  void reset_cloud_all();
 
   //Update data
   void update_cloud_glyphs(Cloud* cloud);
   void update_cloud_IntensityToColor(Cloud* cloud);
   void update_cloud_oID(list<Cloud*>* list);
-  void update_cloud_reset(Cloud* cloud);
   void update_cloud_MinMax(Cloud* cloud);
   void update_cloud_location(Cloud* cloud);
   void update_cloud_color(Cloud* cloud);

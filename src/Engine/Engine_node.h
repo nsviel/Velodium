@@ -46,10 +46,12 @@ public:
 
     //---------------------------
   }
+  void runtime(){}
   void reset(){
     //---------------------------
 
     glyphManager->reset();
+    sceneManager->reset_cloud_all();
 
     //---------------------------
   }

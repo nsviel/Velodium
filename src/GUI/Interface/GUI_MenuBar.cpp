@@ -4,7 +4,7 @@
 
 #include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
-#include "../Node/GUI_Option.h"
+#include "../Control/GUI_Option.h"
 #include "../GUI_node.h"
 
 #include "../../Load/Operation.h"
@@ -12,7 +12,7 @@
 #include "../../Module/Player/GUI/GUI_Player.h"
 
 #include "../../Engine/Scene.h"
-#include "../../Engine/Engine.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
 #include "../../Engine/Configuration/Configuration_node.h"
@@ -32,9 +32,11 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_menuBar::GUI_menuBar(GUI_node* node_gui){
+GUI_menuBar::GUI_menuBar(GUI_node* node){
   //---------------------------
 
+  this->node_gui = node;
+  Engine_node* node_engine = node_gui->get_node_engine();
   Configuration_node* node_config = node_gui->get_node_config();
   Module_node* node_module = node_gui->get_node_module();
   GUI_module* gui_moduleManager = node_gui->get_gui_moduleManager();
@@ -99,12 +101,12 @@ void GUI_menuBar::MenuBar_menus(){
       }
     }
     if(ImGui::MenuItem("Reset scene","r")){
-      //engineManager->reset();
+      node_gui->reset();
     }
 
     ImGui::Separator();
     if (ImGui::MenuItem("Quit")){
-      //engineManager->exit();
+      sceneManager->exit();
     }
 
     ImGui::EndMenu();

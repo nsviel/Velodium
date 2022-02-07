@@ -4,12 +4,16 @@
 #include "../Scala/Scala.h"
 #include "../Velodyne/Velodyne.h"
 
+#include "../../../GUI/GUI_node.h"
+
 
 //Constructor / Destructor
-GUI_Lidar::GUI_Lidar(){
+GUI_Lidar::GUI_Lidar(GUI_node* node_gui){
   //---------------------------
 
-  this->captureManager = new Capture();
+  Module_node* node_module = node_gui->get_node_module();
+
+  this->captureManager = node_module->get_captureManager();
   this->scalaManager = captureManager->get_scalaManager();
   this->veloManager = captureManager->get_veloManager();
 
