@@ -17,7 +17,6 @@ Player_cloud::Player_cloud(Player_online* online){
   this->sceneManager = new Scene();
   this->timerManager = new Timer();
 
-  this->player_subset_range = 15;
   this->player_frequency = 10;
   this->player_isrunning = false;
   this->player_ispaused = false;
@@ -37,7 +36,6 @@ void Player_cloud::select_bySubsetID(Cloud* cloud, int ID_subset){
 
   bool range_ok = select_rangeLimit(cloud, ID_subset);
   if(range_ok){
-    this->select_setVisibility(cloud, ID_subset);
     onlineManager->compute_onlineOpe(cloud, ID_subset);
   }
 
@@ -73,27 +71,6 @@ bool Player_cloud::select_rangeLimit(Cloud* cloud, int& ID_subset){
 
   //---------------------------
   return true;
-}
-void Player_cloud::select_setVisibility(Cloud* cloud, int& ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-  //---------------------------
-
-  //Unset alll other subset visibility
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset_loop = sceneManager->get_subset(cloud, i);
-    subset_loop->visibility = false;
-  }
-
-  //Set visibility just for wanted subsets
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset_loop = sceneManager->get_subset(cloud, i);
-
-    if(subset_loop->ID > ID_subset - player_subset_range && subset_loop->ID <= ID_subset){
-      subset_loop->visibility = true;
-    }
-  }
-
-  //---------------------------
 }
 
 //Player functions

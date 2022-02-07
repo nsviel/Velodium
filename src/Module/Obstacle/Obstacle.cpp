@@ -2,15 +2,19 @@
 
 #include "Obstacle_IO.h"
 
+#include "../Module_node.h"
+
+#include "../../Engine/Scene.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Object/OOBB.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / Destructor
-Obstacle::Obstacle(){
+Obstacle::Obstacle(Module_node* node_module){
   //---------------------------
 
+  this->sceneManager = new Scene();
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
   this->glyphManager = new Glyphs();
@@ -20,12 +24,18 @@ Obstacle::Obstacle(){
 }
 Obstacle::~Obstacle(){}
 
-void Obstacle::online_run(Cloud* cloud){
+void Obstacle::runtime_obstacle(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   bool new_obstacle = ioManager->check_obstacleData();
   if(new_obstacle){
     this->build_obstacleGlyph_gt(cloud);
+  }
+
+  //With just keep n frames
+  if(false){
+    ioManager->save_nFrame(cloud);
   }
 
   //---------------------------

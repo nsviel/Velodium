@@ -16,9 +16,10 @@ GUI_Obstacle::GUI_Obstacle(GUI_node* node_gui){
 
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration_node* node_config = node_gui->get_node_config();
+  Module_node* node_module = node_gui->get_node_module();
 
   this->coordManager = new CoordTransform(node_engine->get_cameraManager(), node_engine->get_dimManager());
-  this->obstacleManager = new Obstacle();
+  this->obstacleManager = node_module->get_obstacleManager();
   this->ioManager = obstacleManager->get_ioManager();
   this->sceneManager = new Scene();
 
@@ -32,14 +33,6 @@ void GUI_Obstacle::design_Obstacle(){
 
   this->compute_obstacle();
   this->make_obstacleName(subset);
-
-  //---------------------------
-}
-void GUI_Obstacle::online_run(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
-
-  obstacleManager->online_run(cloud);
 
   //---------------------------
 }

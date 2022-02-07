@@ -43,7 +43,8 @@ Player_online::Player_online(Module_node* node_module){
   this->cticpManager = node_module->get_cticpManager();
   this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();
-  this->obstacleManager = new Obstacle();
+
+  this->visibility_range = 15;
 
   //---------------------------
   this->update_configuration();
@@ -54,6 +55,8 @@ Player_online::~Player_online(){}
 void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
+
+  this->set_cloud_visibility(cloud, ID_subset);
 
   if(with_online){
     //Ortho top view option
@@ -108,19 +111,8 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
       this->save_image(subset);
     }
 
-    //With just keep n frames
-    if(with_keepNframes){
-      Obstacle_IO* ioManager = obstacleManager->get_ioManager();
-      ioManager->save_nFrame(cloud);
-    }
-
     if(with_remove_lastSubset){
       this->remove_subset_last(cloud, ID_subset);
-    }
-
-    //Make AI module stuff
-    if(with_AI_module){
-      obstacleManager->online_run(cloud);
     }
   }
 
@@ -148,9 +140,7 @@ void Player_online::update_configuration(){
   this->with_slam = configManager->parse_json_b("online", "with_slam");
   this->with_cylinder_cleaning = configManager->parse_json_b("online", "with_cylinder_cleaning");
   this->with_save_image = configManager->parse_json_b("online", "with_save_image");
-  this->with_keepNframes = configManager->parse_json_b("online", "with_keepNframes");
   this->with_remove_lastSubset = configManager->parse_json_b("online", "with_remove_lastSubset");
-  this->with_AI_module = configManager->parse_json_b("online", "with_AI_module");
 
   //---------------------------
 }
@@ -282,6 +272,27 @@ void Player_online::save_image_path(){
 }
 
 //Other functions
+void Player_online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  //---------------------------
+
+  //Unset alll other subset visibility
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset_loop = sceneManager->get_subset(cloud, i);
+    subset_loop->visibility = false;
+  }
+
+  //Set visibility just for wanted subsets
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset_loop = sceneManager->get_subset(cloud, i);
+
+    if(subset_loop->ID > ID_subset - visibility_range && subset_loop->ID <= ID_subset){
+      subset_loop->visibility = true;
+    }
+  }
+
+  //---------------------------
+}
 void Player_online::color_heatmap(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------

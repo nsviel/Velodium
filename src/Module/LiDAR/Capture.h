@@ -6,6 +6,8 @@
 class Scene;
 class Loader;
 class dataExtraction;
+class Module_node;
+class Player_online;
 
 class Scala;
 class Velodyne;
@@ -15,7 +17,7 @@ class Capture
 {
 public:
   //Constructor / Destructor
-  Capture();
+  Capture(Module_node* node_module);
   ~Capture();
 
 public:
@@ -30,6 +32,7 @@ public:
 private:
   Scene* sceneManager;
   Loader* loaderManager;
+  Player_online* onlineManager;
 
   Cloud* cloud_capture;
   Scala* scalaManager;

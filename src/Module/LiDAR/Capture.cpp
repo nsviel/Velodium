@@ -3,6 +3,8 @@
 #include "Scala/Scala.h"
 #include "Velodyne/Velodyne.h"
 
+#include "../Module_node.h"
+
 #include "../../Engine/Scene.h"
 #include "../../Load/Loader.h"
 #include "../../Load/Saver.h"
@@ -12,9 +14,10 @@
 
 
 //Constructor / Destructor
-Capture::Capture(){
+Capture::Capture(Module_node* node_module){
   //---------------------------
 
+  this->onlineManager = node_module->get_onlineManager();
   this->scalaManager = new Scala();
   this->veloManager = new Velodyne();
   this->loaderManager = new Loader();
@@ -91,6 +94,9 @@ void Capture::runtime_capturing(){
 
     //Insert the subset inside the capture cloud
     sceneManager->add_new_subset(cloud_capture, subset);
+
+    //Compute online stuff
+    onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
 
     //Unset new Subset flag
     *velo_new = false;

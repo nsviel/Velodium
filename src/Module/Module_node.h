@@ -3,6 +3,7 @@
 
 #include "SLAM/CT_ICP.h"
 #include "LiDAR/Capture.h"
+#include "Obstacle/Obstacle.h"
 #include "Player/Player_cloud.h"
 #include "Player/Player_online.h"
 
@@ -33,9 +34,10 @@ public:
     //---------------------------
 
     this->cticpManager = new CT_ICP();
-    this->captureManager = new Capture();
+    this->captureManager = new Capture(this);
     this->onlineManager = new Player_online(this);
     this->playerManager = new Player_cloud(onlineManager);
+    this->obstacleManager = new Obstacle(this);
 
     //---------------------------
   }
@@ -43,20 +45,25 @@ public:
     //---------------------------
 
     cticpManager->reset();
-    
+
     //---------------------------
   }
   void update(){}
   void runtime(){
     //---------------------------
 
+    captureManager->runtime_capturing();
+    obstacleManager->runtime_obstacle();
+
     //---------------------------
   }
 
-  inline CT_ICP* get_cticpManager(){return cticpManager;}
-  inline Capture* get_captureManager(){return captureManager;}
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Operation_node* get_node_ope(){return node_ope;}
+
+  inline CT_ICP* get_cticpManager(){return cticpManager;}
+  inline Capture* get_captureManager(){return captureManager;}
+  inline Obstacle* get_obstacleManager(){return obstacleManager;}
   inline Player_online* get_onlineManager(){return onlineManager;}
   inline Player_cloud* get_playerManager(){return playerManager;}
 
@@ -67,6 +74,7 @@ private:
   CT_ICP* cticpManager;
   Capture* captureManager;
   config_module* configManager;
+  Obstacle* obstacleManager;
   Player_cloud* playerManager;
   Player_online* onlineManager;
 };

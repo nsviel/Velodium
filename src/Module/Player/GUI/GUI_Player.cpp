@@ -106,7 +106,7 @@ void GUI_Player::player_run(){
   this->player_selection();
 
   //Range of displayed frames
-  int* player_subset_range = playerManager->get_player_subset_range();
+  int* player_subset_range = onlineManager->get_visibility_range();
   int nb_subset_max = *player_subset_range;
   if(cloud != nullptr){
     nb_subset_max = cloud->nb_subset - 1;

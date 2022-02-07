@@ -19,7 +19,6 @@ public:
 
 public:
   void design_Obstacle();
-  void online_run();
 
   void compute_obstacle();
   void make_obstacleName(Subset* subset);

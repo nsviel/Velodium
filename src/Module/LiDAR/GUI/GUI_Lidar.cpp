@@ -40,7 +40,6 @@ void GUI_Lidar::design_Scala(){
 void GUI_Lidar::design_Velodyne(){
   //---------------------------
 
-  captureManager->runtime_capturing();
   this->velo_state();
   this->velo_capture();
   this->velo_parameter();
