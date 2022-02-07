@@ -13,12 +13,7 @@
 #include "../Module/Module_GUI.h"
 #include "../Module/SLAM/GUI/GUI_Slam.h"
 #include "../Module/SLAM/CT_ICP.h"
-
-#include "../Engine/Engine.h"
-#include "../Engine/Engine_node.h"
 #include "../Engine/OpenGL/Camera.h"
-#include "../Engine/Configuration/Dimension.h"
-#include "../Engine/Configuration/Configuration_node.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -28,15 +23,9 @@
 #include <thread>
 
 
-
-
 //Constructor / Destructor
 GUI::GUI(GUI_node* node_gui){
   //---------------------------
-
-  Configuration_node* node_config = node_gui->get_node_config();
-
-  this->dimManager = node_config->get_dimManager();
 
   this->gui_moduleManager = node_gui->get_gui_moduleManager();
   this->gui_winManager = node_gui->get_gui_winManager();
@@ -64,7 +53,7 @@ void GUI::Gui_init(){
   GLFWwindow* window = glfwGetCurrentContext();
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
-say(window);
+
   //---------------------------
 }
 void GUI::Gui_style(){
@@ -124,16 +113,13 @@ void GUI::Gui_loop(){
   ImGui::NewFrame();
   //---------------------------
 
-  GLFWwindow* windowe = glfwGetCurrentContext();
-  say(windowe);
-
-  //gui_consolManager->design_consol();
+  gui_consolManager->design_consol();
   gui_controlManager->make_control();
-  /*gui_menuBarManager->design_MenuBar();
+  gui_menuBarManager->design_MenuBar();
   gui_leftPanelManager->design_leftPanel();
   gui_winManager->window_Draw();
 
-  this->Gui_Dimensions();*/
+  this->Gui_Dimensions();
 
   //---------------------------
   ImGui::Render();

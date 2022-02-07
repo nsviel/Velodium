@@ -1,6 +1,7 @@
 #include "Viewport.h"
 
-#include "../Configuration/Dimension.h"
+#include "../OpenGL/Dimension.h"
+
 
 
 //Constructor / Destructor

@@ -1,20 +1,22 @@
 #include "Dimension.h"
 
-#include "config_opengl.h"
+#include "../Configuration/config_opengl.h"
+#include "../Configuration/Configuration_node.h"
 
 
 //Constructor / Destructor
-Dimension::Dimension(){
+Dimension::Dimension(GLFWwindow* win, Configuration_node* config){
+  this->window = win;
   //---------------------------
 
-  this->configManager = new config_opengl();
+  this->config_glManager = config->get_conf_glManager();
 
-  int win_h = configManager->parse_json_i("window", "resolution_height");
-  int win_w = configManager->parse_json_i("window", "resolution_width");
-  int lp_w = configManager->parse_json_i("gui", "leftPanel_width");
-  int tp_h = configManager->parse_json_i("gui", "topPanel_height");
-  int bp_h = configManager->parse_json_i("gui", "botPanel_height");
-  int lp_m = configManager->parse_json_i("gui", "leftPanel_mid");
+  int win_h = config_glManager->parse_json_i("window", "resolution_height");
+  int win_w = config_glManager->parse_json_i("window", "resolution_width");
+  int lp_w = config_glManager->parse_json_i("gui", "leftPanel_width");
+  int tp_h = config_glManager->parse_json_i("gui", "topPanel_height");
+  int bp_h = config_glManager->parse_json_i("gui", "botPanel_height");
+  int lp_m = config_glManager->parse_json_i("gui", "leftPanel_mid");
 
   this->gl_dim.x = win_w - lp_w;
   this->gl_dim.y = win_h - tp_h - bp_h;
@@ -33,6 +35,7 @@ Dimension::Dimension(){
   this->with_custom_gl_dim = false;
 
   //---------------------------
+  this->update();
 }
 Dimension::~Dimension(){}
 
@@ -85,9 +88,9 @@ void Dimension::update_window_dim(){
 void Dimension::update_configuration(){
   //---------------------------
 
-  configManager->update_jsonfile("gui", "leftPanel_width", to_string(gui_ltp_dim.x));
-  configManager->update_jsonfile("gui", "topPanel_height", to_string(gui_tp_dim.y));
-  configManager->update_jsonfile("gui", "botPanel_height", to_string(gui_bp_dim.y));
+  config_glManager->update_jsonfile("gui", "leftPanel_width", to_string(gui_ltp_dim.x));
+  config_glManager->update_jsonfile("gui", "topPanel_height", to_string(gui_tp_dim.y));
+  config_glManager->update_jsonfile("gui", "botPanel_height", to_string(gui_bp_dim.y));
 
   //---------------------------
 }

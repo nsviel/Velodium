@@ -1,7 +1,8 @@
 #include "CoordTransform.h"
 
 #include "../../Engine/OpenGL/Camera.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/OpenGL/Dimension.h"
+
 
 #include <glm/gtc/matrix_transform.hpp>
 

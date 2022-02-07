@@ -4,8 +4,9 @@
 #include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/Engine_node.h"
+#include "../../Engine/OpenGL/Dimension.h"
+
 #include "../../Engine/Scene.h"
 
 #include "IconsFontAwesome5.h"
@@ -17,10 +18,10 @@ extern struct Window_tab window_tab;
 GUI_fileManager::GUI_fileManager(GUI_node* node_gui){
   //-------------------------------
 
-  Configuration_node* node_config = node_gui->get_node_config();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
   this->gui_winManager = node_gui->get_gui_winManager();
-  this->dimManager = node_config->get_dimManager();
+  this->dimManager = node_engine->get_dimManager();
   this->sceneManager = new Scene();
 
   //-------------------------------

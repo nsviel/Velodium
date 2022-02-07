@@ -12,7 +12,8 @@
 
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/OpenGL/Dimension.h"
+
 #include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/config_module.h"
 #include "../../Engine/Engine.h"
@@ -38,7 +39,7 @@ Player_online::Player_online(Module_node* node_module){
   this->heatmapManager = node_ope->get_heatmapManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
-  this->dimManager = node_config->get_dimManager();
+  this->dimManager = node_engine->get_dimManager();
   this->cticpManager = node_module->get_cticpManager();
   this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();

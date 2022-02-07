@@ -11,7 +11,6 @@ class GUI_leftPanel;
 class GUI_consol;
 class GUI_module;
 class GUI_node;
-class Dimension;
 
 
 class GUI
@@ -33,7 +32,6 @@ public:
   void Gui_Dimensions();
 
 private:
-  Dimension* dimManager;
   GUI_module* gui_moduleManager;
   GUI_windows* gui_winManager;
   GUI_control* gui_controlManager;

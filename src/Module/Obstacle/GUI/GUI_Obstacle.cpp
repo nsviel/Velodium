@@ -17,7 +17,7 @@ GUI_Obstacle::GUI_Obstacle(GUI_node* node_gui){
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration_node* node_config = node_gui->get_node_config();
 
-  this->coordManager = new CoordTransform(node_engine->get_cameraManager(), node_config->get_dimManager());
+  this->coordManager = new CoordTransform(node_engine->get_cameraManager(), node_engine->get_dimManager());
   this->obstacleManager = new Obstacle();
   this->ioManager = obstacleManager->get_ioManager();
   this->sceneManager = new Scene();

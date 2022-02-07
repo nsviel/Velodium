@@ -3,7 +3,7 @@
 
 #include "config_opengl.h"
 #include "config_module.h"
-#include "Dimension.h"
+
 
 #include "../../common.h"
 
@@ -15,16 +15,19 @@ class Configuration_node
 public:
   //Constructor / Destructor
   Configuration_node(){
-    this->make_configuration();
+    //---------------------------
+
+    this->init_objects();
+
+    //---------------------------
   }
   ~Configuration_node();
 
 public:
   //Main functions
-  void make_configuration(){
+  void init_objects(){
     //---------------------------
 
-    this->dimManager = new Dimension();
     this->conf_glManager = new config_opengl();
     this->conf_modManager = new config_module();
 
@@ -34,15 +37,12 @@ public:
     //---------------------------
   }
 
-  inline Dimension* get_dimManager(){return dimManager;}
   inline config_opengl* get_conf_glManager(){return conf_glManager;}
   inline config_module* get_conf_modManager(){return conf_modManager;}
 
 private:
   config_opengl* conf_glManager;
   config_module* conf_modManager;
-
-  Dimension* dimManager;
 };
 
 #endif

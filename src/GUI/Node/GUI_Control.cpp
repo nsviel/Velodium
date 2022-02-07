@@ -10,7 +10,8 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/struct_viewport.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/OpenGL/Dimension.h"
+
 #include "../../Engine/Configuration/Configuration_node.h"
 #include "../../Engine/Configuration/config_opengl.h"
 
@@ -35,7 +36,7 @@ GUI_control::GUI_control(GUI_node* node_gui){
   config_opengl* configManager = node_config->get_conf_glManager();
 
   this->cameraManager = node_engine->get_cameraManager();
-  this->dimManager = node_config->get_dimManager();
+  this->dimManager = node_engine->get_dimManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->selectionManager = new Selection(dimManager, cameraManager);
   this->sceneManager = new Scene();
@@ -55,9 +56,6 @@ GUI_control::~GUI_control(){}
 //Main function
 void GUI_control::make_control(){
   //---------------------------
-
-  GLFWwindow* windowe = glfwGetCurrentContext();
-  say(windowe);
 
   this->control_mouse();
   this->control_frameSelection();

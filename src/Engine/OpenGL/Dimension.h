@@ -17,12 +17,13 @@
 #include <GLFW/glfw3.h>
 
 class config_opengl;
+class Configuration_node;
 
 
 class Dimension
 {
 public:
-  Dimension();
+  Dimension(GLFWwindow* win, Configuration_node* config);
   ~Dimension();
 
 public:
@@ -38,7 +39,6 @@ public:
   vec2 get_cursorPos();
   void set_cursorPos(vec2 pos);
 
-  inline void set_window(GLFWwindow* value){this->window = value;}
   inline GLFWwindow* get_window(){return window;}
   inline vec2* get_gui_ltp_dim(){return &gui_ltp_dim;}
   inline vec2* get_gui_ltp_pos(){return &gui_ltp_pos;}
@@ -58,7 +58,7 @@ public:
 
 private:
   GLFWwindow* window;
-  config_opengl* configManager;
+  config_opengl* config_glManager;
 
   //Rendering
   vec2 gl_pos;

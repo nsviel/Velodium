@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
-#include "../Configuration/Dimension.h"
+#include "../OpenGL/Dimension.h"
+
 #include "../Configuration/config_opengl.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION

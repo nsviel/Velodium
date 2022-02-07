@@ -45,7 +45,7 @@ GUI_windows::GUI_windows(GUI_node* node_gui){
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration_node* node_config = node_gui->get_node_config();
 
-  this->selectionManager = new Selection(node_config->get_dimManager(), node_engine->get_cameraManager());
+  this->selectionManager = new Selection(node_engine->get_dimManager(), node_engine->get_cameraManager());
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
@@ -54,7 +54,6 @@ GUI_windows::GUI_windows(GUI_node* node_gui){
   this->attribManager = new Attribut();
   this->fitManager = new Fitting();
   this->extractionManager = new Extraction();
-
 
   this->configManager = node_config->get_conf_glManager();
   this->wincamManager = new WIN_camera(node_engine->get_cameraManager());

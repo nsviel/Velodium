@@ -8,7 +8,8 @@
 #include "../../Engine/Scene.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/OpenGL/Camera.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/OpenGL/Dimension.h"
+
 #include "../../Load/Loader.h"
 #include "../../Specific/fct_maths.h"
 

@@ -2,8 +2,9 @@
 #include "struct_consol.h"
 
 #include "../../GUI/GUI_node.h"
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/Engine_node.h"
+#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Scene.h"
 
 #include "imgui/imgui.h"
 
@@ -17,9 +18,9 @@ ConsoleApp console;
 GUI_consol::GUI_consol(GUI_node* node_gui){
   //----------------------------
 
-  node_config = node_gui->get_node_config();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
-  this->dimManager = node_config->get_dimManager();
+  this->dimManager = node_engine->get_dimManager();
 
   //----------------------------
 }
@@ -36,8 +37,6 @@ void GUI_consol::design_consol(){
 }
 void GUI_consol::draw_consol(){
   //----------------------------
-
-
 
   //Get panel dimension
   vec2 win_dim = dimManager->get_win_dim();

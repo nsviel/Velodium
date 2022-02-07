@@ -1,6 +1,7 @@
 #include "PP_edl.h"
 
-#include "../Configuration/Dimension.h"
+#include "../OpenGL/Dimension.h"
+
 
 
 PP_edl::PP_edl(Dimension* dim){

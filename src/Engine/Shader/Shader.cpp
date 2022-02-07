@@ -3,7 +3,8 @@
 #include "PP_edl.h"
 #include "ShaderObject.h"
 
-#include "../Configuration/Dimension.h"
+#include "../OpenGL/Dimension.h"
+
 
 
 //Constructor / Destructor

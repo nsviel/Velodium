@@ -3,12 +3,12 @@
 #include "Camera.h"
 #include "Viewport.h"
 #include "Renderer.h"
+#include "Dimension.h"
 
 #include "../Engine.h"
 #include "../Engine_node.h"
 #include "../Shader/Shader.h"
 #include "../Shader/ShaderObject.h"
-#include "../Configuration/Dimension.h"
 #include "../Configuration/config_opengl.h"
 #include "../Configuration/Configuration_node.h"
 
@@ -58,7 +58,6 @@ bool CoreGLengine::init_OGL(){
   int resolution_height = conf_glManager->parse_json_i("window", "resolution_height");
   bool forceVersion = conf_glManager->parse_json_b("opengl", "forceVersion");
   bool coreGL_verbose = conf_glManager->parse_json_b("opengl", "verbose_coreGL");
-  int nb_multisample = conf_glManager->parse_json_i("opengl", "nb_multisample");
   string win_title = conf_glManager->parse_json_s("window", "title");
   this->waitForEvent = conf_glManager->parse_json_b("opengl", "waitForEvent");
 
@@ -101,9 +100,8 @@ bool CoreGLengine::init_OGL(){
 bool CoreGLengine::init_object(){
   //---------------------------
 
-  this->node_engine = new Engine_node(node_config);
-  this->dimManager = node_config->get_dimManager();
-  dimManager->set_window(window);
+  this->node_engine = new Engine_node(node_config, window);
+  this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
@@ -115,7 +113,7 @@ bool CoreGLengine::init_object(){
 void CoreGLengine::init_rendering(){
   //---------------------------
 
-  dimManager->update();
+
   renderManager->init_rendering_fbo_1();
   renderManager->init_rendering_fbo_2();
   renderManager->init_rendering_quad();

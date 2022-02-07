@@ -5,8 +5,9 @@
 #include "../Node/GUI_FileManager.h"
 
 #include "../../Module/Module_GUI.h"
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/Dimension.h"
+#include "../../Engine/Engine_node.h"
+#include "../../Engine/OpenGL/Dimension.h"
+
 
 #include "imgui/imgui.h"
 
@@ -15,9 +16,9 @@
 GUI_leftPanel::GUI_leftPanel(GUI_node* node_gui){
   //-------------------------------
 
-  Configuration_node* node_config = node_gui->get_node_config();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
-  this->dimManager = node_config->get_dimManager();
+  this->dimManager = node_engine->get_dimManager();
   this->gui_winManager = node_gui->get_gui_winManager();
   this->gui_fileManager = node_gui->get_gui_fileManager();
   this->gui_moduleManager = node_gui->get_gui_moduleManager();

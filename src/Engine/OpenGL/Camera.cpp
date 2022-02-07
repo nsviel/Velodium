@@ -1,6 +1,7 @@
 #include "Camera.h"
 
-#include "../Configuration/Dimension.h"
+#include "../OpenGL/Dimension.h"
+
 #include "../Configuration/config_opengl.h"
 
 #include <glm/gtc/matrix_transform.hpp>

@@ -21,8 +21,6 @@
 #include "../common.h"
 
 
-
-
 class GUI_node
 {
 public:
@@ -45,15 +43,15 @@ public:
   void init_objects(){
     //---------------------------
 
-    this->guiManager = new GUI(this);
     this->gui_moduleManager = new GUI_module(this);
     this->gui_winManager = new GUI_windows(this);
     this->gui_controlManager = new GUI_control(this);
     this->gui_optionManager = new GUI_option(this);
+    this->gui_fileManager = new GUI_fileManager(this);
     this->gui_leftPanelManager = new GUI_leftPanel(this);
     this->gui_menuBarManager = new GUI_menuBar(this);
     this->gui_consolManager = new GUI_consol(this);
-    this->gui_fileManager = new GUI_fileManager(this);
+    this->guiManager = new GUI(this);
 
     //---------------------------
   }
