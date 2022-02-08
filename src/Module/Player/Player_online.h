@@ -10,7 +10,6 @@ class Engine;
 class Filter;
 class Dimension;
 class Scene;
-class Obstacle;
 class config_module;
 class Module_node;
 
@@ -56,7 +55,6 @@ private:
   CT_ICP* cticpManager;
   Filter* filterManager;
   Dimension* dimManager;
-  Obstacle* obstacleManager;
   config_module* configManager;
 
   vec2 HM_height_range;

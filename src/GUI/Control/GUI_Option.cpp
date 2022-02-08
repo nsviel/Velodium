@@ -3,7 +3,7 @@
 #include "../GUI_node.h"
 #include "../Control/GUI_Control.h"
 
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
@@ -31,7 +31,7 @@ GUI_option::GUI_option(GUI_node* node_gui){
   this->glyphManager = new Glyphs();
   this->sceneManager = new Scene();
   this->attribManager = new Attribut;
-  this->opeManager = new Operation();
+  this->pathManager = new Pather();
 
   //---------------------------
 }

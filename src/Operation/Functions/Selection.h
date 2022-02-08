@@ -1,6 +1,7 @@
 #ifndef Selection_H
 #define Selection_H
 
+class Operation_node;
 class Scene;
 class Glyphs;
 class Transforms;
@@ -15,7 +16,7 @@ class Selection
 {
 public:
   //Constructor / Destructor
-  Selection(Dimension* dim, Camera* control);
+  Selection(Operation_node* node_ope);
   ~Selection();
 
 public:
@@ -61,8 +62,8 @@ private:
   Attribut* attribManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
-  Camera* controlsManager;
-  CoordTransform* coordTransManager;
+  Camera* cameraManager;
+  CoordTransform* coordManager;
 
   list<Cloud*> list_Mark;
   list<int> list_glyph;

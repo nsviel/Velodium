@@ -1,6 +1,6 @@
 #include "Scala.h"
 
-#include "../../../Load/Operation.h"
+#include "../../../Load/Pather.h"
 #include "../../../Load/Loader.h"
 #include "../../../Engine/Scene.h"
 
@@ -31,13 +31,13 @@ void Scala::loading(string pathDir){
 }
 
 vector<string> Scala::loading_allPathDir(string pathDir){
-  Operation opeManager;
+  Pather pathManager;
   //---------------------------
 
   if(pathDir == ""){
-    opeManager.selectDirectory(pathDir);
+    pathManager.selectDirectory(pathDir);
   }
-  vector<string> allpath = opeManager.get_directoryAllFilePath(pathDir);
+  vector<string> allpath = pathManager.get_directoryAllFilePath(pathDir);
 
   //---------------------------
   return allpath;

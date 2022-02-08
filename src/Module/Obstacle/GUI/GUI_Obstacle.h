@@ -6,7 +6,7 @@
 class Scene;
 class GUI_node;
 class Obstacle;
-class Obstacle_IO;
+class Interfacing;
 class CoordTransform;
 
 
@@ -27,7 +27,7 @@ public:
 
 private:
   Obstacle* obstacleManager;
-  Obstacle_IO* ioManager;
+  Interfacing* ioManager;
   CoordTransform* coordManager;
   Scene* sceneManager;
 

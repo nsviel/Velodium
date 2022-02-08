@@ -13,7 +13,7 @@ class Scene;
 class Extraction;
 class Heatmap;
 class Textures;
-class Operation;
+class Pather;
 class config_module;
 
 
@@ -38,7 +38,7 @@ public:
 
 private:
   Scene* sceneManager;
-  Operation* opeManager;
+  Pather* pathManager;
   Extraction* extractionManager;
   Heatmap* heatmapManager;
   Textures* texManager;

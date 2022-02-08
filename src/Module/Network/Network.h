@@ -18,7 +18,9 @@ public:
   ~Network();
 
 public:
-  void send_file();
+  void send_file(string path_source, string path_target);
+  void start_connection();
+  void stop_connection();
 
   void select_sourcePath();
   void select_targetPath();
@@ -28,6 +30,7 @@ public:
   inline SSH* get_sshManager(){return sshManager;}
   inline string* get_path_source(){return &path_source;}
   inline string* get_path_target(){return &path_target;}
+  inline bool get_is_connected(){return is_connected;}
 
 private:
   MQTT* mqttManager;
@@ -37,6 +40,8 @@ private:
   string name_file;
   string path_source;
   string path_target;
+
+  bool is_connected;
 };
 
 #endif

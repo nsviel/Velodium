@@ -1,16 +1,22 @@
 #include "CoordTransform.h"
 
+#include "../Operation_node.h"
+
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
-
 #include <glm/gtc/matrix_transform.hpp>
 
+
 //Constructor / Destructor
-CoordTransform::CoordTransform(Camera* controls, Dimension* dim){
-  this->cameraManager = controls;
-  this->dimManager = dim;
+CoordTransform::CoordTransform(Operation_node* node_ope){
   //---------------------------
+
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->cameraManager = node_engine->get_cameraManager();
+  this->dimManager = node_engine->get_dimManager();
 
   //---------------------------
 }

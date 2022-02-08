@@ -6,7 +6,7 @@
 #include "../../Specific/fct_system.h"
 #include "../../Engine/Scene.h"
 #include "../../Load/Saver.h"
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 
 
 //Constructor / Destructor
@@ -144,8 +144,8 @@ void Player_cloud::player_selectDirSave(){
   //---------------------------
 
   string path;
-  Operation opeManager;
-  opeManager.selectDirectory(path);
+  Pather pathManager;
+  pathManager.selectDirectory(path);
 
   this->player_saveas = path + "/";
 

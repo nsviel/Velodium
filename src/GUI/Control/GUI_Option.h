@@ -5,7 +5,7 @@ class GUI_control;
 class GUI_node;
 
 class Scene;
-class Operation;
+class Pather;
 class Glyphs;
 class Attribut;
 class Heatmap;
@@ -45,7 +45,7 @@ private:
   Transforms* transformManager;
   Glyphs* glyphManager;
   Heatmap* heatmapManager;
-  Operation* opeManager;
+  Pather* pathManager;
   Renderer* renderManager;
 
   vec3* backgColor;

@@ -1,5 +1,5 @@
-#ifndef OBSTACLE_IO_H
-#define OBSTACLE_IO_H
+#ifndef INTERFACING_H
+#define INTERFACING_H
 
 #include "../../common.h"
 
@@ -7,52 +7,58 @@
 
 class Scene;
 class Saver;
-class Operation;
+class Pather;
 class Module_node;
 class Renderer;
 
 
-class Obstacle_IO
+class Interfacing
 {
 public:
   //Constructor / Destructor
-  Obstacle_IO(Module_node* node_module);
-  ~Obstacle_IO();
+  Interfacing(Module_node* node_module);
+  ~Interfacing();
 
 public:
+  //Input: Prediction stuff
   void start_dirWatcher();
   void stop_dirWatcher();
-
-  //Save functions
-  void save_image(Subset* subset);
-  void save_image_path();
-
-  bool check_obstacleData();
-  void clean_directories();
-  void save_nFrame(Cloud* cloud);
+  bool check_prediction(Cloud* cloud);
   void parse_obstacle_json(Cloud* cloud, string paths, string data);
+
+  //Output: frame & Image saving
+  void save_image();
+  void save_image_path();
+  void save_frame(Cloud* cloud);
+
+  //Subfunctions
+  void clean_directories();
   void select_dir_path();
 
   inline string get_dir_path(){return path_dir;}
-  inline string* get_save_image_path(){return &screenshot_path;}
+  inline string* get_save_image_path(){return &path_image;}
   inline bool* get_is_thread_pred(){return &thread_predi_ON;}
 
 private:
   Scene* sceneManager;
   Saver* saverManager;
-  Operation* opeManager;
+  Pather* pathManager;
   Renderer* renderManager;
 
-  vector<string> save_path_vec;
+  vector<string> save_frame_vec;
+  vector<string> save_image_vec;
   string path_dir;
   string path_predi;
+  string path_predi_file;
   string path_grThr;
+  string path_grThr_file;
   string path_frame;
-  string path_file_grThr;
-  string path_file_predi;
-  string screenshot_path;
-  int savedFrame_ID;
-  int savedFrame_max;
+  string path_image;
+
+  int save_frame_ID;
+  int save_frame_max;
+  int save_image_ID;
+  int save_image_max;
 
   bool thread_predi_ON;
   bool thread_grThr_ON;

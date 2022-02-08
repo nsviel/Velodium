@@ -1,6 +1,6 @@
 #include "WIN_loading.h"
 
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 #include "../../Load/Loader.h"
 
 #include "../../Load/Format/file_PTS.h"
@@ -15,8 +15,8 @@ extern struct Window_tab window_tab;
 WIN_loading::WIN_loading(){
   //---------------------------
 
-  this->opeManager = new Operation();
-  this->loaderManager = opeManager->get_loaderManager();
+  this->pathManager = new Pather();
+  this->loaderManager = pathManager->get_loaderManager();
 
   this->item_width = 150;
   this->file_selected = false;
@@ -40,7 +40,7 @@ void WIN_loading::window_loading(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Load")){
-      opeManager->loading();
+      pathManager->loading();
       *open = false;
     }
     ImGui::SameLine();
@@ -71,12 +71,12 @@ void WIN_loading::loading_action(){
 
   //Usual cloud loader
   if (ImGui::Button("Open cloud", ImVec2(item_width, 0))){
-    opeManager->loading();
+    pathManager->loading();
   }
 
   //Load a set of PLY binary frames
   if (ImGui::Button("Open frames", ImVec2(item_width, 0))){
-    opeManager->loading_frames();
+    pathManager->loading_frames();
   }
 
   //---------------------------
@@ -87,7 +87,7 @@ void WIN_loading::loading_fileSelection(){
 
   //Get info for a specified file
   if (ImGui::Button("Select file", ImVec2(item_width, 0))){
-    file_path = opeManager->get_filePath();
+    file_path = pathManager->get_filePath();
     this->loading_retrieve_info(file_path);
     file_selected = true;
   }
@@ -266,17 +266,17 @@ void WIN_loading::saving_action(){
   //---------------------------
 
   if (ImGui::Button("Save as", ImVec2(item_width, 0))){
-    opeManager->saving();
+    pathManager->saving();
   }
 
   if (ImGui::Button("Save all", ImVec2(item_width, 0))){
-    opeManager->saving_allCloud();
+    pathManager->saving_allCloud();
   }
 
   static int frame_b = 0;
   static int frame_e = 100;
   if (ImGui::Button("Save frames range", ImVec2(item_width, 0))){
-    opeManager->saving_frameRange(frame_b, frame_e);
+    pathManager->saving_frameRange(frame_b, frame_e);
   }
 
   //---------------------------

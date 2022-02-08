@@ -1,4 +1,4 @@
-#include "Operation.h"
+#include "Pather.h"
 
 #include "Loader.h"
 #include "Saver.h"
@@ -14,7 +14,7 @@
 
 
 //Constructor / destructor
-Operation::Operation(){
+Pather::Pather(){
   //---------------------------
 
   this->sceneManager = new Scene();
@@ -31,10 +31,10 @@ Operation::Operation(){
 
   //---------------------------
 }
-Operation::~Operation(){}
+Pather::~Pather(){}
 
 //Loading functions
-void Operation::loading(){
+void Pather::loading(){
   //---------------------------
 
   //select files
@@ -48,7 +48,7 @@ void Operation::loading(){
 
   //---------------------------
 }
-void Operation::loading_frames(){
+void Pather::loading_frames(){
   //---------------------------
 
   //select files
@@ -61,7 +61,7 @@ void Operation::loading_frames(){
 
   //---------------------------
 }
-void Operation::loading_directoryFrames(string path){
+void Pather::loading_directoryFrames(string path){
   //---------------------------
 
   //Supress unwanted line break
@@ -91,7 +91,7 @@ void Operation::loading_directoryFrames(string path){
 
   //---------------------------
 }
-void Operation::loading_sampling(){
+void Pather::loading_sampling(){
   //---------------------------
 
   //select files
@@ -108,7 +108,7 @@ void Operation::loading_sampling(){
 
   //---------------------------
 }
-void Operation::loading_sampledCloud(string path){
+void Pather::loading_sampledCloud(string path){
   /*  int nbLinePart = nbLineSampling;
   int nbPart = 0;
   int lmin = 0;
@@ -151,7 +151,7 @@ void Operation::loading_sampledCloud(string path){
   */
   //---------------------------
 }
-void Operation::loading_treatment(){
+void Pather::loading_treatment(){
   //---------------------------
 
   //select files
@@ -172,7 +172,7 @@ void Operation::loading_treatment(){
 
   //---------------------------
 }
-void Operation::loading_fastScene(int mode){
+void Pather::loading_fastScene(int mode){
   char path[PATH_MAX];
   //---------------------------
 
@@ -234,7 +234,7 @@ void Operation::loading_fastScene(int mode){
 }
 
 //Other functions
-void Operation::saving(){
+void Pather::saving(){
   //---------------------------
 
   //Select saving path
@@ -246,7 +246,7 @@ void Operation::saving(){
 
   //---------------------------
 }
-void Operation::saving_frameRange(int frame_b, int frame_e){
+void Pather::saving_frameRange(int frame_b, int frame_e){
   //---------------------------
 
   //Select saving path
@@ -261,7 +261,7 @@ void Operation::saving_frameRange(int frame_b, int frame_e){
 
   //---------------------------
 }
-void Operation::saving_allCloud(){
+void Pather::saving_allCloud(){
   //---------------------------
 
   //Select directory path
@@ -280,7 +280,7 @@ void Operation::saving_allCloud(){
 }
 
 //Specific functions
-vector<string> Operation::get_directoryAllFilePath(string path){
+vector<string> Pather::get_directoryAllFilePath(string path){
   vector<string> allpath;
   //---------------------------
 
@@ -291,7 +291,7 @@ vector<string> Operation::get_directoryAllFilePath(string path){
   //---------------------------
   return allpath;
 }
-string Operation::get_filePath(){
+string Pather::get_filePath(){
   //---------------------------
 
   string path_str = "";
@@ -315,7 +315,7 @@ string Operation::get_filePath(){
   //---------------------------
   return path_str;
 }
-string Operation::get_filePath(string path){
+string Pather::get_filePath(string path){
   string path_str;
   //---------------------------
 
@@ -341,7 +341,7 @@ string Operation::get_filePath(string path){
   //---------------------------
   return path_str;
 }
-void Operation::selectDirectory(string& folderPath){
+void Pather::selectDirectory(string& folderPath){
   string zenity = "zenity --file-selection --directory --title=Directory --filename=" + folderPath + " 2> /dev/null";
   FILE *file = popen(zenity.c_str(), "r");
   char filename[32768];
@@ -365,7 +365,7 @@ void Operation::selectDirectory(string& folderPath){
 }
 
 //Zenity stuff
-vector<string> Operation::zenity_loading(){
+vector<string> Pather::zenity_loading(){
   //---------------------------
 
   //Open zenity file manager
@@ -406,7 +406,7 @@ vector<string> Operation::zenity_loading(){
   //---------------------------
   return path_vec;
 }
-string Operation::zenity_saving(){
+string Pather::zenity_saving(){
   string path_saving;
   //---------------------------
 
@@ -431,7 +431,7 @@ string Operation::zenity_saving(){
   //---------------------------
   return path_saving;
 }
-string Operation::zenity_directory(){
+string Pather::zenity_directory(){
   string path_directory;
   //---------------------------
 

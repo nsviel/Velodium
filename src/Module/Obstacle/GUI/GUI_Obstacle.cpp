@@ -1,12 +1,10 @@
 #include "GUI_Obstacle.h"
 
 #include "../Obstacle.h"
-#include "../Obstacle_IO.h"
+#include "../Interfacing.h"
 
 #include "../../../Engine/Scene.h"
 #include "../../../GUI/GUI_node.h"
-#include "../../../Engine/Engine_node.h"
-#include "../../../Engine/Configuration/Configuration_node.h"
 #include "../../../Operation/Functions/CoordTransform.h"
 
 
@@ -14,13 +12,12 @@
 GUI_Obstacle::GUI_Obstacle(GUI_node* node_gui){
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
-  Configuration_node* node_config = node_gui->get_node_config();
   Module_node* node_module = node_gui->get_node_module();
+  Operation_node* node_ope = node_gui->get_node_ope();
 
-  this->coordManager = new CoordTransform(node_engine->get_cameraManager(), node_engine->get_dimManager());
+  this->coordManager = node_ope->get_coordManager();
   this->obstacleManager = node_module->get_obstacleManager();
-  this->ioManager = obstacleManager->get_ioManager();
+  this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
 
   //---------------------------
@@ -55,13 +52,6 @@ void GUI_Obstacle::compute_obstacle(){
     }
   }
   ImGui::PopStyleColor(1);
-
-  if(ImGui::Button("run", ImVec2(100,0))){
-    ioManager->start_dirWatcher();
-    ioManager->check_obstacleData();
-    obstacleManager->build_obstacleGlyph_gt(cloud);
-    obstacleManager->build_obstacleGlyph_pr(cloud);
-  }
 
   //Prediction directory
   if(ImGui::Button("...##1")){
@@ -102,8 +92,6 @@ void GUI_Obstacle::drawText(string text, vec3 position){
   window_flags |= ImGuiWindowFlags_NoBackground;
   window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
   window_flags |= ImGuiWindowFlags_NoMove;
-  //window_flags |= ImGuiWindowFlags_NoNav;
-  //window_flags |= ImGuiWindowFlags_NoFocusOnAppearing;
 
   //Convert world position to screen location
   vec2 uv = coordManager->WorldToScreen(position);
@@ -117,7 +105,6 @@ void GUI_Obstacle::drawText(string text, vec3 position){
 
     string window_name = "label_" + to_string(label_ID);
     ImGui::Begin(window_name.c_str(), &truc, window_flags);
-    //ImGui::SetWindowSize(ImVec2(100, 10));
 
     //Supress window borders
     ImGuiStyle& style = ImGui::GetStyle();
@@ -139,7 +126,7 @@ void GUI_Obstacle::drawText(string text, vec3 position){
 }
 void GUI_Obstacle::parameters(){
   //---------------------------
-
+/*
   //Dicrectory path selection & display
   if(ImGui::Button("...##26")){
     ioManager->save_image_path();
@@ -147,9 +134,9 @@ void GUI_Obstacle::parameters(){
   ImGui::SameLine();
   string saveas = *ioManager->get_save_image_path();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
-
-  bool* with_save_image = onlineManager->get_with_save_image();
-  ImGui::Checkbox("Save image", with_save_image);
+*/
+  //bool* with_save_image = ioManager->get_with_save_image();
+  //ImGui::Checkbox("Save image", with_save_image);
 
   //---------------------------
 }

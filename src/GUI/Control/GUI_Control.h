@@ -8,7 +8,7 @@
 class Scene;
 class Camera;
 class Attribut;
-class Operation;
+class Pather;
 class Transforms;
 class Extraction;
 class Glyphs;
@@ -52,7 +52,7 @@ private:
   Camera* cameraManager;
   Scene* sceneManager;
   Attribut* attribManager;
-  Operation* opeManager;
+  Pather* pathManager;
   Extraction* extractionManager;
   Glyphs* glyphManager;
   Selection* selectionManager;

@@ -507,7 +507,15 @@ void Scene::selection_cloudByName(string name){
 
 //Assesseurs
 Cloud* Scene::get_cloud_selected(){
-  return database.cloud_selected;
+  //---------------------------
+
+  if(database.cloud_selected != nullptr){
+    return database.cloud_selected;
+  }else{
+    return nullptr;
+  }
+
+  //---------------------------
 }
 Cloud* Scene::get_cloud_next(){
   Cloud* cloud;

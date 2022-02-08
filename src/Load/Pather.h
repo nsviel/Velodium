@@ -1,5 +1,5 @@
-#ifndef OPERATION_H
-#define OPERATION_H
+#ifndef PATHER_H
+#define PATHER_H
 
 #include "../common.h"
 
@@ -8,12 +8,12 @@ class Loader;
 class Saver;
 
 
-class Operation
+class Pather
 {
 public:
   //Constructor / Destructor
-  Operation();
-  ~Operation();
+  Pather();
+  ~Pather();
 
 public:
   //Loading function

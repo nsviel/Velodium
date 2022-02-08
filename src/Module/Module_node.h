@@ -4,9 +4,10 @@
 #include "SLAM/CT_ICP.h"
 #include "LiDAR/Capture.h"
 #include "Obstacle/Obstacle.h"
-#include "Obstacle/Obstacle_IO.h"
+#include "Obstacle/Interfacing.h"
 #include "Player/Player_cloud.h"
 #include "Player/Player_online.h"
+#include "Network/Network.h"
 
 #include "../Engine/Configuration/config_module.h"
 #include "../Engine/Engine_node.h"
@@ -38,8 +39,9 @@ public:
     this->captureManager = new Capture(this);
     this->onlineManager = new Player_online(this);
     this->playerManager = new Player_cloud(onlineManager);
+    this->ioManager = new Interfacing(this);
     this->obstacleManager = new Obstacle(this);
-    this->ioManager = new Obstacle_IO(this);
+    this->netManager = new Network();
 
     //---------------------------
   }
@@ -63,10 +65,11 @@ public:
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Operation_node* get_node_ope(){return node_ope;}
 
+  inline Network* get_netManager(){return netManager;}
   inline CT_ICP* get_cticpManager(){return cticpManager;}
   inline Capture* get_captureManager(){return captureManager;}
   inline Obstacle* get_obstacleManager(){return obstacleManager;}
-  inline Obstacle_IO* get_ioManager(){return ioManager;}
+  inline Interfacing* get_ioManager(){return ioManager;}
   inline Player_online* get_onlineManager(){return onlineManager;}
   inline Player_cloud* get_playerManager(){return playerManager;}
 
@@ -74,11 +77,12 @@ private:
   Engine_node* node_engine;
   Operation_node* node_ope;
 
+  Network* netManager;
   CT_ICP* cticpManager;
   Capture* captureManager;
   config_module* configManager;
   Obstacle* obstacleManager;
-  Obstacle_IO* ioManager;
+  Interfacing* ioManager;
   Player_cloud* playerManager;
   Player_online* onlineManager;
 };

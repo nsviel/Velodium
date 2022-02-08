@@ -5,7 +5,7 @@
 #include "Protocol/SSH.h"
 
 #include "../../Specific/fct_maths.h"
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 
 
 //Constructor / Destructor
@@ -20,33 +20,53 @@ Network::Network(){
   this->path_target = "/home/aither/Desktop/";
   this->name_file = "frame_0001.ply";
 
+  this->is_connected = false;
+
   //---------------------------
 }
 Network::~Network(){}
 
-void Network::send_file(){
+//Main function
+void Network::start_connection(){
+  //---------------------------
+
+  sshManager->ssh_startConnexion();
+  this->is_connected = *sshManager->get_ssh_connected();
+
+  //---------------------------
+}
+void Network::stop_connection(){
+  //---------------------------
+
+  sshManager->ssh_stopConnexion();
+  this->is_connected = *sshManager->get_ssh_connected();
+
+  //---------------------------
+}
+void Network::send_file(string path_source, string path_target){
   //---------------------------
 
   //Check if ssh is established
-  bool* ssh_connected = sshManager->get_ssh_connected();
-  if(*ssh_connected == false){
+  bool ssh_connected = *sshManager->get_ssh_connected();
+  if(ssh_connected == false){
     cout<<"SSH not connected."<<endl;
     return;
   }
 
+  //Send file
   ssh_session* ssh = sshManager->get_ssh_session();
-  string path_trg = path_target + name_file;
-  sftpManager->sftp_sendFile(*ssh, path_source, path_trg);
+  sftpManager->sftp_sendFile(*ssh, path_source, path_target);
 
   //---------------------------
 }
 
+//Subfunctions
 void Network::select_sourcePath(){
   //---------------------------
 
   //Select file to send
-  Operation opeManager;
-  path_source = opeManager.get_filePath(path_source);
+  Pather pathManager;
+  path_source = pathManager.get_filePath(path_source);
 
   //Supress unwanted line break
   if (path_source.find('\n')){
@@ -67,8 +87,8 @@ void Network::select_targetPath(){
   //---------------------------
 
   //Select file to send
-  Operation opeManager;
-  opeManager.selectDirectory(path_target);
+  Pather pathManager;
+  pathManager.selectDirectory(path_target);
 
   //Supress unwanted line break
   if (path_source.find('\n')){

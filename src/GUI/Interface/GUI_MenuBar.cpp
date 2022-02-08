@@ -7,7 +7,7 @@
 #include "../Control/GUI_Option.h"
 #include "../GUI_node.h"
 
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 #include "../../Module/Module_GUI.h"
 #include "../../Module/Player/GUI/GUI_Player.h"
 
@@ -50,7 +50,7 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   this->heatmapManager = new Heatmap();
   this->texManager = new Textures();
   this->extractionManager = new Extraction();
-  this->opeManager = new Operation();
+  this->pathManager = new Pather();
 
   //---------------------------
 }
@@ -112,7 +112,7 @@ void GUI_menuBar::MenuBar_menus(){
     ImGui::EndMenu();
   }
   if (ImGui::MenuItem(ICON_FA_FILE " Open")){
-    opeManager->loading();
+    pathManager->loading();
   }
   if (ImGui::BeginMenu(ICON_FA_COG " Option")){
     optionManager->design_Options();
@@ -252,37 +252,37 @@ void GUI_menuBar::MenuBar_fastScene(){
 
   //Two Buddha point cloud to register
   if(ImGui::Button("Buddha", ImVec2(100,0))){
-    opeManager->loading_fastScene(0);
+    pathManager->loading_fastScene(0);
   }
   //Two Torus point cloud to register
   if(ImGui::Button("Torus", ImVec2(100,0))){
-    opeManager->loading_fastScene(1);
+    pathManager->loading_fastScene(1);
   }
   if(ImGui::Button("PCAP file", ImVec2(100,0))){
-    opeManager->loading_fastScene(2);
+    pathManager->loading_fastScene(2);
   }
   if(ImGui::Button("Frames move", ImVec2(100,0))){
-    opeManager->loading_fastScene(3);
+    pathManager->loading_fastScene(3);
     configManager->choose_configuration(0);
     //gui_leftPanelManager->update();
   }
   if(ImGui::Button("More frames", ImVec2(100,0))){
-    opeManager->loading_fastScene(4);
+    pathManager->loading_fastScene(4);
     configManager->choose_configuration(0);
     //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Other frames", ImVec2(100,0))){
-    opeManager->loading_fastScene(5);
+    pathManager->loading_fastScene(5);
     configManager->choose_configuration(0);
     //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Tunel", ImVec2(100,0))){
-    opeManager->loading_fastScene(6);
+    pathManager->loading_fastScene(6);
     configManager->choose_configuration(0);
     //gui_leftPanelManager->update();
   }
   if(ImGui::Button("IA module", ImVec2(100,0))){
-    opeManager->loading_fastScene(7);
+    pathManager->loading_fastScene(7);
     configManager->choose_configuration(1);
     //gui_leftPanelManager->update();
   }

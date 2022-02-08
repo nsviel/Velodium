@@ -2,8 +2,6 @@
 
 #include "../Module_node.h"
 #include "../SLAM/CT_ICP.h"
-#include "../Obstacle/Obstacle.h"
-#include "../Obstacle/Obstacle_IO.h"
 
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -20,7 +18,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene.h"
 
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
@@ -84,7 +82,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
       //Don't forget to operate the first subset
       if(ID_subset == 1){
         Subset* subset_0 = sceneManager->get_subset(cloud, 0);
-        filterManager->filter_subset_cylinder(subset);
+        filterManager->filter_subset_cylinder(subset_0);
       }
 
       //Make cleaning on the current subset

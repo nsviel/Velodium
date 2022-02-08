@@ -1,10 +1,10 @@
-#include "Obstacle_IO.h"
+#include "Interfacing.h"
 
 #include "../Module_node.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Engine_node.h"
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 #include "../../Load/Saver.h"
 
 #include "../../Specific/fct_watcher.h"
@@ -16,23 +16,26 @@
 
 
 //Constructor / Destructor
-Obstacle_IO::Obstacle_IO(Module_node* node_module){
+Interfacing::Interfacing(Module_node* node_module){
   //---------------------------
 
   Engine_node* node_engine = node_module->get_node_engine();
 
+  this->renderManager = node_engine->get_renderManager();
   this->sceneManager = new Scene();
   this->saverManager = new Saver();
-  this->opeManager = new Operation();
-  this->renderManager = node_engine->get_renderManager();
+  this->pathManager = new Pather();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_frame = path_dir + "frame/";
   this->path_predi = path_dir + "prediction/";
   this->path_grThr = path_dir + "groundtruth/";
-  this->screenshot_path = "../media/data/image/";
-  this->savedFrame_ID = 0;
-  this->savedFrame_max = 20;
+  this->path_image = path_dir + "image/";
+
+  this->save_frame_ID = 0;
+  this->save_frame_max = 20;
+  this->save_image_ID = 0;
+  this->save_image_max = 20;
 
   this->thread_predi_ON = false;
   this->thread_grThr_ON = false;
@@ -43,10 +46,10 @@ Obstacle_IO::Obstacle_IO(Module_node* node_module){
 
   //---------------------------
 }
-Obstacle_IO::~Obstacle_IO(){}
+Interfacing::~Interfacing(){}
 
-//Directory watchers
-void Obstacle_IO::start_dirWatcher(){
+//Input: Prediction stuff
+void Interfacing::start_dirWatcher(){
   //---------------------------
 
   this->thread_predi_ON = true;
@@ -54,12 +57,12 @@ void Obstacle_IO::start_dirWatcher(){
 
   thread_predi = std::thread([&](){
     while(thread_predi_ON){
-      watcher_created_file(path_predi, path_file_predi, flag_newPred);
+      watcher_created_file(path_predi, path_predi_file, flag_newPred);
     }
   });
   thread_grThr = std::thread([&](){
     while(thread_grThr_ON){
-      watcher_created_file(path_grThr, path_file_grThr, flag_newGrTh);
+      watcher_created_file(path_grThr, path_grThr_file, flag_newGrTh);
     }
   });
 
@@ -68,7 +71,7 @@ void Obstacle_IO::start_dirWatcher(){
 
   //---------------------------
 }
-void Obstacle_IO::stop_dirWatcher(){
+void Interfacing::stop_dirWatcher(){
   //---------------------------
 
   this->thread_predi_ON = false;
@@ -79,84 +82,29 @@ void Obstacle_IO::stop_dirWatcher(){
 
   //---------------------------
 }
-
-//Save functions
-void Obstacle_IO::save_image(Subset* subset){
+bool Interfacing::check_prediction(Cloud* cloud){
   //---------------------------
 
-  string path = screenshot_path + "image";
+  if(thread_predi_ON && cloud != nullptr){
+    //Load json files - predictions
+    if(flag_newPred){
+      this->parse_obstacle_json(cloud, path_predi_file, "pr");
+      flag_newPred = false;
+      return true;
+    }
 
-  renderManager->render_screenshot(path);
-
-  //---------------------------
-}
-void Obstacle_IO::save_image_path(){
-  //---------------------------
-
-  string path;
-  Operation opeManager;
-  opeManager.selectDirectory(path);
-
-  this->screenshot_path = path + "/";
-
-  //---------------------------
-}
-
-//Other functions
-bool Obstacle_IO::check_obstacleData(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
-  //---------------------------
-
-  //Load json files - predictions
-  if(flag_newPred){
-    this->parse_obstacle_json(cloud, path_file_predi, "pr");
-    flag_newPred = false;
-    return true;
-  }
-
-  //Load json files - GT
-  if(flag_newGrTh){
-    this->parse_obstacle_json(cloud, path_file_grThr, "gt");
-    flag_newGrTh = false;
-    return true;
+    //Load json files - GT
+    if(flag_newGrTh){
+      this->parse_obstacle_json(cloud, path_grThr_file, "gt");
+      flag_newGrTh = false;
+      return true;
+    }
   }
 
   //---------------------------
   return false;
 }
-void Obstacle_IO::save_nFrame(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
-  //---------------------------
-
-  string filePath = path_frame + subset->name + ".ply";
-  saverManager->save_subset(subset, "ply", path_frame);
-
-  if(save_path_vec.size() < savedFrame_max){
-    save_path_vec.push_back(filePath);
-    savedFrame_ID++;
-  }else{
-    std::remove (save_path_vec[savedFrame_ID].c_str());
-    save_path_vec[savedFrame_ID] = filePath;
-    savedFrame_ID++;
-  }
-
-  if(savedFrame_ID >= savedFrame_max){
-    savedFrame_ID = 0;
-  }
-
-  //---------------------------
-}
-void Obstacle_IO::clean_directories(){
-  //---------------------------
-
-  clean_directory_files(path_frame.c_str());
-  clean_directory_files(path_predi.c_str());
-  clean_directory_files(path_grThr.c_str());
-
-  //---------------------------
-}
-void Obstacle_IO::parse_obstacle_json(Cloud* cloud, string path, string data){
+void Interfacing::parse_obstacle_json(Cloud* cloud, string path, string data){
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -220,7 +168,76 @@ void Obstacle_IO::parse_obstacle_json(Cloud* cloud, string path, string data){
 
   //---------------------------
 }
-void Obstacle_IO::select_dir_path(){
+
+//Output: frame & Image saving
+void Interfacing::save_image(){
+  //---------------------------
+
+  //Save image
+  string path = path_image + "image_" + to_string(save_image_ID);
+  renderManager->render_screenshot(path);
+
+  //Check number of frame and delete last one
+  if(save_image_vec.size() < save_image_max){
+    save_image_vec.push_back(path);
+    save_image_ID++;
+  }else{
+    std::remove (save_image_vec[save_image_ID].c_str());
+    save_image_vec[save_image_ID] = path;
+    save_image_ID++;
+  }
+  if(save_image_ID >= save_image_max){
+    save_image_ID = 0;
+  }
+
+  //---------------------------
+}
+void Interfacing::save_image_path(){
+  //---------------------------
+
+  string path;
+  Pather pathManager;
+  pathManager.selectDirectory(path);
+
+  this->path_image = path + "/";
+
+  //---------------------------
+}
+void Interfacing::save_frame(Cloud* cloud){
+  Subset* subset = sceneManager->get_subset(cloud, cloud->nb_subset-1);
+  //---------------------------
+
+  //Save frame
+  string path = path_frame + subset->name + ".ply";
+  saverManager->save_subset(subset, "ply", path_frame);
+
+  //Check number of frame and delete last one
+  if(save_frame_vec.size() < save_frame_max){
+    save_frame_vec.push_back(path);
+    save_frame_ID++;
+  }else{
+    std::remove (save_frame_vec[save_frame_ID].c_str());
+    save_frame_vec[save_frame_ID] = path;
+    save_frame_ID++;
+  }
+  if(save_frame_ID >= save_frame_max){
+    save_frame_ID = 0;
+  }
+
+  //---------------------------
+}
+
+//Subfunctions
+void Interfacing::clean_directories(){
+  //---------------------------
+
+  clean_directory_files(path_frame.c_str());
+  clean_directory_files(path_predi.c_str());
+  clean_directory_files(path_grThr.c_str());
+
+  //---------------------------
+}
+void Interfacing::select_dir_path(){
   //---------------------------
 
   //Get absolute executable location

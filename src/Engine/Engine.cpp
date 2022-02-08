@@ -26,7 +26,7 @@ Engine::Engine(Engine_node* engine){
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
-  this->node_ope = new Operation_node();
+  this->node_ope = new Operation_node(node_engine);
   this->node_module = new Module_node(node_engine, node_ope);
   this->node_gui = new GUI_node(node_engine, node_ope, node_module, node_config);
 

@@ -1,19 +1,20 @@
 #ifndef GUI_NETWORK_H
 #define GUI_NETWORK_H
 
+#include "../../../common.h"
+
+class GUI_node;
 class Network;
 class MQTT;
 class SFTP;
 class SSH;
-
-#include "../../../common.h"
 
 
 class GUI_Network
 {
 public:
   //Constructor / Destructor
-  GUI_Network();
+  GUI_Network(GUI_node* node_gui);
   ~GUI_Network();
 
 public:

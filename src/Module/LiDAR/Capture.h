@@ -29,6 +29,8 @@ public:
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
 
+  inline bool get_is_capturing(){return is_capturing;}
+
 private:
   Scene* sceneManager;
   Loader* loaderManager;
@@ -39,6 +41,7 @@ private:
   Velodyne* veloManager;
 
   bool with_justOneFrame;
+  bool is_capturing;
   int ID_capture;
 };
 

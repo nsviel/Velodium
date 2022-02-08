@@ -10,7 +10,7 @@
 
 #include "../GUI_node.h"
 
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 
 #include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
@@ -45,11 +45,11 @@ GUI_windows::GUI_windows(GUI_node* node_gui){
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration_node* node_config = node_gui->get_node_config();
 
-  this->selectionManager = new Selection(node_engine->get_dimManager(), node_engine->get_cameraManager());
+  this->selectionManager = node_ope->get_selectionManager();
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
 
-  this->opeManager = new Operation();
+  this->pathManager = new Pather();
   this->transformManager = new Transforms();
   this->attribManager = new Attribut();
   this->fitManager = new Fitting();

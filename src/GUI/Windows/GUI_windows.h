@@ -22,7 +22,7 @@ class Scene;
 class Attribut;
 class Transforms;
 class Radiometry;
-class Operation;
+class Pather;
 class Extraction;
 class Glyphs;
 class Selection;
@@ -68,7 +68,7 @@ private:
   Glyphs* glyphManager;
   Selection* selectionManager;
   Fitting* fitManager;
-  Operation* opeManager;
+  Pather* pathManager;
   Extraction* extractionManager;
   Transforms* transformManager;
 

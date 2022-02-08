@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Operation;
+class Pather;
 class Loader;
 
 
@@ -31,7 +31,7 @@ public:
   void saving_configuration();
 
 private:
-  Operation* opeManager;
+  Pather* pathManager;
   Loader* loaderManager;
 
   string file_path;

@@ -3,7 +3,7 @@
 #include "../GUI_node.h"
 #include "../Windows/Window_table.h"
 
-#include "../../Load/Operation.h"
+#include "../../Load/Pather.h"
 
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Scene.h"
@@ -39,12 +39,12 @@ GUI_control::GUI_control(GUI_node* node){
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->selectionManager = new Selection(dimManager, cameraManager);
+  this->selectionManager = node_ope->get_selectionManager();
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
   this->extractionManager = new Extraction();
   this->attribManager = new Attribut();
-  this->opeManager = new Operation();
+  this->pathManager = new Pather();
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");
@@ -227,7 +227,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //N key - Save all & remove all & load new
     if(ImGui::IsKeyPressed(78) && !io.WantCaptureMouse){
-      //opeManager->saving_allCloud();
+      //pathManager->saving_allCloud();
       //sceneManager->remove_cloud_all();
     }
 
@@ -352,11 +352,11 @@ void GUI_control::control_keyboard_ctrlAction(){
   if(ImGui::IsKeyPressed(341)){
     //ctrl+s - Save as
     if(ImGui::IsKeyPressed(83)){
-      opeManager->saving();
+      pathManager->saving();
     }
     //ctrl+w - Open
     if(ImGui::IsKeyPressed(90)){
-      opeManager->loading();
+      pathManager->loading();
     }
   }
 

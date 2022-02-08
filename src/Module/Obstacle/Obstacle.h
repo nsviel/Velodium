@@ -6,10 +6,11 @@
 class Scene;
 class Glyphs;
 class Saver;
-class Obstacle_IO;
+class Interfacing;
 class OOBB;
 class Transforms;
 class Module_node;
+class Capture;
 
 
 class Obstacle
@@ -25,14 +26,16 @@ public:
   void build_obstacleGlyph_gt(Cloud* cloud);
   void build_obstacleGlyph_pr(Cloud* cloud);
 
-  inline Obstacle_IO* get_ioManager(){return ioManager;}
-
 private:
   Scene* sceneManager;
   OOBB* oobbManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
-  Obstacle_IO* ioManager;
+  Interfacing* ioManager;
+  Capture* captureManager;
+
+  bool save_frame;
+  bool save_image;
 };
 
 #endif

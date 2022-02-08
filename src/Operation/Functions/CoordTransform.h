@@ -1,16 +1,18 @@
 #ifndef CoordTransform_H
 #define CoordTransform_H
 
+#include "../../common.h"
+
 class Camera;
 class Dimension;
+class Operation_node;
 
-#include "../../common.h"
 
 class CoordTransform
 {
 public:
   //Constructor / Destructor
-  CoordTransform(Camera* controls, Dimension* dim);
+  CoordTransform(Operation_node* node);
   ~CoordTransform();
 
 public:

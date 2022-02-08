@@ -1,8 +1,9 @@
 #include "Obstacle.h"
 
-#include "Obstacle_IO.h"
+#include "Interfacing.h"
 
 #include "../Module_node.h"
+#include "../LiDAR/Capture.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Engine/Glyphs.h"
@@ -15,10 +16,14 @@ Obstacle::Obstacle(Module_node* node_module){
   //---------------------------
 
   this->ioManager = node_module->get_ioManager();
+  this->captureManager = node_module->get_captureManager();
   this->sceneManager = new Scene();
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
   this->glyphManager = new Glyphs();
+
+  bool save_frame = true;
+  bool save_image = true;
 
   //---------------------------
 }
@@ -28,14 +33,21 @@ void Obstacle::runtime_obstacle(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  bool new_obstacle = ioManager->check_obstacleData();
-  if(new_obstacle){
-    this->build_obstacleGlyph_gt(cloud);
-  }
+  if(captureManager->get_is_capturing() && cloud != nullptr){
+    bool new_obstacle = ioManager->check_prediction(cloud);
+    if(new_obstacle){
+      this->build_obstacleGlyph_gt(cloud);
+    }
 
-  //With just keep n frames
-  if(false){
-    ioManager->save_nFrame(cloud);
+    //Save subset frame
+    if(save_frame){
+      ioManager->save_frame(cloud);
+    }
+
+    //Save rendered image
+    if(save_image){
+      ioManager->save_image();
+    }
   }
 
   //---------------------------

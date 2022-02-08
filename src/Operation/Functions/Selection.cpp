@@ -2,9 +2,11 @@
 
 #include "CoordTransform.h"
 
+#include "../Operation_node.h"
 #include "../Transformation/Transforms.h"
 #include "../Transformation/Attribut.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene.h"
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/OpenGL/Camera.h"
@@ -17,12 +19,14 @@
 
 
 //Constructor / Destructor
-Selection::Selection(Dimension* dim, Camera* control){
-  this->dimManager = dim;
-  this->controlsManager = control;
+Selection::Selection(Operation_node* node_ope){
   //---------------------------
 
-  this->coordTransManager = new CoordTransform(controlsManager, dimManager);
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->dimManager = node_engine->get_dimManager();
+  this->cameraManager = node_engine->get_cameraManager();
+  this->coordManager = node_ope->get_coordManager();
   this->transformManager = new Transforms();
   this->attribManager = new Attribut();
   this->sceneManager = new Scene();
@@ -327,8 +331,8 @@ vec3 Selection::mouse_clickedPoint(){
   glReadPixels(mouse_pos.x, mouse_pos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &mouse_pos.z);
   if((mouse_pos.z > 0) && (mouse_pos.z < 1)){
     glm::tvec4<unsigned int> viewport(gui_X, 0, gl_X, gl_Y);
-    mat4 viewMat = controlsManager->get_viewMat();
-    mat4 projMat = controlsManager->get_projMat();
+    mat4 viewMat = cameraManager->get_viewMat();
+    mat4 projMat = cameraManager->get_projMat();
     point = glm::unProject(mouse_pos, viewMat, projMat, viewport);
   }
 
@@ -386,7 +390,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
 
         //Make selection
         for(int k=0; k<XYZ.size(); k++){
-          vec2 projPT = coordTransManager->WorldToScreen(XYZ[k]);
+          vec2 projPT = coordManager->WorldToScreen(XYZ[k]);
 
           if(projPT.x >= point1.x && projPT.y >= point1.y && projPT.x <= point2.x && projPT.y <= point2.y){
             RGB[k] = vec4(1.0f,1.0f,1.0f,1.0f);
@@ -412,10 +416,10 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   vec2 point4 = vec2(point2.x, point1.y);
   //---------------------------
 
-  vec3 pt1 = coordTransManager->ScreenToWorld(point1);
-  vec3 pt2 = coordTransManager->ScreenToWorld(point2);
-  vec3 pt3 = coordTransManager->ScreenToWorld(point3);
-  vec3 pt4 = coordTransManager->ScreenToWorld(point4);
+  vec3 pt1 = coordManager->ScreenToWorld(point1);
+  vec3 pt2 = coordManager->ScreenToWorld(point2);
+  vec3 pt3 = coordManager->ScreenToWorld(point3);
+  vec3 pt4 = coordManager->ScreenToWorld(point4);
 
   //New frame location
   vector<vec3> xyz;
@@ -437,7 +441,7 @@ void Selection::mouse_cloudPicking(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  vec3 point = coordTransManager->CursorToGround();
+  vec3 point = coordManager->CursorToGround();
   transformManager->make_positionning_XY(cloud, point);
 
   //---------------------------
@@ -453,16 +457,16 @@ vec3 Selection::mouse_cameraPt(){
   float z = 1.0f;
   vec3 ray_nds = vec3(x, y, z);
   vec4 ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0, 1.0);
-  mat4 projMat = controlsManager->get_projMat();
+  mat4 projMat = cameraManager->get_projMat();
   vec4 ray_eye = inverse(projMat) * ray_clip;
   ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
-  mat4 viewMat = controlsManager->get_viewMat();
+  mat4 viewMat = cameraManager->get_viewMat();
   vec4 ray_wor = inverse(viewMat) * ray_eye;
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 
-  vec3 cam_pos = controlsManager->get_camPos();
-  vec3 cam_forw = controlsManager->get_camForward();
+  vec3 cam_pos = cameraManager->get_camPos();
+  vec3 cam_forw = cameraManager->get_camForward();
   vec3 frustum = cam_pos + vec3(cam_forw.x*0.5,cam_forw.y*0.5,cam_forw.z*0.5);
 
   vec3 D = ray_dir;

@@ -22,7 +22,7 @@ public:
     this->gui_lidarManager = new GUI_Lidar(node_gui);
     this->gui_playerManager = new GUI_Player(node_gui);
     this->gui_slamManager = new GUI_Slam(node_gui);
-    this->gui_senderManager = new GUI_Network();
+    this->gui_netManager = new GUI_Network(node_gui);
     this->gui_obstacleManager = new GUI_Obstacle(node_gui);
 
     this->module_velodyne = true;
@@ -43,7 +43,7 @@ public:
       // Network stuff management
       if(module_velodyne){
         if(ImGui::BeginTabItem("Network")){
-          gui_senderManager->design_Network();
+          gui_netManager->design_Network();
           ImGui::EndTabItem();
         }
       }
@@ -100,7 +100,7 @@ private:
   GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;
-  GUI_Network* gui_senderManager;
+  GUI_Network* gui_netManager;
   GUI_Obstacle* gui_obstacleManager;
 
   bool module_velodyne;
