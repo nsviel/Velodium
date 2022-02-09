@@ -27,7 +27,7 @@
 #include "../../Operation/Optimization/Fitting.h"
 #include "../../Operation/Transformation/Attribut.h"
 
-#include "../../Specific/fct_display.h"
+#include "../../Specific/fct_terminal.h"
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
 

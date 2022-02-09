@@ -15,6 +15,7 @@ public:
   ~SLAM_assessment();
 
 public:
+  bool compute_assessment(Cloud* cloud, int ID);
   bool compute_assessment_abs(Frame* frame, Frame* frame_m1);
   bool compute_assessment_rlt(Cloud* cloud, int i);
 
@@ -25,6 +26,7 @@ public:
   inline float* get_thres_pose_trans(){return &thres_pose_trans;}
   inline float* get_thres_pose_rotat(){return &thres_pose_rotat;}
   inline float* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
+  inline int* get_nb_residual_min(){return &nb_residual_min;}
 
 private:
   Scene* sceneManager;
@@ -38,6 +40,8 @@ private:
 
   float rlt_numberMean;
   float rlt_numberPreviousPose;
+
+  int nb_residual_min;
 };
 
 

@@ -24,6 +24,7 @@ public:
 
 public:
   void compute_onlineOpe(Cloud* cloud, int ID_subset);
+  void compute_statistics(Subset* subset);
   void update_configuration();
 
   //Camera functions
@@ -66,6 +67,7 @@ private:
   vec2 camera_moved_trans;
   float camera_moved_rotat;
   float camera_distPos;
+  float time_image;
   int nb_subset_max;
   int visibility_range;
 

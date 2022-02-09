@@ -114,3 +114,28 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath, string fi
   console.AddLog("sucess", log);
   return true;
 }
+bool Saver::save_subset_silent(Subset* subset, string format, string dirPath){
+  bool sucess = false;
+  //---------------------------
+
+  //If no format, add default ply
+  if(format.at(0) == '/') format = "ply";
+
+  //Check file format
+  if     (format == "pts"){
+    sucess = ptsManager->Exporter(dirPath, subset);
+  }
+  else if(format == "ply"){
+    string ply_format = "binary";
+    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
+  }
+
+  //Say if save is successfull
+  if(!sucess){
+    console.AddLog("error", "Failing saving point cloud");
+    return false;
+  }
+
+  //---------------------------
+  return true;
+}

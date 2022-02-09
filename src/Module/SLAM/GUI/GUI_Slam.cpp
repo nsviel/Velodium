@@ -163,7 +163,7 @@ void GUI_Slam::parameters_optimization(){
     }
 
     //Minimal requiered number of residual
-    int* nb_residual_min = gnManager->get_nb_residual_min();
+    int* nb_residual_min = assessManager->get_nb_residual_min();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Minimal number residual", nb_residual_min, 10, 500);
     if(ImGui::IsItemHovered()){

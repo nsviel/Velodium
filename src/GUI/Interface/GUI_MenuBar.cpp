@@ -286,6 +286,12 @@ void GUI_menuBar::MenuBar_fastScene(){
     configManager->choose_configuration(1);
     //gui_leftPanelManager->update();
   }
+  if(ImGui::Button("Velodyne statique", ImVec2(100,0))){
+    pathManager->loading_fastScene(8);
+  }
+  if(ImGui::Button("Velodyne move", ImVec2(100,0))){
+    pathManager->loading_fastScene(9);
+  }
 
   //---------------------------
 }

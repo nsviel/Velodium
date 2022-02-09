@@ -228,6 +228,16 @@ void Pather::loading_fastScene(int mode){
       this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture_test/frame/");
       break;
     }
+    case 8:{//Frame for prediction
+      sceneManager->remove_cloud_all();
+      this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture/test_statique");
+      break;
+    }
+    case 9:{//Frame for prediction
+      sceneManager->remove_cloud_all();
+      this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture/test_movement");
+      break;
+    }
   }
 
   //---------------------------

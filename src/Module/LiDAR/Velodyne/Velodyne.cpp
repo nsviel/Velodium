@@ -31,6 +31,7 @@ Velodyne::Velodyne(){
 
   this->ID_subset = 0;
   this->rot_freq = 0;
+  this->rot_rpm = 0;
   this->fov_min = 0;
   this->fov_max = 359;
 
@@ -93,16 +94,6 @@ void Velodyne::lidar_create_subset(udpPacket* udp_packet){
 void Velodyne::lidar_start_motor(){
   //---------------------------
 
-  this->lidar_check_connection();
-  if(is_connected == false){
-    return;
-  }
-
-  if(is_first_run == true){
-    this->lidar_get_status();
-    is_first_run = false;
-  }
-
   //If LiDAR not running, start it
   if(rot_freq <= 0){
     int err = system("curl -s --connect-timeout 1 --data rpm=600 http://192.168.1.201/cgi/setting");
@@ -142,44 +133,52 @@ void Velodyne::lidar_stop_motor(){
 }
 
 //LiDAR status
-void Velodyne::lidar_get_status(){
-  //---------------------------
+void Velodyne::lidar_check_status(){
+  if(is_first_run == true){
+    //---------------------------
 
-  //Download a snapshop statut
-  int err = system("curl -s --connect-timeout 1 http://192.168.1.201/cgi/status.json &> snapshot.hdl");
+    this->lidar_check_connection();
 
-  std::ifstream ifs("snapshot.hdl");
-  Json::Reader reader;
-  Json::Value root;
+    if(is_connected){
+      //Download a snapshop statut
+      int err = system("curl -s --connect-timeout 1 http://192.168.1.201/cgi/status.json > snapshot.hdl");
 
-  reader.parse(ifs, root);
+      std::ifstream ifs("snapshot.hdl");
+      Json::Reader reader;
+      Json::Value root;
 
-  const Json::Value& motor = root["motor"];
-  const Json::Value& motor_rpm = motor["rpm"];
-  const Json::Value& motor_state = motor["state"];
+      reader.parse(ifs, root);
 
-  const Json::Value& laser = root["laser"];
-  const Json::Value& laser_state = laser["state"];
+      const Json::Value& motor = root["motor"];
+      const Json::Value& motor_rpm = motor["rpm"];
+      const Json::Value& motor_state = motor["state"];
 
-  rot_rpm = motor_rpm.asUInt();
-  rot_freq = rot_rpm / 60;
+      const Json::Value& laser = root["laser"];
+      const Json::Value& laser_state = laser["state"];
 
-  string log_sta = "Motor state: " + motor_state.asString();
-  string log_rpm = "Motor RPM: " + to_string(motor_rpm.asUInt()) + " rpm";
-  string log_las = "Laser state: " + laser_state.asString();
+      rot_rpm = motor_rpm.asUInt();
+      rot_freq = rot_rpm / 60;
 
-  console.AddLog("#", log_sta);
-  console.AddLog("#", log_rpm);
-  console.AddLog("#", log_las);
+      string log_sta = "Motor state: " + motor_state.asString();
+      string log_rpm = "Motor RPM: " + to_string(motor_rpm.asUInt()) + " rpm";
+      string log_las = "Laser state: " + laser_state.asString();
 
-  if(rot_freq <= 0){
-    is_rotating = false;
-  }else{
-    is_rotating = true;
+      console.AddLog("#", log_sta);
+      console.AddLog("#", log_rpm);
+      console.AddLog("#", log_las);
+
+      if(rot_freq <= 0){
+        is_rotating = false;
+      }else{
+        is_rotating = true;
+      }
+
+      is_first_run = false;
+      sleep(1);
+    }
+
+    //---------------------------
   }
-
-  //---------------------------
-  sleep(1);
 }
 void Velodyne::lidar_check_connection(){
   //---------------------------

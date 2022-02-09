@@ -248,17 +248,15 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 }
 void CT_ICP::compute_assessment(Cloud* cloud, int ID){
-  Frame* frame = sceneManager->get_frame_byID(cloud, ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
-  bool sucess = true;
   //---------------------------
 
-  sucess = assessManager->compute_assessment_abs(frame, frame_m1);
-  sucess = assessManager->compute_assessment_rlt(cloud, ID);
+  bool sucess = assessManager->compute_assessment(cloud, ID);
 
   //If unsucess, reinitialize transformations
   if(sucess == false){
-    this->reset();
+    Frame* frame = sceneManager->get_frame_byID(cloud, ID);
+    frame->reset();
+    this->reset_slam();
   }
 
   //---------------------------
@@ -311,7 +309,7 @@ void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, S
   vec3 trans_rlt;
   if(frame->ID == 0){
     trans_rlt = vec3(0, 0, 0);
-  }else{
+  }else if(frame_m1 != nullptr){
     trans_rlt.x = frame->trans_b(0) - frame_m1->trans_b(0);
     trans_rlt.y = frame->trans_b(1) - frame_m1->trans_b(1);
     trans_rlt.z = frame->trans_b(2) - frame_m1->trans_b(2);
@@ -324,7 +322,7 @@ void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, S
   if(frame->ID == 0){
     rotat_rlt = vec3(0, 0, 0);
   }
-  else{
+  else if(frame_m1 != nullptr){
     vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
     vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
 
@@ -342,18 +340,14 @@ void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, S
   if(verbose){
     cout<<"[sucess] SLAM - "<<subset->name.c_str();
     cout<<" "<<to_string(frame->ID)<<"/"<< ID_max;
-    cout<< " [" <<duration<< " ms]"<<endl;
+    cout<< " [" <<frame->time_slam<< " ms]"<<endl;
   }
-
-  //Consol result
-  string result = "SLAM " + subset->name + " - " + to_string(frame->ID) + " [" + to_string((int)duration) + " ms]";
-  console.AddLog("#", result);
 
   //---------------------------
 }
 
 //Support functions
-void CT_ICP::reset(){
+void CT_ICP::reset_slam(){
   //---------------------------
 
   mapManager->reset();

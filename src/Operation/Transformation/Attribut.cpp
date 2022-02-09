@@ -4,7 +4,7 @@
 
 #include "../../Engine/Scene.h"
 #include "../../Specific/fct_maths.h"
-#include "../../Specific/fct_display.h"
+#include "../../Specific/fct_terminal.h"
 
 #include "NormalHough/Normals.h"
 

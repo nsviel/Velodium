@@ -36,19 +36,19 @@ public:
     //---------------------------
 
     this->cticpManager = new CT_ICP();
-    this->captureManager = new Capture(this);
+    this->netManager = new Network();
     this->ioManager = new Interfacing(this);
     this->obstacleManager = new Obstacle(this);
-    this->netManager = new Network();
     this->onlineManager = new Player_online(this);
     this->playerManager = new Player_cloud(onlineManager);
+    this->captureManager = new Capture(this);
 
     //---------------------------
   }
   void reset(){
     //---------------------------
 
-    cticpManager->reset();
+    cticpManager->reset_slam();
 
     //---------------------------
   }

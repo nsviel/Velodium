@@ -34,6 +34,11 @@ void Player_cloud::select_bySubsetID(Cloud* cloud, int ID_subset){
 
   bool range_ok = select_rangeLimit(cloud, ID_subset);
   if(range_ok){
+    //If we go from ID_0 to ID_1, compute also for ID_0
+    if(ID_subset == 1){
+      onlineManager->compute_onlineOpe(cloud, 0);
+    }
+    
     onlineManager->compute_onlineOpe(cloud, ID_subset);
   }
 

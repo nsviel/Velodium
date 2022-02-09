@@ -9,7 +9,7 @@
 #include "../../Load/Loader.h"
 #include "../../Load/Saver.h"
 
-#include "../../Specific/fct_display.h"
+#include "../../Specific/fct_terminal.h"
 #include "../../Specific/fct_system.h"
 
 
@@ -32,17 +32,20 @@ Capture::~Capture(){}
 
 //Main functions
 void Capture::start_new_capture(){
+  bool* is_rotating = veloManager->get_is_rotating();
+  bool* is_connected = veloManager->get_is_connected();
   //---------------------------
 
-  bool is_rotating = *veloManager->get_is_rotating();
-  bool is_connected = *veloManager->get_is_connected();
+  //Check current lidar status
+  veloManager->lidar_check_status();
 
   //If lidar hasn't start, start it
-  if(is_rotating == false){
+  if(*is_rotating == false){
     veloManager->lidar_start_motor();
   }
 
-  if(is_rotating && is_connected){
+  //If all OK start new capture
+  if(*is_rotating && *is_connected){
     veloManager->lidar_start_watcher();
 
     //Reset variables
@@ -54,12 +57,13 @@ void Capture::start_new_capture(){
     cloud_capture = loaderManager->get_createdcloud();
     cloud_capture->name = "Capture_" + to_string(ID_capture);
     ID_capture++;
+
+    console.AddLog("sucess", "Velodyne new capture");
   }else{
-    return;
+    console.AddLog("error", "Problem new capture");
   }
 
   //---------------------------
-  console.AddLog("#", "Velodyne new capture");
 }
 void Capture::stop_capture(){
   //---------------------------

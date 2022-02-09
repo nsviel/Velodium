@@ -1,6 +1,6 @@
 #include "SLAM_optim_ceres.h"
 
-#include "../../../Specific/fct_display.h"
+#include "../../../Specific/fct_terminal.h"
 #include "../../../Specific/fct_transtypage.h"
 #include "../../../Specific/fct_maths.h"
 #include "../../../Engine/Data/Database.h"

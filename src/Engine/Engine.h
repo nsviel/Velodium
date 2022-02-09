@@ -12,8 +12,10 @@ class Operation_node;
 class Engine_node;
 class GUI_node;
 
+//Namespaces
 using namespace std;
 using namespace glm;
+using namespace Eigen;
 
 
 class Engine

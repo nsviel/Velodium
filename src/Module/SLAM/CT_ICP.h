@@ -27,7 +27,7 @@ public:
   void compute_slam_online(Cloud* cloud, int ID);
 
   void set_nb_thread(int value);
-  void reset();
+  void reset_slam();
 
   inline SLAM_normal* get_SLAM_normal(){return normalManager;}
   inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}

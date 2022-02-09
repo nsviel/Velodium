@@ -46,7 +46,9 @@ Interfacing::Interfacing(Module_node* node_module){
 
   //---------------------------
 }
-Interfacing::~Interfacing(){}
+Interfacing::~Interfacing(){
+  this->clean_directories();
+}
 
 //Input: Prediction stuff
 void Interfacing::start_dirWatcher(){
@@ -210,7 +212,7 @@ void Interfacing::save_frame(Subset* subset){
   //---------------------------
 
   //Save frame
-  saverManager->save_subset(subset, "ply", path_frame);
+  saverManager->save_subset_silent(subset, "ply", path_frame);
 
   //Keep only a certain number of frame
   string path = path_frame + subset->name + ".ply";

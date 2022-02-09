@@ -33,7 +33,7 @@ public:
   void lidar_stop_motor();
 
   //LiDAR status
-  void lidar_get_status();
+  void lidar_check_status();
   void lidar_check_connection();
 
   //LiDAR parametrization

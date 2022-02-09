@@ -14,6 +14,8 @@ SLAM_assessment::SLAM_assessment(SLAM_optim_gn* gn){
 
   this->gnManager = gn;
 
+  this->nb_residual_min = 100;
+
   this->thres_ego_trans = 2.0f;
   this->thres_ego_rotat = 15.0f;
   this->thres_pose_trans = 3.0f;
@@ -28,6 +30,33 @@ SLAM_assessment::SLAM_assessment(SLAM_optim_gn* gn){
 SLAM_assessment::~SLAM_assessment(){}
 
 //Main function
+bool SLAM_assessment::compute_assessment(Cloud* cloud, int ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
+  //---------------------------
+
+  //Check absolute values
+  bool sucess_abs = compute_assessment_abs(frame, frame_m1);
+
+  //Check relative values
+  bool sucess_rlt = compute_assessment_rlt(cloud, ID);
+
+  //Check number of residuals
+  bool sucess_residual = true;;
+  if (frame->nb_residual < nb_residual_min) {
+    cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
+    cout << "[CT_ICP]Number_of_residuals : " << frame->nb_residual << endl;
+    sucess_residual = false;
+  }
+
+  if(!sucess_abs || !sucess_rlt || !sucess_residual){
+    string log = "SLAM computation failed";
+    console.AddLog("error", log);
+  }
+
+  //---------------------------
+  return true;
+}
 bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   bool sucess = true;
   //---------------------------

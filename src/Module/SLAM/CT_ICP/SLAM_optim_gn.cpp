@@ -1,6 +1,6 @@
 #include "SLAM_optim_gn.h"
 
-#include "../../../Specific/fct_display.h"
+#include "../../../Specific/fct_terminal.h"
 #include "../../../Specific/fct_transtypage.h"
 #include "../../../Specific/fct_maths.h"
 #include "../../../Engine/Data/Database.h"
@@ -15,7 +15,6 @@ SLAM_optim_gn::SLAM_optim_gn(SLAM_normal* normal){
 
   this->iter_max = 5;
   this->nb_thread = 8;
-  this->nb_residual_min = 100;
   this->PTP_distance_max = 0.5f;
   this->lambda_location = 0.001;
   this->lambda_displacement =  0.001;
@@ -51,56 +50,6 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
 }
 
 //Subfunctions
-void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
-  bool sucess = true;
-  //---------------------------
-
-  //CHeck for good optimization
-  if (nb_residual < nb_residual_min) {
-    sucess = false;
-  }
-
-  //Retrieve parameters
-  if(sucess){
-    Eigen::Matrix3d gn_rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
-    Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
-
-    Eigen::Matrix3d gn_rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
-    Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
-
-    //Update parameters
-    frame->rotat_b = gn_rotat_b * frame->rotat_b;
-    frame->trans_b = gn_trans_b + frame->trans_b;
-
-    frame->rotat_e = gn_rotat_e * frame->rotat_e;
-    frame->trans_e = gn_trans_e + frame->trans_e;
-  }
-
-  //---------------------------
-}
-void SLAM_optim_gn::update_keypoints(Frame* frame){
-  //---------------------------
-
-  //Update keypoints
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
-
-  #pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3d point_raw = frame->xyz_raw[i];
-    float ts_n = frame->ts_n[i];
-
-    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
-    Eigen::Matrix3d R = q.normalized().toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-    frame->xyz[i] = R * point_raw + t;
-  }
-
-  //---------------------------
-}
 void SLAM_optim_gn::compute_constraints(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b){
   //---------------------------
 
@@ -131,7 +80,7 @@ void SLAM_optim_gn::compute_constraints(Frame* frame, Frame* frame_m1, Eigen::Ma
   //---------------------------
 }
 void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b){
-  nb_residual = 0;
+  frame->nb_residual = 0;
   //---------------------------
 
   for(int i=0; i<frame->xyz.size(); i++){
@@ -156,7 +105,7 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
         residual += (point[j] - iNN[j]) * iNN_N[j];
       }
 
-      nb_residual++;
+      frame->nb_residual++;
 
       Eigen::Matrix3d rotat_b = frame->rotat_b;
       Eigen::Matrix3d rotat_e = frame->rotat_e;
@@ -191,19 +140,13 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
     }
   }
 
-  if (nb_residual < nb_residual_min) {
-    cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
-    cout << "[CT_ICP]Number_of_residuals : " << nb_residual << endl;
-    return;
-  }
-
-  // Normalize equation
+  // Normalize equation -> Utility ?
   #pragma omp parallel for num_threads(nb_thread)
   for (int i=0; i < 12; i++) {
-      for (int j=0; j < 12; j++) {
-          J(i, j) = J(i, j) / nb_residual;
-      }
-      b(i) = b(i) / nb_residual;
+    for (int j=0; j < 12; j++) {
+        J(i, j) = J(i, j) / frame->nb_residual;
+    }
+    b(i) = b(i) / frame->nb_residual;
   }
 
   //---------------------------
@@ -224,4 +167,48 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(float Rx, float Ry, float 
 
   //---------------------------
   return rotat;
+}
+
+//Update functions
+void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
+  //---------------------------
+
+  //Retrieve parameters
+  Eigen::Matrix3d gn_rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
+  Eigen::Vector3d gn_trans_b = Eigen::Vector3d(X(3), X(4), X(5));
+
+  Eigen::Matrix3d gn_rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
+  Eigen::Vector3d gn_trans_e = Eigen::Vector3d(X(9), X(10), X(11));
+
+  //Update parameters
+  frame->rotat_b = gn_rotat_b * frame->rotat_b;
+  frame->trans_b = gn_trans_b + frame->trans_b;
+
+  frame->rotat_e = gn_rotat_e * frame->rotat_e;
+  frame->trans_e = gn_trans_e + frame->trans_e;
+
+  //---------------------------
+}
+void SLAM_optim_gn::update_keypoints(Frame* frame){
+  //---------------------------
+
+  //Update keypoints
+  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+  Eigen::Vector3d trans_b = frame->trans_b;
+  Eigen::Vector3d trans_e = frame->trans_e;
+
+  #pragma omp parallel for num_threads(nb_thread)
+  for(int i=0; i<frame->xyz.size(); i++){
+    Eigen::Vector3d point_raw = frame->xyz_raw[i];
+    float ts_n = frame->ts_n[i];
+
+    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
+    Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+    frame->xyz[i] = R * point_raw + t;
+  }
+
+  //---------------------------
 }

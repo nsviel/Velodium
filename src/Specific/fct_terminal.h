@@ -1,5 +1,5 @@
-#ifndef DISPLAY_FUNCTIONS_H
-#define DISPLAY_FUNCTIONS_H
+#ifndef TERMINAL_FUNCTIONS_H
+#define TERMINAL_FUNCTIONS_H
 
 #include <iostream>
 #include <time.h>
