@@ -2,6 +2,7 @@
 
 #include "../Module_node.h"
 #include "../SLAM/CT_ICP.h"
+#include "../Obstacle/Interfacing.h"
 
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -40,6 +41,7 @@ Player_online::Player_online(Module_node* node_module){
   this->cticpManager = node_module->get_cticpManager();
   this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();
+  this->ioManager = node_module->get_ioManager();
 
   this->visibility_range = 15;
 
@@ -51,6 +53,7 @@ Player_online::~Player_online(){}
 //Main function
 void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  //This function is called each time a new subset arrives
   //---------------------------
 
   this->set_cloud_visibility(cloud, ID_subset);
@@ -93,7 +96,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
     if(with_heatmap){
       this->color_heatmap(cloud, ID_subset);
     }
-    if(with_unicolor){
+    else if(with_unicolor){
       //Don't forget to operate the first subset
       if(ID_subset == 1){
         Subset* subset_0 = sceneManager->get_subset(cloud, 0);
@@ -103,6 +106,18 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
       this->color_unicolor(subset, cloud->unicolor);
     }
 
+    //Save subset frame
+    if(with_save_frame){
+      Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+      ioManager->save_frame(subset);
+    }
+
+    //Save rendered image
+    if(with_save_image){
+      ioManager->save_image();
+    }
+
+    //VErifier si utile -> pourquoi ne pas faire ça avec les functions au dessus ?
     if(with_remove_lastSubset){
       this->remove_subset_last(cloud, ID_subset);
     }
@@ -128,6 +143,8 @@ void Player_online::update_configuration(){
   this->with_unicolor = !with_heatmap;
 
   this->with_online = true;
+  this->with_save_frame = true;
+  this->with_save_image = true;
   this->with_slam = configManager->parse_json_b("online", "with_slam");
   this->with_cylinder_cleaning = configManager->parse_json_b("online", "with_cylinder_cleaning");
   this->with_remove_lastSubset = configManager->parse_json_b("online", "with_remove_lastSubset");

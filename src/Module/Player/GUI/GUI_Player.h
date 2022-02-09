@@ -9,6 +9,7 @@ class Player_cloud;
 class Heatmap;
 class Filter;
 class Player_online;
+class Interfacing;
 
 
 class GUI_Player
@@ -35,6 +36,7 @@ private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
+  Interfacing* ioManager;
   Player_cloud* playerManager;
   Player_online* onlineManager;
 };

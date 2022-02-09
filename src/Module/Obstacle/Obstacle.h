@@ -33,9 +33,6 @@ private:
   Glyphs* glyphManager;
   Interfacing* ioManager;
   Capture* captureManager;
-
-  bool save_frame;
-  bool save_image;
 };
 
 #endif

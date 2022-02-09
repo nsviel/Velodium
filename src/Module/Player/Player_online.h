@@ -12,6 +12,7 @@ class Dimension;
 class Scene;
 class config_module;
 class Module_node;
+class Interfacing;
 
 
 class Player_online
@@ -43,6 +44,9 @@ public:
   inline bool* get_with_heatmap_rltHeight(){return &with_heatmap_rltHeight;}
   inline bool* get_with_unicolor(){return &with_unicolor;}
   inline bool* get_with_online(){return &with_online;}
+  inline bool* get_with_save_frame(){return &with_save_frame;}
+  inline bool* get_with_save_image(){return &with_save_image;}
+
   inline vec2* get_heatmap_height_range(){return &HM_height_range;}
   inline bool* get_with_remove_lastSubset(){return &with_remove_lastSubset;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
@@ -56,6 +60,7 @@ private:
   Filter* filterManager;
   Dimension* dimManager;
   config_module* configManager;
+  Interfacing* ioManager;
 
   vec2 HM_height_range;
   vec2 camera_moved_trans;
@@ -74,6 +79,8 @@ private:
   bool with_heatmap_rltHeight;
   bool with_unicolor;
   bool with_remove_lastSubset;
+  bool with_save_frame;
+  bool with_save_image;
 };
 
 #endif

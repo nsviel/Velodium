@@ -32,7 +32,6 @@ Interfacing::Interfacing(Module_node* node_module){
   this->path_grThr = path_dir + "groundtruth/";
   this->path_image = path_dir + "image/";
 
-  this->save_frame_ID = 0;
   this->save_frame_max = 20;
   this->save_image_ID = 0;
   this->save_image_max = 20;
@@ -41,6 +40,7 @@ Interfacing::Interfacing(Module_node* node_module){
   this->thread_grThr_ON = false;
   this->flag_newPred = false;
   this->flag_newGrTh = false;
+  this->is_whatching = false;
 
   this->clean_directories();
 
@@ -69,6 +69,8 @@ void Interfacing::start_dirWatcher(){
   thread_predi.detach();
   thread_grThr.detach();
 
+  this->is_whatching = true;
+
   //---------------------------
 }
 void Interfacing::stop_dirWatcher(){
@@ -80,24 +82,28 @@ void Interfacing::stop_dirWatcher(){
   thread_predi.~thread();
   thread_grThr.~thread();
 
+  this->is_whatching = false;
+
   //---------------------------
 }
 bool Interfacing::check_prediction(Cloud* cloud){
   //---------------------------
 
-  if(thread_predi_ON && cloud != nullptr){
-    //Load json files - predictions
-    if(flag_newPred){
-      this->parse_obstacle_json(cloud, path_predi_file, "pr");
-      flag_newPred = false;
-      return true;
-    }
+  if(thread_predi_ON || thread_grThr_ON){
+    if(cloud != nullptr){
+      //Load json files - predictions
+      if(flag_newPred){
+        this->parse_obstacle_json(cloud, path_predi_file, "pr");
+        flag_newPred = false;
+        return true;
+      }
 
-    //Load json files - GT
-    if(flag_newGrTh){
-      this->parse_obstacle_json(cloud, path_grThr_file, "gt");
-      flag_newGrTh = false;
-      return true;
+      //Load json files - GT
+      if(flag_newGrTh){
+        this->parse_obstacle_json(cloud, path_grThr_file, "gt");
+        flag_newGrTh = false;
+        return true;
+      }
     }
   }
 
@@ -176,18 +182,15 @@ void Interfacing::save_image(){
   //Save image
   string path = path_image + "image_" + to_string(save_image_ID);
   renderManager->render_screenshot(path);
+  save_image_ID++;
 
-  //Check number of frame and delete last one
+  //Keep only a certain number of image
   if(save_image_vec.size() < save_image_max){
-    save_image_vec.push_back(path);
-    save_image_ID++;
+    save_image_vec.push(path);
   }else{
-    std::remove (save_image_vec[save_image_ID].c_str());
-    save_image_vec[save_image_ID] = path;
-    save_image_ID++;
-  }
-  if(save_image_ID >= save_image_max){
-    save_image_ID = 0;
+    std::remove (save_image_vec.front().c_str());
+    save_image_vec.pop();
+    save_image_vec.push(path);
   }
 
   //---------------------------
@@ -203,25 +206,20 @@ void Interfacing::save_image_path(){
 
   //---------------------------
 }
-void Interfacing::save_frame(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset(cloud, cloud->nb_subset-1);
+void Interfacing::save_frame(Subset* subset){
   //---------------------------
 
   //Save frame
-  string path = path_frame + subset->name + ".ply";
   saverManager->save_subset(subset, "ply", path_frame);
 
-  //Check number of frame and delete last one
+  //Keep only a certain number of frame
+  string path = path_frame + subset->name + ".ply";
   if(save_frame_vec.size() < save_frame_max){
-    save_frame_vec.push_back(path);
-    save_frame_ID++;
+    save_frame_vec.push(path);
   }else{
-    std::remove (save_frame_vec[save_frame_ID].c_str());
-    save_frame_vec[save_frame_ID] = path;
-    save_frame_ID++;
-  }
-  if(save_frame_ID >= save_frame_max){
-    save_frame_ID = 0;
+    std::remove (save_frame_vec.front().c_str());
+    save_frame_vec.pop();
+    save_frame_vec.push(path);
   }
 
   //---------------------------
@@ -231,6 +229,7 @@ void Interfacing::save_frame(Cloud* cloud){
 void Interfacing::clean_directories(){
   //---------------------------
 
+  clean_directory_files(path_image.c_str());
   clean_directory_files(path_frame.c_str());
   clean_directory_files(path_predi.c_str());
   clean_directory_files(path_grThr.c_str());

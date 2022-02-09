@@ -3,6 +3,7 @@
 #include "../Player_online.h"
 #include "../Player_cloud.h"
 #include "../../Module_node.h"
+#include "../../Obstacle/Interfacing.h"
 
 #include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Scene.h"
@@ -25,6 +26,7 @@ GUI_Player::GUI_Player(GUI_node* node_gui){
   this->heatmapManager = node_ope->get_heatmapManager();
   this->onlineManager = node_module->get_onlineManager();
   this->playerManager = node_module->get_playerManager();
+  this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
 
   //---------------------------
@@ -264,10 +266,30 @@ void GUI_Player::parameter_online(){
     ImGui::Checkbox("Remove last subset", with_remove_lastSubset);
     ImGui::NextColumn();
 
+    ImGui::NextColumn();
+    bool* with_save_frame = onlineManager->get_with_save_frame();
+    ImGui::Checkbox("Save frame", with_save_frame);
+    ImGui::NextColumn();
+    if(*with_save_frame){
+      int* save_frame_max = ioManager->get_save_frame_max();
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputInt("Nb frame", save_frame_max);
+    }
+
+    ImGui::NextColumn();
+    bool* with_save_image = onlineManager->get_with_save_image();
+    ImGui::Checkbox("Save image", with_save_image);
+    ImGui::NextColumn();
+    if(*with_save_image){
+      int* save_image_max = ioManager->get_save_image_max();
+      ImGui::SetNextItemWidth(100);
+      ImGui::InputInt("Nb image", save_image_max);
+    }
+
     if(*with_remove_lastSubset){
       int* nb_subset_max = onlineManager->get_nb_subset_max();
       ImGui::SetNextItemWidth(100);
-      ImGui::InputInt("Nb subset", nb_subset_max);
+      ImGui::InputInt("Nb cloud subset", nb_subset_max);
     }
     ImGui::NextColumn();
 

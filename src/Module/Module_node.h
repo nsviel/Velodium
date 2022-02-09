@@ -37,11 +37,11 @@ public:
 
     this->cticpManager = new CT_ICP();
     this->captureManager = new Capture(this);
-    this->onlineManager = new Player_online(this);
-    this->playerManager = new Player_cloud(onlineManager);
     this->ioManager = new Interfacing(this);
     this->obstacleManager = new Obstacle(this);
     this->netManager = new Network();
+    this->onlineManager = new Player_online(this);
+    this->playerManager = new Player_cloud(onlineManager);
 
     //---------------------------
   }

@@ -22,31 +22,20 @@ Obstacle::Obstacle(Module_node* node_module){
   this->transformManager = new Transforms();
   this->glyphManager = new Glyphs();
 
-  bool save_frame = true;
-  bool save_image = true;
-
   //---------------------------
 }
 Obstacle::~Obstacle(){}
 
 void Obstacle::runtime_obstacle(){
+  //This function is called at each OpenGL iteration
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  if(captureManager->get_is_capturing() && cloud != nullptr){
+  if(ioManager->get_is_watching() && cloud != nullptr){
+    //Check for new prediction (ground thruth or prediction)
     bool new_obstacle = ioManager->check_prediction(cloud);
     if(new_obstacle){
       this->build_obstacleGlyph_gt(cloud);
-    }
-
-    //Save subset frame
-    if(save_frame){
-      ioManager->save_frame(cloud);
-    }
-
-    //Save rendered image
-    if(save_image){
-      ioManager->save_image();
     }
   }
 
