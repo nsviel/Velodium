@@ -1,6 +1,6 @@
 #include "GUI_Slam.h"
 
-#include "../CT_ICP.h"
+#include "../Slam.h"
 #include "../CT_ICP/SLAM_optim_ceres.h"
 #include "../CT_ICP/SLAM_optim_gn.h"
 #include "../CT_ICP/SLAM_normal.h"
@@ -24,12 +24,12 @@ GUI_Slam::GUI_Slam(GUI_node* node_gui){
 
   Module_node* node_module = node_gui->get_node_module();
 
-  this->cticpManager = node_module->get_cticpManager();
-  this->ceresManager = cticpManager->get_SLAM_optim_ceres();
-  this->gnManager = cticpManager->get_SLAM_optim_gn();
-  this->normalManager = cticpManager->get_SLAM_normal();
-  this->assessManager = cticpManager->get_assessManager();
-  this->mapManager = cticpManager->get_mapManager();
+  this->slamManager = node_module->get_slamManager();
+  this->ceresManager = slamManager->get_SLAM_optim_ceres();
+  this->gnManager = slamManager->get_SLAM_optim_gn();
+  this->normalManager = slamManager->get_SLAM_normal();
+  this->assessManager = slamManager->get_assessManager();
+  this->mapManager = slamManager->get_mapManager();
   this->sceneManager = new Scene();
 
   this->item_width = 100;
@@ -53,11 +53,16 @@ void GUI_Slam::compute(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
+  //Check configuration model
+  //int* adress_ID = sshManager->get_ssh_adress_ID();
+  //ImGui::Combo("Configuration", adress_ID, "64 fibers\016 fibers\0");
+
+  //Compute algorithm
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Compute", ImVec2(item_width,0))){
     if(cloud != nullptr){
       sceneManager->reset_cloud(cloud);
-      cticpManager->compute_slam(cloud);
+      slamManager->compute_slam(cloud);
 
       sceneManager->update_cloud_location(cloud);
       sceneManager->update_cloud_glyphs(cloud);
@@ -87,7 +92,7 @@ void GUI_Slam::parameters_general(){
     //---------------------------
 
     //Display infos in terminal
-    bool* slam_verbose = cticpManager->get_verbose();
+    bool* slam_verbose = slamManager->get_verbose();
     ImGui::Checkbox("Verbose", slam_verbose);
 
     //Make a voxelized slam map
@@ -105,8 +110,8 @@ void GUI_Slam::parameters_general(){
     static int nb_thread = 8;
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
-      SLAM_normal* normalManager = cticpManager->get_SLAM_normal();
-      cticpManager->set_nb_thread(nb_thread);
+      SLAM_normal* normalManager = slamManager->get_SLAM_normal();
+      slamManager->set_nb_thread(nb_thread);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Number of threads for optimization and normal computation");
@@ -125,8 +130,8 @@ void GUI_Slam::parameters_general(){
       static int frame_max = cloud->nb_subset;
       ImGui::SetNextItemWidth(item_width);
       if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_subset)){
-        cticpManager->set_ID_all(false);
-        cticpManager->set_ID_max(frame_max);
+        slamManager->set_ID_all(false);
+        slamManager->set_ID_max(frame_max);
       }
     }else{
       static int frame_max = 0;

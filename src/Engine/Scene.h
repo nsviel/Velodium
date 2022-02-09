@@ -34,21 +34,22 @@ public:
   void reset_cloud(Cloud* cloud);
   void reset_cloud_all();
 
-  //Update data
+  //Update cloud
   void update_cloud_glyphs(Cloud* cloud);
   void update_cloud_IntensityToColor(Cloud* cloud);
   void update_cloud_oID(list<Cloud*>* list);
   void update_cloud_MinMax(Cloud* cloud);
   void update_cloud_location(Cloud* cloud);
   void update_cloud_color(Cloud* cloud);
+  void update_cloud_dataFormat(Cloud* cloud);
 
+  //Update subset
   void update_subset_glyphs(Subset* subset);
   void update_subset(Subset* subset);
   void update_subset_IntensityToColor(Subset* subset);
   void update_subset_MinMax(Subset* subset);
   void update_subset_location(Subset* subset);
   void update_subset_color(Subset* subset);
-  void update_subset_dataFormat(Subset* subset);
 
   //Subfunctions
   void selection_setNext();

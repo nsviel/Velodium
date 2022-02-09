@@ -784,11 +784,15 @@ void GUI_windows::window_color(){
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
 
-        if(subset->has_color){
-          subset->RGB.clear();
+        for(int i=0;i<list_cloud->size();i++){
+          Subset* subset = sceneManager->get_subset(cloud,i);
+          if(subset->has_color){
+            subset->RGB.clear();
+          }
+          subset->has_color = false;
         }
-        subset->has_color = false;
-        sceneManager->update_subset_dataFormat(subset);
+
+        sceneManager->update_cloud_dataFormat(cloud);
       }
     }
     if(ImGui::Button("Random color for all points", ImVec2(150,0))){

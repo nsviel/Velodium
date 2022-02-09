@@ -29,7 +29,6 @@ void WIN_cloudInfo::window_cloudInfo(){
 
   if(*open && cloud != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Visibility
@@ -58,11 +57,11 @@ void WIN_cloudInfo::window_cloudInfo(){
     ImGui::Columns(2);
     ImGui::SetColumnWidth(-1,50);
     static char str[256];
-    strcpy(str, subset->name.c_str());
+    strcpy(str, cloud->name.c_str());
     ImGui::Text("Name ");
     ImGui::NextColumn();
     if(ImGui::InputText("##1", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue)){
-      subset->name = str;
+      cloud->name = str;
     }
     ImGui::NextColumn();
 
@@ -100,7 +99,7 @@ void WIN_cloudInfo::window_cloudInfo(){
     ImGui::NextColumn();
 
     //Root pos
-    vec3& PCroot = subset->root;
+    vec3& PCroot = cloud->root;
     ImGui::Text("Root ");
     ImGui::NextColumn();
     ImGui::Text("%.2f, %.2f, %.2f", PCroot.x, PCroot.y, PCroot.z);
@@ -113,27 +112,17 @@ void WIN_cloudInfo::window_cloudInfo(){
     //Attributs
     ImGui::TextWrapped("Attrib ");
     ImGui::NextColumn();
-    ImGui::TextWrapped("%s", subset->dataFormat.c_str());
+    ImGui::TextWrapped("%s", cloud->dataFormat.c_str());
     ImGui::Columns(1);
     ImGui::Separator();
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Functions");
-    if(ImGui::Button("Supress color", ImVec2(100,0))){
-      subset->has_color = !subset->has_color;
-      if(subset->RGB.size() == 0) subset->has_color = false;
-      sceneManager->update_subset_dataFormat(subset);
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Supress normal", ImVec2(100,0))){
-      subset->N.clear();
-      sceneManager->update_subset_dataFormat(subset);
-    }
     if(ImGui::Button("Transformation", ImVec2(100,0))){
       window_tab.show_transformation = !window_tab.show_transformation;
     }
     ImGui::SameLine();
     if(ImGui::Button("Data", ImVec2(100,0))){
-      window_tab.show_asciiData = true;
+      window_tab.show_asciiData = !window_tab.show_asciiData;
     }
     ImGui::Separator();
 

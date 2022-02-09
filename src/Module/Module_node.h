@@ -1,7 +1,7 @@
 #ifndef NODE_MODULE_H
 #define NODE_MODULE_H
 
-#include "SLAM/CT_ICP.h"
+#include "SLAM/Slam.h"
 #include "LiDAR/Capture.h"
 #include "Obstacle/Obstacle.h"
 #include "Obstacle/Interfacing.h"
@@ -35,7 +35,7 @@ public:
   void init_objects(){
     //---------------------------
 
-    this->cticpManager = new CT_ICP();
+    this->slamManager = new Slam();
     this->netManager = new Network();
     this->ioManager = new Interfacing(this);
     this->obstacleManager = new Obstacle(this);
@@ -48,7 +48,7 @@ public:
   void reset(){
     //---------------------------
 
-    cticpManager->reset_slam();
+    slamManager->reset_slam();
 
     //---------------------------
   }
@@ -66,7 +66,7 @@ public:
   inline Operation_node* get_node_ope(){return node_ope;}
 
   inline Network* get_netManager(){return netManager;}
-  inline CT_ICP* get_cticpManager(){return cticpManager;}
+  inline Slam* get_slamManager(){return slamManager;}
   inline Capture* get_captureManager(){return captureManager;}
   inline Obstacle* get_obstacleManager(){return obstacleManager;}
   inline Interfacing* get_ioManager(){return ioManager;}
@@ -78,7 +78,7 @@ private:
   Operation_node* node_ope;
 
   Network* netManager;
-  CT_ICP* cticpManager;
+  Slam* slamManager;
   Capture* captureManager;
   config_module* configManager;
   Obstacle* obstacleManager;

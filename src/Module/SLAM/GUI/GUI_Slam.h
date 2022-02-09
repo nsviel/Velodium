@@ -5,7 +5,7 @@
 
 class GUI_node;
 class Scene;
-class CT_ICP;
+class Slam;
 
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
@@ -36,11 +36,11 @@ public:
 
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 
-  inline CT_ICP* get_cticpManager(){return cticpManager;}
+  inline Slam* get_slamManager(){return slamManager;}
 
 private:
   Scene* sceneManager;
-  CT_ICP* cticpManager;
+  Slam* slamManager;
 
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;

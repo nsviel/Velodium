@@ -24,7 +24,6 @@ struct Subset{ //Cloud subset / part
   int nb_point;
   std::string name;
   std::string path;
-  std::string dataFormat;
   glm::vec4 unicolor;
   bool visibility;
   bool has_color;

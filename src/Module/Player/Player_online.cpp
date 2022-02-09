@@ -1,7 +1,7 @@
 #include "Player_online.h"
 
 #include "../Module_node.h"
-#include "../SLAM/CT_ICP.h"
+#include "../SLAM/Slam.h"
 #include "../Obstacle/Interfacing.h"
 
 #include "../../Operation/Operation_node.h"
@@ -38,7 +38,7 @@ Player_online::Player_online(Module_node* node_module){
   this->heatmapManager = node_ope->get_heatmapManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
-  this->cticpManager = node_module->get_cticpManager();
+  this->slamManager = node_module->get_slamManager();
   this->configManager = node_config->get_conf_modManager();
   this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
@@ -68,7 +68,7 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
     //Make slam on the current subset
     if(with_slam){
-      cticpManager->compute_slam_online(cloud, ID_subset);
+      slamManager->compute_slam_online(cloud, ID_subset);
     }
 
     //If camera follow up option activated

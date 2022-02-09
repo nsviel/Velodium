@@ -12,7 +12,7 @@
 
 #include "../Module/Module_GUI.h"
 #include "../Module/SLAM/GUI/GUI_Slam.h"
-#include "../Module/SLAM/CT_ICP.h"
+#include "../Module/SLAM/Slam.h"
 #include "../Engine/OpenGL/Camera.h"
 
 #include "imgui/imgui.h"

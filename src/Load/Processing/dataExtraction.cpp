@@ -261,6 +261,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
     cloud->format = "";
   }
 
+  cloud->dataFormat = "";
   cloud->visibility = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
@@ -292,7 +293,6 @@ void dataExtraction::init_subsetParameters(Subset* subset, string name, int ID){
   subset->ID = ID;
   subset->name = name;
   subset->root = vec3(0.0);
-  subset->dataFormat = " ";
 
   //---------------------------
 }

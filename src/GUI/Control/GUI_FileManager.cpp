@@ -157,11 +157,8 @@ void GUI_fileManager::info_subset(Subset* subset){
   ImGui::Separator();
   //---------------------------
 
-  sceneManager->update_subset_dataFormat(subset);
-
   //Additional info
   ImGui::Text("Points: %d", (int)subset->xyz.size());
-  ImGui::Text("Format: %s", subset->dataFormat.c_str());
   ImGui::Text("COM (%.2f, %.2f, %.2f)", COM.x, COM.y, COM.z);
   ImGui::Text("Z [%.2f; %.2f]", subset->min.z, subset->max.z);
 

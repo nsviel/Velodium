@@ -1,9 +1,10 @@
-#include "CT_ICP.h"
+#include "Slam.h"
 
 #include "CT_ICP/SLAM_optim_ceres.h"
 #include "CT_ICP/SLAM_optim_gn.h"
 #include "CT_ICP/SLAM_assessment.h"
 #include "CT_ICP/SLAM_localMap.h"
+#include "CT_ICP/SLAM_configuration.h"
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
@@ -13,16 +14,18 @@
 
 
 //Constructor / Destructor
-CT_ICP::CT_ICP(){
+Slam::Slam(){
   //---------------------------
 
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
+
   this->normalManager = new SLAM_normal();
   this->ceresManager = new SLAM_optim_ceres(normalManager);
   this->gnManager = new SLAM_optim_gn(normalManager);
   this->assessManager = new SLAM_assessment(gnManager);
   this->mapManager = new SLAM_localMap();
+  this->configManager = new SLAM_configuration(this);
 
   this->solver_ceres = false;
   this->solver_GN = true;
@@ -37,10 +40,10 @@ CT_ICP::CT_ICP(){
 
   //---------------------------
 }
-CT_ICP::~CT_ICP(){}
+Slam::~Slam(){}
 
 //Main functions
-void CT_ICP::compute_slam(Cloud* cloud){
+void Slam::compute_slam(Cloud* cloud){
   mapManager->reset();
   if(cloud == nullptr) return;
   if(ID_all) ID_max = sceneManager->get_subset(cloud, cloud->nb_subset-1)->ID;
@@ -79,7 +82,7 @@ void CT_ICP::compute_slam(Cloud* cloud){
 
   //---------------------------
 }
-void CT_ICP::compute_slam_online(Cloud* cloud, int ID){
+void Slam::compute_slam_online(Cloud* cloud, int ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, ID);
 
   if(frame->is_slamed == false && ID >= map_frame_begin_ID){
@@ -113,7 +116,7 @@ void CT_ICP::compute_slam_online(Cloud* cloud, int ID){
 }
 
 //SLAM sub-functions
-void CT_ICP::init_frameID(Frame* frame, int ID){
+void Slam::init_frameID(Frame* frame, int ID){
   //---------------------------
 
   if(map_frame_ID == 0){
@@ -126,7 +129,7 @@ void CT_ICP::init_frameID(Frame* frame, int ID){
 
   //---------------------------
 }
-void CT_ICP::init_frameTimestamp(Subset* subset){
+void Slam::init_frameTimestamp(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -159,7 +162,7 @@ void CT_ICP::init_frameTimestamp(Subset* subset){
 
   //---------------------------
 }
-void CT_ICP::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
+void Slam::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
   //---------------------------
 
   //i == 0 is the reference frame
@@ -204,7 +207,7 @@ void CT_ICP::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
 
   //---------------------------
 }
-void CT_ICP::init_distortion(Frame* frame){
+void Slam::init_distortion(Frame* frame){
   //---------------------------
 
   if(frame->ID > 1){
@@ -233,7 +236,7 @@ void CT_ICP::init_distortion(Frame* frame){
   //---------------------------
 }
 
-void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
+void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
   voxelMap* map = mapManager->get_localmap();
   //---------------------------
 
@@ -247,7 +250,7 @@ void CT_ICP::compute_optimization(Frame* frame, Frame* frame_m1){
 
   //---------------------------
 }
-void CT_ICP::compute_assessment(Cloud* cloud, int ID){
+void Slam::compute_assessment(Cloud* cloud, int ID){
   //---------------------------
 
   bool sucess = assessManager->compute_assessment(cloud, ID);
@@ -261,7 +264,7 @@ void CT_ICP::compute_assessment(Cloud* cloud, int ID){
 
   //---------------------------
 }
-void CT_ICP::compute_updateLocation(Subset* subset){
+void Slam::compute_updateLocation(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -294,7 +297,7 @@ void CT_ICP::compute_updateLocation(Subset* subset){
   //---------------------------
   sceneManager->update_subset_location(subset);
 }
-void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset){
+void Slam::compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset){
   voxelMap* map = mapManager->get_localmap();
   //---------------------------
 
@@ -347,21 +350,12 @@ void CT_ICP::compute_statistics(float duration, Frame* frame, Frame* frame_m1, S
 }
 
 //Support functions
-void CT_ICP::reset_slam(){
+void Slam::reset_slam(){
   //---------------------------
 
   mapManager->reset();
   this->map_frame_ID = 0;
   this->map_frame_begin_ID = 0;
-
-  //---------------------------
-}
-void CT_ICP::set_nb_thread(int value){
-  //---------------------------
-
-  this->nb_thread = value;
-  normalManager->set_nb_thread(nb_thread);
-  gnManager->set_nb_thread(nb_thread);
 
   //---------------------------
 }

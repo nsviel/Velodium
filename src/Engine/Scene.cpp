@@ -336,6 +336,21 @@ void Scene::update_cloud_color(Cloud* cloud){
 
   //---------------------------
 }
+void Scene::update_cloud_dataFormat(Cloud* cloud){
+  cloud->dataFormat.clear();
+  //---------------------------
+
+  Subset* subset = get_subset(cloud, 0);
+  string df = "XYZ";
+
+  if(subset->I.size() != 0) df += " | I";
+  if(subset->RGB.size() != 0) df += " | RGB";
+  if(subset->N.size() != 0) df += " | N";
+  if(subset->ts.size() != 0) df += " | ts";
+
+  //---------------------------
+  cloud->dataFormat = df;
+}
 
 //Updating - subset
 void Scene::update_subset_glyphs(Subset* subset){
@@ -356,21 +371,6 @@ void Scene::update_subset(Subset* subset){
   glyphManager.update(subset);
 
   //---------------------------
-}
-void Scene::update_subset_dataFormat(Subset* subset){
-  subset->dataFormat.clear();
-  //---------------------------
-
-  subset->nb_point = subset->xyz.size();
-
-  string df = "XYZ";
-  if(subset->I.size() != 0) df += " | I";
-  if(subset->has_color) df += " | RGB";
-  if(subset->N.size() != 0) df += " | N";
-  if(subset->ts.size() != 0) df += " | ts";
-
-  //---------------------------
-  subset->dataFormat = df;
 }
 void Scene::update_subset_IntensityToColor(Subset* subset){
   //---------------------------

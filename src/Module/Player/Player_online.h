@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class CT_ICP;
+class Slam;
 class Heatmap;
 class Camera;
 class Engine;
@@ -57,7 +57,7 @@ private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Camera* cameraManager;
-  CT_ICP* cticpManager;
+  Slam* slamManager;
   Filter* filterManager;
   Dimension* dimManager;
   config_module* configManager;

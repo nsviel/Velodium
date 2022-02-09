@@ -30,6 +30,7 @@ struct Cloud{ //Global set of the cloud
   std::string name;
   std::string format;
   std::string saveas;
+  std::string dataFormat;
 
   //Transformation
   glm::vec3 min;
