@@ -29,11 +29,12 @@ public:
   void compute_slam_online(Cloud* cloud, int ID);
   void reset_slam();
 
-  inline SLAM_normal* get_SLAM_normal(){return normalManager;}
-  inline SLAM_optim_ceres* get_SLAM_optim_ceres(){return ceresManager;}
-  inline SLAM_optim_gn* get_SLAM_optim_gn(){return gnManager;}
-  inline SLAM_assessment* get_assessManager(){return assessManager;}
-  inline SLAM_localMap* get_mapManager(){return mapManager;}
+  inline SLAM_normal* get_slam_normal(){return normalManager;}
+  inline SLAM_optim_ceres* get_slam_ceres(){return ceresManager;}
+  inline SLAM_optim_gn* get_slam_gn(){return gnManager;}
+  inline SLAM_assessment* get_slam_assess(){return assessManager;}
+  inline SLAM_localMap* get_slam_map(){return mapManager;}
+  inline SLAM_configuration* get_slam_config(){return configManager;}
 
   inline bool* get_verbose(){return &verbose;}
   inline void set_nb_thread(int value){this->nb_thread = value;}

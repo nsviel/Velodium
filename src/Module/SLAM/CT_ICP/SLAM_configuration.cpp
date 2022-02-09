@@ -11,8 +11,8 @@ SLAM_configuration::SLAM_configuration(Slam* slam){
   //---------------------------
 
   this->slamManager = slam;
-  this->normalManager = slam->get_SLAM_normal();
-  this->gnManager = slam->get_SLAM_optim_gn();
+  this->normalManager = slam->get_slam_normal();
+  this->gnManager = slam->get_slam_gn();
 
   //---------------------------
 }

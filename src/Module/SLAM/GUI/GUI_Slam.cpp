@@ -6,6 +6,7 @@
 #include "../CT_ICP/SLAM_normal.h"
 #include "../CT_ICP/SLAM_assessment.h"
 #include "../CT_ICP/SLAM_localMap.h"
+#include "../CT_ICP/SLAM_configuration.h"
 
 #include "../../Module_node.h"
 
@@ -25,11 +26,12 @@ GUI_Slam::GUI_Slam(GUI_node* node_gui){
   Module_node* node_module = node_gui->get_node_module();
 
   this->slamManager = node_module->get_slamManager();
-  this->ceresManager = slamManager->get_SLAM_optim_ceres();
-  this->gnManager = slamManager->get_SLAM_optim_gn();
-  this->normalManager = slamManager->get_SLAM_normal();
-  this->assessManager = slamManager->get_assessManager();
-  this->mapManager = slamManager->get_mapManager();
+  this->ceresManager = slamManager->get_slam_ceres();
+  this->gnManager = slamManager->get_slam_gn();
+  this->normalManager = slamManager->get_slam_normal();
+  this->assessManager = slamManager->get_slam_assess();
+  this->mapManager = slamManager->get_slam_map();
+  this->configManager = slamManager->get_slam_config();
   this->sceneManager = new Scene();
 
   this->item_width = 100;
@@ -110,7 +112,7 @@ void GUI_Slam::parameters_general(){
     static int nb_thread = 8;
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
-      SLAM_normal* normalManager = slamManager->get_SLAM_normal();
+      SLAM_normal* normalManager = slamManager->get_slam_normal();
       slamManager->set_nb_thread(nb_thread);
     }
     if(ImGui::IsItemHovered()){
