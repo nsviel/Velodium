@@ -27,6 +27,8 @@ public:
   inline float* get_thres_pose_rotat(){return &thres_pose_rotat;}
   inline float* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
   inline int* get_nb_residual_min(){return &nb_residual_min;}
+  inline int* get_nb_rlt_previous_mean(){return &nb_rlt_previous_mean;}
+  inline int* get_nb_rlt_previous_pose(){return &nb_rlt_previous_pose;}
 
 private:
   Scene* sceneManager;
@@ -38,9 +40,8 @@ private:
   float thres_pose_rotat;
   float thres_optimMinNorm;
 
-  float rlt_numberMean;
-  float rlt_numberPreviousPose;
-
+  int nb_rlt_previous_mean;
+  int nb_rlt_previous_pose;
   int nb_residual_min;
 };
 

@@ -21,8 +21,8 @@ public:
 
   inline float* get_voxel_size_localMap(){return &voxel_size_localMap;}
   inline float* get_voxel_size_slamMap(){return &voxel_size_slamMap;}
-  inline float* get_min_subset_distance(){return &min_subset_distance;}
-  inline float* get_max_subset_distance(){return &max_subset_distance;}
+  inline float* get_min_root_distance(){return &min_root_distance;}
+  inline float* get_max_root_distance(){return &max_root_distance;}
   inline float* get_max_voxel_distance(){return &max_voxel_distance;}
   inline float* get_min_voxel_distance(){return &min_voxel_distance;}
   inline float* get_grid_voxel_size(){return &grid_voxel_size;}
@@ -37,8 +37,8 @@ private:
   float voxel_size_localMap;
   float voxel_size_slamMap;
 
-  float min_subset_distance;
-  float max_subset_distance;
+  float min_root_distance;
+  float max_root_distance;
   float max_voxel_distance;
   float min_voxel_distance;
   float grid_voxel_size;

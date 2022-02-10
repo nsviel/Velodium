@@ -58,7 +58,7 @@ private:
 
   UDP_frame* frameManager;
   UDP_server* udpServManager;
-  UDP_parser_VLP16* udpParsManager;
+  UDP_parser_VLP16* udp_vlp16Manager;
 
   Subset* subset_capture;
 

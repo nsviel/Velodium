@@ -26,7 +26,7 @@ Velodyne::Velodyne(){
   this->extractManager = new dataExtraction();
 
   this->udpServManager = new UDP_server();
-  this->udpParsManager = new UDP_parser_VLP16();
+  this->udp_vlp16Manager = new UDP_parser_VLP16();
   this->frameManager = new UDP_frame();
 
   this->ID_subset = 0;
@@ -56,7 +56,7 @@ void Velodyne::lidar_start_watcher(){
       vector<int> packet = udpServManager->read_UDP_packets();
 
       //Parse decimal packet into point cloud
-      udpPacket* packet_parsed = udpParsManager->parse_UDP_packet(packet);
+      udpPacket* packet_parsed = udp_vlp16Manager->parse_UDP_packet(packet);
 
       //Iteratively build a complete frame
       bool frame_rev = frameManager->build_frame(packet_parsed);

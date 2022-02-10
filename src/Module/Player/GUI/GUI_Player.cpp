@@ -270,11 +270,19 @@ void GUI_Player::parameter_online(){
     bool* with_save_frame = onlineManager->get_with_save_frame();
     ImGui::Checkbox("Save frame", with_save_frame);
     ImGui::NextColumn();
-    if(*with_save_frame){
+    static bool with_unlimit_saving = false;
+    if(*with_save_frame && with_unlimit_saving == false){
       int* save_frame_max = ioManager->get_save_frame_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb frame", save_frame_max);
     }
+    ImGui::NextColumn();
+    ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
+    if(with_unlimit_saving){
+      int* save_frame_max = ioManager->get_save_frame_max();
+      *save_frame_max = 500000000;
+    }
+    ImGui::NextColumn();
 
     ImGui::NextColumn();
     bool* with_save_image = onlineManager->get_with_save_image();

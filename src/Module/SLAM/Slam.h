@@ -35,8 +35,11 @@ public:
   inline SLAM_assessment* get_slam_assess(){return assessManager;}
   inline SLAM_localMap* get_slam_map(){return mapManager;}
   inline SLAM_configuration* get_slam_config(){return configManager;}
+  inline SLAM_assessment* get_assessManager(){return assessManager;}
 
   inline bool* get_verbose(){return &verbose;}
+  inline bool* get_solver_gn(){return &solver_GN;}
+  inline bool* get_solver_ceres(){return &solver_ceres;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
   inline void set_ID_max(int value){ID_max = value;}
   inline void set_ID_all(bool value){ID_all = value;}

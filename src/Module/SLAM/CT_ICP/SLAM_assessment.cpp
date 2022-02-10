@@ -22,8 +22,8 @@ SLAM_assessment::SLAM_assessment(SLAM_optim_gn* gn){
   this->thres_pose_rotat = 15.0f;
   this->thres_optimMinNorm = 0.2f;
 
-  this->rlt_numberMean = 10.0f;
-  this->rlt_numberPreviousPose = 4.0f;
+  this->nb_rlt_previous_mean = 10;
+  this->nb_rlt_previous_pose = 4;
 
   //---------------------------
 }
@@ -111,7 +111,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int ID){
   bool sucess = true;
   //---------------------------
 
-  if(frame_m0->ID >= rlt_numberPreviousPose){
+  if(frame_m0->ID >= nb_rlt_previous_pose){
     Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
 
     //Compute previsou frame stat means
@@ -120,7 +120,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int ID){
     float sum_diff_trans = 0;
     float sum_diff_rotat = 0;
     float sum_opti_score = 0;
-    for(int j=1; j<rlt_numberPreviousPose; j++){
+    for(int j=1; j<nb_rlt_previous_pose; j++){
       Frame* frame_m = sceneManager->get_frame_byID(cloud, ID-j);
 
       if(frame_m->is_slamed){
@@ -132,11 +132,11 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int ID){
       }
 
     }
-    sum_ego_trans = rlt_numberMean * sum_ego_trans / rlt_numberPreviousPose;
-    sum_ego_rotat = rlt_numberMean * sum_ego_rotat / rlt_numberPreviousPose;
-    sum_diff_trans = rlt_numberMean * sum_diff_trans / rlt_numberPreviousPose;
-    sum_diff_rotat = rlt_numberMean * sum_diff_rotat / rlt_numberPreviousPose;
-    sum_opti_score = rlt_numberMean * sum_opti_score / rlt_numberPreviousPose;
+    sum_ego_trans = nb_rlt_previous_mean * sum_ego_trans / nb_rlt_previous_pose;
+    sum_ego_rotat = nb_rlt_previous_mean * sum_ego_rotat / nb_rlt_previous_pose;
+    sum_diff_trans = nb_rlt_previous_mean * sum_diff_trans / nb_rlt_previous_pose;
+    sum_diff_rotat = nb_rlt_previous_mean * sum_diff_rotat / nb_rlt_previous_pose;
+    sum_opti_score = nb_rlt_previous_mean * sum_opti_score / nb_rlt_previous_pose;
 
     //Test 1: check ego distance
     frame_m0->ego_trans = (frame_m0->trans_e - frame_m0->trans_b).norm();

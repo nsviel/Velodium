@@ -88,10 +88,13 @@ void Capture::runtime_capturing(){
   if(*velo_new){
     Subset* subset = new Subset(*veloManager->get_subset_capture());
 
-    //Remove all other subset
+    //If option, remove all other subset
     if(with_justOneFrame){
       sceneManager->remove_subset_all(cloud_capture);
     }
+
+    //Supress null points
+    this->supress_nullpoints(subset);
 
     //Insert subset data into GPU
     sceneManager->add_subset_to_gpu(subset);
@@ -105,6 +108,32 @@ void Capture::runtime_capturing(){
     //Unset new Subset flag
     *velo_new = false;
   }
+
+  //---------------------------
+}
+void Capture::supress_nullpoints(Subset* subset){
+  vector<vec3> xyz;
+  vector<vec4> RGB;
+  vector<vec3> N;
+  vector<float> I;
+  vector<float> ts;
+  //---------------------------
+
+  for(int i=0; i<xyz.size(); i++){
+    if(subset->xyz[i].x != 0 && subset->xyz[i].y != 0 && subset->xyz[i].z != 0){
+      xyz.push_back(subset->xyz[i]);
+      RGB.push_back(subset->RGB[i]);
+      N.push_back(subset->N[i]);
+      I.push_back(subset->I[i]);
+      ts.push_back(subset->ts[i]);
+    }
+  }
+
+  subset->xyz = xyz;
+  subset->RGB = RGB;
+  subset->N = N;
+  subset->I = I;
+  subset->ts = ts;
 
   //---------------------------
 }

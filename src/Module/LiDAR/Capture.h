@@ -25,6 +25,7 @@ public:
   void start_new_capture();
   void stop_capture();
   void runtime_capturing();
+  void supress_nullpoints(Subset* subset);
 
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}

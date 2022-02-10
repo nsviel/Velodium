@@ -14,8 +14,8 @@ SLAM_localMap::SLAM_localMap(){
   this->voxel_size_localMap = 1;
   this->voxel_size_slamMap = 0.5;
 
-  this->min_subset_distance = 5.0f;
-  this->max_subset_distance = 100.0f;
+  this->min_root_distance = 5.0f;
+  this->max_root_distance = 100.0f;
   this->max_voxel_distance = 150.0f;
   this->map_max_voxelNbPoints = 20;
   this->min_voxel_distance = 0.05;
@@ -130,7 +130,7 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
     Eigen::Vector3d point = frame->xyz[i];
     float dist = fct_distance_origin(point);
 
-    if(dist > min_subset_distance && dist < max_subset_distance){
+    if(dist > min_root_distance && dist < max_root_distance){
       int vx = static_cast<int>(point(0) / voxel_size_localMap);
       int vy = static_cast<int>(point(1) / voxel_size_localMap);
       int vz = static_cast<int>(point(2) / voxel_size_localMap);

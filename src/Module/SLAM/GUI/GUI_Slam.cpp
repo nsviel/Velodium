@@ -55,10 +55,6 @@ void GUI_Slam::compute(){
   Cloud* cloud = database.cloud_selected;
   //---------------------------
 
-  //Check configuration model
-  //int* adress_ID = sshManager->get_ssh_adress_ID();
-  //ImGui::Combo("Configuration", adress_ID, "64 fibers\016 fibers\0");
-
   //Compute algorithm
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Compute", ImVec2(item_width,0))){
@@ -71,6 +67,12 @@ void GUI_Slam::compute(){
     }
   }
   ImGui::PopStyleColor(1);
+
+  //Check configuration model
+  int slam_conf = *configManager->get_predefined_conf();
+  if(ImGui::Combo("Configuration", &slam_conf, "vlp_64\0vlp_16\0")){
+    configManager->set_predefined_conf(slam_conf);
+  }
 
   //---------------------------
 }
@@ -120,9 +122,9 @@ void GUI_Slam::parameters_general(){
     }
 
     //Subsampling voxel width
-    float* sampling_width = mapManager->get_grid_voxel_size();
+    float* grid_voxel_size = mapManager->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Grid sampling voxel size", sampling_width, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
     }
@@ -188,17 +190,17 @@ void GUI_Slam::parameters_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
 
     //Subset point minimum distance
-    float* min_subset_distance = mapManager->get_min_subset_distance();
+    float* min_root_distance = mapManager->get_min_root_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Min point distance from LiDAR", min_subset_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Suppresses points to close to the center of the sensor");
     }
 
     //Subset point maximum distance
-    float* max_subset_distance = mapManager->get_max_subset_distance();
+    float* max_root_distance = mapManager->get_max_root_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max point distance from LiDAR", max_subset_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Suppresses points to far from the center of the sensor");
     }
@@ -307,6 +309,22 @@ void GUI_Slam::parameters_robustesse(){
     ImGui::InputFloat("Max pose rotation", thres_pose_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Threshold on orientation changes (in degrees) for early termination of the ICP");
+    }
+
+    //Number of previous pose taking into account
+    int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::SliderInt("X previous rlt pose", nb_rlt_previous_pose, 1, 100);
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Number of previous pose taking into account");
+    }
+
+    //Number of time threashold from mean previous pose
+    int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::SliderInt("X time thres previous rlt pose", nb_rlt_previous_mean, 1, 100);
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Number of time threashold from mean previous pose");
     }
 
     //---------------------------
