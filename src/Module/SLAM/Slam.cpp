@@ -38,7 +38,7 @@ Slam::Slam(){
   this->map_size_old = 0;
   this->nb_thread = 8;
 
-  configManager->make_config_0();
+  configManager->make_config_1();
 
   //---------------------------
 }
@@ -85,36 +85,44 @@ void Slam::compute_slam(Cloud* cloud){
   //---------------------------
 }
 void Slam::compute_slam_online(Cloud* cloud, int ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
+  Frame* frame_m2 = sceneManager->get_frame_byID(cloud, ID-2);
+  //---------------------------
 
-  if(frame->is_slamed == false && ID >= map_frame_begin_ID){
-    tic();
-    //---------------------------
+  //Check for computing conditions
+  if(subset->xyz.size() == 0) return;
+  if(ID >= 2 && cloud->subset.size() < 2) return;
+  if(frame->is_slamed == true) return;
+  if(ID < map_frame_begin_ID) return;
 
-    Subset* subset = sceneManager->get_subset_byID(cloud, ID);
-    Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
-    Frame* frame_m2 = sceneManager->get_frame_byID(cloud, ID-2);
 
-    this->init_frameID(frame, ID);
-    this->init_frameTimestamp(subset);
-    this->init_frameChain(frame, frame_m1, frame_m2);
-    this->init_distortion(frame);
+  //SLAM algorithm
+  tic();
+  //---------------------------
 
-    mapManager->compute_gridSampling(subset);
+  //Bien checker pour chaque functions si map_frame_ID est bien respecté
 
-    this->compute_optimization(frame, frame_m1);
-    this->compute_assessment(cloud, ID);
+  this->init_frameID(frame, ID);
+  this->init_frameTimestamp(subset);
+  this->init_frameChain(frame, frame_m1, frame_m2);
+  this->init_distortion(frame);
 
-    mapManager->add_pointsToLocalMap(frame);
-    mapManager->end_clearTooFarVoxels(frame->trans_e);
+  mapManager->compute_gridSampling(subset);
 
-    this->compute_updateLocation(subset);
+  this->compute_optimization(frame, frame_m1);
+  this->compute_assessment(cloud, ID);
 
-    //---------------------------
-    float duration = toc();
-    this->compute_statistics(duration, frame, frame_m1, subset);
-    glyphManager->update(subset);
-  }
+  mapManager->add_pointsToLocalMap(frame);
+  mapManager->end_clearTooFarVoxels(frame->trans_e);
+
+  this->compute_updateLocation(subset);
+
+  //---------------------------
+  float duration = toc();
+  this->compute_statistics(duration, frame, frame_m1, subset);
+  glyphManager->update(subset);
 }
 
 //SLAM sub-functions
@@ -253,9 +261,12 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 }
 void Slam::compute_assessment(Cloud* cloud, int ID){
+  bool sucess = true;
   //---------------------------
 
-  bool sucess = assessManager->compute_assessment(cloud, ID);
+  if(map_frame_ID > 5){
+    sucess = assessManager->compute_assessment(cloud, ID);
+  }
 
   //If unsucess, reinitialize transformations
   if(sucess == false){

@@ -102,11 +102,6 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
       this->time_image = toc();
     }
 
-    //Verifier si utile -> pourquoi ne pas faire ça avec les functions au dessus ?
-    if(with_remove_lastSubset){
-      this->remove_subset_last(cloud, ID_subset);
-    }
-
     //Provide info about computation
     this->compute_statistics(subset);
   }
@@ -136,7 +131,6 @@ void Player_online::update_configuration(){
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
-  this->nb_subset_max = 20;
 
   this->with_camera_top = false;
   this->with_camera_follow = configManager->parse_json_b("online", "with_camera_follow");
@@ -151,7 +145,7 @@ void Player_online::update_configuration(){
   this->with_save_image = true;
   this->with_slam = true;// configManager->parse_json_b("online", "with_slam");
   this->with_cylinder_cleaning = false;//configManager->parse_json_b("online", "with_cylinder_cleaning");
-  this->with_remove_lastSubset = configManager->parse_json_b("online", "with_remove_lastSubset");
+  this->with_remove_lastSubset = true;//configManager->parse_json_b("online", "with_remove_lastSubset");
 
   //---------------------------
 }
@@ -307,13 +301,4 @@ void Player_online::color_unicolor(Subset* subset, vec4 color){
 
   //---------------------------
   sceneManager->update_subset_color(subset);
-}
-void Player_online::remove_subset_last(Cloud* cloud, int ID_subset){
-  //---------------------------
-
-  if(ID_subset >= nb_subset_max){
-    sceneManager->remove_subset(cloud, ID_subset - nb_subset_max);
-  }
-
-  //---------------------------
 }

@@ -44,7 +44,7 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   this->optionManager = node_gui->get_gui_optionManager();
   this->gui_winManager = node_gui->get_gui_winManager();
   this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
-  this->playerManager = gui_moduleManager->get_gui_playerManager();
+  this->gui_playerManager = gui_moduleManager->get_gui_playerManager();
   this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
@@ -176,7 +176,7 @@ void GUI_menuBar::MenuBar_icons(){
 void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 
-  playerManager->player_selection();
+  gui_playerManager->player_selection();
 
   //-------------------------
 }

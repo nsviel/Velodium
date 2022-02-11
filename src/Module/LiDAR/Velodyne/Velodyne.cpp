@@ -81,11 +81,13 @@ void Velodyne::lidar_create_subset(udpPacket* udp_packet){
   upd_frame.name = "frame_" + to_string(ID_subset);
 
   //Convert the udppacket into subset
-  this->subset_capture = extractManager->extractData(&upd_frame, ID_subset);
+  this->subset_capture = extractManager->extractData(&upd_frame, 0);
 
   //Update flags
-  this->is_newSubset = true;
-  this->ID_subset++;
+  if(subset_capture->xyz.size() != 0){
+    this->is_newSubset = true;
+    this->ID_subset++;
+  }
 
   //---------------------------
 }

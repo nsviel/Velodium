@@ -24,7 +24,9 @@ Capture::Capture(Module_node* node_module){
   this->sceneManager = new Scene();
 
   this->ID_capture = 0;
-  this->with_justOneFrame = true;
+  this->ID_subset = 0;
+  this->nb_subset_max = 20;
+  this->with_justOneFrame = false;
 
   //---------------------------
 }
@@ -87,6 +89,8 @@ void Capture::runtime_capturing(){
   //If flag on, include it in the cloud capture
   if(*velo_new){
     Subset* subset = new Subset(*veloManager->get_subset_capture());
+    subset->ID = ID_subset;
+    ID_subset++;
 
     //If option, remove all other subset
     if(with_justOneFrame){
@@ -96,14 +100,22 @@ void Capture::runtime_capturing(){
     //Supress null points
     this->supress_nullpoints(subset);
 
-    //Insert subset data into GPU
-    sceneManager->add_subset_to_gpu(subset);
+    //If ok insert subset into scene
+    if(subset->xyz.size() != 0){
+      //Insert subset data into GPU
+      sceneManager->add_subset_to_gpu(subset);
 
-    //Insert the subset inside the capture cloud
-    sceneManager->add_new_subset(cloud_capture, subset);
+      //Insert the subset inside the capture cloud
+      sceneManager->add_new_subset(cloud_capture, subset);
 
-    //Compute online stuff
-    onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
+      //Compute online stuff
+      onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
+    }
+
+    //Remove old frame
+    if(with_justOneFrame == false){
+      this->remove_subset_last(cloud_capture);
+    }
 
     //Unset new Subset flag
     *velo_new = false;
@@ -119,21 +131,50 @@ void Capture::supress_nullpoints(Subset* subset){
   vector<float> ts;
   //---------------------------
 
-  for(int i=0; i<xyz.size(); i++){
+  for(int i=0; i<subset->xyz.size(); i++){
     if(subset->xyz[i].x != 0 && subset->xyz[i].y != 0 && subset->xyz[i].z != 0){
       xyz.push_back(subset->xyz[i]);
-      RGB.push_back(subset->RGB[i]);
-      N.push_back(subset->N[i]);
-      I.push_back(subset->I[i]);
-      ts.push_back(subset->ts[i]);
+
+      if(subset->RGB.size() != 0){
+        RGB.push_back(subset->RGB[i]);
+      }
+
+      if(subset->N.size() != 0){
+        N.push_back(subset->N[i]);
+      }
+
+      if(subset->ts.size() != 0){
+        ts.push_back(subset->ts[i]);
+      }
+
+      if(subset->I.size() != 0){
+        I.push_back(subset->I[i]);
+      }
     }
   }
 
   subset->xyz = xyz;
-  subset->RGB = RGB;
-  subset->N = N;
-  subset->I = I;
-  subset->ts = ts;
+  if(RGB.size() != 0){
+    subset->RGB = RGB;
+  }
+  if(N.size() != 0){
+    subset->N = N;
+  }
+  if(I.size() != 0){
+    subset->I = I;
+  }
+  if(ts.size() != 0){
+    subset->ts = ts;
+  }
+
+  //---------------------------
+}
+void Capture::remove_subset_last(Cloud* cloud){
+  //---------------------------
+
+  if(cloud->subset.size() >= nb_subset_max){
+    sceneManager->remove_subset_last(cloud);
+  }
 
   //---------------------------
 }

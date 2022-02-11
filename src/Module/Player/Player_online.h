@@ -34,7 +34,6 @@ public:
 
   //Other functions
   void set_cloud_visibility(Cloud* cloud, int& ID_subset);
-  void remove_subset_last(Cloud* cloud, int i);
   void color_heatmap(Cloud* cloud, int i);
   void color_unicolor(Subset* subset, vec4 color);
 
@@ -50,7 +49,6 @@ public:
 
   inline vec2* get_heatmap_height_range(){return &HM_height_range;}
   inline bool* get_with_remove_lastSubset(){return &with_remove_lastSubset;}
-  inline int* get_nb_subset_max(){return &nb_subset_max;}
   inline int* get_visibility_range(){return &visibility_range;}
 
 private:
@@ -68,7 +66,6 @@ private:
   float camera_moved_rotat;
   float camera_distPos;
   float time_image;
-  int nb_subset_max;
   int visibility_range;
 
   bool with_online;

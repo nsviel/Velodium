@@ -48,7 +48,7 @@ private:
   GUI_windows* gui_winManager;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanelManager;
-  GUI_Player* playerManager;
+  GUI_Player* gui_playerManager;
 };
 
 

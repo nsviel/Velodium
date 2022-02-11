@@ -143,6 +143,30 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
 }
+void Scene::remove_subset_last(Cloud* cloud){
+  //---------------------------
+
+  //Supress subset objects
+  Subset* subset = get_subset(cloud, 0);
+  Subset* subset_buf = get_subset_buffer(cloud, 0);
+  Subset* subset_ini = get_subset_init(cloud, 0);
+
+  delete subset;
+  delete subset_buf;
+  delete subset_ini;
+
+  //Supress subset iterators
+  list<Subset*>::iterator it = next(cloud->subset.begin(), 0);
+  list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), 0);
+  list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), 0);
+
+  cloud->subset.erase(it);
+  cloud->subset_buffer.erase(it_buf);
+  cloud->subset_init.erase(it_ini);
+
+  //---------------------------
+  cloud->nb_subset = cloud->subset.size();
+}
 void Scene::remove_subset_all(Cloud* cloud){
   //---------------------------
 
@@ -170,6 +194,7 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
 
   //Update number of cloud subset
   cloud->nb_subset = cloud->subset.size();
+  cloud->ID_selected = subset->ID;
 
   //---------------------------
 }

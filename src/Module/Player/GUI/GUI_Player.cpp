@@ -179,6 +179,7 @@ void GUI_Player::player_selection(){
     }
     ImGui::SameLine();
     ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", ts);
+
   }
 
   //---------------------------
@@ -294,11 +295,11 @@ void GUI_Player::parameter_online(){
       ImGui::InputInt("Nb image", save_image_max);
     }
 
-    if(*with_remove_lastSubset){
+    /*if(*with_remove_lastSubset){
       int* nb_subset_max = onlineManager->get_nb_subset_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb cloud subset", nb_subset_max);
-    }
+    }*/
     ImGui::NextColumn();
 
     //Colorization
