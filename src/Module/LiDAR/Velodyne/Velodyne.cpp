@@ -24,12 +24,11 @@ Velodyne::Velodyne(){
   //---------------------------
 
   this->extractManager = new dataExtraction();
-
   this->udpServManager = new UDP_server();
   this->udp_vlp16Manager = new UDP_parser_VLP16();
   this->frameManager = new UDP_frame();
+  this->subset_capture = new Subset();
 
-  this->ID_subset = 0;
   this->rot_freq = 0;
   this->rot_rpm = 0;
   this->fov_min = 0;
@@ -53,13 +52,13 @@ void Velodyne::lidar_start_watcher(){
   thread_capture = std::thread([&]() {
     while (is_capturing) {
       //Get packet in decimal format
-      vector<int> packet = udpServManager->read_UDP_packets();
+      vector<int> packet_dec = udpServManager->read_UDP_packets();
 
       //Parse decimal packet into point cloud
-      udpPacket* packet_parsed = udp_vlp16Manager->parse_UDP_packet(packet);
+      udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);
 
       //Iteratively build a complete frame
-      bool frame_rev = frameManager->build_frame(packet_parsed);
+      bool frame_rev = frameManager->build_frame(packet_udp);
 
       if(frame_rev){
         udpPacket* frame = frameManager->get_endedFrame();
@@ -78,15 +77,19 @@ void Velodyne::lidar_create_subset(udpPacket* udp_packet){
 
   //Free the memory to get synchroneous data
   udpPacket upd_frame = *udp_packet;
-  upd_frame.name = "frame_" + to_string(ID_subset);
+  upd_frame.name = "";
 
-  //Convert the udppacket into subset
-  this->subset_capture = extractManager->extractData(&upd_frame, 0);
+  //Convert the udp packet into subset
+  Subset* subset_extracted = extractManager->extractData(upd_frame);
+
+  //Make sure to desallocate memory
+  delete subset_capture;
+  this->subset_capture = new Subset(*subset_extracted);
+  delete subset_extracted;
 
   //Update flags
   if(subset_capture->xyz.size() != 0){
     this->is_newSubset = true;
-    this->ID_subset++;
   }
 
   //---------------------------

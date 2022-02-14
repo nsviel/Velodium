@@ -24,7 +24,6 @@ Capture::Capture(Module_node* node_module){
   this->sceneManager = new Scene();
 
   this->ID_capture = 0;
-  this->ID_subset = 0;
   this->nb_subset_max = 20;
   this->with_justOneFrame = false;
 
@@ -49,10 +48,6 @@ void Capture::start_new_capture(){
   //If all OK start new capture
   if(*is_rotating && *is_connected){
     veloManager->lidar_start_watcher();
-
-    //Reset variables
-    int* ID_subset = veloManager->get_ID_subset();
-    *ID_subset = 0;
 
     //Create new empty cloud
     loaderManager->load_cloud_empty();
@@ -89,36 +84,47 @@ void Capture::runtime_capturing(){
   //If flag on, include it in the cloud capture
   if(*velo_new){
     Subset* subset = new Subset(*veloManager->get_subset_capture());
-    subset->ID = ID_subset;
-    ID_subset++;
-
-    //If option, remove all other subset
-    if(with_justOneFrame){
-      sceneManager->remove_subset_all(cloud_capture);
-    }
-
-    //Supress null points
-    this->supress_nullpoints(subset);
-
-    //If ok insert subset into scene
-    if(subset->xyz.size() != 0){
-      //Insert subset data into GPU
-      sceneManager->add_subset_to_gpu(subset);
-
-      //Insert the subset inside the capture cloud
-      sceneManager->add_new_subset(cloud_capture, subset);
-
-      //Compute online stuff
-      onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
-    }
-
-    //Remove old frame
-    if(with_justOneFrame == false){
-      this->remove_subset_last(cloud_capture);
-    }
+    this->operation_new_subset(subset);
 
     //Unset new Subset flag
     *velo_new = false;
+  }
+
+  //---------------------------
+}
+
+//Subfunctions
+void Capture::operation_new_subset(Subset* subset){
+  //---------------------------
+
+  subset->name = "frame_" + to_string(cloud_capture->ID_subset);
+  subset->ID = cloud_capture->ID_subset;
+  cloud_capture->ID_subset++;
+
+  //If option, remove all other subset
+  if(with_justOneFrame){
+    sceneManager->remove_subset_all(cloud_capture);
+  }
+  //Remove old frame if option is activated
+  else{
+    if(cloud_capture->subset.size() >= nb_subset_max){
+      sceneManager->remove_subset_last(cloud_capture);
+    }
+  }
+
+  //Supress null points
+  this->supress_nullpoints(subset);
+
+  //If ok insert subset into scene
+  if(subset->xyz.size() != 0){
+    //Insert subset data into GPU
+    sceneManager->add_subset_to_gpu(subset);
+
+    //Insert the subset inside the capture cloud
+    sceneManager->add_new_subset(cloud_capture, subset);
+
+    //Compute online stuff
+    onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
   }
 
   //---------------------------
@@ -165,15 +171,6 @@ void Capture::supress_nullpoints(Subset* subset){
   }
   if(ts.size() != 0){
     subset->ts = ts;
-  }
-
-  //---------------------------
-}
-void Capture::remove_subset_last(Cloud* cloud){
-  //---------------------------
-
-  if(cloud->subset.size() >= nb_subset_max){
-    sceneManager->remove_subset_last(cloud);
   }
 
   //---------------------------

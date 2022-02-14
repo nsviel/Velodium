@@ -99,6 +99,8 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   Subset* subset_buf = get_subset_buffer(cloud, oID);
   Subset* subset_ini = get_subset_init(cloud, oID);
 
+  this->remove_subset_to_gpu(subset);
+
   delete subset;
   delete subset_buf;
   delete subset_ini;
@@ -143,6 +145,16 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
 }
+void Scene::remove_subset_to_gpu(Subset* subset){
+  //---------------------------
+
+  glDeleteBuffers(1, &subset->VBO_xyz);
+  glDeleteBuffers(1, &subset->VBO_rgb);
+  glDeleteBuffers(1, &subset->VBO_N);
+  glDeleteVertexArrays(1, &subset->VAO);
+
+  //---------------------------
+}
 void Scene::remove_subset_last(Cloud* cloud){
   //---------------------------
 
@@ -150,6 +162,8 @@ void Scene::remove_subset_last(Cloud* cloud){
   Subset* subset = get_subset(cloud, 0);
   Subset* subset_buf = get_subset_buffer(cloud, 0);
   Subset* subset_ini = get_subset_init(cloud, 0);
+
+  this->remove_subset_to_gpu(subset);
 
   delete subset;
   delete subset_buf;
@@ -262,7 +276,7 @@ void Scene::reset_cloud(Cloud* cloud){
     subset->frame.reset();
   }
 
-  cloud->ID_selected = 0;
+  cloud->ID_selected = get_subset(cloud, 0)->ID;
 
   //---------------------------
   this->update_cloud_glyphs(cloud);

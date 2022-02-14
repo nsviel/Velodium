@@ -16,7 +16,7 @@ struct Cloud{ //Global set of the cloud
   GLuint oID; // List order cloud ID
 
   int ID_selected; //Actual selected subset ID
-  int ID_last; //Last given subset ID
+  int ID_subset; //Last given subset ID
 
   //Parameters
   int nb_subset;

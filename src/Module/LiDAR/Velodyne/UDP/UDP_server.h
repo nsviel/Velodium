@@ -17,10 +17,8 @@ public:
   vector<int> read_UDP_packets();
 
   //Subfunctions
-  void make_connexion_boost();
-  void make_connexion_std();
-  void std_binding();
-  void std_read_data();
+  void server_binding();
+  void server_read_data();
 
 private:
   int PORT;

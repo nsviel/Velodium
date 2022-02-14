@@ -1,5 +1,5 @@
-#ifndef WIN_CLOUDINFO_H
-#define WIN_CLOUDINFO_H
+#ifndef WIN_CLOUD_H
+#define WIN_CLOUD_H
 
 #include "../../common.h"
 
@@ -7,16 +7,17 @@ class Scene;
 class Attribut;
 
 
-class WIN_cloudInfo
+class WIN_cloud
 {
 public:
   //Constructor / Destructor
-  WIN_cloudInfo();
-  ~WIN_cloudInfo();
+  WIN_cloud();
+  ~WIN_cloud();
 
 public:
   //Main function
   void window_cloudInfo();
+  void window_asciiData();
 
   //Sub functions
   void cloud_stats_location(Cloud* cloud);

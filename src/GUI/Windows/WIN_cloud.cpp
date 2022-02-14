@@ -1,4 +1,4 @@
-#include "WIN_cloudInfo.h"
+#include "WIN_cloud.h"
 
 #include "../../Engine/Scene.h"
 #include "../../Specific/fct_maths.h"
@@ -11,7 +11,7 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_cloudInfo::WIN_cloudInfo(){
+WIN_cloud::WIN_cloud(){
   //---------------------------
 
   this->sceneManager = new Scene();
@@ -19,10 +19,10 @@ WIN_cloudInfo::WIN_cloudInfo(){
 
   //---------------------------
 }
-WIN_cloudInfo::~WIN_cloudInfo(){}
+WIN_cloud::~WIN_cloud(){}
 
 //Main function
-void WIN_cloudInfo::window_cloudInfo(){
+void WIN_cloud::window_cloudInfo(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   bool* open = &window_tab.show_modifyFileInfo;
   //---------------------------
@@ -153,9 +153,83 @@ void WIN_cloudInfo::window_cloudInfo(){
 
   //---------------------------
 }
+void WIN_cloud::window_asciiData(){
+  if(window_tab.show_asciiData){
+    ImGui::Begin("Data", &window_tab.show_asciiData);
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = sceneManager->get_subset_selected();
+
+    vector<vec3>& XYZ = subset->xyz;
+    vector<vec4>& RGB = subset->RGB;
+    vector<float>& Is = subset->I;
+    vector<vec3>& N = subset->N;
+    //---------------------------
+
+    //Settings
+    static int nbLines = 100;
+    ImGui::SliderInt("Number of lines", &nbLines, 1, subset->nb_point);
+
+    int nb = 2;
+    if(nbLines > XYZ.size()) nbLines = XYZ.size();
+    if(subset->I.size() != 0) nb++;
+    if(subset->has_color) nb++;
+    if(subset->N.size() != 0) nb++;
+
+    //Columns
+    ImGui::Columns(nb);
+    ImGui::Separator();
+    ImGui::Text("#");
+    ImGui::NextColumn();
+    ImGui::Text("XYZ");
+    ImGui::NextColumn();
+    if(subset->I.size() != 0){
+      ImGui::Text("I");
+      ImGui::NextColumn();
+    }
+    if(subset->has_color){
+      ImGui::Text("RGB");
+      ImGui::NextColumn();
+    }
+    if(subset->N.size() != 0){
+      ImGui::Text("N");
+      ImGui::NextColumn();
+    }
+    ImGui::Separator();
+
+    //Data in columns
+    static int selected = -1;
+    for(int i=0; i<nbLines; i++){
+      ImGui::TextColored(ImVec4(0.4f,0.9f,0.4f,1.0f),"%i", i+1);
+      ImGui::NextColumn();
+
+      ImGui::Text("%f %f %f", XYZ[i].x, XYZ[i].y, XYZ[i].z);
+      ImGui::NextColumn();
+
+      if(subset->I.size() != 0){
+        ImGui::Text("%f", Is[i]);
+        ImGui::NextColumn();
+      }
+
+      if(subset->has_color){
+        ImGui::Text("%f %f %f", RGB[i].x, RGB[i].y, RGB[i].z);
+        ImGui::NextColumn();
+      }
+
+      if(subset->N.size() != 0){
+        ImGui::Text("%f %f %f", N[i].x, N[i].y, N[i].z);
+        ImGui::NextColumn();
+      }
+    }
+    ImGui::Columns(1);
+    ImGui::TreePop();
+
+    //---------------------------
+    ImGui::End();
+  }
+}
 
 //Sub functions
-void WIN_cloudInfo::cloud_stats_location(Cloud* cloud){
+void WIN_cloud::cloud_stats_location(Cloud* cloud){
   Subset* subset = sceneManager->get_subset_selected();
   vector<vec3>& XYZ = subset->xyz;
   vec3 XYZ_COM = subset->COM;
@@ -184,7 +258,7 @@ void WIN_cloudInfo::cloud_stats_location(Cloud* cloud){
     cout<<"__________"<<endl;
   }
 }
-void WIN_cloudInfo::cloud_stats_intensity(Cloud* cloud){
+void WIN_cloud::cloud_stats_intensity(Cloud* cloud){
   Subset* subset = sceneManager->get_subset_selected();
   vector<float>& Is = subset->I;
   //---------------------------
@@ -203,7 +277,7 @@ void WIN_cloudInfo::cloud_stats_intensity(Cloud* cloud){
     cout<<"__________"<<endl;
   }
 }
-void WIN_cloudInfo::cloud_stats_distance(Cloud* cloud){
+void WIN_cloud::cloud_stats_distance(Cloud* cloud){
   Subset* subset = sceneManager->get_subset_selected();
   vector<float>& dist = subset->R;
   //---------------------------
@@ -222,7 +296,7 @@ void WIN_cloudInfo::cloud_stats_distance(Cloud* cloud){
   cout<<"Mean : "<<fct_mean(dist)<<endl;
   cout<<"__________"<<endl;
 }
-void WIN_cloudInfo::cloud_stats_cosIt(Cloud* cloud){
+void WIN_cloud::cloud_stats_cosIt(Cloud* cloud){
   Subset* subset = sceneManager->get_subset_selected();
   vector<float>& cosIt =  subset->cosIt;
   vector<float>& It =  subset->It;

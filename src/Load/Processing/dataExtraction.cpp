@@ -33,8 +33,9 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     Subset* subset = new Subset();
 
     this->check_data(data[i]);
-    this->init_subsetParameters(subset, data[i]->name, cloud->ID_last++);
+    this->init_subsetParameters(subset, data[i]->name, cloud->ID_subset);
     this->init_frameParameters(subset);
+    cloud->ID_subset++;
 
     //Subset data
     this->extract_Location(subset, data[i]->location);
@@ -64,21 +65,21 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset* dataExtraction::extractData(udpPacket* data, int ID){
+Subset* dataExtraction::extractData(udpPacket& data){
   Subset* subset = new Subset();
   //---------------------------
 
   this->init_randomColor();
   this->check_data(data);
 
-  this->init_subsetParameters(subset, data->name, ID);
+  this->init_subsetParameters(subset, data.name, 0);
   this->init_frameParameters(subset);
 
   //Subset data
-  this->extract_Location(subset, data->xyz);
-  this->extract_Intensity(subset, data->I);
-  this->extract_Timestamp(subset, data->t);
-  this->extract_Color(subset, data->rgb);
+  this->extract_Location(subset, data.xyz);
+  this->extract_Intensity(subset, data.I);
+  this->extract_Timestamp(subset, data.t);
+  this->extract_Color(subset, data.rgb);
 
   //Create associated glyphs
   Glyphs glyphManager;
@@ -94,7 +95,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   this->init_randomColor();
   this->check_data(data);
 
-  this->init_subsetParameters(subset, data->name, cloud->ID_last++);
+  this->init_subsetParameters(subset, data->name, cloud->ID_subset);
   this->init_frameParameters(subset);
 
   //Subset data
@@ -112,6 +113,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   cloud->subset_init.push_back(subset);
   cloud->subset_buffer.push_back(subset);
   cloud->nb_subset++;
+  cloud->ID_subset++;
 
   //---------------------------
 }
@@ -208,7 +210,7 @@ void dataExtraction::check_data(dataFile* data){
 
   //---------------------------
 }
-void dataExtraction::check_data(udpPacket* data){
+void dataExtraction::check_data(udpPacket& data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -216,24 +218,24 @@ void dataExtraction::check_data(udpPacket* data){
   //---------------------------
 
   //Intensities
-  if(data->I.size() != 0 && data->I.size() == data->xyz.size()){
+  if(data.I.size() != 0 && data.I.size() == data.xyz.size()){
     this->is_intensity = true;
   }
-  if(fct_max(data->I) > 1){
-    for(int i=0; i<data->I.size(); i++){
-      data->I[i] = data->I[i] / 255;
+  if(fct_max(data.I) > 1){
+    for(int i=0; i<data.I.size(); i++){
+      data.I[i] = data.I[i] / 255;
     }
   }
 
   //Timestamp
-  if(data->t.size() != 0 && data->t.size() == data->xyz.size()){
+  if(data.t.size() != 0 && data.t.size() == data.xyz.size()){
     this->is_timestamp = true;
   }
 
   //Color
   if(is_intensity){
-    for(int i=0; i<data->I.size(); i++){
-      data->rgb.push_back(vec4(data->I.at(i), data->I.at(i), data->I.at(i), 1.0f));
+    for(int i=0; i<data.I.size(); i++){
+      data.rgb.push_back(vec4(data.I.at(i), data.I.at(i), data.I.at(i), 1.0f));
     }
   }
 
@@ -266,7 +268,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
   cloud->ID_selected = 0;
-  cloud->ID_last = 0;
+  cloud->ID_subset = 0;
   cloud->heatmap = false;
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;

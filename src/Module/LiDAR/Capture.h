@@ -21,12 +21,14 @@ public:
   ~Capture();
 
 public:
-  //Recording functions
+  //Main functions
   void start_new_capture();
   void stop_capture();
   void runtime_capturing();
+
+  //Subfunctions
+  void operation_new_subset(Subset* subset);
   void supress_nullpoints(Subset* subset);
-  void remove_subset_last(Cloud* cloud);
 
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
@@ -46,7 +48,6 @@ private:
   bool is_capturing;
   int nb_subset_max;
   int ID_capture;
-  int ID_subset;
 };
 
 #endif

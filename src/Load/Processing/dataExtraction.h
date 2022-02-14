@@ -20,14 +20,14 @@ public:
 public:
   //Main function
   Cloud* extractData(vector<dataFile*> data);
-  Subset* extractData(udpPacket* data, int ID);
+  Subset* extractData(udpPacket& data);
   void extractData_frame(Cloud* cloud, dataFile* data);
   void extractData_oneFrame(Cloud* cloud, dataFile* data);
 
 private:
   //Subfunctions
   void check_data(dataFile* data);
-  void check_data(udpPacket* data);
+  void check_data(udpPacket& data);
   void init_cloudParameters(Cloud* cloud, vector<dataFile*> data);
   void init_subsetParameters(Subset* subset, string path, int ID);
   void init_frameParameters(Subset* subset);

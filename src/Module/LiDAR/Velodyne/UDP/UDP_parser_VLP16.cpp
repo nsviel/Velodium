@@ -24,28 +24,28 @@ UDP_parser_VLP16::UDP_parser_VLP16(){
 UDP_parser_VLP16::~UDP_parser_VLP16(){}
 
 //Main function
-udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet){
-  udpPacket* cloud = new udpPacket();
+udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
+  udpPacket* packet_udp = new udpPacket();
   //---------------------------
 
   //Packet timestamp
-  packet_ts_us = packet[1203]*256*256*256 + packet[1202]*256*256 + packet[1201]*256 + packet[1200];
+  packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
 
   //Chekc if data is laser or position information
-  if(packet.size() != 1206){
-    return cloud;
+  if(packet_dec.size() != 1206){
+    return packet_udp;
   }
 
   //Parse packet data
-  this->parse_packet(packet);
+  this->parse_packet(packet_dec);
   this->parse_blocks();
   this->parse_azimuth();
   this->parse_coordinates();
   this->parse_timestamp();
-  this->final_check(cloud);
+  this->final_check(packet_udp);
 
   //---------------------------
-  return cloud;
+  return packet_udp;
 }
 
 //Subfunctions

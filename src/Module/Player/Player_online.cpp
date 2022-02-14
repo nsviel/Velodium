@@ -51,6 +51,31 @@ Player_online::Player_online(Module_node* node_module){
 Player_online::~Player_online(){}
 
 //Main function
+void Player_online::update_configuration(){
+  //---------------------------
+
+  this->HM_height_range = vec2(-2.5, 1.75);
+  this->camera_moved_trans = vec2(0, 0);
+  this->camera_moved_rotat = 0;
+  this->camera_distPos = 5;
+
+  this->with_camera_top = false;
+  this->with_camera_follow = configManager->parse_json_b("online", "with_camera_follow");
+  this->with_camera_root = false;
+
+  this->with_heatmap = configManager->parse_json_b("online", "with_heatmap");
+  this->with_heatmap_rltHeight = true;
+  this->with_unicolor = !with_heatmap;
+
+  this->with_online = true;
+  this->with_save_frame = false;
+  this->with_save_image = false;
+  this->with_slam = false;// configManager->parse_json_b("online", "with_slam");
+  this->with_cylinder_cleaning = false;//configManager->parse_json_b("online", "with_cylinder_cleaning");
+  this->with_remove_lastSubset = true;//configManager->parse_json_b("online", "with_remove_lastSubset");
+
+  //---------------------------
+}
 void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //This function is called each time a new subset arrives
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
@@ -121,31 +146,6 @@ void Player_online::compute_statistics(Subset* subset){
     stats += "[IMAG- " + to_string((int)time_image) + " ms] ";
   }
   console.AddLog("#", stats);
-
-  //---------------------------
-}
-void Player_online::update_configuration(){
-  //---------------------------
-
-  this->HM_height_range = vec2(-2.5, 1.75);
-  this->camera_moved_trans = vec2(0, 0);
-  this->camera_moved_rotat = 0;
-  this->camera_distPos = 5;
-
-  this->with_camera_top = false;
-  this->with_camera_follow = configManager->parse_json_b("online", "with_camera_follow");
-  this->with_camera_root = false;
-
-  this->with_heatmap = configManager->parse_json_b("online", "with_heatmap");
-  this->with_heatmap_rltHeight = true;
-  this->with_unicolor = !with_heatmap;
-
-  this->with_online = true;
-  this->with_save_frame = true;
-  this->with_save_image = true;
-  this->with_slam = true;// configManager->parse_json_b("online", "with_slam");
-  this->with_cylinder_cleaning = false;//configManager->parse_json_b("online", "with_cylinder_cleaning");
-  this->with_remove_lastSubset = true;//configManager->parse_json_b("online", "with_remove_lastSubset");
 
   //---------------------------
 }
