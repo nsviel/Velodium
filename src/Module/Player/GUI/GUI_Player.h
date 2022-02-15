@@ -22,11 +22,10 @@ public:
 public:
   //Main function
   void design_player_cloud();
-  void design_player_online();
-  void update();
 
   //Subfunctions
   void player_run();
+  void player_button();
   void player_mouse();
   void player_selection();
   void parameter_offline();
@@ -39,6 +38,8 @@ private:
   Interfacing* ioManager;
   Player_cloud* playerManager;
   Player_online* onlineManager;
+
+  int item_width;
 };
 
 #endif

@@ -43,7 +43,6 @@ public:
   inline bool* get_with_heatmap(){return &with_heatmap;}
   inline bool* get_with_heatmap_rltHeight(){return &with_heatmap_rltHeight;}
   inline bool* get_with_unicolor(){return &with_unicolor;}
-  inline bool* get_with_online(){return &with_online;}
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
 
@@ -68,7 +67,6 @@ private:
   float time_image;
   int visibility_range;
 
-  bool with_online;
   bool with_camera_follow;
   bool with_slam;
   bool with_camera_top;

@@ -45,7 +45,7 @@ void GUI_Slam::design_SLAM(){
   //---------------------------
 
   this->compute();
-  this->parameters();
+  this->parameter_slam();
   this->statistics();
 
   //---------------------------
@@ -68,7 +68,27 @@ void GUI_Slam::compute(){
   }
   ImGui::PopStyleColor(1);
 
-  //Check configuration model
+  //---------------------------
+}
+void GUI_Slam::parameter_slam(){
+  if(ImGui::CollapsingHeader("SLAM params")){
+    //---------------------------
+
+    this->parameter_configuration();
+    this->parameter_general();
+    this->parameter_optimization();
+    this->parameter_localMap();
+    this->parameter_normal();
+    this->parameter_robustesse();
+
+    //---------------------------
+    ImGui::Separator();
+  }
+}
+void GUI_Slam::parameter_configuration(){
+  //---------------------------
+
+  //Configuration model
   int slam_conf = *configManager->get_predefined_conf();
   if(ImGui::Combo("Configuration", &slam_conf, "vlp_64\0vlp_16\0")){
     configManager->set_predefined_conf(slam_conf);
@@ -76,21 +96,7 @@ void GUI_Slam::compute(){
 
   //---------------------------
 }
-void GUI_Slam::parameters(){
-  if(ImGui::CollapsingHeader("Parameters")){
-    //---------------------------
-
-    this->parameters_general();
-    this->parameters_optimization();
-    this->parameters_localMap();
-    this->parameters_normal();
-    this->parameters_robustesse();
-
-    //---------------------------
-    ImGui::Separator();
-  }
-}
-void GUI_Slam::parameters_general(){
+void GUI_Slam::parameter_general(){
   if(ImGui::TreeNode("General")){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
@@ -147,7 +153,7 @@ void GUI_Slam::parameters_general(){
     ImGui::TreePop();
   }
 }
-void GUI_Slam::parameters_optimization(){
+void GUI_Slam::parameter_optimization(){
   if(ImGui::TreeNode("Optimization")){
     Cloud* cloud = database.cloud_selected;
     //---------------------------
@@ -183,7 +189,7 @@ void GUI_Slam::parameters_optimization(){
     ImGui::TreePop();
   }
 }
-void GUI_Slam::parameters_localMap(){
+void GUI_Slam::parameter_localMap(){
   if(ImGui::TreeNode("Local map")){
     //---------------------------
 
@@ -243,7 +249,7 @@ void GUI_Slam::parameters_localMap(){
     ImGui::TreePop();
   }
 }
-void GUI_Slam::parameters_normal(){
+void GUI_Slam::parameter_normal(){
   if(ImGui::TreeNode("Normal")){
     //---------------------------
 
@@ -267,7 +273,7 @@ void GUI_Slam::parameters_normal(){
     ImGui::TreePop();
   }
 }
-void GUI_Slam::parameters_robustesse(){
+void GUI_Slam::parameter_robustesse(){
   if(ImGui::TreeNode("Robustesse")){
     //---------------------------
 
@@ -361,7 +367,7 @@ void GUI_Slam::statistics(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);
 
-  //SLAM results - absolut transformation parameters
+  //SLAM results - absolut transformation parameter
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Transformation");
   ImGui::Text("T abs [m]:");
   ImGui::SameLine();
@@ -370,7 +376,7 @@ void GUI_Slam::statistics(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_abs.x, rotat_abs.y, rotat_abs.z);
 
-  //SLAM results - relative transformation parameters
+  //SLAM results - relative transformation parameter
   ImGui::Text("T rlt [m]:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_rlt.x, trans_rlt.y, trans_rlt.z);

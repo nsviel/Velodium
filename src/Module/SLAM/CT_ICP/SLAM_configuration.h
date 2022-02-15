@@ -18,6 +18,10 @@ public:
   ~SLAM_configuration();
 
 public:
+  //Main function
+  void make_config(int conf);
+
+  //Subfunctions
   void make_config_0();
   void make_config_1();
   void set_predefined_conf(int conf);

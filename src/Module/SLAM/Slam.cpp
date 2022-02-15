@@ -38,7 +38,7 @@ Slam::Slam(){
   this->map_size_old = 0;
   this->nb_thread = 8;
 
-  configManager->make_config_1();
+  configManager->make_config(0);
 
   //---------------------------
 }

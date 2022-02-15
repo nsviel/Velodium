@@ -5,6 +5,7 @@
 #include "LiDAR/Capture.h"
 #include "Obstacle/Obstacle.h"
 #include "Obstacle/Interfacing.h"
+#include "Obstacle/Scenario.h"
 #include "Player/Player_cloud.h"
 #include "Player/Player_online.h"
 #include "Network/Network.h"
@@ -42,6 +43,7 @@ public:
     this->onlineManager = new Player_online(this);
     this->playerManager = new Player_cloud(onlineManager);
     this->captureManager = new Capture(this);
+    this->scenarioManager = new Scenario(this);
 
     //---------------------------
   }
@@ -52,7 +54,13 @@ public:
 
     //---------------------------
   }
-  void update(){}
+  void update(){
+    //---------------------------
+
+    onlineManager->update_configuration();
+
+    //---------------------------
+  }
   void runtime(){
     //---------------------------
 
@@ -72,6 +80,7 @@ public:
   inline Interfacing* get_ioManager(){return ioManager;}
   inline Player_online* get_onlineManager(){return onlineManager;}
   inline Player_cloud* get_playerManager(){return playerManager;}
+  inline Scenario* get_scenarioManager(){return scenarioManager;}
 
 private:
   Engine_node* node_engine;
@@ -85,6 +94,7 @@ private:
   Interfacing* ioManager;
   Player_cloud* playerManager;
   Player_online* onlineManager;
+  Scenario* scenarioManager;
 };
 
 #endif

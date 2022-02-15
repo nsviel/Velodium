@@ -29,6 +29,8 @@ GUI_Player::GUI_Player(GUI_node* node_gui){
   this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
 
+  this->item_width = 100;
+
   //---------------------------
 }
 GUI_Player::~GUI_Player(){}
@@ -43,19 +45,6 @@ void GUI_Player::design_player_cloud(){
 
   //---------------------------
 }
-void GUI_Player::design_player_online(){
-  //---------------------------
-
-
-  //---------------------------
-}
-void GUI_Player::update(){
-  //---------------------------
-
-  onlineManager->update_configuration();
-
-  //---------------------------
-}
 
 //Subfunctions
 void GUI_Player::player_run(){
@@ -64,45 +53,8 @@ void GUI_Player::player_run(){
   Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
-  //Play / Stop frame display
-  playerManager->player_runtime();
-  bool is_playing = *playerManager->get_player_isrunning();
-  if(is_playing == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
-  }
-  if (ImGui::Button(ICON_FA_PLAY "##36")){
-    if(cloud != nullptr){
-      playerManager->player_start();
-    }
-  }
-  ImGui::PopStyleColor(1);
-  ImGui::SameLine();
-  bool is_paused = *playerManager->get_player_ispaused();
-  if(is_paused){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
-  }
-  if (ImGui::Button(ICON_FA_PAUSE "##37")){
-    if(cloud != nullptr){
-      playerManager->player_pause();
-    }
-  }
-  if(is_paused){
-    ImGui::PopStyleColor(1);
-  }
-  ImGui::SameLine();
-  if (ImGui::Button(ICON_FA_STOP "##37")){
-    if(cloud != nullptr){
-      playerManager->player_stop();
-    }
-  }
-  ImGui::SameLine();
-  int freq = *playerManager->get_frequency();
-  ImGui::SetNextItemWidth(40);
-  if(ImGui::SliderInt("Frequency", &freq, 1, 25)){
-    playerManager->player_setFrequency(freq);
-  }
+  //Display set of player buttons
+  this->player_button();
 
   //Display only the ieme cloud
   this->player_selection();
@@ -137,6 +89,58 @@ void GUI_Player::player_run(){
 
   //---------------------------
   ImGui::Separator();
+}
+void GUI_Player::player_button(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Play button
+  playerManager->player_runtime();
+  bool is_playing = *playerManager->get_player_isrunning();
+  if(is_playing == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
+  if (ImGui::Button(ICON_FA_PLAY "##36")){
+    if(cloud != nullptr){
+      playerManager->player_start();
+    }
+  }
+  ImGui::PopStyleColor(1);
+  ImGui::SameLine();
+
+  //Pause button
+  bool is_paused = *playerManager->get_player_ispaused();
+  if(is_paused){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
+  if (ImGui::Button(ICON_FA_PAUSE "##37")){
+    if(cloud != nullptr){
+      playerManager->player_pause();
+    }
+  }
+  if(is_paused){
+    ImGui::PopStyleColor(1);
+  }
+  ImGui::SameLine();
+
+  //Stop button
+  if (ImGui::Button(ICON_FA_STOP "##37")){
+    if(cloud != nullptr){
+      playerManager->player_stop();
+    }
+  }
+  ImGui::SameLine();
+
+  //Frequency choice
+  int freq = *playerManager->get_frequency();
+  ImGui::SetNextItemWidth(40);
+  if(ImGui::SliderInt("Hz", &freq, 1, 25)){
+    playerManager->player_setFrequency(freq);
+  }
+
+  //---------------------------
 }
 void GUI_Player::player_mouse(){
   Cloud* cloud = sceneManager->get_cloud_selected();
@@ -244,91 +248,68 @@ void GUI_Player::parameter_offline(){
   }
 }
 void GUI_Player::parameter_online(){
-  bool* with_online = onlineManager->get_with_online();
-  ImGui::Checkbox("Online processing", with_online);
-
   if(ImGui::CollapsingHeader("Online params")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
-    ImGui::Columns(2);
     //---------------------------
 
+    //SLAM activated at each frame
     bool* with_slam = onlineManager->get_with_slam();
-    ImGui::Checkbox("SLAM each frame", with_slam);
-    ImGui::NextColumn();
+    ImGui::Checkbox("SLAM", with_slam);
 
-    ImGui::NextColumn();
+    //Camera auto displacement
     bool* with_camera_follow = onlineManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", with_camera_follow);
-    ImGui::NextColumn();
 
-    ImGui::NextColumn();
+    //Remove last subset
     bool* with_remove_lastSubset = onlineManager->get_with_remove_lastSubset();
     ImGui::Checkbox("Remove last subset", with_remove_lastSubset);
-    ImGui::NextColumn();
 
-    ImGui::NextColumn();
+    //Save frame in folder for AI module
     bool* with_save_frame = onlineManager->get_with_save_frame();
     ImGui::Checkbox("Save frame", with_save_frame);
-    ImGui::NextColumn();
-    static bool with_unlimit_saving = false;
-    if(*with_save_frame && with_unlimit_saving == false){
+    if(*with_save_frame){
       int* save_frame_max = ioManager->get_save_frame_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb frame", save_frame_max);
     }
-    ImGui::NextColumn();
+
+    //Option: unlimited frame saving
+    static bool with_unlimit_saving = false;
     ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
     if(with_unlimit_saving){
       int* save_frame_max = ioManager->get_save_frame_max();
       *save_frame_max = 500000000;
     }
-    ImGui::NextColumn();
 
-    ImGui::NextColumn();
+    //Save image for interfacing
     bool* with_save_image = onlineManager->get_with_save_image();
     ImGui::Checkbox("Save image", with_save_image);
-    ImGui::NextColumn();
     if(*with_save_image){
       int* save_image_max = ioManager->get_save_image_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb image", save_image_max);
     }
 
-    /*if(*with_remove_lastSubset){
-      int* nb_subset_max = onlineManager->get_nb_subset_max();
-      ImGui::SetNextItemWidth(100);
-      ImGui::InputInt("Nb cloud subset", nb_subset_max);
-    }*/
-    ImGui::NextColumn();
-
     //Colorization
     int colorization;
     bool* with_heatmap = onlineManager->get_with_heatmap();
-    if(*with_heatmap){
-      colorization = 0;
-    }else{
-      colorization = 1;
-    }
+    if(*with_heatmap){colorization = 0;}else{colorization = 1;}
     if(ImGui::RadioButton("Heatmap", &colorization, 0)){
       *onlineManager->get_with_heatmap() = true;
       *onlineManager->get_with_unicolor() = false;
     }
-    ImGui::NextColumn();
+    ImGui::SameLine();
+    if(ImGui::RadioButton("Unicolor", &colorization, 1)){
+      *onlineManager->get_with_heatmap() = false;
+      *onlineManager->get_with_unicolor() = true;
+    }
 
     //Option: heatmap with relative height
     bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
     if(colorization == 0){
       ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
     }
-
-    ImGui::NextColumn();
-    if(ImGui::RadioButton("Unicolor", &colorization, 1)){
-      *onlineManager->get_with_heatmap() = false;
-      *onlineManager->get_with_unicolor() = true;
-    }
-    ImGui::NextColumn();
-
     if(colorization == 0 && *heatmap_rltHeight){
       vec2* height_range = onlineManager->get_heatmap_height_range();
       ImGui::SetNextItemWidth(100);
@@ -338,10 +319,8 @@ void GUI_Player::parameter_online(){
     }
 
     //Cylinder cleaning filter
-    ImGui::NextColumn();
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
     ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
-    ImGui::NextColumn();
     if(*cylinderFilter){
       float* r_min = filterManager->get_cyl_r_min();
       float* r_max = filterManager->get_cyl_r_max();
@@ -353,9 +332,6 @@ void GUI_Player::parameter_online(){
       ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
     }
-    ImGui::NextColumn();
-
-    ImGui::Columns(1);
 
     //---------------------------
     ImGui::Separator();

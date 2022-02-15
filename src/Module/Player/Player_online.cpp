@@ -67,7 +67,6 @@ void Player_online::update_configuration(){
   this->with_heatmap_rltHeight = true;
   this->with_unicolor = !with_heatmap;
 
-  this->with_online = true;
   this->with_save_frame = false;
   this->with_save_image = false;
   this->with_slam = false;// configManager->parse_json_b("online", "with_slam");
@@ -85,51 +84,50 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   this->set_cloud_visibility(cloud, ID_subset);
 
   //Compute stuff for selected subset
-  if(with_online){
-    //Ortho top view option
-    if(with_camera_top){
-      cameraManager->input_projView(2);
-    }
 
-    //Make slam on the current subset
-    if(with_slam){
-      slamManager->compute_slam_online(cloud, ID_subset);
-    }
-
-    //If camera follow up option activated
-    if(with_camera_follow){
-      this->camera_followUp(cloud, ID_subset);
-    }
-
-    //Make cleaning on the current subset
-    if(with_cylinder_cleaning){
-      filterManager->filter_subset_cylinder(subset);
-    }
-
-    //Colorization options
-    if(with_heatmap){
-      this->color_heatmap(cloud, ID_subset);
-    }
-    else if(with_unicolor){
-      this->color_unicolor(subset, cloud->unicolor);
-    }
-
-    //Save subset frame
-    if(with_save_frame){
-      Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-      ioManager->save_frame(subset);
-    }
-
-    //Save rendered image
-    if(with_save_image){
-      tic();
-      ioManager->save_image();
-      this->time_image = toc();
-    }
-
-    //Provide info about computation
-    this->compute_statistics(subset);
+  //Ortho top view option
+  if(with_camera_top){
+    cameraManager->input_projView(2);
   }
+
+  //Make slam on the current subset
+  if(with_slam){
+    slamManager->compute_slam_online(cloud, ID_subset);
+  }
+
+  //If camera follow up option activated
+  if(with_camera_follow){
+    this->camera_followUp(cloud, ID_subset);
+  }
+
+  //Make cleaning on the current subset
+  if(with_cylinder_cleaning){
+    filterManager->filter_subset_cylinder(subset);
+  }
+
+  //Colorization options
+  if(with_heatmap){
+    this->color_heatmap(cloud, ID_subset);
+  }
+  else if(with_unicolor){
+    this->color_unicolor(subset, cloud->unicolor);
+  }
+
+  //Save subset frame
+  if(with_save_frame){
+    Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+    ioManager->save_frame(subset);
+  }
+
+  //Save rendered image
+  if(with_save_image){
+    tic();
+    ioManager->save_image();
+    this->time_image = toc();
+  }
+
+  //Provide info about computation
+  this->compute_statistics(subset);
 
   //---------------------------
 }

@@ -42,10 +42,10 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int ID){
   bool sucess_rlt = compute_assessment_rlt(cloud, ID);
 
   //Check number of residuals
-  bool sucess_residual = true;;
-  if (frame->nb_residual < nb_residual_min) {
-    cout << "[CT_ICP]Error : not enough keypoints selected in ct-icp !" << endl;
-    cout << "[CT_ICP]Number_of_residuals : " << frame->nb_residual << endl;
+  bool sucess_residual = true;
+  if (frame->nb_residual < nb_residual_min){
+    string log = "Not enough keypoints: " + to_string(frame->nb_residual) + "/" + to_string(nb_residual_min);
+    console.AddLog("error", log);
     sucess_residual = false;
   }
 

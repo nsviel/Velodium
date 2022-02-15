@@ -24,6 +24,23 @@ SLAM_configuration::SLAM_configuration(Slam* slam){
 SLAM_configuration::~SLAM_configuration(){}
 
 //Configuration functions
+void SLAM_configuration::make_config(int conf){
+  //---------------------------
+
+  switch(conf){
+    case 0:{ //VLP64
+      this->make_config_0();
+      break;
+    }
+    case 1:{ //VLP16
+      this->make_config_1();
+      break;
+    }
+  }
+
+  //---------------------------
+  this->predefined_conf = conf;
+}
 void SLAM_configuration::make_config_0(){
   //---------------------------
 

@@ -29,6 +29,8 @@ private:
   MQTT* mqttManager;
   SFTP* sftpManager;
   SSH* sshManager;
+
+  int item_width;
 };
 
 #endif

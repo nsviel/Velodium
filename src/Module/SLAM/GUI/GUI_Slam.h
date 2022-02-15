@@ -28,12 +28,13 @@ public:
   void compute();
   void statistics();
 
-  void parameters();
-  void parameters_general();
-  void parameters_optimization();
-  void parameters_localMap();
-  void parameters_normal();
-  void parameters_robustesse();
+  void parameter_slam();
+  void parameter_configuration();
+  void parameter_general();
+  void parameter_optimization();
+  void parameter_localMap();
+  void parameter_normal();
+  void parameter_robustesse();
 
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 

@@ -130,15 +130,19 @@ void GUI_menuBar::MenuBar_menus(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_icons(){
+  //---------------------------
+
+  //Distance from left
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
+
+  //Parameters
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(22, 110, 161, 255));
   ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
   ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 0));
   float iconSize = 0;
   Texture* texture;
-  //---------------------------
 
-  //Cloud
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 150);
+  //Cloud info
   if(ImGui::Button(ICON_FA_COMMENT, ImVec2(iconSize,iconSize))){
     if(sceneManager->is_atLeastOnecloud()){
       window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
@@ -176,6 +180,11 @@ void GUI_menuBar::MenuBar_icons(){
 void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 
+  //Distance from left
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
+
+  gui_playerManager->player_button();
+  ImGui::SameLine();
   gui_playerManager->player_selection();
 
   //-------------------------

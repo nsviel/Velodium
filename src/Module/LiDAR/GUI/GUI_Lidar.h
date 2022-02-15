@@ -31,6 +31,8 @@ private:
   Scala* scalaManager;
   Velodyne* veloManager;
   Capture* captureManager;
+
+  int item_width;
 };
 
 #endif

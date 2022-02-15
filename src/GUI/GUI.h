@@ -3,6 +3,8 @@
 
 #include "../common.h"
 
+class Dimension;
+
 class GUI_windows;
 class GUI_control;
 class GUI_option;
@@ -32,6 +34,7 @@ public:
   void Gui_Dimensions();
 
 private:
+  Dimension* dimManager;
   GUI_module* gui_moduleManager;
   GUI_windows* gui_winManager;
   GUI_control* gui_controlManager;

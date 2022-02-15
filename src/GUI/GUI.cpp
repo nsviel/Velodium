@@ -14,6 +14,8 @@
 #include "../Module/SLAM/GUI/GUI_Slam.h"
 #include "../Module/SLAM/Slam.h"
 #include "../Engine/OpenGL/Camera.h"
+#include "../Engine/OpenGL/Dimension.h"
+#include "../Engine/Engine_node.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -27,6 +29,9 @@
 GUI::GUI(GUI_node* node_gui){
   //---------------------------
 
+  Engine_node* node_engine = node_gui->get_node_engine();
+
+  this->dimManager = node_engine->get_dimManager();
   this->gui_moduleManager = node_gui->get_gui_moduleManager();
   this->gui_winManager = node_gui->get_gui_winManager();
   this->gui_controlManager = node_gui->get_gui_controlManager();
@@ -50,8 +55,7 @@ void GUI::Gui_init(){
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
-  GLFWwindow* window = glfwGetCurrentContext();
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplGlfw_InitForOpenGL(dimManager->get_window(), true);
   ImGui_ImplOpenGL3_Init("#version 330");
 
   //---------------------------

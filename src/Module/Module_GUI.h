@@ -40,6 +40,14 @@ public:
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
 
+      // Obstacle detection
+      if(module_obstacle){
+        if(ImGui::BeginTabItem("Obstacle")){
+          gui_obstacleManager->design_Obstacle();
+          ImGui::EndTabItem();
+        }
+      }
+
       // Network stuff management
       if(module_velodyne){
         if(ImGui::BeginTabItem("Network")){
@@ -73,14 +81,6 @@ public:
         }
       }
 
-      // Obstacle detection
-      if(module_obstacle){
-        if(ImGui::BeginTabItem("Obstacle")){
-          gui_obstacleManager->design_Obstacle();
-          ImGui::EndTabItem();
-        }
-      }
-
       //-------------------------------
       ImGui::EndTabBar();
     }
@@ -94,7 +94,9 @@ public:
   }
 
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
+  inline GUI_Lidar* get_gui_lidarManager(){return gui_lidarManager;}
   inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
+  inline GUI_Network* get_gui_netManager(){return gui_netManager;}
 
 private:
   GUI_Lidar* gui_lidarManager;
