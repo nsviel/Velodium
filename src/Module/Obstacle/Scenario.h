@@ -5,6 +5,10 @@
 
 class Module_node;
 class Interfacing;
+class Capture;
+class Network;
+class SLAM_configuration;
+class Player_online;
 
 
 class Scenario
@@ -18,7 +22,6 @@ public:
   void scenario_start();
   void scenario_stop();
 
-  void scenario_common();
   void scenario_WP4_auto();
   void scenario_WP5_train_board();
   void scenario_WP5_train_edge();
@@ -28,6 +31,10 @@ public:
 
 private:
   Interfacing* ioManager;
+  Capture* captureManager;
+  Network* netManager;
+  SLAM_configuration* slam_configManager;
+  Player_online* onlineManager;
 
   int scenario_selected;
   bool scenario_started;

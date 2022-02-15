@@ -7,7 +7,9 @@
 #include "../../Module_GUI.h"
 #include "../../Module_node.h"
 #include "../../LiDAR/GUI/GUI_Lidar.h"
+#include "../../LiDAR/Capture.h"
 #include "../../Player/GUI/GUI_Player.h"
+#include "../../Network/Network.h"
 #include "../../SLAM/GUI/GUI_Slam.h"
 
 #include "../../../Engine/Scene.h"
@@ -115,8 +117,33 @@ void GUI_Obstacle::compute_obstacle(){
 void GUI_Obstacle::element_state(){
   //---------------------------
 
+  Module_node* node_module = node_gui->get_node_module();
+  Capture* captureManager = node_module->get_captureManager();
+  Interfacing* ioManager = node_module->get_ioManager();
+  Network* netManager = node_module->get_netManager();
+
+  bool is_capturing = captureManager->get_is_capturing();
+  ImGui::Text("Watcher - Capture");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_capturing ? "ON" : "OFF");
+
+  bool is_thread_pred = *ioManager->get_is_thread_pred();
+  ImGui::Text("Watcher - AI");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_thread_pred ? "ON" : "OFF");
+
+  bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
+  ImGui::Text("Watcher - MQTT");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_mqtt_watcher ? "ON" : "OFF");
+
+  bool is_image_watcher = netManager->get_is_mqtt_watcher();
+  ImGui::Text("Watcher - Image");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_image_watcher ? "ON" : "OFF");
 
   //---------------------------
+  ImGui::Separator();
 }
 void GUI_Obstacle::parameter(){
   //---------------------------

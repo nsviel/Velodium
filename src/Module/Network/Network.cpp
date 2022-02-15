@@ -21,6 +21,8 @@ Network::Network(){
   this->name_file = "frame_0001.ply";
 
   this->is_connected = false;
+  this->is_image_watcher = false;
+  this->is_mqtt_watcher = false;
 
   //---------------------------
 }
@@ -56,6 +58,21 @@ void Network::send_file(string path_source, string path_target){
   //Send file
   ssh_session* ssh = sshManager->get_ssh_session();
   sftpManager->sftp_sendFile(*ssh, path_source, path_target);
+
+  //---------------------------
+}
+
+void Network::start_mqtt_watcher(){
+  //---------------------------
+
+  //mqttManager->mqtt_sendMessages();
+
+  //---------------------------
+}
+void Network::start_image_watcher(){
+  //---------------------------
+
+  //mqttManager->mqtt_sendMessages();
 
   //---------------------------
 }

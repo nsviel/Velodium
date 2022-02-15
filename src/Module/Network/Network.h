@@ -22,6 +22,9 @@ public:
   void start_connection();
   void stop_connection();
 
+  void start_mqtt_watcher();
+  void start_image_watcher();
+
   void select_sourcePath();
   void select_targetPath();
 
@@ -31,6 +34,8 @@ public:
   inline string* get_path_source(){return &path_source;}
   inline string* get_path_target(){return &path_target;}
   inline bool get_is_connected(){return is_connected;}
+  inline bool get_is_mqtt_watcher(){return is_mqtt_watcher;}
+  inline bool get_is_image_watcher(){return is_image_watcher;}
 
 private:
   MQTT* mqttManager;
@@ -41,6 +46,8 @@ private:
   string path_source;
   string path_target;
 
+  bool is_mqtt_watcher;
+  bool is_image_watcher;
   bool is_connected;
 };
 
