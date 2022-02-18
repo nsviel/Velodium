@@ -4,7 +4,7 @@
 #include "SLAM/Slam.h"
 #include "LiDAR/Capture.h"
 #include "Obstacle/Obstacle.h"
-#include "Obstacle/Interfacing.h"
+#include "Obstacle/Interface/Interfacing.h"
 #include "Obstacle/Scenario.h"
 #include "Player/Player_cloud.h"
 #include "Player/Player_online.h"

@@ -30,7 +30,7 @@ public:
   void parameter_interfacing();
 
   //Obstacle visual naming
-  void make_obstacleName(Subset* subset);
+  void runtime_prediction_naming();
   void drawText(string text, vec3 position);
 
 private:

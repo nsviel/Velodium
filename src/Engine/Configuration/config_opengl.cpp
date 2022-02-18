@@ -45,6 +45,7 @@ void config_opengl::create_jsonfile(){
     window["resolution_height"] = 500;
     window["resolution_ratio"] = 4.0f/3.0f;
     window["background_color"] = 0.86f;
+    window["activated"] = false;
     root["window"] = window;
 
     //GUI

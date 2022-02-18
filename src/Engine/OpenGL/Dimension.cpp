@@ -34,6 +34,12 @@ Dimension::Dimension(GLFWwindow* win, Configuration_node* config){
   this->is_resized = true;
   this->with_custom_gl_dim = false;
 
+  if(window == nullptr){
+    this->is_window = false;
+  }else{
+    this->is_window = true;
+  }
+
   //---------------------------
   this->update();
 }
@@ -69,8 +75,11 @@ void Dimension::update_window_dim(){
   //---------------------------
 
   //Check window size
-  int win_w, win_h;
-  glfwGetWindowSize(window, &win_w, &win_h);
+  int win_w = 0;
+  int win_h = 0;
+  if(is_window){
+    glfwGetWindowSize(window, &win_w, &win_h);
+  }
 
   if(win_w != win_dim.x || win_h != win_dim.y){
 
@@ -108,23 +117,29 @@ vec2 Dimension::get_gl_middle(){
 }
 vec2 Dimension::get_cursorPos_gl(){
   double xpos, ypos;
+  vec2 pos = vec2(0, 0);
   //---------------------------
 
-  glfwGetCursorPos(window, &xpos, &ypos);
-  xpos = xpos - gui_ltp_dim.x;
-  ypos = ypos - gui_tp_dim.y;
+  if(is_window){
+    glfwGetCursorPos(window, &xpos, &ypos);
+    xpos = xpos - gui_ltp_dim.x;
+    ypos = ypos - gui_tp_dim.y;
 
-  vec2 pos = vec2(xpos, ypos);
+    pos = vec2(xpos, ypos);
+  }
 
   //---------------------------
   return pos;
 }
 vec2 Dimension::get_cursorPos(){
   double xpos, ypos;
+  vec2 pos = vec2(0, 0);
   //---------------------------
 
-  glfwGetCursorPos(window, &xpos, &ypos);
-  vec2 pos = vec2(xpos, ypos);
+  if(is_window){
+    glfwGetCursorPos(window, &xpos, &ypos);
+    pos = vec2(xpos, ypos);
+  }
 
   //---------------------------
   return pos;
@@ -132,7 +147,9 @@ vec2 Dimension::get_cursorPos(){
 void Dimension::set_cursorPos(vec2 pos){
   //---------------------------
 
-  glfwSetCursorPos(window, pos.x, pos.y);
+  if(is_window){
+    glfwSetCursorPos(window, pos.x, pos.y);
+  }
 
   //---------------------------
 }

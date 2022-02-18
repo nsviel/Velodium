@@ -88,7 +88,8 @@ public:
   void runtime(){
     //-------------------------------
 
-    gui_playerManager->player_mouse();
+    gui_obstacleManager->runtime_prediction_naming();
+    gui_playerManager->runtime_player_mouse();
 
     //-------------------------------
   }

@@ -4,8 +4,8 @@
 
 #include "../Configuration/config_opengl.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image/stb_image_write.h"
+#include <FreeImage.h>
+#include <cstdint>
 
 
 //Constructor / Destructor
@@ -155,25 +155,38 @@ void Renderer::render_quad(){
 }
 void Renderer::render_screenshot(string path){
   GLFWwindow* window = dimManager->get_window();
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 gl_pos = dimManager->get_gl_pos();
   //---------------------------
 
-  //Parameters
-  glPixelStorei(GL_PACK_ALIGNMENT, 4);
-  glReadBuffer(GL_FRONT);
+  if(window != nullptr){
+    vec2 gl_dim = dimManager->get_gl_dim();
+    vec2 gl_pos = dimManager->get_gl_pos();
 
-  //Configure buffer
-  GLsizei nrChannels = 3;
-  GLsizei stride = nrChannels * gl_dim.x;
-  stride += (stride % 4) ? (4 - stride % 4) : 0;
-  GLsizei bufferSize = stride * gl_dim.y;
-  vector<char> buffer(bufferSize);
+    //Parameters
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+    glReadBuffer(GL_FRONT);
 
-  //Read pixels
-  glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
-  stbi_flip_vertically_on_write(true);
-  stbi_write_png(path.c_str(), gl_dim.x, gl_dim.y, nrChannels, buffer.data(), stride);
+    //Configure buffer
+    GLsizei nrChannels = 3;
+    GLsizei stride = nrChannels * gl_dim.x;
+    stride += (stride % 4) ? (4 - stride % 4) : 0;
+    GLsizei size = stride * gl_dim.y;
+    uint8_t* pixels = new uint8_t[size];
+    glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    //Reverse red and blue colors
+    for(int i=0; i<size; i=i+3){
+      uint8_t& a = pixels[i];
+      uint8_t& c = pixels[i+2];
+      uint8_t b = a;
+      a = c;
+      c = b;
+    }
+
+    //Freeimage
+    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, stride, 24, 0x0000FF, 0x00FF00, 0xFF0000, false);
+    FreeImage_Save(FIF_JPEG, image, path.c_str(), 0);
+    FreeImage_Unload(image);
+  }
 
   //---------------------------
 }

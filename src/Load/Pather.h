@@ -41,6 +41,7 @@ public:
   vector<string> zenity_loading();
   string zenity_saving();
   string zenity_directory();
+  void zenity_select_directory(string& path_dir);
 
   inline void set_spaceSampling(float value){this->spaceSampling = value;}
   inline void set_nbLineSampling(int value){this->nbLineSampling = value;}

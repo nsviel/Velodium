@@ -22,6 +22,8 @@ class Engine;
 class Renderer;
 class Engine_node;
 class Configuration_node;
+class config_opengl;
+
 
 class CoreGLengine
 {
@@ -30,9 +32,10 @@ public:
   ~CoreGLengine();
 
 public:
-  bool init();
-  bool init_OGL();
-  bool init_object();
+  void init();
+  void init_conf();
+  void init_OGL();
+  void init_object();
   void init_rendering();
 
   //GL loop
@@ -46,6 +49,7 @@ public:
 
 private:
   Configuration_node* node_config;
+  config_opengl* conf_glManager;
   Engine_node* node_engine;
 
   GLFWwindow* window;
@@ -58,6 +62,8 @@ private:
   Shader* shaderManager;
 
   bool waitForEvent;
+  bool openglDisplay;
+  bool openglRunning;
   bool flag_resized;
 };
 

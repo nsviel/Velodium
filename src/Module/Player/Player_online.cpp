@@ -2,7 +2,8 @@
 
 #include "../Module_node.h"
 #include "../SLAM/Slam.h"
-#include "../Obstacle/Interfacing.h"
+#include "../Obstacle/Interface/Interfacing.h"
+#include "../Obstacle/Interface/Saving.h"
 
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -68,7 +69,7 @@ void Player_online::update_configuration(){
   this->with_unicolor = !with_heatmap;
 
   this->with_save_frame = false;
-  this->with_save_image = false;
+  this->with_save_image = true;
   this->with_slam = false;// configManager->parse_json_b("online", "with_slam");
   this->with_cylinder_cleaning = false;//configManager->parse_json_b("online", "with_cylinder_cleaning");
   this->with_remove_lastSubset = true;//configManager->parse_json_b("online", "with_remove_lastSubset");
@@ -116,13 +117,15 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Save subset frame
   if(with_save_frame){
     Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-    ioManager->save_frame(subset);
+    Saving* saveManager = ioManager->get_saveManager();
+    saveManager->save_frame(subset);
   }
 
   //Save rendered image
   if(with_save_image){
     tic();
-    ioManager->save_image();
+    Saving* saveManager = ioManager->get_saveManager();
+    saveManager->save_image();
     this->time_image = toc();
   }
 

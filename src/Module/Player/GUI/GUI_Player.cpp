@@ -3,7 +3,8 @@
 #include "../Player_online.h"
 #include "../Player_cloud.h"
 #include "../../Module_node.h"
-#include "../../Obstacle/Interfacing.h"
+#include "../../Obstacle/Interface/Interfacing.h"
+#include "../../Obstacle/Interface/Saving.h"
 
 #include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Scene.h"
@@ -142,28 +143,6 @@ void GUI_Player::player_button(){
 
   //---------------------------
 }
-void GUI_Player::player_mouse(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  ImGuiIO io = ImGui::GetIO();
-  //----------------------------
-
-  //Wheel - rolling stone
-  if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
-    if(cloud != nullptr){
-      int subset_selected_ID = cloud->ID_selected;
-
-      if(io.MouseWheel > 0){
-        subset_selected_ID++;
-      }else{
-        subset_selected_ID--;
-      }
-
-      playerManager->select_bySubsetID(cloud, subset_selected_ID);
-    }
-  }
-
-  //----------------------------
-}
 void GUI_Player::player_selection(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
@@ -269,7 +248,8 @@ void GUI_Player::parameter_online(){
     bool* with_save_frame = onlineManager->get_with_save_frame();
     ImGui::Checkbox("Save frame", with_save_frame);
     if(*with_save_frame){
-      int* save_frame_max = ioManager->get_save_frame_max();
+      Saving* saveManager = ioManager->get_saveManager();
+      int* save_frame_max = saveManager->get_save_frame_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb frame", save_frame_max);
     }
@@ -278,7 +258,8 @@ void GUI_Player::parameter_online(){
     static bool with_unlimit_saving = false;
     ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
     if(with_unlimit_saving){
-      int* save_frame_max = ioManager->get_save_frame_max();
+      Saving* saveManager = ioManager->get_saveManager();
+      int* save_frame_max = saveManager->get_save_frame_max();
       *save_frame_max = 500000000;
     }
 
@@ -286,7 +267,8 @@ void GUI_Player::parameter_online(){
     bool* with_save_image = onlineManager->get_with_save_image();
     ImGui::Checkbox("Save image", with_save_image);
     if(*with_save_image){
-      int* save_image_max = ioManager->get_save_image_max();
+      Saving* saveManager = ioManager->get_saveManager();
+      int* save_image_max = saveManager->get_save_image_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb image", save_image_max);
     }
@@ -336,4 +318,26 @@ void GUI_Player::parameter_online(){
     //---------------------------
     ImGui::Separator();
   }
+}
+void GUI_Player::runtime_player_mouse(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  ImGuiIO io = ImGui::GetIO();
+  //----------------------------
+
+  //Wheel - rolling stone
+  if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
+    if(cloud != nullptr){
+      int subset_selected_ID = cloud->ID_selected;
+
+      if(io.MouseWheel > 0){
+        subset_selected_ID++;
+      }else{
+        subset_selected_ID--;
+      }
+
+      playerManager->select_bySubsetID(cloud, subset_selected_ID);
+    }
+  }
+
+  //----------------------------
 }

@@ -49,7 +49,7 @@ void Glyphs::drawing(){
         glPointSize(glyph->draw_width);
         glDrawArrays(GL_POINTS, 0, glyph->location.size());
       }
-      else if(glyph->draw_type == "line"){ if(glyph->name=="subset_axis") say("il est bien la!");
+      else if(glyph->draw_type == "line"){
         glLineWidth(glyph->draw_width);
         glDrawArrays(GL_LINES, 0, glyph->location.size());
         glLineWidth(1);

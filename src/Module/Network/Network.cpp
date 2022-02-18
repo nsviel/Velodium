@@ -16,8 +16,8 @@ Network::Network(){
   this->sftpManager = new SFTP();
   this->sshManager = new SSH();
 
-  this->path_source = "/home/aither/Desktop/Point_cloud/frame_0001.ply";
-  this->path_target = "/home/aither/Desktop/";
+  this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
+  this->path_target = "/home/aether/Desktop/";
   this->name_file = "frame_0001.ply";
 
   this->is_connected = false;
@@ -62,14 +62,29 @@ void Network::send_file(string path_source, string path_target){
   //---------------------------
 }
 
-void Network::start_mqtt_watcher(){
+void Network::start_watcher_mqtt(){
   //---------------------------
 
   //mqttManager->mqtt_sendMessages();
 
   //---------------------------
 }
-void Network::start_image_watcher(){
+void Network::stop_watcher_mqtt(){
+  //---------------------------
+
+  //mqttManager->mqtt_sendMessages();
+
+  //---------------------------
+}
+
+void Network::start_watcher_image(){
+  //---------------------------
+
+  //mqttManager->mqtt_sendMessages();
+
+  //---------------------------
+}
+void Network::stop_watcher_image(){
   //---------------------------
 
   //mqttManager->mqtt_sendMessages();

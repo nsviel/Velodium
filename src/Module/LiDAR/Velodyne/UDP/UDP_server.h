@@ -25,7 +25,6 @@ private:
   int BUF_SIZE;
   int sock;
   bool is_binded;
-  string IP_local;
 
   vector<int> packet_dec;
 };

@@ -54,6 +54,7 @@ public:
   inline vec2 get_win_dim(){return win_dim;}
   inline void set_is_resized(bool value){this->is_resized = value;}
   inline bool get_is_resized(){return is_resized;}
+  inline bool get_is_window(){return is_window;}
   inline bool* get_with_custom_gl_dim(){return &with_custom_gl_dim;}
 
 private:
@@ -78,6 +79,7 @@ private:
   //Flag
   bool with_custom_gl_dim;
   bool is_resized;
+  bool is_window;
 };
 
 #endif

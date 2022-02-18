@@ -35,7 +35,7 @@ void GUI_Lidar::design_Scala(){
     }
 
     if(ImGui::Button("Load fast", ImVec2(item_width,0))){
-      scalaManager->loading("/home/aither/Desktop/Velodium/media/scala");
+      scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
     }
 
     //---------------------------

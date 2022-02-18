@@ -1,8 +1,10 @@
 #include "GUI_Obstacle.h"
 
 #include "../Obstacle.h"
-#include "../Interfacing.h"
 #include "../Scenario.h"
+#include "../Interface/Interfacing.h"
+#include "../Interface/Prediction.h"
+#include "../Interface/GPS.h"
 
 #include "../../Module_GUI.h"
 #include "../../Module_node.h"
@@ -40,15 +42,12 @@ GUI_Obstacle::~GUI_Obstacle(){}
 
 //Main function
 void GUI_Obstacle::design_Obstacle(){
-  Subset* subset = sceneManager->get_subset_selected();
   //---------------------------
 
   this->compute_scenario();
   this->element_state();
   //this->compute_obstacle();
   this->parameter();
-
-  this->make_obstacleName(subset);
 
   //---------------------------
 }
@@ -87,16 +86,17 @@ void GUI_Obstacle::compute_obstacle(){
 
   //IA watchers
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "AI interfacing");
-  bool* is_thread_pred = ioManager->get_is_thread_pred();
+  Prediction* predManager = ioManager->get_predManager();
+  bool* is_thread_pred = predManager->get_is_thread_pred();
   if(*is_thread_pred == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Start watchers", ImVec2(item_width,0))){
-      ioManager->start_dirWatcher();
+      predManager->start_watcher_prediction();
     }
   }else{
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
     if(ImGui::Button("Stop watchers", ImVec2(item_width,0))){
-      ioManager->stop_dirWatcher();
+      predManager->stop_watcher_prediction();
     }
   }
   ImGui::PopStyleColor(1);
@@ -121,16 +121,18 @@ void GUI_Obstacle::element_state(){
   Capture* captureManager = node_module->get_captureManager();
   Interfacing* ioManager = node_module->get_ioManager();
   Network* netManager = node_module->get_netManager();
+  Prediction* predManager = ioManager->get_predManager();
+  GPS* gpsManager = ioManager->get_gpsManager();
 
   bool is_capturing = captureManager->get_is_capturing();
   ImGui::Text("Watcher - Capture");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_capturing ? "ON" : "OFF");
 
-  bool is_thread_pred = *ioManager->get_is_thread_pred();
+  bool is_pred_watcher = predManager->get_is_watching();
   ImGui::Text("Watcher - AI");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_thread_pred ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_pred_watcher ? "ON" : "OFF");
 
   bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
   ImGui::Text("Watcher - MQTT");
@@ -141,6 +143,11 @@ void GUI_Obstacle::element_state(){
   ImGui::Text("Watcher - Image");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_image_watcher ? "ON" : "OFF");
+
+  bool is_gps_watcher = gpsManager->get_is_watching();
+  ImGui::Text("Watcher - GPS");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_gps_watcher ? "ON" : "OFF");
 
   //---------------------------
   ImGui::Separator();
@@ -180,7 +187,8 @@ void GUI_Obstacle::parameter_interfacing(){
 }
 
 //Obstacle visual naming
-void GUI_Obstacle::make_obstacleName(Subset* subset){
+void GUI_Obstacle::runtime_prediction_naming(){
+  Subset* subset = sceneManager->get_subset_selected();
   if(subset == nullptr) return;
   label_ID = 0;
   //---------------------------

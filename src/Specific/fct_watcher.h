@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 
+namespace{
 void watcher_all_directory(std::string path){
   std::string event_str;
   //---------------------------
@@ -102,6 +103,7 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   ( void ) close( fd );
 
   //---------------------------
+}
 }
 
 #endif

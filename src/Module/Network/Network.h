@@ -22,8 +22,11 @@ public:
   void start_connection();
   void stop_connection();
 
-  void start_mqtt_watcher();
-  void start_image_watcher();
+  void start_watcher_mqtt();
+  void stop_watcher_mqtt();
+
+  void start_watcher_image();
+  void stop_watcher_image();
 
   void select_sourcePath();
   void select_targetPath();

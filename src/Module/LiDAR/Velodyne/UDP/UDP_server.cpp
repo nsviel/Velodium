@@ -18,7 +18,6 @@ UDP_server::UDP_server(){
   this->PORT = 2368;
   this->BUF_SIZE = 1206;
   this->is_binded = false;
-  this->IP_local = "127.0.0.1";
 
   //---------------------------
 }
@@ -73,8 +72,10 @@ void UDP_server::server_read_data(){
   socklen_t fromlen = sizeof(from);
   //---------------------------
 
+  //The thread blocks here until a packet is received (MSG_WAITALL)
   int udp_size = recvfrom(sock, buffer, BUF_SIZE, MSG_WAITALL, reinterpret_cast<sockaddr*>(&from), &fromlen);
 
+  //Once packet received, process it
   packet_dec.clear();
   for(int i=0; i<udp_size; i++){
     bitset<8> octet(buffer[i]);

@@ -37,16 +37,17 @@ void Capture::start_new_capture(){
   bool* is_connected = veloManager->get_is_connected();
   //---------------------------
 
-  //Check current lidar status
+  /*//Check current lidar status
   veloManager->lidar_check_status();
 
   //If lidar hasn't start, start it
   if(*is_rotating == false){
     veloManager->lidar_start_motor();
-  }
+  }*/
 
   //If all OK start new capture
-  if(*is_rotating && *is_connected){
+  //if(*is_rotating && *is_connected){
+  if(true){
     veloManager->lidar_start_watcher();
 
     //Create new empty cloud

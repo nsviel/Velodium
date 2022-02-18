@@ -6,7 +6,7 @@
 echo Installation...
 
 #Install dependancies -> Essential
-sudo apt install git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev 
+sudo apt install git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev
 
 
 #Install pcl library - V1.2 is requiered
@@ -19,8 +19,8 @@ sudo apt install git build-essential cmake libglfw3-dev libglew-dev libeigen3-de
 sudo apt-get install libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev
 git clone https://ceres-solver.googlesource.com/ceres-solver
 tar zxf ceres-solver-2.0.0.tar.gz
-cd ceres-solver && mkdir build && cmake .. && make -j4
-make test && make install
+cd ceres-solver && mkdir build && cd build && cmake .. && make -j4
+sudo make install
 
 #Install Eclysp Paho for MQTT 
 #version C
@@ -29,6 +29,7 @@ cd paho.mqtt.c && mkdir build && cd build
 cmake .. -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
 sudo make install
 sudo ldconfig
+
 #version C++
 git clone https://github.com/eclipse/paho.mqtt.cpp
 cd paho.mqtt.cpp
@@ -36,11 +37,10 @@ cmake -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_
 sudo cmake --build build/ --target install
 sudo ldconfig
 
-#ToDo: vérifier installation avec just package robin-map-dev
 #Install robin-map
-#git clone https://github.com/Tessil/robin-map.git
-#cd robin-map && mkdir build && cd build
-#cmake .. && make -j5 && sudo make install
+git clone https://github.com/Tessil/robin-map.git
+cd robin-map && mkdir build && cd build
+cmake .. && make -j5 && sudo make install
 
 export MESA_GL_VERSION_OVERRIDE=3.3
 

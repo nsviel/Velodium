@@ -55,8 +55,11 @@ void GUI::Gui_init(){
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(dimManager->get_window(), true);
-  ImGui_ImplOpenGL3_Init("#version 330");
+
+  if(dimManager->get_is_window()){
+    ImGui_ImplGlfw_InitForOpenGL(dimManager->get_window(), true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+  }
 
   //---------------------------
 }

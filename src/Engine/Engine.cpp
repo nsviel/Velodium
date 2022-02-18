@@ -15,9 +15,10 @@ Database database;
 
 
 //Constructor / Destructor
-Engine::Engine(Engine_node* engine){
+Engine::Engine(Engine_node* engine, bool window_ON){
   //---------------------------
 
+  this->with_window = window_ON;
   this->node_engine = engine;
   this->node_config = node_engine->get_node_config();
 
@@ -30,7 +31,9 @@ Engine::Engine(Engine_node* engine){
   this->node_module = new Module_node(node_engine, node_ope);
   this->node_gui = new GUI_node(node_engine, node_ope, node_module, node_config);
 
-  glyphManager->init();
+  if(with_window){
+    glyphManager->init();
+  }
 
   //---------------------------
 }
@@ -58,28 +61,31 @@ void Engine::loop_scene(){
   //---------------------------
 
   //Draw glyph stuff
-  glyphManager->drawing();
+  if(with_window){
+    glyphManager->drawing();
 
-  //Draw clouds
-  this->draw_clouds();
+    //Draw clouds
+    this->draw_clouds();
 
-  //Module stuff
-  this->loop_runtime();
+    //Runtime functions
+    node_gui->runtime();
+  }
 
-  //---------------------------
-}
-void Engine::loop_runtime(){
-  //---------------------------
-
-  node_gui->runtime();
+  //Runtime functions
   node_engine->runtime();
   node_module->runtime();
 
   //---------------------------
 }
 void Engine::loop_gui(){
-  GUI* guiManager = node_gui->get_guiManager();
-  guiManager->Gui_loop();
+  //---------------------------
+
+  if(with_window){
+    GUI* guiManager = node_gui->get_guiManager();
+    guiManager->Gui_loop();
+  }
+
+  //---------------------------
 }
 void Engine::draw_clouds(){
   list<Cloud*>* list_cloud = database.list_cloud;

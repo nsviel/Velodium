@@ -1,6 +1,7 @@
 #include "Obstacle.h"
 
-#include "Interfacing.h"
+#include "Interface/Interfacing.h"
+#include "Interface/Prediction.h"
 
 #include "../Module_node.h"
 #include "../LiDAR/Capture.h"
@@ -29,12 +30,13 @@ Obstacle::~Obstacle(){}
 void Obstacle::runtime_obstacle(){
   //This function is called at each OpenGL iteration
   Cloud* cloud = sceneManager->get_cloud_selected();
+  Prediction* predManager = ioManager->get_predManager();
   //---------------------------
 
-  if(ioManager->get_is_watching() && cloud != nullptr){
+  if(predManager->get_is_watching() && cloud != nullptr){
     //Check for new prediction (ground thruth or prediction)
-    bool new_obstacle = ioManager->check_prediction(cloud);
-    if(new_obstacle){
+    bool is_prediction = predManager->runtime_prediction();
+    if(is_prediction){
       this->build_obstacleGlyph_gt(cloud);
     }
   }

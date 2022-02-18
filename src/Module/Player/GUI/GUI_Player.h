@@ -26,10 +26,10 @@ public:
   //Subfunctions
   void player_run();
   void player_button();
-  void player_mouse();
   void player_selection();
   void parameter_offline();
   void parameter_online();
+  void runtime_player_mouse();
 
 private:
   Scene* sceneManager;

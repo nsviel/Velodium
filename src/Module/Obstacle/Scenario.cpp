@@ -1,6 +1,7 @@
 #include "Scenario.h"
 
-#include "Interfacing.h"
+#include "Interface/Interfacing.h"
+#include "Interface/Prediction.h"
 
 #include "../Module_node.h"
 #include "../LiDAR/Capture.h"
@@ -76,12 +77,14 @@ void Scenario::scenario_WP4_auto(){
   *with_save_image = true;
 
   //Start runtime stuff
-  ioManager->start_dirWatcher();
+  Prediction* predManager = ioManager->get_predManager();
+
+  predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_image_watcher();
+  netManager->start_watcher_image();
 
   bool is_capturing = captureManager->get_is_capturing();
-  bool is_thread_pred = *ioManager->get_is_thread_pred();
+  bool is_thread_pred = *predManager->get_is_thread_pred();
   bool is_image_watcher = netManager->get_is_image_watcher();
 
   if(!is_capturing || !is_thread_pred || !is_image_watcher){
@@ -110,12 +113,14 @@ void Scenario::scenario_WP5_train_board(){
   *with_save_image = false;
 
   //Start runtime stuff
-  ioManager->start_dirWatcher();
+  Prediction* predManager = ioManager->get_predManager();
+
+  predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_mqtt_watcher();
+  netManager->start_watcher_mqtt();
 
   bool is_capturing = captureManager->get_is_capturing();
-  bool is_thread_pred = *ioManager->get_is_thread_pred();
+  bool is_thread_pred = *predManager->get_is_thread_pred();
   bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
 
   if(!is_capturing || !is_thread_pred || !is_mqtt_watcher){
@@ -144,12 +149,14 @@ void Scenario::scenario_WP5_train_edge(){
   *with_save_image = false;
 
   //Start runtime stuff
-  ioManager->start_dirWatcher();
+  Prediction* predManager = ioManager->get_predManager();
+
+  predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_mqtt_watcher();
+  netManager->start_watcher_mqtt();
 
   bool is_capturing = captureManager->get_is_capturing();
-  bool is_thread_pred = *ioManager->get_is_thread_pred();
+  bool is_thread_pred = *predManager->get_is_thread_pred();
   bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
 
   if(!is_capturing || !is_thread_pred || !is_mqtt_watcher){

@@ -22,14 +22,13 @@ class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Engine_node* engine);
+  Engine(Engine_node* engine, bool with_window);
   ~Engine();
 
 public:
   //Program functions
   void init_database();
   void loop_scene();
-  void loop_runtime();
   void loop_gui();
 
   //Subfunctions
@@ -51,6 +50,7 @@ private:
   Engine_node* node_engine;
   GUI_node* node_gui;
 
+  bool with_window;
   uint modelID, comID;
 };
 

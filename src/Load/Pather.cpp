@@ -220,22 +220,22 @@ void Pather::loading_fastScene(int mode){
     }
     case 6:{//Frame other
       sceneManager->remove_cloud_all();
-      loaderManager->load_cloud("/home/aither/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
+      loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
       break;
     }
     case 7:{//Frame for prediction
       sceneManager->remove_cloud_all();
-      this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture_test/frame/");
+      this->loading_directoryFrames("/home/aether/Desktop/Velodium/media/data/capture_test/frame/");
       break;
     }
     case 8:{//Frame for prediction
       sceneManager->remove_cloud_all();
-      this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture/test_statique");
+      this->loading_directoryFrames("/home/aether/Desktop/Velodium/media/data/capture/test_statique");
       break;
     }
     case 9:{//Frame for prediction
       sceneManager->remove_cloud_all();
-      this->loading_directoryFrames("/home/aither/Desktop/Velodium/media/data/capture/test_movement");
+      this->loading_directoryFrames("/home/aether/Desktop/Velodium/media/data/capture/test_movement");
       break;
     }
   }
@@ -465,4 +465,28 @@ string Pather::zenity_directory(){
 
   //---------------------------
   return path_directory;
+}
+void Pather::zenity_select_directory(string& path_dir){
+  //---------------------------
+
+  //Get absolute executable location
+  string zenity = "zenity --file-selection --directory --title=Save --filename=" + path_dir;
+
+  //Retrieve dir path
+  FILE *file = popen(zenity.c_str(), "r");
+  char filename[1024];
+  char* path_char = fgets(filename, 1024, file);
+
+  //Check if empty
+  if ((path_char != NULL) && (path_char[0] != '\0')) {
+    string path_str(path_char);
+
+    if (path_str.find('\n')){
+      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
+    }
+
+    path_dir = path_str + "/";
+  }
+
+  //---------------------------
 }

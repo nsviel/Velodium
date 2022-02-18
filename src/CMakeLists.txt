@@ -28,6 +28,7 @@ set(ALL_LIBS
     -ldl
     -lboost_iostreams
     -llz4
+    -lfreeimage 
 )
 
 #Module subdirectory
@@ -35,24 +36,24 @@ add_subdirectory(Module)
 
 #Source files
 file(GLOB_RECURSE ALL_SOURCES
-    Engine/*.cpp 
-    GUI/*.cpp 
-    Load/*.cpp 
-    Operation/*.cpp 
-    Specific/*.cpp 
-    Module/*.cpp 
+    Engine/*.cpp
+    GUI/*.cpp
+    Load/*.cpp
+    Operation/*.cpp
+    Specific/*.cpp
+    Module/*.cpp
     main.cpp
 )
 
 #Executable
-add_executable(executable 
+add_executable(executable
     ${ALL_SOURCES}
 )
 
 #Library linking
-target_link_libraries(executable 
-    ${ALL_LIBS} 
-    dir_extern 
+target_link_libraries(executable
+    ${ALL_LIBS}
+    dir_extern
     dir_module
     ${CMAKE_DL_LIBS}
 )
@@ -62,6 +63,3 @@ target_include_directories(executable PUBLIC
     "${PROJECT_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/extern"
 )
-
-
- 
