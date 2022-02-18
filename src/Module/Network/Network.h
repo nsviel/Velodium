@@ -18,16 +18,16 @@ public:
   ~Network();
 
 public:
+  //Main function
   void send_file(string path_source, string path_target);
   void start_connection();
   void stop_connection();
 
-  void start_watcher_mqtt();
-  void stop_watcher_mqtt();
+  //Threaded functions
+  void start_thread_mqtt();
+  void start_thread_image();
 
-  void start_watcher_image();
-  void stop_watcher_image();
-
+  //Subfunctions
   void select_sourcePath();
   void select_targetPath();
 

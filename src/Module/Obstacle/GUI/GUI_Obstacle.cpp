@@ -45,8 +45,9 @@ void GUI_Obstacle::design_Obstacle(){
   //---------------------------
 
   this->compute_scenario();
-  this->element_state();
-  //this->compute_obstacle();
+  this->watcher_state();
+  this->online_state();
+  this->watcher_activation();
   this->parameter();
 
   //---------------------------
@@ -80,74 +81,84 @@ void GUI_Obstacle::compute_scenario(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Obstacle::compute_obstacle(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
+void GUI_Obstacle::watcher_activation(){
+  if(ImGui::CollapsingHeader("Watcher")){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    //---------------------------
 
-  //IA watchers
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "AI interfacing");
-  Prediction* predManager = ioManager->get_predManager();
-  bool* is_thread_pred = predManager->get_is_thread_pred();
-  if(*is_thread_pred == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start watchers", ImVec2(item_width,0))){
-      predManager->start_watcher_prediction();
-    }
-  }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
-    if(ImGui::Button("Stop watchers", ImVec2(item_width,0))){
-      predManager->stop_watcher_prediction();
-    }
+    //AI watcher
+    this->watcher_AI_pred();
+
+    //GPS watcher
+    this->watcher_gps();
+
+    //Capture watcher
+    GUI_module* gui_module = node_gui->get_gui_moduleManager();
+    GUI_Lidar* gui_lidarManager = gui_module->get_gui_lidarManager();
+    gui_lidarManager->velo_capture();
+
+    //MQTT messager
+    //GUI_Network* gui_netManager = gui_module->get_gui_netManager();
+    //gui_netManager->mqtt_connection();
+
+    //---------------------------
+    ImGui::Separator();
   }
-  ImGui::PopStyleColor(1);
-
-  //LiDAR control
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "LiDAR capture");
-  GUI_module* gui_module = node_gui->get_gui_moduleManager();
-  GUI_Lidar* gui_lidarManager = gui_module->get_gui_lidarManager();
-  gui_lidarManager->velo_capture();
-
-  //MQTT messager
-  GUI_Network* gui_netManager = gui_module->get_gui_netManager();
-  gui_netManager->mqtt_connection();
-
-  //---------------------------
-  ImGui::Separator();
 }
-void GUI_Obstacle::element_state(){
+void GUI_Obstacle::watcher_state(){
   //---------------------------
 
+  //Watchers
   Module_node* node_module = node_gui->get_node_module();
   Capture* captureManager = node_module->get_captureManager();
   Interfacing* ioManager = node_module->get_ioManager();
-  Network* netManager = node_module->get_netManager();
   Prediction* predManager = ioManager->get_predManager();
   GPS* gpsManager = ioManager->get_gpsManager();
 
-  bool is_capturing = captureManager->get_is_capturing();
+  bool is_capture_watcher = captureManager->get_is_capture_watcher();
   ImGui::Text("Watcher - Capture");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_capturing ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_capture_watcher ? "ON" : "OFF");
 
   bool is_pred_watcher = predManager->get_is_watching();
   ImGui::Text("Watcher - AI");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_pred_watcher ? "ON" : "OFF");
 
-  bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
-  ImGui::Text("Watcher - MQTT");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_mqtt_watcher ? "ON" : "OFF");
-
-  bool is_image_watcher = netManager->get_is_mqtt_watcher();
-  ImGui::Text("Watcher - Image");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_image_watcher ? "ON" : "OFF");
-
   bool is_gps_watcher = gpsManager->get_is_watching();
   ImGui::Text("Watcher - GPS");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_gps_watcher ? "ON" : "OFF");
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Obstacle::online_state(){
+  //---------------------------
+
+  //Specific module
+  Module_node* node_module = node_gui->get_node_module();
+  Player_online* onlineManager = node_module->get_onlineManager();
+
+  bool with_slam = *onlineManager->get_with_slam();
+  ImGui::Text("Online - SLAM");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_slam ? "ON" : "OFF");
+
+  bool with_camera_follow = *onlineManager->get_with_camera_follow();
+  ImGui::Text("Online - Camera follow");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_camera_follow ? "ON" : "OFF");
+
+  bool with_save_frame = *onlineManager->get_with_save_frame();
+  ImGui::Text("Online - Save frame");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_frame ? "ON" : "OFF");
+
+  bool with_save_image = *onlineManager->get_with_save_image();
+  ImGui::Text("Online - Save image");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");
 
   //---------------------------
   ImGui::Separator();
@@ -184,6 +195,50 @@ void GUI_Obstacle::parameter_interfacing(){
 
     //---------------------------
   }
+}
+
+//Subfunctions
+void GUI_Obstacle::watcher_AI_pred(){
+  //---------------------------
+
+  //IA watchers
+  Prediction* predManager = ioManager->get_predManager();
+  bool is_watching = predManager->get_is_watching();
+  if(is_watching == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Start AI prediction", ImVec2(item_width,0))){
+      predManager->start_watcher_prediction();
+    }
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
+    if(ImGui::Button("Stop AI prediction", ImVec2(item_width,0))){
+      predManager->stop_watcher_prediction();
+    }
+  }
+  ImGui::PopStyleColor(1);
+
+  //---------------------------
+}
+void GUI_Obstacle::watcher_gps(){
+  //---------------------------
+
+  //IA watchers
+  GPS* gpsManager = ioManager->get_gpsManager();
+  bool is_watching = gpsManager->get_is_watching();
+  if(is_watching == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Start GPS", ImVec2(item_width,0))){
+      gpsManager->start_watcher_gps();
+    }
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
+    if(ImGui::Button("Stop GPS", ImVec2(item_width,0))){
+      gpsManager->stop_watcher_gps();
+    }
+  }
+  ImGui::PopStyleColor(1);
+
+  //---------------------------
 }
 
 //Obstacle visual naming

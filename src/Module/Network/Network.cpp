@@ -62,29 +62,15 @@ void Network::send_file(string path_source, string path_target){
   //---------------------------
 }
 
-void Network::start_watcher_mqtt(){
+//Threaded functions
+void Network::start_thread_mqtt(){
   //---------------------------
 
   //mqttManager->mqtt_sendMessages();
 
   //---------------------------
 }
-void Network::stop_watcher_mqtt(){
-  //---------------------------
-
-  //mqttManager->mqtt_sendMessages();
-
-  //---------------------------
-}
-
-void Network::start_watcher_image(){
-  //---------------------------
-
-  //mqttManager->mqtt_sendMessages();
-
-  //---------------------------
-}
-void Network::stop_watcher_image(){
+void Network::start_thread_image(){
   //---------------------------
 
   //mqttManager->mqtt_sendMessages();

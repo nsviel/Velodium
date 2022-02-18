@@ -84,12 +84,11 @@ void GUI_Network::ssh_connection(){
   ImGui::Separator();
 }
 void GUI_Network::mqtt_connection(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
   //---------------------------
 
   //Connect to MQTT broker
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Connection", ImVec2(item_width, 0))){
+  if(ImGui::Button("Start MQTT", ImVec2(item_width, 0))){
     mqttManager->mqtt_sendMessages();
   }
   ImGui::PopStyleColor(1);

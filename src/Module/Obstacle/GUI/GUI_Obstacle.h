@@ -24,10 +24,15 @@ public:
 
   //Subfunctions
   void compute_scenario();
-  void compute_obstacle();
-  void element_state();
+  void watcher_activation();
+  void watcher_state();
+  void online_state();
   void parameter();
   void parameter_interfacing();
+
+  //Subfunctions
+  void watcher_AI_pred();
+  void watcher_gps();
 
   //Obstacle visual naming
   void runtime_prediction_naming();

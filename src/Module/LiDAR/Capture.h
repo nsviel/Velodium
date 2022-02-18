@@ -33,7 +33,7 @@ public:
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
-  inline bool get_is_capturing(){return is_capturing;}
+  inline bool get_is_capture_watcher(){return is_capturing;}
 
 private:
   Scene* sceneManager;

@@ -103,29 +103,24 @@ void GUI_Lidar::velo_connection(){
   //---------------------------
 }
 void GUI_Lidar::velo_capture(){
-  bool is_capturing = *veloManager->get_is_capturing();
+  bool is_capturing = *veloManager->get_is_velo_capturing();
   //---------------------------
 
   //Capturing button
   if(is_capturing == false){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Capture", ImVec2(item_width,0))){
+    if(ImGui::Button("Start capture", ImVec2(item_width, 0))){
       captureManager->start_new_capture();
     }
-    ImGui::PopStyleColor(1);
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%s", "OFF");
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop capture", ImVec2(item_width,0))){
+    if(ImGui::Button("Stop capture", ImVec2(item_width, 0))){
       captureManager->stop_capture();
     }
-    ImGui::PopStyleColor(1);
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
   }
+  ImGui::PopStyleColor(1);
 
   //---------------------------
 }

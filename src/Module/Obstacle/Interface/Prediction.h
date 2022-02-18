@@ -26,7 +26,6 @@ public:
 
   inline string get_path_grThr(){return path_grThr;}
   inline string get_path_predi(){return path_predi;}
-  inline bool* get_is_thread_pred(){return &thread_predi_ON;}
   inline bool get_is_watching(){return is_whatching;}
 
 private:

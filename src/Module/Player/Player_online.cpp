@@ -84,8 +84,6 @@ void Player_online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Control subset visibilities
   this->set_cloud_visibility(cloud, ID_subset);
 
-  //Compute stuff for selected subset
-
   //Ortho top view option
   if(with_camera_top){
     cameraManager->input_projView(2);

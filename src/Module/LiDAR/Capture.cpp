@@ -26,6 +26,7 @@ Capture::Capture(Module_node* node_module){
   this->ID_capture = 0;
   this->nb_subset_max = 20;
   this->with_justOneFrame = false;
+  this->is_capturing = false;
 
   //---------------------------
 }
@@ -54,6 +55,8 @@ void Capture::start_new_capture(){
     loaderManager->load_cloud_empty();
     cloud_capture = loaderManager->get_createdcloud();
     cloud_capture->name = "Capture_" + to_string(ID_capture);
+
+    this->is_capturing = true;
     ID_capture++;
 
     console.AddLog("sucess", "Velodyne new capture");
@@ -67,8 +70,9 @@ void Capture::stop_capture(){
   //---------------------------
 
   //Stop watcher
-  bool* is_capturing = veloManager->get_is_capturing();
+  bool* is_capturing = veloManager->get_is_velo_capturing();
   *is_capturing = false;
+  this->is_capturing = false;
 
   //Stop lidar motor
   veloManager->lidar_stop_motor();

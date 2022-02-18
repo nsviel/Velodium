@@ -2,6 +2,7 @@
 
 #include "Interface/Interfacing.h"
 #include "Interface/Prediction.h"
+#include "Interface/GPS.h"
 
 #include "../Module_node.h"
 #include "../LiDAR/Capture.h"
@@ -81,13 +82,13 @@ void Scenario::scenario_WP4_auto(){
 
   predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_watcher_image();
+  netManager->start_thread_image();
 
-  bool is_capturing = captureManager->get_is_capturing();
-  bool is_thread_pred = *predManager->get_is_thread_pred();
+  bool is_capture_watcher = captureManager->get_is_capture_watcher();
+  bool is_pred_watcher = predManager->get_is_watching();
   bool is_image_watcher = netManager->get_is_image_watcher();
 
-  if(!is_capturing || !is_thread_pred || !is_image_watcher){
+  if(!is_capture_watcher || !is_pred_watcher || !is_image_watcher){
     console.AddLog("error", "Probleme with scenario element");
   }
 
@@ -114,16 +115,18 @@ void Scenario::scenario_WP5_train_board(){
 
   //Start runtime stuff
   Prediction* predManager = ioManager->get_predManager();
+  GPS* gpsManager = ioManager->get_gpsManager();
 
   predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_watcher_mqtt();
+  netManager->start_thread_mqtt();
+  gpsManager->start_watcher_gps();
 
-  bool is_capturing = captureManager->get_is_capturing();
-  bool is_thread_pred = *predManager->get_is_thread_pred();
+  bool is_capture_watcher = captureManager->get_is_capture_watcher();
+  bool is_pred_watcher = predManager->get_is_watching();
   bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
 
-  if(!is_capturing || !is_thread_pred || !is_mqtt_watcher){
+  if(!is_capture_watcher || !is_pred_watcher || !is_mqtt_watcher){
     console.AddLog("error", "Probleme with scenario element");
   }
 
@@ -153,13 +156,13 @@ void Scenario::scenario_WP5_train_edge(){
 
   predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_watcher_mqtt();
+  netManager->start_thread_mqtt();
 
-  bool is_capturing = captureManager->get_is_capturing();
-  bool is_thread_pred = *predManager->get_is_thread_pred();
+  bool is_capture_watcher = captureManager->get_is_capture_watcher();
+  bool is_pred_watcher = predManager->get_is_watching();
   bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
 
-  if(!is_capturing || !is_thread_pred || !is_mqtt_watcher){
+  if(!is_capture_watcher || !is_pred_watcher || !is_mqtt_watcher){
     console.AddLog("error", "Probleme with scenario element");
   }
 
