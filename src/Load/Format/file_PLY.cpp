@@ -424,8 +424,9 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subse
   //---------------------------
 
   //Write header
-  file << "ply" <<endl;
-  file << "format "+ format +" 1.0" <<endl;
+  file << "ply" << endl;
+  file << "ID " + subset->ID << endl;
+  file << "format " + format +" 1.0" << endl;
   file << "element vertex " << point_number << endl;
   file << "property float x" << endl;
   file << "property float y" << endl;
