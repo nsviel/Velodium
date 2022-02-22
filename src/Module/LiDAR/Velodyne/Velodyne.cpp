@@ -53,7 +53,6 @@ void Velodyne::lidar_start_watcher(){
     while (is_capturing){
       //Get packet in decimal format
       vector<int> packet_dec = udpServManager->read_UDP_packets();
-      say(packet_dec.size());
 
       //Parse decimal packet into point cloud
       udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);

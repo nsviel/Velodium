@@ -24,7 +24,7 @@ Scenario::Scenario(Module_node* node_module){
   this->onlineManager = node_module->get_onlineManager();
   this->slam_configManager = slamManager->get_slam_config();
 
-  this->scenario_selected = 1;
+  this->scenario_selected = 0;
   this->scenario_started = false;
 
   //---------------------------
@@ -61,36 +61,11 @@ void Scenario::scenario_stop(){
 void Scenario::scenario_WP4_auto(){
   //---------------------------
 
-  //Parameters
   slam_configManager->set_predefined_conf(1);
-  bool* with_camera = onlineManager->get_with_camera_follow();
-  bool* with_slam = onlineManager->get_with_slam();
-  bool* with_cylinder = onlineManager->get_with_cylinder_filter();
-  bool* with_heatmap = onlineManager->get_with_heatmap();
-  bool* with_save_frame = onlineManager->get_with_save_frame();
-  bool* with_save_image = onlineManager->get_with_save_image();
-
-  *with_camera = true;
-  *with_slam = true;
-  *with_cylinder = true;
-  *with_heatmap = true;
-  *with_save_frame = true;
-  *with_save_image = true;
+  this->make_configuration();
 
   //Start runtime stuff
-  Prediction* predManager = ioManager->get_predManager();
-
-  predManager->start_watcher_prediction();
-  captureManager->start_new_capture();
-  netManager->start_thread_image();
-
-  bool is_capture_watcher = captureManager->get_is_capture_watcher();
-  bool is_pred_watcher = predManager->get_is_watching();
-  bool is_image_watcher = netManager->get_is_image_watcher();
-
-  if(!is_capture_watcher || !is_pred_watcher || !is_image_watcher){
-    console.AddLog("error", "Probleme with scenario element");
-  }
+  this->make_watcher();
 
   //---------------------------
 }
@@ -99,36 +74,10 @@ void Scenario::scenario_WP5_train_board(){
 
   //Parameters
   slam_configManager->set_predefined_conf(1);
-  bool* with_camera = onlineManager->get_with_camera_follow();
-  bool* with_slam = onlineManager->get_with_slam();
-  bool* with_cylinder = onlineManager->get_with_cylinder_filter();
-  bool* with_heatmap = onlineManager->get_with_heatmap();
-  bool* with_save_frame = onlineManager->get_with_save_frame();
-  bool* with_save_image = onlineManager->get_with_save_image();
-
-  *with_camera = false;
-  *with_slam = true;
-  *with_cylinder = true;
-  *with_heatmap = false;
-  *with_save_frame = true;
-  *with_save_image = false;
+  this->make_configuration();
 
   //Start runtime stuff
-  Prediction* predManager = ioManager->get_predManager();
-  GPS* gpsManager = ioManager->get_gpsManager();
-
-  predManager->start_watcher_prediction();
-  captureManager->start_new_capture();
-  netManager->start_thread_mqtt();
-  gpsManager->start_watcher_gps();
-
-  bool is_capture_watcher = captureManager->get_is_capture_watcher();
-  bool is_pred_watcher = predManager->get_is_watching();
-  bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
-
-  if(!is_capture_watcher || !is_pred_watcher || !is_mqtt_watcher){
-    console.AddLog("error", "Probleme with scenario element");
-  }
+  this->make_watcher();
 
   //---------------------------
 }
@@ -137,6 +86,18 @@ void Scenario::scenario_WP5_train_edge(){
 
   //Parameters
   slam_configManager->set_predefined_conf(1);
+  this->make_configuration();
+
+  //Start runtime stuff
+  this->make_watcher();
+
+  //---------------------------
+}
+
+void Scenario::make_configuration(){
+  //---------------------------
+
+  //Parameters
   bool* with_camera = onlineManager->get_with_camera_follow();
   bool* with_slam = onlineManager->get_with_slam();
   bool* with_cylinder = onlineManager->get_with_cylinder_filter();
@@ -144,25 +105,47 @@ void Scenario::scenario_WP5_train_edge(){
   bool* with_save_frame = onlineManager->get_with_save_frame();
   bool* with_save_image = onlineManager->get_with_save_image();
 
-  *with_camera = false;
-  *with_slam = true;
-  *with_cylinder = true;
-  *with_heatmap = false;
-  *with_save_frame = true;
-  *with_save_image = false;
+  switch(scenario_selected){
+    case 0:{
+      *with_camera = true;
+      *with_slam = true;
+      *with_cylinder = true;
+      *with_heatmap = true;
+      *with_save_frame = true;
+      *with_save_image = true;
+      break;
+    }
 
-  //Start runtime stuff
+    case 1:
+    case 2:{
+      *with_camera = false;
+      *with_slam = true;
+      *with_cylinder = true;
+      *with_heatmap = false;
+      *with_save_frame = true;
+      *with_save_image = false;
+      break;
+    }
+  }
+
+  //---------------------------
+}
+void Scenario::make_watcher(){
+  //---------------------------
+
   Prediction* predManager = ioManager->get_predManager();
+  GPS* gpsManager = ioManager->get_gpsManager();
 
   predManager->start_watcher_prediction();
   captureManager->start_new_capture();
-  netManager->start_thread_mqtt();
+  netManager->start_thread_image();
+  gpsManager->start_watcher_gps();
 
   bool is_capture_watcher = captureManager->get_is_capture_watcher();
   bool is_pred_watcher = predManager->get_is_watching();
-  bool is_mqtt_watcher = netManager->get_is_mqtt_watcher();
+  bool is_image_watcher = netManager->get_is_image_watcher();
 
-  if(!is_capture_watcher || !is_pred_watcher || !is_mqtt_watcher){
+  if(!is_capture_watcher || !is_pred_watcher || !is_image_watcher){
     console.AddLog("error", "Probleme with scenario element");
   }
 

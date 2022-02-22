@@ -77,6 +77,16 @@ void GUI_Obstacle::compute_scenario(){
   }
   ImGui::PopStyleColor(1);
 
+  //Start watchers
+  if(ImGui::Button("Watchers", ImVec2(item_width, 0))){
+    scenarioManager->make_watcher();
+  }
+
+  //Start config
+  if(ImGui::Button("Configure", ImVec2(item_width, 0))){
+    scenarioManager->make_configuration();
+  }
+
 
   //---------------------------
   ImGui::Separator();

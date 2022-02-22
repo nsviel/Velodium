@@ -3,6 +3,7 @@
 #include "../../Specific/fct_maths.h"
 
 #include <iomanip>
+#include <sys/file.h>
 
 
 //Constructor / Destructor
@@ -85,6 +86,10 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
       Subset* subset = *next(cloud->subset.begin(), i);
       format = "binary_little_endian";
 
+      //Locak file
+      int fd = open(pathFile.c_str(), O_RDWR | O_CREAT, 0666);
+      flock(fd, LOCK_EX | LOCK_NB);
+
       //Open file
       std::ofstream file(pathFile, ios::binary);
 
@@ -124,8 +129,11 @@ bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset
     file.close();
   }
   else if (ply_format == "binary" || ply_format == "binary_little_endian"){
-
     ply_format = "binary_little_endian";
+
+    //Locak file
+    int fd = open(filePath.c_str(), O_RDWR | O_CREAT, 0666);
+    flock(fd, LOCK_EX | LOCK_NB);
 
     //Open file
     std::ofstream file(filePath, ios::binary);
@@ -166,8 +174,11 @@ bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset
     file.close();
   }
   else if (ply_format == "binary" || ply_format == "binary_little_endian"){
-
     ply_format = "binary_little_endian";
+
+    //Locak file
+    int fd = open(filePath.c_str(), O_RDWR | O_CREAT, 0666);
+    flock(fd, LOCK_EX | LOCK_NB);
 
     //Open file
     std::ofstream file(filePath, ios::binary);

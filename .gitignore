@@ -1,6 +1,11 @@
 build/*
-media/data/*
-media/point_cloud/*
+media/data/capture_0*
+media/data/capture_1*
+media/data/capture_test*
+media/point_cloud/frames_lot/*
+media/point_cloud/frames_other/*
+media/point_cloud/scala/*
+media/point_cloud/test/*
 doc
 doc/*
 archive/*

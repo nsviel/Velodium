@@ -71,9 +71,10 @@ public:
   Subset* get_subset_selected_init();
   Subset* get_subset(Cloud* cloud, int i);
   Subset* get_subset_buffer(Cloud* cloud, int i);
-  Subset* get_subset_init(Cloud* cloud, int i);
-  Subset* get_subset_byID(Cloud* cloud, int ID);
   Subset* get_subset_buffer_byID(Cloud* cloud, int ID);
+  Subset* get_subset_init(Cloud* cloud, int i);
+  Subset* get_subset_init_byID(Cloud* cloud, int ID);
+  Subset* get_subset_byID(Cloud* cloud, int ID);
 
   Frame* get_frame(Cloud* cloud, int i);
   Frame* get_frame_byID(Cloud* cloud, int ID);

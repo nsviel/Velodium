@@ -647,19 +647,11 @@ Subset* Scene::get_subset_buffer(Cloud* cloud, int i){
   //---------------------------
   return subset;
 }
-Subset* Scene::get_subset_init(Cloud* cloud, int i){
-  //---------------------------
-
-  Subset* subset = *next(cloud->subset_init.begin(), i);
-
-  //---------------------------
-  return subset;
-}
-Subset* Scene::get_subset_byID(Cloud* cloud, int ID){
+Subset* Scene::get_subset_buffer_byID(Cloud* cloud, int ID){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Subset* subset = *next(cloud->subset_buffer.begin(), i);
 
     if(subset->ID == ID){
       return subset;
@@ -669,11 +661,33 @@ Subset* Scene::get_subset_byID(Cloud* cloud, int ID){
   //---------------------------
   return nullptr;
 }
-Subset* Scene::get_subset_buffer_byID(Cloud* cloud, int ID){
+Subset* Scene::get_subset_init(Cloud* cloud, int i){
+  //---------------------------
+
+  Subset* subset = *next(cloud->subset_init.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Subset* Scene::get_subset_init_byID(Cloud* cloud, int ID){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset_buffer.begin(), i);
+    Subset* subset = *next(cloud->subset_init.begin(), i);
+
+    if(subset->ID == ID){
+      return subset;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
+}
+Subset* Scene::get_subset_byID(Cloud* cloud, int ID){
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
 
     if(subset->ID == ID){
       return subset;

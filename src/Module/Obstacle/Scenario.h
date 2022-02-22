@@ -26,6 +26,10 @@ public:
   void scenario_WP5_train_board();
   void scenario_WP5_train_edge();
 
+  //Subfunctions
+  void make_configuration();
+  void make_watcher();
+
   inline int* get_scenario_selected(){return &scenario_selected;}
   inline bool* get_scenario_started(){return &scenario_started;}
 

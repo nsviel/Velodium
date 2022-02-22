@@ -120,17 +120,25 @@ void Capture::operation_new_subset(Subset* subset){
   //Supress null points
   this->supress_nullpoints(subset);
 
+  sayHello();
+
+  //FUITE DE MEMOIRE ICIIIIIIIIIIIIIIIIIIII
+
+
   //If ok insert subset into scene
   if(subset->xyz.size() != 0){
     //Insert subset data into GPU
     sceneManager->add_subset_to_gpu(subset);
+    sceneManager->remove_subset_to_gpu(subset);
 
     //Insert the subset inside the capture cloud
-    sceneManager->add_new_subset(cloud_capture, subset);
+    //sceneManager->add_new_subset(cloud_capture, subset);
 
     //Compute online stuff
-    onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
+    //onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
   }
+
+  delete subset;
 
   //---------------------------
 }
