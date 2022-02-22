@@ -454,8 +454,6 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subse
 
     property_number++;
   }
-  file << "element face 0" << endl;
-  file << "property list uchar int vertex_indices" << endl;
   file << "end_header" <<endl;
 
   //---------------------------
