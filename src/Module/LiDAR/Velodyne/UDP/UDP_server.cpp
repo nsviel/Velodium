@@ -59,11 +59,13 @@ void UDP_server::server_binding(){
 
     if(binding < 0){
       cout << "bind failed" << endl;
-      exit(EXIT_FAILURE);
+      this->is_binded = false;
+    }else{
+      this->is_binded = true;
     }
 
     //---------------------------
-    this->is_binded = true;
+
   }
 }
 void UDP_server::server_read_data(){

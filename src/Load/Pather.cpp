@@ -23,11 +23,7 @@ Pather::Pather(){
 
   this->spaceSampling = 0.08f;
   this->nbLineSampling = 1000000;
-
-  //Get absolute executable location
-  config_opengl configManager;
-  string path_init = configManager.parse_json_s("parameter", "path_media");
-  this->path_current_dir = get_absolutePath_build() + '/' + path_init;
+  this->path_current_dir = get_absolutePath_build() + '/';
 
   //---------------------------
 }
@@ -38,7 +34,7 @@ void Pather::loading(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading();
+  vector<string> path_vec = this->zenity_loading("Cloud loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -52,7 +48,7 @@ void Pather::loading_frames(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading();
+  vector<string> path_vec = this->zenity_loading("Frame loading");
 
   //Load files
   if(path_vec.size() != 0){
@@ -95,7 +91,7 @@ void Pather::loading_sampling(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading();
+  vector<string> path_vec = this->zenity_loading("Cloud with sampling loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -155,7 +151,7 @@ void Pather::loading_treatment(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading();
+  vector<string> path_vec = this->zenity_loading("Cloud with processing loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -244,34 +240,50 @@ void Pather::loading_fastScene(int mode){
 }
 
 //Other functions
-void Pather::saving(){
+void Pather::saving_subset(Subset* subset){
   //---------------------------
 
   //Select saving path
   string path_saving = this->zenity_saving();
 
   //Save current cloud
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  saverManager->save_cloud(cloud, path_saving);
-
-  //---------------------------
-}
-void Pather::saving_frameRange(int frame_b, int frame_e){
-  //---------------------------
-
-  //Select saving path
-  string path_saving = this->zenity_saving();
-
-  //Save current cloud
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  for(int i=frame_b; i<frame_e; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+  if(subset != nullptr && path_saving != ""){
     saverManager->save_subset(subset, ".ply", path_saving);
   }
 
   //---------------------------
 }
-void Pather::saving_allCloud(){
+void Pather::saving_subset_range(int frame_b, int frame_e){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Select saving path
+  string path_saving = this->zenity_saving();
+
+  //Save current cloud
+  if(cloud != nullptr && path_saving != ""){
+    for(int i=frame_b; i<frame_e; i++){
+      Subset* subset = sceneManager->get_subset(cloud, i);
+      saverManager->save_subset(subset, ".ply", path_saving);
+    }
+  }
+
+  //---------------------------
+}
+void Pather::saving_cloud(Cloud* cloud){
+  //---------------------------
+
+  //Select saving path
+  string path_saving = this->zenity_saving();
+
+  //Save current cloud
+  if(cloud != nullptr && path_saving != ""){
+    saverManager->save_cloud(cloud, path_saving);
+  }
+
+  //---------------------------
+}
+void Pather::saving_cloud_all(){
   //---------------------------
 
   //Select directory path
@@ -326,7 +338,7 @@ string Pather::get_filePath(){
   return path_str;
 }
 string Pather::get_filePath(string path){
-  string path_str;
+  string path_str = "";
   //---------------------------
 
   //Zenity window
@@ -375,11 +387,12 @@ void Pather::selectDirectory(string& folderPath){
 }
 
 //Zenity stuff
-vector<string> Pather::zenity_loading(){
+vector<string> Pather::zenity_loading(string title){
   //---------------------------
 
   //Open zenity file manager
-  string zenity = "zenity --file-selection --multiple --title=Load --filename=" + path_current_dir + " 2> /dev/null";
+  string path_current_dir = get_absolutePath_build() + '/';
+  string zenity = "zenity --file-selection --multiple --title=" + title + " --filename=" + path_current_dir + " 2> /dev/null";
   FILE *file = popen(zenity.c_str(), "r");
   char filename[32768];
   const char* path_char = fgets(filename, 32768, file);
@@ -417,7 +430,7 @@ vector<string> Pather::zenity_loading(){
   return path_vec;
 }
 string Pather::zenity_saving(){
-  string path_saving;
+  string path_saving = "";
   //---------------------------
 
   //Open Zenity window
@@ -442,7 +455,7 @@ string Pather::zenity_saving(){
   return path_saving;
 }
 string Pather::zenity_directory(){
-  string path_directory;
+  string path_directory = "";
   //---------------------------
 
   //Retrieve dir path

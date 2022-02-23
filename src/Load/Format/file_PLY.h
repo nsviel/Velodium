@@ -28,7 +28,7 @@ private:
   void Loader_header(std::ifstream& file);
   void Loader_data_ascii(std::ifstream& file);
   void Loader_data_binary(std::ifstream& file);
-  void Loader_data_binary_auto(std::ifstream& file);
+  void reorder_byTimestamp();
 
   //Exporter subfunctions
   void Exporter_header(std::ofstream& file, string format, Subset* subset);
@@ -43,6 +43,8 @@ private:
   vector<string> property_name;
   vector<int> property_size;
   string format;
+  bool is_timestamp;
+  bool is_intensity;
   int point_data_idx;
   int point_number;
   int property_number;

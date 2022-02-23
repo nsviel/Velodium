@@ -22,7 +22,15 @@ public:
 
   //Subfunctions
   bool runtime_prediction();
-  void parse_json_prediction(Cloud* cloud, string paths, string data);
+  void compute_prediction(Cloud* cloud, string file_path);
+  void compute_prediction(Cloud* cloud, vector<string> path_vec);
+  void compute_groundTruth(Cloud* cloud, string path_file);
+  void compute_groundTruth(Cloud* cloud, vector<string> path_vec);
+
+  //JSON parsers
+  void parse_json_groundTruth(Subset* subset, string file_path);
+  void parse_json_prediction(Subset* subset, string file_path);
+  int parse_frame_ID(string file_path);
 
   inline string get_path_grThr(){return path_grThr;}
   inline string get_path_predi(){return path_predi;}

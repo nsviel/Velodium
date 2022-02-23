@@ -352,7 +352,8 @@ void GUI_control::control_keyboard_ctrlAction(){
   if(ImGui::IsKeyPressed(341)){
     //ctrl+s - Save as
     if(ImGui::IsKeyPressed(83)){
-      pathManager->saving();
+      Cloud* cloud = sceneManager->get_cloud_selected();
+      pathManager->saving_cloud(cloud);
     }
     //ctrl+w - Open
     if(ImGui::IsKeyPressed(90)){

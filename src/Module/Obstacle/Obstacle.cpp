@@ -10,6 +10,7 @@
 #include "../../Engine/Glyphs.h"
 #include "../../Engine/Object/OOBB.h"
 #include "../../Operation/Transformation/Transforms.h"
+#include "../../Load/Pather.h"
 
 
 //Constructor / Destructor
@@ -18,6 +19,7 @@ Obstacle::Obstacle(Module_node* node_module){
 
   this->ioManager = node_module->get_ioManager();
   this->captureManager = node_module->get_captureManager();
+  this->predManager = ioManager->get_predManager();
   this->sceneManager = new Scene();
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
@@ -27,6 +29,7 @@ Obstacle::Obstacle(Module_node* node_module){
 }
 Obstacle::~Obstacle(){}
 
+//Main functions
 void Obstacle::runtime_obstacle(){
   //This function is called at each OpenGL iteration
   Cloud* cloud = sceneManager->get_cloud_selected();
@@ -38,11 +41,44 @@ void Obstacle::runtime_obstacle(){
     bool is_prediction = predManager->runtime_prediction();
     if(is_prediction){
       this->build_obstacleGlyph_gt(cloud);
+      this->build_obstacleGlyph_pr(cloud);
     }
   }
 
   //---------------------------
 }
+void Obstacle::compute_obstacle(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Get prediction file paths
+  vector<string> path_vec = pathManager->zenity_loading("Prediction loading");
+
+  //Parses predictions files
+  predManager->compute_prediction(cloud, path_vec);
+
+  //Build glyphs
+  this->build_obstacleGlyph_pr(cloud);
+
+  //---------------------------
+}
+void Obstacle::compute_groundTruth(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Get prediction file paths
+  vector<string> path_vec = pathManager->zenity_loading("Ground truth loading");
+
+  //Parses predictions files
+  predManager->compute_groundTruth(cloud, path_vec);
+
+  //Build glyphs
+  this->build_obstacleGlyph_gt(cloud);
+
+  //---------------------------
+}
+
+//Subfunctions
 void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
   //---------------------------
 

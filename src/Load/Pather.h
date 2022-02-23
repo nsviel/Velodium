@@ -26,9 +26,10 @@ public:
   void loading_fastScene(int mode);
 
   //Saving functions
-  void saving();
-  void saving_allCloud();
-  void saving_frameRange(int frame_b, int frame_e);
+  void saving_subset(Subset* subset);
+  void saving_subset_range(int frame_b, int frame_e);
+  void saving_cloud(Cloud* cloud);
+  void saving_cloud_all();
 
   //Specific functions
   void convertIscale();
@@ -38,7 +39,7 @@ public:
   vector<string> get_directoryAllFilePath(string path);
 
   //Zenity stuff
-  vector<string> zenity_loading();
+  vector<string> zenity_loading(string title);
   string zenity_saving();
   string zenity_directory();
   void zenity_select_directory(string& path_dir);

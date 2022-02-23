@@ -22,21 +22,23 @@ public:
   //Main function
   void design_Obstacle();
 
-  //Subfunctions
+  //Actions
   void compute_scenario();
-  void watcher_activation();
-  void watcher_state();
-  void online_state();
-  void parameter();
+  void compute_display_naming();
+  void compute_draw_text(string text, vec3 position);
+
+  //Watchers
+  void state_watcher();
+  void state_online();
+
+  //Parameters
+  void parameter_watcher();
+  void parameter_online();
   void parameter_interfacing();
 
-  //Subfunctions
+  //Watchers
   void watcher_AI_pred();
   void watcher_gps();
-
-  //Obstacle visual naming
-  void runtime_prediction_naming();
-  void drawText(string text, vec3 position);
 
 private:
   Obstacle* obstacleManager;

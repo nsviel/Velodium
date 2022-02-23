@@ -227,7 +227,7 @@ void GUI_Player::parameter_offline(){
   }
 }
 void GUI_Player::parameter_online(){
-  if(ImGui::CollapsingHeader("Online params")){
+  if(ImGui::CollapsingHeader("Parameter - online")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------

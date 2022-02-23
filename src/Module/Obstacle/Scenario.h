@@ -9,6 +9,8 @@ class Capture;
 class Network;
 class SLAM_configuration;
 class Player_online;
+class Prediction;
+class GPS;
 
 
 class Scenario
@@ -21,10 +23,6 @@ public:
 public:
   void scenario_start();
   void scenario_stop();
-
-  void scenario_WP4_auto();
-  void scenario_WP5_train_board();
-  void scenario_WP5_train_edge();
 
   //Subfunctions
   void make_configuration();
@@ -39,6 +37,8 @@ private:
   Network* netManager;
   SLAM_configuration* slam_configManager;
   Player_online* onlineManager;
+  Prediction* predManager;
+  GPS* gpsManager;
 
   int scenario_selected;
   bool scenario_started;

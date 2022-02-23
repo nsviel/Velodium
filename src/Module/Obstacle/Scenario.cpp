@@ -23,77 +23,36 @@ Scenario::Scenario(Module_node* node_module){
   this->netManager = node_module->get_netManager();
   this->onlineManager = node_module->get_onlineManager();
   this->slam_configManager = slamManager->get_slam_config();
+  this->predManager = ioManager->get_predManager();
+  this->gpsManager = ioManager->get_gpsManager();
 
-  this->scenario_selected = 0;
+  this->scenario_selected = 1;
   this->scenario_started = false;
 
   //---------------------------
 }
 Scenario::~Scenario(){}
 
+//Run scenario functions
 void Scenario::scenario_start(){
   //---------------------------
 
-  switch(scenario_selected){
-    case 0:{//WP4 auto
-      this->scenario_WP4_auto();
-      break;
-    }
-    case 1:{//WP5 train on-board
-      this->scenario_WP5_train_board();
-      break;
-    }
-    case 2:{//WP5 train on-edge
-      this->scenario_WP5_train_edge();
-      break;
-    }
-  }
+  slam_configManager->set_predefined_conf(1);
+  this->make_configuration();
+  this->make_watcher();
 
   //---------------------------
 }
 void Scenario::scenario_stop(){
   //---------------------------
 
+  predManager->stop_watcher_prediction();
+  gpsManager->stop_watcher_gps();
 
   //---------------------------
 }
 
-void Scenario::scenario_WP4_auto(){
-  //---------------------------
-
-  slam_configManager->set_predefined_conf(1);
-  this->make_configuration();
-
-  //Start runtime stuff
-  this->make_watcher();
-
-  //---------------------------
-}
-void Scenario::scenario_WP5_train_board(){
-  //---------------------------
-
-  //Parameters
-  slam_configManager->set_predefined_conf(1);
-  this->make_configuration();
-
-  //Start runtime stuff
-  this->make_watcher();
-
-  //---------------------------
-}
-void Scenario::scenario_WP5_train_edge(){
-  //---------------------------
-
-  //Parameters
-  slam_configManager->set_predefined_conf(1);
-  this->make_configuration();
-
-  //Start runtime stuff
-  this->make_watcher();
-
-  //---------------------------
-}
-
+//Subfunctions
 void Scenario::make_configuration(){
   //---------------------------
 
@@ -105,8 +64,19 @@ void Scenario::make_configuration(){
   bool* with_save_frame = onlineManager->get_with_save_frame();
   bool* with_save_image = onlineManager->get_with_save_image();
 
+  //Set according to scenario choice
   switch(scenario_selected){
     case 0:{
+      *with_camera = false;
+      *with_slam = false;
+      *with_cylinder = false;
+      *with_heatmap = false;
+      *with_save_frame = false;
+      *with_save_image = false;
+      break;
+    }
+
+    case 1:{
       *with_camera = true;
       *with_slam = true;
       *with_cylinder = true;
@@ -116,8 +86,8 @@ void Scenario::make_configuration(){
       break;
     }
 
-    case 1:
-    case 2:{
+    case 2:
+    case 3:{
       *with_camera = false;
       *with_slam = true;
       *with_cylinder = true;
@@ -133,20 +103,28 @@ void Scenario::make_configuration(){
 void Scenario::make_watcher(){
   //---------------------------
 
-  Prediction* predManager = ioManager->get_predManager();
-  GPS* gpsManager = ioManager->get_gpsManager();
+  switch(scenario_selected){
+    case 0:{//Null scenario
+      this->scenario_stop();
+      break;
+    }
 
-  predManager->start_watcher_prediction();
-  captureManager->start_new_capture();
-  netManager->start_thread_image();
-  gpsManager->start_watcher_gps();
+    case 1:{//WP4 scenario
+      predManager->start_watcher_prediction();
+      captureManager->start_new_capture();
+      netManager->start_thread_image();
+      gpsManager->start_watcher_gps();
+      break;
+    }
 
-  bool is_capture_watcher = captureManager->get_is_capture_watcher();
-  bool is_pred_watcher = predManager->get_is_watching();
-  bool is_image_watcher = netManager->get_is_image_watcher();
-
-  if(!is_capture_watcher || !is_pred_watcher || !is_image_watcher){
-    console.AddLog("error", "Probleme with scenario element");
+    case 2://WP5 scenario
+    case 3:{
+      predManager->start_watcher_prediction();
+      captureManager->start_new_capture();
+      netManager->start_thread_image();
+      gpsManager->start_watcher_gps();
+      break;
+    }
   }
 
   //---------------------------

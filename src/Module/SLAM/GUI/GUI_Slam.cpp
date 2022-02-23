@@ -71,7 +71,7 @@ void GUI_Slam::compute(){
   //---------------------------
 }
 void GUI_Slam::parameter_slam(){
-  if(ImGui::CollapsingHeader("SLAM params")){
+  if(ImGui::CollapsingHeader("Parameter - SLAM")){
     //---------------------------
 
     this->parameter_configuration();

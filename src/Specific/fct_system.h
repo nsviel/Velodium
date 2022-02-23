@@ -218,10 +218,7 @@ namespace{
     std::vector<std::string> path_vec = list_allFiles(path);
     for(int i=0; i<path_vec.size(); i++){
       string path_full = path + path_vec[i];
-
-      if(stat (path_full.c_str(), &buffer)){
-        std::remove (path_full.c_str());
-      }
+      std::remove (path_full.c_str());
     }
 
     //---------------------------

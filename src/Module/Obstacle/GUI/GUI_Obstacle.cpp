@@ -45,22 +45,23 @@ void GUI_Obstacle::design_Obstacle(){
   //---------------------------
 
   this->compute_scenario();
-  this->watcher_state();
-  this->online_state();
-  this->watcher_activation();
-  this->parameter();
+  this->state_watcher();
+  this->state_online();
+  this->parameter_watcher();
+  this->parameter_online();
+  this->parameter_interfacing();
 
   //---------------------------
 }
 
-//Subfunctions
+//Actions
 void GUI_Obstacle::compute_scenario(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Scenario");
   //---------------------------
 
   //Choose scenario
   int* scenario_selected = scenarioManager->get_scenario_selected();
-  ImGui::Combo("##007", scenario_selected, "WP4 auto\0WP5 train on-board\0WP5 train on-edge\0");
+  ImGui::Combo("##007", scenario_selected, "None\0WP4 auto\0WP5 train on-board\0WP5 train on-edge\0");
 
   //Start scenario
   bool scenario_started = *scenarioManager->get_scenario_started();
@@ -91,31 +92,71 @@ void GUI_Obstacle::compute_scenario(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Obstacle::watcher_activation(){
-  if(ImGui::CollapsingHeader("Watcher")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    //---------------------------
+void GUI_Obstacle::compute_display_naming(){
+  Subset* subset = sceneManager->get_subset_selected();
+  if(subset == nullptr) return;
+  label_ID = 0;
+  //---------------------------
 
-    //AI watcher
-    this->watcher_AI_pred();
+  Obstac* obstacle_pr = &subset->obstacle_pr;
 
-    //GPS watcher
-    this->watcher_gps();
+  for(int j=0; j<obstacle_pr->name.size(); j++){
+    string name = obstacle_pr->name[j];
+    vec3 position = obstacle_pr->position[j];
+    position.z = obstacle_pr->dimension[j].z;
 
-    //Capture watcher
-    GUI_module* gui_module = node_gui->get_gui_moduleManager();
-    GUI_Lidar* gui_lidarManager = gui_module->get_gui_lidarManager();
-    gui_lidarManager->velo_capture();
+    this->compute_draw_text(name, position);
 
-    //MQTT messager
-    //GUI_Network* gui_netManager = gui_module->get_gui_netManager();
-    //gui_netManager->mqtt_connection();
-
-    //---------------------------
-    ImGui::Separator();
+    label_ID++;
   }
+
+  //---------------------------
 }
-void GUI_Obstacle::watcher_state(){
+void GUI_Obstacle::compute_draw_text(string text, vec3 position){
+  //---------------------------
+
+  //Overlay flags
+  ImGuiWindowFlags window_flags = 0;
+  window_flags |= ImGuiWindowFlags_NoTitleBar;
+  window_flags |= ImGuiWindowFlags_NoResize;
+  window_flags |= ImGuiWindowFlags_NoBackground;
+  window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+  window_flags |= ImGuiWindowFlags_NoMove;
+
+  //Convert world position to screen location
+  vec2 uv = coordManager->WorldToScreen(position);
+
+  //Obstacle labeling
+  if(uv.x != -1 && uv.y != -1){
+    bool truc = true;
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(255, 255, 255, 255));
+    ImGui::SetNextWindowBgAlpha(0.75f);
+    ImGui::SetNextWindowPos(ImVec2(uv.x, uv.y));
+
+    string window_name = "label_" + to_string(label_ID);
+    ImGui::Begin(window_name.c_str(), &truc, window_flags);
+
+    //Supress window borders
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.WindowBorderSize = 0.0f;
+
+    //Supress potential focus
+    if(ImGui::IsWindowHovered()){
+      ImGuiIO& io = ImGui::GetIO();
+      io.WantCaptureMouse = false;
+    }
+
+    ImGui::TextColored(ImVec4(1.0f,0.0f,0.0f,1.0f), "%s", text.c_str());
+
+    ImGui::End();
+    ImGui::PopStyleColor();
+  }
+
+  //---------------------------
+}
+
+//State
+void GUI_Obstacle::state_watcher(){
   //---------------------------
 
   //Watchers
@@ -143,7 +184,7 @@ void GUI_Obstacle::watcher_state(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Obstacle::online_state(){
+void GUI_Obstacle::state_online(){
   //---------------------------
 
   //Specific module
@@ -170,14 +211,47 @@ void GUI_Obstacle::online_state(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");
 
+  string colorization;
+  if(*onlineManager->get_with_heatmap()){
+    colorization = "Heatmap";
+  }else{
+    colorization = "Unicolor";
+  }
+  ImGui::Text("Online - Colorization");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", colorization.c_str());
+
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Obstacle::parameter(){
-  //---------------------------
 
-  //Interfacing parameters
-  this->parameter_interfacing();
+//Parameters
+void GUI_Obstacle::parameter_watcher(){
+  if(ImGui::CollapsingHeader("Parameter - watcher")){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    //---------------------------
+
+    //AI watcher
+    this->watcher_AI_pred();
+
+    //GPS watcher
+    this->watcher_gps();
+
+    //Capture watcher
+    GUI_module* gui_module = node_gui->get_gui_moduleManager();
+    GUI_Lidar* gui_lidarManager = gui_module->get_gui_lidarManager();
+    gui_lidarManager->velo_capture();
+
+    //MQTT messager
+    //GUI_Network* gui_netManager = gui_module->get_gui_netManager();
+    //gui_netManager->mqtt_connection();
+
+    //---------------------------
+    ImGui::Separator();
+  }
+}
+void GUI_Obstacle::parameter_online(){
+  //---------------------------
 
   //Online parameters
   GUI_module* gui_module = node_gui->get_gui_moduleManager();
@@ -192,7 +266,7 @@ void GUI_Obstacle::parameter(){
 }
 void GUI_Obstacle::parameter_interfacing(){
   //Obstacle detection parameters
-  if(ImGui::CollapsingHeader("Interfacing params")){
+  if(ImGui::CollapsingHeader("Parameter - interface")){
     //---------------------------
 
     //Prediction directory
@@ -203,11 +277,21 @@ void GUI_Obstacle::parameter_interfacing(){
     string dir_path = ioManager->get_dir_path();
     ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
 
+    //Add predictions
+    if(ImGui::Button("Add predictions")){
+      obstacleManager->compute_obstacle();
+    }
+
+    //Add ground truth
+    if(ImGui::Button("Add ground truth")){
+      obstacleManager->compute_groundTruth();
+    }
+
     //---------------------------
   }
 }
 
-//Subfunctions
+//Watchers
 void GUI_Obstacle::watcher_AI_pred(){
   //---------------------------
 
@@ -247,70 +331,6 @@ void GUI_Obstacle::watcher_gps(){
     }
   }
   ImGui::PopStyleColor(1);
-
-  //---------------------------
-}
-
-//Obstacle visual naming
-void GUI_Obstacle::runtime_prediction_naming(){
-  Subset* subset = sceneManager->get_subset_selected();
-  if(subset == nullptr) return;
-  label_ID = 0;
-  //---------------------------
-
-  Obstac* obstacle_pr = &subset->obstacle_pr;
-
-  for(int j=0; j<obstacle_pr->name.size(); j++){
-    string name = obstacle_pr->name[j];
-    vec3 position = obstacle_pr->position[j];
-    position.z = obstacle_pr->dimension[j].z;
-
-    this->drawText(name, position);
-
-    label_ID++;
-  }
-
-  //---------------------------
-}
-void GUI_Obstacle::drawText(string text, vec3 position){
-  //---------------------------
-
-  //Overlay flags
-  ImGuiWindowFlags window_flags = 0;
-  window_flags |= ImGuiWindowFlags_NoTitleBar;
-  window_flags |= ImGuiWindowFlags_NoResize;
-  window_flags |= ImGuiWindowFlags_NoBackground;
-  window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-  window_flags |= ImGuiWindowFlags_NoMove;
-
-  //Convert world position to screen location
-  vec2 uv = coordManager->WorldToScreen(position);
-
-  //Obstacle labeling
-  if(uv.x != -1 && uv.y != -1){
-    bool truc = true;
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(255, 255, 255, 255));
-    ImGui::SetNextWindowBgAlpha(0.75f);
-    ImGui::SetNextWindowPos(ImVec2(uv.x, uv.y));
-
-    string window_name = "label_" + to_string(label_ID);
-    ImGui::Begin(window_name.c_str(), &truc, window_flags);
-
-    //Supress window borders
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowBorderSize = 0.0f;
-
-    //Supress potential focus
-    if(ImGui::IsWindowHovered()){
-      ImGuiIO& io = ImGui::GetIO();
-      io.WantCaptureMouse = false;
-    }
-
-    ImGui::TextColored(ImVec4(1.0f,0.0f,0.0f,1.0f), "%s", text.c_str());
-
-    ImGui::End();
-    ImGui::PopStyleColor();
-  }
 
   //---------------------------
 }

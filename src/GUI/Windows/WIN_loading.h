@@ -3,6 +3,7 @@
 
 #include "../../common.h"
 
+class Scene;
 class Pather;
 class Loader;
 
@@ -31,6 +32,7 @@ public:
   void saving_configuration();
 
 private:
+  Scene* sceneManager;
   Pather* pathManager;
   Loader* loaderManager;
 

@@ -50,7 +50,7 @@ public:
 
       // Network stuff management
       if(module_velodyne){
-        if(ImGui::BeginTabItem("Network")){
+        if(ImGui::BeginTabItem("Interface")){
           gui_netManager->design_Network();
           ImGui::EndTabItem();
         }
@@ -88,7 +88,7 @@ public:
   void runtime(){
     //-------------------------------
 
-    gui_obstacleManager->runtime_prediction_naming();
+    gui_obstacleManager->compute_display_naming();
     gui_playerManager->runtime_player_mouse();
 
     //-------------------------------

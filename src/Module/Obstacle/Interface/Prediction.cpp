@@ -30,7 +30,33 @@ Prediction::Prediction(){
 }
 Prediction::~Prediction(){}
 
-//Watchers
+//Main functions
+bool Prediction::runtime_prediction(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  bool is_prediction = false;
+  //---------------------------
+
+  if(thread_predi_ON || thread_grThr_ON){
+    if(cloud != nullptr){
+      //Load json files - predictions
+      if(flag_newPred){
+        this->compute_prediction(cloud, path_predi_file);
+        this->flag_newPred = false;
+        is_prediction = true;
+      }
+
+      //Load json files - GT
+      if(flag_newGrTh){
+        this->compute_groundTruth(cloud, path_grThr_file);
+        this->flag_newGrTh = false;
+        is_prediction = true;
+      }
+    }
+  }
+
+  //---------------------------
+  return is_prediction;
+}
 void Prediction::start_watcher_prediction(){
   //---------------------------
 
@@ -70,93 +96,185 @@ void Prediction::stop_watcher_prediction(){
 }
 
 //Subfunctions
-bool Prediction::runtime_prediction(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  bool is_prediction = false;
-  //---------------------------
-
-  if(thread_predi_ON || thread_grThr_ON){
-    if(cloud != nullptr){
-      //Load json files - predictions
-      if(flag_newPred){
-        this->parse_json_prediction(cloud, path_predi_file, "pr");
-        this->flag_newPred = false;
-        is_prediction = true;
-      }
-
-      //Load json files - GT
-      if(flag_newGrTh){
-        this->parse_json_prediction(cloud, path_grThr_file, "gt");
-        this->flag_newGrTh = false;
-        is_prediction = true;
-      }
-    }
-  }
-
-  //---------------------------
-  return is_prediction;
-}
-void Prediction::parse_json_prediction(Cloud* cloud, string path, string data){
+void Prediction::compute_prediction(Cloud* cloud, string path_file){
   if(cloud == nullptr) return;
   //---------------------------
 
-  //Get json name
-  std::ifstream ifs(path);
-  Json::Reader reader;
-  Json::Value obj;
-  reader.parse(ifs, obj);
-  string json_name = obj["frame_id"].asString();
+  //Retrieve prediction frame ID
+  int frame_ID = parse_frame_ID(path_file);
 
   //For the subset with same name
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset->name == json_name){
-      //Make stuff
-      Obstac* obstacle_gt = &subset->obstacle_gt;
-      Obstac* obstacle_pr = &subset->obstacle_pr;
-      const Json::Value& json_dete = obj["detections"];
-
-      for (int i = 0; i < json_dete.size(); i++){
-        //Obstacle name
-        string name = json_dete[i]["name"].asString();
-
-        //Obstacle position
-        const Json::Value& json_pos = json_dete[i]["position"];
-        vec3 position;
-        for (int j=0; j<json_pos.size(); j++){
-          position[j] = json_pos[j].asFloat();
-        }
-
-        //Obstacle dimension
-        const Json::Value& json_dim = json_dete[i]["dimensions"];
-        vec3 dimension;
-        for (int j=0; j<json_dim.size(); j++){
-          dimension[j] = json_dim[j].asFloat();
-        }
-
-        //Obstacle heading
-        const Json::Value& json_head = json_dete[i]["heading"];
-        float heading = json_head.asFloat();
-
-        //Store all data
-        if(data == "pr"){
-          obstacle_pr->name.push_back(name);
-          obstacle_pr->position.push_back(position);
-          obstacle_pr->dimension.push_back(dimension);
-          obstacle_pr->heading.push_back(heading);
-        }
-        else if(data == "gt"){
-          obstacle_gt->name.push_back(name);
-          obstacle_gt->position.push_back(position);
-          obstacle_gt->dimension.push_back(dimension);
-          obstacle_gt->heading.push_back(heading);
-        }
-      }
-
-      break;
+    if(subset->ID == frame_ID){
+      this->parse_json_prediction(subset, path_file);
     }
   }
 
   //---------------------------
+}
+void Prediction::compute_prediction(Cloud* cloud, vector<string> path_vec){
+  if(cloud == nullptr) return;
+  //---------------------------
+
+  for(int i=0; i<path_vec.size(); i++){
+    string path_file = path_vec[i];
+
+    //Retrieve prediction frame ID
+    int frame_ID = parse_frame_ID(path_file);
+
+    //For the subset with same name
+    for(int j=0; j<cloud->subset.size(); j++){
+      Subset* subset = sceneManager->get_subset(cloud, j);
+
+      if(subset->ID == frame_ID){
+        this->parse_json_prediction(subset, path_file);
+      }
+    }
+  }
+
+  //---------------------------
+}
+void Prediction::compute_groundTruth(Cloud* cloud, string path_file){
+  if(cloud == nullptr) return;
+  //---------------------------
+
+  //Retrieve prediction frame ID
+  int frame_ID = parse_frame_ID(path_file);
+
+  //For the subset with same name
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = sceneManager->get_subset(cloud, i);
+
+    if(subset->ID == frame_ID){
+      this->parse_json_groundTruth(subset, path_file);
+    }
+  }
+
+  //---------------------------
+}
+void Prediction::compute_groundTruth(Cloud* cloud, vector<string> path_vec){
+  if(cloud == nullptr) return;
+  //---------------------------
+
+  for(int i=0; i<path_vec.size(); i++){
+    string path_file = path_vec[i];
+
+    //Retrieve prediction frame ID
+    int frame_ID = parse_frame_ID(path_file);
+
+    //For the subset with same name
+    for(int j=0; j<cloud->subset.size(); j++){
+      Subset* subset = sceneManager->get_subset(cloud, j);
+
+      if(subset->ID == frame_ID){
+        this->parse_json_groundTruth(subset, path_file);
+      }
+    }
+  }
+
+  //---------------------------
+}
+
+//JSON parsers
+void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
+  //---------------------------
+
+  //Parse ground truth json file
+  std::ifstream ifs(path_file);
+  Json::Reader reader;
+  Json::Value obj;
+  reader.parse(ifs, obj);
+
+  //For each hierarchical set
+  Obstac* obstacle_gt = &subset->obstacle_gt;
+  const Json::Value& json = obj["detections"];
+
+  for (int i = 0; i < json.size(); i++){
+    //Obstacle name
+    string name = json[i]["name"].asString();
+
+    //Obstacle position
+    const Json::Value& json_pos = json[i]["position"];
+    vec3 position;
+    for (int j=0; j<json_pos.size(); j++){
+      position[j] = json_pos[j].asFloat();
+    }
+
+    //Obstacle dimension
+    const Json::Value& json_dim = json[i]["dimensions"];
+    vec3 dimension;
+    for (int j=0; j<json_dim.size(); j++){
+      dimension[j] = json_dim[j].asFloat();
+    }
+
+    //Obstacle heading
+    const Json::Value& json_head = json[i]["heading"];
+    float heading = json_head.asFloat();
+
+    //Store all data
+    obstacle_gt->name.push_back(name);
+    obstacle_gt->position.push_back(position);
+    obstacle_gt->dimension.push_back(dimension);
+    obstacle_gt->heading.push_back(heading);
+  }
+
+  //---------------------------
+}
+void Prediction::parse_json_prediction(Subset* subset, string path_file){
+  //---------------------------
+
+  //Parse prediction json file
+  std::ifstream ifs(path_file);
+  Json::Reader reader;
+  Json::Value obj;
+  reader.parse(ifs, obj);
+
+  //For each hierarchical set
+  Obstac* obstacle_pr = &subset->obstacle_pr;
+  const Json::Value& json = obj["detections"];
+
+  for (int i = 0; i < json.size(); i++){
+    //Obstacle name
+    string name = json[i]["name"].asString();
+
+    //Obstacle position
+    const Json::Value& json_pos = json[i]["position"];
+    vec3 position;
+    for (int j=0; j<json_pos.size(); j++){
+      position[j] = json_pos[j].asFloat();
+    }
+
+    //Obstacle dimension
+    const Json::Value& json_dim = json[i]["dimensions"];
+    vec3 dimension;
+    for (int j=0; j<json_dim.size(); j++){
+      dimension[j] = json_dim[j].asFloat();
+    }
+
+    //Obstacle heading
+    const Json::Value& json_head = json[i]["heading"];
+    float heading = json_head.asFloat();
+
+    //Store all data
+    obstacle_pr->name.push_back(name);
+    obstacle_pr->position.push_back(position);
+    obstacle_pr->dimension.push_back(dimension);
+    obstacle_pr->heading.push_back(heading);
+  }
+
+  //---------------------------
+}
+int Prediction::parse_frame_ID(string path_file){
+  //---------------------------
+
+  std::ifstream ifs(path_file);
+  Json::Reader reader;
+  Json::Value obj;
+  reader.parse(ifs, obj);
+  int frame_ID = obj["frame_id"].asInt();
+
+  //---------------------------
+  return frame_ID;
 }

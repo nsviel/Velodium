@@ -129,11 +129,10 @@ void Capture::operation_new_subset(Subset* subset){
   if(subset->xyz.size() != 0){
     //Insert subset data into GPU
     sceneManager->add_subset_to_gpu(subset);
-    sceneManager->remove_subset_to_gpu(subset);
 
     //Insert the subset inside the capture cloud
-    //sceneManager->add_new_subset(cloud_capture, subset);
-
+    sceneManager->add_new_subset(cloud_capture, subset);
+say("end");
     //Compute online stuff
     //onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
   }

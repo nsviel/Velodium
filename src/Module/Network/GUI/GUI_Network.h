@@ -21,6 +21,7 @@ public:
   void design_Network();
 
   void ssh_connection();
+  void ssh_parameter();
   void mqtt_connection();
   void mqtt_parameter();
 
