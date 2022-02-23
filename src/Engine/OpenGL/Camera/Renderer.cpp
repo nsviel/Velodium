@@ -1,8 +1,7 @@
 #include "Renderer.h"
 
-#include "../OpenGL/Dimension.h"
-
-#include "../Configuration/config_opengl.h"
+#include "../../OpenGL/Dimension.h"
+#include "../../Scene/Configuration.h"
 
 #include <FreeImage.h>
 #include <cstdint>
@@ -13,7 +12,7 @@ Renderer::Renderer(Dimension* dim){
   //---------------------------
 
   this->dimManager = dim;
-  this->configManager = new config_opengl();
+  this->configManager = new Configuration();
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);

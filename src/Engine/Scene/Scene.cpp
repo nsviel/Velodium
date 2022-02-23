@@ -2,8 +2,8 @@
 
 #include "Glyphs.h"
 
-#include "../Specific/fct_system.h"
-#include "../Operation/Transformation/Transforms.h"
+#include "../../Specific/fct_system.h"
+#include "../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / Destructor

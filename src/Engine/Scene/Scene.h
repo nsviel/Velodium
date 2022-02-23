@@ -1,9 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../common.h"
+#include "../../common.h"
 
-#include "Data/Database.h"
+#include "../Data/Database.h"
 extern struct Database database;
 
 class Data;

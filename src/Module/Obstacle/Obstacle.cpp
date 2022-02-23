@@ -6,9 +6,9 @@
 #include "../Module_node.h"
 #include "../LiDAR/Capture.h"
 
-#include "../../Engine/Scene.h"
-#include "../../Engine/Glyphs.h"
-#include "../../Engine/Object/OOBB.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object/OOBB.h"
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Load/Pather.h"
 

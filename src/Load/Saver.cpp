@@ -8,7 +8,7 @@
 #include "Format/file_OBJ.h"
 #include "Format/file_XYZ.h"
 
-#include "../Engine/Scene.h"
+#include "../Engine/Scene/Scene.h"
 #include "../Specific/fct_system.h"
 #include "../Specific/fct_transtypage.h"
 

@@ -7,9 +7,9 @@
 #include "../Transformation/Attribut.h"
 
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/Scene.h"
-#include "../../Engine/Glyphs.h"
-#include "../../Engine/OpenGL/Camera.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
 #include "../../Load/Loader.h"

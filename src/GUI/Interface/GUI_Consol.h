@@ -3,7 +3,7 @@
 
 class Dimension;
 class GUI_node;
-class Configuration_node;
+class Configuration;
 
 #include "../../common.h"
 
@@ -24,7 +24,7 @@ public:
   inline vec2 get_bp_dim(){return dim_bp;}
 
 private:
-  Configuration_node* node_config;
+  Configuration* node_config;
   Dimension* dimManager;
 
   vec2 dim_bp;

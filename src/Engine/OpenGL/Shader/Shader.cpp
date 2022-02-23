@@ -3,7 +3,7 @@
 #include "PP_edl.h"
 #include "ShaderObject.h"
 
-#include "../OpenGL/Dimension.h"
+#include "../Dimension.h"
 
 
 
@@ -20,8 +20,14 @@ Shader::~Shader(){}
 void Shader::init(){
 	//---------------------------
 
-	shader_scene = new ShaderObject("../src/Engine/Shader/shader_scene.vs", "../src/Engine/Shader/shader_scene.fs");
-	shader_screen = new ShaderObject("../src/Engine/Shader/shader_edl.vs", "../src/Engine/Shader/shader_edl.fs");
+	string path_scene_vs = "../src/Engine/OpenGL/Shader/shader_scene.vs";
+	string path_scene_fs = "../src/Engine/OpenGL/Shader/shader_scene.fs";
+
+	string path_screen_vs = "../src/Engine/OpenGL/Shader/shader_edl.vs";
+	string path_screen_fs = "../src/Engine/OpenGL/Shader/shader_edl.fs";
+
+	shader_scene = new ShaderObject(path_scene_vs, path_scene_fs);
+	shader_screen = new ShaderObject(path_screen_vs, path_screen_fs);
 
 	edlManager->setup_edl(shader_screen->get_program_ID());
 

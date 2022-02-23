@@ -10,7 +10,7 @@
 #include "Player/Player_online.h"
 #include "Network/Network.h"
 
-#include "../Engine/Configuration/config_module.h"
+#include "../Engine/Scene/Configuration.h"
 #include "../Engine/Engine_node.h"
 #include "../Operation/Operation_node.h"
 #include "../common.h"
@@ -89,7 +89,7 @@ private:
   Network* netManager;
   Slam* slamManager;
   Capture* captureManager;
-  config_module* configManager;
+  Configuration* configManager;
   Obstacle* obstacleManager;
   Interfacing* ioManager;
   Player_cloud* playerManager;

@@ -12,20 +12,17 @@
 
 #include "../Module/Module_GUI.h"
 #include "../Module/Module_node.h"
-
 #include "../Engine/Engine_node.h"
-#include "../Engine/Configuration/Configuration_node.h"
 #include "../Operation/Operation_node.h"
 
 
 //Constructor / Destructor
-GUI_node::GUI_node(Engine_node* engine, Operation_node* ope, Module_node* module, Configuration_node* config){
+GUI_node::GUI_node(Engine_node* engine, Operation_node* ope, Module_node* module){
   //---------------------------
 
   this->node_engine = engine;
   this->node_ope = ope;
   this->node_module = module;
-  this->node_config = config;
 
   //---------------------------
   this->init_objects();

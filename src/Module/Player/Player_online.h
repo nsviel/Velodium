@@ -10,7 +10,7 @@ class Engine;
 class Filter;
 class Dimension;
 class Scene;
-class config_module;
+class Configuration;
 class Module_node;
 class Interfacing;
 
@@ -57,7 +57,7 @@ private:
   Slam* slamManager;
   Filter* filterManager;
   Dimension* dimManager;
-  config_module* configManager;
+  Configuration* configManager;
   Interfacing* ioManager;
 
   vec2 HM_height_range;

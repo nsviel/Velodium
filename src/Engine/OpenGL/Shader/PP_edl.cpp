@@ -1,6 +1,6 @@
 #include "PP_edl.h"
 
-#include "../OpenGL/Dimension.h"
+#include "../Dimension.h"
 
 
 

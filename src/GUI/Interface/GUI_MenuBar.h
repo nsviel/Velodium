@@ -14,7 +14,6 @@ class Extraction;
 class Heatmap;
 class Textures;
 class Pather;
-class config_module;
 
 
 class GUI_menuBar
@@ -42,7 +41,6 @@ private:
   Extraction* extractionManager;
   Heatmap* heatmapManager;
   Textures* texManager;
-  config_module* configManager;
 
   GUI_node* node_gui;
   GUI_windows* gui_winManager;

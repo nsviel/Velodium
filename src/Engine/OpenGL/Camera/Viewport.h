@@ -3,7 +3,7 @@
 
 #include "Camera.h"
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Dimension;
 

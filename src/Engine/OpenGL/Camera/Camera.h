@@ -3,10 +3,10 @@
 
 #include "struct_viewport.h"
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Dimension;
-class config_opengl;
+class Configuration;
 
 
 class Camera
@@ -65,7 +65,7 @@ public:
   inline bool is_cameraMovON(){return viewMain.cameraMovON;}
 
 private:
-  config_opengl* configManager;
+  Configuration* configManager;
   Dimension* dimManager;
 
   Viewport_obj viewMain;

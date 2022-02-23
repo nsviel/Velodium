@@ -7,7 +7,7 @@
  * Deal with specific background objects (grid, axis ...)
  */
 
-#include "../common.h"
+#include "../../common.h"
 
 class Scene;
 

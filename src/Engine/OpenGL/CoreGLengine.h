@@ -21,8 +21,8 @@ class GUI;
 class Engine;
 class Renderer;
 class Engine_node;
-class Configuration_node;
-class config_opengl;
+class Configuration;
+class Configuration;
 
 
 class CoreGLengine
@@ -48,8 +48,6 @@ public:
   void loop_end();
 
 private:
-  Configuration_node* node_config;
-  config_opengl* conf_glManager;
   Engine_node* node_engine;
 
   GLFWwindow* window;
@@ -60,6 +58,7 @@ private:
   Renderer* renderManager;
   GUI* guiManager;
   Shader* shaderManager;
+  Configuration* configManager;
 
   bool waitForEvent;
   bool openglDisplay;

@@ -3,12 +3,11 @@
 #include "IconsFontAwesome5.h"
 
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/OpenGL/Camera.h"
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/config_opengl.h"
-#include "../../Engine/Shader/Shader.h"
-#include "../../Engine/Shader/ShaderObject.h"
-#include "../../Engine/Shader/PP_edl.h"
+#include "../../Engine/Scene/Configuration.h"
+#include "../../Engine/OpenGL/Camera/Camera.h"
+#include "../../Engine/OpenGL/Shader/Shader.h"
+#include "../../Engine/OpenGL/Shader/ShaderObject.h"
+#include "../../Engine/OpenGL/Shader/PP_edl.h"
 
 #include <fstream>
 
@@ -20,9 +19,7 @@ extern struct Window_tab window_tab;
 WIN_opengl::WIN_opengl(Engine_node* node_engine){
   //---------------------------
 
-  Configuration_node* node_config = node_engine->get_node_config();
-
-  this->configManager = node_config->get_conf_glManager();
+  this->configManager = node_engine->get_configManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->edlManager = shaderManager->get_edlManager();

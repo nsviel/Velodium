@@ -1,6 +1,6 @@
 #include "WIN_loading.h"
 
-#include "../../Engine/Scene.h"
+#include "../../Engine/Scene/Scene.h"
 
 #include "../../Load/Pather.h"
 #include "../../Load/Loader.h"

@@ -2,8 +2,8 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "../../Engine/Scene.h"
-#include "../../Engine/Glyphs.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Functions/Heatmap.h"

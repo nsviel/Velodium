@@ -11,12 +11,10 @@
 #include "../../Module/Module_GUI.h"
 #include "../../Module/Player/GUI/GUI_Player.h"
 
-#include "../../Engine/Scene.h"
 #include "../../Engine/Engine_node.h"
+#include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/config_module.h"
 
 #include "../../Operation/Functions/Extraction.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -33,11 +31,10 @@ extern struct Window_tab window_tab;
 
 //Constructor / Destructor
 GUI_menuBar::GUI_menuBar(GUI_node* node){
+  this->node_gui = node;
   //---------------------------
 
-  this->node_gui = node;
   Engine_node* node_engine = node_gui->get_node_engine();
-  Configuration_node* node_config = node_gui->get_node_config();
   Module_node* node_module = node_gui->get_node_module();
   GUI_module* gui_moduleManager = node_gui->get_gui_moduleManager();
 
@@ -45,7 +42,6 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   this->gui_winManager = node_gui->get_gui_winManager();
   this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
   this->gui_playerManager = gui_moduleManager->get_gui_playerManager();
-  this->configManager = node_config->get_conf_modManager();
   this->sceneManager = new Scene();
   this->heatmapManager = new Heatmap();
   this->texManager = new Textures();
@@ -272,28 +268,18 @@ void GUI_menuBar::MenuBar_fastScene(){
   }
   if(ImGui::Button("Frames move", ImVec2(100,0))){
     pathManager->loading_fastScene(3);
-    configManager->choose_configuration(0);
-    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("More frames", ImVec2(100,0))){
     pathManager->loading_fastScene(4);
-    configManager->choose_configuration(0);
-    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Other frames", ImVec2(100,0))){
     pathManager->loading_fastScene(5);
-    configManager->choose_configuration(0);
-    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Tunel", ImVec2(100,0))){
     pathManager->loading_fastScene(6);
-    configManager->choose_configuration(0);
-    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("IA module", ImVec2(100,0))){
     pathManager->loading_fastScene(7);
-    configManager->choose_configuration(1);
-    //gui_leftPanelManager->update();
   }
   if(ImGui::Button("Velodyne statique", ImVec2(100,0))){
     pathManager->loading_fastScene(8);

@@ -14,7 +14,7 @@
 #include "../../Network/Network.h"
 #include "../../SLAM/GUI/GUI_Slam.h"
 
-#include "../../../Engine/Scene.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../GUI/GUI_node.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/CoordTransform.h"

@@ -3,7 +3,7 @@
 #include "../Operation_node.h"
 
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/OpenGL/Camera.h"
+#include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
 #include <glm/gtc/matrix_transform.hpp>

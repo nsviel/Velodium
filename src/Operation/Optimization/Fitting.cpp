@@ -2,8 +2,8 @@
 
 #include "../Transformation/Attribut.h"
 
-#include "../../Engine/Scene.h"
-#include "../../Engine/Glyphs.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
 
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"

@@ -4,7 +4,7 @@
 
 #include "../../Specific/fct_timer.h"
 #include "../../Specific/fct_system.h"
-#include "../../Engine/Scene.h"
+#include "../../Engine/Scene/Scene.h"
 #include "../../Load/Saver.h"
 #include "../../Load/Pather.h"
 

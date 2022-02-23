@@ -13,7 +13,7 @@
 #include "../Module/Module_GUI.h"
 #include "../Module/SLAM/GUI/GUI_Slam.h"
 #include "../Module/SLAM/Slam.h"
-#include "../Engine/OpenGL/Camera.h"
+#include "../Engine/OpenGL/Camera/Camera.h"
 #include "../Engine/OpenGL/Dimension.h"
 #include "../Engine/Engine_node.h"
 

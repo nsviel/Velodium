@@ -12,7 +12,7 @@
 
 #include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Data/Database.h"
-#include "../../../Engine/Scene.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Engine.h"
 #include "../../../Specific/fct_transtypage.h"
 

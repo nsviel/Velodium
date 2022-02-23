@@ -5,15 +5,13 @@
 
 #include "../../Load/Pather.h"
 
-#include "../../Engine/Glyphs.h"
-#include "../../Engine/Scene.h"
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/OpenGL/Camera.h"
-#include "../../Engine/OpenGL/struct_viewport.h"
+#include "../../Engine/OpenGL/Camera/Camera.h"
+#include "../../Engine/OpenGL/Camera/struct_viewport.h"
 #include "../../Engine/OpenGL/Dimension.h"
-
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/config_opengl.h"
+#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
 
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Transformation/Attribut.h"
@@ -32,9 +30,8 @@ GUI_control::GUI_control(GUI_node* node){
   //---------------------------
 
   Operation_node* node_ope = node_gui->get_node_ope();
-  Configuration_node* node_config = node_gui->get_node_config();
-  config_opengl* configManager = node_config->get_conf_glManager();
   Engine_node* node_engine = node_gui->get_node_engine();
+  Configuration* configManager = node_engine->get_configManager();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();

@@ -1,8 +1,8 @@
-#ifndef MATCHING_H
-#define MATCHING_H
+#ifndef OBJECT_MATCHING_H
+#define OBJECT_MATCHING_H
 
-#include "../../common.h"
-#include "../Data/struct_glyph.h"
+#include "../../../common.h"
+#include "../../Data/struct_glyph.h"
 
 
 class Matching

@@ -1,7 +1,7 @@
 #include "WIN_operation.h"
 
-#include "../../Engine/Scene.h"
-#include "../../Engine/Glyphs.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Transformation/Filter.h"
 #include "../../Operation/Transformation/Transforms.h"

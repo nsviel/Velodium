@@ -3,8 +3,8 @@
 #include "Loader.h"
 #include "Saver.h"
 
-#include "../Engine/Scene.h"
-#include "../Engine/Configuration/config_opengl.h"
+#include "../Engine/Scene/Scene.h"
+#include "../Engine/Scene/Configuration.h"
 
 #include "../Specific/fct_transtypage.h"
 #include "../Specific/fct_system.h"

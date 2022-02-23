@@ -1,11 +1,10 @@
 #include "Engine.h"
 
-#include "Scene.h"
-#include "Glyphs.h"
 #include "Data/Database.h"
-
 #include "Engine_node.h"
-#include "Configuration/Configuration_node.h"
+#include "Scene/Glyphs.h"
+#include "Scene/Scene.h"
+
 #include "../Operation/Operation_node.h"
 #include "../Module/Module_node.h"
 #include "../GUI/GUI_node.h"
@@ -20,7 +19,6 @@ Engine::Engine(Engine_node* engine, bool window_ON){
 
   this->with_window = window_ON;
   this->node_engine = engine;
-  this->node_config = node_engine->get_node_config();
 
   this->init_database();
 
@@ -29,7 +27,7 @@ Engine::Engine(Engine_node* engine, bool window_ON){
 
   this->node_ope = new Operation_node(node_engine);
   this->node_module = new Module_node(node_engine, node_ope);
-  this->node_gui = new GUI_node(node_engine, node_ope, node_module, node_config);
+  this->node_gui = new GUI_node(node_engine, node_ope, node_module);
 
   if(with_window){
     glyphManager->init();

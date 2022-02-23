@@ -1,4 +1,4 @@
-#include "config_opengl.h"
+#include "Configuration.h"
 
 #include "../../Specific/fct_system.h"
 
@@ -8,21 +8,21 @@
 
 
 //Constructor / Destructor
-config_opengl::config_opengl(){
+Configuration::Configuration(){
   //---------------------------
 
-  this->path_file = "../media/configuration/config_opengl.json";
+  this->path_config = get_absolutePath_build() + "/../media/engine/configuration.json";
 
   //---------------------------
 }
-config_opengl::~config_opengl(){}
+Configuration::~Configuration(){}
 
 //Main functions
-void config_opengl::make_configuration(){
-  bool exist = is_file_exist(path_file.c_str());
+void Configuration::make_configuration(){
+  bool is_config = is_file_exist(path_config.c_str());
   //---------------------------
 
-  if(exist == false){
+  if(is_config == false){
     this->create_jsonfile();
   }
 
@@ -30,10 +30,10 @@ void config_opengl::make_configuration(){
 }
 
 //json stuff
-void config_opengl::create_jsonfile(){
+void Configuration::create_jsonfile(){
   //---------------------------
 
-  std::ifstream ifs(path_file);
+  std::ifstream ifs(path_config);
   Json::Reader reader;
   Json::Value root;
 
@@ -72,6 +72,8 @@ void config_opengl::create_jsonfile(){
     param["cloud_rotation"] = 5; //Degree
     param["cloud_movement"] = true;
     param["point_size"] = 3;
+    param["clean_directories"] = true;
+    param["check_directories"] = true;
     root["parameter"] = param;
 
     //Camera
@@ -85,11 +87,23 @@ void config_opengl::create_jsonfile(){
     camera["speed_zoom"] = 0.1f;
     root["camera"] = camera;
 
+    //Module
+    Json::Value online;
+    online["with_slam"] = false;
+    online["with_camera_follow"] = false;
+    online["with_cylinder_cleaning"] = false;
+    online["with_heatmap"] = false;
+    online["with_save_image"] = false;
+    online["with_remove_lastSubset"] = false;
+    online["with_keepNframes"] = false;
+    online["with_AI_module"] = true;
+    root["online"] = online;
+
     //Write all above stuff
     Json::StyledWriter writer;
     string strWrite = writer.write(root);
     ofstream ofs;
-    ofs.open(path_file.c_str());
+    ofs.open(path_config.c_str());
     ofs << strWrite;
     ofs.close();
   }
@@ -97,10 +111,10 @@ void config_opengl::create_jsonfile(){
 
   //---------------------------
 }
-void config_opengl::update_jsonfile(string field, string title, string value){
+void Configuration::update_jsonfile(string field, string title, string value){
   //---------------------------
 
-  std::ifstream ifs(path_file);
+  std::ifstream ifs(path_config);
   Json::Reader reader;
   Json::Value root;
   reader.parse(ifs, root);
@@ -112,10 +126,10 @@ void config_opengl::update_jsonfile(string field, string title, string value){
 
   //---------------------------
 }
-string config_opengl::parse_json_s(string field, string value){
+string Configuration::parse_json_s(string field, string value){
   //---------------------------
 
-  std::ifstream ifs(path_file);
+  std::ifstream ifs(path_config);
   Json::Reader reader;
   Json::Value root;
   reader.parse(ifs, root);
@@ -128,10 +142,10 @@ string config_opengl::parse_json_s(string field, string value){
   //---------------------------
   return truc;
 }
-float config_opengl::parse_json_f(string field, string value){
+float Configuration::parse_json_f(string field, string value){
   //---------------------------
 
-  std::ifstream ifs(path_file);
+  std::ifstream ifs(path_config);
   Json::Reader reader;
   Json::Value root;
   reader.parse(ifs, root);
@@ -144,10 +158,10 @@ float config_opengl::parse_json_f(string field, string value){
   //---------------------------
   return truc;
 }
-int config_opengl::parse_json_i(string field, string value){
+int Configuration::parse_json_i(string field, string value){
   //---------------------------
 
-  std::ifstream ifs(path_file);
+  std::ifstream ifs(path_config);
   Json::Reader reader;
   Json::Value root;
   reader.parse(ifs, root);
@@ -160,10 +174,10 @@ int config_opengl::parse_json_i(string field, string value){
   //---------------------------
   return truc;
 }
-bool config_opengl::parse_json_b(string field, string value){
+bool Configuration::parse_json_b(string field, string value){
   //---------------------------
 
-  std::ifstream ifs(path_file);
+  std::ifstream ifs(path_config);
   Json::Reader reader;
   Json::Value root;
   reader.parse(ifs, root);
@@ -176,7 +190,7 @@ bool config_opengl::parse_json_b(string field, string value){
   //---------------------------
   return truc;
 }
-bool config_opengl::is_file_exist(string fileName){
+bool Configuration::is_file_exist(string fileName){
   std::ifstream infile(fileName.c_str());
   return infile.good();
 }

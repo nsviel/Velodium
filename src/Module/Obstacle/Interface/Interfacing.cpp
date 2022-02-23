@@ -22,13 +22,25 @@ Interfacing::Interfacing(Module_node* node_module){
   this->predManager = new Prediction();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
+  this->is_clean_dir = true;
 
   //---------------------------
-  this->clean_directories();
+  this->init();
 }
 Interfacing::~Interfacing(){}
 
 //Main functions
+void Interfacing::init(){
+  //---------------------------
+
+  this->check_directories();
+
+  if(is_clean_dir){
+    this->clean_directories();
+  }
+
+  //---------------------------
+}
 void Interfacing::runtime(){
   //---------------------------
 
@@ -40,6 +52,25 @@ void Interfacing::runtime(){
 
 //Subfunctions
 void Interfacing::clean_directories(){
+  //---------------------------
+
+  //Get directory paths
+  string path_gps = gpsManager->get_path_gps();
+  string path_image = saveManager->get_path_image();
+  string path_frame = saveManager->get_path_frame();
+  string path_predi = predManager->get_path_predi();
+  string path_grThr = predManager->get_path_grThr();
+
+  //Clean directories
+  clean_directory_files(path_image.c_str());
+  clean_directory_files(path_frame.c_str());
+  clean_directory_files(path_predi.c_str());
+  clean_directory_files(path_grThr.c_str());
+  clean_directory_files(path_gps.c_str());
+
+  //---------------------------
+}
+void Interfacing::check_directories(){
   //---------------------------
 
   //Get directory paths

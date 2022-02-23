@@ -1,8 +1,8 @@
 #include "dataExtraction.h"
 
-#include "../../Engine/Glyphs.h"
-#include "../../Engine/Scene.h"
-#include "../../Engine/Configuration/config_opengl.h"
+#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_system.h"
 
@@ -11,7 +11,7 @@
 dataExtraction::dataExtraction(){
   //---------------------------
 
-  this->configManager = new config_opengl();
+  this->configManager = new Configuration();
   this->sceneManager = new Scene();
 
   this->ID = 0;

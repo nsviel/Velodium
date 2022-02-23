@@ -6,7 +6,6 @@
 class Engine_node;
 class Operation_node;
 class Module_node;
-class Configuration_node;
 
 class GUI;
 class GUI_windows;
@@ -23,7 +22,7 @@ class GUI_node
 {
 public:
   //Constructor / Destructor
-  GUI_node(Engine_node* engine, Operation_node* ope, Module_node* module, Configuration_node* config);
+  GUI_node(Engine_node* engine, Operation_node* ope, Module_node* module);
   ~GUI_node();
 
 public:
@@ -36,7 +35,6 @@ public:
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Operation_node* get_node_ope(){return node_ope;}
   inline Module_node* get_node_module(){return node_module;}
-  inline Configuration_node* get_node_config(){return node_config;}
 
   inline GUI* get_guiManager(){return guiManager;}
   inline GUI_windows* get_gui_winManager(){return gui_winManager;}
@@ -52,7 +50,6 @@ private:
   Engine_node* node_engine;
   Operation_node* node_ope;
   Module_node* node_module;
-  Configuration_node* node_config;
 
   GUI* guiManager;
   GUI_windows* gui_winManager;

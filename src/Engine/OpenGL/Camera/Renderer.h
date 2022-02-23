@@ -1,10 +1,10 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Dimension;
-class config_opengl;
+class Configuration;
 
 
 class Renderer
@@ -30,7 +30,7 @@ public:
 
 private:
   Dimension* dimManager;
-  config_opengl* configManager;
+  Configuration* configManager;
 
   GLuint quad_vao;
   GLuint quad_vbo;

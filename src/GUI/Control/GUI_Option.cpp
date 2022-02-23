@@ -5,12 +5,11 @@
 
 #include "../../Load/Pather.h"
 
-#include "../../Engine/Scene.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/Glyphs.h"
-#include "../../Engine/OpenGL/Renderer.h"
-#include "../../Engine/Configuration/config_opengl.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/OpenGL/Camera/Renderer.h"
 
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Heatmap.h"
@@ -226,7 +225,7 @@ void GUI_option::option_colors(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Reset", ImVec2(75,0))){
-      config_opengl configManager;
+      Configuration configManager;
       float bkg_color = configManager.parse_json_f("window", "background_color");
       vec4* screen_color = renderManager->get_screen_color();
       *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);

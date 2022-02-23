@@ -18,10 +18,12 @@ public:
 
 public:
   //Main functions
+  void init();
   void runtime();
 
   //Subfunctions
   void clean_directories();
+  void check_directories();
   void select_dir_path();
 
   inline GPS* get_gpsManager(){return gpsManager;}
@@ -34,6 +36,7 @@ private:
   Saving* saveManager;
   Prediction* predManager;
 
+  bool is_clean_dir;
   string path_dir;
 };
 

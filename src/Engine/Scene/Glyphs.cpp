@@ -9,8 +9,8 @@
 #include "Object/Mark.h"
 #include "Object/Normal.h"
 
-#include "../Load/Format/file_PTS.h"
-#include "../Operation/Transformation/Transforms.h"
+#include "../../Load/Format/file_PTS.h"
+#include "../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / Destructor

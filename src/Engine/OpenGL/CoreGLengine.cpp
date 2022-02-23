@@ -1,16 +1,16 @@
 #include "CoreGLengine.h"
 
-#include "Camera.h"
-#include "Viewport.h"
-#include "Renderer.h"
 #include "Dimension.h"
+
+#include "Camera/Camera.h"
+#include "Camera/Viewport.h"
+#include "Camera/Renderer.h"
+#include "Shader/Shader.h"
+#include "Shader/ShaderObject.h"
 
 #include "../Engine.h"
 #include "../Engine_node.h"
-#include "../Shader/Shader.h"
-#include "../Shader/ShaderObject.h"
-#include "../Configuration/config_opengl.h"
-#include "../Configuration/Configuration_node.h"
+#include "../Scene/Configuration.h"
 
 #include "../../GUI/GUI_node.h"
 #include "../../GUI/GUI.h"
@@ -51,9 +51,12 @@ void CoreGLengine::init(){
 void CoreGLengine::init_conf(){
   //---------------------------
 
-  this->node_config = new Configuration_node();
-  this->conf_glManager = node_config->get_conf_glManager();
-  this->openglDisplay = true;//conf_glManager->parse_json_i("window", "activated");
+  //Make preliminary configuration
+  this->configManager = new Configuration();
+  configManager->make_configuration();
+
+  //Set up opengl parameters
+  this->openglDisplay = true;//configManager->parse_json_i("window", "activated");
   this->window = nullptr;
 
   //---------------------------
@@ -63,12 +66,12 @@ void CoreGLengine::init_OGL(){
     //---------------------------
 
     //Parametrization
-    int resolution_width = conf_glManager->parse_json_i("window", "resolution_width");
-    int resolution_height = conf_glManager->parse_json_i("window", "resolution_height");
-    bool forceVersion = conf_glManager->parse_json_b("opengl", "forceVersion");
-    bool coreGL_verbose = conf_glManager->parse_json_b("opengl", "verbose_coreGL");
-    string win_title = conf_glManager->parse_json_s("window", "title");
-    this->waitForEvent = conf_glManager->parse_json_b("opengl", "waitForEvent");
+    int resolution_width = configManager->parse_json_i("window", "resolution_width");
+    int resolution_height = configManager->parse_json_i("window", "resolution_height");
+    bool forceVersion = configManager->parse_json_b("opengl", "forceVersion");
+    bool coreGL_verbose = configManager->parse_json_b("opengl", "verbose_coreGL");
+    string win_title = configManager->parse_json_s("window", "title");
+    this->waitForEvent = configManager->parse_json_b("opengl", "waitForEvent");
 
     //GLFW
     glfwInit();
@@ -108,7 +111,7 @@ void CoreGLengine::init_OGL(){
 void CoreGLengine::init_object(){
   //---------------------------
 
-  this->node_engine = new Engine_node(node_config, window);
+  this->node_engine = new Engine_node(configManager, window);
   this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();

@@ -1,9 +1,9 @@
-#ifndef AABB_H
-#define AABB_H
+#ifndef OBJECT_AABB_H
+#define OBJECT_AABB_H
 
-#include "../../common.h"
-#include "../Data/struct_glyph.h"
-#include "../Data/struct_cloud.h"
+#include "../../../common.h"
+#include "../../Data/struct_glyph.h"
+#include "../../Data/struct_cloud.h"
 
 
 class AABB

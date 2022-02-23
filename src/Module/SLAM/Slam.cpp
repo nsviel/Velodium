@@ -8,8 +8,8 @@
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
-#include "../../Engine/Scene.h"
-#include "../../Engine/Glyphs.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 

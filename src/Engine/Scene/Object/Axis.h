@@ -1,9 +1,9 @@
-#ifndef AXIS_H
-#define AXIS_H
+#ifndef OBJECT_AXIS_H
+#define OBJECT_AXIS_H
 
-#include "../../common.h"
-#include "../Data/struct_glyph.h"
-#include "../Data/struct_subset.h"
+#include "../../../common.h"
+#include "../../Data/struct_glyph.h"
+#include "../../Data/struct_subset.h"
 
 
 class Axis

@@ -8,7 +8,7 @@
 #include "Obstacle/GUI/GUI_Obstacle.h"
 
 #include "../GUI/GUI_node.h"
-#include "../Engine/Configuration/config_module.h"
+#include "../Engine/Scene/Configuration.h"
 #include "../common.h"
 
 

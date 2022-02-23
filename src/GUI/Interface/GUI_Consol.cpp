@@ -4,7 +4,7 @@
 #include "../../GUI/GUI_node.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Dimension.h"
-#include "../../Engine/Scene.h"
+#include "../../Engine/Scene/Scene.h"
 
 #include "imgui/imgui.h"
 

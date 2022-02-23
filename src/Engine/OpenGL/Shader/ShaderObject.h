@@ -1,7 +1,7 @@
 #ifndef SHADER_OBJECT_H
 #define SHADER_OBJECT_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 
 class ShaderObject

@@ -10,15 +10,14 @@
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Transformation/Filter.h"
 
-#include "../../Engine/OpenGL/Camera.h"
-#include "../../Engine/OpenGL/Renderer.h"
+#include "../../Engine/OpenGL/Camera/Camera.h"
+#include "../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
-#include "../../Engine/Configuration/Configuration_node.h"
-#include "../../Engine/Configuration/config_module.h"
 #include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/Scene.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
 
 #include "../../Load/Pather.h"
 
@@ -33,14 +32,13 @@ Player_online::Player_online(Module_node* node_module){
 
   Operation_node* node_ope = node_module->get_node_ope();
   Engine_node* node_engine = node_module->get_node_engine();
-  Configuration_node* node_config = node_engine->get_node_config();
 
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
   this->slamManager = node_module->get_slamManager();
-  this->configManager = node_config->get_conf_modManager();
+  this->configManager = node_engine->get_configManager();
   this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
 

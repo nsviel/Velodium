@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class PP_edl;
 class ShaderObject;

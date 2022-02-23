@@ -1,6 +1,6 @@
 #include "Prediction.h"
 
-#include "../../../Engine/Scene.h"
+#include "../../../Engine/Scene/Scene.h"
 
 #include "../../../Specific/fct_watcher.h"
 #include "../../../Specific/fct_system.h"

@@ -1,8 +1,7 @@
 #include "Camera.h"
 
-#include "../OpenGL/Dimension.h"
-
-#include "../Configuration/config_opengl.h"
+#include "../../OpenGL/Dimension.h"
+#include "../../Scene/Configuration.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -12,7 +11,7 @@ Camera::Camera(Dimension* dimension){
   this->dimManager = dimension;
   //---------------------------
 
-  this->configManager = new config_opengl();
+  this->configManager = new Configuration();
 
   this->viewport_init();
 

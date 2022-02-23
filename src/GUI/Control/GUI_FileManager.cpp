@@ -7,7 +7,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
-#include "../../Engine/Scene.h"
+#include "../../Engine/Scene/Scene.h"
 
 #include "IconsFontAwesome5.h"
 

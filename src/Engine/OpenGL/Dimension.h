@@ -16,14 +16,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-class config_opengl;
-class Configuration_node;
+class Configuration;
 
 
 class Dimension
 {
 public:
-  Dimension(GLFWwindow* win, Configuration_node* config);
+  Dimension(GLFWwindow* win, Configuration* config);
   ~Dimension();
 
 public:
@@ -59,7 +58,7 @@ public:
 
 private:
   GLFWwindow* window;
-  config_opengl* config_glManager;
+  Configuration* configManager;
 
   //Rendering
   vec2 gl_pos;

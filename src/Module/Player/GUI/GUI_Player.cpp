@@ -7,7 +7,7 @@
 #include "../../Obstacle/Interface/Saving.h"
 
 #include "../../../GUI/GUI_node.h"
-#include "../../../Engine/Scene.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/Heatmap.h"
 #include "../../../Operation/Transformation/Filter.h"

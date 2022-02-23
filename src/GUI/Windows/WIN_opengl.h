@@ -5,7 +5,7 @@
 
 class Engine_node;
 class Camera;
-class config_opengl;
+class Configuration;
 class Shader;
 class PP_edl;
 
@@ -28,7 +28,7 @@ public:
   void cam_definedPosition();
 
 private:
-  config_opengl* configManager;
+  Configuration* configManager;
   Camera* cameraManager;
   Shader* shaderManager;
   PP_edl* edlManager;

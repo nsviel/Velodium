@@ -2,7 +2,7 @@
 
 #include "SLAM_optim_gn.h"
 
-#include "../../../Engine/Scene.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Specific/fct_maths.h"
 
 
