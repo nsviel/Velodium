@@ -1,8 +1,7 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "Format/struct_dataFile.h"
-
+#include "../Engine/Data/struct_dataFile.h"
 #include "../common.h"
 
 class dataExtraction;

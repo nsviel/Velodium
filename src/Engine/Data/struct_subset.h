@@ -2,9 +2,8 @@
 #define SUBSET_STRUCT_H
 
 #include "struct_glyph.h"
-
-#include "../../Module/SLAM/struct_frame.h"
-#include "../../Module/Obstacle/struct_obstacle.h"
+#include "struct_frame.h"
+#include "struct_obstacle.h"
 
 #include <string>
 #include <vector>

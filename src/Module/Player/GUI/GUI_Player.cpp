@@ -1,10 +1,12 @@
 #include "GUI_Player.h"
 
-#include "../Player_online.h"
-#include "../Player_cloud.h"
+#include "../Player.h"
+#include "../Dynamic/Online.h"
+#include "../Dynamic/Offline.h"
+
 #include "../../Module_node.h"
-#include "../../Obstacle/Interface/Interfacing.h"
-#include "../../Obstacle/Interface/Saving.h"
+#include "../../Interface/Interface.h"
+#include "../../Interface/Component/Saving.h"
 
 #include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -22,11 +24,12 @@ GUI_Player::GUI_Player(GUI_node* node_gui){
 
   Operation_node* node_ope = node_gui->get_node_ope();
   Module_node* node_module = node_gui->get_node_module();
+  Player* playerManager = node_module->get_playerManager();
 
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->onlineManager = node_module->get_onlineManager();
-  this->playerManager = node_module->get_playerManager();
+  this->onlineManager = playerManager->get_onlineManager();
+  this->offlineManager = playerManager->get_offlineManager();
   this->ioManager = node_module->get_ioManager();
   this->sceneManager = new Scene();
 
@@ -69,23 +72,23 @@ void GUI_Player::player_run(){
   ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Displayed frames", player_subset_range, 1, 1, nb_subset_max)){
     if(cloud != nullptr){
-      playerManager->select_bySubsetID(cloud, cloud->ID_selected);
+      offlineManager->select_bySubsetID(cloud, cloud->ID_selected);
     }
   }
 
   //Recording
   if (ImGui::Button(ICON_FA_CIRCLE "##37")){
     if(cloud != nullptr){
-      playerManager->player_save(cloud);
+      offlineManager->player_save(cloud);
     }
   }
   ImGui::SameLine();
   //Dicrectory path selection & display
   if(ImGui::Button("...##23")){
-    playerManager->player_selectDirSave();
+    offlineManager->player_selectDirSave();
   }
   ImGui::SameLine();
-  string saveas = *playerManager->get_player_saveas();
+  string saveas = *offlineManager->get_player_saveas();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
@@ -96,8 +99,8 @@ void GUI_Player::player_button(){
   //---------------------------
 
   //Play button
-  playerManager->player_runtime();
-  bool is_playing = *playerManager->get_player_isrunning();
+  offlineManager->player_runtime();
+  bool is_playing = *offlineManager->get_player_isrunning();
   if(is_playing == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   }else{
@@ -105,20 +108,20 @@ void GUI_Player::player_button(){
   }
   if (ImGui::Button(ICON_FA_PLAY "##36")){
     if(cloud != nullptr){
-      playerManager->player_start();
+      offlineManager->player_start();
     }
   }
   ImGui::PopStyleColor(1);
   ImGui::SameLine();
 
   //Pause button
-  bool is_paused = *playerManager->get_player_ispaused();
+  bool is_paused = *offlineManager->get_player_ispaused();
   if(is_paused){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
   }
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     if(cloud != nullptr){
-      playerManager->player_pause();
+      offlineManager->player_pause();
     }
   }
   if(is_paused){
@@ -129,16 +132,16 @@ void GUI_Player::player_button(){
   //Stop button
   if (ImGui::Button(ICON_FA_STOP "##37")){
     if(cloud != nullptr){
-      playerManager->player_stop();
+      offlineManager->player_stop();
     }
   }
   ImGui::SameLine();
 
   //Frequency choice
-  int freq = *playerManager->get_frequency();
+  int freq = *offlineManager->get_frequency();
   ImGui::SetNextItemWidth(40);
   if(ImGui::SliderInt("Hz", &freq, 1, 25)){
-    playerManager->player_setFrequency(freq);
+    offlineManager->player_setFrequency(freq);
   }
 
   //---------------------------
@@ -157,7 +160,7 @@ void GUI_Player::player_selection(){
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
       if(cloud != nullptr){
-        playerManager->select_bySubsetID(cloud, subset_selected_ID);
+        offlineManager->select_bySubsetID(cloud, subset_selected_ID);
       }
     }
     ImGui::SameLine();
@@ -173,7 +176,7 @@ void GUI_Player::parameter_offline(){
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
-    bool* with_restart = playerManager->get_with_restart();
+    bool* with_restart = offlineManager->get_with_restart();
     ImGui::Checkbox("Loop when end", with_restart);
 
     if (ImGui::Button("Cylinder cleaning", ImVec2(120,0))){
@@ -335,7 +338,7 @@ void GUI_Player::runtime_player_mouse(){
         subset_selected_ID--;
       }
 
-      playerManager->select_bySubsetID(cloud, subset_selected_ID);
+      offlineManager->select_bySubsetID(cloud, subset_selected_ID);
     }
   }
 

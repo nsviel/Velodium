@@ -1,10 +1,10 @@
 #ifndef DATA_EXTRACTION_H
 #define DATA_EXTRACTION_H
 
-#include "../Format/struct_dataFile.h"
+#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_UDPpacket.h"
 
 #include "../../common.h"
-#include "../../Module/LiDAR/Velodyne/UDP/struct_UDPpacket.h"
 
 class Scene;
 class Configuration;

@@ -1,8 +1,7 @@
 #ifndef FILE_PLY_H
 #define FILE_PLY_H
 
-#include "struct_dataFile.h"
-
+#include "../../Engine/Data/struct_dataFile.h"
 #include "../../common.h"
 
 #include <iomanip>

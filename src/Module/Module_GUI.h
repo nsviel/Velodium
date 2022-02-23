@@ -1,11 +1,11 @@
 #ifndef GUI_MODULE_H
 #define GUI_MODULE_H
 
-#include "LiDAR/GUI/GUI_Lidar.h"
-#include "Player/GUI/GUI_Player.h"
 #include "SLAM/GUI/GUI_Slam.h"
-#include "Network/GUI/GUI_Network.h"
-#include "Obstacle/GUI/GUI_Obstacle.h"
+#include "Interface/GUI/GUI_Interface.h"
+#include "Interface/LiDAR/GUI/GUI_Lidar.h"
+#include "Player/GUI/GUI_Player.h"
+#include "Player/Obstacle/GUI/GUI_Obstacle.h"
 
 #include "../GUI/GUI_node.h"
 #include "../Engine/Scene/Configuration.h"
@@ -16,13 +16,14 @@ class GUI_module
 {
 public:
   //Constructor / Destructor
-  GUI_module(GUI_node* node_gui){
+  GUI_module(GUI_node* node){
+    this->node_gui = node;
     //-------------------------------
 
     this->gui_lidarManager = new GUI_Lidar(node_gui);
     this->gui_playerManager = new GUI_Player(node_gui);
     this->gui_slamManager = new GUI_Slam(node_gui);
-    this->gui_netManager = new GUI_Network(node_gui);
+    this->gui_ioManager = new GUI_Interface(node_gui);
     this->gui_obstacleManager = new GUI_Obstacle(node_gui);
 
     this->module_velodyne = true;
@@ -51,7 +52,7 @@ public:
       // Network stuff management
       if(module_velodyne){
         if(ImGui::BeginTabItem("Interface")){
-          gui_netManager->design_Network();
+          gui_ioManager->design_Network();
           ImGui::EndTabItem();
         }
       }
@@ -97,13 +98,14 @@ public:
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
   inline GUI_Lidar* get_gui_lidarManager(){return gui_lidarManager;}
   inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
-  inline GUI_Network* get_gui_netManager(){return gui_netManager;}
+  inline GUI_Interface* get_gui_ioManager(){return gui_ioManager;}
 
 private:
+  GUI_node* node_gui;
   GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;
-  GUI_Network* gui_netManager;
+  GUI_Interface* gui_ioManager;
   GUI_Obstacle* gui_obstacleManager;
 
   bool module_velodyne;

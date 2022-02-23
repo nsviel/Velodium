@@ -1,7 +1,7 @@
 #ifndef SLAM_NORMAL_H
 #define SLAM_NORMAL_H
 
-#include "../struct_voxelMap.h"
+#include "../../../Engine/Data/struct_voxelMap.h"
 
 #include "../../../common.h"
 

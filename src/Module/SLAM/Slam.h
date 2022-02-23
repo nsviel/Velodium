@@ -1,10 +1,10 @@
 #ifndef SLAM_H
 #define SLAM_H
 
-#include "struct_voxelMap.h"
 #include "CT_ICP/SLAM_normal.h"
 #include "Cost_function/Cost_function.h"
 
+#include "../../Engine/Data/struct_voxelMap.h"
 #include "../../common.h"
 
 class Scene;

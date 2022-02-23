@@ -1,8 +1,7 @@
 #ifndef FILE_PTS_H
 #define FILE_PTS_H
 
-#include "struct_dataFile.h"
-
+#include "../../Engine/Data/struct_dataFile.h"
 #include "../../common.h"
 
 #include <iomanip>

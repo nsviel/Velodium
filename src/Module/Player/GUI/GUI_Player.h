@@ -8,8 +8,10 @@ class GUI_node;
 class Player_cloud;
 class Heatmap;
 class Filter;
-class Player_online;
-class Interfacing;
+class Offline;
+class Online;
+class Interface;
+class GUI_Interface;
 
 
 class GUI_Player
@@ -35,10 +37,11 @@ private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
-  Interfacing* ioManager;
-  Player_cloud* playerManager;
-  Player_online* onlineManager;
-
+  Interface* ioManager;
+  Offline* offlineManager;
+  Online* onlineManager;
+  GUI_Interface* gui_ioManager;
+  
   int item_width;
 };
 
