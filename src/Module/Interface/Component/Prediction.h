@@ -35,7 +35,7 @@ public:
   inline string get_path_grThr(){return path_grThr;}
   inline string get_path_predi(){return path_predi;}
   inline bool get_is_watching(){return is_whatching;}
-  inline bool* get_is_prediction(){return &is_predictions;}
+  inline bool* get_is_prediction(){return &is_prediction;}
 
 private:
   Scene* sceneManager;
