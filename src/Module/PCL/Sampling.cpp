@@ -1,5 +1,5 @@
 #ifdef USE_PCL
-#include "Sampling.h"
+/*#include "Sampling.h"
 
 #include "pcl_transtypage.h"
 
@@ -188,6 +188,6 @@ void Sampling::sampling_spaceRadius(Subset* subset, float radius){
   int size_filtered = subset->xyz.size();
   string log = "Space sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
-}
+}*/
 
 #endif

@@ -2,17 +2,22 @@
 
 #include "Attribut.h"
 
+#include "../Operation_node.h"
+
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_terminal.h"
 
 
 //Constructor / Destructor
-Filter::Filter(){
+Filter::Filter(Operation_node* node_ope){
   //---------------------------
 
-  this->sceneManager = new Scene();
-  this->attribManager = new Attribut();
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_SceneManager();
+  this->attribManager = node_ope->get_attribManager();
 
   this->verbose = false;
   this->sphereDiameter = 0.139f;

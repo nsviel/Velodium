@@ -3,6 +3,7 @@
 
 #include "../../common.h"
 
+class Operation_node;
 class Scene;
 class Attribut;
 
@@ -11,7 +12,7 @@ class WIN_cloud
 {
 public:
   //Constructor / Destructor
-  WIN_cloud();
+  WIN_cloud(Operation_node* node_ope);
   ~WIN_cloud();
 
 public:

@@ -7,14 +7,16 @@
 
 using namespace Eigen;
 
+class Operation_node;
 class Scene;
+class Fitting;
 
 
 class Attribut
 {
 public:
   //Constructor / Destructor
-  Attribut();
+  Attribut(Operation_node* node_ope);
   ~Attribut();
 
 public:
@@ -72,6 +74,7 @@ public:
 
 private:
   Scene* sceneManager;
+  Fitting* fitManager;
 
   float sphereRadius;
 };

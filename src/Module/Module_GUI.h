@@ -5,10 +5,10 @@
 #include "Interface/GUI/GUI_Interface.h"
 #include "Interface/LiDAR/GUI/GUI_Lidar.h"
 #include "Player/GUI/GUI_Player.h"
-#include "Player/Obstacle/GUI/GUI_Obstacle.h"
 
 #include "../GUI/GUI_node.h"
-#include "../Engine/Scene/Configuration.h"
+#include "../Engine/Engine_node.h"
+#include "../Operation/Operation_node.h"
 #include "../common.h"
 
 
@@ -20,11 +20,14 @@ public:
     this->node_gui = node;
     //-------------------------------
 
-    this->gui_lidarManager = new GUI_Lidar(node_gui);
-    this->gui_playerManager = new GUI_Player(node_gui);
-    this->gui_slamManager = new GUI_Slam(node_gui);
-    this->gui_ioManager = new GUI_Interface(node_gui);
-    this->gui_obstacleManager = new GUI_Obstacle(node_gui);
+    this->node_module = node_gui->get_node_module();
+    this->node_engine = node_gui->get_node_engine();
+    this->node_ope = node_gui->get_node_ope();
+
+    this->gui_lidarManager = new GUI_Lidar(this);
+    this->gui_playerManager = new GUI_Player(this);
+    this->gui_slamManager = new GUI_Slam(this);
+    this->gui_ioManager = new GUI_Interface(this);
 
     this->module_velodyne = true;
     this->module_player = true;
@@ -41,15 +44,7 @@ public:
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
 
-      // Obstacle detection
-      if(module_obstacle){
-        if(ImGui::BeginTabItem("Obstacle")){
-          gui_obstacleManager->design_Obstacle();
-          ImGui::EndTabItem();
-        }
-      }
-
-      // Network stuff management
+      // Interface stuff
       if(module_velodyne){
         if(ImGui::BeginTabItem("Interface")){
           gui_ioManager->design_Network();
@@ -57,10 +52,10 @@ public:
         }
       }
 
-      // Velodyne data management
+      // Dynamic & obstacle stuff
       if(module_player){
         if(ImGui::BeginTabItem("Player")){
-          gui_playerManager->design_player_cloud();
+          gui_playerManager->design_player();
           ImGui::EndTabItem();
         }
       }
@@ -89,24 +84,31 @@ public:
   void runtime(){
     //-------------------------------
 
-    gui_obstacleManager->compute_display_naming();
-    gui_playerManager->runtime_player_mouse();
+    gui_playerManager->runtime();
 
     //-------------------------------
   }
 
+  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Operation_node* get_node_ope(){return node_ope;}
+  inline Module_node* get_node_module(){return node_module;}
+
+  inline GUI_node* get_node_gui(){return node_gui;}
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
   inline GUI_Lidar* get_gui_lidarManager(){return gui_lidarManager;}
   inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
   inline GUI_Interface* get_gui_ioManager(){return gui_ioManager;}
 
 private:
+  Module_node* node_module;
+  Engine_node* node_engine;
+  Operation_node* node_ope;
+
   GUI_node* node_gui;
   GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;
   GUI_Interface* gui_ioManager;
-  GUI_Obstacle* gui_obstacleManager;
 
   bool module_velodyne;
   bool module_player;

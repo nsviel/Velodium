@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class GUI_node;
+class GUI_module;
 class Scene;
 class Slam;
 
@@ -19,7 +19,7 @@ class GUI_Slam
 {
 public:
   //Constructor / Destructor
-  GUI_Slam(GUI_node* node_gui);
+  GUI_Slam(GUI_module* node_gui);
   ~GUI_Slam();
 
 public:

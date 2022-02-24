@@ -1,7 +1,9 @@
 #include "WIN_cloud.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Transformation/Attribut.h"
 
 #include "IconsFontAwesome5.h"
@@ -11,11 +13,13 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_cloud::WIN_cloud(){
+WIN_cloud::WIN_cloud(Operation_node* node_ope){
   //---------------------------
 
-  this->sceneManager = new Scene();
-  this->attribManager = new Attribut();
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_SceneManager();
+  this->attribManager = node_ope->get_attribManager();
 
   //---------------------------
 }

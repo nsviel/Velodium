@@ -1,6 +1,7 @@
 #ifndef HEATMAP_H
 #define HEATMAP_H
 
+class Operation_node;
 class Scene;
 class Attribut;
 
@@ -8,11 +9,12 @@ class Attribut;
 
 #include "../../common.h"
 
+
 class Heatmap
 {
 public:
   //Constructor / Destructor
-  Heatmap();
+  Heatmap(Operation_node* node_ope);
   ~Heatmap();
 
 public:

@@ -24,8 +24,8 @@ public:
 
 public:
   void init();
-  void drawing();
-  void drawing(Subset* subset);
+  void drawing_runtime();
+  void drawing_subset(Subset* subset);
   void drawing_prediction(Subset* subset);
   void reset();
   void reset_colors();
@@ -44,6 +44,7 @@ public:
 
   //Glyph creation / supression
   Glyph* create_glyph_instance(string name);
+  Glyph* create_glyph_ostacle();
   void create_glyph_alone(Glyph& glyph);
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
   Glyph* create_glyph_fromFile(string path);

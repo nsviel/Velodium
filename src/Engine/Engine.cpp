@@ -15,15 +15,14 @@ Database database;
 
 //Constructor / Destructor
 Engine::Engine(Engine_node* engine, bool window_ON){
-  //---------------------------
-
   this->with_window = window_ON;
   this->node_engine = engine;
+  //---------------------------
 
   this->init_database();
 
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
 
   this->node_ope = new Operation_node(node_engine);
   this->node_module = new Module_node(node_engine, node_ope);
@@ -60,7 +59,7 @@ void Engine::loop_scene(){
 
   //Draw glyph stuff
   if(with_window){
-    glyphManager->drawing();
+    glyphManager->drawing_runtime();
 
     //Draw clouds
     this->draw_clouds();
@@ -108,12 +107,13 @@ void Engine::draw_clouds(){
           glDrawArrays(GL_POINTS, 0, subset->xyz.size());
           glBindVertexArray(0);
 
-          glyphManager->drawing(subset);
+          glyphManager->drawing_subset(subset);
         }
 
         //Display for current subset
-        if(subset->ID == subset_selected->ID){
-          glyphManager->drawing_prediction(subset);
+        if(subset->ID == subset_selected->ID && subset->obstacle_pr.oobb.size() != 0){
+          Subset* subset_m1 = *next(cloud->subset.begin(), j - 1);
+          glyphManager->drawing_prediction(subset_m1);
         }
       }
     }

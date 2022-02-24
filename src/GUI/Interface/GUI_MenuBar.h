@@ -6,12 +6,12 @@
 class GUI_windows;
 class GUI_option;
 class GUI_leftPanel;
-class GUI_Player;
+class GUI_Dynamic;
 class GUI_node;
+class GUI_Initialization;
 
 class Scene;
 class Extraction;
-class Heatmap;
 class Textures;
 class Pather;
 
@@ -32,21 +32,20 @@ public:
   void MenuBar_icons();
   void MenuBar_appInfo();
   void MenuBar_subsetSelection();
-  void MenuBar_fastScene();
   void MenuBar_Operations();
 
 private:
   Scene* sceneManager;
   Pather* pathManager;
   Extraction* extractionManager;
-  Heatmap* heatmapManager;
   Textures* texManager;
 
   GUI_node* node_gui;
   GUI_windows* gui_winManager;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanelManager;
-  GUI_Player* gui_playerManager;
+  GUI_Dynamic* gui_dynamic;
+  GUI_Initialization* gui_init;
 };
 
 

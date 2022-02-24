@@ -105,8 +105,16 @@ void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
     Subset* subset = *next(cloud->subset.begin(), i);
     Obstac* obstacle_gt = &subset->obstacle_gt;
 
+    /*//If exist clear old oobb
+    for(int i=0; i<obstacle_gt->oobb.size(); i++){
+      Glyphs* glyph = obstacle_gt->oobb[i];
+      delete glyph;
+    }
+    obstacle_gt->oobb.clear();*/
+
+    //
     for(int j=0; j<obstacle_gt->name.size(); j++){
-      Glyph* glyph = glyphManager->create_glyph_instance("obstacle");
+      Glyph* glyph = glyphManager->create_glyph_ostacle();
       glyphManager->set_glyph_color(glyph, vec3(37.0f/255, 186.0f/255, 40.0f/255));
 
       vec3 To = obstacle_gt->position[j];

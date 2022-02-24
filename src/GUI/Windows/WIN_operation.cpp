@@ -1,5 +1,6 @@
 #include "WIN_operation.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Operation_node.h"
@@ -18,13 +19,15 @@ extern struct Window_tab window_tab;
 WIN_operation::WIN_operation(Operation_node* node_ope){
   //---------------------------
 
+  Engine_node* node_engine = node_ope->get_node_engine();
+
   this->filterManager = node_ope->get_filterManager();
   this->selectionManager = node_ope->get_selectionManager();
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
+  this->fitManager = node_ope->get_fittingManager();
+  this->extractionManager = node_ope->get_extractionManager();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
   this->transformManager = new Transforms();
-  this->fitManager = new Fitting();
-  this->extractionManager = new Extraction();
 
   this->item_width = 150;
 

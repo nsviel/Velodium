@@ -37,10 +37,10 @@ GUI_control::GUI_control(GUI_node* node){
   this->dimManager = node_engine->get_dimManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->selectionManager = node_ope->get_selectionManager();
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
-  this->extractionManager = new Extraction();
-  this->attribManager = new Attribut();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
+  this->attribManager = node_ope->get_attribManager();
+  this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = new Pather();
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");

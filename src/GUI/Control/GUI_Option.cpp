@@ -11,8 +11,9 @@
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
-#include "../../Operation/Transformation/Attribut.h"
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Functions/Heatmap.h"
+#include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 #include "imgui/imgui.h"
@@ -23,13 +24,14 @@ GUI_option::GUI_option(GUI_node* node_gui){
   //---------------------------
 
   Engine_node* node_engine = node_gui->get_node_engine();
+  Operation_node* node_ope = node_gui->get_node_ope();
 
   this->renderManager = node_engine->get_renderManager();
   this->gui_controlManager = node_gui->get_gui_controlManager();
-  this->heatmapManager = new Heatmap();
-  this->glyphManager = new Glyphs();
-  this->sceneManager = new Scene();
-  this->attribManager = new Attribut;
+  this->glyphManager = node_engine->get_glyphManager();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->heatmapManager = node_ope->get_heatmapManager();
+  this->attribManager = node_ope->get_attribManager();
   this->pathManager = new Pather();
 
   //---------------------------

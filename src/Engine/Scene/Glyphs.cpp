@@ -36,7 +36,7 @@ void Glyphs::init(){
 
   //---------------------------
 }
-void Glyphs::drawing(){
+void Glyphs::drawing_runtime(){
   list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
   //---------------------------
 
@@ -72,7 +72,7 @@ void Glyphs::drawing(){
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }
-void Glyphs::drawing(Subset* subset){
+void Glyphs::drawing_subset(Subset* subset){
   //---------------------------
 
   if(subset->visibility){
@@ -405,6 +405,43 @@ Glyph* Glyphs::create_glyph_instance(string name){
   glyph->ID = *ID_glyph++;
 
   list_glyph->push_back(glyph);
+
+  //---------------------------
+  return glyph;
+}
+Glyph* Glyphs::create_glyph_ostacle(){
+  //---------------------------
+
+  //Creat new OOBB object
+  OOBB oobbManager;
+  Glyph* glyph = oobbManager.obj_oobb();
+
+  //OpenGL stuff
+  GLuint VAO;
+  glGenVertexArrays(1, &VAO);
+  glBindVertexArray(VAO);
+
+  //Vertices
+  vector<vec3>& XYZ = glyph->location;
+  GLuint locationVBO;
+  glGenBuffers(1, &locationVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, locationVBO);
+  glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0], GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
+  glEnableVertexAttribArray(0);
+
+  //Color
+  vector<vec4>& RGB = glyph->color;
+  GLuint colorVBO;
+  glGenBuffers(1, &colorVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+  glBufferData(GL_ARRAY_BUFFER, RGB.size()*sizeof(glm::vec4), &RGB[0], GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+  glEnableVertexAttribArray(1);
+
+  glyph->VAO = VAO;
+  glyph->VBO_location = locationVBO;
+  glyph->VBO_color = colorVBO;
 
   //---------------------------
   return glyph;

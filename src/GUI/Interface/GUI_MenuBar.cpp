@@ -5,19 +5,20 @@
 #include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 #include "../Control/GUI_Option.h"
+#include "../Control/GUI_Initialization.h"
 #include "../GUI_node.h"
 
 #include "../../Load/Pather.h"
 #include "../../Module/Module_GUI.h"
-#include "../../Module/Player/GUI/GUI_Player.h"
+#include "../../Module/Player/Dynamic/GUI/GUI_Dynamic.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/Textures.h"
 
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Functions/Extraction.h"
-#include "../../Operation/Functions/Heatmap.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 #include "imgui/imgui.h"
@@ -37,15 +38,17 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   Engine_node* node_engine = node_gui->get_node_engine();
   Module_node* node_module = node_gui->get_node_module();
   GUI_module* gui_moduleManager = node_gui->get_gui_moduleManager();
+  Operation_node* node_ope = node_gui->get_node_ope();
+  GUI_Player* gui_player = gui_moduleManager->get_gui_playerManager();
 
+  this->gui_init = node_gui->get_gui_initManager();
   this->optionManager = node_gui->get_gui_optionManager();
   this->gui_winManager = node_gui->get_gui_winManager();
   this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
-  this->gui_playerManager = gui_moduleManager->get_gui_playerManager();
-  this->sceneManager = new Scene();
-  this->heatmapManager = new Heatmap();
+  this->gui_dynamic = gui_player->get_gui_dynamic();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->extractionManager = node_ope->get_extractionManager();
   this->texManager = new Textures();
-  this->extractionManager = new Extraction();
   this->pathManager = new Pather();
 
   //---------------------------
@@ -119,7 +122,7 @@ void GUI_menuBar::MenuBar_menus(){
     ImGui::EndMenu();
   }
   if(ImGui::BeginMenu("Init")){
-    this->MenuBar_fastScene();
+    gui_init->init_gui();
     ImGui::EndMenu();
   }
 
@@ -179,9 +182,9 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //Distance from left
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
 
-  gui_playerManager->player_button();
+  gui_dynamic->player_button();
   ImGui::SameLine();
-  gui_playerManager->player_selection();
+  gui_dynamic->player_selection();
 
   //-------------------------
 }
@@ -251,42 +254,4 @@ void GUI_menuBar::MenuBar_appInfo(){
     //---------------------------
     ImGui::EndMenu();
   }
-}
-void GUI_menuBar::MenuBar_fastScene(){
-  //---------------------------
-
-  //Two Buddha point cloud to register
-  if(ImGui::Button("Buddha", ImVec2(100,0))){
-    pathManager->loading_fastScene(0);
-  }
-  //Two Torus point cloud to register
-  if(ImGui::Button("Torus", ImVec2(100,0))){
-    pathManager->loading_fastScene(1);
-  }
-  if(ImGui::Button("PCAP file", ImVec2(100,0))){
-    pathManager->loading_fastScene(2);
-  }
-  if(ImGui::Button("Frames move", ImVec2(100,0))){
-    pathManager->loading_fastScene(3);
-  }
-  if(ImGui::Button("More frames", ImVec2(100,0))){
-    pathManager->loading_fastScene(4);
-  }
-  if(ImGui::Button("Other frames", ImVec2(100,0))){
-    pathManager->loading_fastScene(5);
-  }
-  if(ImGui::Button("Tunel", ImVec2(100,0))){
-    pathManager->loading_fastScene(6);
-  }
-  if(ImGui::Button("IA module", ImVec2(100,0))){
-    pathManager->loading_fastScene(7);
-  }
-  if(ImGui::Button("Velodyne statique", ImVec2(100,0))){
-    pathManager->loading_fastScene(8);
-  }
-  if(ImGui::Button("Velodyne move", ImVec2(100,0))){
-    pathManager->loading_fastScene(9);
-  }
-
-  //---------------------------
 }

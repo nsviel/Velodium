@@ -1,18 +1,20 @@
-#ifndef Extraction_H
-#define Extraction_H
+#ifndef EXTRACTION_H
+#define EXTRACTION_H
 
 #include "../../Engine/Data/struct_generic.h"
 #include "../../common.h"
 
+class Operation_node;
 class Scene;
 class Loader;
 class Attribut;
+
 
 class Extraction
 {
 public:
   //Constructor / Destructor
-  Extraction();
+  Extraction(Operation_node* node_ope);
   ~Extraction();
 
 public:

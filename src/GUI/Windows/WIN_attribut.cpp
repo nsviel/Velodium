@@ -2,6 +2,7 @@
 
 #include "IconsFontAwesome5.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Attribut.h"
@@ -18,10 +19,12 @@ extern struct Window_tab window_tab;
 WIN_attribut::WIN_attribut(Operation_node* node_ope){
   //---------------------------
 
+  Engine_node* node_engine = node_ope->get_node_engine();
+
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->sceneManager = new Scene();
-  this->attribManager = new Attribut();
-  this->glyphManager = new Glyphs();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->attribManager = node_ope->get_attribManager();
+  this->glyphManager = node_engine->get_glyphManager();
   this->transformManager = new Transforms();
 
   this->item_width = 150;

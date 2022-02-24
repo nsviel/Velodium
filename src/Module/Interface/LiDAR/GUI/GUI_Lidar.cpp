@@ -6,13 +6,12 @@
 
 #include "../../Interface.h"
 
+#include "../../../Module_GUI.h"
 #include "../../../Module_node.h"
-
-#include "../../../../GUI/GUI_node.h"
 
 
 //Constructor / Destructor
-GUI_Lidar::GUI_Lidar(GUI_node* node_gui){
+GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();

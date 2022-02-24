@@ -3,6 +3,8 @@
 #include "../Obstacle.h"
 #include "../Scenario.h"
 
+#include "../../Dynamic/GUI/GUI_Dynamic.h"
+
 #include "../../../Interface/Interface.h"
 #include "../../../Interface/Component/Prediction.h"
 #include "../../../Interface/Component/GPS.h"
@@ -25,12 +27,12 @@
 
 
 //Constructor / Destructor
-GUI_Obstacle::GUI_Obstacle(GUI_node* node){
-  this->node_gui = node;
+GUI_Obstacle::GUI_Obstacle(GUI_module* node_gui_module){
+  this->node_gui = node_gui_module;
   //---------------------------
 
-  Module_node* node_module = node_gui->get_node_module();
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Module_node* node_module = node_gui_module->get_node_module();
+  Operation_node* node_ope = node_gui_module->get_node_ope();
   Player* playerManager = node_module->get_playerManager();
 
   this->coordManager = node_ope->get_coordManager();
@@ -243,8 +245,7 @@ void GUI_Obstacle::parameter_watcher(){
     this->watcher_gps();
 
     //Capture watcher
-    GUI_module* gui_module = node_gui->get_gui_moduleManager();
-    GUI_Lidar* gui_lidarManager = gui_module->get_gui_lidarManager();
+    GUI_Lidar* gui_lidarManager = node_gui->get_gui_lidarManager();
     gui_lidarManager->velo_capture();
 
     //MQTT messager
@@ -259,12 +260,12 @@ void GUI_Obstacle::parameter_online(){
   //---------------------------
 
   //Online parameters
-  GUI_module* gui_module = node_gui->get_gui_moduleManager();
-  GUI_Player* gui_playerManager = gui_module->get_gui_playerManager();
-  gui_playerManager->parameter_online();
+  GUI_Player* gui_player = node_gui->get_gui_playerManager();
+  GUI_Dynamic* gui_dynamic = gui_player->get_gui_dynamic();
+  gui_dynamic->parameter_online();
 
   //SLAM parameters
-  GUI_Slam* gui_slamManager = gui_module->get_gui_slamManager();
+  GUI_Slam* gui_slamManager = node_gui->get_gui_slamManager();
   gui_slamManager->parameter_slam();
 
   //---------------------------

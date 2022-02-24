@@ -181,7 +181,14 @@ void Prediction::compute_groundTruth(Cloud* cloud, vector<string> path_vec){
 
 //JSON parsers
 void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
+  Obstac* obstacle_gt = &subset->obstacle_pr;
   //---------------------------
+
+  //Reset all values
+  obstacle_gt->name.clear();
+  obstacle_gt->position.clear();
+  obstacle_gt->dimension.clear();
+  obstacle_gt->heading.clear();
 
   //Parse ground truth json file
   std::ifstream ifs(path_file);
@@ -190,7 +197,6 @@ void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
   reader.parse(ifs, obj);
 
   //For each hierarchical set
-  Obstac* obstacle_gt = &subset->obstacle_gt;
   const Json::Value& json = obj["detections"];
 
   for (int i = 0; i < json.size(); i++){
@@ -225,7 +231,14 @@ void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
   //---------------------------
 }
 void Prediction::parse_json_prediction(Subset* subset, string path_file){
+  Obstac* obstacle_pr = &subset->obstacle_pr;
   //---------------------------
+
+  //Reset all values
+  obstacle_pr->name.clear();
+  obstacle_pr->position.clear();
+  obstacle_pr->dimension.clear();
+  obstacle_pr->heading.clear();
 
   //Parse prediction json file
   std::ifstream ifs(path_file);
@@ -234,9 +247,7 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
   reader.parse(ifs, obj);
 
   //For each hierarchical set
-  Obstac* obstacle_pr = &subset->obstacle_pr;
   const Json::Value& json = obj["detections"];
-
   for (int i = 0; i < json.size(); i++){
     //Obstacle name
     string name = json[i]["name"].asString();

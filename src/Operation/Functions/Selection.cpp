@@ -28,9 +28,9 @@ Selection::Selection(Operation_node* node_ope){
   this->cameraManager = node_engine->get_cameraManager();
   this->coordManager = node_ope->get_coordManager();
   this->transformManager = new Transforms();
-  this->attribManager = new Attribut();
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
+  this->attribManager = node_ope->get_attribManager();
+  this->sceneManager = node_engine->get_SceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
 
   this->gui_X = 0;
   this->gui_Y = 0;

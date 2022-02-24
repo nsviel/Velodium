@@ -1,18 +1,22 @@
 #include "Extraction.h"
 
+#include "../Operation_node.h"
 #include "../Transformation/Attribut.h"
 
-#include "../../Load/Loader.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
+#include "../../Load/Loader.h"
 
 
 //Constructor / destructor
-Extraction::Extraction(){
+Extraction::Extraction(Operation_node* node_ope){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_SceneManager();
+  this->attribManager = node_ope->get_attribManager();
   this->loaderManager = new Loader();
-  this->attribManager = new Attribut();
 
   this->list_part = new list<subpart*>;
   this->highlightON = false;

@@ -4,7 +4,7 @@
 #include "../../../../common.h"
 
 class Scene;
-class GUI_node;
+class GUI_module;
 class Obstacle;
 class Scenario;
 class Interface;
@@ -15,7 +15,7 @@ class GUI_Obstacle
 {
 public:
   //Constructor / Destructor
-  GUI_Obstacle(GUI_node* node_gui);
+  GUI_Obstacle(GUI_module* node_gui_module);
   ~GUI_Obstacle();
 
 public:
@@ -46,7 +46,7 @@ private:
   CoordTransform* coordManager;
   Scene* sceneManager;
   Scenario* scenarioManager;
-  GUI_node* node_gui;
+  GUI_module* node_gui;
 
   int label_ID;
   int item_width;

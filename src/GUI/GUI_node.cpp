@@ -8,6 +8,7 @@
 #include "Control/GUI_Control.h"
 #include "Control/GUI_Option.h"
 #include "Control/GUI_FileManager.h"
+#include "Control/GUI_Initialization.h"
 #include "Windows/GUI_windows.h"
 
 #include "../Module/Module_GUI.h"
@@ -34,6 +35,7 @@ GUI_node::~GUI_node(){}
 void GUI_node::init_objects(){
   //---------------------------
 
+  this->gui_initManager = new GUI_Initialization(this);
   this->gui_moduleManager = new GUI_module(this);
   this->gui_winManager = new GUI_windows(this);
   this->gui_controlManager = new GUI_control(this);

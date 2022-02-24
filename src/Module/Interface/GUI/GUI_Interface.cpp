@@ -7,15 +7,15 @@
 #include "../Protocol/SSH.h"
 
 #include "../../Module_node.h"
+#include "../../Module_GUI.h"
 
-#include "../../../GUI/GUI_node.h"
 #include "../../../Specific/color.h"
 
 #include "imgui/imgui_stdlib.h"
 
 
 //Constructor / Destructor
-GUI_Interface::GUI_Interface(GUI_node* node_gui){
+GUI_Interface::GUI_Interface(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();

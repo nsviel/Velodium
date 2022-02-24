@@ -1,17 +1,21 @@
 #include "Heatmap.h"
 
+#include "../Operation_node.h"
 #include "../Transformation/Attribut.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
 
 
 //Constructor / destructor
-Heatmap::Heatmap(){
+Heatmap::Heatmap(Operation_node* node_ope){
   //---------------------------
 
-  this->sceneManager = new Scene();
-  this->attribManager = new Attribut();
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_SceneManager();
+  this->attribManager = node_ope->get_attribManager();
 
   this->HMmode = 0;
   this->normalized = true;

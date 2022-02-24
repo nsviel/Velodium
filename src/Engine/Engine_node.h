@@ -19,18 +19,7 @@ class Engine_node
 public:
   //Constructor / Destructor
   Engine_node(Configuration* config, GLFWwindow* window){
-    //---------------------------
-
     this->configManager = config;
-
-    //---------------------------
-    this->init_objects(window);
-  }
-  ~Engine_node();
-
-public:
-  //Main functions
-  void init_objects(GLFWwindow* window){
     //---------------------------
 
     this->dimManager = new Dimension(window, configManager);
@@ -43,10 +32,15 @@ public:
 
     //---------------------------
   }
+  ~Engine_node();
+
+public:
+  //Main functions
   void runtime(){}
   void reset(){
     //---------------------------
 
+    cameraManager->viewport_reset();
     glyphManager->reset();
     sceneManager->reset_cloud_all();
 

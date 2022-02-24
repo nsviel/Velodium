@@ -1,16 +1,17 @@
-#ifndef Fitting_H
-#define Fitting_H
+#ifndef FITTING_H
+#define FITTING_H
 
+class Operation_node;
 class Scene;
 class Glyphs;
-class Attribut;
 
 #include "../../common.h"
+
 
 class Fitting
 {
 public:
-  Fitting();
+  Fitting(Operation_node* node_ope);
   ~Fitting();
 
 public:
@@ -25,7 +26,6 @@ public:
 private:
   Scene* sceneManager;
   Glyphs* glyphManager;
-  Attribut* attribManager;
 
   float Radius;
 };

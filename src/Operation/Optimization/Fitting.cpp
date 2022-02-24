@@ -1,7 +1,8 @@
 #include "Fitting.h"
 
-#include "../Transformation/Attribut.h"
+#include "../Operation_node.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 
@@ -10,12 +11,13 @@
 
 
 //Constructor / Destructor
-Fitting::Fitting(){
+Fitting::Fitting(Operation_node* node_ope){
   //--------------------------
 
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
-  this->attribManager = new Attribut();
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_SceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
 
   //--------------------------
 }
@@ -39,9 +41,6 @@ void Fitting::Sphere_cloudToCenter(Subset* subset){
   vector<float>& dist = subset->R;
   //---------------------------
 
-  if(dist.size() == 0){
-    attribManager->compute_Distances(subset);
-  }
   float dist_min = fct_min(dist);
   int size = XYZ.size();
   float r = 0.0695;

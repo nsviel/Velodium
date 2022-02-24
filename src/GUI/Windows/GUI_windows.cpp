@@ -27,9 +27,9 @@ GUI_windows::GUI_windows(GUI_node* node_gui){
   this->win_opengl = new WIN_opengl(node_engine);
   this->win_operation = new WIN_operation(node_ope);
   this->win_attribut = new WIN_attribut(node_ope);
+  this->win_cloud = new WIN_cloud(node_ope);
   this->win_loading = new WIN_loading();
-  this->win_cloud = new WIN_cloud();
-
+  
   //---------------------------
   this->window_init();
 }

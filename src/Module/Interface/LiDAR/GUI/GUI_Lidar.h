@@ -4,7 +4,7 @@
 class Scala;
 class Velodyne;
 class Capture;
-class GUI_node;
+class GUI_module;
 
 #include "../../../../common.h"
 
@@ -13,7 +13,7 @@ class GUI_Lidar
 {
 public:
   //Constructor / Destructor
-  GUI_Lidar(GUI_node* node_gui);
+  GUI_Lidar(GUI_module* node_gui);
   ~GUI_Lidar();
 
 public:

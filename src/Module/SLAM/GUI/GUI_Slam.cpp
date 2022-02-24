@@ -9,6 +9,7 @@
 #include "../CT_ICP/SLAM_configuration.h"
 
 #include "../../Module_node.h"
+#include "../../Module_GUI.h"
 
 #include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Data/Database.h"
@@ -20,7 +21,7 @@ extern struct Database database;
 
 
 //Constructor / Destructor
-GUI_Slam::GUI_Slam(GUI_node* node_gui){
+GUI_Slam::GUI_Slam(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();

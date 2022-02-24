@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class GUI_node;
+class GUI_module;
 class Network;
 class MQTT;
 class SFTP;
@@ -14,7 +14,7 @@ class GUI_Interface
 {
 public:
   //Constructor / Destructor
-  GUI_Interface(GUI_node* node_gui);
+  GUI_Interface(GUI_module* node_gui);
   ~GUI_Interface();
 
 public:

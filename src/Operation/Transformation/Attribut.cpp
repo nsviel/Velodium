@@ -1,7 +1,9 @@
 #include "Attribut.h"
 
+#include "../Operation_node.h"
 #include "../Optimization/Fitting.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_terminal.h"
@@ -10,10 +12,13 @@
 
 
 //Constructor / destructor
-Attribut::Attribut(){
+Attribut::Attribut(Operation_node* node_ope){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_SceneManager();
+  this->fitManager = node_ope->get_fittingManager();
 
   this->sphereRadius = 0.0695;
 
@@ -574,8 +579,7 @@ void Attribut::compute_normals_sphere(Subset* subset){
   }
 
   //Determine the center of the sphere
-  Fitting fitManager;
-  vec3 Center = fitManager.Sphere_FindCenter(subset);
+  vec3 Center = fitManager->Sphere_FindCenter(subset);
 
   //Compute normals
   vector<vec3> N(XYZ.size());
