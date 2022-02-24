@@ -87,6 +87,7 @@ void Engine::loop_gui(){
 }
 void Engine::draw_clouds(){
   list<Cloud*>* list_cloud = database.list_cloud;
+  Subset* subset_selected = sceneManager->get_subset_selected();
   //---------------------------
 
   //By cloud
@@ -100,7 +101,7 @@ void Engine::draw_clouds(){
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
 
-        //Display vertices
+        //Display for all visible subsets
         if(subset->visibility){
           sceneManager->update_subset_location(subset);
           glBindVertexArray(subset->VAO);
@@ -110,6 +111,10 @@ void Engine::draw_clouds(){
           glyphManager->drawing(subset);
         }
 
+        //Display for current subset
+        if(subset->ID == subset_selected->ID){
+          glyphManager->drawing_prediction(subset);
+        }
       }
     }
 

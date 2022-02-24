@@ -284,12 +284,12 @@ void GUI_Obstacle::parameter_interfacing(){
 
     //Add predictions
     if(ImGui::Button("Add predictions")){
-      obstacleManager->compute_obstacle();
+      obstacleManager->add_prediction();
     }
 
     //Add ground truth
     if(ImGui::Button("Add ground truth")){
-      obstacleManager->compute_groundTruth();
+      obstacleManager->add_groundTruth();
     }
 
     //---------------------------

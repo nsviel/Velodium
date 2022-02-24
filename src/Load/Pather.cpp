@@ -219,9 +219,9 @@ void Pather::loading_fastScene(int mode){
       loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
       break;
     }
-    case 7:{//Frame for prediction
+    case 7:{//AI prediction
       sceneManager->remove_cloud_all();
-      this->loading_directoryFrames("/home/aether/Desktop/Velodium/media/data/capture_test/frame/");
+      this->loading_directoryFrames("../media/point_cloud/frames/");
       break;
     }
     case 8:{//Frame for prediction

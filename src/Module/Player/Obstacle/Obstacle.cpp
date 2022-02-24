@@ -12,6 +12,7 @@
 #include "../../../Engine/Scene/Object/OOBB.h"
 #include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Load/Pather.h"
+#include "../../../Specific/fct_system.h"
 
 
 //Constructor / Destructor
@@ -42,7 +43,6 @@ void Obstacle::runtime_obstacle(){
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
     if(is_prediction){
-      say("new prediction ok");
       this->build_obstacleGlyph_gt(cloud);
       this->build_obstacleGlyph_pr(cloud);
     }
@@ -50,7 +50,7 @@ void Obstacle::runtime_obstacle(){
 
   //---------------------------
 }
-void Obstacle::compute_obstacle(){
+void Obstacle::add_prediction(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
@@ -65,7 +65,22 @@ void Obstacle::compute_obstacle(){
 
   //---------------------------
 }
-void Obstacle::compute_groundTruth(){
+void Obstacle::add_prediction(string path_dir){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Get prediction file paths
+  vector<string> path_vec = list_allFiles(path_dir.c_str());
+
+  //Parses predictions files
+  predManager->compute_prediction(cloud, path_vec);
+
+  //Build glyphs
+  this->build_obstacleGlyph_pr(cloud);
+
+  //---------------------------
+}
+void Obstacle::add_groundTruth(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 

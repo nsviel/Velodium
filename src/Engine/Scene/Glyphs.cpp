@@ -44,6 +44,7 @@ void Glyphs::drawing(){
     Glyph* glyph = *next(list_glyph->begin(),i);
 
     if(glyph->visibility){
+      // Bind the glyph VAO
       glBindVertexArray(glyph->VAO);
       if(glyph->draw_type == "point"){
         glPointSize(glyph->draw_width);
@@ -94,26 +95,33 @@ void Glyphs::drawing(Subset* subset){
       glLineWidth(1);
       glBindVertexArray(0);
     }
+  }
 
-    //OOBB - ground thruth
-    vector<Glyph*>& oobb_gt = subset->obstacle_gt.oobb;
-    for(int i=0; i<oobb_gt.size(); i++){
-      glBindVertexArray(oobb_gt[i]->VAO);
-      glLineWidth(oobb_gt[i]->draw_width);
-      glDrawArrays(GL_LINES, 0, oobb_gt[i]->location.size());
-      glLineWidth(1);
-      glBindVertexArray(0);
-    }
+  //---------------------------
+  glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+}
+void Glyphs::drawing_prediction(Subset* subset){
+  //---------------------------
 
-    //OOBB - prediction
-    vector<Glyph*>& oobb_pr = subset->obstacle_pr.oobb;
-    for(int i=0; i<oobb_pr.size(); i++){
-      glBindVertexArray(oobb_pr[i]->VAO);
-      glLineWidth(oobb_pr[i]->draw_width);
-      glDrawArrays(GL_LINES, 0, oobb_pr[i]->location.size());
-      glLineWidth(1);
-      glBindVertexArray(0);
-    }
+  //OOBB - ground thruth
+  vector<Glyph*>& oobb_gt = subset->obstacle_gt.oobb;
+  for(int i=0; i<oobb_gt.size(); i++){
+    glBindVertexArray(oobb_gt[i]->VAO);
+    glLineWidth(oobb_gt[i]->draw_width);
+    glDrawArrays(GL_LINES, 0, oobb_gt[i]->location.size());
+    glLineWidth(1);
+    glBindVertexArray(0);
+  }
+
+  //OOBB - prediction
+  vector<Glyph*>& oobb_pr = subset->obstacle_pr.oobb;
+  for(int i=0; i<oobb_pr.size(); i++){
+    glBindVertexArray(oobb_pr[i]->VAO);
+    glLineWidth(oobb_pr[i]->draw_width);
+    glDrawArrays(GL_LINES, 0, oobb_pr[i]->location.size());
+    glLineWidth(1);
+    glBindVertexArray(0);
   }
 
   //---------------------------

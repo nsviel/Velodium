@@ -26,6 +26,7 @@ public:
   void init();
   void drawing();
   void drawing(Subset* subset);
+  void drawing_prediction(Subset* subset);
   void reset();
   void reset_colors();
 

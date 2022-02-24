@@ -104,13 +104,11 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
   //Retrieve prediction frame ID
   int frame_ID = parse_frame_ID(path_file);
 
-  say("runtime prediction ok");
-
   //For the subset with same name
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset->ID == frame_ID){cout<<"frame ID detected "<<subset->ID<<" / "<<frame_ID<<endl;
+    if(subset->ID == frame_ID){
       this->parse_json_prediction(subset, path_file);
       this->is_prediction = true;
     }
