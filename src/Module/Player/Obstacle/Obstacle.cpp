@@ -38,7 +38,7 @@ void Obstacle::runtime_obstacle(){
   Prediction* predManager = ioManager->get_predManager();
   //---------------------------
 
-  if(predManager->get_is_watching() && cloud != nullptr){
+  if(predManager->get_is_watching() && subset != nullptr){
 
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
