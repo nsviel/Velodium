@@ -38,9 +38,11 @@ void Obstacle::runtime_obstacle(){
   //---------------------------
 
   if(predManager->get_is_watching() && cloud != nullptr){
+
     //Check for new prediction (ground thruth or prediction)
     bool is_prediction = predManager->runtime_prediction();
     if(is_prediction){
+      say("new prediction ok");
       this->build_obstacleGlyph_gt(cloud);
       this->build_obstacleGlyph_pr(cloud);
     }

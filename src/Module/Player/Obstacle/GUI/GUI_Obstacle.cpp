@@ -93,7 +93,6 @@ void GUI_Obstacle::compute_scenario(){
     scenarioManager->make_configuration();
   }
 
-
   //---------------------------
   ImGui::Separator();
 }
