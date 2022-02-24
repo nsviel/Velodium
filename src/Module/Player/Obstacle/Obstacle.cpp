@@ -34,7 +34,7 @@ Obstacle::~Obstacle(){}
 //Main functions
 void Obstacle::runtime_obstacle(){
   //This function is called at each OpenGL iteration
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Subset* subset = sceneManager->get_subset_selected();
   Prediction* predManager = ioManager->get_predManager();
   //---------------------------
 
@@ -42,9 +42,10 @@ void Obstacle::runtime_obstacle(){
 
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
-    if(is_prediction){
-      this->build_obstacleGlyph_gt(cloud);
-      this->build_obstacleGlyph_pr(cloud);
+    if(*is_prediction){
+      //this->build_obstacleGlyph_gt(cloud);
+      this->build_obstacleGlyph_pr(subset);
+      *is_prediction = false;
     }
   }
 
@@ -141,6 +142,26 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
       glyphManager->update_glyph_location(glyph);
       obstacle_pr->oobb.push_back(glyph);
     }
+  }
+
+  //---------------------------
+}
+void Obstacle::build_obstacleGlyph_pr(Subset* subset){
+  Obstac* obstacle_pr = &subset->obstacle_pr;
+  //---------------------------
+
+  for(int j=0; j<obstacle_pr->name.size(); j++){
+    Glyph* glyph = glyphManager->create_glyph_instance("obstacle");
+    glyphManager->set_glyph_color(glyph, vec3(201.0f/255, 1.0f/255, 30.0f/255));
+
+    vec3 To = obstacle_pr->position[j];
+    vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
+    vec3 So = obstacle_pr->dimension[j];
+    mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
+
+    oobbManager->update_oobb(glyph, transf);
+    glyphManager->update_glyph_location(glyph);
+    obstacle_pr->oobb.push_back(glyph);
   }
 
   //---------------------------

@@ -32,6 +32,7 @@ public:
   //Subfunctions
   void build_obstacleGlyph_gt(Cloud* cloud);
   void build_obstacleGlyph_pr(Cloud* cloud);
+  void build_obstacleGlyph_pr(Subset* subset);
 
 private:
   Scene* sceneManager;
