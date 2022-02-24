@@ -25,6 +25,7 @@ Prediction::Prediction(){
   this->flag_newPred = false;
   this->flag_newGrTh = false;
   this->is_whatching = false;
+  this->is_prediction = false;
 
   //---------------------------
 }

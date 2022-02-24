@@ -48,7 +48,7 @@ private:
 
   bool thread_predi_ON;
   bool thread_grThr_ON;
-  bool is_prediction
+  bool is_prediction;
   bool is_whatching;
   bool flag_newPred;
   bool flag_newGrTh;
