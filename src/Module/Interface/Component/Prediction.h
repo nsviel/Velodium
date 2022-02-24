@@ -35,6 +35,7 @@ public:
   inline string get_path_grThr(){return path_grThr;}
   inline string get_path_predi(){return path_predi;}
   inline bool get_is_watching(){return is_whatching;}
+  inline bool* get_is_prediction(){return &is_predictions;}
 
 private:
   Scene* sceneManager;
@@ -47,6 +48,7 @@ private:
 
   bool thread_predi_ON;
   bool thread_grThr_ON;
+  bool is_prediction
   bool is_whatching;
   bool flag_newPred;
   bool flag_newGrTh;

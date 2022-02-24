@@ -111,6 +111,7 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
 
     if(subset->ID == frame_ID){cout<<"frame ID detected "<<subset->ID<<" / "<<frame_ID<<endl;
       this->parse_json_prediction(subset, path_file);
+      this->is_prediction = true;
     }
   }
 
