@@ -5,7 +5,6 @@
 #include "Scene/Glyphs.h"
 #include "Scene/Scene.h"
 
-#include "../Operation/Operation_node.h"
 #include "../Module/Module_node.h"
 #include "../GUI/GUI_node.h"
 #include "../GUI/GUI.h"
@@ -21,12 +20,10 @@ Engine::Engine(Engine_node* engine, bool window_ON){
 
   this->init_database();
 
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
-
-  this->node_ope = new Operation_node(node_engine);
-  this->node_module = new Module_node(node_engine, node_ope);
-  this->node_gui = new GUI_node(node_engine, node_ope, node_module);
+  this->node_module = node_engine->get_node_module();
+  this->node_gui = node_engine->get_node_gui();
 
   if(with_window){
     glyphManager->init();

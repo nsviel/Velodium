@@ -3,12 +3,14 @@
 #include "../GUI_node.h"
 #include "../Control/GUI_Control.h"
 
-#include "../../Load/Pather.h"
+#include "../../Load/Load_node.h"
+#include "../../Load/Processing/Pather.h"
 
 #include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
 #include "../../Operation/Operation_node.h"
@@ -25,14 +27,16 @@ GUI_option::GUI_option(GUI_node* node_gui){
 
   Engine_node* node_engine = node_gui->get_node_engine();
   Operation_node* node_ope = node_gui->get_node_ope();
+  Load_node* node_load = node_engine->get_node_load();
 
   this->renderManager = node_engine->get_renderManager();
   this->gui_controlManager = node_gui->get_gui_controlManager();
   this->glyphManager = node_engine->get_glyphManager();
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->attribManager = node_ope->get_attribManager();
-  this->pathManager = new Pather();
+  this->pathManager = node_load->get_pathManager();
+  this->configManager = node_engine->get_configManager();
 
   //---------------------------
 }
@@ -227,8 +231,7 @@ void GUI_option::option_colors(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Reset", ImVec2(75,0))){
-      Configuration configManager;
-      float bkg_color = configManager.parse_json_f("window", "background_color");
+      float bkg_color = configManager->parse_json_f("window", "background_color");
       vec4* screen_color = renderManager->get_screen_color();
       *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 

@@ -3,16 +3,18 @@
 
 #include "../../../common.h"
 
+class Module_node;
 class Scene;
 class Timer;
 class Online;
+class Saver;
 
 
 class Offline
 {
 public:
   //Constructor / Destructor
-  Offline(Online* online);
+  Offline(Module_node* node_module);
   ~Offline();
 
 public:
@@ -39,6 +41,7 @@ private:
   Scene* sceneManager;
   Timer* timerManager;
   Online* onlineManager;
+  Saver* saveManager;
 
   string player_saveas;
   bool player_isrunning;

@@ -1,5 +1,8 @@
 #include "dataExtraction.h"
 
+#include "../Load_node.h"
+
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
@@ -8,11 +11,13 @@
 
 
 //Constructor / Destructor
-dataExtraction::dataExtraction(){
+dataExtraction::dataExtraction(Load_node* node_load){
   //---------------------------
 
-  this->configManager = new Configuration();
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = node_load->get_node_engine();
+
+  this->configManager = node_engine->get_configManager();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->ID = 0;
 

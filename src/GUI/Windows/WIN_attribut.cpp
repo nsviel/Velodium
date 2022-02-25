@@ -22,7 +22,7 @@ WIN_attribut::WIN_attribut(Operation_node* node_ope){
   Engine_node* node_engine = node_ope->get_node_engine();
 
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->transformManager = new Transforms();

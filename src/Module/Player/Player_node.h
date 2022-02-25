@@ -1,5 +1,5 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef PLAYER_NODE_H
+#define PLAYER_NODE_H
 
 #include "../../common.h"
 
@@ -10,12 +10,12 @@ class Offline;
 class Scenario;
 
 
-class Player
+class Player_node
 {
 public:
   //Constructor / Destructor
-  Player(Module_node* node_module);
-  ~Player();
+  Player_node(Module_node* node_module);
+  ~Player_node();
 
 public:
   void update();

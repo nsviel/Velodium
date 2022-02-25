@@ -11,7 +11,6 @@
 #include "../Module_node.h"
 
 #include "../../Engine/Engine_node.h"
-#include "../../Load/Pather.h"
 #include "../../Specific/fct_system.h"
 
 
@@ -21,7 +20,7 @@ Interface::Interface(Module_node* node_module){
 
   Engine_node* node_engine = node_module->get_node_engine();
 
-  this->saveManager = new Saving(node_engine->get_renderManager());
+  this->saveManager = new Saving(node_engine);
   this->gpsManager = new GPS();
   this->predManager = new Prediction();
   this->netManager = new Network();

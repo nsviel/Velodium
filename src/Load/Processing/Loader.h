@@ -1,9 +1,10 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "../Engine/Data/struct_dataFile.h"
-#include "../common.h"
+#include "../../Engine/Data/struct_dataFile.h"
+#include "../../common.h"
 
+class Load_node;
 class dataExtraction;
 class Scene;
 
@@ -20,7 +21,7 @@ class Loader
 {
 public:
   //Constructor / Destructor
-  Loader();
+  Loader(Load_node* node_load);
   ~Loader();
 
 public:

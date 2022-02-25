@@ -23,7 +23,7 @@ class GUI_node
 {
 public:
   //Constructor / Destructor
-  GUI_node(Engine_node* engine, Operation_node* ope, Module_node* module);
+  GUI_node(Engine_node* engine);
   ~GUI_node();
 
 public:

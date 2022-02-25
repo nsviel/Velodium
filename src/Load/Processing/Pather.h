@@ -1,8 +1,9 @@
 #ifndef PATHER_H
 #define PATHER_H
 
-#include "../common.h"
+#include "../../common.h"
 
+class Load_node;
 class Scene;
 class Loader;
 class Saver;
@@ -12,7 +13,7 @@ class Pather
 {
 public:
   //Constructor / Destructor
-  Pather();
+  Pather(Load_node* node_load);
   ~Pather();
 
 public:

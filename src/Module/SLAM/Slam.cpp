@@ -8,17 +8,18 @@
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / Destructor
-Slam::Slam(){
+Slam::Slam(Engine_node* node_engine){
   //---------------------------
 
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
+  this->sceneManager = node_engine->get_sceneManager();
+  this->glyphManager = node_engine->get_glyphManager();;
 
   this->normalManager = new SLAM_normal();
   this->ceresManager = new SLAM_optim_ceres(normalManager);

@@ -5,7 +5,8 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Load/Loader.h"
+#include "../../Load/Load_node.h"
+#include "../../Load/Processing/Loader.h"
 
 
 //Constructor / destructor
@@ -13,10 +14,11 @@ Extraction::Extraction(Operation_node* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();
+  Load_node* node_load = node_engine->get_node_load();
 
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
-  this->loaderManager = new Loader();
+  this->loaderManager = node_load->get_loadManager();
 
   this->list_part = new list<subpart*>;
   this->highlightON = false;

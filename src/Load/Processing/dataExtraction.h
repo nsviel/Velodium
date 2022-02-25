@@ -6,6 +6,7 @@
 
 #include "../../common.h"
 
+class Load_node;
 class Scene;
 class Configuration;
 
@@ -14,7 +15,7 @@ class dataExtraction
 {
 public:
   //Constructor / Destructor
-  dataExtraction();
+  dataExtraction(Load_node* node_load);
   ~dataExtraction();
 
 public:

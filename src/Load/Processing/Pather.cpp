@@ -3,23 +3,27 @@
 #include "Loader.h"
 #include "Saver.h"
 
-#include "../Engine/Scene/Scene.h"
-#include "../Engine/Scene/Configuration.h"
+#include "../Load_node.h"
 
-#include "../Specific/fct_transtypage.h"
-#include "../Specific/fct_system.h"
+#include "../../Engine/Engine_node.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
+#include "../../Specific/fct_transtypage.h"
+#include "../../Specific/fct_system.h"
 
 #include <Eigen/Dense>
 #include <set>
 
 
 //Constructor / destructor
-Pather::Pather(){
+Pather::Pather(Load_node* node_load){
   //---------------------------
 
-  this->sceneManager = new Scene();
-  this->loaderManager = new Loader();
-  this->saverManager = new Saver();
+  Engine_node* node_engine = node_load->get_node_engine();
+
+  this->sceneManager = node_engine->get_sceneManager();
+  this->loaderManager = node_load->get_loadManager();
+  this->saverManager = node_load->get_saveManager();
 
   this->spaceSampling = 0.08f;
   this->nbLineSampling = 1000000;

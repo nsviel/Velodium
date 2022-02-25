@@ -1,9 +1,11 @@
 #include "WIN_loading.h"
 
+#include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 
-#include "../../Load/Pather.h"
-#include "../../Load/Loader.h"
+#include "../../Load/Load_node.h"
+#include "../../Load/Processing/Pather.h"
+#include "../../Load/Processing/Loader.h"
 
 #include "../../Load/Format/file_PTS.h"
 #include "../../Load/Format/file_PTX.h"
@@ -14,12 +16,14 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_loading::WIN_loading(){
+WIN_loading::WIN_loading(Engine_node* node_engine){
   //---------------------------
 
-  this->pathManager = new Pather();
-  this->sceneManager = new Scene();
-  this->loaderManager = pathManager->get_loaderManager();
+  Load_node* node_load = node_engine->get_node_load();
+
+  this->sceneManager = node_engine->get_sceneManager();
+  this->loaderManager = node_load->get_loadManager();
+  this->pathManager = node_load->get_pathManager();
 
   this->item_width = 150;
   this->file_selected = false;

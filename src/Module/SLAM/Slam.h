@@ -7,6 +7,7 @@
 #include "../../Engine/Data/struct_voxelMap.h"
 #include "../../common.h"
 
+class Engine_node;
 class Scene;
 class Glyphs;
 
@@ -21,7 +22,7 @@ class Slam
 {
 public:
   //Constructor / Destructor
-  Slam();
+  Slam(Engine_node* node);
   ~Slam();
 
 public:

@@ -3,7 +3,7 @@
 #include "GUI_Dynamic.h"
 #include "GUI_Player.h"
 
-#include "../Player.h"
+#include "../Player_node.h"
 #include "../Obstacle/Obstacle.h"
 #include "../Obstacle/Scenario.h"
 #include "../Dynamic/Online.h"
@@ -25,19 +25,20 @@
 
 
 //Constructor / Destructor
-GUI_Obstacle::GUI_Obstacle(GUI_module* node_gui_module){
-  this->node_gui = node_gui_module;
+GUI_Obstacle::GUI_Obstacle(GUI_module* node){
+  this->node_gui = node;
   //---------------------------
 
-  Module_node* node_module = node_gui_module->get_node_module();
-  Operation_node* node_ope = node_gui_module->get_node_ope();
-  Player* playerManager = node_module->get_playerManager();
+  Module_node* node_module = node_gui->get_node_module();
+  Operation_node* node_ope = node_gui->get_node_ope();
+  Player_node* node_player = node_module->get_node_player();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
   this->coordManager = node_ope->get_coordManager();
   this->ioManager = node_module->get_ioManager();
-  this->obstacleManager = playerManager->get_obstacleManager();
-  this->scenarioManager = playerManager->get_scenarioManager();
-  this->sceneManager = new Scene();
+  this->obstacleManager = node_player->get_obstacleManager();
+  this->scenarioManager = node_player->get_scenarioManager();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
 
@@ -193,8 +194,8 @@ void GUI_Obstacle::state_online(){
 
   //Specific module
   Module_node* node_module = node_gui->get_node_module();
-  Player* playerManager = node_module->get_playerManager();
-  Online* onlineManager = playerManager->get_onlineManager();
+  Player_node* node_player = node_module->get_node_player();
+  Online* onlineManager = node_player->get_onlineManager();
 
   bool with_slam = *onlineManager->get_with_slam();
   ImGui::Text("Online - SLAM");
@@ -233,7 +234,6 @@ void GUI_Obstacle::state_online(){
 //Parameters
 void GUI_Obstacle::parameter_watcher(){
   if(ImGui::CollapsingHeader("Parameter - watcher")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
     //AI watcher

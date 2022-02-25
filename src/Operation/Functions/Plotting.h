@@ -1,9 +1,9 @@
 #ifndef PLOTTING_H
 #define PLOTTING_H
 
-#include "../../extern/gnuplot/gnuplot-iostream.h"
+#include "../../../extern/gnuplot/gnuplot-iostream.h"
 
-#include "../common.h"
+#include "../../common.h"
 #include <Eigen/Dense>
 
 using namespace Eigen;

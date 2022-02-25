@@ -12,9 +12,10 @@
 #include "../../Module_GUI.h"
 
 #include "../../../GUI/GUI_node.h"
+#include "../../../Engine/Engine.h"
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Engine.h"
 #include "../../../Specific/fct_transtypage.h"
 
 extern struct Database database;
@@ -25,6 +26,7 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();
+  Engine_node* node_engine = node_gui->get_node_engine();
 
   this->slamManager = node_module->get_slamManager();
   this->ceresManager = slamManager->get_slam_ceres();
@@ -33,7 +35,7 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   this->assessManager = slamManager->get_slam_assess();
   this->mapManager = slamManager->get_slam_map();
   this->configManager = slamManager->get_slam_config();
-  this->sceneManager = new Scene();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
 

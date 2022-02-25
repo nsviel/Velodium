@@ -8,7 +8,8 @@
 #include "../Control/GUI_Initialization.h"
 #include "../GUI_node.h"
 
-#include "../../Load/Pather.h"
+#include "../../Load/Load_node.h"
+#include "../../Load/Processing/Pather.h"
 #include "../../Module/Module_GUI.h"
 #include "../../Module/Player/GUI/GUI_Dynamic.h"
 
@@ -40,16 +41,17 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   GUI_module* gui_moduleManager = node_gui->get_gui_moduleManager();
   Operation_node* node_ope = node_gui->get_node_ope();
   GUI_Player* gui_player = gui_moduleManager->get_gui_playerManager();
+  Load_node* node_load = node_engine->get_node_load();
 
   this->gui_init = node_gui->get_gui_initManager();
   this->optionManager = node_gui->get_gui_optionManager();
   this->gui_winManager = node_gui->get_gui_winManager();
   this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
   this->gui_dynamic = gui_player->get_gui_dynamic();
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();
+  this->pathManager = node_load->get_pathManager();
   this->texManager = new Textures();
-  this->pathManager = new Pather();
 
   //---------------------------
 }

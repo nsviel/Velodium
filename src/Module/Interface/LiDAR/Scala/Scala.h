@@ -3,14 +3,16 @@
 
 #include "../../../../common.h"
 
+class Engine_node;
 class Scene;
+class Loader;
 
 
 class Scala
 {
 public:
   //Constructor / Destructor
-  Scala();
+  Scala(Engine_node* node_engine);
   ~Scala();
 
 public:
@@ -23,6 +25,7 @@ public:
 
 private:
   Scene* sceneManager;
+  Loader* loaderManager;
 };
 
 #endif

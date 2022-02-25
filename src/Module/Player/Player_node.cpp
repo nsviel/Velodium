@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "Player_node.h"
 
 #include "Dynamic/Online.h"
 #include "Dynamic/Offline.h"
@@ -9,26 +9,26 @@
 
 
 //Constructor / Destructor
-Player::Player(Module_node* node_module){
+Player_node::Player_node(Module_node* node_module){
   //---------------------------
 
   this->onlineManager = new Online(node_module);
-  this->offlineManager = new Offline(onlineManager);
+  this->offlineManager = new Offline(node_module);
   this->obstacleManager = new Obstacle(node_module);
   this->scenarioManager = new Scenario(node_module, onlineManager);
 
   //---------------------------
 }
-Player::~Player(){}
+Player_node::~Player_node(){}
 
-void Player::update(){
+void Player_node::update(){
   //---------------------------
 
   onlineManager->update_configuration();
 
   //---------------------------
 }
-void Player::runtime(){
+void Player_node::runtime(){
   //---------------------------
 
   obstacleManager->runtime_obstacle();

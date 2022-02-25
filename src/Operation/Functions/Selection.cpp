@@ -11,8 +11,6 @@
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
-
-#include "../../Load/Loader.h"
 #include "../../Specific/fct_maths.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -29,7 +27,7 @@ Selection::Selection(Operation_node* node_ope){
   this->coordManager = node_ope->get_coordManager();
   this->transformManager = new Transforms();
   this->attribManager = node_ope->get_attribManager();
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
 
   this->gui_X = 0;

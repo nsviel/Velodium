@@ -6,8 +6,8 @@
 #include <thread>
 #include <queue>
 
+class Engine_node;
 class Saver;
-class Pather;
 class Renderer;
 
 
@@ -15,7 +15,7 @@ class Saving
 {
 public:
   //Constructor / Destructor
-  Saving(Renderer* renderer);
+  Saving(Engine_node* node_engine);
   ~Saving();
 
 public:
@@ -31,7 +31,6 @@ public:
 
 private:
   Saver* saverManager;
-  Pather* pathManager;
   Renderer* renderManager;
 
   queue<string> save_frame_vec;

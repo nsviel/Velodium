@@ -18,7 +18,7 @@ WIN_cloud::WIN_cloud(Operation_node* node_ope){
 
   Engine_node* node_engine = node_ope->get_node_engine();
 
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
 
   //---------------------------

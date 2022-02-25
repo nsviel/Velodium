@@ -9,7 +9,7 @@
 #include "../../Interface/LiDAR/Capture.h"
 #include "../../SLAM/Slam.h"
 #include "../../SLAM/CT_ICP/SLAM_configuration.h"
-#include "../../Player/Player.h"
+#include "../../Player/Player_node.h"
 #include "../../Player/Dynamic/Online.h"
 
 
@@ -20,7 +20,7 @@ Scenario::Scenario(Module_node* node_module, Online* online){
 
   Slam* slamManager = node_module->get_slamManager();
   Interface* ioManager = node_module->get_ioManager();
-  Player* playerManager = node_module->get_playerManager();
+  Player_node* node_player = node_module->get_node_player();
 
   this->captureManager = ioManager->get_captureManager();
   this->netManager = ioManager->get_netManager();

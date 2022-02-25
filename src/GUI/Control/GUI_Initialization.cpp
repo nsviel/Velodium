@@ -4,10 +4,11 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Load/Loader.h"
-#include "../../Load/Pather.h"
+#include "../../Load/Load_node.h"
+#include "../../Load/Processing/Loader.h"
+#include "../../Load/Processing/Pather.h"
 #include "../../Module/Module_node.h"
-#include "../../Module/Player/Player.h"
+#include "../../Module/Player/Player_node.h"
 #include "../../Module/Player/Obstacle/Obstacle.h"
 #include "../../Module/Player/Obstacle/Scenario.h"
 
@@ -18,13 +19,14 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
 
   Engine_node* node_engine = node_gui->get_node_engine();
   Module_node* node_module = node_gui->get_node_module();
-  Player* playerManager = node_module->get_playerManager();
+  Player_node* node_player = node_module->get_node_player();
+  Load_node* node_load = node_engine->get_node_load();
 
-  this->sceneManager = node_engine->get_SceneManager();
-  this->obstacleManager = playerManager->get_obstacleManager();
-  this->scenarioManager = playerManager->get_scenarioManager();
-  this->loaderManager = new Loader();
-  this->pathManager = new Pather();
+  this->sceneManager = node_engine->get_sceneManager();
+  this->obstacleManager = node_player->get_obstacleManager();
+  this->scenarioManager = node_player->get_scenarioManager();
+  this->loaderManager = node_load->get_loadManager();
+  this->pathManager = node_load->get_pathManager();
 
   //---------------------------
 }

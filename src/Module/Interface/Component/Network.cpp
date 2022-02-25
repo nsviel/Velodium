@@ -5,7 +5,7 @@
 #include "../Protocol/SSH.h"
 
 #include "../../../Specific/fct_maths.h"
-#include "../../../Load/Pather.h"
+#include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
@@ -83,8 +83,7 @@ void Network::select_sourcePath(){
   //---------------------------
 
   //Select file to send
-  Pather pathManager;
-  path_source = pathManager.get_filePath(path_source);
+  zenity_file("source", path_source);
 
   //Supress unwanted line break
   if (path_source.find('\n')){
@@ -105,8 +104,7 @@ void Network::select_targetPath(){
   //---------------------------
 
   //Select file to send
-  Pather pathManager;
-  pathManager.selectDirectory(path_target);
+  zenity_directory(path_target);
 
   //Supress unwanted line break
   if (path_source.find('\n')){

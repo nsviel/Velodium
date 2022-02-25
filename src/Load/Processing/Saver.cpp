@@ -1,23 +1,28 @@
 #include "Saver.h"
 
-#include "Format/file_PTS.h"
-#include "Format/file_PLY.h"
-#include "Format/file_PTX.h"
-#include "Format/file_PCAP.h"
-#include "Format/file_CSV.h"
-#include "Format/file_OBJ.h"
-#include "Format/file_XYZ.h"
+#include "../Format/file_PTS.h"
+#include "../Format/file_PLY.h"
+#include "../Format/file_PTX.h"
+#include "../Format/file_PCAP.h"
+#include "../Format/file_CSV.h"
+#include "../Format/file_OBJ.h"
+#include "../Format/file_XYZ.h"
 
-#include "../Engine/Scene/Scene.h"
-#include "../Specific/fct_system.h"
-#include "../Specific/fct_transtypage.h"
+#include "../Load_node.h"
+
+#include "../../Engine/Engine_node.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Specific/fct_system.h"
+#include "../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
-Saver::Saver(){
+Saver::Saver(Load_node* node_load){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = node_load->get_node_engine();
+
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->ptsManager = new file_PTS();
   this->plyManager = new file_PLY();

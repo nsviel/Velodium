@@ -1,7 +1,9 @@
 #include "Scala.h"
 
-#include "../../../../Load/Pather.h"
-#include "../../../../Load/Loader.h"
+#include "../../../../Specific/fct_zenity.h"
+#include "../../../../Load/Load_node.h"
+#include "../../../../Load/Processing/Loader.h"
+#include "../../../../Engine/Engine_node.h"
 #include "../../../../Engine/Scene/Scene.h"
 
 //1 frame = 2 lidar scans = 2046 points
@@ -10,10 +12,13 @@
 
 
 //Constructor / Destructor
-Scala::Scala(){
+Scala::Scala(Engine_node* node_engine){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  Load_node* node_load = node_engine->get_node_load();
+
+  this->sceneManager = node_engine->get_sceneManager();
+  this->loaderManager = node_load->get_loadManager();
 
   //---------------------------
 }
@@ -31,13 +36,9 @@ void Scala::loading(string pathDir){
 }
 
 vector<string> Scala::loading_allPathDir(string pathDir){
-  Pather pathManager;
   //---------------------------
 
-  if(pathDir == ""){
-    pathManager.selectDirectory(pathDir);
-  }
-  vector<string> allpath = pathManager.get_directoryAllFilePath(pathDir);
+  vector<string> allpath = zenity_file_vec("Load Scala", pathDir);
 
   //---------------------------
   return allpath;
@@ -48,7 +49,6 @@ vector<Cloud*> Scala::loading_allFile(vector<string> allpath){
 
   string format = "csv";
 
-  Loader loaderManager;
   for(int i=0; i<allpath.size(); i++){
     string path = allpath[i];
     string format = path.substr(path.find_last_of(".") + 1);
@@ -58,8 +58,8 @@ vector<Cloud*> Scala::loading_allFile(vector<string> allpath){
     float Blue = float(rand()%101)/100;
 
     if(format == "csv"){
-      loaderManager.load_cloud_silent(path);
-      Cloud* cloud = loaderManager.get_createdcloud();
+      loaderManager->load_cloud_silent(path);
+      Cloud* cloud = loaderManager->get_createdcloud();
       cloud->path = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
@@ -115,9 +115,8 @@ Cloud* Scala::loading_reoganizeData(vector<Cloud*> clouds){
   }
 
   //Load final cloud
-  Loader loaderManager;
-  loaderManager.load_cloud_creation(cloud_scala);
-  Cloud* cloud = loaderManager.get_createdcloud();
+  loaderManager->load_cloud_creation(cloud_scala);
+  Cloud* cloud = loaderManager->get_createdcloud();
 
   //---------------------------
   return cloud;

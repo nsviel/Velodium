@@ -5,9 +5,11 @@
 
 #include "../../Module_node.h"
 
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Load/Loader.h"
-#include "../../../Load/Saver.h"
+#include "../../../Load/Load_node.h"
+#include "../../../Load/Processing/Loader.h"
+#include "../../../Load/Processing/Saver.h"
 
 #include "../../../Specific/fct_terminal.h"
 #include "../../../Specific/fct_system.h"
@@ -17,10 +19,13 @@
 Capture::Capture(Module_node* node_module){
   //---------------------------
 
-  this->scalaManager = new Scala();
-  this->veloManager = new Velodyne();
-  this->loaderManager = new Loader();
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = node_module->get_node_engine();
+  Load_node* node_load = node_engine->get_node_load();
+
+  this->sceneManager = node_engine->get_sceneManager();
+  this->loaderManager = node_load->get_loadManager();
+  this->scalaManager = new Scala(node_engine);
+  this->veloManager = new Velodyne(node_engine);
 
   this->ID_capture = 0;
   this->nb_subset_max = 20;

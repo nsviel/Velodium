@@ -6,8 +6,8 @@
 
 #include "../Interface.h"
 
-#include "../../../Load/Pather.h"
 #include "../../../Specific/fct_system.h"
+#include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
@@ -65,8 +65,7 @@ void Filemanager::select_dir_path(){
   string path_dir;
   //---------------------------
 
-  Pather pathManager;
-  pathManager.zenity_select_directory(path_dir);
+  zenity_directory(path_dir);
 
   //---------------------------
 }

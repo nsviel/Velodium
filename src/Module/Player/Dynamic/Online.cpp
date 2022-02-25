@@ -19,8 +19,6 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
 
-#include "../../../Load/Pather.h"
-
 #include "../../../Specific/fct_maths.h"
 #include "../../../Specific/fct_transtypage.h"
 #include "../../../Specific/fct_system.h"
@@ -40,7 +38,7 @@ Online::Online(Module_node* node_module){
   this->slamManager = node_module->get_slamManager();
   this->configManager = node_engine->get_configManager();
   this->ioManager = node_module->get_ioManager();
-  this->sceneManager = new Scene();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->visibility_range = 15;
 

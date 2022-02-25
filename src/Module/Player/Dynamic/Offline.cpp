@@ -2,19 +2,30 @@
 
 #include "Online.h"
 
+#include "../Player_node.h"
+
+#include "../../Module_node.h"
+
 #include "../../../Specific/fct_timer.h"
 #include "../../../Specific/fct_system.h"
+#include "../../../Specific/fct_zenity.h"
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Load/Saver.h"
-#include "../../../Load/Pather.h"
+#include "../../../Load/Load_node.h"
+#include "../../../Load/Processing/Saver.h"
 
 
 //Constructor / Destructor
-Offline::Offline(Online* online){
+Offline::Offline(Module_node* node_module){
   //---------------------------
 
-  this->onlineManager = online;
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = node_module->get_node_engine();
+  Player_node* node_player = node_module->get_node_player();
+  Load_node* node_load = node_engine->get_node_load();
+
+  this->onlineManager = node_player->get_onlineManager();
+  this->sceneManager = node_engine->get_sceneManager();
+  this->saveManager = node_load->get_saveManager();
   this->timerManager = new Timer();
 
   this->player_frequency = 10;
@@ -134,13 +145,12 @@ void Offline::player_stop(){
   //---------------------------
 }
 void Offline::player_save(Cloud* cloud){
-  Saver saverManager;
   //---------------------------
 
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
-    saverManager.save_subset(subset, "ply", player_saveas);
+    saveManager->save_subset(subset, "ply", player_saveas);
   }
 
   //---------------------------
@@ -149,8 +159,7 @@ void Offline::player_selectDirSave(){
   //---------------------------
 
   string path;
-  Pather pathManager;
-  pathManager.selectDirectory(path);
+  zenity_directory("", path);
 
   this->player_saveas = path + "/";
 

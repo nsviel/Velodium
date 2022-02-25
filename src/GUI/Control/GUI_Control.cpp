@@ -3,8 +3,7 @@
 #include "../GUI_node.h"
 #include "../Windows/Window_table.h"
 
-#include "../../Load/Pather.h"
-
+#include "../../Load/Load_node.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Camera/struct_viewport.h"
@@ -32,16 +31,17 @@ GUI_control::GUI_control(GUI_node* node){
   Operation_node* node_ope = node_gui->get_node_ope();
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
+  Load_node* node_load = node_engine->get_node_load();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->selectionManager = node_ope->get_selectionManager();
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
-  this->pathManager = new Pather();
+  this->pathManager = node_load->get_pathManager();
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");

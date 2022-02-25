@@ -5,8 +5,6 @@
 
 #include "mqtt/async_client.h"
 
-#include "../../../../Load/Processing/file_JSON.h"
-
 #include <iostream>
 #include <cstdlib>
 #include <string>

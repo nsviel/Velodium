@@ -9,6 +9,8 @@
 #include "UDP/UDP_server.h"
 #include "UDP/UDP_parser_VLP16.h"
 
+#include "../../../../Engine/Engine_node.h"
+#include "../../../../Load/Load_node.h"
 #include "../../../../Load/Processing/dataExtraction.h"
 
 #include <jsoncpp/json/value.h>
@@ -20,10 +22,12 @@
 
 
 //Constructor / Destructor
-Velodyne::Velodyne(){
+Velodyne::Velodyne(Engine_node* node_engine){
   //---------------------------
 
-  this->extractManager = new dataExtraction();
+  Load_node* node_load = node_engine->get_node_load();
+
+  this->extractManager = node_load->get_extractManager();
   this->udpServManager = new UDP_server();
   this->udp_vlp16Manager = new UDP_parser_VLP16();
   this->frameManager = new UDP_frame();

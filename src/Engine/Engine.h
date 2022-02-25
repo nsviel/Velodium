@@ -7,7 +7,6 @@ class Scene;
 class Glyphs;
 
 class Module_node;
-class Operation_node;
 class Engine_node;
 class GUI_node;
 
@@ -34,7 +33,6 @@ public:
   void draw_clouds();
 
   inline Module_node* get_node_module(){return node_module;}
-  inline Operation_node* get_node_ope(){return node_ope;}
   inline Engine_node* get_node_engine(){return node_engine;}
   inline GUI_node* get_node_gui(){return node_gui;}
 
@@ -43,7 +41,6 @@ private:
   Glyphs* glyphManager;
 
   Module_node* node_module;
-  Operation_node* node_ope;
   Engine_node* node_engine;
   GUI_node* node_gui;
 

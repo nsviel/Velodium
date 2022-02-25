@@ -1,6 +1,6 @@
 #include "GUI_Dynamic.h"
 
-#include "../Player.h"
+#include "../Player_node.h"
 #include "../Dynamic/Online.h"
 #include "../Dynamic/Offline.h"
 
@@ -9,6 +9,7 @@
 #include "../../Interface/Interface.h"
 #include "../../Interface/Component/Saving.h"
 
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/Heatmap.h"
@@ -22,16 +23,17 @@
 GUI_Dynamic::GUI_Dynamic(GUI_module* node_gui){
   //---------------------------
 
+  Engine_node* node_engine = node_gui->get_node_engine();
   Operation_node* node_ope = node_gui->get_node_ope();
   Module_node* node_module = node_gui->get_node_module();
-  Player* playerManager = node_module->get_playerManager();
+  Player_node* node_player = node_module->get_node_player();
 
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->onlineManager = playerManager->get_onlineManager();
-  this->offlineManager = playerManager->get_offlineManager();
+  this->onlineManager = node_player->get_onlineManager();
+  this->offlineManager = node_player->get_offlineManager();
   this->ioManager = node_module->get_ioManager();
-  this->sceneManager = new Scene();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
 

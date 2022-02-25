@@ -18,22 +18,12 @@
 
 
 //Constructor / Destructor
-GUI_node::GUI_node(Engine_node* engine, Operation_node* ope, Module_node* module){
-  //---------------------------
-
+GUI_node::GUI_node(Engine_node* engine){
   this->node_engine = engine;
-  this->node_ope = ope;
-  this->node_module = module;
-
   //---------------------------
-  this->init_objects();
-}
-GUI_node::~GUI_node(){}
 
-
-//Main functions
-void GUI_node::init_objects(){
-  //---------------------------
+  this->node_ope = node_engine->get_node_ope();
+  this->node_module = node_engine->get_node_module();
 
   this->gui_initManager = new GUI_Initialization(this);
   this->gui_moduleManager = new GUI_module(this);
@@ -48,6 +38,10 @@ void GUI_node::init_objects(){
 
   //---------------------------
 }
+GUI_node::~GUI_node(){}
+
+
+//Main functions
 void GUI_node::reset(){
   //---------------------------
 

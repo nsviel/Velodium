@@ -7,25 +7,28 @@
 #include "../../Interface/Component/Prediction.h"
 #include "../../Interface/LiDAR/Capture.h"
 
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Engine/Scene/Object/OOBB.h"
 #include "../../../Operation/Transformation/Transforms.h"
-#include "../../../Load/Pather.h"
 #include "../../../Specific/fct_system.h"
+#include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
 Obstacle::Obstacle(Module_node* node_module){
   //---------------------------
 
+  Engine_node* node_engine = node_module->get_node_engine();
+
   this->ioManager = node_module->get_ioManager();
   this->captureManager = ioManager->get_captureManager();
   this->predManager = ioManager->get_predManager();
-  this->sceneManager = new Scene();
+  this->sceneManager = node_engine->get_sceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
-  this->glyphManager = new Glyphs();
 
   //---------------------------
 }
@@ -56,7 +59,7 @@ void Obstacle::add_prediction(){
   //---------------------------
 
   //Get prediction file paths
-  vector<string> path_vec = pathManager->zenity_loading("Prediction loading");
+  vector<string> path_vec = zenity_file_vec("Prediction loading", "");
 
   //Parses predictions files
   predManager->compute_prediction(cloud, path_vec);
@@ -86,7 +89,7 @@ void Obstacle::add_groundTruth(){
   //---------------------------
 
   //Get prediction file paths
-  vector<string> path_vec = pathManager->zenity_loading("Ground truth loading");
+  vector<string> path_vec = zenity_file_vec("Ground truth loading", "");
 
   //Parses predictions files
   predManager->compute_groundTruth(cloud, path_vec);

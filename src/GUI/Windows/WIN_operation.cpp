@@ -25,7 +25,7 @@ WIN_operation::WIN_operation(Operation_node* node_ope){
   this->selectionManager = node_ope->get_selectionManager();
   this->fitManager = node_ope->get_fittingManager();
   this->extractionManager = node_ope->get_extractionManager();
-  this->sceneManager = node_engine->get_SceneManager();
+  this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->transformManager = new Transforms();
 

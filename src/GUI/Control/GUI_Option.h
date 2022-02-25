@@ -11,6 +11,7 @@ class Attribut;
 class Heatmap;
 class Transforms;
 class Renderer;
+class Configuration;
 
 #include "../../common.h"
 
@@ -40,6 +41,7 @@ private:
   GUI_control* gui_controlManager;
   GUI_option* gui_optionManager;
 
+  Configuration* configManager;
   Scene* sceneManager;
   Attribut* attribManager;
   Transforms* transformManager;

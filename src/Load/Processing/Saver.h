@@ -1,9 +1,10 @@
 #ifndef SAVER_H
 #define SAVER_H
 
-#include "../Engine/Data/struct_dataFile.h"
-#include "../common.h"
+#include "../../Engine/Data/struct_dataFile.h"
+#include "../../common.h"
 
+class Load_node;
 class Scene;
 
 class file_PTS;
@@ -19,7 +20,7 @@ class Saver
 {
 public:
   //Constructor / Destructor
-  Saver();
+  Saver(Load_node* node_load);
   ~Saver();
 
 public:

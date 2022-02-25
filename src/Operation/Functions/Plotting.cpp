@@ -1,7 +1,7 @@
 #include "Plotting.h"
 
-#include "../Specific/fct_maths.h"
-#include "../Specific/color.h"
+#include "../../Specific/fct_maths.h"
+#include "../../Specific/color.h"
 
 
 //Constructor / Destructor

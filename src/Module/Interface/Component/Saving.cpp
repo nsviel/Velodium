@@ -1,19 +1,22 @@
 #include "Saving.h"
 
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/OpenGL/Camera/Renderer.h"
-#include "../../../Load/Saver.h"
-#include "../../../Load/Pather.h"
+#include "../../../Load/Load_node.h"
+#include "../../../Load/Processing/Saver.h"
 
 #include "../../../Specific/fct_system.h"
+#include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
-Saving::Saving(Renderer* renderer){
+Saving::Saving(Engine_node* node_engine){
   //---------------------------
 
-  this->renderManager = renderer;
-  this->saverManager = new Saver();
-  this->pathManager = new Pather();
+  Load_node* node_load = node_engine->get_node_load();
+
+  this->renderManager = node_engine->get_renderManager();
+  this->saverManager = node_load->get_saveManager();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_frame = path_dir + "frame/";
@@ -51,8 +54,7 @@ void Saving::save_image_path(){
   //---------------------------
 
   string path;
-  Pather pathManager;
-  pathManager.selectDirectory(path);
+  zenity_directory("", path);
 
   this->path_image = path + "/";
 
