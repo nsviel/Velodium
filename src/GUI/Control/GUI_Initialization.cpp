@@ -6,6 +6,9 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Load/Loader.h"
 #include "../../Load/Pather.h"
+#include "../../Module/Module_node.h"
+#include "../../Module/Player/Player.h"
+#include "../../Module/Player/Obstacle/Obstacle.h"
 
 
 //Constructor / Destructor
@@ -13,8 +16,11 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
   //---------------------------
 
   Engine_node* node_engine = node_gui->get_node_engine();
+  Module_node* node_module = node_gui->get_node_module();
+  Player* playerManager = node_module->get_playerManager();
 
   this->sceneManager = node_engine->get_SceneManager();
+  this->obstacleManager = playerManager->get_obstacleManager();
   this->loaderManager = new Loader();
   this->pathManager = new Pather();
 
@@ -115,6 +121,7 @@ void GUI_Initialization::init_mode(int mode){
     case 7:{//AI prediction
       sceneManager->remove_cloud_all();
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
+      obstacleManager->add_prediction("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
       break;
     }
     case 8:{//Frame for prediction

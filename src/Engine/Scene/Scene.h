@@ -81,6 +81,7 @@ public:
 
   int get_orderSelectedcloud();
   int get_listcloudSize();
+  int get_subset_oID(Cloud* cloud, Subset* subset);
   vector<string> get_nameByOrder();
   bool is_cloudExist(Cloud* cloud);
   bool is_cloudNameExist(Cloud* cloud);

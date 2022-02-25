@@ -121,6 +121,26 @@ namespace{
     //---------------------------
     return list;
   }
+  std::vector<std::string> list_allPaths(string path_dir){
+    //---------------------------
+
+    struct dirent* files;
+    DIR* directory = opendir(path_dir.c_str());
+    std::vector<std::string> path_vec;
+
+    //Filtre and store files present in the folder
+    while ((files = readdir(directory)) != NULL){
+      std::string path_file = files->d_name;
+      std::string path_full = path_dir + path_file;
+      path_vec.push_back(path_full);
+    }
+
+    //Close and return the file names list
+    closedir(directory);
+
+    //---------------------------
+    return path_vec;
+  }
   std::vector<std::string> list_allDirs(const char *path){
     //---------------------------
 

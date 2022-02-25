@@ -71,7 +71,7 @@ void Obstacle::add_prediction(string path_dir){
   //---------------------------
 
   //Get prediction file paths
-  vector<string> path_vec = list_allFiles(path_dir.c_str());
+  vector<string> path_vec = list_allPaths(path_dir);
 
   //Parses predictions files
   predManager->compute_prediction(cloud, path_vec);

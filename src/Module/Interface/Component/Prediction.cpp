@@ -116,6 +116,33 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
 
   //---------------------------
 }
+void Prediction::compute_prediction(string path_dir){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  if(cloud == nullptr) return;
+  //---------------------------
+
+  //Retrieve prediction frame ID
+  vector<string> path_vec = list_allPaths(path_dir);
+
+  for(int i=0; i<path_vec.size(); i++){
+    string path_file = path_vec[i];
+
+    //Retrieve prediction frame ID
+    int frame_ID = parse_frame_ID(path_file);
+
+    //For the subset with same name
+    for(int j=0; j<cloud->subset.size(); j++){
+      Subset* subset = sceneManager->get_subset(cloud, j);
+
+      if(subset->ID == frame_ID){
+        this->parse_json_prediction(subset, path_file);
+        break;
+      }
+    }
+  }
+
+  //---------------------------
+}
 void Prediction::compute_prediction(Cloud* cloud, vector<string> path_vec){
   if(cloud == nullptr) return;
   //---------------------------

@@ -7,6 +7,7 @@ class GUI_node;
 class Scene;
 class Loader;
 class Pather;
+class Obstacle;
 
 
 class GUI_Initialization
@@ -24,6 +25,7 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Pather* pathManager;
+  Obstacle* obstacleManager;
 };
 
 #endif

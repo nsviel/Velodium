@@ -789,6 +789,21 @@ int Scene::get_orderSelectedcloud(){
   //---------------------------
   return order;
 }
+int Scene::get_subset_oID(Cloud* cloud, Subset* subset){
+  int oID = -1;
+  //---------------------------
+
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset_test = *next(cloud->subset.begin(), i);
+    if(subset->ID == subset_test->ID){
+      oID = i;
+      break;
+    }
+  }
+
+  //---------------------------
+  return oID;
+}
 int Scene::get_listcloudSize(){
   return database.list_cloud->size();
 }
