@@ -9,6 +9,7 @@ class Prediction;
 class Module_node;
 class Network;
 class Capture;
+class Filemanager;
 
 
 class Interface
@@ -24,9 +25,7 @@ public:
   void runtime();
 
   //Subfunctions
-  void clean_directories();
-  void check_directories();
-  void select_dir_path();
+
 
   inline GPS* get_gpsManager(){return gpsManager;}
   inline Saving* get_saveManager(){return saveManager;}
@@ -42,6 +41,7 @@ private:
   Prediction* predManager;
   Network* netManager;
   Capture* captureManager;
+  Filemanager* fileManager;
 
   bool is_clean_dir;
   string path_dir;

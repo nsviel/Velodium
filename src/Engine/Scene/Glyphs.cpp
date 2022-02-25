@@ -145,8 +145,10 @@ void Glyphs::reset(){
 
   //Invisibilize all cloud dependant glyphs
   Glyph* aabb = get_glyph("aabb");
-  aabb->location.clear();
-  this->update_glyph_location(aabb);
+  if(aabb != nullptr){
+    aabb->location.clear();
+    this->update_glyph_location(aabb);
+  }
 
   for (int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
@@ -252,7 +254,7 @@ void Glyphs::update_glyph_object(string name, Cloud* cloud){
   Glyph* glyph = get_glyph(name);
   //---------------------------
 
-  if(name == "aabb"){
+  if(name == "aabb" && glyph != nullptr){
     AABB aabbManager;
     aabbManager.update_aabb(glyph, cloud);
 
@@ -752,7 +754,7 @@ void Glyphs::set_visibility_axisCloud(bool value){
 }
 Glyph* Glyphs::get_glyph(string name){
   list<Glyph*>* list_glyph = sceneManager->get_list_glyph();
-  Glyph* glyph_out;
+  Glyph* glyph_out = nullptr;
   //---------------------------
 
   for(int i=0;i<list_glyph->size();i++){

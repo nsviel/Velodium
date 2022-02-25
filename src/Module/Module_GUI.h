@@ -3,7 +3,6 @@
 
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Interface/GUI/GUI_Interface.h"
-#include "Interface/LiDAR/GUI/GUI_Lidar.h"
 #include "Player/GUI/GUI_Player.h"
 
 #include "../GUI/GUI_node.h"
@@ -24,7 +23,6 @@ public:
     this->node_engine = node_gui->get_node_engine();
     this->node_ope = node_gui->get_node_ope();
 
-    this->gui_lidarManager = new GUI_Lidar(this);
     this->gui_playerManager = new GUI_Player(this);
     this->gui_slamManager = new GUI_Slam(this);
     this->gui_ioManager = new GUI_Interface(this);
@@ -44,10 +42,12 @@ public:
     if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
       //-------------------------------
 
+      ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
+
       // Interface stuff
       if(module_velodyne){
         if(ImGui::BeginTabItem("Interface")){
-          gui_ioManager->design_Network();
+          gui_ioManager->design_Interface();
           ImGui::EndTabItem();
         }
       }
@@ -68,14 +68,7 @@ public:
         }
       }
 
-      // LiDAR management
-      if(module_velodyne){
-        if(ImGui::BeginTabItem("LiDAR")){
-          gui_lidarManager->design_Velodyne();
-          gui_lidarManager->design_Scala();
-          ImGui::EndTabItem();
-        }
-      }
+      ImGui::PopStyleColor();
 
       //-------------------------------
       ImGui::EndTabBar();
@@ -95,7 +88,6 @@ public:
 
   inline GUI_node* get_node_gui(){return node_gui;}
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
-  inline GUI_Lidar* get_gui_lidarManager(){return gui_lidarManager;}
   inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
   inline GUI_Interface* get_gui_ioManager(){return gui_ioManager;}
 
@@ -105,7 +97,6 @@ private:
   Operation_node* node_ope;
 
   GUI_node* node_gui;
-  GUI_Lidar* gui_lidarManager;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;
   GUI_Interface* gui_ioManager;

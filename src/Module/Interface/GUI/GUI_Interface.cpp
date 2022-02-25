@@ -1,5 +1,7 @@
 #include "GUI_Interface.h"
 
+#include "GUI_Lidar.h"
+
 #include "../Interface.h"
 #include "../Component/Network.h"
 #include "../Protocol/MQTT/MQTT.h"
@@ -25,6 +27,7 @@ GUI_Interface::GUI_Interface(GUI_module* node_gui){
   this->mqttManager = netManager->get_mqttManager();
   this->sftpManager = netManager->get_sftpManager();
   this->sshManager = netManager->get_sshManager();
+  this->gui_lidarManager = new GUI_Lidar(node_gui);
 
   this->item_width = 100;
 
@@ -32,6 +35,30 @@ GUI_Interface::GUI_Interface(GUI_module* node_gui){
 }
 GUI_Interface::~GUI_Interface(){}
 
+void GUI_Interface::design_Interface(){
+  //---------------------------
+
+  if(ImGui::BeginTabBar("Interface", ImGuiTabBarFlags_None)){
+    //-------------------------------
+
+    // Offline cloud player
+    if(ImGui::BeginTabItem("Network")){
+      this->design_Network();
+      ImGui::EndTabItem();
+    }
+
+    // LiDAR management
+    if(ImGui::BeginTabItem("LiDAR")){
+      gui_lidarManager->design_Velodyne();
+      gui_lidarManager->design_Scala();
+      ImGui::EndTabItem();
+    }
+
+    ImGui::EndTabBar();
+  }
+
+  //---------------------------
+}
 void GUI_Interface::design_Network(){
   //---------------------------
 

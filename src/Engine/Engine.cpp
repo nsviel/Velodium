@@ -112,9 +112,11 @@ void Engine::draw_clouds(){
 
         //Display for current subset
         if(subset->ID == subset_selected->ID && subset->obstacle_pr.oobb.size() != 0){
-          //Subset* subset_m1 = *next(cloud->subset.begin(), j - 1);
-          //if(subset_m1 != nullptr)
-          glyphManager->drawing_prediction(subset);
+          int oID = sceneManager->get_subset_oID(cloud, subset);
+          if(oID > 0){
+            Subset* subset_m1 = *next(cloud->subset.begin(), j - 1);
+            glyphManager->drawing_prediction(subset_m1);
+          }
         }
       }
     }

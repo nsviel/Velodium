@@ -10,7 +10,7 @@
 
 #include "../../Load/Pather.h"
 #include "../../Module/Module_GUI.h"
-#include "../../Module/Player/Dynamic/GUI/GUI_Dynamic.h"
+#include "../../Module/Player/GUI/GUI_Dynamic.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"

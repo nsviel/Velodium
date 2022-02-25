@@ -1,7 +1,7 @@
 #ifndef GUI_OBSTACLE_H
 #define GUI_OBSTACLE_H
 
-#include "../../../../common.h"
+#include "../../../common.h"
 
 class Scene;
 class GUI_module;

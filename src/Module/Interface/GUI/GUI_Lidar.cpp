@@ -1,13 +1,13 @@
 #include "GUI_Lidar.h"
 
-#include "../Capture.h"
-#include "../Scala/Scala.h"
-#include "../Velodyne/Velodyne.h"
+#include "../LiDAR/Capture.h"
+#include "../LiDAR/Scala/Scala.h"
+#include "../LiDAR/Velodyne/Velodyne.h"
 
-#include "../../Interface.h"
+#include "../Interface.h"
 
-#include "../../../Module_GUI.h"
-#include "../../../Module_node.h"
+#include "../../Module_GUI.h"
+#include "../../Module_node.h"
 
 
 //Constructor / Destructor

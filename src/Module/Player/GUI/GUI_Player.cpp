@@ -1,7 +1,7 @@
 #include "GUI_Player.h"
 
-#include "../Dynamic/GUI/GUI_Dynamic.h"
-#include "../Obstacle/GUI/GUI_Obstacle.h"
+#include "GUI_Dynamic.h"
+#include "GUI_Obstacle.h"
 
 #include "../../Module_GUI.h"
 

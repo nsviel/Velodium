@@ -271,21 +271,22 @@ void Scene::reset_cloud(Cloud* cloud){
     this->update_subset_MinMax(subset);
     this->update_subset_location(subset);
     this->update_subset_color(subset);
-sayHello();
-    //Delete obstacles glyphs
+
+    /*//Delete obstacles glyphs
     for(int i=0; i<subset->obstacle_pr.oobb.size(); i++){
       say(subset->obstacle_pr.oobb.size());
       Glyph* glyph = subset->obstacle_pr.oobb[i];
       say(glyph->name);
       delete glyph;
+      say("ok");
     }
     subset->obstacle_pr.oobb.clear();
     for(int i=0; i<subset->obstacle_gt.oobb.size(); i++){
       Glyph* glyph = subset->obstacle_gt.oobb[i];
       delete glyph;
     }
-    subset->obstacle_gt.oobb.clear();
-sayHello();
+    subset->obstacle_gt.oobb.clear();*/
+
     //Reset frame
     subset->frame.reset();
   }

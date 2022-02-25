@@ -8,6 +8,7 @@ extern struct Database database;
 
 class Data;
 
+#include <list>
 #include <GLFW/glfw3.h>
 
 
@@ -97,6 +98,8 @@ public:
 
 private:
   Data* dataManager;
+
+  list<Cloud*>* list_cloud;
 };
 
 #endif

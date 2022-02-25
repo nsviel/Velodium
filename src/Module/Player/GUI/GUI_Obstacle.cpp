@@ -1,29 +1,27 @@
 #include "GUI_Obstacle.h"
 
-#include "../Obstacle.h"
-#include "../Scenario.h"
+#include "GUI_Dynamic.h"
+#include "GUI_Player.h"
 
-#include "../../Dynamic/GUI/GUI_Dynamic.h"
+#include "../Player.h"
+#include "../Obstacle/Obstacle.h"
+#include "../Obstacle/Scenario.h"
+#include "../Dynamic/Online.h"
 
-#include "../../../Interface/Interface.h"
-#include "../../../Interface/Component/Prediction.h"
-#include "../../../Interface/Component/GPS.h"
-#include "../../../Interface/Component/Network.h"
+#include "../../Interface/Interface.h"
+#include "../../Interface/Component/Prediction.h"
+#include "../../Interface/Component/GPS.h"
+#include "../../Interface/Component/Network.h"
+#include "../../Interface/GUI/GUI_Lidar.h"
+#include "../../Interface/LiDAR/Capture.h"
+#include "../../Module_GUI.h"
+#include "../../Module_node.h"
+#include "../../SLAM/GUI/GUI_Slam.h"
 
-#include "../../../Player/Player.h"
-#include "../../../Player/Dynamic/Online.h"
-
-#include "../../../Module_GUI.h"
-#include "../../../Module_node.h"
-#include "../../../Interface/LiDAR/GUI/GUI_Lidar.h"
-#include "../../../Interface/LiDAR/Capture.h"
-#include "../../../Player/GUI/GUI_Player.h"
-#include "../../../SLAM/GUI/GUI_Slam.h"
-
-#include "../../../../Engine/Scene/Scene.h"
-#include "../../../../GUI/GUI_node.h"
-#include "../../../../Operation/Operation_node.h"
-#include "../../../../Operation/Functions/CoordTransform.h"
+#include "../../../Engine/Scene/Scene.h"
+#include "../../../GUI/GUI_node.h"
+#include "../../../Operation/Operation_node.h"
+#include "../../../Operation/Functions/CoordTransform.h"
 
 
 //Constructor / Destructor
@@ -245,8 +243,9 @@ void GUI_Obstacle::parameter_watcher(){
     this->watcher_gps();
 
     //Capture watcher
-    GUI_Lidar* gui_lidarManager = node_gui->get_gui_lidarManager();
-    gui_lidarManager->velo_capture();
+    GUI_Interface* gui_io = node_gui->get_gui_ioManager();
+    GUI_Lidar* gui_lidar = gui_io->get_gui_lidarManager();
+    gui_lidar->velo_capture();
 
     //MQTT messager
     //GUI_Network* gui_netManager = gui_module->get_gui_netManager();
@@ -277,7 +276,7 @@ void GUI_Obstacle::parameter_interfacing(){
 
     //Prediction directory
     if(ImGui::Button("...##1")){
-      ioManager->select_dir_path();
+      //ioManager->select_dir_path();
     }
     ImGui::SameLine();
     string dir_path = ioManager->get_dir_path();

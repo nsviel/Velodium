@@ -6,7 +6,7 @@ class Velodyne;
 class Capture;
 class GUI_module;
 
-#include "../../../../common.h"
+#include "../../../common.h"
 
 
 class GUI_Lidar

@@ -1,7 +1,7 @@
 #ifndef GUI_DYNAMIC_H
 #define GUI_DYNAMIC_H
 
-#include "../../../../common.h"
+#include "../../../common.h"
 
 class Scene;
 class GUI_module;
