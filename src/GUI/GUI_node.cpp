@@ -54,7 +54,7 @@ void GUI_node::update(){}
 void GUI_node::runtime(){
   //---------------------------
 
-  gui_moduleManager->runtime();
+  //gui_moduleManager->runtime();sayHello();
 
   //---------------------------
 }

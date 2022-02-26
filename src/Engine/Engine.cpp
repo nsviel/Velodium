@@ -13,8 +13,8 @@ Database database;
 
 
 //Constructor / Destructor
-Engine::Engine(Engine_node* engine, bool window_ON){
-  this->with_window = window_ON;
+Engine::Engine(Engine_node* engine){
+  this->with_window = true;
   this->node_engine = engine;
   //---------------------------
 

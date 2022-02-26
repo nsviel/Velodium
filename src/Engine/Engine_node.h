@@ -15,6 +15,7 @@ class Shader;
 class Renderer;
 class Viewport;
 class Dimension;
+class Engine;
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -45,6 +46,7 @@ public:
   inline Shader* get_shaderManager(){return shaderManager;}
   inline Renderer* get_renderManager(){return renderManager;}
   inline Viewport* get_viewportManager(){return viewportManager;}
+  inline Engine* get_engineManager(){return engineManager;}
 
 private:
   Operation_node* node_ope;
@@ -60,6 +62,7 @@ private:
   Renderer* renderManager;
   Viewport* viewportManager;
   Dimension* dimManager;
+  Engine* engineManager;
 };
 
 #endif

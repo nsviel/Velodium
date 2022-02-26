@@ -16,14 +16,14 @@
 
 
 //Constructor / Destructor
-Offline::Offline(Module_node* node_module){
+Offline::Offline(Module_node* node_module, Online* online){
+  this->onlineManager = online;
   //---------------------------
 
   Engine_node* node_engine = node_module->get_node_engine();
   Player_node* node_player = node_module->get_node_player();
   Load_node* node_load = node_engine->get_node_load();
 
-  this->onlineManager = node_player->get_onlineManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->saveManager = node_load->get_saveManager();
   this->timerManager = new Timer();

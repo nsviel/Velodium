@@ -1,5 +1,7 @@
 #include "Engine_node.h"
 
+#include "Engine.h"
+
 #include "Scene/Configuration.h"
 #include "Scene/Scene.h"
 #include "Scene/Glyphs.h"
@@ -21,10 +23,6 @@ Engine_node::Engine_node(Configuration* config, GLFWwindow* window){
   this->configManager = config;
   //---------------------------
 
-  this->node_load = new Load_node(this);
-  this->node_ope = new Operation_node(this);
-  this->node_module = new Module_node(this);
-  this->node_gui = new GUI_node(this);
 
   this->dimManager = new Dimension(window, configManager);
   this->shaderManager = new Shader(dimManager);
@@ -33,6 +31,12 @@ Engine_node::Engine_node(Configuration* config, GLFWwindow* window){
   this->viewportManager = new Viewport(dimManager);
   this->sceneManager = new Scene();
   this->glyphManager = new Glyphs();
+
+  this->node_load = new Load_node(this);
+  this->node_ope = new Operation_node(this);
+  this->node_module = new Module_node(this);
+  this->node_gui = new GUI_node(this);
+  this->engineManager = new Engine(this);
 
   //---------------------------
 }

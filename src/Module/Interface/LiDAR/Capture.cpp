@@ -124,7 +124,7 @@ void Capture::operation_new_subset(Subset* subset){
   //Supress null points
   this->supress_nullpoints(subset);
 
-  sayHello();
+  // /sayHello();
 
   //FUITE DE MEMOIRE ICIIIIIIIIIIIIIIIIIIII
 

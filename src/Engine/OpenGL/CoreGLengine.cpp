@@ -116,7 +116,7 @@ void CoreGLengine::init_object(){
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
-  this->engineManager = new Engine(node_engine, openglDisplay);
+  this->engineManager = node_engine->get_engineManager();
 
   //---------------------------
 }

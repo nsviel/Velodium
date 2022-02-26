@@ -14,7 +14,7 @@ class Offline
 {
 public:
   //Constructor / Destructor
-  Offline(Module_node* node_module);
+  Offline(Module_node* node_module, Online* online);
   ~Offline();
 
 public:

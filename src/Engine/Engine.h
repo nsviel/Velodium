@@ -20,7 +20,7 @@ class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Engine_node* engine, bool with_window);
+  Engine(Engine_node* engine);
   ~Engine();
 
 public:
