@@ -94,7 +94,7 @@ void GUI_menuBar::MenuBar_menus(){
       sceneManager->selection_setNext();
     }
     if(ImGui::MenuItem("Center cloud")){
-      if(sceneManager->is_atLeastOnecloud()){
+      if(!sceneManager->get_is_list_empty()){
         Transforms transformManager;
         transformManager.make_centering(cloud);
         //Module* moduleManager = engineManager->get_moduleManager();
@@ -145,7 +145,7 @@ void GUI_menuBar::MenuBar_icons(){
 
   //Cloud info
   if(ImGui::Button(ICON_FA_COMMENT, ImVec2(iconSize,iconSize))){
-    if(sceneManager->is_atLeastOnecloud()){
+    if(!sceneManager->get_is_list_empty()){
       window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
     }
   }
@@ -156,7 +156,7 @@ void GUI_menuBar::MenuBar_icons(){
   //Heatmap
   //ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 10);
   if(ImGui::Button(ICON_FA_EYE, ImVec2(iconSize,iconSize))){
-    if(sceneManager->is_atLeastOnecloud()){
+    if(!sceneManager->get_is_list_empty()){
       //Heatmap window
       window_tab.show_heatmap = !window_tab.show_heatmap;
     }

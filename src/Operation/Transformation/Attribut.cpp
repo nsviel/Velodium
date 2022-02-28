@@ -698,7 +698,7 @@ void Attribut::compute_normals_planFitting(Subset* subset){
   console.AddLog("#", log);
 }
 void Attribut::compute_normals_invert(){
-  if(sceneManager->is_atLeastOnecloud()){
+  if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     Subset* subset_init = sceneManager->get_subset_selected_init();
@@ -756,7 +756,7 @@ void Attribut::compute_checkForNan(Subset* subset){
 
 //Intensity
 void Attribut::compute_intensityInversion(){
-  if(sceneManager->is_atLeastOnecloud()){
+  if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
@@ -813,7 +813,7 @@ void Attribut::fct_convert2048to255(Subset* subset){
   sceneManager->update_subset_color(subset);
 }
 void Attribut::fct_moins(){
-  if(sceneManager->is_atLeastOnecloud()){
+  if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     vector<float>& Is = subset->I;
@@ -856,7 +856,7 @@ vec2 Attribut::get_IsRange(){
   vector<float>& Is = subset->I;
   //---------------------------
 
-  if(sceneManager->is_atLeastOnecloud() && Is.size() != 0){
+  if(!sceneManager->get_is_list_empty() && Is.size() != 0){
     float min = fct_max(Is);
     for(int i=0; i<Is.size(); i++){
       if(min > Is[i] && Is[i] != -1.0f){

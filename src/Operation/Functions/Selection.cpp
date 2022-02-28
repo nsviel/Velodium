@@ -9,6 +9,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object/Mark.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
 #include "../../Specific/fct_maths.h"
@@ -52,7 +53,7 @@ void Selection::update(){
   //---------------------------
 }
 void Selection::validate(){
-  if(sceneManager->is_atLeastOnecloud()){
+  if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = sceneManager->get_subset_selected();
     Subset* subset_init = sceneManager->get_subset_selected_init();
@@ -403,6 +404,10 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     }
   }
 
+  Mark* markObject = glyphManager->get_object_mark();
+  Glyph* glyph = markObject->get_selection_frame();
+  glyph->location.clear();
+
   //--------------------------
 }
 void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
@@ -427,7 +432,10 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   xyz.push_back(pt2);
 
   //Update frame glyph
-  //glyphManager->update_glyph("selection", xyz);
+  Mark* markObject = glyphManager->get_object_mark();
+  Glyph* glyph = markObject->get_selection_frame();
+  glyph->location = xyz;
+  glyphManager->update_glyph_location(glyph);
 
   //---------------------------
 }

@@ -5,30 +5,31 @@
 Mark::Mark(){
   //---------------------------
 
-  this->selection_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  this->selection_frame_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+  this->create_selection_frame();
 
   //---------------------------
 }
 Mark::~Mark(){}
 
-Glyph* Mark::obj_frameSelection(){
-  Glyph* selection = new Glyph();
+void Mark::create_selection_frame(){
+  selection_frame = new Glyph();
   //---------------------------
 
   //Create glyph
-  selection->name = "selection";
-  selection->draw_width = 1;
-  selection->draw_type = "line";
-  selection->color_unique = selection_color;
-  selection->visibility = true;
-  selection->permanent = true;
+  selection_frame->name = "selection";
+  selection_frame->draw_width = 1;
+  selection_frame->draw_type = "line";
+  selection_frame->color_unique = selection_frame_color;
+  selection_frame->visibility = true;
+  selection_frame->permanent = true;
 
   for(int i=0; i<8; i++){
-    selection->color.push_back(selection_color);
+    selection_frame->color.push_back(selection_frame_color);
   }
 
   //---------------------------
-  return selection;
 }
 Glyph* Mark::obj_pointsAtLocation(vector<vec3>& pos){
   Glyph* ptAtLoc = new Glyph();
@@ -101,4 +102,11 @@ Glyph* Mark::obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in
 
   //---------------------------
   return sphere;
+}
+void Mark::update_selection_frame(vector<vec3> xyz){
+  //---------------------------
+
+  selection_frame->location = xyz;
+
+  //---------------------------
 }

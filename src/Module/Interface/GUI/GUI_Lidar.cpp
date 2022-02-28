@@ -28,21 +28,6 @@ GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
 GUI_Lidar::~GUI_Lidar(){}
 
 //Main function
-void GUI_Lidar::design_Scala(){
-  if(ImGui::CollapsingHeader("Scala")){
-    //---------------------------
-
-    if(ImGui::Button("Load in directory", ImVec2(item_width,0))){
-      scalaManager->loading("");
-    }
-
-    if(ImGui::Button("Load fast", ImVec2(item_width,0))){
-      scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
-    }
-
-    //---------------------------
-  }
-}
 void GUI_Lidar::design_Velodyne(){
   //---------------------------
 
@@ -51,14 +36,27 @@ void GUI_Lidar::design_Velodyne(){
   this->velo_parameter();
 
   //---------------------------
+  ImGui::Separator();
 }
+void GUI_Lidar::design_Scala(){
+  //---------------------------
+
+  this->scala_state();
+  this->scala_test();
+
+  //---------------------------
+  ImGui::Separator();
+}
+
 
 //Velodyne subfunctions
 void GUI_Lidar::velo_state(){
   //---------------------------
 
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Velodyne");
+
   //Motor state
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "State");
+  ImGui::Text("State");
   ImGui::SameLine();
   int rot_freq = veloManager->get_rot_freq();
   int rot_rpm = veloManager->get_rot_rpm();
@@ -153,4 +151,26 @@ void GUI_Lidar::velo_parameter(){
     //---------------------------
     ImGui::Separator();
   }
+}
+
+//Scala subfunctions
+void GUI_Lidar::scala_state(){
+  //---------------------------
+
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Scala");
+
+  //---------------------------
+}
+void GUI_Lidar::scala_test(){
+  //---------------------------
+
+  if(ImGui::Button("Load in directory", ImVec2(item_width,0))){
+    scalaManager->loading("");
+  }
+
+  if(ImGui::Button("Load fast", ImVec2(item_width,0))){
+    scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
+  }
+
+  //---------------------------
 }

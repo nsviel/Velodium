@@ -348,7 +348,7 @@ void GUI_Slam::statistics(){
   int map_size_abs = 0;
   int map_size_rlt = 0;
 
-  if(sceneManager->is_atLeastOnecloud()){
+  if(!sceneManager->get_is_list_empty()){
     Subset* subset = sceneManager->get_subset_selected();
     Frame* frame = &subset->frame;
 

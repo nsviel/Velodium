@@ -53,8 +53,8 @@ void GUI_node::update(){}
 void GUI_node::runtime(){
   //---------------------------
 
-  //gui_moduleManager->runtime();sayHello();
-
+  gui_moduleManager->runtime();
+  
   //---------------------------
 }
 void GUI_node::exit(){

@@ -10,6 +10,7 @@ class Axis;
 class AABB;
 class Normal;
 class OOBB;
+class Mark;
 
 
 class Glyphs
@@ -41,15 +42,17 @@ public:
   //Glyph creation / supression
   void insert_into_gpu(Glyph* glyph);
   void remove_glyph_scene(int ID);
+  void remove_glyph_subset(Subset* subset);
   void create_glyph_scene(Glyph* glyph);
   void create_glyph_subset(Subset* subset);
-  Glyph* create_glyph_ostacle();
+  Glyph create_glyph_ostacle();
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
 
   inline Grid* get_object_grid(){return gridObject;}
   inline Axis* get_object_axis(){return axisObject;}
   inline AABB* get_object_aabb(){return aabbObject;}
   inline Normal* get_object_normal(){return normObject;}
+  inline Mark* get_object_mark(){return markObject;}
 
 private:
   Engine_node* node_engine;
@@ -58,6 +61,7 @@ private:
   AABB* aabbObject;
   Normal* normObject;
   OOBB* oobbObject;
+  Mark* markObject;
 
   list<Glyph*>* list_glyph;
   int ID_glyph;

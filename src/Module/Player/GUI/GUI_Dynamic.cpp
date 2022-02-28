@@ -51,6 +51,28 @@ void GUI_Dynamic::design_dynamic(){
 
   //---------------------------
 }
+void GUI_Dynamic::runtime_player_mouse(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  ImGuiIO io = ImGui::GetIO();
+  //----------------------------
+
+  //Wheel - rolling stone
+  if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
+    if(cloud != nullptr){
+      int subset_selected_ID = cloud->ID_selected;
+
+      if(io.MouseWheel > 0){
+        subset_selected_ID++;
+      }else{
+        subset_selected_ID--;
+      }
+
+      offlineManager->select_bySubsetID(cloud, subset_selected_ID);
+    }
+  }
+
+  //----------------------------
+}
 
 //Subfunctions
 void GUI_Dynamic::player_run(){
@@ -323,26 +345,4 @@ void GUI_Dynamic::parameter_online(){
     //---------------------------
     ImGui::Separator();
   }
-}
-void GUI_Dynamic::runtime_player_mouse(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  ImGuiIO io = ImGui::GetIO();
-  //----------------------------
-
-  //Wheel - rolling stone
-  if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
-    if(cloud != nullptr){
-      int subset_selected_ID = cloud->ID_selected;
-
-      if(io.MouseWheel > 0){
-        subset_selected_ID++;
-      }else{
-        subset_selected_ID--;
-      }
-
-      offlineManager->select_bySubsetID(cloud, subset_selected_ID);
-    }
-  }
-
-  //----------------------------
 }

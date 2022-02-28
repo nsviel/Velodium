@@ -59,6 +59,26 @@ void GUI_Obstacle::design_Obstacle(){
 
   //---------------------------
 }
+void GUI_Obstacle::runtime_display_naming(){
+  Subset* subset = sceneManager->get_subset_selected();
+  if(subset == nullptr) return;
+  this->label_ID = 0;
+  //---------------------------
+
+  Obstac* obstacle_pr = &subset->obstacle_pr;
+
+  for(int j=0; j<obstacle_pr->name.size(); j++){
+    string name = obstacle_pr->name[j];
+    vec3 position = obstacle_pr->position[j];
+    position.z = obstacle_pr->dimension[j].z;
+
+    this->compute_draw_text(name, position);
+
+    this->label_ID++;
+  }
+
+  //---------------------------
+}
 
 //Actions
 void GUI_Obstacle::compute_scenario(){
@@ -97,32 +117,11 @@ void GUI_Obstacle::compute_scenario(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Obstacle::compute_display_naming(){
-  Subset* subset = sceneManager->get_subset_selected();
-  if(subset == nullptr) return;
-  label_ID = 0;
-  //---------------------------
-
-  Obstac* obstacle_pr = &subset->obstacle_pr;
-
-  for(int j=0; j<obstacle_pr->name.size(); j++){
-    string name = obstacle_pr->name[j];
-    vec3 position = obstacle_pr->position[j];
-    position.z = obstacle_pr->dimension[j].z;
-
-    this->compute_draw_text(name, position);
-
-    label_ID++;
-  }
-
-  //---------------------------
-}
 void GUI_Obstacle::compute_draw_text(string text, vec3 position){
   //---------------------------
 
   //Overlay flags
-  ImGuiWindowFlags window_flags = 0;
-  window_flags |= ImGuiWindowFlags_NoTitleBar;
+  ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar;
   window_flags |= ImGuiWindowFlags_NoResize;
   window_flags |= ImGuiWindowFlags_NoBackground;
   window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -138,7 +137,7 @@ void GUI_Obstacle::compute_draw_text(string text, vec3 position){
     ImGui::SetNextWindowBgAlpha(0.75f);
     ImGui::SetNextWindowPos(ImVec2(uv.x, uv.y));
 
-    string window_name = "label_" + to_string(label_ID);
+    string window_name = "label_" + to_string(this->label_ID);
     ImGui::Begin(window_name.c_str(), &truc, window_flags);
 
     //Supress window borders

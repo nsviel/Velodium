@@ -28,7 +28,7 @@ Scene::~Scene(){
 void Scene::remove_cloud(Cloud* cloud){
   //---------------------------
 
-  if(is_atLeastOnecloud()){
+  if(!get_is_list_empty()){
     int oID = cloud->oID;
     string name =  cloud->name;
     //---------------------------
@@ -39,6 +39,7 @@ void Scene::remove_cloud(Cloud* cloud){
     //Delete subsets
     for(int i=0; i<cloud->nb_subset; i++){
       Subset* subset = *next(cloud->subset.begin(), i);
+      glyphManager->remove_glyph_subset(subset);
       this->remove_subset(cloud, subset->ID);
     }
 
@@ -113,34 +114,6 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   cloud->subset.erase(it);
   cloud->subset_buffer.erase(it_buf);
   cloud->subset_init.erase(it_ini);
-
-  /*
-  //Delete subset iterator in cloud
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = get_subset(cloud, i);
-
-    if(subset->ID == ID){
-      //Supress subset objects
-      Subset* subset_buf = get_subset_buffer(cloud, i);
-      Subset* subset_ini = get_subset_init(cloud, i);
-
-      delete subset;
-      delete subset_buf;
-      delete subset_ini;
-
-      //Supress subset iterators
-      list<Subset*>::iterator it = next(cloud->subset.begin(), i);
-      list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), i);
-      list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), i);
-
-      cloud->subset.erase(it);
-      cloud->subset_buffer.erase(it_buf);
-      cloud->subset_init.erase(it_ini);
-
-      break;
-    }
-  }
-  */
 
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
@@ -590,6 +563,18 @@ Subset* Scene::get_subset(Cloud* cloud, int i){
   //---------------------------
 
   Subset* subset = *next(cloud->subset.begin(), i);
+
+  //---------------------------
+  return subset;
+}
+Subset* Scene::get_subset_selected(){
+  Subset* subset = nullptr;
+  //---------------------------
+
+  if(cloud_selected != nullptr){
+    int ID_subset = cloud_selected->ID_selected;
+    subset = *next(cloud_selected->subset.begin(), ID_subset);
+  }
 
   //---------------------------
   return subset;

@@ -21,10 +21,10 @@ public:
 public:
   //Main function
   void design_Obstacle();
+  void runtime_display_naming();
 
   //Actions
   void compute_scenario();
-  void compute_display_naming();
   void compute_draw_text(string text, vec3 position);
 
   //Watchers

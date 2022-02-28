@@ -151,7 +151,7 @@ void GUI_option::option_heatmap(){
 
     //Heatmap
     if(ImGui::Button("Apply##238", ImVec2(75,0))){
-      if(sceneManager->is_atLeastOnecloud()){
+      if(!sceneManager->get_is_list_empty()){
         heatmapManager->set_Heatmap(cloud);
       }
     }
@@ -160,7 +160,7 @@ void GUI_option::option_heatmap(){
     //Heatmap all
     static bool heatAll = false;
     if(ImGui::Button("Apply all", ImVec2(75,0))){
-      if(sceneManager->is_atLeastOnecloud()){
+      if(!sceneManager->get_is_list_empty()){
         heatAll = !heatAll;
         heatmapManager->set_Heatmap_all(heatAll);
       }
@@ -226,7 +226,7 @@ void GUI_option::option_colors(){
 
       ImGui::SetNextItemWidth(colorEditSize);
       if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
-        if(sceneManager->is_atLeastOnecloud()){
+        if(!sceneManager->get_is_list_empty()){
           attribManager->set_cloud_color(cloud, cloud_color);
         }
       }
@@ -239,7 +239,7 @@ void GUI_option::option_colors(){
 
       ImGui::SetNextItemWidth(colorEditSize);
       if(ImGui::ColorEdit4("Cloud subset", (float*)&subset_color, ImGuiColorEditFlags_AlphaBar)){
-        if(sceneManager->is_atLeastOnecloud()){
+        if(!sceneManager->get_is_list_empty()){
           Subset* subset = sceneManager->get_subset_selected();
           attribManager->set_subset_color(subset, subset_color);
         }
@@ -273,7 +273,7 @@ void GUI_option::option_parameters(){
     static float scale = 1.0f;
     ImGui::SetNextItemWidth(100);
     if(ImGui::DragFloat("Scale", &scale, 0.01, 0.1, 10, "%.2f X")){
-      if(sceneManager->is_atLeastOnecloud()){
+      if(!sceneManager->get_is_list_empty()){
         Transforms transformManager;
         transformManager.make_scaling(cloud, scale);
         sceneManager->update_cloud_location(cloud);

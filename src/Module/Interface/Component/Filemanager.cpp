@@ -53,11 +53,11 @@ void Filemanager::check_directories(){
   string path_grThr = predManager->get_path_grThr();
 
   //Clean directories
-  clean_directory_files(path_image.c_str());
-  clean_directory_files(path_frame.c_str());
-  clean_directory_files(path_predi.c_str());
-  clean_directory_files(path_grThr.c_str());
-  clean_directory_files(path_gps.c_str());
+  create_new_dir(path_image);
+  create_new_dir(path_frame);
+  create_new_dir(path_predi);
+  create_new_dir(path_grThr);
+  create_new_dir(path_gps);
 
   //---------------------------
 }

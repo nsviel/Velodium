@@ -31,6 +31,7 @@ public:
 
   //Subfunctions
   void build_obstacleGlyph_gt(Cloud* cloud);
+  void build_obstacleGlyph_gt(Subset* subset);
   void build_obstacleGlyph_pr(Cloud* cloud);
   void build_obstacleGlyph_pr(Subset* subset);
 
@@ -43,6 +44,9 @@ private:
   Capture* captureManager;
   Prediction* predManager;
   Pather* pathManager;
+
+  vec4 gt_color;
+  vec4 pr_color;
 };
 
 #endif

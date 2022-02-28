@@ -44,18 +44,18 @@ public:
 
       ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
 
-      // Interface stuff
-      if(module_velodyne){
-        if(ImGui::BeginTabItem("Interface")){
-          gui_ioManager->design_Interface();
-          ImGui::EndTabItem();
-        }
-      }
-
       // Dynamic & obstacle stuff
       if(module_player){
         if(ImGui::BeginTabItem("Player")){
           gui_playerManager->design_player();
+          ImGui::EndTabItem();
+        }
+      }
+
+      // Interface stuff
+      if(module_velodyne){
+        if(ImGui::BeginTabItem("Interface")){
+          gui_ioManager->design_Interface();
           ImGui::EndTabItem();
         }
       }

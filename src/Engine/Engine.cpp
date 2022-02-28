@@ -23,14 +23,7 @@ Engine::Engine(Engine_node* engine){
 
   //---------------------------
 }
-Engine::~Engine(){
-  //---------------------------
-
-  delete sceneManager;
-  delete glyphManager;
-
-  //---------------------------
-}
+Engine::~Engine(){}
 
 //Program functions
 void Engine::loop_scene(){
@@ -84,16 +77,12 @@ void Engine::draw_clouds(){
           glDrawArrays(GL_POINTS, 0, subset->xyz.size());
           glBindVertexArray(0);
 
+          //Subset glyph stuff
           glyphManager->runtime_glyph_subset(subset);
-        }
-
-        //Display for current subset
-        if(subset->ID == subset_selected->ID && subset->obstacle_pr.oobb.size() != 0){
-          int oID = sceneManager->get_subset_oID(cloud, subset);
-          if(oID > 0){
-            Subset* subset_m1 = *next(cloud->subset.begin(), j - 1);
-            glyphManager->runtime_glyph_pred(subset_m1);
+          if(subset->ID == subset_selected->ID){
+            glyphManager->runtime_glyph_pred(subset);
           }
+
         }
       }
     }

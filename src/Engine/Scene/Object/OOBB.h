@@ -13,8 +13,8 @@ public:
   ~OOBB();
 
 public:
-  void create_oobb();
-  void update_oobb(mat4 transformation);
+  Glyph create_oobb();
+  void update_oobb(Glyph& oobb, mat4 transformation);
   vector<vec3> build_box(vec3 min, vec3 max);
 
   inline Glyph* get_oobb(){return oobb;}

@@ -17,15 +17,19 @@ public:
   ~GUI_Lidar();
 
 public:
-  void design_Scala();
   //Main function
   void design_Velodyne();
+  void design_Scala();
 
-  //Subfunctions
+  //Velodyn functions
   void velo_state();
   void velo_connection();
   void velo_capture();
   void velo_parameter();
+
+  //Scala functions
+  void scala_state();
+  void scala_test();
 
 private:
   Scala* scalaManager;

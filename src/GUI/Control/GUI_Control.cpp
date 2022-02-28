@@ -209,7 +209,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //5 key - Centering
     if (ImGui::IsKeyPressed(325) && !io.WantCaptureMouse){
-      if(sceneManager->is_atLeastOnecloud()){
+      if(!sceneManager->get_is_list_empty()){
         transformManager.make_centering(cloud);
         sceneManager->update_cloud_location(cloud);
       }

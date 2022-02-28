@@ -13,12 +13,17 @@ public:
   ~Mark();
 
 public:
-  Glyph* obj_frameSelection();
+  void create_selection_frame();
   Glyph* obj_pointsAtLocation(vector<vec3>& pos);
   Glyph* obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in);
+  void update_selection_frame(vector<vec3> xyz);
+
+  inline Glyph* get_selection_frame(){return selection_frame;}
 
 private:
-  vec4 selection_color;
+  Glyph* selection_frame;
+
+  vec4 selection_frame_color;
 };
 
 #endif

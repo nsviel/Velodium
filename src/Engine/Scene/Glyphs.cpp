@@ -26,6 +26,7 @@ Glyphs::Glyphs(Engine_node* node){
   this->aabbObject = new AABB();
   this->normObject = new Normal();
   this->oobbObject = new OOBB();
+  this->markObject = new Mark();
 
   this->ID_glyph = 0;
 
@@ -38,6 +39,7 @@ Glyphs::~Glyphs(){}
 void Glyphs::init_scene_object(){
   //---------------------------
 
+  this->create_glyph_scene(markObject->get_selection_frame());
   this->create_glyph_scene(gridObject->get_grid());
   this->create_glyph_scene(gridObject->get_grid_sub());
   this->create_glyph_scene(gridObject->get_grid_plane());
@@ -146,24 +148,25 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
   glDisableVertexAttribArray(1);
 }
 void Glyphs::runtime_glyph_pred(Subset* subset){
+  if(subset->obstacle_pr.oobb.size() == 0) return;
   //---------------------------
 
-  //OOBB - ground thruth
-  vector<Glyph*>& oobb_gt = subset->obstacle_gt.oobb;
-  for(int i=0; i<oobb_gt.size(); i++){
-    glBindVertexArray(oobb_gt[i]->VAO);
-    glLineWidth(oobb_gt[i]->draw_width);
-    glDrawArrays(GL_LINES, 0, oobb_gt[i]->location.size());
+  //OOBB - prediction
+  vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
+  for(int i=0; i<oobb_pr.size(); i++){
+    glBindVertexArray(oobb_pr[i].VAO);
+    glLineWidth(oobb_pr[i].draw_width);
+    glDrawArrays(GL_LINES, 0, oobb_pr[i].location.size());
     glLineWidth(1);
     glBindVertexArray(0);
   }
 
-  //OOBB - prediction
-  vector<Glyph*>& oobb_pr = subset->obstacle_pr.oobb;
-  for(int i=0; i<oobb_pr.size(); i++){
-    glBindVertexArray(oobb_pr[i]->VAO);
-    glLineWidth(oobb_pr[i]->draw_width);
-    glDrawArrays(GL_LINES, 0, oobb_pr[i]->location.size());
+  //OOBB - ground thruth
+  vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;
+  for(int i=0; i<oobb_gt.size(); i++){
+    glBindVertexArray(oobb_gt[i].VAO);
+    glLineWidth(oobb_gt[i].draw_width);
+    glDrawArrays(GL_LINES, 0, oobb_gt[i].location.size());
     glLineWidth(1);
     glBindVertexArray(0);
   }
@@ -220,22 +223,19 @@ void Glyphs::update_glyph_color(Glyph* glyph){
 }
 void Glyphs::update_glyph_color(Glyph* glyph, vec4 RGB_new){
   vector<vec4>& RGB = glyph->color;
+  int size = RGB.size();
   //---------------------------
 
   //Change internal glyph color
   RGB.clear();
-  for(int i=0; i<RGB.size(); i++){
-    RGB[i] = RGB_new;
+  for(int i=0; i<size; i++){
+    RGB.push_back(RGB_new);
   }
   glyph->color_unique = RGB_new;
 
-  //Update gpu
-  glBindVertexArray(glyph->VAO);
+  //Reactualise vertex color data
   glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_color);
-  glBufferData(GL_ARRAY_BUFFER, RGB.size() * sizeof(glm::vec4), &RGB[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,4 * sizeof(float),(void*)(4* sizeof(float)));
-  glEnableVertexAttribArray(1);
-  glBindVertexArray(0);
+  glBufferData(GL_ARRAY_BUFFER, RGB.size() * sizeof(glm::vec4), &RGB[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }
@@ -313,6 +313,12 @@ void Glyphs::remove_glyph_scene(int ID){
 
   //---------------------------
 }
+void Glyphs::remove_glyph_subset(Subset* subset){
+  //---------------------------
+
+
+  //---------------------------
+}
 void Glyphs::create_glyph_scene(Glyph* glyph){
   //---------------------------
 
@@ -334,13 +340,12 @@ void Glyphs::create_glyph_subset(Subset* subset){
 
   //---------------------------
 }
-Glyph* Glyphs::create_glyph_ostacle(){
+Glyph Glyphs::create_glyph_ostacle(){
   //---------------------------
 
   //Creat new OOBB object
-  oobbObject->create_oobb();
-  Glyph* glyph = oobbObject->get_oobb();
-  this->insert_into_gpu(glyph);
+  Glyph glyph = oobbObject->create_oobb();
+  this->insert_into_gpu(&glyph);
 
   //---------------------------
   return glyph;

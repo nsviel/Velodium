@@ -24,15 +24,15 @@ void GUI_Player::design_player(){
   if(ImGui::BeginTabBar("Player##156", ImGuiTabBarFlags_None)){
     //-------------------------------
 
-    // Offline cloud player
-    if(ImGui::BeginTabItem("Dynamic")){
-      gui_dynamic->design_dynamic();
-      ImGui::EndTabItem();
-    }
-
     // Obstacle detection
     if(ImGui::BeginTabItem("Obstacle")){
       gui_obstacle->design_Obstacle();
+      ImGui::EndTabItem();
+    }
+
+    // Offline cloud player
+    if(ImGui::BeginTabItem("Dynamic")){
+      gui_dynamic->design_dynamic();
       ImGui::EndTabItem();
     }
 
@@ -44,7 +44,7 @@ void GUI_Player::design_player(){
 void GUI_Player::runtime(){
   //---------------------------
 
-  gui_obstacle->compute_display_naming();
+  gui_obstacle->runtime_display_naming();
   gui_dynamic->runtime_player_mouse();
 
   //---------------------------

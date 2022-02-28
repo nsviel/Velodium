@@ -3,9 +3,6 @@
 
 #include "../../common.h"
 
-#include "../Data/Database.h"
-extern struct Database database;
-
 class Data;
 class Engine_node;
 class Glyphs;
@@ -67,6 +64,7 @@ public:
   Subset* get_subset_selected_init();
   Subset* get_subset(Cloud* cloud, int i);
   Subset* get_subset_byID(Cloud* cloud, int ID);
+  Subset* get_subset_selected();
   Subset* get_subset_buffer(Cloud* cloud, int i);
   Subset* get_subset_buffer_byID(Cloud* cloud, int ID);
   Subset* get_subset_init(Cloud* cloud, int i);
@@ -79,7 +77,6 @@ public:
   inline list<Cloud*>* get_list_cloud(){return list_cloud;}
   inline int* get_list_ID_cloud(){return &ID_cloud;}
   inline Cloud* get_cloud_selected(){return cloud_selected;}
-  inline Subset* get_subset_selected(){return subset_selected;}
   inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
 
 private:

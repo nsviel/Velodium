@@ -110,7 +110,7 @@ void Offline::player_start(){
     //Set timer parameter
     float increment = (1 / (float)player_frequency) * 1000;
     timerManager->setFunc([&](){
-      if(sceneManager->is_atLeastOnecloud()){
+      if(!sceneManager->get_is_list_empty()){
         player_flag_1s = true;
       }else{
         timerManager->stop();
