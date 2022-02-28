@@ -5,59 +5,56 @@
 OOBB::OOBB(){
   //---------------------------
 
-  this->oobb_color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+  this->color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+  this->width = 2;
 
   //---------------------------
 }
 OOBB::~OOBB(){}
 
-Glyph* OOBB::obj_oobb(){
-  Glyph* obstacle = new Glyph();
+void OOBB::create_oobb(){
+  oobb = new Glyph();
   //---------------------------
 
   //Create glyph
-  obstacle->name = "obstacle";
-  obstacle->draw_width = 4;
-  obstacle->visibility = false;
-  obstacle->draw_type = "line";
-  obstacle->permanent = false;
-  obstacle->color_unique = oobb_color;
+  oobb->name = "OOBB";
+  oobb->draw_width = width;
+  oobb->visibility = false;
+  oobb->draw_type = "line";
+  oobb->permanent = false;
+  oobb->color_unique = color;
 
   //Box color
   for(int i=0; i<24; i++){
-    obstacle->color.push_back(oobb_color);
+    oobb->color.push_back(color);
   }
 
   //Arrow color
   for(int i=0; i<6; i++){
-    obstacle->color.push_back(vec4(0,0,1,1));
+    oobb->color.push_back(vec4(0,0,1,1));
   }
 
   //---------------------------
-  return obstacle;
 }
-
-void OOBB::update_oobb(Glyph* obstacle, mat4 transformation){
-  vector<vec3>& XYZ = obstacle->location;
-  vector<vec4>& RGB = obstacle->color;
+void OOBB::update_oobb(mat4 transformation){
+  vector<vec3>& XYZ = oobb->location;
+  vector<vec4>& RGB = oobb->color;
   vec3 min = vec3(-0.5f, -0.5f, -0.5f);
   vec3 max = vec3(0.5f, 0.5f, 0.5f);
   //---------------------------
 
   //location
   vector<vec3> box = build_box(min, max);
-
   for(int i=0; i<box.size(); i++){
     vec4 point = vec4(box[i].x, box[i].y, box[i].z, 1.0f);
     point = point * transformation;
     box[i] = vec3(point.x, point.y, point.z);
   }
 
-  obstacle->location = box;
+  oobb->location = box;
 
   //---------------------------
 }
-
 vector<vec3> OOBB::build_box(vec3 min, vec3 max){
   vector<vec3> XYZ;
   vec3 l1, l2;

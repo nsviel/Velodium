@@ -1,5 +1,5 @@
-#ifndef INTERFACE_H
-#define INTERFACE_H
+#ifndef INTERFACE_NODE_H
+#define INTERFACE_NODE_H
 
 #include "../../common.h"
 
@@ -12,12 +12,12 @@ class Capture;
 class Filemanager;
 
 
-class Interface
+class Interface_node
 {
 public:
   //Constructor / Destructor
-  Interface(Module_node* node_module);
-  ~Interface();
+  Interface_node(Module_node* node_module);
+  ~Interface_node();
 
 public:
   //Main functions

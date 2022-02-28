@@ -1,6 +1,5 @@
 #include "Engine.h"
 
-#include "Data/Database.h"
 #include "Engine_node.h"
 #include "Scene/Glyphs.h"
 #include "Scene/Scene.h"
@@ -9,8 +8,6 @@
 #include "../GUI/GUI_node.h"
 #include "../GUI/GUI.h"
 
-Database database;
-
 
 //Constructor / Destructor
 Engine::Engine(Engine_node* engine){
@@ -18,16 +15,11 @@ Engine::Engine(Engine_node* engine){
   this->node_engine = engine;
   //---------------------------
 
-  this->init_database();
-
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
   this->node_module = node_engine->get_node_module();
   this->node_gui = node_engine->get_node_gui();
-
-  if(with_window){
-    glyphManager->init();
-  }
+  this->sceneManager = node_engine->get_sceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
+  this->guiManager = node_gui->get_guiManager();
 
   //---------------------------
 }
@@ -41,22 +33,12 @@ Engine::~Engine(){
 }
 
 //Program functions
-void Engine::init_database(){
-  //---------------------------
-
-  database.list_cloud = new list<Cloud*>;
-  database.list_glyph = new list<Glyph*>;
-  database.ID_cloud = 0;
-  database.ID_glyph = 0;
-
-  //---------------------------
-}
 void Engine::loop_scene(){
   //---------------------------
 
   //Draw glyph stuff
   if(with_window){
-    glyphManager->drawing_runtime();
+    glyphManager->runtime_glyph_scene();
 
     //Draw clouds
     this->draw_clouds();
@@ -75,14 +57,13 @@ void Engine::loop_gui(){
   //---------------------------
 
   if(with_window){
-    GUI* guiManager = node_gui->get_guiManager();
     guiManager->Gui_loop();
   }
 
   //---------------------------
 }
 void Engine::draw_clouds(){
-  list<Cloud*>* list_cloud = database.list_cloud;
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   Subset* subset_selected = sceneManager->get_subset_selected();
   //---------------------------
 
@@ -99,12 +80,11 @@ void Engine::draw_clouds(){
 
         //Display for all visible subsets
         if(subset->visibility){
-          sceneManager->update_subset_location(subset);
           glBindVertexArray(subset->VAO);
           glDrawArrays(GL_POINTS, 0, subset->xyz.size());
           glBindVertexArray(0);
 
-          glyphManager->drawing_subset(subset);
+          glyphManager->runtime_glyph_subset(subset);
         }
 
         //Display for current subset
@@ -112,7 +92,7 @@ void Engine::draw_clouds(){
           int oID = sceneManager->get_subset_oID(cloud, subset);
           if(oID > 0){
             Subset* subset_m1 = *next(cloud->subset.begin(), j - 1);
-            glyphManager->drawing_prediction(subset_m1);
+            glyphManager->runtime_glyph_pred(subset_m1);
           }
         }
       }

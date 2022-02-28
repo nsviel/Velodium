@@ -40,7 +40,6 @@ GUI_node::GUI_node(Engine_node* engine){
 }
 GUI_node::~GUI_node(){}
 
-
 //Main functions
 void GUI_node::reset(){
   //---------------------------
@@ -55,6 +54,13 @@ void GUI_node::runtime(){
   //---------------------------
 
   //gui_moduleManager->runtime();sayHello();
+
+  //---------------------------
+}
+void GUI_node::exit(){
+  //---------------------------
+
+  node_engine->exit();
 
   //---------------------------
 }

@@ -8,7 +8,7 @@
 #include "../Obstacle/Scenario.h"
 #include "../Dynamic/Online.h"
 
-#include "../../Interface/Interface.h"
+#include "../../Interface/Interface_node.h"
 #include "../../Interface/Component/Prediction.h"
 #include "../../Interface/Component/GPS.h"
 #include "../../Interface/Component/Network.h"
@@ -166,7 +166,7 @@ void GUI_Obstacle::state_watcher(){
 
   //Watchers
   Module_node* node_module = node_gui->get_node_module();
-  Interface* ioManager = node_module->get_ioManager();
+  Interface_node* ioManager = node_module->get_ioManager();
   Capture* captureManager = ioManager->get_captureManager();
   Prediction* predManager = ioManager->get_predManager();
   GPS* gpsManager = ioManager->get_gpsManager();

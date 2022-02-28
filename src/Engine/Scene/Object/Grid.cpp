@@ -8,12 +8,16 @@ Grid::Grid(){
   this->grid_color = vec4(0.5f, 0.5f, 0.5f, 1.0f);
   this->nb_cell = 4;
 
+  this->create_grid();
+  this->create_grid_sub();
+  this->create_grid_plane();
+
   //---------------------------
 }
 Grid::~Grid(){}
 
-Glyph* Grid::obj_grid(){
-  Glyph* grid = new Glyph();
+void Grid::create_grid(){
+  grid = new Glyph();
   //---------------------------
 
   //Create glyph
@@ -43,20 +47,19 @@ Glyph* Grid::obj_grid(){
   }
 
   //---------------------------
-  return grid;
 }
-Glyph* Grid::obj_subgrid(){
-  Glyph* subgrid = new Glyph();
-  vector<vec3>& XYZ = subgrid->location;
-  vector<vec4>& RGB = subgrid->color;
+void Grid::create_grid_sub(){
+  grid_sub = new Glyph();
+  vector<vec3>& XYZ = grid_sub->location;
+  vector<vec4>& RGB = grid_sub->color;
   //---------------------------
 
   //Create glyph
-  subgrid->name = "subgrid";
-  subgrid->draw_width = 1;
-  subgrid->visibility = false;
-  subgrid->draw_type = "line";
-  subgrid->permanent = true;
+  grid_sub->name = "grid_sub";
+  grid_sub->draw_width = 1;
+  grid_sub->visibility = false;
+  grid_sub->draw_type = "line";
+  grid_sub->permanent = true;
 
   //Parameters
   int SIZE_sg = 10;
@@ -83,24 +86,23 @@ Glyph* Grid::obj_subgrid(){
   }
 
   //---------------------------
-  return subgrid;
 }
-Glyph* Grid::obj_planegrid(){
-  Glyph* planegrid = new Glyph();
+void Grid::create_grid_plane(){
+  grid_plane = new Glyph();
   //---------------------------
 
   //Construct plane grid
-  planegrid->name = "planegrid";
-  planegrid->draw_width = 1;
-  planegrid->visibility = false;
-  planegrid->draw_type = "triangle";
-  planegrid->permanent = true;
+  grid_plane->name = "grid_plane";
+  grid_plane->draw_width = 1;
+  grid_plane->visibility = false;
+  grid_plane->draw_type = "triangle";
+  grid_plane->permanent = true;
 
   //Parameters
   vec3 color = vec3(0.15f, 0.15f, 0.15f);
   int SIZE = nb_cell;
-  vector<vec3>& XYZ = planegrid->location;
-  vector<vec4>& RGB = planegrid->color;
+  vector<vec3>& XYZ = grid_plane->location;
+  vector<vec4>& RGB = grid_plane->color;
 
   //Create plane
   //Location
@@ -118,5 +120,4 @@ Glyph* Grid::obj_planegrid(){
   }
 
   //---------------------------
-  return planegrid;
 }

@@ -1,6 +1,6 @@
 #include "Loader.h"
 
-#include "dataExtraction.h"
+#include "Extractore.h"
 
 #include "../Format/file_PTS.h"
 #include "../Format/file_PLY.h"

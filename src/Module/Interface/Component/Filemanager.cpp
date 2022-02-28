@@ -4,14 +4,14 @@
 #include "Saving.h"
 #include "Prediction.h"
 
-#include "../Interface.h"
+#include "../Interface_node.h"
 
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
-Filemanager::Filemanager(Interface* ioManager){
+Filemanager::Filemanager(Interface_node* ioManager){
   //---------------------------
 
   this->gpsManager = ioManager->get_gpsManager();

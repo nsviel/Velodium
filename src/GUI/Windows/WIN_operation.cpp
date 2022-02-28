@@ -156,21 +156,21 @@ void WIN_operation::window_selection(){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     if(ImGui::DragFloatRange2("Y", &ymin, &ymax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     if(ImGui::DragFloatRange2("Z", &zmin, &zmax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     ImGui::PopAllowKeyboardFocus();
@@ -540,21 +540,21 @@ void WIN_operation::window_extractCloud(){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     if(ImGui::DragFloatRange2("Y", &ymin, &ymax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     if(ImGui::DragFloatRange2("Z", &zmin, &zmax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     ImGui::PopAllowKeyboardFocus();
@@ -642,21 +642,21 @@ void WIN_operation::window_cutCloud(){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     if(ImGui::DragFloatRange2("Y", &ymin, &ymax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     if(ImGui::DragFloatRange2("Z", &zmin, &zmax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
       if(cloud != nullptr){
         extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
         extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        glyphManager->update_glyph_object("aabb", cloud);
+        //glyphManager->update_glyph_object("aabb", cloud);
       }
     }
     ImGui::PopAllowKeyboardFocus();

@@ -4,7 +4,7 @@
 #include "../LiDAR/Scala/Scala.h"
 #include "../LiDAR/Velodyne/Velodyne.h"
 
-#include "../Interface.h"
+#include "../Interface_node.h"
 
 #include "../../Module_GUI.h"
 #include "../../Module_node.h"
@@ -15,7 +15,7 @@ GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();
-  Interface* ioManager = node_module->get_ioManager();
+  Interface_node* ioManager = node_module->get_ioManager();
 
   this->captureManager = ioManager->get_captureManager();
   this->scalaManager = captureManager->get_scalaManager();

@@ -6,7 +6,7 @@
 class Scene;
 class Glyphs;
 class Saver;
-class Interface;
+class Interface_node;
 class OOBB;
 class Transforms;
 class Module_node;
@@ -39,7 +39,7 @@ private:
   OOBB* oobbManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
-  Interface* ioManager;
+  Interface_node* ioManager;
   Capture* captureManager;
   Prediction* predManager;
   Pather* pathManager;

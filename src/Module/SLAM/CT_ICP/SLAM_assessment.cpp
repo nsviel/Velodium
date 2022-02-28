@@ -2,17 +2,21 @@
 
 #include "SLAM_optim_gn.h"
 
+#include "../Slam.h"
+
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Specific/fct_maths.h"
 
 
 //Constructor / Destructor
-SLAM_assessment::SLAM_assessment(SLAM_optim_gn* gn){
+SLAM_assessment::SLAM_assessment(Slam* slam){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  Engine_node* node_engine = slam->get_node_engine();
 
-  this->gnManager = gn;
+  this->sceneManager = node_engine->get_sceneManager();
+  this->gnManager = slam->get_slam_gn();
 
   this->nb_residual_min = 100;
 

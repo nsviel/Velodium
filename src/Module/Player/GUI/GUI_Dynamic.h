@@ -10,7 +10,7 @@ class Heatmap;
 class Filter;
 class Offline;
 class Online;
-class Interface;
+class Interface_node;
 class GUI_Interface;
 
 
@@ -37,7 +37,7 @@ private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
-  Interface* ioManager;
+  Interface_node* ioManager;
   Offline* offlineManager;
   Online* onlineManager;
   GUI_Interface* gui_ioManager;

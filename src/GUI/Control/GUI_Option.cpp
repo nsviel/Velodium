@@ -10,6 +10,10 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object/AABB.h"
+#include "../../Engine/Scene/Object/Grid.h"
+#include "../../Engine/Scene/Object/Axis.h"
+#include "../../Engine/Scene/Object/Normal.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
@@ -64,46 +68,58 @@ void GUI_option::option_glyphs(){
   //---------------------------
 
   //Display grid
-  static bool gridON = true;
-  if(ImGui::Checkbox("Grid", &gridON)){
-    glyphManager->set_visibility("grid", gridON);
+  static bool grid_ON = true;
+  if(ImGui::Checkbox("Grid", &grid_ON)){
+    Grid* gridObject = glyphManager->get_object_grid();
+    Glyph* grid = gridObject->get_grid();
+
+    grid->visibility = grid_ON;
   }
   ImGui::NextColumn();
 
   //Subgrid
-  static bool subGridON = false;
-  if(ImGui::Checkbox("Subgrid", &subGridON)){
-    glyphManager->set_visibility("subgrid", subGridON);
-    glyphManager->set_visibility("planegrid", subGridON);
+  static bool grid_sub_ON = false;
+  if(ImGui::Checkbox("Subgrid", &grid_sub_ON)){
+    Grid* gridObject = glyphManager->get_object_grid();
+    Glyph* grid_sub = gridObject->get_grid_sub();
+    Glyph* grid_plane = gridObject->get_grid_plane();
+
+    grid_sub->visibility = grid_sub_ON;
+    grid_plane->visibility = grid_sub_ON;
   }
   ImGui::NextColumn();
 
   //Display Bounding Box
-  static bool aabbON = true;
-  if(ImGui::Checkbox("AABB", &aabbON)){
-    glyphManager->set_visibility("aabb", aabbON);
+  static bool aabb_ON = true;
+  if(ImGui::Checkbox("AABB", &aabb_ON)){
+    AABB* aabbObject = glyphManager->get_object_aabb();
+    Glyph* aabb = aabbObject->get_aabb();
+
+    aabb->visibility = aabb_ON;
   }
   ImGui::NextColumn();
 
   //Display normals
-  static bool normalsON = false;
-  if(ImGui::Checkbox("Normal", &normalsON)){
-    glyphManager->set_visibility_normal(normalsON);
+  static bool normal_ON = false;
+  if(ImGui::Checkbox("Normal", &normal_ON)){
+
   }
   ImGui::NextColumn();
 
   //Display ICP line correspondences
   static bool matchingON = false;
   if(ImGui::Checkbox("Match", &matchingON)){
-    glyphManager->set_visibility("matching", matchingON);
+
   }
   ImGui::NextColumn();
 
   //Display Axis
-  static bool axisON = true;
-  if(ImGui::Checkbox("Axis", &axisON)){
-    glyphManager->set_visibility("axis", axisON);
-    glyphManager->set_visibility_axisCloud(axisON);
+  static bool axis_scene_ON = true;
+  if(ImGui::Checkbox("Axis", &axis_scene_ON)){
+    Axis* axisObject = glyphManager->get_object_axis();
+    Glyph* axis_scene = axisObject->get_axis_scene();
+
+    axis_scene->visibility = axis_scene_ON;
   }
   ImGui::NextColumn();
 
@@ -185,46 +201,48 @@ void GUI_option::option_colors(){
     ImGui::SetNextItemWidth(colorEditSize);
     vec4* color_normals = glyphManager->get_glyph_color("normal");
     if(ImGui::ColorEdit4("Normals", (float*)color_normals)){
-      glyphManager->set_glyph_color("normal", *color_normals);
+      glyphManager->update_glyph_color("normal", *color_normals);
     }*/
 
     //Grid color
     ImGui::SetNextItemWidth(colorEditSize);
-    vec4* color_grid = glyphManager->get_glyph_color("grid");
-    if(ImGui::ColorEdit4("Grid", (float*)color_grid)){
-      glyphManager->set_glyph_color("grid", *color_grid);
+    Grid* gridObject = glyphManager->get_object_grid();
+    vec4* grid_color = gridObject->get_grid_color();
+    if(ImGui::ColorEdit4("Grid", (float*)grid_color)){
+      glyphManager->update_glyph_color(gridObject->get_grid(), *grid_color);
     }
 
     //Bounding box color
     ImGui::SetNextItemWidth(colorEditSize);
-    vec4* color_aabb = glyphManager->get_glyph_color("aabb");
-    if(ImGui::ColorEdit4("AABB", (float*)color_aabb)){
-      glyphManager->set_glyph_color("aabb", *color_aabb);
+    AABB* aabbObject = glyphManager->get_object_aabb();
+    vec4* aabb_color = aabbObject->get_aabb_color();
+    if(ImGui::ColorEdit4("AABB", (float*)aabb_color)){
+      glyphManager->update_glyph_color(aabbObject->get_aabb(), *aabb_color);
     }
 
     //Uniform cloud color
-    ImGui::SetNextItemWidth(colorEditSize);
-    static vec4 cloud_color;
     if(cloud != nullptr){
-      cloud_color = cloud->unicolor;
-    }
-    if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
-      if(sceneManager->is_atLeastOnecloud()){
-        attribManager->set_cloud_color(cloud, cloud_color);
+      vec4 cloud_color = cloud->unicolor;
+
+      ImGui::SetNextItemWidth(colorEditSize);
+      if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
+        if(sceneManager->is_atLeastOnecloud()){
+          attribManager->set_cloud_color(cloud, cloud_color);
+        }
       }
     }
 
     //Uniform subset color
-    ImGui::SetNextItemWidth(colorEditSize);
-    static vec4 subset_color;
     if(cloud != nullptr){
       Subset* subset = sceneManager->get_subset_selected();
-      subset_color = subset->unicolor;
-    }
-    if(ImGui::ColorEdit4("Cloud subset", (float*)&subset_color, ImGuiColorEditFlags_AlphaBar)){
-      if(sceneManager->is_atLeastOnecloud()){
-        Subset* subset = sceneManager->get_subset_selected();
-        attribManager->set_subset_color(subset, subset_color);
+      vec4 subset_color = subset->unicolor;
+
+      ImGui::SetNextItemWidth(colorEditSize);
+      if(ImGui::ColorEdit4("Cloud subset", (float*)&subset_color, ImGuiColorEditFlags_AlphaBar)){
+        if(sceneManager->is_atLeastOnecloud()){
+          Subset* subset = sceneManager->get_subset_selected();
+          attribManager->set_subset_color(subset, subset_color);
+        }
       }
     }
 
@@ -235,7 +253,7 @@ void GUI_option::option_colors(){
       vec4* screen_color = renderManager->get_screen_color();
       *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
-      glyphManager->reset_colors();
+      glyphManager->reset_color();
     }
   }
 }
@@ -312,12 +330,12 @@ void GUI_option::option_parameters(){
       if(cpt_nor <= 1){
         cpt_nor = 1;
       }
-      glyphManager->set_size_normal(cpt_nor);
+      //glyphManager->set_size_normal(cpt_nor);
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if(ImGui::ArrowButton("##right_n", ImGuiDir_Right)){
       cpt_nor++;
-      glyphManager->set_size_normal(cpt_nor);
+      //glyphManager->set_size_normal(cpt_nor);
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
@@ -337,15 +355,15 @@ void GUI_option::option_mode(){
     if(ImGui::Checkbox("Dark mode", &darkMode)){
       vec4* screen_color = renderManager->get_screen_color();
 
-      if(darkMode == true){
-        glyphManager->set_glyph_color("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        glyphManager->set_glyph_color("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+      /*if(darkMode == true){
+        glyphManager->update_glyph_color("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        glyphManager->update_glyph_color("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
         *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
       }else{
-        glyphManager->set_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        glyphManager->set_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        glyphManager->update_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        glyphManager->update_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
         *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
-      }
+      }*/
     }
 
     //Visualization mode
@@ -353,7 +371,7 @@ void GUI_option::option_mode(){
     if(ImGui::Checkbox("Visualization", &visualization)){
       vec4* screen_color = renderManager->get_screen_color();
 
-      if(visualization == true){
+      /*if(visualization == true){
         glyphManager->set_visibility("axis", false);
         glyphManager->set_visibility("axiscloud", false);
         glyphManager->set_visibility("grid", false);
@@ -368,7 +386,7 @@ void GUI_option::option_mode(){
         if(darkMode == true){
           *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
         }
-      }
+      }*/
     }
 
     //Mouse wheel mode

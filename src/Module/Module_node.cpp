@@ -1,7 +1,7 @@
 #include "Module_node.h"
 
 #include "SLAM/Slam.h"
-#include "Interface/Interface.h"
+#include "Interface/Interface_node.h"
 #include "Player/Player_node.h"
 
 #include "../Engine/Engine_node.h"
@@ -17,7 +17,7 @@ Module_node::Module_node(Engine_node* engine){
   this->node_ope = node_engine->get_node_ope();
 
   this->slamManager = new Slam(node_engine);
-  this->ioManager = new Interface(this);
+  this->ioManager = new Interface_node(this);
   this->node_player = new Player_node(this);
 
   //---------------------------

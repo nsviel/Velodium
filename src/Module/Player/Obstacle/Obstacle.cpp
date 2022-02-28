@@ -3,7 +3,7 @@
 #include "Scenario.h"
 
 #include "../../Module_node.h"
-#include "../../Interface/Interface.h"
+#include "../../Interface/Interface_node.h"
 #include "../../Interface/Component/Prediction.h"
 #include "../../Interface/LiDAR/Capture.h"
 
@@ -118,14 +118,15 @@ void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
     //
     for(int j=0; j<obstacle_gt->name.size(); j++){
       Glyph* glyph = glyphManager->create_glyph_ostacle();
-      glyphManager->set_glyph_color(glyph, vec3(37.0f/255, 186.0f/255, 40.0f/255));
+      vec4 RGB_new = vec4(37.0f/255, 186.0f/255, 40.0f/255, 1.0f);
+      glyphManager->update_glyph_color(glyph, RGB_new);
 
       vec3 To = obstacle_gt->position[j];
       vec3 Ro = vec3(0, 0, obstacle_gt->heading[j]);
       vec3 So = obstacle_gt->dimension[j];
       mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
-      oobbManager->update_oobb(glyph, transf);
+      //oobbManager->update_oobb(glyph, transf);
       glyphManager->update_glyph_location(glyph);
       obstacle_gt->oobb.push_back(glyph);
     }
@@ -141,15 +142,17 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
     Obstac* obstacle_pr = &subset->obstacle_pr;
 
     for(int j=0; j<obstacle_pr->name.size(); j++){
-      Glyph* glyph = glyphManager->create_glyph_instance("obstacle");
-      glyphManager->set_glyph_color(glyph, vec3(201.0f/255, 1.0f/255, 30.0f/255));
+      Glyph* glyph = glyphManager->create_glyph_ostacle();
+
+      vec4 RGB_new = vec4(201.0f/255, 1.0f/255, 30.0f/255, 1.0f);
+      glyphManager->update_glyph_color(glyph, RGB_new);
 
       vec3 To = obstacle_pr->position[j];
       vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
       vec3 So = obstacle_pr->dimension[j];
       mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
-      oobbManager->update_oobb(glyph, transf);
+      //oobbManager->update_oobb(glyph, transf);
       glyphManager->update_glyph_location(glyph);
       obstacle_pr->oobb.push_back(glyph);
     }
@@ -162,15 +165,17 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   //---------------------------
 
   for(int j=0; j<obstacle_pr->name.size(); j++){
-    Glyph* glyph = glyphManager->create_glyph_instance("obstacle");
-    glyphManager->set_glyph_color(glyph, vec3(201.0f/255, 1.0f/255, 30.0f/255));
+    Glyph* glyph = glyphManager->create_glyph_ostacle();
+
+    vec4 RGB_new = vec4(201.0f/255, 1.0f/255, 30.0f/255, 1.0f);
+    glyphManager->update_glyph_color(glyph, RGB_new);
 
     vec3 To = obstacle_pr->position[j];
     vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
     vec3 So = obstacle_pr->dimension[j];
     mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
-    oobbManager->update_oobb(glyph, transf);
+    //oobbManager->update_oobb(glyph, transf);
     glyphManager->update_glyph_location(glyph);
     obstacle_pr->oobb.push_back(glyph);
   }

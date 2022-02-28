@@ -3,6 +3,7 @@
 
 #include "../../../common.h"
 
+class Slam;
 class Scene;
 class SLAM_optim_gn;
 
@@ -11,7 +12,7 @@ class SLAM_assessment
 {
 public:
   //Constructor / Destructor
-  SLAM_assessment(SLAM_optim_gn* gn);
+  SLAM_assessment(Slam* slam);
   ~SLAM_assessment();
 
 public:

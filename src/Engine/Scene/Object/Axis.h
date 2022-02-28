@@ -14,14 +14,17 @@ public:
   ~Axis();
 
 public:
-  Glyph* obj_axis();
-  Glyph* obj_axis_circle(float circleRadius);
+  void create_axis_scene();
+  void create_axis_circle(float circleRadius);
+  void create_axis_subset(Subset* subset);
+  void update_axis_subset(Subset* subset);
 
-  void obj_axis_cloud(Subset* subset);
-  void update_axis_cloud(Subset* subset);
+  inline Glyph* get_axis_scene(){return axis_scene;}
+  inline Glyph* get_axis_circle(){return axis_circle;}
 
 private:
-
+  Glyph* axis_scene;
+  Glyph* axis_circle;
 };
 
 #endif

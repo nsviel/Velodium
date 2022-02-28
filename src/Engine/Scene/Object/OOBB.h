@@ -13,14 +13,16 @@ public:
   ~OOBB();
 
 public:
-  Glyph* obj_oobb();
-
-  void update_oobb(Glyph* obstacle, mat4 transformation);
-
+  void create_oobb();
+  void update_oobb(mat4 transformation);
   vector<vec3> build_box(vec3 min, vec3 max);
 
+  inline Glyph* get_oobb(){return oobb;}
+
 private:
-  vec4 oobb_color;
+  Glyph* oobb;
+  vec4 color;
+  int width;
 };
 
 #endif

@@ -32,6 +32,7 @@ public:
   void reset();
   void update();
   void runtime();
+  void exit();
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Operation_node* get_node_ope(){return node_ope;}

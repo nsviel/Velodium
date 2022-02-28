@@ -5,6 +5,7 @@
 
 class Scene;
 class Glyphs;
+class GUI;
 
 class Module_node;
 class Engine_node;
@@ -25,7 +26,6 @@ public:
 
 public:
   //Program functions
-  void init_database();
   void loop_scene();
   void loop_gui();
 
@@ -39,6 +39,7 @@ public:
 private:
   Scene* sceneManager;
   Glyphs* glyphManager;
+  GUI* guiManager;
 
   Module_node* node_module;
   Engine_node* node_engine;

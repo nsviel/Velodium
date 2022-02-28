@@ -32,6 +32,7 @@ public:
   //Main functions
   void runtime();
   void reset();
+  void exit();
 
   inline Module_node* get_node_module(){return node_module;}
   inline Operation_node* get_node_ope(){return node_ope;}

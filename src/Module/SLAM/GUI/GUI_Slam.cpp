@@ -14,11 +14,8 @@
 #include "../../../GUI/GUI_node.h"
 #include "../../../Engine/Engine.h"
 #include "../../../Engine/Engine_node.h"
-#include "../../../Engine/Data/Database.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Specific/fct_transtypage.h"
-
-extern struct Database database;
 
 
 //Constructor / Destructor
@@ -55,7 +52,7 @@ void GUI_Slam::design_SLAM(){
 }
 
 void GUI_Slam::compute(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   //Compute algorithm
@@ -101,7 +98,7 @@ void GUI_Slam::parameter_configuration(){
 }
 void GUI_Slam::parameter_general(){
   if(ImGui::TreeNode("General")){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
     //Display infos in terminal
@@ -158,7 +155,7 @@ void GUI_Slam::parameter_general(){
 }
 void GUI_Slam::parameter_optimization(){
   if(ImGui::TreeNode("Optimization")){
-    Cloud* cloud = database.cloud_selected;
+    Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
     //Number of optimization iterations

@@ -9,7 +9,7 @@
 #include <thread>
 
 class Engine_node;
-class dataExtraction;
+class Extractore;
 
 class UDP_frame;
 class UDP_server;
@@ -53,7 +53,7 @@ public:
   inline int get_fov_max(){return fov_max;}
 
 private:
-  dataExtraction* extractManager;
+  Extractore* extractManager;
 
   UDP_frame* frameManager;
   UDP_server* udpServManager;

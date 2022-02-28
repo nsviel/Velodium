@@ -1,4 +1,4 @@
-#include "Interface.h"
+#include "Interface_node.h"
 
 #include "Component/GPS.h"
 #include "Component/Saving.h"
@@ -15,16 +15,16 @@
 
 
 //Constructor / Destructor
-Interface::Interface(Module_node* node_module){
+Interface_node::Interface_node(Module_node* node_module){
   //---------------------------
 
   Engine_node* node_engine = node_module->get_node_engine();
 
   this->saveManager = new Saving(node_engine);
-  this->gpsManager = new GPS();
-  this->predManager = new Prediction();
-  this->netManager = new Network();
+  this->predManager = new Prediction(node_engine);
   this->captureManager = new Capture(node_module);
+  this->netManager = new Network();
+  this->gpsManager = new GPS();
   this->fileManager = new Filemanager(this);
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
@@ -33,10 +33,10 @@ Interface::Interface(Module_node* node_module){
   //---------------------------
   this->init();
 }
-Interface::~Interface(){}
+Interface_node::~Interface_node(){}
 
 //Main functions
-void Interface::init(){
+void Interface_node::init(){
   //---------------------------
 
   fileManager->check_directories();
@@ -47,7 +47,7 @@ void Interface::init(){
 
   //---------------------------
 }
-void Interface::runtime(){
+void Interface_node::runtime(){
   //---------------------------
 
   captureManager->runtime_capturing();

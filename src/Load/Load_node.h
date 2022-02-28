@@ -4,7 +4,7 @@
 #include "Processing/Loader.h"
 #include "Processing/Saver.h"
 #include "Processing/Pather.h"
-#include "Processing/dataExtraction.h"
+#include "Processing/Extractore.h"
 
 #include "../Engine/Engine_node.h"
 
@@ -19,7 +19,7 @@ public:
     this->node_engine = engine;
     //---------------------------
 
-    this->extractManager = new dataExtraction(this);
+    this->extractManager = new Extractore(this);
     this->saveManager = new Saver(this);
     this->loadManager = new Loader(this);
     this->pathManager = new Pather(this);
@@ -33,14 +33,14 @@ public:
   inline Pather* get_pathManager(){return pathManager;}
   inline Saver* get_saveManager(){return saveManager;}
   inline Loader* get_loadManager(){return loadManager;}
-  inline dataExtraction* get_extractManager(){return extractManager;}
+  inline Extractore* get_extractManager(){return extractManager;}
 
 private:
   Engine_node* node_engine;
   Pather* pathManager;
   Saver* saveManager;
   Loader* loadManager;
-  dataExtraction* extractManager;
+  Extractore* extractManager;
 };
 
 #endif

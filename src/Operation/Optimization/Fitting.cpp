@@ -63,7 +63,7 @@ void Fitting::Sphere_cloudToCenter(Subset* subset){
 
   //Add a ptMark cloud to the selected point
   //int ID = glyphManager->loadGlyph("../media/engine/Marks/sphere_FARO.pts", Center, "point", false, 3);
-  //glyphManager->set_glyph_color(ID, vec3(1.0f, 0.0f, 0.0f));
+  //glyphManager->update_glyph_color(ID, vec3(1.0f, 0.0f, 0.0f));
 
   //---------------------------
 }

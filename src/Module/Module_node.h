@@ -6,7 +6,7 @@
 class Engine_node;
 class Operation_node;
 class Slam;
-class Interface;
+class Interface_node;
 class Player_node;
 
 
@@ -28,14 +28,14 @@ public:
   inline Player_node* get_node_player(){return node_player;}
 
   inline Slam* get_slamManager(){return slamManager;}
-  inline Interface* get_ioManager(){return ioManager;}
+  inline Interface_node* get_ioManager(){return ioManager;}
 
 private:
   Engine_node* node_engine;
   Operation_node* node_ope;
 
   Slam* slamManager;
-  Interface* ioManager;
+  Interface_node* ioManager;
   Player_node* node_player;
 };
 

@@ -5,6 +5,7 @@
 
 #include <thread>
 
+class Engine_node;
 class Scene;
 
 
@@ -12,7 +13,7 @@ class Prediction
 {
 public:
   //Constructor / Destructor
-  Prediction();
+  Prediction(Engine_node* node_engine);
   ~Prediction();
 
 public:

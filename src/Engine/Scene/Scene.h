@@ -7,6 +7,8 @@
 extern struct Database database;
 
 class Data;
+class Engine_node;
+class Glyphs;
 
 #include <list>
 #include <GLFW/glfw3.h>
@@ -16,12 +18,11 @@ class Scene
 {
 public:
   //Constructor / Destructor
-  Scene();
+  Scene(Engine_node* node_engine);
   ~Scene();
 
 public:
   //Remove functions
-  void exit();
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
   void remove_subset(Cloud* cloud, int ID);
@@ -58,48 +59,37 @@ public:
   void selection_setNext();
   void selection_setCloud(int ID);
   void selection_setSubset(Cloud* cloud, int ID);
-  void set_cloudVisibility(Cloud* cloud, bool visible);
   void selection_cloudByName(string name);
   void selection_setCloud(Cloud* cloud);
 
   //Assesseurs
-  Cloud* get_cloud_selected();
   Cloud* get_cloud_next();
-  Cloud* get_cloud_byName(string name);
-  Cloud* get_cloud_byoID(int oID);
-
-  Subset* get_subset_selected();
   Subset* get_subset_selected_init();
   Subset* get_subset(Cloud* cloud, int i);
+  Subset* get_subset_byID(Cloud* cloud, int ID);
   Subset* get_subset_buffer(Cloud* cloud, int i);
   Subset* get_subset_buffer_byID(Cloud* cloud, int ID);
   Subset* get_subset_init(Cloud* cloud, int i);
   Subset* get_subset_init_byID(Cloud* cloud, int ID);
-  Subset* get_subset_byID(Cloud* cloud, int ID);
-
   Frame* get_frame(Cloud* cloud, int i);
   Frame* get_frame_byID(Cloud* cloud, int ID);
-
-  int get_orderSelectedcloud();
-  int get_listcloudSize();
   int get_subset_oID(Cloud* cloud, Subset* subset);
-  vector<string> get_nameByOrder();
-  bool is_cloudExist(Cloud* cloud);
-  bool is_cloudNameExist(Cloud* cloud);
-  bool is_atLeastMinNbcloud(int nbMin);
-  bool is_listcloudEmpty();
-  bool is_atLeastOnecloud();
+  bool get_is_list_empty();
 
-  inline list<Glyph*>* get_list_glyph(){return database.list_glyph;}
-  inline list<Cloud*>* get_list_cloud(){return database.list_cloud;}
-  inline int* get_list_ID_cloud(){return &database.ID_cloud;}
-  inline int* get_list_ID_glyph(){return &database.ID_glyph;}
-  inline void set_selected_cloud(Cloud* cloud){database.cloud_selected = cloud;}
+  inline list<Cloud*>* get_list_cloud(){return list_cloud;}
+  inline int* get_list_ID_cloud(){return &ID_cloud;}
+  inline Cloud* get_cloud_selected(){return cloud_selected;}
+  inline Subset* get_subset_selected(){return subset_selected;}
+  inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
 
 private:
   Data* dataManager;
+  Glyphs* glyphManager;
 
   list<Cloud*>* list_cloud;
+  Cloud* cloud_selected;
+  Subset* subset_selected;
+  int ID_cloud;
 };
 
 #endif

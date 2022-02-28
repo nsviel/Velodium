@@ -1,6 +1,6 @@
 #include "Scenario.h"
 
-#include "../../Interface/Interface.h"
+#include "../../Interface/Interface_node.h"
 #include "../../Interface/Component/Prediction.h"
 #include "../../Interface/Component/GPS.h"
 #include "../../Interface/Component/Network.h"
@@ -19,7 +19,7 @@ Scenario::Scenario(Module_node* node_module, Online* online){
   //---------------------------
 
   Slam* slamManager = node_module->get_slamManager();
-  Interface* ioManager = node_module->get_ioManager();
+  Interface_node* ioManager = node_module->get_ioManager();
   Player_node* node_player = node_module->get_node_player();
 
   this->captureManager = ioManager->get_captureManager();

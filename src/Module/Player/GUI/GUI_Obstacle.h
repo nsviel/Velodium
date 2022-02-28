@@ -7,7 +7,7 @@ class Scene;
 class GUI_module;
 class Obstacle;
 class Scenario;
-class Interface;
+class Interface_node;
 class CoordTransform;
 
 
@@ -42,7 +42,7 @@ public:
 
 private:
   Obstacle* obstacleManager;
-  Interface* ioManager;
+  Interface_node* ioManager;
   CoordTransform* coordManager;
   Scene* sceneManager;
   Scenario* scenarioManager;

@@ -6,14 +6,14 @@
 class GPS;
 class Saving;
 class Prediction;
-class Interface;
+class Interface_node;
 
 
 class Filemanager
 {
 public:
   //Constructor / Destructor
-  Filemanager(Interface* ioManager);
+  Filemanager(Interface_node* ioManager);
   ~Filemanager();
 
 public:

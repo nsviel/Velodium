@@ -107,7 +107,7 @@ void GUI_menuBar::MenuBar_menus(){
 
     ImGui::Separator();
     if (ImGui::MenuItem("Quit")){
-      sceneManager->exit();
+      node_gui->exit();
     }
 
     ImGui::EndMenu();

@@ -137,7 +137,7 @@ void Selection::mark_pointCreation(vec3 point){
 
         if(markMode == "cube"){
           //int ID = glyphManager->loadGlyph("../media/engine/Marks/cube.pts", point, "point", false);
-          //glyphManager->set_glyph_color(ID, vec3(1.0f, 1.0f, 1.0f));
+          //glyphManager->update_glyph_color(ID, vec3(1.0f, 1.0f, 1.0f));
           //list_glyph.push_back(ID);
         }
         if(markMode == "sphere"){
@@ -176,7 +176,7 @@ bool Selection::mark_pointSupression(vec3 point){
         idx.erase(it_idx);
 
         int ID = *next(list_glyph.begin(), 0);
-        glyphManager->remove_glyph(ID);
+        glyphManager->remove_glyph_scene(ID);
         list<int>::iterator it = next(list_glyph.begin(), 0);
         list_glyph.erase(it);
 
@@ -276,7 +276,7 @@ void Selection::mark_supressSelectedPoints(Cloud* cloud){
   }
 }
 void Selection::mark_pointLocation(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  /*list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //Reposionning of ptMark if cloud move
@@ -307,10 +307,10 @@ void Selection::mark_pointLocation(){
   //If too much ptMark, supress them
   while(cpt < list_glyph.size()){
     int ID = *next(list_glyph.begin(), 0);
-    glyphManager->remove_glyph(ID);
+    glyphManager->remove_glyph_scene(ID);
     list<int>::iterator it = next(list_glyph.begin(), 0);
     list_glyph.erase(it);
-  }
+  }*/
 
   //---------------------------
 }
@@ -403,10 +403,6 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     }
   }
 
-  //Supress frame glyph
-  Glyph* glyph = glyphManager->get_glyph("selection");
-  glyph->location.clear();
-
   //--------------------------
 }
 void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
@@ -431,7 +427,7 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   xyz.push_back(pt2);
 
   //Update frame glyph
-  glyphManager->update_glyph("selection", xyz);
+  //glyphManager->update_glyph("selection", xyz);
 
   //---------------------------
 }
@@ -541,7 +537,7 @@ void Selection::mark_planeABpoints(Cloud* cloud){
   //---------------------------
 }
 void Selection::mark_planeLocation(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  /*list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //For each Cloud insert plane
@@ -553,7 +549,7 @@ void Selection::mark_planeLocation(){
     if(idx.size() == 2){
       this->mark_planeCreation();
     }else if(ID_plane != -1){
-      glyphManager->remove_glyph(ID_plane);
+      glyphManager->remove_glyph_scene(ID_plane);
     }
   }
 
@@ -589,6 +585,6 @@ void Selection::mark_planeLocation(){
       }
     }
   }
-
+  */
   //---------------------------
 }

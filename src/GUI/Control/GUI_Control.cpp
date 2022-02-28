@@ -165,7 +165,7 @@ void GUI_control::control_keyboard_oneAction(){
   for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
     //Esc key
     if(ImGui::IsKeyPressed(256)){
-      sceneManager->exit();
+      node_gui->exit();
     }
 
     //Tab key

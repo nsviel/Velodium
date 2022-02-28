@@ -5,25 +5,26 @@
 Axis::Axis(){
   //---------------------------
 
+  this->create_axis_scene();
 
   //---------------------------
 }
 Axis::~Axis(){}
 
-Glyph* Axis::obj_axis(){
-  Glyph* axis = new Glyph();
+void Axis::create_axis_scene(){
+  axis_scene = new Glyph();
   //---------------------------
 
   //Create glyph
-  axis->name = "axis";
-  axis->draw_width = 3;
-  axis->visibility = true;
-  axis->draw_type = "line";
-  axis->permanent = true;
+  axis_scene->name = "axis";
+  axis_scene->draw_width = 3;
+  axis_scene->visibility = true;
+  axis_scene->draw_type = "line";
+  axis_scene->permanent = true;
 
   //Parameters
-  vector<vec3>& XYZ = axis->location;
-  vector<vec4>& RGB = axis->color;
+  vector<vec3>& XYZ = axis_scene->location;
+  vector<vec4>& RGB = axis_scene->color;
 
   //Construct glyph
   //X axis
@@ -45,10 +46,9 @@ Glyph* Axis::obj_axis(){
   RGB.push_back(vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
   //---------------------------
-  return axis;
 }
-Glyph* Axis::obj_axis_circle(float circleRadius){
-  Glyph* axis_circle = new Glyph();
+void Axis::create_axis_circle(float circleRadius){
+  axis_circle = new Glyph();
   //---------------------------
 
   //Create glyph
@@ -83,21 +83,19 @@ Glyph* Axis::obj_axis_circle(float circleRadius){
   }
 
   //---------------------------
-  return axis_circle;
 }
-
-void Axis::obj_axis_cloud(Subset* subset){
-  Glyph axis_cloud;
+void Axis::create_axis_subset(Subset* subset){
+  Glyph axis_subset;
   //---------------------------
 
   //Create glyph
-  axis_cloud.name = "subset_axis";
-  axis_cloud.draw_width = 3;
-  axis_cloud.visibility = true;
-  axis_cloud.draw_type = "line";
+  axis_subset.name = "subset_axis";
+  axis_subset.draw_width = 3;
+  axis_subset.visibility = true;
+  axis_subset.draw_type = "line";
 
   //Axis colors
-  vector<vec4>& RGB = axis_cloud.color;
+  vector<vec4>& RGB = axis_subset.color;
   RGB.push_back(vec4(0.9f, 0.2f, 0.2f, 1.0f));
   RGB.push_back(vec4(0.9f, 0.2f, 0.2f, 1.0f));
   RGB.push_back(vec4(0.2f, 0.9f, 0.2f, 1.0f));
@@ -106,11 +104,11 @@ void Axis::obj_axis_cloud(Subset* subset){
   RGB.push_back(vec4(0.2f, 0.2f, 0.9f, 1.0f));
 
   //---------------------------
-  subset->axis = axis_cloud;
+  subset->axis = axis_subset;
 }
-void Axis::update_axis_cloud(Subset* subset){
-  Glyph* axis_cloud = &subset->axis;
-  vector<vec3>& XYZ = axis_cloud->location;
+void Axis::update_axis_subset(Subset* subset){
+  Glyph* axis_subset = &subset->axis;
+  vector<vec3>& XYZ = axis_subset->location;
   vec3 root = subset->root;
   //---------------------------
 

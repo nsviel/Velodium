@@ -14,12 +14,12 @@ public:
   ~Normal();
 
 public:
-  void obj_normal(Subset* subset);
-  void update_normal(Subset* subset);
+  void create_normal_subset(Subset* subset);
+  void update_normal_subset(Subset* subset);
 
 private:
-  vec4 normal_color;
-  int normal_size;
+  vec4 color;
+  int width;
 };
 
 #endif

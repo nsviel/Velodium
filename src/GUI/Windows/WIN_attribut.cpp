@@ -113,7 +113,7 @@ void WIN_attribut::window_normal(){
           sceneManager->update_cloud_location(cloud);
         }
 
-        glyphManager->update_glyph_object("normal", cloud);
+        //glyphManager->update_glyph_object("normal", cloud);
 
         //---------------------------
       }
@@ -164,7 +164,7 @@ void WIN_attribut::window_normal(){
             sceneManager->update_subset_location(subset);
           }
 
-          glyphManager->update_glyph_object("normal", cloud);
+          //glyphManager->update_glyph_object("normal", cloud);
         }
 
         //---------------------------
@@ -174,13 +174,13 @@ void WIN_attribut::window_normal(){
     if(ImGui::Button("Reoriente to origin", ImVec2(200,0))){
       if(cloud != nullptr){
         attribManager->compute_normals_reorientToOrigin(subset);
-        glyphManager->update_glyph_object("normal", cloud);
+        //glyphManager->update_glyph_object("normal", cloud);
       }
     }
     if(ImGui::Button("Invert", ImVec2(200,0))){
       if(cloud != nullptr){
         attribManager->compute_normals_invert();
-        glyphManager->update_glyph_object("normal", cloud);
+        //glyphManager->update_glyph_object("normal", cloud);
       }
     }
 

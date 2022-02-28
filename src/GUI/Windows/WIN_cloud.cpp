@@ -38,7 +38,7 @@ void WIN_cloud::window_cloudInfo(){
     //Visibility
     static bool visible = true;
     if(ImGui::Checkbox("Visibility", &visible)){
-      sceneManager->set_cloudVisibility(cloud, visible);
+      cloud->visibility = visible;
     }
     ImGui::SameLine();
 

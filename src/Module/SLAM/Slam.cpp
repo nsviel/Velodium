@@ -15,7 +15,8 @@
 
 
 //Constructor / Destructor
-Slam::Slam(Engine_node* node_engine){
+Slam::Slam(Engine_node* node){
+  this->node_engine = node;
   //---------------------------
 
   this->sceneManager = node_engine->get_sceneManager();
@@ -24,7 +25,7 @@ Slam::Slam(Engine_node* node_engine){
   this->normalManager = new SLAM_normal();
   this->ceresManager = new SLAM_optim_ceres(normalManager);
   this->gnManager = new SLAM_optim_gn(normalManager);
-  this->assessManager = new SLAM_assessment(gnManager);
+  this->assessManager = new SLAM_assessment(this);
   this->mapManager = new SLAM_localMap();
   this->configManager = new SLAM_configuration(this);
 
@@ -123,7 +124,7 @@ void Slam::compute_slam_online(Cloud* cloud, int ID){
   //---------------------------
   float duration = toc();
   this->compute_statistics(duration, frame, frame_m1, subset);
-  glyphManager->update(subset);
+  glyphManager->update_glyph_subset(subset);
 }
 
 //SLAM sub-functions

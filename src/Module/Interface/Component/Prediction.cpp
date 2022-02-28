@@ -1,5 +1,6 @@
 #include "Prediction.h"
 
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 
 #include "../../../Specific/fct_watcher.h"
@@ -11,10 +12,10 @@
 
 
 //Constructor / Destructor
-Prediction::Prediction(){
+Prediction::Prediction(Engine_node* node_engine){
   //---------------------------
 
-  this->sceneManager = new Scene();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_predi = path_dir + "prediction/";

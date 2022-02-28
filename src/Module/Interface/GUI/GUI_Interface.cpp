@@ -2,7 +2,7 @@
 
 #include "GUI_Lidar.h"
 
-#include "../Interface.h"
+#include "../Interface_node.h"
 #include "../Component/Network.h"
 #include "../Protocol/MQTT/MQTT.h"
 #include "../Protocol/SFTP.h"
@@ -21,7 +21,7 @@ GUI_Interface::GUI_Interface(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();
-  Interface* ioManager = node_module->get_ioManager();
+  Interface_node* ioManager = node_module->get_ioManager();
 
   this->netManager = ioManager->get_netManager();
   this->mqttManager = netManager->get_mqttManager();

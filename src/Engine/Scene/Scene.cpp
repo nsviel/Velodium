@@ -2,13 +2,22 @@
 
 #include "Glyphs.h"
 
+#include "../Engine_node.h"
+
 #include "../../Specific/fct_system.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / Destructor
-Scene::Scene(){
+Scene::Scene(Engine_node* node_engine){
   //---------------------------
+
+  this->glyphManager = node_engine->get_glyphManager();
+
+  this->list_cloud = new list<Cloud*>;
+  this->cloud_selected = nullptr;
+  this->subset_selected = nullptr;
+  this->ID_cloud = 0;
 
   //---------------------------
 }
@@ -16,14 +25,6 @@ Scene::~Scene(){
 }
 
 //Remove functions
-void Scene::exit(){
-  //---------------------------
-
-  GLFWwindow* window = glfwGetCurrentContext();
-  glfwSetWindowShouldClose(window, true);
-
-  //---------------------------
-}
 void Scene::remove_cloud(Cloud* cloud){
   //---------------------------
 
@@ -42,28 +43,27 @@ void Scene::remove_cloud(Cloud* cloud){
     }
 
     //Delete cloud
-    delete database.cloud_selected;
+    delete cloud_selected;
 
     //Delete cloud iterator in list
-    list<Cloud*>::iterator it = next(database.list_cloud->begin(), oID);
-    database.list_cloud->erase(it);
+    list<Cloud*>::iterator it = next(list_cloud->begin(), oID);
+    list_cloud->erase(it);
 
     //Check for end list new selected cloud
-    if(oID >= database.list_cloud->size()){
+    if(oID >= list_cloud->size()){
       oID = 0;
     }
 
-    this->update_cloud_oID(database.list_cloud);
+    this->update_cloud_oID(list_cloud);
     this->selection_setCloud(oID);
 
     //---------------------------
     string log = "Cloud "+ name +" removed";
     console.AddLog("#", log);
   }
-  if(database.list_cloud->size() == 0){
-    Glyphs glyphManager;
-    glyphManager.reset();
-    database.cloud_selected = nullptr;
+  if(list_cloud->size() == 0){
+    glyphManager->reset_scene();
+    cloud_selected = nullptr;
   }
 
   //---------------------------
@@ -71,8 +71,8 @@ void Scene::remove_cloud(Cloud* cloud){
 void Scene::remove_cloud_all(){
   //---------------------------
 
-  while(database.list_cloud->size() != 0){
-    Cloud* cloud = *database.list_cloud->begin();
+  while(list_cloud->size() != 0){
+    Cloud* cloud = *list_cloud->begin();
     this->remove_cloud(cloud);
   }
 
@@ -300,12 +300,12 @@ void Scene::reset_cloud_all(){
   //---------------------------
 
   //Reset all clouds
-  for(int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     this->reset_cloud(cloud);
   }
 
-  this->update_cloud_glyphs(database.cloud_selected);
+  this->update_cloud_glyphs(cloud_selected);
 
   //---------------------------
   console.AddLog("#", "Reset scene...");
@@ -317,8 +317,7 @@ void Scene::update_cloud_glyphs(Cloud* cloud){
   //---------------------------
 
   this->update_cloud_MinMax(cloud);
-  Glyphs glyphManager;
-  glyphManager.update(cloud);
+  glyphManager->update_glyph_cloud(cloud);
 
   //---------------------------
 }
@@ -411,8 +410,7 @@ void Scene::update_subset_glyphs(Subset* subset){
   //---------------------------
 
   this->update_subset_MinMax(subset);
-  Glyphs glyphManager;
-  glyphManager.update(subset);
+  glyphManager->update_glyph_subset(subset);
 
   //---------------------------
 }
@@ -421,8 +419,7 @@ void Scene::update_subset(Subset* subset){
   //---------------------------
 
   this->update_subset_MinMax(subset);
-  Glyphs glyphManager;
-  glyphManager.update(subset);
+  glyphManager->update_glyph_subset(subset);
 
   //---------------------------
 }
@@ -491,11 +488,11 @@ void Scene::update_subset_color(Subset* subset){
 void Scene::selection_setCloud(int ID){
   //---------------------------
 
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     if(cloud->oID == ID){
-      database.cloud_selected = cloud;
-      this->update_cloud_glyphs(database.cloud_selected);
+      cloud_selected = cloud;
+      this->update_cloud_glyphs(cloud_selected);
     }
   }
 
@@ -504,8 +501,8 @@ void Scene::selection_setCloud(int ID){
 void Scene::selection_setCloud(Cloud* cloud){
   //---------------------------
 
-  database.cloud_selected = cloud;
-  this->update_cloud_glyphs(database.cloud_selected);
+  cloud_selected = cloud;
+  this->update_cloud_glyphs(cloud_selected);
 
   //---------------------------
 }
@@ -526,20 +523,19 @@ void Scene::selection_setSubset(Cloud* cloud, int ID){
   //---------------------------
 }
 void Scene::selection_setNext(){
-  Glyphs glyphManager;
   //---------------------------
 
-  if(database.list_cloud->size() != 0){
-    if(database.cloud_selected->oID + 1 < database.list_cloud->size()){
-      database.cloud_selected = *next(database.list_cloud->begin(),database.cloud_selected->oID + 1);
+  if(list_cloud->size() != 0){
+    if(cloud_selected->oID + 1 < list_cloud->size()){
+      cloud_selected = *next(list_cloud->begin(),cloud_selected->oID + 1);
     }
     else{
-      database.cloud_selected = *next(database.list_cloud->begin(),0);
+      cloud_selected = *next(list_cloud->begin(),0);
     }
-    this->update_cloud_MinMax(database.cloud_selected);
-    glyphManager.update(database.cloud_selected);
+    this->update_cloud_MinMax(cloud_selected);
+    glyphManager->update_glyph_cloud(cloud_selected);
   }else{
-    glyphManager.reset();
+    glyphManager->reset_scene();
   }
 
   //---------------------------
@@ -547,12 +543,12 @@ void Scene::selection_setNext(){
 void Scene::selection_cloudByName(string name){
   //---------------------------
 
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
 
     if(cloud->name == name){
-      database.cloud_selected = cloud;
-      this->update_cloud_glyphs(database.cloud_selected);
+      cloud_selected = cloud;
+      this->update_cloud_glyphs(cloud_selected);
     }
   }
 
@@ -560,79 +556,23 @@ void Scene::selection_cloudByName(string name){
 }
 
 //Assesseurs
-Cloud* Scene::get_cloud_selected(){
-  //---------------------------
-
-  if(database.cloud_selected != nullptr){
-    return database.cloud_selected;
-  }else{
-    return nullptr;
-  }
-
-  //---------------------------
-}
 Cloud* Scene::get_cloud_next(){
   Cloud* cloud;
   //---------------------------
 
-  if(database.list_cloud->size() != 0){
-    if(database.cloud_selected->oID + 1 < database.list_cloud->size()){
-      cloud = *next(database.list_cloud->begin(),database.cloud_selected->oID + 1);
+  if(list_cloud->size() != 0){
+    if(cloud_selected->oID + 1 < list_cloud->size()){
+      cloud = *next(list_cloud->begin(),cloud_selected->oID + 1);
     }else{
-      cloud = *next(database.list_cloud->begin(),0);
+      cloud = *next(list_cloud->begin(),0);
     }
   }
 
   //---------------------------
   return cloud;
 }
-Cloud* Scene::get_cloud_byName(string name){
-  Cloud* cloud_out;
-  //---------------------------
-
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
-
-    if(cloud->name == name){
-      cloud_out = cloud;
-    }
-  }
-
-  //---------------------------
-  return cloud_out;
-}
-Cloud* Scene::get_cloud_byoID(int oID){
-  Cloud* cloud_out;
-  //---------------------------
-
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
-
-    if(cloud->oID == oID){
-      cloud_out = cloud;
-    }
-  }
-
-  //---------------------------
-  return cloud_out;
-}
-
-Subset* Scene::get_subset_selected(){
-  Cloud* cloud = database.cloud_selected;
-  //---------------------------
-
-  if(cloud != nullptr){
-    Subset* subset = get_subset_byID(cloud, cloud->ID_selected);
-    return subset;
-  }
-  else{
-    return nullptr;
-  }
-
-  //---------------------------
-}
 Subset* Scene::get_subset_selected_init(){
-  Cloud* cloud = database.cloud_selected;
+  Cloud* cloud = cloud_selected;
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
@@ -712,7 +652,6 @@ Subset* Scene::get_subset_byID(Cloud* cloud, int ID){
   //---------------------------
   return nullptr;
 }
-
 Frame* Scene::get_frame(Cloud* cloud, int i){
   //---------------------------
 
@@ -737,58 +676,8 @@ Frame* Scene::get_frame_byID(Cloud* cloud, int ID){
   //---------------------------
   return nullptr;
 }
-vector<string> Scene::get_nameByOrder(){
-  vector<string> nameByOrder;
-  //---------------------------
-
-  if(is_atLeastOnecloud()){
-    string temp;
-
-    for(int i=0; i<database.list_cloud->size(); i++){
-      Cloud* cloud = *next(database.list_cloud->begin(), i);
-      nameByOrder.push_back(cloud->name);
-    }
-
-    bool ok = true;
-    while(ok){
-      ok = false;
-      for(int i=0; i<database.list_cloud->size()-1; i++){
-        int id = strcasecmp_withNumbers(nameByOrder[i].c_str(), nameByOrder[i+1].c_str());
-        if(id > 0){
-          temp = nameByOrder[i];
-          nameByOrder[i] = nameByOrder[i+1];
-          nameByOrder[i+1] = temp;
-
-          ok = true;
-        }
-      }
-    }
-
-    //Reorganize list of cloudes
-    list<Cloud*>* list_out = new list<Cloud*>;
-    for(int i=0; i<nameByOrder.size(); i++){
-      list_out->push_back(get_cloud_byName(nameByOrder[i]));
-    }
-
-    database.list_cloud = list_out;
-  }
-
-  //---------------------------
-  return nameByOrder;
-}
-int Scene::get_orderSelectedcloud(){
-  vector<string> Names = get_nameByOrder();
-  //---------------------------
-
-  int order = -1;
-  for(int i=0; i<Names.size(); i++){
-    if(database.cloud_selected->name == Names[i]){
-      order = i;
-    }
-  }
-
-  //---------------------------
-  return order;
+bool Scene::get_is_list_empty(){
+  return list_cloud->empty();
 }
 int Scene::get_subset_oID(Cloud* cloud, Subset* subset){
   int oID = -1;
@@ -804,70 +693,4 @@ int Scene::get_subset_oID(Cloud* cloud, Subset* subset){
 
   //---------------------------
   return oID;
-}
-int Scene::get_listcloudSize(){
-  return database.list_cloud->size();
-}
-void Scene::set_cloudVisibility(Cloud* cloud, bool visibleON){
-  //---------------------------
-
-  //Toggle cloud visibility
-  if(visibleON == true && cloud->visibility == false){
-    cloud->visibility = true;
-  }else if(visibleON == false && cloud->visibility == true){
-    cloud->visibility = false;
-  }
-
-  //---------------------------
-}
-
-//Check state functions
-bool Scene::is_cloudExist(Cloud* cloud_in){
-  //---------------------------
-
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
-
-    if(cloud_in->ID == cloud->ID){
-      return true;
-    }
-  }
-
-  //---------------------------
-  cout<<"Cloud ID problem..."<<endl;
-  return false;
-}
-bool Scene::is_cloudNameExist(Cloud* cloud_in){
-  bool exist = false;
-  //---------------------------
-
-  for (int i=0; i<database.list_cloud->size(); i++){
-    Cloud* cloud = *next(database.list_cloud->begin(),i);
-
-    if(cloud->name == cloud_in->name){
-      cloud_in->name = cloud_in->name + "_";
-      exist = true;
-    }
-  }
-
-  //---------------------------
-  return exist;
-}
-bool Scene::is_atLeastMinNbcloud(int nbMin){
-  bool result = false;
-  int nb = database.list_cloud->size();
-  //---------------------------
-
-  if(nb >= nbMin){
-    result = true;
-  }
-
-  //---------------------------
-  return result;
-}
-bool Scene::is_listcloudEmpty(){
-  return database.list_cloud->empty();
-}
-bool Scene::is_atLeastOnecloud(){
-  return !database.list_cloud->empty();
 }

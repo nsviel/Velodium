@@ -12,7 +12,7 @@ class Dimension;
 class Scene;
 class Configuration;
 class Module_node;
-class Interface;
+class Interface_node;
 
 
 class Online
@@ -58,7 +58,7 @@ private:
   Filter* filterManager;
   Dimension* dimManager;
   Configuration* configManager;
-  Interface* ioManager;
+  Interface_node* ioManager;
 
   vec2 HM_height_range;
   vec2 camera_moved_trans;

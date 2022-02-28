@@ -1,4 +1,4 @@
-#include "dataExtraction.h"
+#include "Extractore.h"
 
 #include "../Load_node.h"
 
@@ -11,22 +11,23 @@
 
 
 //Constructor / Destructor
-dataExtraction::dataExtraction(Load_node* node_load){
+Extractore::Extractore(Load_node* node_load){
   //---------------------------
 
   Engine_node* node_engine = node_load->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
+  this->glyphManager = node_engine->get_glyphManager();
 
   this->ID = 0;
 
   //---------------------------
 }
-dataExtraction::~dataExtraction(){}
+Extractore::~Extractore(){}
 
 //Main function
-Cloud* dataExtraction::extractData(vector<dataFile*> data){
+Cloud* Extractore::extractData(vector<dataFile*> data){
   Cloud* cloud = new Cloud();
   //---------------------------
 
@@ -56,8 +57,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
     }
 
     //Create associated glyphs
-    Glyphs glyphManager;
-    glyphManager.create_glyph_fromCloud(subset);
+    glyphManager->create_glyph_subset(subset);
 
     Subset* subset_buf = new Subset(*subset);
     Subset* subset_ini = new Subset(*subset);
@@ -70,7 +70,7 @@ Cloud* dataExtraction::extractData(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset* dataExtraction::extractData(udpPacket& data){
+Subset* Extractore::extractData(udpPacket& data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -87,13 +87,12 @@ Subset* dataExtraction::extractData(udpPacket& data){
   this->extract_Color(subset, data.rgb);
 
   //Create associated glyphs
-  Glyphs glyphManager;
-  glyphManager.create_glyph_fromCloud(subset);
+  glyphManager->create_glyph_subset(subset);
 
   //---------------------------
   return subset;
 }
-void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
+void Extractore::extractData_frame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -111,8 +110,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
   this->extract_Timestamp(subset, data->timestamp);
 
   //Create associated glyphs
-  Glyphs glyphManager;
-  glyphManager.create_glyph_fromCloud(subset);
+  glyphManager->create_glyph_subset(subset);
 
   cloud->subset.push_back(subset);
   cloud->subset_init.push_back(subset);
@@ -122,7 +120,7 @@ void dataExtraction::extractData_frame(Cloud* cloud, dataFile* data){
 
   //---------------------------
 }
-void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
+void Extractore::extractData_oneFrame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -166,7 +164,7 @@ void dataExtraction::extractData_oneFrame(Cloud* cloud, dataFile* data){
 }
 
 //Subfunctions
-void dataExtraction::check_data(dataFile* data){
+void Extractore::check_data(dataFile* data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -215,7 +213,7 @@ void dataExtraction::check_data(dataFile* data){
 
   //---------------------------
 }
-void dataExtraction::check_data(udpPacket& data){
+void Extractore::check_data(udpPacket& data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -246,7 +244,7 @@ void dataExtraction::check_data(udpPacket& data){
 
   //---------------------------
 }
-void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
+void Extractore::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   //---------------------------
 
   //Calculate number of point
@@ -287,7 +285,7 @@ void dataExtraction::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void dataExtraction::init_subsetParameters(Subset* subset, string name, int ID){
+void Extractore::init_subsetParameters(Subset* subset, string name, int ID){
   //---------------------------
 
   //Subset VAO
@@ -303,7 +301,7 @@ void dataExtraction::init_subsetParameters(Subset* subset, string name, int ID){
 
   //---------------------------
 }
-void dataExtraction::init_frameParameters(Subset* subset){
+void Extractore::init_frameParameters(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -311,7 +309,7 @@ void dataExtraction::init_frameParameters(Subset* subset){
 
   //---------------------------
 }
-void dataExtraction::init_randomColor(){
+void Extractore::init_randomColor(){
   //---------------------------
 
   //---> Compute a random color for each cloud
@@ -328,7 +326,7 @@ void dataExtraction::init_randomColor(){
   //---------------------------
 }
 
-void dataExtraction::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
+void Extractore::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------
 
@@ -350,7 +348,7 @@ void dataExtraction::extract_Location(Subset* subset, vector<vec3>& locationOBJ)
 
   //---------------------------
 }
-void dataExtraction::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
+void Extractore::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
   //---------------------------
 
   if(is_intensity){
@@ -359,7 +357,7 @@ void dataExtraction::extract_Intensity(Subset* subset, vector<float>& intensityO
 
   //---------------------------
 }
-void dataExtraction::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
+void Extractore::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
   //---------------------------
 
   if(is_timestamp){
@@ -372,7 +370,7 @@ void dataExtraction::extract_Timestamp(Subset* subset, vector<float>& timestampO
 
   //---------------------------
 }
-void dataExtraction::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
+void Extractore::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
   uint normalVBO;
   //---------------------------
 
@@ -382,7 +380,7 @@ void dataExtraction::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
 
   //---------------------------
 }
-void dataExtraction::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
+void Extractore::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
   uint colorVBO;
   //---------------------------
 

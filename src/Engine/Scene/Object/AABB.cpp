@@ -5,33 +5,35 @@
 AABB::AABB(){
   //---------------------------
 
-  this->aabb_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  this->color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  this->width = 1;
+  
+  this->create_aabb_scene();
 
   //---------------------------
 }
 AABB::~AABB(){}
 
-Glyph* AABB::obj_aabb(){
-  Glyph* aabb = new Glyph();
+//Main function
+void AABB::create_aabb_scene(){
+  aabb = new Glyph();
   //---------------------------
 
   //Create glyph
   aabb->name = "aabb";
-  aabb->draw_width = 1;
+  aabb->draw_width = width;
   aabb->visibility = true;
   aabb->draw_type = "line";
   aabb->permanent = true;
-  aabb->color_unique = aabb_color;
+  aabb->color_unique = color;
 
   for(int i=0; i<24; i++){
-    aabb->color.push_back(aabb_color);
+    aabb->color.push_back(color);
   }
 
   //---------------------------
-  return aabb;
 }
-
-void AABB::update_aabb(Glyph* aabb, Cloud* cloud){
+void AABB::update_aabb(Cloud* cloud){
   vector<vec3>& XYZ = aabb->location;
   vector<vec4>& RGB = aabb->color;
   vec3 min = cloud->min;
@@ -43,7 +45,7 @@ void AABB::update_aabb(Glyph* aabb, Cloud* cloud){
 
   //---------------------------
 }
-void AABB::update_aabb(Glyph* aabb, Subset* subset){
+void AABB::update_aabb(Subset* subset){
   vector<vec3>& XYZ = aabb->location;
   vector<vec4>& RGB = aabb->color;
   vec3 min = subset->min;
@@ -55,7 +57,6 @@ void AABB::update_aabb(Glyph* aabb, Subset* subset){
 
   //---------------------------
 }
-
 vector<vec3> AABB::build_box(vec3 min, vec3 max){
   vector<vec3> XYZ;
   vec3 l1, l2;

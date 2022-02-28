@@ -23,19 +23,19 @@ Engine_node::Engine_node(Configuration* config, GLFWwindow* window){
   this->configManager = config;
   //---------------------------
 
-
   this->dimManager = new Dimension(window, configManager);
   this->shaderManager = new Shader(dimManager);
   this->cameraManager = new Camera(dimManager);
   this->renderManager = new Renderer(dimManager);
   this->viewportManager = new Viewport(dimManager);
-  this->sceneManager = new Scene();
-  this->glyphManager = new Glyphs();
+  this->glyphManager = new Glyphs(this);
+  this->sceneManager = new Scene(this);
 
   this->node_load = new Load_node(this);
   this->node_ope = new Operation_node(this);
   this->node_module = new Module_node(this);
   this->node_gui = new GUI_node(this);
+
   this->engineManager = new Engine(this);
 
   //---------------------------
@@ -47,8 +47,16 @@ void Engine_node::reset(){
   //---------------------------
 
   cameraManager->viewport_reset();
-  glyphManager->reset();
+  glyphManager->reset_scene();
   sceneManager->reset_cloud_all();
+
+  //---------------------------
+}
+void Engine_node::exit(){
+  //---------------------------
+
+  GLFWwindow* window = glfwGetCurrentContext();
+  glfwSetWindowShouldClose(window, true);
 
   //---------------------------
 }

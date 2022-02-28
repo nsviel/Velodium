@@ -30,6 +30,7 @@ public:
   void compute_slam_online(Cloud* cloud, int ID);
   void reset_slam();
 
+  inline Engine_node* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return normalManager;}
   inline SLAM_optim_ceres* get_slam_ceres(){return ceresManager;}
   inline SLAM_optim_gn* get_slam_gn(){return gnManager;}
@@ -57,6 +58,7 @@ private:
   void compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset);
 
 private:
+  Engine_node* node_engine;
   Scene* sceneManager;
   Glyphs* glyphManager;
 

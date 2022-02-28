@@ -8,15 +8,16 @@
 
 class Load_node;
 class Scene;
+class Glyphs;
 class Configuration;
 
 
-class dataExtraction
+class Extractore
 {
 public:
   //Constructor / Destructor
-  dataExtraction(Load_node* node_load);
-  ~dataExtraction();
+  Extractore(Load_node* node_load);
+  ~Extractore();
 
 public:
   //Main function
@@ -42,6 +43,7 @@ private:
 
 private:
   Scene* sceneManager;
+  Glyphs* glyphManager;
   Configuration* configManager;
 
   int ID, oneFrame_VAO;
