@@ -178,7 +178,7 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   //OpenGL stuff
   Json::Value window;
   window["title"] = "Velodium";
-  window["resolution_width"] = 400;
+  window["resolution_width"] = 500;
   window["resolution_height"] = 200;
   window["resolution_ratio"] = 4.0f/3.0f;
   window["background_color"] = 0.86f;

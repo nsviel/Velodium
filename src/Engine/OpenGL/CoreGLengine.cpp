@@ -57,7 +57,7 @@ void CoreGLengine::arg(int argc, char* argv[]){
   }
   //Else make default configuration
   else{
-    configManager->make_preconfig(2);
+    configManager->make_preconfig(0);
   }
 
   //---------------------------
