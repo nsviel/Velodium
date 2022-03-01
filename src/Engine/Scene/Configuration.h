@@ -3,6 +3,10 @@
 
 #include "../../common.h"
 
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/json.h>
+#include <fstream>
+
 
 class Configuration
 {
@@ -14,6 +18,12 @@ public:
 public:
   //Main functions
   void make_configuration();
+  void make_preconfig(int config);
+
+  //Pred-defined configurations
+  void preconf_default(Json::Value& root);
+  void preconf_WP4_car(Json::Value& root);
+  void preconf_WP5_train(Json::Value& root);
 
   //json stuff
   void create_jsonfile();
@@ -28,6 +38,11 @@ public:
 
 private:
   string path_config;
+  string path_default;
+  string path_WP4_car;
+  string path_WP5_train;
+
+  int config;
 };
 
 #endif

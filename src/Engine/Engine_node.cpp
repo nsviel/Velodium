@@ -42,6 +42,7 @@ Engine_node::Engine_node(Configuration* config, GLFWwindow* window){
 }
 Engine_node::~Engine_node(){}
 
+void Engine_node::update(){}
 void Engine_node::runtime(){}
 void Engine_node::reset(){
   //---------------------------

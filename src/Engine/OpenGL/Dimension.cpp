@@ -60,11 +60,10 @@ void Dimension::update_opengl_dim(){
   int gl_h = win_dim.y - gui_tp_dim.y - gui_bp_dim.y;
 
   if(gl_w != gl_dim.x || gl_h != gl_dim.y && !with_custom_gl_dim){
-
+    //Set up new values
     this->gl_dim = vec2(gl_w, gl_h);
     this->gl_pos = vec2(gui_ltp_dim.x, gui_bp_dim.y);
     this->is_resized = true;
-
   }
 
   //---------------------------
@@ -79,6 +78,21 @@ void Dimension::update_window_dim(){
     glfwGetWindowSize(window, &win_w, &win_h);
   }
 
+  //Check for minimal dimension
+  bool min_dim = false;
+  if(win_w < 300){
+    win_w = 300;
+    min_dim = true;
+  }
+  if(win_h < 300){
+    win_h = 300;
+    min_dim = true;
+  }
+  if(min_dim){
+    glfwSetWindowSize(window, win_w, win_h);
+  }
+
+  //Set up new values
   if(win_w != win_dim.x || win_h != win_dim.y){
 
     this->win_dim = vec2(win_w, win_h);

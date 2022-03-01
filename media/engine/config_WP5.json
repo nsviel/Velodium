@@ -9,27 +9,20 @@
       "speed_zoom" : 0.10000000149011612
    },
    "gui" : {
-      "botPanel_height" : 100,
-      "leftPanel_mid" : 200,
-      "leftPanel_width" : 220,
+      "botPanel_height" : 282,
+      "leftPanel_mid" : 1,
+      "leftPanel_width" : 0,
       "topPanel_height" : 18
    },
-   "online" : {
+   "module" : {
       "with_AI_module" : true,
       "with_camera_follow" : false,
       "with_cylinder_cleaning" : false,
       "with_heatmap" : false,
-      "with_keepNframes" : false,
-      "with_remove_lastSubset" : false,
+      "with_remove_lastSubset" : true,
+      "with_save_frame" : true,
       "with_save_image" : false,
-      "with_slam" : false
-   },
-   "opengl" : {
-      "forceVersion" : false,
-      "nb_multisample" : 4,
-      "verbose_coreGL" : false,
-      "verbose_shader" : false,
-      "waitForEvent" : false
+      "with_slam" : true
    },
    "parameter" : {
       "check_directories" : true,
@@ -38,14 +31,15 @@
       "cloud_rotation" : 5,
       "cloud_translation" : 0.01,
       "path_media" : "../media/",
-      "point_size" : 3
+      "point_size" : 2
    },
    "window" : {
-      "activated" : false,
       "background_color" : 0.86000001430511475,
-      "resolution_height" : 500,
+      "forceVersion" : false,
+      "resolution_height" : 200,
       "resolution_ratio" : 1.3333333730697632,
-      "resolution_width" : 1024,
-      "title" : "Velodium"
+      "resolution_width" : 400,
+      "title" : "Velodium",
+      "visualization" : false
    }
 }

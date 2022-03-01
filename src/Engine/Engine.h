@@ -30,7 +30,7 @@ public:
   void loop_gui();
 
   //Subfunctions
-  void draw_clouds();
+  void runtime_draw_clouds();
 
   inline Module_node* get_node_module(){return node_module;}
   inline Engine_node* get_node_engine(){return node_engine;}
@@ -45,7 +45,7 @@ private:
   Engine_node* node_engine;
   GUI_node* node_gui;
 
-  bool with_window;
+  bool is_visualization;
   uint modelID, comID;
 };
 

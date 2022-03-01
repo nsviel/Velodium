@@ -10,6 +10,7 @@
 #include "Object/Normal.h"
 
 #include "../Engine_node.h"
+#include "../Scene/Configuration.h"
 
 #include "../../Load/Format/file_PTS.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -20,6 +21,8 @@ Glyphs::Glyphs(Engine_node* node){
   this->node_engine = node;
   //---------------------------
 
+  Configuration* configManager = node_engine->get_configManager();
+
   this->list_glyph = new list<Glyph*>;
   this->gridObject = new Grid();
   this->axisObject = new Axis();
@@ -28,6 +31,7 @@ Glyphs::Glyphs(Engine_node* node){
   this->oobbObject = new OOBB();
   this->markObject = new Mark();
 
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
   this->ID_glyph = 0;
 
   //---------------------------
@@ -268,32 +272,35 @@ void Glyphs::update_glyph_MinMax(Glyph* glyph){
 void Glyphs::insert_into_gpu(Glyph* glyph){
   //---------------------------
 
-  //OpenGL stuff
-  GLuint VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
+  if(is_visualization){
+    //OpenGL stuff
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
 
-  //Vertices
-  vector<vec3>& XYZ = glyph->location;
-  GLuint locationVBO;
-  glGenBuffers(1, &locationVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, locationVBO);
-  glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
+    //Vertices
+    vector<vec3>& XYZ = glyph->location;
+    GLuint locationVBO;
+    glGenBuffers(1, &locationVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, locationVBO);
+    glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0], GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
+    glEnableVertexAttribArray(0);
 
-  //Color
-  vector<vec4>& RGB = glyph->color;
-  GLuint colorVBO;
-  glGenBuffers(1, &colorVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-  glBufferData(GL_ARRAY_BUFFER, RGB.size()*sizeof(glm::vec4), &RGB[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glEnableVertexAttribArray(1);
+    //Color
+    vector<vec4>& RGB = glyph->color;
+    GLuint colorVBO;
+    glGenBuffers(1, &colorVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+    glBufferData(GL_ARRAY_BUFFER, RGB.size()*sizeof(glm::vec4), &RGB[0], GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+    glEnableVertexAttribArray(1);
 
-  glyph->VAO = VAO;
-  glyph->VBO_location = locationVBO;
-  glyph->VBO_color = colorVBO;
+    glyph->VAO = VAO;
+    glyph->VBO_location = locationVBO;
+    glyph->VBO_color = colorVBO;
+  }
+
   glyph->ID = ID_glyph++;
 
   //---------------------------

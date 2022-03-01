@@ -3,6 +3,7 @@
 #include "Glyphs.h"
 
 #include "../Engine_node.h"
+#include "../Scene/Configuration.h"
 
 #include "../../Specific/fct_system.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -12,7 +13,10 @@
 Scene::Scene(Engine_node* node_engine){
   //---------------------------
 
+  Configuration* configManager = node_engine->get_configManager();
+
   this->glyphManager = node_engine->get_glyphManager();
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
 
   this->list_cloud = new list<Cloud*>;
   this->cloud_selected = nullptr;
@@ -186,27 +190,29 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   //---------------------------
 }
 void Scene::add_subset_to_gpu(Subset* subset){
-  //---------------------------
+  if(is_visualization){
+    //---------------------------
 
-  glGenVertexArrays(1, &subset->VAO);
-  glBindVertexArray(subset->VAO);
+    glGenVertexArrays(1, &subset->VAO);
+    glBindVertexArray(subset->VAO);
 
-  glGenBuffers(1, &subset->VBO_xyz);
-  glGenBuffers(1, &subset->VBO_rgb);
+    glGenBuffers(1, &subset->VBO_xyz);
+    glGenBuffers(1, &subset->VBO_rgb);
 
-  //Location
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_xyz);
-  glBufferData(GL_ARRAY_BUFFER, subset->xyz.size()*sizeof(glm::vec3), &subset->xyz[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
+    //Location
+    glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_xyz);
+    glBufferData(GL_ARRAY_BUFFER, subset->xyz.size()*sizeof(glm::vec3), &subset->xyz[0], GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
+    glEnableVertexAttribArray(0);
 
-  //Color
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);
-  glBufferData(GL_ARRAY_BUFFER, subset->RGB.size()*sizeof(glm::vec4), &subset->RGB[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glEnableVertexAttribArray(1);
+    //Color
+    glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);
+    glBufferData(GL_ARRAY_BUFFER, subset->RGB.size()*sizeof(glm::vec4), &subset->RGB[0], GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+    glEnableVertexAttribArray(1);
 
-  //---------------------------
+    //---------------------------
+  }
 }
 
 //Reset functions

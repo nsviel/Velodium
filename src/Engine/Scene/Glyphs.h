@@ -64,6 +64,7 @@ private:
   Mark* markObject;
 
   list<Glyph*>* list_glyph;
+  bool is_visualization;
   int ID_glyph;
 };
 

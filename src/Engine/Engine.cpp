@@ -3,6 +3,7 @@
 #include "Engine_node.h"
 #include "Scene/Glyphs.h"
 #include "Scene/Scene.h"
+#include "Scene/Configuration.h"
 
 #include "../Module/Module_node.h"
 #include "../GUI/GUI_node.h"
@@ -11,15 +12,18 @@
 
 //Constructor / Destructor
 Engine::Engine(Engine_node* engine){
-  this->with_window = true;
   this->node_engine = engine;
   //---------------------------
+
+  Configuration* configManager = node_engine->get_configManager();
 
   this->node_module = node_engine->get_node_module();
   this->node_gui = node_engine->get_node_gui();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->guiManager = node_gui->get_guiManager();
+
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
 
   //---------------------------
 }
@@ -30,11 +34,11 @@ void Engine::loop_scene(){
   //---------------------------
 
   //Draw glyph stuff
-  if(with_window){
+  if(is_visualization){
     glyphManager->runtime_glyph_scene();
 
     //Draw clouds
-    this->draw_clouds();
+    this->runtime_draw_clouds();
 
     //Runtime functions
     node_gui->runtime();
@@ -49,13 +53,11 @@ void Engine::loop_scene(){
 void Engine::loop_gui(){
   //---------------------------
 
-  if(with_window){
-    guiManager->Gui_loop();
-  }
+  guiManager->Gui_loop();
 
   //---------------------------
 }
-void Engine::draw_clouds(){
+void Engine::runtime_draw_clouds(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   Subset* subset_selected = sceneManager->get_subset_selected();
   //---------------------------

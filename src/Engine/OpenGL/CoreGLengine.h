@@ -32,8 +32,11 @@ public:
   ~CoreGLengine();
 
 public:
+  //Argument processing
+  void arg(int argc, char* argv[]);
+
+  //Init opengl stuff
   void init();
-  void init_conf();
   void init_OGL();
   void init_object();
   void init_rendering();
@@ -60,8 +63,7 @@ private:
   Shader* shaderManager;
   Configuration* configManager;
 
-  bool waitForEvent;
-  bool openglDisplay;
+  bool is_visualization;
   bool openglRunning;
   bool flag_resized;
 };

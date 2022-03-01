@@ -86,6 +86,7 @@ private:
   list<Cloud*>* list_cloud;
   Cloud* cloud_selected;
   Subset* subset_selected;
+  bool is_visualization;
   int ID_cloud;
 };
 

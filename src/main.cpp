@@ -5,12 +5,13 @@
  * \brief Start the software
  */
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   std::cout<<"--Begin program--"<<std::endl;
   //---------------------------
 
   CoreGLengine GLengine;
+  GLengine.arg(argc, argv);
   GLengine.init();
   GLengine.loop();
 

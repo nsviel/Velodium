@@ -30,6 +30,7 @@ public:
 
 public:
   //Main functions
+  void update();
   void runtime();
   void reset();
   void exit();

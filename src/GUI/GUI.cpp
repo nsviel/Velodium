@@ -15,6 +15,7 @@
 #include "../Module/SLAM/Slam.h"
 #include "../Engine/OpenGL/Camera/Camera.h"
 #include "../Engine/OpenGL/Dimension.h"
+#include "../Engine/Scene/Configuration.h"
 #include "../Engine/Engine_node.h"
 
 #include "imgui/imgui.h"
@@ -30,6 +31,7 @@ GUI::GUI(GUI_node* node_gui){
   //---------------------------
 
   Engine_node* node_engine = node_gui->get_node_engine();
+  Configuration* configManager = node_engine->get_configManager();
 
   this->dimManager = node_engine->get_dimManager();
   this->gui_moduleManager = node_gui->get_gui_moduleManager();
@@ -39,6 +41,8 @@ GUI::GUI(GUI_node* node_gui){
   this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
   this->gui_menuBarManager = node_gui->get_gui_menuBarManager();
   this->gui_consolManager = node_gui->get_gui_consolManager();
+
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
 
   //---------------------------
   this->Gui_init();
@@ -121,10 +125,13 @@ void GUI::Gui_loop(){
   //---------------------------
 
   gui_consolManager->design_consol();
-  gui_controlManager->make_control();
   gui_menuBarManager->design_MenuBar();
-  gui_leftPanelManager->design_leftPanel();
-  gui_winManager->window_Draw();
+
+  if(is_visualization){
+    gui_controlManager->make_control();
+    gui_leftPanelManager->design_leftPanel();
+    gui_winManager->window_Draw();
+  }
 
   this->Gui_Dimensions();
 

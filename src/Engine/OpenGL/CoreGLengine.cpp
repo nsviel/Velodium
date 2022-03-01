@@ -24,6 +24,7 @@ CoreGLengine::CoreGLengine(){
   //---------------------------
 
   this->openglRunning = true;
+  this->window = nullptr;
 
   //---------------------------
 }
@@ -36,11 +37,36 @@ CoreGLengine::~CoreGLengine(){
   //---------------------------
 }
 
-//Engine Initialization
+//Argument processing
+void CoreGLengine::arg(int argc, char* argv[]){
+  this->configManager = new Configuration();
+  //---------------------------
+
+  //Command line processing
+  if(argc > 1){
+    string command_1 = argv[1];
+
+    if(command_1 == "car"){
+      configManager->make_preconfig(1);
+      node_engine->update();
+    }
+    else if(command_1 == "train"){
+      configManager->make_preconfig(2);
+      node_engine->update();
+    }
+  }
+  //Else make default configuration
+  else{
+    configManager->make_preconfig(2);
+  }
+
+  //---------------------------
+}
+
+//Init opengl stuff
 void CoreGLengine::init(){
   //---------------------------
 
-  this->init_conf();
   this->init_OGL();
   this->init_object();
   this->init_rendering();
@@ -48,65 +74,48 @@ void CoreGLengine::init(){
   //---------------------------
   console.AddLog("sucess" ,"Program initialized...");
 }
-void CoreGLengine::init_conf(){
-  //---------------------------
-
-  //Make preliminary configuration
-  this->configManager = new Configuration();
-  configManager->make_configuration();
-
-  //Set up opengl parameters
-  this->openglDisplay = true;//configManager->parse_json_i("window", "activated");
-  this->window = nullptr;
-
-  //---------------------------
-}
 void CoreGLengine::init_OGL(){
-  if(openglDisplay){
-    //---------------------------
+  //---------------------------
 
-    //Parametrization
-    int resolution_width = configManager->parse_json_i("window", "resolution_width");
-    int resolution_height = configManager->parse_json_i("window", "resolution_height");
-    bool forceVersion = configManager->parse_json_b("opengl", "forceVersion");
-    bool coreGL_verbose = configManager->parse_json_b("opengl", "verbose_coreGL");
-    string win_title = configManager->parse_json_s("window", "title");
-    this->waitForEvent = configManager->parse_json_b("opengl", "waitForEvent");
+  //Parametrization
+  int resolution_width = configManager->parse_json_i("window", "resolution_width");
+  int resolution_height = configManager->parse_json_i("window", "resolution_height");
+  bool forceVersion = configManager->parse_json_b("opengl", "forceVersion");
+  bool coreGL_verbose = configManager->parse_json_b("opengl", "verbose_coreGL");
+  string win_title = configManager->parse_json_s("window", "title");
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
 
-    //GLFW
-    glfwInit();
-    if(forceVersion){
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
-    }
-    glfwWindowHint(GLFW_SAMPLES, 16);
-    glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
-    window = glfwCreateWindow(resolution_width, resolution_height, "window", NULL, NULL);
-    if(window == NULL){
-      std::cout << "Failed to create GLFW window" << std::endl;
-      glfwTerminate();
-    }else if(coreGL_verbose){
-      std::cout << "GLFW window created" << std::endl;
-    }
-
-    glfwMakeContextCurrent(window);
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-    glfwSetWindowTitle(window, win_title.c_str());
-
-    //Enable OpenGL alpha channel for RGB
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //GLEW
-    glewInit();
-    if(coreGL_verbose){
-      std::cout << "GLEW initiated" << std::endl;
-    }
-
-    //---------------------------
+  //GLFW
+  glfwInit();
+  if(forceVersion){
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
   }
+  glfwWindowHint(GLFW_SAMPLES, 16);
+  glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+  window = glfwCreateWindow(resolution_width, resolution_height, "window", NULL, NULL);
+  if(window == NULL){
+    std::cout << "Failed to create GLFW window" << std::endl;
+    glfwTerminate();
+  }
+
+  glfwMakeContextCurrent(window);
+  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+  glfwSetWindowTitle(window, win_title.c_str());
+
+  //Enable OpenGL alpha channel for RGB
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  //GLEW
+  glewInit();
+  if(coreGL_verbose){
+    std::cout << "GLEW initiated" << std::endl;
+  }
+
+  //---------------------------
 }
 void CoreGLengine::init_object(){
   //---------------------------
@@ -121,7 +130,7 @@ void CoreGLengine::init_object(){
   //---------------------------
 }
 void CoreGLengine::init_rendering(){
-  if(openglDisplay){
+  if(is_visualization){
     //---------------------------
 
     renderManager->init_rendering_fbo_1();
@@ -157,20 +166,18 @@ void CoreGLengine::loop(){
   //---------------------------
 }
 void CoreGLengine::loop_gui(){
-  if(openglDisplay){
-    //---------------------------
+  //---------------------------
 
-    dimManager->set_is_resized(false);
+  dimManager->set_is_resized(false);
 
-    //Draw GUI on fbo 0
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    engineManager->loop_gui();
+  //Draw GUI on fbo 0
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  engineManager->loop_gui();
 
-    //---------------------------
-  }
+  //---------------------------
 }
 void CoreGLengine::loop_pass_1(){
-  if(openglDisplay){
+  if(is_visualization){
     //---------------------------
 
     //Update things
@@ -194,7 +201,7 @@ void CoreGLengine::loop_pass_1(){
   }
 }
 void CoreGLengine::loop_pass_2(){
-  if(openglDisplay){
+  if(is_visualization){
     //---------------------------
 
     //Framebuffer pass 2
@@ -207,18 +214,19 @@ void CoreGLengine::loop_pass_2(){
   }
 }
 void CoreGLengine::loop_drawScene(){
-  if(openglDisplay){
-    //---------------------------
+  //---------------------------
 
+  if(is_visualization){
     cameraManager->viewport_update(0);
     cameraManager->input_cameraMouseCommands();
-    engineManager->loop_scene();
-
-    //---------------------------
   }
+
+  engineManager->loop_scene();
+
+  //---------------------------
 }
 void CoreGLengine::loop_drawScreen(){
-  if(openglDisplay){
+  if(is_visualization){
     //---------------------------
 
     //Viewport
@@ -238,21 +246,16 @@ void CoreGLengine::loop_drawScreen(){
   }
 }
 void CoreGLengine::loop_end(){
-  if(openglDisplay){
-    //---------------------------
+  //---------------------------
 
-    //Window display stuff
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-    if(waitForEvent){
-      glfwWaitEvents();
-    }
+  //Window display stuff
+  glfwSwapBuffers(window);
+  glfwPollEvents();
 
-    //Check for window termination
-    if(glfwWindowShouldClose(window)){
-      openglRunning = false;
-    }
-
-    //---------------------------
+  //Check for window termination
+  if(glfwWindowShouldClose(window)){
+    openglRunning = false;
   }
+
+  //---------------------------
 }
