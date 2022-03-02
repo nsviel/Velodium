@@ -2,6 +2,7 @@
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Configuration.h"
 
 #include "../../../Specific/fct_watcher.h"
 #include "../../../Specific/fct_system.h"
@@ -14,6 +15,8 @@
 //Constructor / Destructor
 Prediction::Prediction(Engine_node* node_engine){
   //---------------------------
+
+  Configuration* configManager = node_engine->get_configManager();
 
   this->sceneManager = node_engine->get_sceneManager();
 
@@ -82,6 +85,7 @@ void Prediction::start_watcher_prediction(){
   this->is_whatching = true;
 
   //---------------------------
+  console.AddLog("sucess", "Watcher - Prediction running...");
 }
 void Prediction::stop_watcher_prediction(){
   //---------------------------

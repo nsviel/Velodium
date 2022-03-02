@@ -12,6 +12,9 @@
 #include "../../Player/Player_node.h"
 #include "../../Player/Dynamic/Online.h"
 
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Configuration.h"
+
 
 //Constructor / Destructor
 Scenario::Scenario(Module_node* node_module, Online* online){
@@ -21,14 +24,16 @@ Scenario::Scenario(Module_node* node_module, Online* online){
   Slam* slamManager = node_module->get_slamManager();
   Interface_node* ioManager = node_module->get_ioManager();
   Player_node* node_player = node_module->get_node_player();
+  Engine_node* node_engine = node_module->get_node_engine();
 
+  this->configManager = node_engine->get_configManager();
   this->captureManager = ioManager->get_captureManager();
   this->netManager = ioManager->get_netManager();
   this->predManager = ioManager->get_predManager();
   this->gpsManager = ioManager->get_gpsManager();
   this->slam_configManager = slamManager->get_slam_config();
 
-  this->scenario_selected = 1;
+  this->scenario_selected = configManager->parse_json_i("module", "scenario");
   this->scenario_started = false;
 
   //---------------------------

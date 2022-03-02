@@ -3,7 +3,7 @@
 
 // Server side implementation of UDP client-server model
 
-#include "../../../../../common.h"
+#include "../../common.h"
 
 class UDP_server
 {

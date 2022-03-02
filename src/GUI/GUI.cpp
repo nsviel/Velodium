@@ -60,10 +60,8 @@ void GUI::Gui_init(){
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
 
-  if(dimManager->get_is_window()){
-    ImGui_ImplGlfw_InitForOpenGL(dimManager->get_window(), true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-  }
+  ImGui_ImplGlfw_InitForOpenGL(dimManager->get_window(), true);
+  ImGui_ImplOpenGL3_Init("#version 330");
 
   //---------------------------
 }
@@ -126,11 +124,11 @@ void GUI::Gui_loop(){
 
   gui_consolManager->design_consol();
   gui_menuBarManager->design_MenuBar();
+  gui_controlManager->make_control();
+  gui_winManager->window_Draw();
 
   if(is_visualization){
-    gui_controlManager->make_control();
     gui_leftPanelManager->design_leftPanel();
-    gui_winManager->window_Draw();
   }
 
   this->Gui_Dimensions();

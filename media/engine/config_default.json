@@ -9,19 +9,19 @@
       "speed_zoom" : 0.10000000149011612
    },
    "gui" : {
-      "botPanel_height" : 282,
-      "leftPanel_mid" : 1,
-      "leftPanel_width" : 0,
+      "botPanel_height" : 100,
+      "leftPanel_mid" : 200,
+      "leftPanel_width" : 220,
       "topPanel_height" : 18
    },
    "module" : {
-      "scenario" : 2,
-      "with_AI_module" : true,
-      "with_camera_follow" : false,
-      "with_cylinder_cleaning" : false,
-      "with_heatmap" : false,
-      "with_remove_lastSubset" : true,
-      "with_save_frame" : true,
+      "scenario" : 0,
+      "with_AI_module" : false,
+      "with_camera_follow" : true,
+      "with_cylinder_cleaning" : true,
+      "with_heatmap" : true,
+      "with_remove_lastSubset" : false,
+      "with_save_frame" : false,
       "with_save_image" : false,
       "with_slam" : true
    },
@@ -35,18 +35,18 @@
       "point_size" : 2
    },
    "watcher" : {
-      "capture" : true,
-      "gps" : true,
+      "capture" : false,
+      "gps" : false,
       "lidar" : "vlp16",
-      "prediction" : true
+      "prediction" : false
    },
    "window" : {
       "background_color" : 0.86000001430511475,
       "forceVersion" : false,
-      "resolution_height" : 200,
+      "resolution_height" : 500,
       "resolution_ratio" : 1.3333333730697632,
-      "resolution_width" : 500,
+      "resolution_width" : 1024,
       "title" : "Velodium",
-      "visualization" : false
+      "visualization" : true
    }
 }

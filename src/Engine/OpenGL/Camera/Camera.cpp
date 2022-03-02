@@ -204,9 +204,7 @@ void Camera::input_cameraMouseCommands(){
     if(view->angle_azimuth > M_PI*2) view->angle_azimuth = 0;
     if(view->angle_azimuth < -M_PI*2) view->angle_azimuth = 0;
 
-    if(dimManager->get_is_window()){
-      glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    }
+    glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
   }
 
   //---------------------------

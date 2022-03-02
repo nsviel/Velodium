@@ -5,12 +5,14 @@
 
 #include <thread>
 
+class Engine_node;
+
 
 class GPS
 {
 public:
   //Constructor / Destructor
-  GPS();
+  GPS(Engine_node* node_engine);
   ~GPS();
 
 public:

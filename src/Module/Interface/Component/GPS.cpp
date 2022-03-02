@@ -1,5 +1,8 @@
 #include "GPS.h"
 
+#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Engine/Engine_node.h"
+
 #include "../../../Specific/fct_watcher.h"
 #include "../../../Specific/fct_system.h"
 
@@ -9,8 +12,10 @@
 
 
 //Constructor / Destructor
-GPS::GPS(){
+GPS::GPS(Engine_node* node_engine){
   //---------------------------
+
+  Configuration* configManager = node_engine->get_configManager();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_gps = path_dir + "gps/";
@@ -38,6 +43,7 @@ void GPS::start_watcher_gps(){
   this->is_whatching = true;
 
   //---------------------------
+  console.AddLog("sucess", "Watcher - GPS running...");
 }
 void GPS::stop_watcher_gps(){
   //---------------------------

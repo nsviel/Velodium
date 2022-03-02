@@ -37,7 +37,7 @@ vector<int> UDP_server::read_UDP_packets(){
 //Subfunctions
 void UDP_server::server_binding(){
   if(is_binded == false){
-    cout << "Connect to read UDP packets..." << endl;
+    //cout << "Connect to read UDP packets..." << endl;
     //---------------------------
 
     // Creating socket file descriptor

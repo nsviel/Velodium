@@ -15,6 +15,7 @@ Dimension::Dimension(GLFWwindow* win, Configuration* config){
   int tp_h = configManager->parse_json_i("gui", "topPanel_height");
   int bp_h = configManager->parse_json_i("gui", "botPanel_height");
   int lp_m = configManager->parse_json_i("gui", "leftPanel_mid");
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
 
   this->gl_dim.x = win_w - lp_w;
   this->gl_dim.y = win_h - tp_h - bp_h;
@@ -32,12 +33,6 @@ Dimension::Dimension(GLFWwindow* win, Configuration* config){
   this->is_resized = true;
   this->with_custom_gl_dim = false;
 
-  if(window == nullptr){
-    this->is_window = false;
-  }else{
-    this->is_window = true;
-  }
-
   //---------------------------
   this->update();
 }
@@ -49,6 +44,7 @@ void Dimension::update(){
 
   this->update_opengl_dim();
   this->update_window_dim();
+  this->update_gui_consol();
 
   //---------------------------
 }
@@ -74,9 +70,7 @@ void Dimension::update_window_dim(){
   //Check window size
   int win_w = 0;
   int win_h = 0;
-  if(is_window){
-    glfwGetWindowSize(window, &win_w, &win_h);
-  }
+  glfwGetWindowSize(window, &win_w, &win_h);
 
   //Check for minimal dimension
   bool min_dim = false;
@@ -94,14 +88,22 @@ void Dimension::update_window_dim(){
 
   //Set up new values
   if(win_w != win_dim.x || win_h != win_dim.y){
-
     this->win_dim = vec2(win_w, win_h);
     this->gui_bp_pos = vec2(gui_lbp_dim.x, win_h - gui_bp_dim.y);
     this->gui_bp_dim.x = win_w - gui_lbp_dim.x;
     this->gui_ltp_dim.y = gui_lp_mid - gui_tp_dim.y;
     this->gui_lbp_dim.y = win_h - gui_lp_mid;
     this->is_resized = true;
+  }
 
+  //---------------------------
+}
+void Dimension::update_gui_consol(){
+  //---------------------------
+
+  if(is_visualization == false){
+    this->gui_bp_pos = vec2(0, 18);
+    this->gui_bp_dim = vec2(win_dim.x, win_dim.y - 18);
   }
 
   //---------------------------
@@ -132,13 +134,11 @@ vec2 Dimension::get_cursorPos_gl(){
   vec2 pos = vec2(0, 0);
   //---------------------------
 
-  if(is_window){
-    glfwGetCursorPos(window, &xpos, &ypos);
-    xpos = xpos - gui_ltp_dim.x;
-    ypos = ypos - gui_tp_dim.y;
+  glfwGetCursorPos(window, &xpos, &ypos);
+  xpos = xpos - gui_ltp_dim.x;
+  ypos = ypos - gui_tp_dim.y;
 
-    pos = vec2(xpos, ypos);
-  }
+  pos = vec2(xpos, ypos);
 
   //---------------------------
   return pos;
@@ -148,10 +148,8 @@ vec2 Dimension::get_cursorPos(){
   vec2 pos = vec2(0, 0);
   //---------------------------
 
-  if(is_window){
-    glfwGetCursorPos(window, &xpos, &ypos);
-    pos = vec2(xpos, ypos);
-  }
+  glfwGetCursorPos(window, &xpos, &ypos);
+  pos = vec2(xpos, ypos);
 
   //---------------------------
   return pos;
@@ -159,9 +157,7 @@ vec2 Dimension::get_cursorPos(){
 void Dimension::set_cursorPos(vec2 pos){
   //---------------------------
 
-  if(is_window){
-    glfwSetCursorPos(window, pos.x, pos.y);
-  }
+  glfwSetCursorPos(window, pos.x, pos.y);
 
   //---------------------------
 }

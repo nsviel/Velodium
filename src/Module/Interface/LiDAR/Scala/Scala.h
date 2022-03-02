@@ -1,11 +1,19 @@
 #ifndef SCALA_H
 #define SCALA_H
 
+// Server side implementation of UDP client-server model
+
+#include "../../../../Engine/Data/struct_UDPpacket.h"
 #include "../../../../common.h"
 
+#include <thread>
+
 class Engine_node;
-class Scene;
-class Loader;
+class Extractore;
+
+class UDP_frame;
+class UDP_server;
+class UDP_parser_Scala;
 
 
 class Scala
@@ -16,16 +24,31 @@ public:
   ~Scala();
 
 public:
-  void loading(string pathDir);
+  //Recording functions
+  void lidar_start_watcher();
+  void lidar_create_subset(udpPacket* udp_packet);
 
-  vector<string> loading_allPathDir(string pathDir);
-  vector<Cloud*> loading_allFile(vector<string> allpath);
-  Cloud* loading_reoganizeData(vector<Cloud*> clouds);
-  void compute_relativeTimestamp(Cloud* cloud);
+  inline Subset* get_subset_capture(){return subset_capture;}
+  inline bool* get_is_newSubset(){return &is_newSubset;}
+  inline bool* get_is_scala_capturing(){return &is_capturing;}
 
 private:
-  Scene* sceneManager;
-  Loader* loaderManager;
+  Extractore* extractManager;
+
+  UDP_frame* frameManager;
+  UDP_server* udpServManager;
+  UDP_parser_Scala* udp_scalaManager;
+
+  Subset* subset_capture;
+
+  int rot_freq, rot_rpm;
+  int fov_min, fov_max;
+  bool is_newSubset;
+  bool is_capturing;
+  bool is_rotating;
+  bool is_connected;
+  bool is_first_run;
+  std::thread thread_capture;
 };
 
 #endif

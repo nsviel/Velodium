@@ -29,7 +29,8 @@ public:
 
   //Scala functions
   void scala_state();
-  void scala_test();
+  void scala_file();
+  void scala_capture();
 
 private:
   Scala* scalaManager;

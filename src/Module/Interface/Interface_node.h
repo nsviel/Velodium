@@ -9,6 +9,7 @@ class Prediction;
 class Module_node;
 class Network;
 class Capture;
+class Watcher;
 class Filemanager;
 
 
@@ -42,6 +43,7 @@ private:
   Network* netManager;
   Capture* captureManager;
   Filemanager* fileManager;
+  Watcher* watcherManager;
 
   bool is_clean_dir;
   string path_dir;

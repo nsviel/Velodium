@@ -25,6 +25,10 @@ public:
   void stop_capture();
   void runtime_capturing();
 
+  //LiDAR specific functions
+  void capture_vlp16();
+  void capture_scala();
+
   //Subfunctions
   void operation_new_subset(Subset* subset);
   void supress_nullpoints(Subset* subset);
@@ -43,6 +47,7 @@ private:
   Scala* scalaManager;
   Velodyne* veloManager;
 
+  string lidar_capture;
   bool with_justOneFrame;
   bool is_capturing;
   int nb_subset_max;

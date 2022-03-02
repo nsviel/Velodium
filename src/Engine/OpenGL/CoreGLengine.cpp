@@ -177,11 +177,11 @@ void CoreGLengine::loop_gui(){
   //---------------------------
 }
 void CoreGLengine::loop_pass_1(){
+  dimManager->update();
   if(is_visualization){
     //---------------------------
 
     //Update things
-    dimManager->update();
     this->flag_resized = dimManager->get_is_resized();
     if(flag_resized){
       renderManager->update_texture();

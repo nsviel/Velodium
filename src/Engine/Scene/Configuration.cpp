@@ -110,7 +110,16 @@ void Configuration::preconf_default(Json::Value& root){
   module["with_save_frame"] = false;
   module["with_remove_lastSubset"] = false;
   module["with_AI_module"] = false;
+  module["scenario"] = 0;
   root["module"] = module;
+
+  //Watchers
+  Json::Value watcher;
+  watcher["prediction"] = false;
+  watcher["capture"] = false;
+  watcher["gps"] = false;
+  watcher["lidar"] = "vlp16";
+  root["watcher"] = watcher;
 
   //---------------------------
 }
@@ -168,7 +177,16 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   module["with_save_frame"] = true;
   module["with_remove_lastSubset"] = true;
   module["with_AI_module"] = true;
+  module["scenario"] = 1;
   root["module"] = module;
+
+  //Watchers
+  Json::Value watcher;
+  watcher["prediction"] = true;
+  watcher["capture"] = true;
+  watcher["gps"] = false;
+  watcher["lidar"] = "scala";
+  root["watcher"] = watcher;
 
   //---------------------------
 }
@@ -226,7 +244,16 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   module["with_save_frame"] = true;
   module["with_remove_lastSubset"] = true;
   module["with_AI_module"] = true;
+  module["scenario"] = 2;
   root["module"] = module;
+
+  //Watchers
+  Json::Value watcher;
+  watcher["prediction"] = true;
+  watcher["capture"] = true;
+  watcher["gps"] = true;
+  watcher["lidar"] = "vlp16";
+  root["watcher"] = watcher;
 
   //---------------------------
 }

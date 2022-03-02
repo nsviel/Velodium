@@ -9,6 +9,7 @@ class Network;
 class SLAM_configuration;
 class Online;
 class Prediction;
+class Configuration;
 class GPS;
 
 
@@ -33,6 +34,7 @@ public:
 private:
   Capture* captureManager;
   Network* netManager;
+  Configuration* configManager;
   SLAM_configuration* slam_configManager;
   Online* onlineManager;
   Prediction* predManager;

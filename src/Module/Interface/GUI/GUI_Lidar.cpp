@@ -42,7 +42,8 @@ void GUI_Lidar::design_Scala(){
   //---------------------------
 
   this->scala_state();
-  this->scala_test();
+  this->scala_capture();
+  this->scala_file();
 
   //---------------------------
   ImGui::Separator();
@@ -161,16 +162,38 @@ void GUI_Lidar::scala_state(){
 
   //---------------------------
 }
-void GUI_Lidar::scala_test(){
+void GUI_Lidar::scala_file(){
   //---------------------------
 
   if(ImGui::Button("Load in directory", ImVec2(item_width,0))){
-    scalaManager->loading("");
+    //scalaManager->loading("");
   }
 
   if(ImGui::Button("Load fast", ImVec2(item_width,0))){
-    scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
+    //scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
   }
+
+  //---------------------------
+}
+void GUI_Lidar::scala_capture(){
+  bool is_capturing = *scalaManager->get_is_scala_capturing();
+  //---------------------------
+
+  //Capturing button
+  if(is_capturing == false){
+    //Start button
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Start capture", ImVec2(item_width, 0))){
+      captureManager->start_new_capture();
+    }
+  }else{
+    //Stop button
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
+    if(ImGui::Button("Stop capture", ImVec2(item_width, 0))){
+      captureManager->stop_capture();
+    }
+  }
+  ImGui::PopStyleColor(1);
 
   //---------------------------
 }

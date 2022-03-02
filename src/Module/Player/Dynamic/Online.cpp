@@ -64,11 +64,11 @@ void Online::update_configuration(){
   this->with_heatmap_rltHeight = true;
   this->with_unicolor = !with_heatmap;
 
-  this->with_save_frame = false;
-  this->with_save_image = true;
-  this->with_slam = false;// configManager->parse_json_b("online", "with_slam");
-  this->with_cylinder_cleaning = false;//configManager->parse_json_b("online", "with_cylinder_cleaning");
-  this->with_remove_lastSubset = true;//configManager->parse_json_b("online", "with_remove_lastSubset");
+  this->with_save_frame = configManager->parse_json_b("online", "with_save_frame");
+  this->with_save_image = configManager->parse_json_b("online", "with_save_image");
+  this->with_slam = configManager->parse_json_b("online", "with_slam");
+  this->with_cylinder_cleaning = configManager->parse_json_b("online", "with_cylinder_cleaning");
+  this->with_remove_lastSubset = configManager->parse_json_b("online", "with_remove_lastSubset");
 
   //---------------------------
 }
