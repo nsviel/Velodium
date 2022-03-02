@@ -21,9 +21,9 @@ GUI_Interface::GUI_Interface(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();
-  Interface_node* ioManager = node_module->get_ioManager();
+  Interface_node* node_interface = node_module->get_node_interface();
 
-  this->netManager = ioManager->get_netManager();
+  this->netManager = node_interface->get_netManager();
   this->mqttManager = netManager->get_mqttManager();
   this->sftpManager = netManager->get_sftpManager();
   this->sshManager = netManager->get_sshManager();

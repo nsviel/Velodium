@@ -15,9 +15,9 @@ GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();
-  Interface_node* ioManager = node_module->get_ioManager();
+  Interface_node* node_interface = node_module->get_node_interface();
 
-  this->captureManager = ioManager->get_captureManager();
+  this->captureManager = node_interface->get_captureManager();
   this->scalaManager = captureManager->get_scalaManager();
   this->veloManager = captureManager->get_veloManager();
 

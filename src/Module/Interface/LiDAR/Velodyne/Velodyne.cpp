@@ -50,6 +50,7 @@ Velodyne::~Velodyne(){}
 
 //Capturing functions
 void Velodyne::lidar_start_watcher(){
+  this->is_capturing = true;
   //---------------------------
 
   //Start udp packets watcher
@@ -73,7 +74,6 @@ void Velodyne::lidar_start_watcher(){
   thread_capture.detach();
 
   //---------------------------
-  this->is_capturing = true;
 }
 void Velodyne::lidar_create_subset(udpPacket* udp_packet){
   //Asynchroneous function (used by theaded watcher)

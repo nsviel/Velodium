@@ -32,7 +32,7 @@ GUI_Dynamic::GUI_Dynamic(GUI_module* node_gui){
   this->heatmapManager = node_ope->get_heatmapManager();
   this->onlineManager = node_player->get_onlineManager();
   this->offlineManager = node_player->get_offlineManager();
-  this->ioManager = node_module->get_ioManager();
+  this->node_interface = node_module->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
@@ -275,7 +275,7 @@ void GUI_Dynamic::parameter_online(){
     bool* with_save_frame = onlineManager->get_with_save_frame();
     ImGui::Checkbox("Save frame", with_save_frame);
     if(*with_save_frame){
-      Saving* saveManager = ioManager->get_saveManager();
+      Saving* saveManager = node_interface->get_saveManager();
       int* save_frame_max = saveManager->get_save_frame_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb frame", save_frame_max);
@@ -285,7 +285,7 @@ void GUI_Dynamic::parameter_online(){
     static bool with_unlimit_saving = false;
     ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
     if(with_unlimit_saving){
-      Saving* saveManager = ioManager->get_saveManager();
+      Saving* saveManager = node_interface->get_saveManager();
       int* save_frame_max = saveManager->get_save_frame_max();
       *save_frame_max = 500000000;
     }
@@ -294,7 +294,7 @@ void GUI_Dynamic::parameter_online(){
     bool* with_save_image = onlineManager->get_with_save_image();
     ImGui::Checkbox("Save image", with_save_image);
     if(*with_save_image){
-      Saving* saveManager = ioManager->get_saveManager();
+      Saving* saveManager = node_interface->get_saveManager();
       int* save_image_max = saveManager->get_save_image_max();
       ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb image", save_image_max);

@@ -22,9 +22,9 @@ Obstacle::Obstacle(Module_node* node_module){
 
   Engine_node* node_engine = node_module->get_node_engine();
 
-  this->ioManager = node_module->get_ioManager();
-  this->captureManager = ioManager->get_captureManager();
-  this->predManager = ioManager->get_predManager();
+  this->node_interface = node_module->get_node_interface();
+  this->captureManager = node_interface->get_captureManager();
+  this->predManager = node_interface->get_predManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->oobbManager = new OOBB();
@@ -41,7 +41,7 @@ Obstacle::~Obstacle(){}
 void Obstacle::runtime_obstacle(){
   //This function is called at each OpenGL iteration
   Subset* subset = sceneManager->get_subset_selected();
-  Prediction* predManager = ioManager->get_predManager();
+  Prediction* predManager = node_interface->get_predManager();
   //---------------------------
 
   if(predManager->get_is_watching() && subset != nullptr){

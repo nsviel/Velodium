@@ -25,7 +25,7 @@ public:
 
     this->gui_playerManager = new GUI_Player(this);
     this->gui_slamManager = new GUI_Slam(this);
-    this->gui_ioManager = new GUI_Interface(this);
+    this->gui_node_interface = new GUI_Interface(this);
 
     this->module_velodyne = true;
     this->module_player = true;
@@ -55,7 +55,7 @@ public:
       // Interface stuff
       if(module_velodyne){
         if(ImGui::BeginTabItem("Interface")){
-          gui_ioManager->design_Interface();
+          gui_node_interface->design_Interface();
           ImGui::EndTabItem();
         }
       }
@@ -89,7 +89,7 @@ public:
   inline GUI_node* get_node_gui(){return node_gui;}
   inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
   inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
-  inline GUI_Interface* get_gui_ioManager(){return gui_ioManager;}
+  inline GUI_Interface* get_gui_node_interface(){return gui_node_interface;}
 
 private:
   Module_node* node_module;
@@ -99,7 +99,7 @@ private:
   GUI_node* node_gui;
   GUI_Player* gui_playerManager;
   GUI_Slam* gui_slamManager;
-  GUI_Interface* gui_ioManager;
+  GUI_Interface* gui_node_interface;
 
   bool module_velodyne;
   bool module_player;

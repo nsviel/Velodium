@@ -40,7 +40,7 @@ private:
   OOBB* oobbManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
-  Interface_node* ioManager;
+  Interface_node* node_interface;
   Capture* captureManager;
   Prediction* predManager;
   Pather* pathManager;

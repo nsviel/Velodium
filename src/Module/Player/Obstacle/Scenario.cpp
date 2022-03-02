@@ -22,15 +22,15 @@ Scenario::Scenario(Module_node* node_module, Online* online){
   //---------------------------
 
   Slam* slamManager = node_module->get_slamManager();
-  Interface_node* ioManager = node_module->get_ioManager();
+  Interface_node* node_interface = node_module->get_node_interface();
   Player_node* node_player = node_module->get_node_player();
   Engine_node* node_engine = node_module->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
-  this->captureManager = ioManager->get_captureManager();
-  this->netManager = ioManager->get_netManager();
-  this->predManager = ioManager->get_predManager();
-  this->gpsManager = ioManager->get_gpsManager();
+  this->captureManager = node_interface->get_captureManager();
+  this->netManager = node_interface->get_netManager();
+  this->predManager = node_interface->get_predManager();
+  this->gpsManager = node_interface->get_gpsManager();
   this->slam_configManager = slamManager->get_slam_config();
 
   this->scenario_selected = configManager->parse_json_i("module", "scenario");

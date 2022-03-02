@@ -42,10 +42,10 @@ public:
 
 private:
   Obstacle* obstacleManager;
-  Interface_node* ioManager;
+  Interface_node* node_interface;
   CoordTransform* coordManager;
   Scene* sceneManager;
-  Scenario* scenarioManager;
+  Scenario* scenarnode_interface;
   GUI_module* node_gui;
 
   int label_ID;

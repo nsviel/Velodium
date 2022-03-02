@@ -17,7 +17,7 @@ Module_node::Module_node(Engine_node* engine){
   this->node_ope = node_engine->get_node_ope();
 
   this->slamManager = new Slam(node_engine);
-  this->ioManager = new Interface_node(this);
+  this->node_interface = new Interface_node(this);
   this->node_player = new Player_node(this);
 
   //---------------------------
@@ -41,7 +41,7 @@ void Module_node::update(){
 void Module_node::runtime(){
   //---------------------------
 
-  ioManager->runtime();
+  node_interface->runtime();
   node_player->runtime();
 
   //---------------------------

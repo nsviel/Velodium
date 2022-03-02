@@ -27,7 +27,7 @@ private:
   Loader* loaderManager;
   Pather* pathManager;
   Obstacle* obstacleManager;
-  Scenario* scenarioManager;
+  Scenario* scenarnode_interface;
 };
 
 #endif

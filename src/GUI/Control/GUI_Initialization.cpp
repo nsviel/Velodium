@@ -24,7 +24,7 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarioManager = node_player->get_scenarioManager();
+  this->scenarnode_interface = node_player->get_scenarnode_interface();
   this->loaderManager = node_load->get_loadManager();
   this->pathManager = node_load->get_pathManager();
 
@@ -126,7 +126,7 @@ void GUI_Initialization::init_mode(int mode){
       sceneManager->remove_cloud_all();
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
       obstacleManager->add_prediction("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
-      scenarioManager->make_configuration();
+      scenarnode_interface->make_configuration();
       break;
     }
     case 8:{//Frame for prediction

@@ -11,12 +11,12 @@
 
 
 //Constructor / Destructor
-Filemanager::Filemanager(Interface_node* ioManager){
+Filemanager::Filemanager(Interface_node* node_interface){
   //---------------------------
 
-  this->gpsManager = ioManager->get_gpsManager();
-  this->saveManager = ioManager->get_saveManager();
-  this->predManager = ioManager->get_predManager();
+  this->gpsManager = node_interface->get_gpsManager();
+  this->saveManager = node_interface->get_saveManager();
+  this->predManager = node_interface->get_predManager();
 
   //---------------------------
 }

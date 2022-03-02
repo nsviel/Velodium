@@ -4,6 +4,8 @@
 #include "Velodyne/Velodyne.h"
 
 #include "../../Module_node.h"
+#include "../../Player/Player_node.h"
+#include "../../Player/Dynamic/Online.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -17,7 +19,8 @@
 
 
 //Constructor / Destructor
-Capture::Capture(Module_node* node_module){
+Capture::Capture(Module_node* node){
+  this->node_module = node;
   //---------------------------
 
   Engine_node* node_engine = node_module->get_node_engine();
@@ -78,6 +81,7 @@ void Capture::runtime_capturing(){
   //Check for new Subset
   if(lidar_capture == "vlp16"){
     bool *new_capture = veloManager->get_is_newSubset();
+
     if(*new_capture){
       //Pick new subset
       new_subset = new Subset(*veloManager->get_subset_capture());
@@ -191,12 +195,12 @@ void Capture::operation_new_subset(Subset* subset){
 
     //Insert the subset inside the capture cloud
     sceneManager->add_new_subset(cloud_capture, subset);
-say("end");
-    //Compute online stuff
-    //onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
-  }
 
-  delete subset;
+    //Compute online stuff
+    Player_node* node_player = node_module->get_node_player();
+    Online* onlineManager = node_player->get_onlineManager();
+    onlineManager->compute_onlineOpe(cloud_capture, subset->ID);
+  }
 
   //---------------------------
 }

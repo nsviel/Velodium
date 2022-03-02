@@ -11,8 +11,8 @@ class Filter;
 class Dimension;
 class Scene;
 class Configuration;
-class Module_node;
 class Interface_node;
+class Module_node;
 
 
 class Online
@@ -57,8 +57,8 @@ private:
   Slam* slamManager;
   Filter* filterManager;
   Dimension* dimManager;
+  Interface_node* node_interface;
   Configuration* configManager;
-  Interface_node* ioManager;
 
   vec2 HM_height_range;
   vec2 camera_moved_trans;

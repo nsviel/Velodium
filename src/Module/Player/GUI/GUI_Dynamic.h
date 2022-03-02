@@ -37,10 +37,10 @@ private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
-  Interface_node* ioManager;
+  Interface_node* node_interface;
   Offline* offlineManager;
   Online* onlineManager;
-  GUI_Interface* gui_ioManager;
+  GUI_Interface* gui_node_interface;
 
   int item_width;
 };

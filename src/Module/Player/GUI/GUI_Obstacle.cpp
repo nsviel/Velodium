@@ -35,9 +35,9 @@ GUI_Obstacle::GUI_Obstacle(GUI_module* node){
   Engine_node* node_engine = node_gui->get_node_engine();
 
   this->coordManager = node_ope->get_coordManager();
-  this->ioManager = node_module->get_ioManager();
+  this->node_interface = node_module->get_node_interface();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarioManager = node_player->get_scenarioManager();
+  this->scenarnode_interface = node_player->get_scenarnode_interface();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
@@ -86,32 +86,32 @@ void GUI_Obstacle::compute_scenario(){
   //---------------------------
 
   //Choose scenario
-  int* scenario_selected = scenarioManager->get_scenario_selected();
+  int* scenario_selected = scenarnode_interface->get_scenario_selected();
   ImGui::Combo("##007", scenario_selected, "None\0WP4 auto\0WP5 train on-board\0WP5 train on-edge\0");
 
   //Start scenario
-  bool scenario_started = *scenarioManager->get_scenario_started();
+  bool scenario_started = *scenarnode_interface->get_scenario_started();
   if(scenario_started == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Start scenario", ImVec2(item_width, 0))){
-      scenarioManager->scenario_start();
+      scenarnode_interface->scenario_start();
     }
   }else{
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
     if(ImGui::Button("Stop scenario", ImVec2(item_width, 0))){
-      scenarioManager->scenario_stop();
+      scenarnode_interface->scenario_stop();
     }
   }
   ImGui::PopStyleColor(1);
 
   //Start watchers
   if(ImGui::Button("Watchers", ImVec2(item_width, 0))){
-    scenarioManager->make_watcher();
+    scenarnode_interface->make_watcher();
   }
 
   //Start config
   if(ImGui::Button("Configure", ImVec2(item_width, 0))){
-    scenarioManager->make_configuration();
+    scenarnode_interface->make_configuration();
   }
 
   //---------------------------
@@ -165,10 +165,10 @@ void GUI_Obstacle::state_watcher(){
 
   //Watchers
   Module_node* node_module = node_gui->get_node_module();
-  Interface_node* ioManager = node_module->get_ioManager();
-  Capture* captureManager = ioManager->get_captureManager();
-  Prediction* predManager = ioManager->get_predManager();
-  GPS* gpsManager = ioManager->get_gpsManager();
+  Interface_node* node_interface = node_module->get_node_interface();
+  Capture* captureManager = node_interface->get_captureManager();
+  Prediction* predManager = node_interface->get_predManager();
+  GPS* gpsManager = node_interface->get_gpsManager();
 
   bool is_capture_watcher = captureManager->get_is_capture_watcher();
   ImGui::Text("Watcher - Capture");
@@ -242,7 +242,7 @@ void GUI_Obstacle::parameter_watcher(){
     this->watcher_gps();
 
     //Capture watcher
-    GUI_Interface* gui_io = node_gui->get_gui_ioManager();
+    GUI_Interface* gui_io = node_gui->get_gui_node_interface();
     GUI_Lidar* gui_lidar = gui_io->get_gui_lidarManager();
     gui_lidar->velo_capture();
 
@@ -275,10 +275,10 @@ void GUI_Obstacle::parameter_interfacing(){
 
     //Prediction directory
     if(ImGui::Button("...##1")){
-      //ioManager->select_dir_path();
+      //node_interface->select_dir_path();
     }
     ImGui::SameLine();
-    string dir_path = ioManager->get_dir_path();
+    string dir_path = node_interface->get_dir_path();
     ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
 
     //Add predictions
@@ -300,7 +300,7 @@ void GUI_Obstacle::watcher_AI_pred(){
   //---------------------------
 
   //IA watchers
-  Prediction* predManager = ioManager->get_predManager();
+  Prediction* predManager = node_interface->get_predManager();
   bool is_watching = predManager->get_is_watching();
   if(is_watching == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
@@ -321,7 +321,7 @@ void GUI_Obstacle::watcher_gps(){
   //---------------------------
 
   //IA watchers
-  GPS* gpsManager = ioManager->get_gpsManager();
+  GPS* gpsManager = node_interface->get_gpsManager();
   bool is_watching = gpsManager->get_is_watching();
   if(is_watching == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));

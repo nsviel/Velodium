@@ -13,7 +13,7 @@ class Filemanager
 {
 public:
   //Constructor / Destructor
-  Filemanager(Interface_node* ioManager);
+  Filemanager(Interface_node* node_interface);
   ~Filemanager();
 
 public:

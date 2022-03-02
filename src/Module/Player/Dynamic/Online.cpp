@@ -37,7 +37,7 @@ Online::Online(Module_node* node_module){
   this->dimManager = node_engine->get_dimManager();
   this->slamManager = node_module->get_slamManager();
   this->configManager = node_engine->get_configManager();
-  this->ioManager = node_module->get_ioManager();
+  this->node_interface = node_module->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->visibility_range = 15;
@@ -111,14 +111,14 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Save subset frame
   if(with_save_frame){
     Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-    Saving* saveManager = ioManager->get_saveManager();
+    Saving* saveManager = node_interface->get_saveManager();
     saveManager->save_frame(subset);
   }
 
   //Save rendered image
   if(with_save_image){
     tic();
-    Saving* saveManager = ioManager->get_saveManager();
+    Saving* saveManager = node_interface->get_saveManager();
     saveManager->save_image();
     this->time_image = toc();
   }

@@ -26,16 +26,15 @@ public:
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Operation_node* get_node_ope(){return node_ope;}
   inline Player_node* get_node_player(){return node_player;}
-
+  inline Interface_node* get_node_interface(){return node_interface;}
   inline Slam* get_slamManager(){return slamManager;}
-  inline Interface_node* get_ioManager(){return ioManager;}
 
 private:
   Engine_node* node_engine;
   Operation_node* node_ope;
 
   Slam* slamManager;
-  Interface_node* ioManager;
+  Interface_node* node_interface;
   Player_node* node_player;
 };
 
