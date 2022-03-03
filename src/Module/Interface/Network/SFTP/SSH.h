@@ -1,7 +1,7 @@
 #ifndef PROTOCOL_SSH_H
 #define PROTOCOL_SSH_H
 
-#include "../../../common.h"
+#include "../../../../common.h"
 
 #include <libssh/libssh.h>
 #include <sys/socket.h>

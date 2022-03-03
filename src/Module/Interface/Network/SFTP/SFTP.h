@@ -1,7 +1,7 @@
 #ifndef PROTOCOL_SFTP_H
 #define PROTOCOL_SFTP_H
 
-#include "../../../common.h"
+#include "../../../../common.h"
 
 #include <libssh/sftp.h>
 #include <libssh/libssh.h>

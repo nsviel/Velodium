@@ -3,10 +3,10 @@
 #include "GUI_Lidar.h"
 
 #include "../Interface_node.h"
-#include "../Component/Network.h"
-#include "../Protocol/MQTT/MQTT.h"
-#include "../Protocol/SFTP.h"
-#include "../Protocol/SSH.h"
+#include "../Network/Network.h"
+#include "../Network/MQTT/MQTT.h"
+#include "../Network/SFTP/SFTP.h"
+#include "../Network/SFTP/SSH.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"

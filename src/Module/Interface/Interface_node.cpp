@@ -1,11 +1,11 @@
 #include "Interface_node.h"
 
-#include "Component/GPS.h"
-#include "Component/Saving.h"
-#include "Component/Prediction.h"
-#include "Component/Network.h"
-#include "Component/Filemanager.h"
-#include "Component/Watcher.h"
+#include "Local/GPS.h"
+#include "Local/Saving.h"
+#include "Local/Prediction.h"
+#include "Network/Network.h"
+#include "Local/Filemanager.h"
+#include "Local/Watcher.h"
 
 #include "LiDAR/Capture.h"
 

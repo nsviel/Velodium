@@ -1,8 +1,8 @@
 #include "Network.h"
 
-#include "../Protocol/MQTT/MQTT.h"
-#include "../Protocol/SFTP.h"
-#include "../Protocol/SSH.h"
+#include "MQTT/MQTT.h"
+#include "SFTP/SFTP.h"
+#include "SFTP/SSH.h"
 
 #include "../../../Specific/fct_maths.h"
 #include "../../../Specific/fct_zenity.h"

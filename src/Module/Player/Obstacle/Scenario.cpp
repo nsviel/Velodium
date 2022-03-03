@@ -1,9 +1,9 @@
 #include "Scenario.h"
 
 #include "../../Interface/Interface_node.h"
-#include "../../Interface/Component/Prediction.h"
-#include "../../Interface/Component/GPS.h"
-#include "../../Interface/Component/Network.h"
+#include "../../Interface/Local/Prediction.h"
+#include "../../Interface/Local/GPS.h"
+#include "../../Interface/Network/Network.h"
 
 #include "../../Module_node.h"
 #include "../../Interface/LiDAR/Capture.h"
