@@ -5,7 +5,6 @@
 #include "Scene/Scene.h"
 #include "Scene/Configuration.h"
 
-#include "../Module/Module_node.h"
 #include "../GUI/GUI_node.h"
 #include "../GUI/GUI.h"
 
@@ -17,7 +16,6 @@ Engine::Engine(Engine_node* engine){
 
   Configuration* configManager = node_engine->get_configManager();
 
-  this->node_module = node_engine->get_node_module();
   this->node_gui = node_engine->get_node_gui();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
@@ -44,9 +42,8 @@ void Engine::loop_scene(){
     node_gui->runtime();
   }
 
-  //Runtime functions
+  //Runtime
   node_engine->runtime();
-  node_module->runtime();
 
   //---------------------------
 }

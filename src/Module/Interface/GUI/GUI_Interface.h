@@ -26,6 +26,7 @@ public:
   void ssh_parameter();
   void mqtt_connection();
   void mqtt_parameter();
+  void mqtt_test();
 
   inline GUI_Lidar* get_gui_lidarManager(){return gui_lidarManager;}
 

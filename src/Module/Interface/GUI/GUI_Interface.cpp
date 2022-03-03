@@ -71,6 +71,7 @@ void GUI_Interface::design_Network(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
   this->mqtt_connection();
   this->mqtt_parameter();
+  this->mqtt_test();
 
   ImGui::Separator();
 
@@ -145,21 +146,12 @@ void GUI_Interface::mqtt_connection(){
   //---------------------------
 }
 void GUI_Interface::mqtt_parameter(){
-  if(ImGui::CollapsingHeader("Parameters")){
+  if(ImGui::CollapsingHeader("Parameters##2")){
     //---------------------------
-
-    //Test localhost connexion
-    if(ImGui::Button("Test localhost##1", ImVec2(item_width, 0))){
-      mqttManager->mqtt_test_localhost();
-    }
 
     // Topic
     string* topic = mqttManager->get_topic();
     ImGui::InputText("Topic", topic);
-
-    //Text mesage
-    string* message = mqttManager->get_message();
-    ImGui::InputText("Message", message);
 
     //Client ID
     string* client_ID = mqttManager->get_client_ID();
@@ -168,6 +160,23 @@ void GUI_Interface::mqtt_parameter(){
     //Server adress
     string* server_address = mqttManager->get_server_address();
     ImGui::InputText("Server adress", server_address);
+
+    //---------------------------
+    ImGui::Separator();
+  }
+}
+void GUI_Interface::mqtt_test(){
+  if(ImGui::CollapsingHeader("Test##2")){
+    //---------------------------
+
+    //Test localhost connexion
+    if(ImGui::Button("Test localhost##1", ImVec2(item_width, 0))){
+      mqttManager->mqtt_test_localhost();
+    }
+
+    //Text mesage
+    string* message = mqttManager->get_message();
+    ImGui::InputText("Message", message);
 
     //---------------------------
     ImGui::Separator();

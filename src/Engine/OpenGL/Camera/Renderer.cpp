@@ -148,7 +148,6 @@ void Renderer::render_quad(){
   glBindVertexArray(quad_vao);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   //---------------------------
 }

@@ -1,5 +1,8 @@
 #include "Slam.h"
 
+//ID = subset absolute ID
+//map_frame_ID = frame ID / the relative slam ID
+
 #include "CT_ICP/SLAM_optim_ceres.h"
 #include "CT_ICP/SLAM_optim_gn.h"
 #include "CT_ICP/SLAM_assessment.h"
@@ -86,27 +89,24 @@ void Slam::compute_slam(Cloud* cloud){
 
   //---------------------------
 }
-void Slam::compute_slam_online(Cloud* cloud, int ID){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID);
-  Frame* frame = sceneManager->get_frame_byID(cloud, ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID-1);
-  Frame* frame_m2 = sceneManager->get_frame_byID(cloud, ID-2);
+void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
   //---------------------------
 
   //Check for computing conditions
   if(subset->xyz.size() == 0) return;
-  if(ID >= 2 && cloud->subset.size() < 2) return;
+  if(subset_ID >= 2 && cloud->subset.size() < 2) return;
   if(frame->is_slamed == true) return;
-  if(ID < map_frame_begin_ID) return;
-
+  if(subset_ID < map_frame_begin_ID) return;
 
   //SLAM algorithm
   tic();
   //---------------------------
 
-  //Bien checker pour chaque functions si map_frame_ID est bien respecté
-
-  this->init_frameID(frame, ID);
+  this->init_frameID(frame, subset_ID);
   this->init_frameTimestamp(subset);
   this->init_frameChain(frame, frame_m1, frame_m2);
   this->init_distortion(frame);
@@ -114,7 +114,7 @@ void Slam::compute_slam_online(Cloud* cloud, int ID){
   mapManager->compute_gridSampling(subset);
 
   this->compute_optimization(frame, frame_m1);
-  this->compute_assessment(cloud, ID);
+  this->compute_assessment(cloud, subset_ID);
 
   mapManager->add_pointsToLocalMap(frame);
   mapManager->end_clearTooFarVoxels(frame->trans_e);
@@ -128,11 +128,11 @@ void Slam::compute_slam_online(Cloud* cloud, int ID){
 }
 
 //SLAM sub-functions
-void Slam::init_frameID(Frame* frame, int ID){
+void Slam::init_frameID(Frame* frame, int subset_ID){
   //---------------------------
 
   if(map_frame_ID == 0){
-    map_frame_begin_ID = ID;
+    map_frame_begin_ID = subset_ID;
   }
 
   frame->ID = map_frame_ID;
@@ -262,17 +262,16 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
 
   //---------------------------
 }
-void Slam::compute_assessment(Cloud* cloud, int ID){
-  bool sucess = true;
+void Slam::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
 
-  if(map_frame_ID > 5){
-    sucess = assessManager->compute_assessment(cloud, ID);
-  }
+  //Compute assessment
+  bool sucess = true;
+  sucess = assessManager->compute_assessment(cloud, subset_ID);
 
   //If unsucess, reinitialize transformations
   if(sucess == false){
-    Frame* frame = sceneManager->get_frame_byID(cloud, ID);
+    Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
     frame->reset();
     this->reset_slam();
   }
@@ -370,7 +369,6 @@ void Slam::reset_slam(){
 
   mapManager->reset();
   this->map_frame_ID = 0;
-  this->map_frame_begin_ID = 0;
 
   //---------------------------
 }
