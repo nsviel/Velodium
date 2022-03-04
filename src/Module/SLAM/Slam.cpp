@@ -68,18 +68,18 @@ void Slam::compute_slam(Cloud* cloud){
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame_m0, frame_m1, frame_m2);
     this->init_distortion(frame_m0);
-toc("slam init");tic();
+
     mapManager->compute_gridSampling(subset);
 
     this->compute_optimization(frame_m0, frame_m1);
     this->compute_assessment(cloud, i);
-toc("slam optim");tic();
+
     mapManager->add_pointsToSlamMap(subset);
     mapManager->add_pointsToLocalMap(frame_m0);
     mapManager->end_clearTooFarVoxels(frame_m0->trans_e);
 
     this->compute_updateLocation(subset);
-toc("slam end");tic();
+
     //--------------
     float duration = toc();
     this->compute_statistics(duration, frame_m0, frame_m1, subset);

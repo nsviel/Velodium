@@ -114,11 +114,11 @@ void Glyphs::runtime_glyph_scene(){
       else{
         glDrawArrays(GL_POINTS, 0, glyph->location.size());
       }
-      glBindVertexArray(0);
     }
   }
 
   //---------------------------
+  glBindVertexArray(0);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }
@@ -132,8 +132,6 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
       glBindVertexArray(axis->VAO);
       glLineWidth(axis->draw_width);
       glDrawArrays(GL_LINES, 0, axis->location.size());
-      glLineWidth(1);
-      glBindVertexArray(0);
     }
 
     //Normal
@@ -142,14 +140,15 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
       glBindVertexArray(normal->VAO);
       glLineWidth(normal->draw_width);
       glDrawArrays(GL_LINES, 0, normal->location.size());
-      glLineWidth(1);
-      glBindVertexArray(0);
     }
+
+    glLineWidth(1);
+    glBindVertexArray(0);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
   }
 
   //---------------------------
-  glDisableVertexAttribArray(0);
-  glDisableVertexAttribArray(1);
 }
 void Glyphs::runtime_glyph_pred(Subset* subset){
   if(subset->obstacle_pr.oobb.size() == 0) return;
@@ -163,8 +162,6 @@ void Glyphs::runtime_glyph_pred(Subset* subset){
     glLineWidth(oobb_pr[i].draw_width);
     glDrawArrays(GL_LINES, 0, oobb_pr[i].location.size());
   }
-  glLineWidth(1);
-  glBindVertexArray(0);
 
   //OOBB - ground thruth
   vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;
@@ -172,11 +169,11 @@ void Glyphs::runtime_glyph_pred(Subset* subset){
     glBindVertexArray(oobb_gt[i].VAO);
     glLineWidth(oobb_gt[i].draw_width);
     glDrawArrays(GL_LINES, 0, oobb_gt[i].location.size());
-    glLineWidth(1);
-    glBindVertexArray(0);
   }
 
   //---------------------------
+  glLineWidth(1);
+  glBindVertexArray(0);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }
