@@ -285,7 +285,8 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
   return true;
 }
 bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset){
-  string filePath = dirPath + subset->name + ".ply";
+  string filePath = dirPath + subset->name + ".tmp";
+  string filePath_end = dirPath + subset->name + ".ply";
   //---------------------------
 
   //Check for file format ending
@@ -325,6 +326,8 @@ bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset
     cout << "WARNING: format not recognized" << endl;
     return false;
   }
+
+  rename(filePath.c_str(), filePath_end.c_str());
 
   //---------------------------
   return true;
