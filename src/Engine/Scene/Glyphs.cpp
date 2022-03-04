@@ -152,7 +152,6 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
   glDisableVertexAttribArray(1);
 }
 void Glyphs::runtime_glyph_pred(Subset* subset){
-  say(subset->obstacle_pr.oobb.size());
   if(subset->obstacle_pr.oobb.size() == 0) return;
   //---------------------------
 
