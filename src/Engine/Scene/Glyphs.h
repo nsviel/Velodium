@@ -45,7 +45,7 @@ public:
   void remove_glyph_subset(Subset* subset);
   void create_glyph_scene(Glyph* glyph);
   void create_glyph_subset(Subset* subset);
-  Glyph create_glyph_ostacle();
+  Glyph* create_glyph_ostacle();
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
 
   inline Grid* get_object_grid(){return gridObject;}

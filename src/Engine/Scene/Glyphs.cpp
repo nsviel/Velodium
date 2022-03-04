@@ -348,12 +348,12 @@ void Glyphs::create_glyph_subset(Subset* subset){
 
   //---------------------------
 }
-Glyph Glyphs::create_glyph_ostacle(){
+Glyph* Glyphs::create_glyph_ostacle(){
   //---------------------------
 
   //Creat new OOBB object
-  Glyph glyph = oobbObject->create_oobb();
-  this->insert_into_gpu(&glyph);
+  Glyph* glyph = oobbObject->create_oobb();
+  this->insert_into_gpu(glyph);
 
   //---------------------------
   return glyph;

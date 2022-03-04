@@ -129,7 +129,7 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
   //---------------------------
 
   for(int j=0; j<obstacle_gt->name.size(); j++){
-    Glyph glyph = glyphManager->create_glyph_ostacle();
+    Glyph* glyph = glyphManager->create_glyph_ostacle();
 
     vec3 To = obstacle_gt->position[j];
     vec3 Ro = vec3(0, 0, obstacle_gt->heading[j]);
@@ -137,9 +137,10 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
     mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
     oobbManager->update_oobb(glyph, transf);
-    glyphManager->update_glyph_location(&glyph);
-    glyphManager->update_glyph_color(&glyph, gt_color);
-    obstacle_gt->oobb.push_back(glyph);
+    glyphManager->update_glyph_location(glyph);
+    glyphManager->update_glyph_color(glyph, gt_color);
+    obstacle_gt->oobb.push_back(*glyph);
+    delete glyph;
   }
 
   //---------------------------
@@ -159,7 +160,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   //---------------------------
 
   for(int j=0; j<obstacle_pr->name.size(); j++){
-    Glyph glyph = glyphManager->create_glyph_ostacle();
+    Glyph* glyph = glyphManager->create_glyph_ostacle();
 
     vec3 To = obstacle_pr->position[j];
     vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
@@ -167,9 +168,10 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
     mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
     oobbManager->update_oobb(glyph, transf);
-    glyphManager->update_glyph_location(&glyph);
-    glyphManager->update_glyph_color(&glyph, pr_color);
-    obstacle_pr->oobb.push_back(glyph);
+    glyphManager->update_glyph_location(glyph);
+    glyphManager->update_glyph_color(glyph, pr_color);
+    obstacle_pr->oobb.push_back(*glyph);
+    delete glyph;
   }
 
   //---------------------------
