@@ -152,12 +152,13 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
   glDisableVertexAttribArray(1);
 }
 void Glyphs::runtime_glyph_pred(Subset* subset){
+  say(subset->obstacle_pr.oobb.size());
   if(subset->obstacle_pr.oobb.size() == 0) return;
   //---------------------------
 
   //OOBB - prediction
   vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
-  say(oobb_pr.size());
+
   for(int i=0; i<oobb_pr.size(); i++){
     glBindVertexArray(oobb_pr[i].VAO);
     glLineWidth(oobb_pr[i].draw_width);
