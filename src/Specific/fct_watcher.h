@@ -33,31 +33,31 @@ void watcher_all_directory(std::string path){
       if ( event->mask & IN_CREATE ) {
         if ( event->mask & IN_ISDIR ) {
           event_str = "The directory " + (string)event->name + " was created.";
-          printf( "The directory %s was created.\n", event->name );
+          //printf( "The directory %s was created.\n", event->name );
         }
         else {
           event_str = "The file " + (string)event->name + " was created.";
-          printf( "The file %s was created.\n", event->name );
+          //printf( "The file %s was created.\n", event->name );
         }
       }
       else if ( event->mask & IN_DELETE ) {
         if ( event->mask & IN_ISDIR ) {
           event_str = "The directory " + (string)event->name + " was deleted.";
-          printf( "The directory %s was deleted.\n", event->name );
+          //printf( "The directory %s was deleted.\n", event->name );
         }
         else {
           event_str = "The file " + (string)event->name + " was deleted.";
-          printf( "The file %s was deleted.\n", event->name );
+          //printf( "The file %s was deleted.\n", event->name );
         }
       }
       else if ( event->mask & IN_MODIFY ) {
         if ( event->mask & IN_ISDIR ) {
           event_str = "The directory " + (string)event->name + " was modified.";
-          printf( "The directory %s was modified.\n", event->name );
+          //printf( "The directory %s was modified.\n", event->name );
         }
         else {
           event_str = "The file " + (string)event->name + " was modified.";
-          printf( "The file %s was modified.\n", event->name );
+          //printf( "The file %s was modified.\n", event->name );
         }
       }
     }

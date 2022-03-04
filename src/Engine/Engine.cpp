@@ -78,8 +78,9 @@ void Engine::runtime_draw_clouds(){
 
           //Subset glyph stuff
           glyphManager->runtime_glyph_subset(subset);
-          if(subset->ID == subset_selected->ID){
-            glyphManager->runtime_glyph_pred(subset);
+          if(subset->ID == subset_selected->ID && j > 2){
+            Subset* subset_m1 = *next(cloud->subset.begin(), j-1);
+            glyphManager->runtime_glyph_pred(subset_m1);
           }
 
         }
