@@ -5,12 +5,15 @@
 #include "../Interface_node.h"
 #include "../Network/Network.h"
 #include "../Network/MQTT/MQTT.h"
+#include "../Network/MQTT/Alert.h"
 #include "../Network/SFTP/SFTP.h"
 #include "../Network/SFTP/SSH.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
 
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Specific/color.h"
 
 #include "imgui/imgui_stdlib.h"
@@ -21,10 +24,13 @@ GUI_Interface::GUI_Interface(GUI_module* node_gui){
   //---------------------------
 
   Module_node* node_module = node_gui->get_node_module();
+  Engine_node* node_engine = node_gui->get_node_engine();
   Interface_node* node_interface = node_module->get_node_interface();
 
+  this->sceneManager = node_engine->get_sceneManager();
   this->netManager = node_interface->get_netManager();
   this->mqttManager = netManager->get_mqttManager();
+  this->alertManager = netManager->get_alertManager();
   this->sftpManager = netManager->get_sftpManager();
   this->sshManager = netManager->get_sshManager();
   this->gui_lidarManager = new GUI_Lidar(node_gui);
@@ -71,7 +77,6 @@ void GUI_Interface::design_Network(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
   this->mqtt_connection();
   this->mqtt_parameter();
-  this->mqtt_test();
 
   ImGui::Separator();
 
@@ -138,8 +143,20 @@ void GUI_Interface::mqtt_connection(){
 
   //Connect to MQTT broker
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Start MQTT", ImVec2(item_width, 0))){
-    mqttManager->mqtt_sendMessages();
+  if(ImGui::Button("Test MQTT", ImVec2(item_width, 0))){
+    mqttManager->mqtt_test_localhost();
+  }
+  ImGui::PopStyleColor(1);
+
+  //Text mesage
+  string* message = mqttManager->get_message();
+  ImGui::InputText("Message", message);
+
+  //Connect to MQTT broker
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Test Alert", ImVec2(item_width, 0))){
+    Subset* subset = sceneManager->get_subset_selected();
+    alertManager->send_prediction_by_mqtt(subset);
   }
   ImGui::PopStyleColor(1);
 
@@ -158,25 +175,8 @@ void GUI_Interface::mqtt_parameter(){
     ImGui::InputText("Client ID", client_ID);
 
     //Server adress
-    string* server_address = mqttManager->get_server_address();
+    string* server_address = mqttManager->get_broker_address();
     ImGui::InputText("Server adress", server_address);
-
-    //---------------------------
-    ImGui::Separator();
-  }
-}
-void GUI_Interface::mqtt_test(){
-  if(ImGui::CollapsingHeader("Test##2")){
-    //---------------------------
-
-    //Test localhost connexion
-    if(ImGui::Button("Test localhost##1", ImVec2(item_width, 0))){
-      mqttManager->mqtt_test_localhost();
-    }
-
-    //Text mesage
-    string* message = mqttManager->get_message();
-    ImGui::InputText("Message", message);
 
     //---------------------------
     ImGui::Separator();

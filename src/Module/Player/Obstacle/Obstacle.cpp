@@ -5,6 +5,8 @@
 #include "../../Module_node.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Prediction.h"
+#include "../../Interface/Network/Network.h"
+#include "../../Interface/Network/MQTT/Alert.h"
 #include "../../Interface/LiDAR/Capture.h"
 
 #include "../../../Engine/Engine_node.h"
@@ -21,8 +23,10 @@ Obstacle::Obstacle(Module_node* node_module){
   //---------------------------
 
   Engine_node* node_engine = node_module->get_node_engine();
+  Interface_node* node_interface = node_module->get_node_interface();
+  Network* netManager = node_interface->get_netManager();
 
-  this->node_interface = node_module->get_node_interface();
+  this->alertManager = netManager->get_alertManager();
   this->captureManager = node_interface->get_captureManager();
   this->predManager = node_interface->get_predManager();
   this->sceneManager = node_engine->get_sceneManager();
@@ -39,24 +43,30 @@ Obstacle::~Obstacle(){}
 
 //Main functions
 void Obstacle::runtime_obstacle(){
-  //This function is called at each OpenGL iteration
   Subset* subset = sceneManager->get_subset_selected();
-  Prediction* predManager = node_interface->get_predManager();
   //---------------------------
 
   if(predManager->get_is_watching() && subset != nullptr){
-
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
+
     if(*is_prediction){
+      //Build obstacle glyphs
       this->build_obstacleGlyph_gt(subset);
       this->build_obstacleGlyph_pr(subset);
+
+      //Send obstacle warning
+      alertManager->send_prediction_by_mqtt(subset);
+
+      //Reverse flag
       *is_prediction = false;
     }
   }
 
   //---------------------------
 }
+
+//Manual obstacle adding
 void Obstacle::add_prediction(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------

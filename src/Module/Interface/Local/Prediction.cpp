@@ -47,14 +47,14 @@ bool Prediction::runtime_prediction(){
       if(flag_newPred){
         this->compute_prediction(cloud, path_predi_file);
         this->flag_newPred = false;
-        is_prediction = true;
+        this->is_prediction = true;
       }
 
       //Load json files - GT
       if(flag_newGrTh){
         this->compute_groundTruth(cloud, path_grThr_file);
         this->flag_newGrTh = false;
-        is_prediction = true;
+        this->is_prediction = true;
       }
     }
   }

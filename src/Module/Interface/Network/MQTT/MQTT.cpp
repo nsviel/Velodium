@@ -3,8 +3,6 @@
 
 #include "MQTT_callback.h"
 
-#include "mqtt/async_client.h"
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -17,137 +15,87 @@ MQTT::MQTT(){
   //---------------------------
 
   //Connection
-  this->server_address = "tcp://localhost:1883";
-  this->client_topic = "Obstacle";
+  this->broker_address = "tcp://localhost:1883";
+  this->broker_topic = "Obstacle";
   this->client_message = "Hello world!";
-  this->client_ID = "velodium";
-  this->client_json = "{\nsepalLength: 6.4,\nsepalWidth:  3.2,\npetalLength: 4.5,\npetalWidth:  1.5,\n}";
+  this->client_ID = "AI_module";
 
   //Parameters
   this->qos = 1;
   this->persist_dir	= "./persist";
   this->timeout = std::chrono::seconds(2);
+  this->client = nullptr;
 
   //---------------------------
 }
-MQTT::~MQTT(){
-  //---------------------------
-
-  //---------------------------
-}
+MQTT::~MQTT(){}
 
 void MQTT::mqtt_test_localhost(){
   //---------------------------
 
-  string server_address  = "tcp://localhost:1883";
-  string client_ID = "paho_cpp_async_publish";
+  this->broker_address  = "tcp://localhost:1883";
+  this->client_ID = "Test_AI_module";
 
-  //Initialize connection parameters
-  cout << "Initializing for server '" << server_address << "'..." << flush;
-  mqtt::async_client client(server_address, client_ID, persist_dir);
+  // Initialize connection parameters
+  this->mqtt_connexion();
 
-  callback cb;
-  client.set_callback(cb);
+  // First use a message pointer.
+  this->mqtt_send_message(client_message);
 
-  auto connOpts = mqtt::connect_options_builder()
-    .clean_session()
-    .will(mqtt::message("Test_localhost", "Test_0", qos))
-    .finalize();
-
-  cout << " [OK]" << endl;
-
-  try {
-    //Serveur connection
-    cout << "Connecting..." << endl;
-    mqtt::token_ptr conntok = client.connect(connOpts);
-    cout << "Waiting for the connection..." << flush;
-    conntok->wait();
-    cout << " [OK]" << endl;
-
-    // First use a message pointer.
-    cout << "Sending message..." << flush;
-    mqtt::message_ptr pubmsg = mqtt::make_message("Test_localhost", "Test_1");
-    pubmsg->set_qos(qos);
-    client.publish(pubmsg)->wait_for(timeout);
-
-    // Now try with itemized publish.
-    cout << "Sending next message..." << flush;
-    mqtt::delivery_token_ptr pubtok;
-    pubtok = client.publish("Test_localhost", "Test_2", strlen("Test_2"), qos, false);
-    cout << "  ...with token: " << pubtok->get_message_id() << endl;
-    cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
-      << " bytes" << endl;
-    pubtok->wait_for(timeout);
-
-    // Now try with a listener
-    cout << "Sending next message..." << flush;
-    action_listener listener;
-    pubmsg = mqtt::make_message("Test_localhost", "Test_3");
-    pubtok = client.publish(pubmsg, nullptr, listener);
-    pubtok->wait();
-
-    // Finally try with a listener, but no token
-    cout << "Sending final message..." << flush;
-    delivery_action_listener deliveryListener;
-    pubmsg = mqtt::make_message("Test_localhost", "Test_4");
-    client.publish(pubmsg, nullptr, deliveryListener);
-
-    while (!deliveryListener.is_done()) {
-      this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-
-    // Double check that there are no pending tokens
-    auto toks = client.get_pending_delivery_tokens();
-    if (!toks.empty())
-      cout << "\n[Error] There are pending delivery tokens!" << endl;
-
-    // Disconnect
-    cout << "\nDisconnecting..." << endl;
-    client.disconnect()->wait();
-  }
-  catch (const mqtt::exception& exc) {
-    cerr << exc.what() << endl;
-  }
+  // Disconnect
+  this->mqtt_disconnect();
 
   //---------------------------
 }
-void MQTT::mqtt_sendMessages(){
+
+
+void MQTT::mqtt_connexion(){
+  if(client == nullptr){
+    //---------------------------
+
+    //Initialize connection parameters
+    this->client = new mqtt::async_client(broker_address, client_ID, persist_dir);
+
+    callback cb;
+    client->set_callback(cb);
+    auto connect_option = mqtt::connect_options_builder().clean_session().finalize();
+
+    //Serveur connection
+    mqtt::token_ptr token = client->connect(connect_option);
+    token->wait();
+
+    //---------------------------
+    cout << "Connection server '" << broker_address << "' [OK]" << endl;
+  }
+}
+void MQTT::mqtt_send_message(string message){
   //---------------------------
 
-  //Initialize connection parameters
-  cout << "Initializing for server '" << server_address << "'..." << flush;
-  mqtt::async_client client(server_address, client_ID, persist_dir);
+  //Check for connection
+  this->mqtt_connexion();
 
   callback cb;
-  client.set_callback(cb);
+  client->set_callback(cb);
 
-  auto connOpts = mqtt::connect_options_builder()
-    .clean_session()
-    .finalize();
-
-  cout << " [OK]" << endl;
-
-  try {
-    //Serveur connection
-    cout << "Connecting..." << flush;
-    mqtt::token_ptr conntok = client.connect(connOpts);
-    conntok->wait();
-    cout << " [OK]" << endl;
-
-    // First use a message pointer.
-    cout << "Sending message..." << flush;
-    mqtt::message_ptr pubmsg = mqtt::make_message(client_topic, client_message);
-    pubmsg->set_qos(qos);
-    client.publish(pubmsg)->wait_for(timeout);
-    cout << " [OK]" << endl;
-
-    // Disconnect
-    client.disconnect()->wait();
-    cout << "Disconnecting... [OK]" << endl;
-  }
-  catch (const mqtt::exception& exc) {
-    cerr << exc.what() << endl;
-  }
+  // First use a message pointer.
+  mqtt::message_ptr pubmsg = mqtt::make_message(broker_topic, message);
+  pubmsg->set_qos(qos);
+  client->publish(pubmsg)->wait_for(timeout);
 
   //---------------------------
+  cout << "Sending message [OK]" << endl;
+}
+void MQTT::mqtt_disconnect(){
+  //---------------------------
+
+  callback cb;
+  client->set_callback(cb);
+
+  // Disconnect
+  client->disconnect()->wait();
+  delete client;
+  client = nullptr;
+
+  //---------------------------
+  cout << "Disconnecting... [OK]" << endl;
 }

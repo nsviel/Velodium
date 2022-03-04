@@ -1,6 +1,7 @@
 #include "Network.h"
 
 #include "MQTT/MQTT.h"
+#include "MQTT/Alert.h"
 #include "SFTP/SFTP.h"
 #include "SFTP/SSH.h"
 
@@ -13,6 +14,7 @@ Network::Network(){
   //---------------------------
 
   this->mqttManager = new MQTT();
+  this->alertManager = new Alert(mqttManager);
   this->sftpManager = new SFTP();
   this->sshManager = new SSH();
 

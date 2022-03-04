@@ -5,6 +5,7 @@
 
 #include <libssh/libssh.h>
 
+class Alert;
 class MQTT;
 class SFTP;
 class SSH;
@@ -32,6 +33,7 @@ public:
   void select_targetPath();
 
   inline MQTT* get_mqttManager(){return mqttManager;}
+  inline Alert* get_alertManager(){return alertManager;}
   inline SFTP* get_sftpManager(){return sftpManager;}
   inline SSH* get_sshManager(){return sshManager;}
   inline string* get_path_source(){return &path_source;}
@@ -42,6 +44,7 @@ public:
 
 private:
   MQTT* mqttManager;
+  Alert* alertManager;
   SFTP* sftpManager;
   SSH* sshManager;
 
