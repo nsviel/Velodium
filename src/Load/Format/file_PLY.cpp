@@ -327,6 +327,7 @@ bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset
     return false;
   }
 
+  //Rename file in proper format when complete
   rename(filePath.c_str(), filePath_end.c_str());
 
   //---------------------------

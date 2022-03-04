@@ -56,7 +56,7 @@ void Obstacle::runtime_obstacle(){
       this->build_obstacleGlyph_pr(subset);
 
       //Send obstacle warning
-      alertManager->send_prediction_by_mqtt(subset);
+      //alertManager->send_prediction_by_mqtt(subset);
 
       //Reverse flag
       *is_prediction = false;
