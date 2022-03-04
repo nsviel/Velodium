@@ -162,9 +162,9 @@ void Glyphs::runtime_glyph_pred(Subset* subset){
     glBindVertexArray(oobb_pr[i].VAO);
     glLineWidth(oobb_pr[i].draw_width);
     glDrawArrays(GL_LINES, 0, oobb_pr[i].location.size());
-    glLineWidth(1);
-    glBindVertexArray(0);
   }
+  glLineWidth(1);
+  glBindVertexArray(0);
 
   //OOBB - ground thruth
   vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;

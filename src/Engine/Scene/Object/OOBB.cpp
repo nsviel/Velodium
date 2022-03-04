@@ -38,8 +38,6 @@ Glyph* OOBB::create_oobb(){
   return oobb;
 }
 void OOBB::update_oobb(Glyph* oobb, mat4 transformation){
-  vector<vec3>& XYZ = oobb->location;
-  vector<vec4>& RGB = oobb->color;
   vec3 min = vec3(-0.5f, -0.5f, -0.5f);
   vec3 max = vec3(0.5f, 0.5f, 0.5f);
   //---------------------------
