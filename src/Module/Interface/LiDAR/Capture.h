@@ -38,7 +38,6 @@ public:
   inline Velodyne* get_veloManager(){return veloManager;}
   inline Cloud* get_cloud_capture(){return cloud_capture;}
 
-  inline int* get_nb_subset_max(){return &nb_subset_max;}
   inline bool get_is_capture_watcher(){return is_capturing;}
   inline bool* get_is_new_capture(){return &is_new_capture;}
 
@@ -52,10 +51,9 @@ private:
   Velodyne* veloManager;
 
   string lidar_capture;
-  bool with_justOneFrame;
+
   bool is_capturing;
   bool is_new_capture;
-  int nb_subset_max;
   int ID_capture;
 };
 

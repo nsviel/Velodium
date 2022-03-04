@@ -142,18 +142,14 @@ void Scene::remove_subset_last(Cloud* cloud){
 
   this->remove_subset_to_gpu(subset);
 
+  //Supress subset iterators
+  cloud->subset.pop_front();
+  cloud->subset_buffer.pop_front();
+  cloud->subset_init.pop_front();
+
   delete subset;
   delete subset_buf;
   delete subset_ini;
-
-  //Supress subset iterators
-  list<Subset*>::iterator it = next(cloud->subset.begin(), 0);
-  list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), 0);
-  list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), 0);
-
-  cloud->subset.erase(it);
-  cloud->subset_buffer.erase(it_buf);
-  cloud->subset_init.erase(it_ini);
 
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
@@ -574,16 +570,22 @@ Subset* Scene::get_subset(Cloud* cloud, int i){
   return subset;
 }
 Subset* Scene::get_subset_selected(){
-  Subset* subset = nullptr;
   //---------------------------
 
   if(cloud_selected != nullptr){
     int ID_subset = cloud_selected->ID_selected;
-    subset = *next(cloud_selected->subset.begin(), ID_subset);
+
+    for(int i=0; i<cloud_selected->subset.size(); i++){
+      Subset* subset = *next(cloud_selected->subset.begin(), i);
+      if(ID_subset == subset->ID){
+        return subset;
+      }
+    }
+
   }
 
   //---------------------------
-  return subset;
+  return nullptr;
 }
 Subset* Scene::get_subset_buffer(Cloud* cloud, int i){
   //---------------------------

@@ -18,6 +18,12 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #define GL_GLEXT_PROTOTYPES
 
+#include <chrono>
+
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+using std::chrono::duration_cast;
+
 
 //Constructor / Destructor
 CoreGLengine::CoreGLengine(){
@@ -120,7 +126,7 @@ void CoreGLengine::init_OGL(){
 void CoreGLengine::init_object(){
   //---------------------------
 
-  this->node_engine = new Engine_node(configManager, window);
+  this->node_engine = new Engine_node(this);
   this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
@@ -146,6 +152,8 @@ void CoreGLengine::loop(){
   //---------------------------
 
   do{
+    auto t1 = high_resolution_clock::now();
+
     //First pass
     //---------------------------
     this->loop_pass_1();
@@ -160,6 +168,10 @@ void CoreGLengine::loop(){
     //---------------------------
     this->loop_gui();
     this->loop_end();
+
+    //Time loop
+    auto t2 = high_resolution_clock::now();
+    this->time_loop = duration_cast<milliseconds>(t2 - t1).count();
   }
   while(openglRunning);
 

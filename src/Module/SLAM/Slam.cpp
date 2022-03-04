@@ -16,6 +16,12 @@
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Transforms.h"
 
+#include <chrono>
+
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+using std::chrono::duration_cast;
+
 
 //Constructor / Destructor
 Slam::Slam(Engine_node* node){
@@ -61,9 +67,10 @@ void Slam::compute_slam(Cloud* cloud){
     Frame* frame_m0 = sceneManager->get_frame(cloud, i);
     Frame* frame_m1 = sceneManager->get_frame(cloud, i-1);
     Frame* frame_m2 = sceneManager->get_frame(cloud, i-2);
-    frame_m0->ID = i;
-    tic();
+    auto t1 = high_resolution_clock::now();
     //--------------
+
+    frame_m0->ID = i;
 
     this->init_frameTimestamp(subset);
     this->init_frameChain(frame_m0, frame_m1, frame_m2);
@@ -81,12 +88,12 @@ void Slam::compute_slam(Cloud* cloud){
     this->compute_updateLocation(subset);
 
     //--------------
-    float duration = toc();
+    auto t2 = high_resolution_clock::now();
+    float duration = duration_cast<milliseconds>(t2 - t1).count();
     this->compute_statistics(duration, frame_m0, frame_m1, subset);
   }
 
   mapManager->end_slamVoxelization(cloud, ID_max);
-toc("slam reend");
   //---------------------------
 }
 void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
@@ -103,7 +110,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   if(subset_ID < map_frame_begin_ID) return;
 
   //SLAM algorithm
-  tic();
+  auto t1 = high_resolution_clock::now();
   //---------------------------
 
   this->init_frameID(frame, subset_ID);
@@ -122,7 +129,8 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   this->compute_updateLocation(subset);
 
   //---------------------------
-  float duration = toc();
+  auto t2 = high_resolution_clock::now();
+  float duration = duration_cast<milliseconds>(t2 - t1).count();
   this->compute_statistics(duration, frame, frame_m1, subset);
   glyphManager->update_glyph_subset(subset);
 }

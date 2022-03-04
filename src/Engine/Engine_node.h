@@ -16,6 +16,7 @@ class Renderer;
 class Viewport;
 class Dimension;
 class Engine;
+class CoreGLengine;
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -25,7 +26,7 @@ class Engine_node
 {
 public:
   //Constructor / Destructor
-  Engine_node(Configuration* config, GLFWwindow* window);
+  Engine_node(CoreGLengine* ogl);
   ~Engine_node();
 
 public:
@@ -49,6 +50,7 @@ public:
   inline Renderer* get_renderManager(){return renderManager;}
   inline Viewport* get_viewportManager(){return viewportManager;}
   inline Engine* get_engineManager(){return engineManager;}
+  inline CoreGLengine* get_glManager(){return glManager;}
 
 private:
   Operation_node* node_ope;
@@ -56,6 +58,7 @@ private:
   Module_node* node_module;
   GUI_node* node_gui;
 
+  CoreGLengine* glManager;
   Configuration* configManager;
   Scene* sceneManager;
   Glyphs* glyphManager;

@@ -50,6 +50,10 @@ public:
   void loop_drawScreen();
   void loop_end();
 
+  inline GLFWwindow* get_window(){return window;}
+  inline Configuration* get_configManager(){return configManager;}
+  inline float get_time_loop(){return time_loop;}
+
 private:
   Engine_node* node_engine;
 
@@ -63,6 +67,7 @@ private:
   Shader* shaderManager;
   Configuration* configManager;
 
+  float time_loop;
   bool is_visualization;
   bool openglRunning;
   bool flag_resized;

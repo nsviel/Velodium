@@ -34,8 +34,6 @@ Capture::Capture(Module_node* node){
 
   this->lidar_capture = configManager->parse_json_s("watcher", "lidar");
   this->ID_capture = 0;
-  this->nb_subset_max = 20;
-  this->with_justOneFrame = false;
   this->is_capturing = false;
 
   //---------------------------
@@ -132,6 +130,7 @@ void Capture::capture_vlp16(){
     //Create new empty cloud
     loaderManager->load_cloud_empty();
     cloud_capture = loaderManager->get_createdcloud();
+    cloud_capture->ID_subset = 0;
     cloud_capture->name = "Capture_vlp16_" + to_string(ID_capture);
 
     this->is_capturing = true;
@@ -165,20 +164,12 @@ void Capture::capture_scala(){
 void Capture::operation_new_subset(Subset* subset){
   //---------------------------
 
+  //Set new subset identifieurs
   subset->name = "frame_" + to_string(cloud_capture->ID_subset);
   subset->ID = cloud_capture->ID_subset;
   cloud_capture->ID_subset++;
 
-  //If option, remove all other subset
-  if(with_justOneFrame){
-    sceneManager->remove_subset_all(cloud_capture);
-  }
-  //Remove old frame if option is activated
-  else{
-    if(cloud_capture->subset.size() >= nb_subset_max){
-      sceneManager->remove_subset_last(cloud_capture);
-    }
-  }
+
 
   //Supress null points
   this->supress_nullpoints(subset);

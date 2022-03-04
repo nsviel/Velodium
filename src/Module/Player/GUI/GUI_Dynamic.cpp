@@ -179,7 +179,6 @@ void GUI_Dynamic::player_selection(){
     Subset* subset_first = sceneManager->get_subset(cloud, 0);
     Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
     int subset_selected_ID = cloud->ID_selected;
-    float ts =  subset->ts[0];
 
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
@@ -188,8 +187,10 @@ void GUI_Dynamic::player_selection(){
       }
     }
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", ts);
-
+    if(subset != nullptr){
+      float ts =  subset->ts[0];
+      ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", ts);
+    }
   }
 
   //---------------------------

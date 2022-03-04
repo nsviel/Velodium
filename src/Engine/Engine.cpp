@@ -74,7 +74,6 @@ void Engine::runtime_draw_clouds(){
         if(subset->visibility){
           glBindVertexArray(subset->VAO);
           glDrawArrays(GL_POINTS, 0, subset->xyz.size());
-          glBindVertexArray(0);
 
           //Subset glyph stuff
           glyphManager->runtime_glyph_subset(subset);
@@ -90,6 +89,7 @@ void Engine::runtime_draw_clouds(){
   }
 
   //---------------------------
+  glBindVertexArray(0);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }

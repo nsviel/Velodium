@@ -55,6 +55,7 @@ void Online::update_configuration(){
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
+  this->nb_subset_max = 20;
 
   this->with_camera_top = false;
   this->with_camera_follow = configManager->parse_json_b("online", "with_camera_follow");
@@ -64,6 +65,7 @@ void Online::update_configuration(){
   this->with_heatmap_rltHeight = true;
   this->with_unicolor = !with_heatmap;
 
+  this->with_justOneFrame = false;
   this->with_save_frame = configManager->parse_json_b("online", "with_save_frame");
   this->with_save_image = configManager->parse_json_b("online", "with_save_image");
   this->with_slam = configManager->parse_json_b("online", "with_slam");
@@ -122,6 +124,9 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
     saveManager->save_image();
     this->time_image = toc();
   }
+
+  //Regulate the number of cloud frame
+  this->cloud_size_controler(cloud);
 
   //Provide info about computation
   this->compute_statistics(subset);
@@ -249,6 +254,22 @@ void Online::camera_orientation(Subset* subset){
 }
 
 //Other functions
+void Online::cloud_size_controler(Cloud* cloud){
+  //---------------------------
+
+  //If option, remove all other subset
+  if(with_justOneFrame){
+    sceneManager->remove_subset_last(cloud);
+  }
+  //Remove old frame if option is activated
+  else{
+    if(cloud->subset.size() > nb_subset_max){
+      sceneManager->remove_subset_last(cloud);
+    }
+  }
+
+  //---------------------------
+}
 void Online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------

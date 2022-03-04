@@ -7,6 +7,7 @@
 #include "Scene/Glyphs.h"
 
 #include "OpenGL/Dimension.h"
+#include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Camera/Renderer.h"
 #include "OpenGL/Camera/Camera.h"
 #include "OpenGL/Camera/Viewport.h"
@@ -19,11 +20,12 @@
 
 
 //Constructor / Destructor
-Engine_node::Engine_node(Configuration* config, GLFWwindow* window){
-  this->configManager = config;
+Engine_node::Engine_node(CoreGLengine* ogl){
+  this->glManager = ogl;
   //---------------------------
 
-  this->dimManager = new Dimension(window, configManager);
+  this->configManager = ogl->get_configManager();
+  this->dimManager = new Dimension(ogl->get_window(), configManager);
   this->shaderManager = new Shader(dimManager);
   this->cameraManager = new Camera(dimManager);
   this->renderManager = new Renderer(dimManager);

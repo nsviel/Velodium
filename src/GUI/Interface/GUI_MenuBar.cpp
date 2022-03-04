@@ -16,6 +16,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Data/struct_generic.h"
+#include "../../Engine/OpenGL/CoreGLengine.h"
 #include "../../Engine/OpenGL/Textures.h"
 
 #include "../../Operation/Operation_node.h"
@@ -51,6 +52,7 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   this->sceneManager = node_engine->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_pathManager();
+  this->glManager = node_engine->get_glManager();
   this->texManager = new Textures();
 
   //---------------------------
@@ -241,17 +243,21 @@ void GUI_menuBar::MenuBar_appInfo(){
     struct sysinfo si;
     sysinfo (&si);
     float percentFreeRam = ((float)si.freeram*100) / (float)si.totalram;
-    ImGui::Text("Total RAM  : %5.1f MB\n", si.totalram / megabyte);
-    ImGui::Text("Free RAM   : %5.1f MB - %.1f%%\n", si.freeram / megabyte, percentFreeRam);
+    ImGui::Text("Total RAM: %5.1f MB\n", si.totalram / megabyte);
+    ImGui::Text("Free RAM: %5.1f MB - %.1f%%\n", si.freeram / megabyte, percentFreeRam);
 
     //Number of concurrency threads
     const auto processor_count = std::thread::hardware_concurrency();
-    ImGui::Text("Max nb thread   : %d\n", processor_count);
+    ImGui::Text("Max nb thread: %d\n", processor_count);
     ImGui::Separator();
 
     //Framerate
     ImGuiIO io = ImGui::GetIO();
     ImGui::Text("%.1f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+    //Loop duration
+    float time_loop = glManager->get_time_loop();
+    ImGui::Text("Loop: %.f ms", time_loop);
 
     //---------------------------
     ImGui::EndMenu();
