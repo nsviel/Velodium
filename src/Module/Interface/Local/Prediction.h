@@ -23,6 +23,7 @@ public:
 
   //Subfunctions
   void runtime_prediction();
+  void remove_prediction_file(string path);
   void compute_prediction(Cloud* cloud, string file_path);
   void compute_prediction(string path_dir);
   void compute_prediction(Cloud* cloud, vector<string> path_vec);

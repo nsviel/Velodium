@@ -35,7 +35,7 @@ void GPS::start_watcher_gps(){
 
   thread_gps = std::thread([&](){
     while(thread_gps_ON){
-      watcher_created_file(path_gps, path_gps_file, flag_newGPS);
+      watcher_created_file("gps", path_gps, path_gps_file, flag_newGPS);
     }
   });
   thread_gps.detach();

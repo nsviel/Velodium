@@ -69,7 +69,7 @@ void watcher_all_directory(std::string path){
 
   //---------------------------
 }
-void watcher_created_file(std::string path, std::string& path_full, bool& flag){
+void watcher_created_file(std::string format_in, std::string path, std::string& path_out, bool& flag){
   std::string event_str;
   //---------------------------
 
@@ -88,13 +88,21 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   while(i < length){
     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
     if ( event->len && event->mask & IN_CREATE ) {
-      //Terminal info
-      event_str = "The file " + (string)event->name + " was created.";
-      printf( "The file %s was created.\n", event->name );
 
-      //Output
-      path_full = path + event->name;
-      flag = true;
+      //Full file path
+      std::string path_full = path + event->name;
+      std::string format = path_full.substr(path_full.find_last_of("."), string::npos);
+      std::cout<<format<<std::endl;
+
+      if(format == format_in){
+        //Terminal info
+        event_str = "The file " + (string)event->name + " was created.";
+        printf( "The file %s was created.\n", event->name );
+
+        //Output
+        path_out = path + event->name;
+        flag = true;
+      }
     }
     i += EVENT_SIZE + event->len;
   }
@@ -127,7 +135,8 @@ void watcher_modify_file(std::string format_in, std::string path, std::string& p
       //Full file path
       std::string path_full = path + event->name;
       std::string format = path_full.substr(path_full.find_last_of("."), string::npos);
-std::cout<<format<<std::endl;
+      std::cout<<format<<std::endl;
+
       if(format == format_in){
         //Terminal info
         event_str = "The file " + (string)event->name + " was modified.";

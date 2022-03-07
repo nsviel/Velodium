@@ -44,7 +44,7 @@ void Prediction::runtime_prediction(){
   //Load json files - predictions
   if(thread_predi_ON && flag_newPred && cloud != nullptr){
     this->compute_prediction(cloud, path_predi_file);
-    //this->remove_prediction_file()
+    this->remove_prediction_file(path_predi_file);
     this->flag_newPred = false;
   }
 
@@ -64,13 +64,13 @@ void Prediction::start_watcher_prediction(){
 
   thread_predi = std::thread([&](){
     while(thread_predi_ON){
-      watcher_modify_file("json", path_predi, path_predi_file, flag_newPred);
-      watcher_all_directory(path_predi);
+      watcher_created_file("json", path_predi, path_predi_file, flag_newPred);
+      watcher_all_directory(path_predi); //Juste for testing
     }
   });
   thread_grThr = std::thread([&](){
     while(thread_grThr_ON){
-      watcher_modify_file("json", path_grThr, path_grThr_file, flag_newGrTh);
+      watcher_created_file("json", path_grThr, path_grThr_file, flag_newGrTh);
     }
   });
 
@@ -201,6 +201,13 @@ void Prediction::compute_groundTruth(Cloud* cloud, vector<string> path_vec){
       }
     }
   }
+
+  //---------------------------
+}
+void Prediction::remove_prediction_file(string path){
+  //---------------------------
+
+  //remove(path);
 
   //---------------------------
 }
