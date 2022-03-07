@@ -270,10 +270,10 @@ void Extractore::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->saveas = get_absolutePath_build() + "/../media/data/";
 
   //ID
-  int* list_ID = sceneManager->get_list_ID_cloud();
-  cloud->ID = *list_ID;
-  cloud->oID = *list_ID;
-  *list_ID++;
+  int* ID_cloud = sceneManager->get_new_ID_cloud();
+  cloud->ID = *ID_cloud;
+  cloud->oID = sceneManager->get_new_oID_cloud();
+  *ID_cloud += 1;
 
   //---------------------------
 }

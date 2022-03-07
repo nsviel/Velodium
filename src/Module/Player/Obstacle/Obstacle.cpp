@@ -172,9 +172,9 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
     glyphManager->update_glyph_color(glyph, pr_color);
     obstacle_pr->oobb.push_back(*glyph);
 
-
-    //delete glyph;
+    delete glyph;
   }
+  cout<<"obstacle "<<subset->name<<" runtime nb oobb : "<<obstacle_pr->oobb.size()<<endl;
 
   //---------------------------
 }

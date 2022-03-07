@@ -111,7 +111,6 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
       say(subset->name);
 
       this->parse_json_prediction(subset, path_file);
-      say(subset->obstacle_pr.oobb.size());
       this->is_prediction = true;
     }
   }
@@ -277,8 +276,7 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
 
   //For each hierarchical set
   const Json::Value& json = obj["detections"];
-  cout<<"json size : "<<json.size()<<endl;
-  for (int i = 0; i < json.size(); i++){
+  for(int i = 0; i < json.size(); i++){
     //Obstacle name
     string name = json[i]["name"].asString();
 

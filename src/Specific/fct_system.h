@@ -107,19 +107,22 @@ namespace{
 
     struct dirent* files;
     DIR* directory = opendir(path);
-    std::vector<std::string> list;
+    std::vector<std::string> path_vec;
 
     //Filtre and store files present in the folder
     while ((files = readdir(directory)) != NULL){
       std::string name = files->d_name;
-      list.push_back(name);
+      path_vec.push_back(name);
     }
 
     //Close and return the file names list
     closedir(directory);
 
+    //Sort vector in alphabetic order
+    std::sort(path_vec.begin(), path_vec.end());
+
     //---------------------------
-    return list;
+    return path_vec;
   }
   std::vector<std::string> list_allPaths(string path_dir){
     //---------------------------
@@ -137,6 +140,9 @@ namespace{
 
     //Close and return the file names list
     closedir(directory);
+
+    //Sort vector in alphabetic order
+    std::sort(path_vec.begin(), path_vec.end());
 
     //---------------------------
     return path_vec;

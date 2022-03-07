@@ -75,7 +75,8 @@ public:
   bool get_is_list_empty();
 
   inline list<Cloud*>* get_list_cloud(){return list_cloud;}
-  inline int* get_list_ID_cloud(){return &ID_cloud;}
+  inline int* get_new_ID_cloud(){return &ID_cloud;}
+  inline int get_new_oID_cloud(){return list_cloud->size();}
   inline Cloud* get_cloud_selected(){return cloud_selected;}
   inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
 

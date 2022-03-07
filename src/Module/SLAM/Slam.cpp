@@ -44,6 +44,7 @@ Slam::Slam(Engine_node* node){
   this->ID_all = true;
 
   this->ID_max = 0;
+  this->ID_cloud = -1; //To ensure that the current processing cloud is the same than before
   this->map_frame_ID = 0;
   this->map_frame_begin_ID = 0;
   this->map_size_old = 0;
@@ -101,19 +102,13 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
-  //---------------------------
-
-  //Check for computing conditions
-  if(subset->xyz.size() == 0) return;
-  if(subset_ID >= 2 && cloud->subset.size() < 2) return;
-  if(frame->is_slamed == true) return;
-  if(subset_ID < map_frame_begin_ID) return;
 
   //SLAM algorithm
+  if(check_conditions(cloud, subset_ID) == false) return;
   auto t1 = high_resolution_clock::now();
   //---------------------------
 
-  this->init_frameID(frame, subset_ID);
+  this->init_frameID(cloud, subset_ID);
   this->init_frameTimestamp(subset);
   this->init_frameChain(frame, frame_m1, frame_m2);
   this->init_distortion(frame);
@@ -136,16 +131,34 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
 }
 
 //SLAM sub-functions
-void Slam::init_frameID(Frame* frame, int subset_ID){
+bool Slam::check_conditions(Cloud* cloud, int subset_ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
 
-  if(map_frame_ID == 0){
-    map_frame_begin_ID = subset_ID;
+  //Check for computing conditions
+  if(subset->xyz.size() == 0) return false;
+  if(subset_ID >= 2 && cloud->subset.size() < 2) return false;
+  if(frame->is_slamed == true) return false;
+  if(subset_ID < map_frame_begin_ID) return false;
+  if(cloud->ID != ID_cloud && ID_cloud != -1){
+    this->reset_slam();
   }
+
+  //---------------------------
+  return true;
+}
+void Slam::init_frameID(Cloud* cloud, int subset_ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  //---------------------------
 
   frame->ID = map_frame_ID;
 
-  map_frame_ID++;
+  if(map_frame_ID == 0){
+    this->map_frame_begin_ID = subset_ID;
+  }
+  this->ID_cloud = cloud->ID;
+  this->map_frame_ID++;
 
   //---------------------------
 }
@@ -215,14 +228,6 @@ void Slam::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
     frame->trans_b = trans_next_b;
     frame->rotat_e = rotat_next_e;
     frame->trans_e = trans_next_e;
-  }
-
-  //Essai sans option
-  if(false && frame->ID >= 2){
-    frame->rotat_b = frame_m1->rotat_b;
-    frame->trans_b = frame_m1->trans_b;
-    frame->rotat_e = frame_m1->rotat_b;
-    frame->trans_e = frame_m1->trans_b;
   }
 
   //---------------------------

@@ -47,7 +47,8 @@ public:
   inline void set_ID_all(bool value){ID_all = value;}
 
 private:
-  void init_frameID(Frame* frame, int ID);
+  bool check_conditions(Cloud* cloud, int subset_ID);
+  void init_frameID(Cloud* cloud, int ID);
   void init_frameTimestamp(Subset* subset);
   void init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
   void init_distortion(Frame* frame);
@@ -75,6 +76,7 @@ private:
   int map_size_old;
   int map_frame_ID;
   int map_frame_begin_ID;
+  int ID_cloud;
   int ID_max;
   int nb_thread;
 };
