@@ -203,14 +203,6 @@ void Extractore::check_data(dataFile* data){
     }
   }
 
-  //Name
-  string path = data->path;
-  if(data->name == ""){
-    string name = path.substr(path.find_last_of("/\\") + 1);
-    name =  name.substr(0, name.find_last_of("/"));
-    data->name = name.substr(0, name.find_last_of("."));
-  }
-
   //---------------------------
 }
 void Extractore::check_data(udpPacket& data){
@@ -296,7 +288,7 @@ void Extractore::init_subsetParameters(Subset* subset, string name, int ID){
 
   //Other stuff
   subset->ID = ID;
-  subset->name = name;
+  subset->name = "subset_" + to_string(ID);
   subset->root = vec3(0.0);
 
   //---------------------------
