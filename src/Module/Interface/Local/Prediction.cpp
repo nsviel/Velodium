@@ -63,12 +63,12 @@ void Prediction::start_watcher_prediction(){
 
   thread_predi = std::thread([&](){
     while(thread_predi_ON){
-      watcher_created_file(path_predi, path_predi_file, flag_newPred);
+      watcher_modify_file("json", path_predi, path_predi_file, flag_newPred);
     }
   });
   thread_grThr = std::thread([&](){
     while(thread_grThr_ON){
-      watcher_created_file(path_grThr, path_grThr_file, flag_newGrTh);
+      watcher_modify_file("json", path_grThr, path_grThr_file, flag_newGrTh);
     }
   });
 
@@ -106,10 +106,6 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->ID == frame_ID){
-      say("----- RUNTIME NEW PREDICTION ----");
-      say(path_file);
-      say(subset->name);
-
       this->parse_json_prediction(subset, path_file);
       this->is_prediction = true;
     }

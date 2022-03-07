@@ -176,7 +176,6 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
       delete glyph;
     }
   }
-  cout<<"obstacle "<<subset->name<<" runtime nb oobb : "<<obstacle_pr->oobb.size()<<endl;
 
   //---------------------------
 }

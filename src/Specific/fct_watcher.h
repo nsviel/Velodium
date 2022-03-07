@@ -77,6 +77,41 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   int BUF_LEN = 1024 * ( EVENT_SIZE + 16 );
 
   int fd = inotify_init();
+  int wd = inotify_add_watch(fd, path.c_str(), IN_MODIFY);
+
+  char buffer[BUF_LEN];
+  int length = read(fd, buffer, BUF_LEN);
+
+  struct inotify_event *event = ( struct inotify_event * ) &buffer[0];
+
+  int i = 0;
+  while(i < length){
+    struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
+    if ( event->len && event->mask & IN_MODIFY ) {
+      //Terminal info
+      event_str = "The file " + (string)event->name + " was created.";
+      printf( "The file %s was created.\n", event->name );
+
+      //Output
+      path_full = path + event->name;
+      flag = true;
+    }
+    i += EVENT_SIZE + event->len;
+  }
+
+  ( void ) inotify_rm_watch( fd, wd );
+  ( void ) close( fd );
+
+  //---------------------------
+}
+void watcher_modify_file(std::string format_in, std::string path, std::string& path_out, bool& flag){
+  std::string event_str;
+  //---------------------------
+
+  int EVENT_SIZE = sizeof (struct inotify_event);
+  int BUF_LEN = 1024 * ( EVENT_SIZE + 16 );
+
+  int fd = inotify_init();
   int wd = inotify_add_watch(fd, path.c_str(), IN_CREATE);
 
   char buffer[BUF_LEN];
@@ -88,13 +123,21 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   while(i < length){
     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
     if ( event->len && event->mask & IN_CREATE ) {
-      //Terminal info
-      event_str = "The file " + (string)event->name + " was created.";
-      printf( "The file %s was created.\n", event->name );
 
-      //Output
-      path_full = path + event->name;
-      flag = true;
+      //Full file path
+      std::string path_full = path + event->name;
+      std::string format = path_full.substr(path_full.find_last_of("."), string::npos);
+
+      if(format == format_in){
+        //Terminal info
+        event_str = "The file " + (string)event->name + " was modified.";
+        printf( "The file %s was modified.\n", event->name );
+
+        //Output
+        path_out = path + event->name;
+        flag = true;
+      }
+
     }
     i += EVENT_SIZE + event->len;
   }

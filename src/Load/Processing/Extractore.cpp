@@ -288,7 +288,7 @@ void Extractore::init_subsetParameters(Subset* subset, string name, int ID){
 
   //Other stuff
   subset->ID = ID;
-  subset->name = "subset_" + to_string(ID);
+  subset->name = "frame_" + to_string(ID);
   subset->root = vec3(0.0);
 
   //---------------------------

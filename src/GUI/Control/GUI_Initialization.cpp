@@ -120,6 +120,8 @@ void GUI_Initialization::init_mode(int mode){
       sceneManager->remove_cloud_all();
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
       obstacleManager->add_prediction("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
+      int* scenar = scenarioManager->get_scenario_selected();
+      *scenar = 1;
       scenarioManager->make_configuration();
       break;
     }

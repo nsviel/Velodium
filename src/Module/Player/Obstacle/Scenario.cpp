@@ -15,6 +15,13 @@
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Configuration.h"
 
+/*Scénario :
+  * 0 = default
+  * 1 = AI Module
+  * 2 = WP4 - car
+  * 3 - 4 = WP5 - train
+*/
+
 
 //Constructor / Destructor
 Scenario::Scenario(Module_node* node_module, Online* online){
@@ -73,7 +80,7 @@ void Scenario::make_configuration(){
 
   //Set according to scenario choice
   switch(scenario_selected){
-    case 0:{
+    case 0:{//Default
       *with_camera = false;
       *with_slam = false;
       *with_cylinder = false;
@@ -82,8 +89,16 @@ void Scenario::make_configuration(){
       *with_save_image = false;
       break;
     }
-
-    case 1:{
+    case 1:{//AI module
+      *with_camera = true;
+      *with_slam = true;
+      *with_cylinder = false;
+      *with_heatmap = true;
+      *with_save_frame = true;
+      *with_save_image = false;
+      break;
+    }
+    case 2:{//WP4 - car
       *with_camera = true;
       *with_slam = true;
       *with_cylinder = true;
@@ -93,8 +108,8 @@ void Scenario::make_configuration(){
       break;
     }
 
-    case 2:
-    case 3:{
+    case 3:
+    case 4:{//WP5 - train
       *with_camera = false;
       *with_slam = true;
       *with_cylinder = true;
@@ -104,15 +119,7 @@ void Scenario::make_configuration(){
       break;
     }
 
-    case 4:{
-      *with_camera = true;
-      *with_slam = true;
-      *with_cylinder = false;
-      *with_heatmap = true;
-      *with_save_frame = true;
-      *with_save_image = false;
-      break;
-    }
+
   }
 
   //---------------------------
