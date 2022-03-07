@@ -43,17 +43,17 @@ Obstacle::~Obstacle(){}
 
 //Main functions
 void Obstacle::runtime_obstacle(){
-  Subset* subset = sceneManager->get_subset_selected();
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  if(predManager->get_is_watching() && subset != nullptr){
+  if(predManager->get_is_watching() && cloud != nullptr){
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
 
     if(*is_prediction){
       //Build obstacle glyphs
-      this->build_obstacleGlyph_gt(subset);
-      this->build_obstacleGlyph_pr(subset);
+      this->build_obstacleGlyph_pr(cloud);
+      this->build_obstacleGlyph_pr(cloud);
 
       //Send obstacle warning
       //alertManager->send_prediction_by_mqtt(subset);
@@ -159,20 +159,22 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   Obstac* obstacle_pr = &subset->obstacle_pr;
   //---------------------------
 
-  for(int j=0; j<obstacle_pr->name.size(); j++){
-    Glyph* glyph = glyphManager->create_glyph_ostacle();
+  if(obstacle_pr->oobb.size() == 0 && obstacle_pr->name.size() != 0){
+    for(int j=0; j<obstacle_pr->name.size(); j++){
+      Glyph* glyph = glyphManager->create_glyph_ostacle();
 
-    vec3 To = obstacle_pr->position[j];
-    vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
-    vec3 So = obstacle_pr->dimension[j];
-    mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
+      vec3 To = obstacle_pr->position[j];
+      vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
+      vec3 So = obstacle_pr->dimension[j];
+      mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
-    oobbManager->update_oobb(glyph, transf);
-    glyphManager->update_glyph_location(glyph);
-    glyphManager->update_glyph_color(glyph, pr_color);
-    obstacle_pr->oobb.push_back(*glyph);
+      oobbManager->update_oobb(glyph, transf);
+      glyphManager->update_glyph_location(glyph);
+      glyphManager->update_glyph_color(glyph, pr_color);
+      obstacle_pr->oobb.push_back(*glyph);
 
-    delete glyph;
+      delete glyph;
+    }
   }
   cout<<"obstacle "<<subset->name<<" runtime nb oobb : "<<obstacle_pr->oobb.size()<<endl;
 

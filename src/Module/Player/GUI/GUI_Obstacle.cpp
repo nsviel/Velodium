@@ -37,7 +37,7 @@ GUI_Obstacle::GUI_Obstacle(GUI_module* node){
   this->coordManager = node_ope->get_coordManager();
   this->node_interface = node_module->get_node_interface();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarioManager = node_player->get_scenarnode_interface();
+  this->scenarioManager = node_player->get_scenarioManager();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;

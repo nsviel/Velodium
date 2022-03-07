@@ -24,13 +24,13 @@ public:
   inline Online* get_onlineManager(){return onlineManager;}
   inline Offline* get_offlineManager(){return offlineManager;}
   inline Obstacle* get_obstacleManager(){return obstacleManager;}
-  inline Scenario* get_scenarnode_interface(){return scenarnode_interface;}
+  inline Scenario* get_scenarioManager(){return scenarioManager;}
 
 private:
   Obstacle* obstacleManager;
   Online* onlineManager;
   Offline* offlineManager;
-  Scenario* scenarnode_interface;
+  Scenario* scenarioManager;
 };
 
 #endif

@@ -24,7 +24,7 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarnode_interface = node_player->get_scenarnode_interface();
+  this->scenarioManager = node_player->get_scenarioManager();
   this->loaderManager = node_load->get_loadManager();
   this->pathManager = node_load->get_pathManager();
 
@@ -61,12 +61,6 @@ void GUI_Initialization::init_gui(){
   }
   if(ImGui::Button("IA module", ImVec2(100,0))){
     this->init_mode(7);
-  }
-  if(ImGui::Button("Velodyne statique", ImVec2(100,0))){
-    this->init_mode(8);
-  }
-  if(ImGui::Button("Velodyne move", ImVec2(100,0))){
-    this->init_mode(9);
   }
 
   //---------------------------
@@ -126,16 +120,7 @@ void GUI_Initialization::init_mode(int mode){
       sceneManager->remove_cloud_all();
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
       obstacleManager->add_prediction("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
-      scenarnode_interface->make_configuration();
-      break;
-    }
-    case 8:{//Frame for prediction
-      sceneManager->remove_cloud_all();
-      pathManager->loading_directoryFrames("/home/aether/Desktop/Velodium/media/data/capture/test_statique");
-      break;
-    }
-    case 9:{//Frame for prediction
-
+      scenarioManager->make_configuration();
       break;
     }
   }
