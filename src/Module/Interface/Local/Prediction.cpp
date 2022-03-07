@@ -43,9 +43,6 @@ void Prediction::runtime_prediction(){
 
   //Load json files - predictions
   if(thread_predi_ON && flag_newPred && cloud != nullptr){
-    say("----- PREDICTION ----");
-    say(path_predi_file);
-
     this->compute_prediction(cloud, path_predi_file);
     this->flag_newPred = false;
   }
@@ -109,7 +106,8 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->ID == frame_ID){
-      say("----- PREDICTION ----");
+      say("----- RUNTIME NEW PREDICTION ----");
+      say(path_file);
       say(subset->ID);
       say(frame_ID);
 

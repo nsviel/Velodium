@@ -158,7 +158,7 @@ void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
 
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 1);
 
-  say("----- VISUALIZATION ----");
+  say("----- SUBSET WITH OOBB ----");
   say(subset->name);
   say(subset->obstacle_pr.oobb.size());
 
