@@ -29,7 +29,7 @@ public:
   //Runtime functions
   void runtime_glyph_scene();
   void runtime_glyph_subset(Subset* subset);
-  void runtime_glyph_pred(Subset* subset);
+  void runtime_glyph_pred(Cloud* cloud, int subset_ID);
 
   //Glyph update
   void update_glyph_subset(Subset* subset);

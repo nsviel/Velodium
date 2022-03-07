@@ -150,9 +150,13 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
 
   //---------------------------
 }
-void Glyphs::runtime_glyph_pred(Subset* subset){
-  if(subset->obstacle_pr.oobb.size() == 0) return;
+void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
+  Scene* sceneManager = node_engine->get_sceneManager();
+  Subset* subset_selected = sceneManager->get_subset_selected();
+  if(subset_ID != subset_selected->ID && subset_ID == 0) return;
   //---------------------------
+
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 1);
   say("----");
   say(subset->name);
   say(subset->ID);
