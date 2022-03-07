@@ -43,6 +43,9 @@ void Prediction::runtime_prediction(){
 
   //Load json files - predictions
   if(thread_predi_ON && flag_newPred && cloud != nullptr){
+    say("----- PREDICTION ----");
+    say(path_predi_file);
+    say(subset->obstacle_pr.oobb.size());
     this->compute_prediction(cloud, path_predi_file);
     this->flag_newPred = false;
   }
@@ -300,13 +303,6 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
     obstacle_pr->dimension.push_back(dimension);
     obstacle_pr->heading.push_back(heading);
   }
-
-  say("-----");
-  say(subset->name);
-  say(subset->ID);
-  say(obstacle_pr->name.size());
-  say(obstacle_pr->position.size());
-  say(obstacle_pr->dimension.size());
 
   //---------------------------
 }
