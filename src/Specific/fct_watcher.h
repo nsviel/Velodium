@@ -77,7 +77,7 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   int BUF_LEN = 1024 * ( EVENT_SIZE + 16 );
 
   int fd = inotify_init();
-  int wd = inotify_add_watch(fd, path.c_str(), IN_MODIFY);
+  int wd = inotify_add_watch(fd, path.c_str(), IN_CREATE);
 
   char buffer[BUF_LEN];
   int length = read(fd, buffer, BUF_LEN);
@@ -87,7 +87,7 @@ void watcher_created_file(std::string path, std::string& path_full, bool& flag){
   int i = 0;
   while(i < length){
     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
-    if ( event->len && event->mask & IN_MODIFY ) {
+    if ( event->len && event->mask & IN_CREATE ) {
       //Terminal info
       event_str = "The file " + (string)event->name + " was created.";
       printf( "The file %s was created.\n", event->name );
@@ -112,7 +112,7 @@ void watcher_modify_file(std::string format_in, std::string path, std::string& p
   int BUF_LEN = 1024 * ( EVENT_SIZE + 16 );
 
   int fd = inotify_init();
-  int wd = inotify_add_watch(fd, path.c_str(), IN_CREATE);
+  int wd = inotify_add_watch(fd, path.c_str(), IN_MODIFY);
 
   char buffer[BUF_LEN];
   int length = read(fd, buffer, BUF_LEN);
@@ -122,7 +122,7 @@ void watcher_modify_file(std::string format_in, std::string path, std::string& p
   int i = 0;
   while(i < length){
     struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
-    if ( event->len && event->mask & IN_CREATE ) {
+    if ( event->len && event->mask & IN_MODIFY ) {
 
       //Full file path
       std::string path_full = path + event->name;
