@@ -44,6 +44,7 @@ void Prediction::runtime_prediction(){
   //Load json files - predictions
   if(thread_predi_ON && flag_newPred && cloud != nullptr){
     this->compute_prediction(cloud, path_predi_file);
+    this->remove_prediction_file()
     this->flag_newPred = false;
   }
 
