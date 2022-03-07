@@ -25,6 +25,7 @@ private:
   GPS* gpsManager;
   Saving* saveManager;
   Prediction* predManager;
+  Interface_node* node_interface;
 };
 
 #endif

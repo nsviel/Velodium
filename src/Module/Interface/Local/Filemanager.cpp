@@ -11,7 +11,8 @@
 
 
 //Constructor / Destructor
-Filemanager::Filemanager(Interface_node* node_interface){
+Filemanager::Filemanager(Interface_node* node){
+  this->node_interface = node;
   //---------------------------
 
   this->gpsManager = node_interface->get_gpsManager();
@@ -46,6 +47,7 @@ void Filemanager::check_directories(){
   //---------------------------
 
   //Get directory paths
+  string path_dir = node_interface->get_dir_path();
   string path_gps = gpsManager->get_path_gps();
   string path_image = saveManager->get_path_image();
   string path_frame = saveManager->get_path_frame();
@@ -53,6 +55,7 @@ void Filemanager::check_directories(){
   string path_grThr = predManager->get_path_grThr();
 
   //Clean directories
+  create_new_dir(path_dir);
   create_new_dir(path_image);
   create_new_dir(path_frame);
   create_new_dir(path_predi);

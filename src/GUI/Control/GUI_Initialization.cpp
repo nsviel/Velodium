@@ -86,20 +86,20 @@ void GUI_Initialization::init_mode(int mode){
         0.016318,  -0.0371476 ,   0.999177,   0.0189446,
         0,           0,           0,           1;
 
-      loaderManager->load_cloud("../media/fastScene/buddha.pts");
-      loaderManager->load_cloud("../media/fastScene/buddha_moved.pts");
-      //loaderManager->load_cloud("../media/fastScene/buddha_moved.pts", realTransformation);
+      loaderManager->load_cloud("../media/engine/fastScene/buddha.pts");
+      loaderManager->load_cloud("../media/engine/fastScene/buddha_moved.pts");
+      //loaderManager->load_cloud("../media/engine/fastScene/buddha_moved.pts", realTransformation);
       break;
     }
     case 1:{//Torus
       sceneManager->remove_cloud_all();
-      loaderManager->load_cloud("../media/fastScene/torus_1.ply");
-      loaderManager->load_cloud("../media/fastScene/torus_2.ply");
+      loaderManager->load_cloud("../media/engine/fastScene/torus_1.ply");
+      loaderManager->load_cloud("../media/engine/fastScene/torus_2.ply");
       break;
     }
     case 2:{//PCAP
       sceneManager->remove_cloud_all();
-      loaderManager->load_cloud("../media/fastScene/pcap_test.pcap");
+      loaderManager->load_cloud("../media/engine/fastScene/pcap_test.pcap");
       break;
     }
     case 3:{//Frames in movement

@@ -1,7 +1,5 @@
 build/*
-media/data/capture_0*
-media/data/capture_1*
-media/data/capture_test*
+media/data/*
 media/point_cloud/frames_lot/*
 media/point_cloud/frames_other/*
 media/point_cloud/scala/*
