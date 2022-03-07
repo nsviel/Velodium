@@ -65,6 +65,7 @@ void Prediction::start_watcher_prediction(){
   thread_predi = std::thread([&](){
     while(thread_predi_ON){
       watcher_modify_file("json", path_predi, path_predi_file, flag_newPred);
+      watcher_all_directory(path_predi);
     }
   });
   thread_grThr = std::thread([&](){
