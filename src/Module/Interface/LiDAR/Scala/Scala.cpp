@@ -1,5 +1,6 @@
-//Input : udp packets
+//Input : CBOR packets
 //Output : Subset pointer
+//https://github.com/nlohmann/json#binary-formats-cbor-and-messagepack
 
 #include "Scala.h"
 
@@ -10,8 +11,12 @@
 #include "../../../../Engine/Engine_node.h"
 #include "../../../../Load/Load_node.h"
 #include "../../../../Load/Processing/Extractore.h"
+#include "../../../../Specific/fct_system.h"
+#include "../../../../Specific/fct_watcher.h"
 
 #include "../../../../../extern/json.hpp"
+
+#include <fstream>
 
 
 //Constructor / Destructor
@@ -21,14 +26,7 @@ Scala::Scala(Engine_node* node_engine){
   Load_node* node_load = node_engine->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
-  this->udpServManager = new UDP_server();
-  this->udp_scalaManager = new UDP_parser_Scala();
-  this->frameManager = new UDP_frame();
-  this->subset_capture = new Subset();
-
-  this->is_first_run = true;
-  this->is_capturing = false;
-  this->is_newSubset = false;
+  this->path_scala = get_absolutePath_build() + "/../media/data/capture/scala";
 
   //---------------------------
 }
@@ -39,24 +37,18 @@ void Scala::lidar_start_watcher(){
   //---------------------------
 
   //Start udp packets watcher
-  thread_capture = std::thread([&]() {
+  thread_scala = std::thread([&]() {
     while (is_capturing){
-      //Get packet in decimal format
-      vector<int> packet_dec = udpServManager->read_UDP_packets();
+      //Watch for new file
+      watcher_created_file(".cbor", path_scala, path_scala_file, flag_newScala);
 
-      //Parse decimal packet into point cloud
-      udpPacket* packet_udp = udp_scalaManager->parse_UDP_packet(packet_dec);
-
-      //Iteratively build a complete frame
-      bool frame_rev = frameManager->build_frame(packet_udp);
-
-      if(frame_rev){
-        udpPacket* frame = frameManager->get_endedFrame();
-        this->lidar_create_subset(frame);
-      }
+      // read a JSON file
+      std::ifstream file(path_scala_file);
+      nlohmann::json json_file;
+      file >> json_file;
     }
   });
-  thread_capture.detach();
+  thread_scala.detach();
 
   //---------------------------
   this->is_capturing = true;
@@ -65,22 +57,6 @@ void Scala::lidar_create_subset(udpPacket* udp_packet){
   //Asynchroneous function (used by theaded watcher)
   //---------------------------
 
-  //Free the memory to get synchroneous data
-  udpPacket upd_frame = *udp_packet;
-  upd_frame.name = "";
-
-  //Convert the udp packet into subset
-  Subset* subset_extracted = extractManager->extractData(upd_frame);
-
-  //Make sure to desallocate memory
-  delete subset_capture;
-  this->subset_capture = new Subset(*subset_extracted);
-  delete subset_extracted;
-
-  //Update flags
-  if(subset_capture->xyz.size() != 0){
-    this->is_newSubset = true;
-  }
 
   //---------------------------
 }

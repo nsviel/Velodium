@@ -64,13 +64,12 @@ void Prediction::start_watcher_prediction(){
 
   thread_predi = std::thread([&](){
     while(thread_predi_ON){
-      watcher_created_file("json", path_predi, path_predi_file, flag_newPred);
-      watcher_all_directory(path_predi); //Juste for testing
+      watcher_created_file(".json", path_predi, path_predi_file, flag_newPred);
     }
   });
   thread_grThr = std::thread([&](){
     while(thread_grThr_ON){
-      watcher_created_file("json", path_grThr, path_grThr_file, flag_newGrTh);
+      watcher_created_file(".json", path_grThr, path_grThr_file, flag_newGrTh);
     }
   });
 

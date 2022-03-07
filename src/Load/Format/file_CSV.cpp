@@ -14,7 +14,7 @@ vector<dataFile*> file_CSV::Loader(string pathFile){
   vector<dataFile*> cloud;
   //---------------------------
 
-  std::ifstream file(pathFile);;
+  std::ifstream file(pathFile);
   std::vector<std::vector<std::string>> csvFile = readCSV(file);
 
   //At row level
