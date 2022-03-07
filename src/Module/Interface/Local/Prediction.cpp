@@ -277,6 +277,7 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
 
   //For each hierarchical set
   const Json::Value& json = obj["detections"];
+  cout<<"json size : "<<json.size()<<endl;
   for (int i = 0; i < json.size(); i++){
     //Obstacle name
     string name = json[i]["name"].asString();
