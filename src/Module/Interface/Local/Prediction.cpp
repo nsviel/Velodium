@@ -108,7 +108,7 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
     if(subset->ID == frame_ID){
       say("----- RUNTIME NEW PREDICTION ----");
       say(path_file);
-      say(subset->ID);
+      say(subset->name);
 
       this->parse_json_prediction(subset, path_file);
       say(subset->obstacle_pr.oobb.size());
