@@ -135,8 +135,7 @@ void GUI_Initialization::init_mode(int mode){
       break;
     }
     case 9:{//Frame for prediction
-      sceneManager->remove_cloud_all();
-      pathManager->loading_directoryFrames("/home/aether/Desktop/Velodium/media/data/capture/test_movement");
+
       break;
     }
   }

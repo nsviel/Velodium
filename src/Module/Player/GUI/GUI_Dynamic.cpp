@@ -123,7 +123,6 @@ void GUI_Dynamic::player_button(){
   //---------------------------
 
   //Play button
-  offlineManager->player_runtime();
   bool is_playing = *offlineManager->get_player_isrunning();
   if(is_playing == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));

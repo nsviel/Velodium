@@ -4,6 +4,7 @@
 #include "../../SLAM/Slam.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Saving.h"
+#include "../../Interface/LiDAR/Capture.h"
 
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/Heatmap.h"
@@ -112,7 +113,6 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //Save subset frame
   if(with_save_frame){
-    Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
     Saving* saveManager = node_interface->get_saveManager();
     saveManager->save_frame(subset);
   }
@@ -129,11 +129,11 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   this->cloud_size_controler(cloud);
 
   //Provide info about computation
-  this->compute_statistics(subset);
+  this->compute_displayStats(subset);
 
   //---------------------------
 }
-void Online::compute_statistics(Subset* subset){
+void Online::compute_displayStats(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -143,7 +143,7 @@ void Online::compute_statistics(Subset* subset){
     stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
   }
   if(with_save_image){
-    stats += "[IMAG- " + to_string((int)time_image) + " ms] ";
+    stats += "[Image- " + to_string((int)time_image) + " ms] ";
   }
   console.AddLog("#", stats);
 
@@ -263,7 +263,9 @@ void Online::cloud_size_controler(Cloud* cloud){
   }
   //Remove old frame if option is activated
   else{
-    if(cloud->subset.size() > nb_subset_max){
+    Capture* captureManager = node_interface->get_captureManager();
+    bool is_capturing = captureManager->get_is_capture_watcher();
+    if(cloud->subset.size() > nb_subset_max && is_capturing){
       sceneManager->remove_subset_last(cloud);
     }
   }

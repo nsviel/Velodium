@@ -32,6 +32,7 @@ void Player_node::runtime(){
   //---------------------------
 
   obstacleManager->runtime_obstacle();
+  offlineManager->player_runtime();
 
   //---------------------------
 }
