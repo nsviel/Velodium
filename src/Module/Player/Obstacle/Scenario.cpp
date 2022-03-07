@@ -103,6 +103,16 @@ void Scenario::make_configuration(){
       *with_save_image = false;
       break;
     }
+
+    case 4:{
+      *with_camera = true;
+      *with_slam = true;
+      *with_cylinder = false;
+      *with_heatmap = true;
+      *with_save_frame = true;
+      *with_save_image = false;
+      break;
+    }
   }
 
   //---------------------------
@@ -130,6 +140,11 @@ void Scenario::make_watcher(){
       captureManager->start_new_capture();
       netManager->start_thread_image();
       gpsManager->start_watcher_gps();
+      break;
+    }
+
+    case 4:{
+      predManager->start_watcher_prediction();
       break;
     }
   }

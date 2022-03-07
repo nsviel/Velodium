@@ -58,19 +58,19 @@ void Online::update_configuration(){
   this->nb_subset_max = 20;
 
   this->with_camera_top = false;
-  this->with_camera_follow = configManager->parse_json_b("online", "with_camera_follow");
+  this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_root = false;
 
-  this->with_heatmap = configManager->parse_json_b("online", "with_heatmap");
+  this->with_heatmap = configManager->parse_json_b("module", "with_heatmap");
   this->with_heatmap_rltHeight = true;
   this->with_unicolor = !with_heatmap;
 
   this->with_justOneFrame = false;
-  this->with_save_frame = configManager->parse_json_b("online", "with_save_frame");
-  this->with_save_image = configManager->parse_json_b("online", "with_save_image");
-  this->with_slam = configManager->parse_json_b("online", "with_slam");
-  this->with_cylinder_cleaning = configManager->parse_json_b("online", "with_cylinder_cleaning");
-  this->with_remove_lastSubset = configManager->parse_json_b("online", "with_remove_lastSubset");
+  this->with_save_frame = configManager->parse_json_b("module", "with_save_frame");
+  this->with_save_image = configManager->parse_json_b("module", "with_save_image");
+  this->with_slam = configManager->parse_json_b("module", "with_slam");
+  this->with_cylinder_cleaning = configManager->parse_json_b("module", "with_cylinder_cleaning");
+  this->with_remove_lastSubset = configManager->parse_json_b("module", "with_remove_lastSubset");
 
   //---------------------------
 }

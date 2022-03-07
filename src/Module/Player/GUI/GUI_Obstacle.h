@@ -45,7 +45,7 @@ private:
   Interface_node* node_interface;
   CoordTransform* coordManager;
   Scene* sceneManager;
-  Scenario* scenarnode_interface;
+  Scenario* scenarioManager;
   GUI_module* node_gui;
 
   int label_ID;

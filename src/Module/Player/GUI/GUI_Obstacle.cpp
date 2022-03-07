@@ -37,7 +37,7 @@ GUI_Obstacle::GUI_Obstacle(GUI_module* node){
   this->coordManager = node_ope->get_coordManager();
   this->node_interface = node_module->get_node_interface();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarnode_interface = node_player->get_scenarnode_interface();
+  this->scenarioManager = node_player->get_scenarnode_interface();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
@@ -86,32 +86,32 @@ void GUI_Obstacle::compute_scenario(){
   //---------------------------
 
   //Choose scenario
-  int* scenario_selected = scenarnode_interface->get_scenario_selected();
-  ImGui::Combo("##007", scenario_selected, "None\0WP4 auto\0WP5 train on-board\0WP5 train on-edge\0");
+  int* scenario_selected = scenarioManager->get_scenario_selected();
+  ImGui::Combo("##007", scenario_selected, "Default\0AI module\0WP4 auto\0WP5 train on-board\0WP5 train on-edge\0");
 
   //Start scenario
-  bool scenario_started = *scenarnode_interface->get_scenario_started();
+  bool scenario_started = *scenarioManager->get_scenario_started();
   if(scenario_started == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Start scenario", ImVec2(item_width, 0))){
-      scenarnode_interface->scenario_start();
+      scenarioManager->scenario_start();
     }
   }else{
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
     if(ImGui::Button("Stop scenario", ImVec2(item_width, 0))){
-      scenarnode_interface->scenario_stop();
+      scenarioManager->scenario_stop();
     }
   }
   ImGui::PopStyleColor(1);
 
   //Start watchers
   if(ImGui::Button("Watchers", ImVec2(item_width, 0))){
-    scenarnode_interface->make_watcher();
+    scenarioManager->make_watcher();
   }
 
   //Start config
   if(ImGui::Button("Configure", ImVec2(item_width, 0))){
-    scenarnode_interface->make_configuration();
+    scenarioManager->make_configuration();
   }
 
   //---------------------------

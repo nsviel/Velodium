@@ -8,6 +8,7 @@ Configuration::Configuration(){
   //---------------------------
 
   this->path_default = get_absolutePath_build() + "/../media/engine/config_default.json";
+  this->path_AI = get_absolutePath_build() + "/../media/engine/config_AI.json";
   this->path_WP4_car = get_absolutePath_build() + "/../media/engine/config_WP4.json";
   this->path_WP5_train = get_absolutePath_build() + "/../media/engine/config_WP5.json";
   this->path_config = path_default;
@@ -38,15 +39,21 @@ void Configuration::make_preconfig(int config){
       this->make_configuration();
       break;
     }
-    case 1:{ //WP4 auto
-      this->path_config = path_WP4_car;
+    case 1:{ //AI module
+      this->path_config = path_AI;
       this->config = 1;
       this->make_configuration();
       break;
     }
-    case 2:{ //WP5 train
-      this->path_config = path_WP5_train;
+    case 2:{ //WP4 auto
+      this->path_config = path_WP4_car;
       this->config = 2;
+      this->make_configuration();
+      break;
+    }
+    case 3:{ //WP5 train
+      this->path_config = path_WP5_train;
+      this->config = 3;
       this->make_configuration();
       break;
     }
@@ -116,6 +123,73 @@ void Configuration::preconf_default(Json::Value& root){
   //Watchers
   Json::Value watcher;
   watcher["prediction"] = false;
+  watcher["capture"] = false;
+  watcher["gps"] = false;
+  watcher["lidar"] = "vlp16";
+  root["watcher"] = watcher;
+
+  //---------------------------
+}
+void Configuration::preconf_AI_module(Json::Value& root){
+  //---------------------------
+
+  //OpenGL stuff
+  Json::Value window;
+  window["title"] = "Velodium";
+  window["resolution_width"] = 1024;
+  window["resolution_height"] = 500;
+  window["resolution_ratio"] = 4.0f/3.0f;
+  window["background_color"] = 0.86f;
+  window["forceVersion"] = false;
+  window["visualization"] = true;
+  root["window"] = window;
+
+  //GUI
+  Json::Value gui;
+  gui["leftPanel_width"] = 220;
+  gui["leftPanel_mid"] = 200;
+  gui["topPanel_height"] = 18;
+  gui["botPanel_height"] = 100;
+  root["gui"] = gui;
+
+  //Parameters
+  Json::Value param;
+  param["path_media"] = "../media/";
+  param["cloud_translation"] = 0.01;
+  param["cloud_rotation"] = 5; //Degree
+  param["cloud_movement"] = true;
+  param["point_size"] = 2;
+  param["clean_directories"] = true;
+  param["check_directories"] = true;
+  root["parameter"] = param;
+
+  //Camera
+  Json::Value camera;
+  camera["fov"] = 65.0f;
+  camera["initial_pos"] = 5.0f;
+  camera["clip_near"] = 0.1f;
+  camera["clip_far"] = 10000.0f;
+  camera["speed_mouse"] = 0.003f;
+  camera["speed_move"] = 3.0f;
+  camera["speed_zoom"] = 0.1f;
+  root["camera"] = camera;
+
+  //Module
+  Json::Value module;
+  module["with_slam"] = true;
+  module["with_camera_follow"] = true;
+  module["with_cylinder_cleaning"] = false;
+  module["with_heatmap"] = true;
+  module["with_save_image"] = false;
+  module["with_save_frame"] = true;
+  module["with_remove_lastSubset"] = true;
+  module["with_AI_module"] = true;
+  module["scenario"] = 1;
+  root["module"] = module;
+
+  //Watchers
+  Json::Value watcher;
+  watcher["prediction"] = true;
   watcher["capture"] = false;
   watcher["gps"] = false;
   watcher["lidar"] = "vlp16";
@@ -274,11 +348,15 @@ void Configuration::create_jsonfile(){
         this->preconf_default(root);
         break;
       }
-      case 1:{ //WP4 auto
+      case 1:{ //Default
+        this->preconf_AI_module(root);
+        break;
+      }
+      case 2:{ //WP4 auto
         this->preconf_WP4_car(root);
         break;
       }
-      case 2:{ //WP5 train
+      case 3:{ //WP5 train
         this->preconf_WP5_train(root);
         break;
       }
