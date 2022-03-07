@@ -301,6 +301,13 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
     obstacle_pr->heading.push_back(heading);
   }
 
+  say("-----");
+  say(subset->name);
+  say(subset->ID);
+  say(obstacle_pr->name.size());
+  say(obstacle_pr->position.size());
+  say(obstacle_pr->dimension.size());
+
   //---------------------------
 }
 int Prediction::parse_frame_ID(string path_file){
