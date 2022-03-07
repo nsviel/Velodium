@@ -91,7 +91,7 @@ void watcher_created_file(std::string format_in, std::string path, std::string& 
 
       //Full file path
       std::string path_full = path + event->name;
-      std::string format = path_full.substr(path_full.find_last_of("."), string::npos);
+      std::string format = path_full.substr(path_full.find_last_of(".")+1, string::npos);
       std::cout<<format<<std::endl;
 
       if(format == format_in){
