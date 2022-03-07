@@ -158,7 +158,7 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
 void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   Obstac* obstacle_pr = &subset->obstacle_pr;
   //---------------------------
-say(subset->name);
+
   for(int j=0; j<obstacle_pr->name.size(); j++){
     Glyph* glyph = glyphManager->create_glyph_ostacle();
 

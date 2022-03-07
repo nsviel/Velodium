@@ -36,31 +36,24 @@ Prediction::Prediction(Engine_node* node_engine){
 Prediction::~Prediction(){}
 
 //Main functions
-bool Prediction::runtime_prediction(){
+void Prediction::runtime_prediction(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   bool is_prediction = false;
   //---------------------------
 
-  if(thread_predi_ON || thread_grThr_ON){
-    if(cloud != nullptr){
-      //Load json files - predictions
-      if(flag_newPred){
-        this->compute_prediction(cloud, path_predi_file);
-        this->flag_newPred = false;
-        this->is_prediction = true;
-      }
+  //Load json files - predictions
+  if(thread_predi_ON && flag_newPred && cloud != nullptr){
+    this->compute_prediction(cloud, path_predi_file);
+    this->flag_newPred = false;
+  }
 
-      //Load json files - GT
-      if(flag_newGrTh){
-        this->compute_groundTruth(cloud, path_grThr_file);
-        this->flag_newGrTh = false;
-        this->is_prediction = true;
-      }
-    }
+  //Load json files - GT
+  if(thread_grThr_ON && flag_newGrTh && cloud != nullptr){
+    this->compute_groundTruth(cloud, path_grThr_file);
+    this->flag_newGrTh = false;
   }
 
   //---------------------------
-  return is_prediction;
 }
 void Prediction::start_watcher_prediction(){
   //---------------------------
@@ -103,7 +96,6 @@ void Prediction::stop_watcher_prediction(){
 
 //Subfunctions
 void Prediction::compute_prediction(Cloud* cloud, string path_file){
-  if(cloud == nullptr) return;
   //---------------------------
 
   //Retrieve prediction frame ID
