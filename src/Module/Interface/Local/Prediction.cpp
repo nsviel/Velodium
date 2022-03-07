@@ -109,6 +109,10 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->ID == frame_ID){
+      say("----- PREDICTION ----");
+      say(subset->ID);
+      say(frame_ID);
+
       this->parse_json_prediction(subset, path_file);
       this->is_prediction = true;
     }
