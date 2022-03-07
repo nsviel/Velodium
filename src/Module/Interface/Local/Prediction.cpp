@@ -45,7 +45,7 @@ void Prediction::runtime_prediction(){
   if(thread_predi_ON && flag_newPred && cloud != nullptr){
     say("----- PREDICTION ----");
     say(path_predi_file);
-    say(subset->obstacle_pr.oobb.size());
+
     this->compute_prediction(cloud, path_predi_file);
     this->flag_newPred = false;
   }
