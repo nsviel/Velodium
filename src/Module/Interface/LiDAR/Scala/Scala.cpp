@@ -11,6 +11,8 @@
 #include "../../../../Load/Load_node.h"
 #include "../../../../Load/Processing/Extractore.h"
 
+#include "../../../../../extern/json.hpp"
+
 
 //Constructor / Destructor
 Scala::Scala(Engine_node* node_engine){
