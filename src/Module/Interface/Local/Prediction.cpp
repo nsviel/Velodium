@@ -40,6 +40,7 @@ void Prediction::runtime_prediction(){
     vector<string> path_vec = list_allPaths(path_predi);
 
     say("----");
+    say(path_vec.size());
     for(int i=0; i<path_vec.size(); i++){
       string path = path_vec[i];
       string format = get_file_format(path);
