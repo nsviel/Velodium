@@ -39,15 +39,11 @@ void Prediction::runtime_prediction(){
   if(with_prediction && cloud != nullptr){
     vector<string> path_vec = list_allPaths(path_predi);
 
-    say("----");
-    say(path_vec.size());
     for(int i=0; i<path_vec.size(); i++){
       string path = path_vec[i];
       string format = get_file_format(path);
-      say(format);
-      if(format == "json"){
 
-        say(path);
+      if(format == ".json"){
         this->compute_prediction(cloud, path);
         this->remove_prediction_file(path);
         this->is_prediction = true;
