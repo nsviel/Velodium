@@ -8,6 +8,8 @@
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
 
+#include <chrono>
+
 
 //Constructor / Destructor
 Saving::Saving(Engine_node* node_engine){
@@ -32,6 +34,7 @@ Saving::~Saving(){}
 
 //Output: frame & Image saving
 void Saving::save_image(){
+  auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
   //Save image
@@ -49,6 +52,8 @@ void Saving::save_image(){
   }
 
   //---------------------------
+  auto t2 = std::chrono::high_resolution_clock::now();
+  this->time_save_image = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }
 void Saving::save_image_path(){
   //---------------------------
@@ -61,6 +66,7 @@ void Saving::save_image_path(){
   //---------------------------
 }
 void Saving::save_frame(Subset* subset){
+  auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
   //Save frame
@@ -77,4 +83,6 @@ void Saving::save_frame(Subset* subset){
   }
 
   //---------------------------
+  auto t2 = std::chrono::high_resolution_clock::now();
+  this->time_save_frame = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }

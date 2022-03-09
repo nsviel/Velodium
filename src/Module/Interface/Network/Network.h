@@ -23,11 +23,7 @@ public:
   void send_file(string path_source, string path_target);
   void start_connection();
   void stop_connection();
-
-  //Threaded functions
-  void start_thread_mqtt();
-  void start_thread_image();
-
+  
   //Subfunctions
   void select_sourcePath();
   void select_targetPath();

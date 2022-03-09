@@ -170,15 +170,8 @@ void Capture::operation_new_subset(Subset* subset){
   subset->ID = cloud_capture->ID_subset;
   cloud_capture->ID_subset++;
 
-
-
   //Supress null points
   this->supress_nullpoints(subset);
-
-  // /sayHello();
-
-  //FUITE DE MEMOIRE ICIIIIIIIIIIIIIIIIIIII
-
 
   //If ok insert subset into scene
   if(subset->xyz.size() != 0){

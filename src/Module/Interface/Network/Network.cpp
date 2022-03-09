@@ -64,22 +64,6 @@ void Network::send_file(string path_source, string path_target){
   //---------------------------
 }
 
-//Threaded functions
-void Network::start_thread_mqtt(){
-  //---------------------------
-
-  //mqttManager->mqtt_sendMessages();
-
-  //---------------------------
-}
-void Network::start_thread_image(){
-  //---------------------------
-
-  //mqttManager->mqtt_sendMessages();
-
-  //---------------------------
-}
-
 //Subfunctions
 void Network::select_sourcePath(){
   //---------------------------
