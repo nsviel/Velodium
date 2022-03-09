@@ -224,53 +224,50 @@ void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
   //---------------------------
 }
 void Prediction::parse_json_prediction(Subset* subset, string path_file){
-  Obstac* obstacle_pr = &subset->obstacle_pr;
-  //---------------------------
+  if(subset->obstacle_pr.name.size() == 0){
+    //---------------------------
 
-  //Reset all values
-  obstacle_pr->name.clear();
-  obstacle_pr->position.clear();
-  obstacle_pr->dimension.clear();
-  obstacle_pr->heading.clear();
+    //Parse prediction json file
+    std::ifstream ifs(path_file);
+    Json::Reader reader;
+    Json::Value obj;
+    reader.parse(ifs, obj);
 
-  //Parse prediction json file
-  std::ifstream ifs(path_file);
-  Json::Reader reader;
-  Json::Value obj;
-  reader.parse(ifs, obj);
+    //For each hierarchical set
+    const Json::Value& json = obj["detections"];
+    for(int i = 0; i < json.size(); i++){
+      //Obstacle name
+      string name = json[i]["name"].asString();
 
-  //For each hierarchical set
-  const Json::Value& json = obj["detections"];
-  for(int i = 0; i < json.size(); i++){
-    //Obstacle name
-    string name = json[i]["name"].asString();
+      //Obstacle position
+      const Json::Value& json_pos = json[i]["position"];
+      vec3 position;
+      for (int j=0; j<json_pos.size(); j++){
+        position[j] = json_pos[j].asFloat();
+      }
 
-    //Obstacle position
-    const Json::Value& json_pos = json[i]["position"];
-    vec3 position;
-    for (int j=0; j<json_pos.size(); j++){
-      position[j] = json_pos[j].asFloat();
+      //Obstacle dimension
+      const Json::Value& json_dim = json[i]["dimensions"];
+      vec3 dimension;
+      for (int j=0; j<json_dim.size(); j++){
+        dimension[j] = json_dim[j].asFloat();
+      }
+
+      //Obstacle heading
+      const Json::Value& json_head = json[i]["heading"];
+      float heading = json_head.asFloat();
+
+      //Store all data
+      subset->obstacle_pr.name.push_back(name);
+      subset->obstacle_pr.position.push_back(position);
+      subset->obstacle_pr.dimension.push_back(dimension);
+      subset->obstacle_pr.heading.push_back(heading);
     }
 
-    //Obstacle dimension
-    const Json::Value& json_dim = json[i]["dimensions"];
-    vec3 dimension;
-    for (int j=0; j<json_dim.size(); j++){
-      dimension[j] = json_dim[j].asFloat();
-    }
+    cout<<subset->name<<" obstacle: "<<subset->obstacle_pr.name.size()<<endl;
 
-    //Obstacle heading
-    const Json::Value& json_head = json[i]["heading"];
-    float heading = json_head.asFloat();
-
-    //Store all data
-    obstacle_pr->name.push_back(name);
-    obstacle_pr->position.push_back(position);
-    obstacle_pr->dimension.push_back(dimension);
-    obstacle_pr->heading.push_back(heading);
+    //---------------------------
   }
-
-  //---------------------------
 }
 int Prediction::parse_frame_ID(string path_file){
   //---------------------------
