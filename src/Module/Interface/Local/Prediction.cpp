@@ -43,7 +43,7 @@ void Prediction::runtime_prediction(){
     for(int i=0; i<path_vec.size(); i++){
       string path = path_vec[i];
       string format = get_file_format(path);
-
+      say(format);
       if(format == "json"){
 
         say(path);
