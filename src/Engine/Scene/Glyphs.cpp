@@ -158,6 +158,8 @@ void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
 
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 1);
 
+  cout<<subset->name<<" glyph obstacle: "<<subset->obstacle_pr.oobb.size()<<endl;
+
   //OOBB - prediction
   vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
   for(int i=0; i<oobb_pr.size(); i++){

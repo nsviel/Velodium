@@ -264,8 +264,6 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
       subset->obstacle_pr.heading.push_back(heading);
     }
 
-    cout<<subset->name<<" obstacle: "<<subset->obstacle_pr.name.size()<<endl;
-
     //---------------------------
   }
 }
