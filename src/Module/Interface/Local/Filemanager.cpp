@@ -19,29 +19,33 @@ Filemanager::Filemanager(Interface_node* node){
   this->saveManager = node_interface->get_saveManager();
   this->predManager = node_interface->get_predManager();
 
+  this->is_clean_dir = true;
+
   //---------------------------
 }
 Filemanager::~Filemanager(){}
 
 //Subfunctions
 void Filemanager::clean_directories(){
-  //---------------------------
+  if(is_clean_dir){
+    //---------------------------
 
-  //Get directory paths
-  string path_gps = gpsManager->get_path_gps();
-  string path_image = saveManager->get_path_image();
-  string path_frame = saveManager->get_path_frame();
-  string path_predi = predManager->get_path_predi();
-  string path_grThr = predManager->get_path_grThr();
+    //Get directory paths
+    string path_gps = gpsManager->get_path_gps();
+    string path_image = saveManager->get_path_image();
+    string path_frame = saveManager->get_path_frame();
+    string path_predi = predManager->get_path_predi();
+    string path_grThr = predManager->get_path_grThr();
 
-  //Clean directories
-  clean_directory_files(path_image.c_str());
-  clean_directory_files(path_frame.c_str());
-  clean_directory_files(path_predi.c_str());
-  clean_directory_files(path_grThr.c_str());
-  clean_directory_files(path_gps.c_str());
+    //Clean directories
+    clean_directory_files(path_image.c_str());
+    clean_directory_files(path_frame.c_str());
+    clean_directory_files(path_predi.c_str());
+    clean_directory_files(path_grThr.c_str());
+    clean_directory_files(path_gps.c_str());
 
-  //---------------------------
+    //---------------------------
+  }
 }
 void Filemanager::check_directories(){
   //---------------------------

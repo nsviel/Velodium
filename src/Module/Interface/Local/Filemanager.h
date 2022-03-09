@@ -26,6 +26,8 @@ private:
   Saving* saveManager;
   Prediction* predManager;
   Interface_node* node_interface;
+
+  bool is_clean_dir;
 };
 
 #endif

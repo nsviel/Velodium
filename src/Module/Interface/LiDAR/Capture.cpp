@@ -32,7 +32,8 @@ Capture::Capture(Module_node* node){
   this->scalaManager = new Scala(node_engine);
   this->veloManager = new Velodyne(node_engine);
 
-  this->lidar_capture = configManager->parse_json_s("watcher", "lidar");
+  this->lidar_velodyne = configManager->parse_json_b("interface", "lidar_velodyne");
+  this->lidar_scala = configManager->parse_json_b("interface", "lidar_scala");
   this->ID_capture = 0;
   this->is_capturing = false;
 
@@ -44,10 +45,10 @@ Capture::~Capture(){}
 void Capture::start_new_capture(){
   //---------------------------
 
-  if(lidar_capture == "vlp16"){
+  if(lidar_velodyne){
     this->capture_vlp16();
   }
-  else if(lidar_capture == "scala"){
+  if(lidar_scala){
     this->capture_scala();
   }
 
@@ -56,11 +57,11 @@ void Capture::start_new_capture(){
 void Capture::stop_capture(){
   //---------------------------
 
-  if(lidar_capture == "vlp16"){
+  if(lidar_velodyne){
     *veloManager->get_is_velo_capturing() = false;
     veloManager->lidar_stop_motor();
   }
-  else if(lidar_capture == "scala"){
+  if(lidar_scala){
     *scalaManager->get_is_scala_capturing() = false;
   }
 
@@ -77,7 +78,7 @@ void Capture::runtime_capturing(){
   new_subset = nullptr;
 
   //Check for new Subset
-  if(lidar_capture == "vlp16"){
+  if(lidar_velodyne){
     bool *new_capture = veloManager->get_is_newSubset();
 
     if(*new_capture){
@@ -88,7 +89,7 @@ void Capture::runtime_capturing(){
       *new_capture = false;
     }
   }
-  else if(lidar_capture == "scala"){
+  if(lidar_scala){
     bool* new_capture = scalaManager->get_is_newSubset();
     if(*new_capture){
       //Pick new subset

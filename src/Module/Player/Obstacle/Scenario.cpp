@@ -36,8 +36,6 @@ Scenario::Scenario(Module_node* node_module, Online* online){
   this->configManager = node_engine->get_configManager();
   this->captureManager = node_interface->get_captureManager();
   this->netManager = node_interface->get_netManager();
-  this->predManager = node_interface->get_predManager();
-  this->gpsManager = node_interface->get_gpsManager();
   this->slam_configManager = slamManager->get_slam_config();
 
   this->scenario_selected = configManager->parse_json_i("module", "scenario");
@@ -59,9 +57,6 @@ void Scenario::scenario_start(){
 }
 void Scenario::scenario_stop(){
   //---------------------------
-
-  predManager->stop_watcher_prediction();
-  gpsManager->stop_watcher_gps();
 
   //---------------------------
 }
@@ -134,24 +129,17 @@ void Scenario::make_watcher(){
     }
 
     case 1:{//WP4 scenario
-      predManager->start_watcher_prediction();
       captureManager->start_new_capture();
-      netManager->start_thread_image();
-      gpsManager->start_watcher_gps();
       break;
     }
 
     case 2://WP5 scenario
     case 3:{
-      predManager->start_watcher_prediction();
       captureManager->start_new_capture();
-      netManager->start_thread_image();
-      gpsManager->start_watcher_gps();
       break;
     }
 
     case 4:{
-      predManager->start_watcher_prediction();
       break;
     }
   }

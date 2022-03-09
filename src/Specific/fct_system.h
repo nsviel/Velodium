@@ -32,6 +32,16 @@ namespace{
     //---------------------------
   }
 
+  //Retrieve file format (eg, pts, json, pcap)
+  std::string get_file_format(std::string path){
+    //---------------------------
+
+    std::string format = path.substr(path.find_last_of("."), string::npos);
+
+    //---------------------------
+    return format;
+  }
+
   //Get a RGB random color
   glm::vec4 random_color(){
     //---------------------------

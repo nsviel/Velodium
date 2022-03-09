@@ -46,7 +46,7 @@ void Obstacle::runtime_obstacle(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  if(predManager->get_is_watching() && cloud != nullptr){
+  if(predManager->get_with_prediction() && cloud != nullptr){
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
 

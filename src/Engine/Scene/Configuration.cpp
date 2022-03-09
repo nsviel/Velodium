@@ -111,22 +111,21 @@ void Configuration::preconf_default(Json::Value& root){
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = true;
+  module["with_cylinder_cleaning"] = false;
   module["with_heatmap"] = true;
-  module["with_save_image"] = false;
-  module["with_save_frame"] = false;
-  module["with_remove_lastSubset"] = false;
-  module["with_AI_module"] = false;
   module["scenario"] = 0;
   root["module"] = module;
 
-  //Watchers
-  Json::Value watcher;
-  watcher["prediction"] = false;
-  watcher["capture"] = false;
-  watcher["gps"] = false;
-  watcher["lidar"] = "vlp16";
-  root["watcher"] = watcher;
+  //Interface
+  Json::Value interface;
+  interface["lidar_scala"] = false;
+  interface["lidar_velodyne"] = true;
+  interface["with_prediction"] = false;
+  interface["with_gps"] = false;
+  interface["with_save_image"] = false;
+  interface["with_save_frame"] = false;
+  interface["with_remove_lastSubset"] = false;
+  root["interface"] = interface;
 
   //---------------------------
 }
@@ -180,20 +179,19 @@ void Configuration::preconf_AI_module(Json::Value& root){
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
   module["with_heatmap"] = true;
-  module["with_save_image"] = false;
-  module["with_save_frame"] = true;
-  module["with_remove_lastSubset"] = true;
-  module["with_AI_module"] = true;
   module["scenario"] = 1;
   root["module"] = module;
 
-  //Watchers
-  Json::Value watcher;
-  watcher["prediction"] = true;
-  watcher["capture"] = false;
-  watcher["gps"] = false;
-  watcher["lidar"] = "vlp16";
-  root["watcher"] = watcher;
+  //Interface
+  Json::Value interface;
+  interface["lidar_scala"] = false;
+  interface["lidar_velodyne"] = true;
+  interface["with_prediction"] = true;
+  interface["with_gps"] = false;
+  interface["with_save_image"] = false;
+  interface["with_save_frame"] = true;
+  interface["with_remove_lastSubset"] = false;
+  root["interface"] = interface;
 
   //---------------------------
 }
@@ -245,22 +243,21 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = true;
+  module["with_cylinder_cleaning"] = false;
   module["with_heatmap"] = true;
-  module["with_save_image"] = true;
-  module["with_save_frame"] = true;
-  module["with_remove_lastSubset"] = true;
-  module["with_AI_module"] = true;
-  module["scenario"] = 1;
+  module["scenario"] = 2;
   root["module"] = module;
 
-  //Watchers
-  Json::Value watcher;
-  watcher["prediction"] = true;
-  watcher["capture"] = true;
-  watcher["gps"] = false;
-  watcher["lidar"] = "scala";
-  root["watcher"] = watcher;
+  //Interface
+  Json::Value interface;
+  interface["lidar_scala"] = true;
+  interface["lidar_velodyne"] = false;
+  interface["with_prediction"] = true;
+  interface["with_gps"] = false;
+  interface["with_save_image"] = true;
+  interface["with_save_frame"] = true;
+  interface["with_remove_lastSubset"] = true;
+  root["interface"] = interface;
 
   //---------------------------
 }
@@ -314,20 +311,19 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
   module["with_heatmap"] = false;
-  module["with_save_image"] = false;
-  module["with_save_frame"] = true;
-  module["with_remove_lastSubset"] = true;
-  module["with_AI_module"] = true;
-  module["scenario"] = 2;
+  module["scenario"] = 3;
   root["module"] = module;
 
-  //Watchers
-  Json::Value watcher;
-  watcher["prediction"] = true;
-  watcher["capture"] = true;
-  watcher["gps"] = true;
-  watcher["lidar"] = "vlp16";
-  root["watcher"] = watcher;
+  //Interface
+  Json::Value interface;
+  interface["lidar_scala"] = false;
+  interface["lidar_velodyne"] = true;
+  interface["with_prediction"] = true;
+  interface["with_gps"] = true;
+  interface["with_save_image"] = false;
+  interface["with_save_frame"] = true;
+  interface["with_remove_lastSubset"] = true;
+  root["interface"] = interface;
 
   //---------------------------
 }

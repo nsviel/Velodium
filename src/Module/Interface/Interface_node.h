@@ -42,7 +42,6 @@ private:
   Filemanager* fileManager;
   Watcher* watcherManager;
 
-  bool is_clean_dir;
   string path_dir;
 };
 

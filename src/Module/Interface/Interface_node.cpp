@@ -5,7 +5,6 @@
 #include "Local/Prediction.h"
 #include "Network/Network.h"
 #include "Local/Filemanager.h"
-#include "Local/Watcher.h"
 
 #include "LiDAR/Capture.h"
 
@@ -27,10 +26,8 @@ Interface_node::Interface_node(Module_node* node_module){
   this->gpsManager = new GPS(node_engine);
   this->netManager = new Network();
   this->fileManager = new Filemanager(this);
-  this->watcherManager = new Watcher(this, node_engine);
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
-  this->is_clean_dir = true;
 
   //---------------------------
   this->init();
@@ -42,12 +39,7 @@ void Interface_node::init(){
   //---------------------------
 
   fileManager->check_directories();
-
-  if(is_clean_dir){
-    fileManager->clean_directories();
-  }
-
-  watcherManager->watcher_starter();
+  fileManager->clean_directories();
 
   //---------------------------
 }

@@ -14,15 +14,20 @@
       "leftPanel_width" : 220,
       "topPanel_height" : 18
    },
-   "module" : {
-      "scenario" : 0,
-      "with_AI_module" : false,
-      "with_camera_follow" : true,
-      "with_cylinder_cleaning" : true,
-      "with_heatmap" : true,
+   "interface" : {
+      "lidar_scala" : false,
+      "lidar_velodyne" : true,
+      "with_gps" : false,
+      "with_prediction" : false,
       "with_remove_lastSubset" : false,
       "with_save_frame" : false,
-      "with_save_image" : false,
+      "with_save_image" : false
+   },
+   "module" : {
+      "scenario" : 0,
+      "with_camera_follow" : true,
+      "with_cylinder_cleaning" : false,
+      "with_heatmap" : true,
       "with_slam" : true
    },
    "parameter" : {
@@ -33,12 +38,6 @@
       "cloud_translation" : 0.01,
       "path_media" : "../media/",
       "point_size" : 2
-   },
-   "watcher" : {
-      "capture" : false,
-      "gps" : false,
-      "lidar" : "vlp16",
-      "prediction" : false
    },
    "window" : {
       "background_color" : 0.86000001430511475,

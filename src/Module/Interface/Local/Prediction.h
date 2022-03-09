@@ -18,11 +18,9 @@ public:
 
 public:
   //Watchers
-  void start_watcher_prediction();
-  void stop_watcher_prediction();
+  void runtime_prediction();
 
   //Subfunctions
-  void runtime_prediction();
   void remove_prediction_file(string path);
   void compute_prediction(Cloud* cloud, string file_path);
   void compute_prediction(string path_dir);
@@ -37,27 +35,17 @@ public:
 
   inline string get_path_grThr(){return path_grThr;}
   inline string get_path_predi(){return path_predi;}
-  inline bool get_is_watching(){return is_whatching;}
   inline bool* get_is_prediction(){return &is_prediction;}
+  inline bool* get_with_prediction(){return &is_prediction;}
 
 private:
   Scene* sceneManager;
 
+  bool is_prediction;
+  bool with_prediction;
   string path_dir;
   string path_predi;
-  string path_predi_file;
   string path_grThr;
-  string path_grThr_file;
-
-  bool thread_predi_ON;
-  bool thread_grThr_ON;
-  bool is_prediction;
-  bool is_whatching;
-  bool flag_newPred;
-  bool flag_newGrTh;
-
-  std::thread thread_predi;
-  std::thread thread_grThr;
 };
 
 #endif

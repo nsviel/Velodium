@@ -67,11 +67,11 @@ void Online::update_configuration(){
   this->with_unicolor = !with_heatmap;
 
   this->with_justOneFrame = false;
-  this->with_save_frame = configManager->parse_json_b("module", "with_save_frame");
-  this->with_save_image = configManager->parse_json_b("module", "with_save_image");
+  this->with_save_frame = configManager->parse_json_b("interface", "with_save_frame");
+  this->with_save_image = configManager->parse_json_b("interface", "with_save_image");
   this->with_slam = configManager->parse_json_b("module", "with_slam");
   this->with_cylinder_cleaning = configManager->parse_json_b("module", "with_cylinder_cleaning");
-  this->with_remove_lastSubset = configManager->parse_json_b("module", "with_remove_lastSubset");
+  this->with_remove_lastSubset = configManager->parse_json_b("interface", "with_remove_lastSubset");
 
   //---------------------------
 }

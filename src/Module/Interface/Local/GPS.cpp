@@ -1,6 +1,7 @@
 #include "GPS.h"
 
 #include "../../../Engine/Scene/Configuration.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Engine_node.h"
 
 #include "../../../Specific/fct_watcher.h"
@@ -17,63 +18,41 @@ GPS::GPS(Engine_node* node_engine){
 
   Configuration* configManager = node_engine->get_configManager();
 
+  this->sceneManager = node_engine->get_sceneManager();
+
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_gps = path_dir + "gps/";
 
-  this->thread_gps_ON = false;
-  this->is_whatching = false;
+  this->with_gps = configManager->parse_json_b("interface", "with_gps");
+  this->is_gps = false;
 
   //---------------------------
 }
 GPS::~GPS(){}
 
 //Input: GPS position
-void GPS::start_watcher_gps(){
+void GPS::runtime_gps(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  this->thread_gps_ON = true;
+  if(with_gps && cloud != nullptr){
+    vector<string> path_vec = list_allPaths(path_gps);
 
-  thread_gps = std::thread([&](){
-    while(thread_gps_ON){
-      watcher_created_file(".gps", path_gps, path_gps_file, flag_newGPS);
+    for(int i=0; i<path_vec.size(); i++){
+      string path = path_vec[i];
+      string format = get_file_format(path);
+
+      if(format == "gps"){
+        this->parse_json_gps(path);
+        this->is_gps = true;
+      }
     }
-  });
-  thread_gps.detach();
-
-  this->is_whatching = true;
-
-  //---------------------------
-  console.AddLog("sucess", "Watcher - GPS running...");
-}
-void GPS::stop_watcher_gps(){
-  //---------------------------
-
-  this->thread_gps_ON = false;
-
-  thread_gps.~thread();
-
-  this->is_whatching = false;
+  }
 
   //---------------------------
 }
 
 //Subfunctions
-bool GPS::runtime_gps(){
-  bool is_gps = false;
-  //---------------------------
-
-  if(thread_gps_ON){
-    //Load json files - gps
-    if(flag_newGPS){
-      this->parse_json_gps(path_gps_file);
-      this->flag_newGPS = false;
-      is_gps = true;
-    }
-  }
-
-  //---------------------------
-  return is_gps;
-}
 void GPS::parse_json_gps(string path){
   //---------------------------
 

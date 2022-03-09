@@ -32,13 +32,8 @@ public:
   void state_online();
 
   //Parameters
-  void parameter_watcher();
   void parameter_online();
   void parameter_interfacing();
-
-  //Watchers
-  void watcher_AI_pred();
-  void watcher_gps();
 
 private:
   Obstacle* obstacleManager;

@@ -53,7 +53,6 @@ void GUI_Obstacle::design_Obstacle(){
   this->compute_scenario();
   this->state_watcher();
   this->state_online();
-  this->parameter_watcher();
   this->parameter_online();
   this->parameter_interfacing();
 
@@ -170,20 +169,25 @@ void GUI_Obstacle::state_watcher(){
   Prediction* predManager = node_interface->get_predManager();
   GPS* gpsManager = node_interface->get_gpsManager();
 
-  bool is_capture_watcher = captureManager->get_is_capture_watcher();
-  ImGui::Text("Watcher - Capture");
+  bool is_velodyne_watcher = captureManager->get_is_capture_watcher();
+  ImGui::Text("Watcher - Velodyne");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_capture_watcher ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_velodyne_watcher ? "ON" : "OFF");
 
-  bool is_pred_watcher = predManager->get_is_watching();
-  ImGui::Text("Watcher - AI");
+  bool is_scala_watcher = captureManager->get_is_capture_watcher();
+  ImGui::Text("Watcher - Scala");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_pred_watcher ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_scala_watcher ? "ON" : "OFF");
 
-  bool is_gps_watcher = gpsManager->get_is_watching();
-  ImGui::Text("Watcher - GPS");
+  bool with_prediction = *predManager->get_with_prediction();
+  ImGui::Text("Runtime - AI");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_gps_watcher ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
+
+  bool with_gps = *gpsManager->get_with_gps();
+  ImGui::Text("Runtime - GPS");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_gps ? "ON" : "OFF");
 
   //---------------------------
   ImGui::Separator();
@@ -231,29 +235,6 @@ void GUI_Obstacle::state_online(){
 }
 
 //Parameters
-void GUI_Obstacle::parameter_watcher(){
-  if(ImGui::CollapsingHeader("Parameter - watcher")){
-    //---------------------------
-
-    //AI watcher
-    this->watcher_AI_pred();
-
-    //GPS watcher
-    this->watcher_gps();
-
-    //Capture watcher
-    GUI_Interface* gui_io = node_gui->get_gui_node_interface();
-    GUI_Lidar* gui_lidar = gui_io->get_gui_lidarManager();
-    gui_lidar->velo_capture();
-
-    //MQTT messager
-    //GUI_Network* gui_netManager = gui_module->get_gui_netManager();
-    //gui_netManager->mqtt_connection();
-
-    //---------------------------
-    ImGui::Separator();
-  }
-}
 void GUI_Obstacle::parameter_online(){
   //---------------------------
 
@@ -293,48 +274,4 @@ void GUI_Obstacle::parameter_interfacing(){
 
     //---------------------------
   }
-}
-
-//Watchers
-void GUI_Obstacle::watcher_AI_pred(){
-  //---------------------------
-
-  //IA watchers
-  Prediction* predManager = node_interface->get_predManager();
-  bool is_watching = predManager->get_is_watching();
-  if(is_watching == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start AI prediction", ImVec2(item_width,0))){
-      predManager->start_watcher_prediction();
-    }
-  }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
-    if(ImGui::Button("Stop AI prediction", ImVec2(item_width,0))){
-      predManager->stop_watcher_prediction();
-    }
-  }
-  ImGui::PopStyleColor(1);
-
-  //---------------------------
-}
-void GUI_Obstacle::watcher_gps(){
-  //---------------------------
-
-  //IA watchers
-  GPS* gpsManager = node_interface->get_gpsManager();
-  bool is_watching = gpsManager->get_is_watching();
-  if(is_watching == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start GPS", ImVec2(item_width,0))){
-      gpsManager->start_watcher_gps();
-    }
-  }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
-    if(ImGui::Button("Stop GPS", ImVec2(item_width,0))){
-      gpsManager->stop_watcher_gps();
-    }
-  }
-  ImGui::PopStyleColor(1);
-
-  //---------------------------
 }

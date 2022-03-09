@@ -37,8 +37,6 @@ private:
   Configuration* configManager;
   SLAM_configuration* slam_configManager;
   Online* onlineManager;
-  Prediction* predManager;
-  GPS* gpsManager;
 
   int scenario_selected;
   bool scenario_started;
