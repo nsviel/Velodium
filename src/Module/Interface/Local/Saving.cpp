@@ -2,6 +2,7 @@
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/OpenGL/Camera/Renderer.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Load/Load_node.h"
 #include "../../../Load/Processing/Saver.h"
 
@@ -19,6 +20,7 @@ Saving::Saving(Engine_node* node_engine){
 
   this->renderManager = node_engine->get_renderManager();
   this->saverManager = node_load->get_saveManager();
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
   this->path_frame = path_dir + "frame/";
@@ -34,6 +36,7 @@ Saving::~Saving(){}
 
 //Output: frame & Image saving
 void Saving::save_image(){
+  Frame* frame = sceneManager->get_frame_selected();
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
@@ -53,7 +56,7 @@ void Saving::save_image(){
 
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
-  this->time_save_image = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+  frame->time_save_image = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }
 void Saving::save_image_path(){
   //---------------------------
@@ -66,6 +69,7 @@ void Saving::save_image_path(){
   //---------------------------
 }
 void Saving::save_frame(Subset* subset){
+  Frame* frame = &subset->frame;
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
@@ -84,5 +88,5 @@ void Saving::save_frame(Subset* subset){
 
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
-  this->time_save_frame = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+  frame->time_save_frame = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }

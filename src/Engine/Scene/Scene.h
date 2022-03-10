@@ -70,6 +70,7 @@ public:
   Subset* get_subset_init(Cloud* cloud, int i);
   Subset* get_subset_init_byID(Cloud* cloud, int ID);
   Frame* get_frame(Cloud* cloud, int i);
+  Frame* get_frame_selected();
   Frame* get_frame_byID(Cloud* cloud, int ID);
   int get_subset_oID(Cloud* cloud, Subset* subset);
   bool get_is_list_empty();

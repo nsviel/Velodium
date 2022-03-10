@@ -157,7 +157,7 @@ void Configuration::preconf_AI_module(Json::Value& root){
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
-  param["point_size"] = 2;
+  param["point_size"] = 3;
   param["clean_directories"] = true;
   param["check_directories"] = true;
   root["parameter"] = param;

@@ -25,9 +25,11 @@ public:
 public:
   //Main functions
   void runtime_obstacle();
-  void add_prediction();
-  void add_prediction(string path_dir);
-  void add_groundTruth();
+
+  //Manual obstacle adding
+  void add_obstacle_pred();
+  void add_obstacle_pred(string path_dir);
+  void add_obstacle_grTr();
 
   //Subfunctions
   void build_obstacleGlyph_gt(Cloud* cloud);

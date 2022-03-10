@@ -639,6 +639,25 @@ Frame* Scene::get_frame(Cloud* cloud, int i){
   //---------------------------
   return frame;
 }
+Frame* Scene::get_frame_selected(){
+  //---------------------------
+
+  if(cloud_selected != nullptr){
+    int ID_subset = cloud_selected->ID_selected;
+
+    for(int i=0; i<cloud_selected->subset.size(); i++){
+      Subset* subset = *next(cloud_selected->subset.begin(), i);
+      if(ID_subset == subset->ID){
+        Frame* frame = &subset->frame;
+        return frame;
+      }
+    }
+
+  }
+
+  //---------------------------
+  return nullptr;
+}
 Frame* Scene::get_frame_byID(Cloud* cloud, int ID){
   //---------------------------
 

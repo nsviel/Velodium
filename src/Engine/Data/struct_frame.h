@@ -30,8 +30,12 @@ struct Frame{ //SLAM stuff
   float diff_rotat;
   float opti_score;
 
-  //Informative stats
+  //Processing time
+  float time_save_image;
+  float time_save_frame;
   float time_slam;
+
+  //Informative stats
   bool is_slamed;
   int nb_residual;
   int map_size_abs;
@@ -61,7 +65,10 @@ struct Frame{ //SLAM stuff
     this->trans_b = Eigen::Vector3d::Zero();
     this->trans_e = Eigen::Vector3d::Zero();
 
+    this->time_save_image = 0;
+    this->time_save_frame = 0;
     this->time_slam = 0;
+
     this->map_size_abs = 0;
     this->map_size_rlt = 0;
     this->is_slamed = false;

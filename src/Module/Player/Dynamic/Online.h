@@ -66,7 +66,6 @@ private:
   vec2 camera_moved_trans;
   float camera_moved_rotat;
   float camera_distPos;
-  float time_image;
   int visibility_range;
   int nb_subset_max;
 

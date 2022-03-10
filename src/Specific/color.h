@@ -1,15 +1,25 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-/**
- * Used colors definition
- * https://www.nordtheme.com/docs/colors-and-palettes
- */
+#include <map>
+#include <string>
 
+
+//Generic colors
 #define color_a1 "#2e4b85"
 #define color_a2 "#006997"
 #define color_a3 "#00828f"
 #define color_a4 "#149676"
+
+//AI class colors
+static std::map<std::string, glm::vec4> AI_color_dic = {
+  { "Car", vec4(1.0f, 0.0f, 0.0f, 1.0f) },
+  { "Cyclist", vec4(0.0f, 1.0f, 0.0f, 1.0f) },
+  { "Truck", vec4(1.0f, 1.0f, 0.0f, 1.0f) },
+  { "Bus", vec4(1.0f, 0.0f, 1.0f, 1.0f) },
+  { "Pedestrian", vec4(0.0f, 0.0f, 1.0f, 1.0f) },
+  { "Default", vec4(0.0f, 0.0f, 0.0f, 1.0f) }
+};
 
 //Nordic palette
 static vec3 nord0 (46,	52, 64); //Dark

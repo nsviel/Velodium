@@ -264,12 +264,12 @@ void GUI_Obstacle::parameter_interfacing(){
 
     //Add predictions
     if(ImGui::Button("Add predictions")){
-      obstacleManager->add_prediction();
+      obstacleManager->add_obstacle_pred();
     }
 
     //Add ground truth
     if(ImGui::Button("Add ground truth")){
-      obstacleManager->add_groundTruth();
+      obstacleManager->add_obstacle_grTr();
     }
 
     //---------------------------

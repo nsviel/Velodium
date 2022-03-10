@@ -16,6 +16,7 @@
 #include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
+#include "../../../Specific/color.h"
 
 
 //Constructor / Destructor
@@ -67,7 +68,7 @@ void Obstacle::runtime_obstacle(){
 }
 
 //Manual obstacle adding
-void Obstacle::add_prediction(){
+void Obstacle::add_obstacle_pred(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
@@ -82,7 +83,7 @@ void Obstacle::add_prediction(){
 
   //---------------------------
 }
-void Obstacle::add_prediction(string path_dir){
+void Obstacle::add_obstacle_pred(string path_dir){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
@@ -97,7 +98,7 @@ void Obstacle::add_prediction(string path_dir){
 
   //---------------------------
 }
-void Obstacle::add_groundTruth(){
+void Obstacle::add_obstacle_grTr(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
@@ -160,17 +161,18 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   //---------------------------
 
   if(obstacle_pr->oobb.size() == 0 && obstacle_pr->name.size() != 0){
-    for(int j=0; j<obstacle_pr->name.size(); j++){
+    for(int i=0; i<obstacle_pr->name.size(); i++){
       Glyph* glyph = glyphManager->create_glyph_ostacle();
 
-      vec3 To = obstacle_pr->position[j];
-      vec3 Ro = vec3(0, 0, obstacle_pr->heading[j]);
-      vec3 So = obstacle_pr->dimension[j];
+      vec3 To = obstacle_pr->position[i];
+      vec3 Ro = vec3(0, 0, obstacle_pr->heading[i]);
+      vec3 So = obstacle_pr->dimension[i];
       mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
+      vec4 color = AI_color_dic.find(obstacle_pr->name[i])->second;
 
       oobbManager->update_oobb(glyph, transf);
       glyphManager->update_glyph_location(glyph);
-      glyphManager->update_glyph_color(glyph, pr_color);
+      glyphManager->update_glyph_color(glyph, color);
       obstacle_pr->oobb.push_back(*glyph);
 
       delete glyph;

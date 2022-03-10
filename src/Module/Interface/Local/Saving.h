@@ -7,6 +7,7 @@
 #include <queue>
 
 class Engine_node;
+class Scene;
 class Saver;
 class Renderer;
 
@@ -30,6 +31,7 @@ public:
   inline int* get_save_image_max(){return &save_image_max;}
 
 private:
+  Scene* sceneManager;
   Saver* saverManager;
   Renderer* renderManager;
 

@@ -16,7 +16,7 @@ sudo apt install git build-essential cmake libglfw3-dev libglew-dev libeigen3-de
 #cd pcl && mkdir build && cd build && cmake .. && make -j4 && sudo make install 
 
 #Install ceres 2.0
-sudo apt-get install libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev
+sudo apt-get install libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev
 git clone https://ceres-solver.googlesource.com/ceres-solver
 tar zxf ceres-solver-2.0.0.tar.gz
 cd ceres-solver && mkdir build && cd build && cmake .. && make -j4
@@ -25,8 +25,7 @@ sudo make install
 #Install Eclysp Paho for MQTT 
 #version C
 git clone https://github.com/eclipse/paho.mqtt.c
-cd paho.mqtt.c && mkdir build && cd build
-cmake .. -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
+cd paho.mqtt.c && cmake . -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
 sudo make install
 sudo ldconfig
 

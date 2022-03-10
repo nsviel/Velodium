@@ -119,10 +119,8 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //Save rendered image
   if(with_save_image){
-    tic();
     Saving* saveManager = node_interface->get_saveManager();
     saveManager->save_image();
-    this->time_image = toc();
   }
 
   //Regulate the number of cloud frame
@@ -139,11 +137,14 @@ void Online::compute_displayStats(Subset* subset){
 
   //Consol result
   string stats = subset->name + " [" + to_string(subset->ID) + "]: ";
-  if(with_save_image){
+  if(with_slam){
     stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
   }
   if(with_save_image){
-    stats += "[Image- " + to_string((int)time_image) + " ms] ";
+    stats += "[Image- " + to_string((int)frame->time_save_image) + " ms] ";
+  }
+  if(with_save_frame){
+    stats += "[Frame- " + to_string((int)frame->time_save_frame) + " ms] ";
   }
   console.AddLog("#", stats);
 

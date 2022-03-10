@@ -11,8 +11,10 @@
 struct Obstac{ //Obstacle detection stuff
   //---------------------------
 
+  glm::vec4 unicolor;
   std::vector<std::string> name;
   std::vector<glm::vec3> position;
+  std::vector<glm::vec4> color;
   std::vector<glm::vec3> dimension;
   std::vector<float> heading;
   std::vector<Glyph> oobb;
