@@ -136,7 +136,7 @@ void Online::compute_displayStats(Subset* subset){
   //---------------------------
 
   //Consol result
-  string stats = subset->name + " [" + to_string(subset->ID) + "]: ";
+  string stats = subset->name + ": ";
   if(with_slam){
     stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
   }
