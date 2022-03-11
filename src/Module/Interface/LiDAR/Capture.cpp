@@ -59,7 +59,6 @@ void Capture::stop_capture(){
 
   if(lidar_velodyne){
     *veloManager->get_is_velo_capturing() = false;
-    veloManager->lidar_stop_motor();
   }
   if(lidar_scala){
     *scalaManager->get_is_scala_capturing() = false;
@@ -83,7 +82,7 @@ void Capture::runtime_capturing(){
 
     if(*new_capture){
       //Pick new subset
-      new_subset = new Subset(*veloManager->get_subset_capture());
+      new_subset = veloManager->get_subset_capture();
 
       //Unset new Subset flag
       *new_capture = false;

@@ -69,40 +69,6 @@ void GUI_Lidar::velo_state(){
 
   //---------------------------
 }
-void GUI_Lidar::velo_connection(){
-  //---------------------------
-
-  bool* is_connected = veloManager->get_is_connected();
-  bool* is_rotating = veloManager->get_is_rotating();
-
-  //Start LiDAR button
-  if(*is_rotating == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start##1", ImVec2(item_width,0))){
-      veloManager->lidar_start_motor();
-    }
-    ImGui::PopStyleColor(1);
-  }else{
-    //Stop button
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop LiDAR", ImVec2(item_width,0))){
-
-      //If the LiDAR is running, stop it
-      veloManager->lidar_stop_motor();
-    }
-    ImGui::PopStyleColor(1);
-  }
-
-  //Connected state
-  ImGui::SameLine();
-  if(*is_connected && *is_rotating){
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", "ON");
-  }else{
-    ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%s", "OFF");
-  }
-
-  //---------------------------
-}
 void GUI_Lidar::velo_capture(){
   bool is_capturing = *veloManager->get_is_velo_capturing();
   //---------------------------
@@ -128,6 +94,25 @@ void GUI_Lidar::velo_capture(){
 void GUI_Lidar::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
+
+    //LiDAR motor
+    bool* is_rotating = veloManager->get_is_rotating();
+    if(*is_rotating == false){
+      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+      if(ImGui::Button("Start motor", ImVec2(item_width,0))){
+        veloManager->lidar_start_motor();
+      }
+      ImGui::PopStyleColor(1);
+    }else{
+      //Stop button
+      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
+      if(ImGui::Button("Stop motor", ImVec2(item_width,0))){
+
+        //If the LiDAR is running, stop it
+        veloManager->lidar_stop_motor();
+      }
+      ImGui::PopStyleColor(1);
+    }
 
     //Set RPM parameter
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "RPM");

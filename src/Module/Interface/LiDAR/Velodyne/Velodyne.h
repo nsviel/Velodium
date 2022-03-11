@@ -26,7 +26,8 @@ public:
 public:
   //Recording functions
   void lidar_start_watcher();
-  void lidar_create_subset(udpPacket* udp_packet);
+  //void lidar_create_subset(udpPacket* udp_packet);
+  Subset* get_subset_capture();
 
   //LiDAR motor
   void lidar_start_motor();
@@ -42,7 +43,7 @@ public:
   void lidar_set_cameraFOV_max(int fov_max);
   void lidar_set_cameraFOV(int min, int max);
 
-  inline Subset* get_subset_capture(){return subset_capture;}
+  //inline Subset* get_subset_capture(){return subset_capture;}
   inline bool* get_is_newSubset(){return &is_newSubset;}
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
@@ -60,6 +61,7 @@ private:
   UDP_parser_VLP16* udp_vlp16Manager;
 
   Subset* subset_capture;
+  udpPacket udp_capture;
 
   int rot_freq, rot_rpm;
   int fov_min, fov_max;

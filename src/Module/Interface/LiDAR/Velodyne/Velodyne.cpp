@@ -67,7 +67,10 @@ void Velodyne::lidar_start_watcher(){
 
       if(frame_rev){
         udpPacket* frame = frameManager->get_endedFrame();
-        this->lidar_create_subset(frame);
+        this->udp_capture = *frame;
+        this->is_newSubset = true;
+        delete frame;
+        //this->lidar_create_subset(frame);
       }
     }
   });
@@ -75,28 +78,17 @@ void Velodyne::lidar_start_watcher(){
 
   //---------------------------
 }
-void Velodyne::lidar_create_subset(udpPacket* udp_packet){
-  //Asynchroneous function (used by theaded watcher)
+Subset* Velodyne::get_subset_capture(){
   //---------------------------
 
   //Free the memory to get synchroneous data
-  udpPacket upd_frame = *udp_packet;
-  upd_frame.name = "";
+  udp_capture.name = "";
 
   //Convert the udp packet into subset
-  Subset* subset_extracted = extractManager->extractData(upd_frame);
-
-  //Make sure to desallocate memory
-  delete subset_capture;
-  this->subset_capture = new Subset(*subset_extracted);
-  delete subset_extracted;
-
-  //Update flags
-  if(subset_capture->xyz.size() != 0){
-    this->is_newSubset = true;
-  }
+  Subset* subset_extracted = extractManager->extractData(udp_capture);
 
   //---------------------------
+  return subset_extracted;
 }
 
 //LiDAR motor
