@@ -306,11 +306,19 @@ void GUI_Dynamic::parameter_online(){
     if(*with_heatmap){colorization = 0;}else{colorization = 1;}
     if(ImGui::RadioButton("Heatmap", &colorization, 0)){
       *onlineManager->get_with_heatmap() = true;
+      *onlineManager->get_with_intensity() = false;
+      *onlineManager->get_with_unicolor() = false;
+    }
+    ImGui::SameLine();
+    if(ImGui::RadioButton("Intensity", &colorization, 1)){
+      *onlineManager->get_with_heatmap() = false;
+      *onlineManager->get_with_intensity() = true;
       *onlineManager->get_with_unicolor() = false;
     }
     ImGui::SameLine();
     if(ImGui::RadioButton("Unicolor", &colorization, 1)){
       *onlineManager->get_with_heatmap() = false;
+      *onlineManager->get_with_intensity() = false;
       *onlineManager->get_with_unicolor() = true;
     }
 

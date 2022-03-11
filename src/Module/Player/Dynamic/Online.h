@@ -35,7 +35,10 @@ public:
   //Other functions
   void cloud_size_controler(Cloud* cloud);
   void set_cloud_visibility(Cloud* cloud, int& ID_subset);
+
+  //Colorization
   void color_heatmap(Cloud* cloud, int i);
+  void color_intensity(Subset* subset);
   void color_unicolor(Subset* subset, vec4 color);
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
@@ -43,6 +46,7 @@ public:
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
   inline bool* get_with_heatmap(){return &with_heatmap;}
   inline bool* get_with_heatmap_rltHeight(){return &with_heatmap_rltHeight;}
+  inline bool* get_with_intensity(){return &with_intensity;}
   inline bool* get_with_unicolor(){return &with_unicolor;}
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
@@ -77,6 +81,7 @@ private:
   bool with_cylinder_cleaning;
   bool with_heatmap;
   bool with_heatmap_rltHeight;
+  bool with_intensity;
   bool with_unicolor;
   bool with_remove_lastSubset;
   bool with_save_frame;

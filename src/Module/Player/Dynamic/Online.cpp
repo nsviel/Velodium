@@ -64,6 +64,7 @@ void Online::update_configuration(){
 
   this->with_heatmap = configManager->parse_json_b("module", "with_heatmap");
   this->with_heatmap_rltHeight = true;
+  this->with_intensity = false;
   this->with_unicolor = !with_heatmap;
 
   this->with_justOneFrame = false;
@@ -106,6 +107,9 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Colorization options
   if(with_heatmap){
     this->color_heatmap(cloud, ID_subset);
+  }
+  else if(with_intensity){
+    this->color_intensity(subset);
   }
   else if(with_unicolor){
     this->color_unicolor(subset, cloud->unicolor);
@@ -294,6 +298,8 @@ void Online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
 
   //---------------------------
 }
+
+//Colorization
 void Online::color_heatmap(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
@@ -309,6 +315,20 @@ void Online::color_heatmap(Cloud* cloud, int ID_subset){
   heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
 
   //---------------------------
+}
+void Online::color_intensity(Subset* subset){
+  vector<vec4>& RGB = subset->RGB;
+  vector<float>& Is = subset->I;
+  //---------------------------
+
+  if(Is.size() != 0){
+    for(int i=0; i<RGB.size(); i++){
+      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
+    }
+  }
+
+  //---------------------------
+  sceneManager->update_subset_color(subset);
 }
 void Online::color_unicolor(Subset* subset, vec4 color){
   vector<vec4>& RGB = subset->RGB;

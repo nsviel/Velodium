@@ -69,8 +69,6 @@ void Velodyne::lidar_start_watcher(){
         udpPacket* frame = frameManager->get_endedFrame();
         this->udp_capture = *frame;
         this->is_newSubset = true;
-        delete frame;
-        //this->lidar_create_subset(frame);
       }
     }
   });
@@ -85,10 +83,10 @@ Subset* Velodyne::get_subset_capture(){
   udp_capture.name = "";
 
   //Convert the udp packet into subset
-  Subset* subset_extracted = extractManager->extractData(udp_capture);
+  Subset* subset = extractManager->extractData(udp_capture);
 
   //---------------------------
-  return subset_extracted;
+  return subset;
 }
 
 //LiDAR motor

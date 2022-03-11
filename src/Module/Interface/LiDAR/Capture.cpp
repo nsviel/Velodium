@@ -174,9 +174,9 @@ void Capture::operation_new_subset(Subset* subset){
 
   //If ok insert subset into scene
   if(subset->xyz.size() != 0){
-    //Insert subset data into GPU
-    sceneManager->add_subset_to_gpu(subset);
-
+    //Update subset data
+    sceneManager->update_subset_location(subset);
+    
     //Insert the subset inside the capture cloud
     sceneManager->add_new_subset(cloud_capture, subset);
 
