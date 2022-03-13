@@ -21,7 +21,7 @@ GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
   this->scalaManager = captureManager->get_scalaManager();
   this->veloManager = captureManager->get_veloManager();
 
-  this->item_width = 100;
+  this->item_width = 150;
 
   //---------------------------
 }
@@ -77,42 +77,33 @@ void GUI_Lidar::velo_capture(){
   if(is_capturing == false){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start capture", ImVec2(item_width, 0))){
+    if(ImGui::Button("Start capture", ImVec2(item_width + 7, 0))){
       captureManager->start_new_capture();
     }
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop capture", ImVec2(item_width, 0))){
+    if(ImGui::Button("Stop capture", ImVec2(item_width + 7, 0))){
       captureManager->stop_capture();
     }
   }
   ImGui::PopStyleColor(1);
+
+  //LiDAR motor
+  if(ImGui::Button("Start motor", ImVec2(item_width/2, 0))){
+    veloManager->lidar_start_motor();
+  }
+  //Stop button
+  ImGui::SameLine();
+  if(ImGui::Button("Stop motor", ImVec2(item_width/2, 0))){
+    veloManager->lidar_stop_motor();
+  }
 
   //---------------------------
 }
 void GUI_Lidar::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
-
-    //LiDAR motor
-    bool* is_rotating = veloManager->get_is_rotating();
-    if(*is_rotating == false){
-      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-      if(ImGui::Button("Start motor", ImVec2(item_width,0))){
-        veloManager->lidar_start_motor();
-      }
-      ImGui::PopStyleColor(1);
-    }else{
-      //Stop button
-      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-      if(ImGui::Button("Stop motor", ImVec2(item_width,0))){
-
-        //If the LiDAR is running, stop it
-        veloManager->lidar_stop_motor();
-      }
-      ImGui::PopStyleColor(1);
-    }
 
     //Set RPM parameter
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "RPM");
@@ -150,11 +141,11 @@ void GUI_Lidar::scala_state(){
 void GUI_Lidar::scala_file(){
   //---------------------------
 
-  if(ImGui::Button("Load in directory", ImVec2(item_width,0))){
+  if(ImGui::Button("Load in dir", ImVec2(item_width/2, 0))){
     //scalaManager->loading("");
   }
-
-  if(ImGui::Button("Load fast", ImVec2(item_width,0))){
+  ImGui::SameLine();
+  if(ImGui::Button("Load fast", ImVec2(item_width/2, 0))){
     //scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
   }
 
@@ -168,13 +159,13 @@ void GUI_Lidar::scala_capture(){
   if(is_capturing == false){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start capture", ImVec2(item_width, 0))){
+    if(ImGui::Button("Start capture", ImVec2(item_width + 7, 0))){
       captureManager->start_new_capture();
     }
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop capture", ImVec2(item_width, 0))){
+    if(ImGui::Button("Stop capture", ImVec2(item_width + 7, 0))){
       captureManager->stop_capture();
     }
   }

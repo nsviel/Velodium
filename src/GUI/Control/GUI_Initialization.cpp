@@ -4,13 +4,13 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
 #include "../../Load/Load_node.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Pather.h"
 #include "../../Module/Module_node.h"
 #include "../../Module/Player/Player_node.h"
 #include "../../Module/Player/Obstacle/Obstacle.h"
-#include "../../Module/Player/Obstacle/Scenario.h"
 
 
 //Constructor / Destructor
@@ -22,9 +22,9 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
   Player_node* node_player = node_module->get_node_player();
   Load_node* node_load = node_engine->get_node_load();
 
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarioManager = node_player->get_scenarioManager();
   this->loaderManager = node_load->get_loadManager();
   this->pathManager = node_load->get_pathManager();
 
@@ -120,9 +120,7 @@ void GUI_Initialization::init_mode(int mode){
       sceneManager->remove_cloud_all();
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
       obstacleManager->add_obstacle_pred("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
-      int* scenar = scenarioManager->get_scenario_selected();
-      *scenar = 1;
-      scenarioManager->make_configuration();
+      configManager->make_preconfig(1);
       break;
     }
   }

@@ -1,7 +1,5 @@
 #include "Obstacle.h"
 
-#include "Scenario.h"
-
 #include "../../Module_node.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Prediction.h"

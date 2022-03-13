@@ -8,6 +8,11 @@
       "speed_move" : 3,
       "speed_zoom" : 0.10000000149011612
    },
+   "glyph" : {
+      "aabb_visibility" : true,
+      "grid_visibility" : true,
+      "normal_visibility" : false
+   },
    "gui" : {
       "botPanel_height" : 100,
       "leftPanel_mid" : 200,
@@ -26,8 +31,10 @@
    "module" : {
       "scenario" : 0,
       "with_camera_follow" : true,
+      "with_color_heatmap" : true,
+      "with_color_intensity" : false,
+      "with_color_unicolor" : false,
       "with_cylinder_cleaning" : false,
-      "with_heatmap" : true,
       "with_slam" : true
    },
    "parameter" : {

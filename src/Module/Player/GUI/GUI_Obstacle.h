@@ -6,9 +6,10 @@
 class Scene;
 class GUI_module;
 class Obstacle;
-class Scenario;
 class Interface_node;
 class CoordTransform;
+class Player_node;
+class Configuration;
 
 
 class GUI_Obstacle
@@ -24,7 +25,7 @@ public:
   void runtime_display_naming();
 
   //Actions
-  void compute_scenario();
+  void state_configuration();
   void compute_draw_text(string text, vec3 position);
 
   //Watchers
@@ -36,11 +37,12 @@ public:
   void parameter_interfacing();
 
 private:
+  Player_node* node_player;
   Obstacle* obstacleManager;
   Interface_node* node_interface;
   CoordTransform* coordManager;
   Scene* sceneManager;
-  Scenario* scenarioManager;
+  Configuration* configManager;
   GUI_module* node_gui;
 
   int label_ID;

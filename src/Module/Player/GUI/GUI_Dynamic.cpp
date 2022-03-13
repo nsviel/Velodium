@@ -277,7 +277,7 @@ void GUI_Dynamic::parameter_online(){
     if(*with_save_frame){
       Saving* saveManager = node_interface->get_saveManager();
       int* save_frame_max = saveManager->get_save_frame_max();
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb frame", save_frame_max);
     }
 
@@ -296,14 +296,19 @@ void GUI_Dynamic::parameter_online(){
     if(*with_save_image){
       Saving* saveManager = node_interface->get_saveManager();
       int* save_image_max = saveManager->get_save_image_max();
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb image", save_image_max);
     }
 
     //Colorization
-    int colorization;
-    bool* with_heatmap = onlineManager->get_with_heatmap();
-    if(*with_heatmap){colorization = 0;}else{colorization = 1;}
+    static int colorization;
+    if(*onlineManager->get_with_heatmap()){
+      colorization = 0;
+    }else if(*onlineManager->get_with_intensity()){
+      colorization = 1;
+    }else if(*onlineManager->get_with_unicolor()){
+      colorization = 2;
+    }
     if(ImGui::RadioButton("Heatmap", &colorization, 0)){
       *onlineManager->get_with_heatmap() = true;
       *onlineManager->get_with_intensity() = false;
@@ -316,7 +321,7 @@ void GUI_Dynamic::parameter_online(){
       *onlineManager->get_with_unicolor() = false;
     }
     ImGui::SameLine();
-    if(ImGui::RadioButton("Unicolor", &colorization, 1)){
+    if(ImGui::RadioButton("Unicolor", &colorization, 2)){
       *onlineManager->get_with_heatmap() = false;
       *onlineManager->get_with_intensity() = false;
       *onlineManager->get_with_unicolor() = true;
@@ -325,14 +330,29 @@ void GUI_Dynamic::parameter_online(){
     //Option: heatmap with relative height
     bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
     if(colorization == 0){
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
       ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
     }
     if(colorization == 0 && *heatmap_rltHeight){
       vec2* height_range = onlineManager->get_heatmap_height_range();
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
+    }
+
+    //Option: Intensity range
+    if(colorization == 1){
+      //Set heatmap range
+      vec2 intensity_range = *heatmapManager->get_heatmap_range();
+      int min = (int) (intensity_range.x * 255);
+      int max = (int) (intensity_range.y * 255);
+
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+      if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
+        vec2* range = heatmapManager->get_heatmap_range();
+        *range = vec2((float)min / 255, (float)max / 255);
+      }
     }
 
     //Cylinder cleaning filter
@@ -342,11 +362,11 @@ void GUI_Dynamic::parameter_online(){
       float* r_min = filterManager->get_cyl_r_min();
       float* r_max = filterManager->get_cyl_r_max();
       float* z_min = filterManager->get_cyl_z_min();
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
-      ImGui::SetNextItemWidth(100);
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
     }
 

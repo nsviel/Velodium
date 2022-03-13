@@ -11,6 +11,7 @@ class AABB;
 class Normal;
 class OOBB;
 class Mark;
+class Configuration;
 
 
 class Glyphs
@@ -22,7 +23,7 @@ public:
 
 public:
   //Main functions
-  void init_scene_object();
+  void init_scene_object(Configuration* configManager);
   void reset_scene();
   void reset_color();
 

@@ -61,6 +61,28 @@ void Configuration::make_preconfig(int config){
 
   //---------------------------
 }
+void Configuration::make_watcher(){
+  //---------------------------
+
+  switch(config){
+    case 0:{//Null scenario
+      //captureManager->stop_capture();
+      break;
+    }
+
+    case 2:{//WP4 scenario
+      //captureManager->start_new_capture();
+      break;
+    }
+
+    case 3:{//WP5 scenario
+      //captureManager->start_new_capture();
+      break;
+    }
+  }
+
+  //---------------------------
+}
 
 //Pred-defined configuration
 void Configuration::preconf_default(Json::Value& root){
@@ -107,13 +129,21 @@ void Configuration::preconf_default(Json::Value& root){
   camera["speed_zoom"] = 0.1f;
   root["camera"] = camera;
 
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = true;
+  glyph["grid_visibility"] = true;
+  glyph["normal_visibility"] = false;
+  root["glyph"] = glyph;
+
   //Module
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_heatmap"] = true;
-  module["scenario"] = 0;
+  module["with_color_heatmap"] = true;
+  module["with_color_intensity"] = false;
+  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface
@@ -173,13 +203,21 @@ void Configuration::preconf_AI_module(Json::Value& root){
   camera["speed_zoom"] = 0.1f;
   root["camera"] = camera;
 
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = true;
+  glyph["grid_visibility"] = true;
+  glyph["normal_visibility"] = false;
+  root["glyph"] = glyph;
+
   //Module
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_heatmap"] = true;
-  module["scenario"] = 1;
+  module["with_color_heatmap"] = true;
+  module["with_color_intensity"] = false;
+  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface
@@ -239,13 +277,21 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   camera["speed_zoom"] = 0.1f;
   root["camera"] = camera;
 
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = true;
+  glyph["grid_visibility"] = true;
+  glyph["normal_visibility"] = false;
+  root["glyph"] = glyph;
+
   //Module
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_heatmap"] = true;
-  module["scenario"] = 2;
+  module["with_color_heatmap"] = true;
+  module["with_color_intensity"] = false;
+  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface
@@ -305,13 +351,21 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   camera["speed_zoom"] = 0.1f;
   root["camera"] = camera;
 
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = true;
+  glyph["grid_visibility"] = true;
+  glyph["normal_visibility"] = false;
+  root["glyph"] = glyph;
+
   //Module
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
-  module["with_heatmap"] = false;
-  module["scenario"] = 3;
+  module["with_color_heatmap"] = true;
+  module["with_color_intensity"] = false;
+  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface

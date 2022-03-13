@@ -62,10 +62,10 @@ void Online::update_configuration(){
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_root = false;
 
-  this->with_heatmap = configManager->parse_json_b("module", "with_heatmap");
+  this->with_heatmap = configManager->parse_json_b("module", "with_color_heatmap");
   this->with_heatmap_rltHeight = true;
-  this->with_intensity = false;
-  this->with_unicolor = !with_heatmap;
+  this->with_intensity = configManager->parse_json_b("module", "with_color_intensity");
+  this->with_unicolor = configManager->parse_json_b("module", "with_color_unicolor");
 
   this->with_justOneFrame = false;
   this->with_save_frame = configManager->parse_json_b("interface", "with_save_frame");

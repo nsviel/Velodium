@@ -19,6 +19,7 @@ public:
   //Main functions
   void make_configuration();
   void make_preconfig(int config);
+  void make_watcher();
 
   //Pred-defined configurations
   void preconf_default(Json::Value& root);
@@ -36,6 +37,8 @@ public:
   string parse_json_s(string field, string value);
   int parse_json_i(string field, string value);
   bool parse_json_b(string field, string value);
+
+  inline int* get_config(){return &config;}
 
 private:
   string path_config;

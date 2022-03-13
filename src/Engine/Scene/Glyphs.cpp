@@ -35,20 +35,26 @@ Glyphs::Glyphs(Engine_node* node){
   this->ID_glyph = 0;
 
   //---------------------------
-  this->init_scene_object();
+  this->init_scene_object(configManager);
 }
 Glyphs::~Glyphs(){}
 
 //Main functions
-void Glyphs::init_scene_object(){
+void Glyphs::init_scene_object(Configuration* configManager){
   //---------------------------
 
+  Glyph* aabb = aabbObject->get_aabb();
+  Glyph* grid = gridObject->get_grid();
+
   this->create_glyph_scene(markObject->get_selection_frame());
-  this->create_glyph_scene(gridObject->get_grid());
+  this->create_glyph_scene(grid);
   this->create_glyph_scene(gridObject->get_grid_sub());
   this->create_glyph_scene(gridObject->get_grid_plane());
   this->create_glyph_scene(axisObject->get_axis_scene());
-  this->create_glyph_scene(aabbObject->get_aabb());
+  this->create_glyph_scene(aabb);
+
+  aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
+  grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");
 
   //---------------------------
 }

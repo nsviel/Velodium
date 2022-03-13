@@ -5,7 +5,6 @@
 
 #include "../Player_node.h"
 #include "../Obstacle/Obstacle.h"
-#include "../Obstacle/Scenario.h"
 #include "../Dynamic/Online.h"
 
 #include "../../Interface/Interface_node.h"
@@ -19,6 +18,7 @@
 #include "../../SLAM/GUI/GUI_Slam.h"
 
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Configuration.h"
 #include "../../../GUI/GUI_node.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Functions/CoordTransform.h"
@@ -31,13 +31,13 @@ GUI_Obstacle::GUI_Obstacle(GUI_module* node){
 
   Module_node* node_module = node_gui->get_node_module();
   Operation_node* node_ope = node_gui->get_node_ope();
-  Player_node* node_player = node_module->get_node_player();
   Engine_node* node_engine = node_gui->get_node_engine();
 
+  this->node_player = node_module->get_node_player();
   this->coordManager = node_ope->get_coordManager();
   this->node_interface = node_module->get_node_interface();
   this->obstacleManager = node_player->get_obstacleManager();
-  this->scenarioManager = node_player->get_scenarioManager();
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
@@ -50,7 +50,7 @@ GUI_Obstacle::~GUI_Obstacle(){}
 void GUI_Obstacle::design_Obstacle(){
   //---------------------------
 
-  this->compute_scenario();
+  this->state_configuration();
   this->state_watcher();
   this->state_online();
   this->parameter_online();
@@ -80,37 +80,30 @@ void GUI_Obstacle::runtime_display_naming(){
 }
 
 //Actions
-void GUI_Obstacle::compute_scenario(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Scenario");
+void GUI_Obstacle::state_configuration(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Configuration");
   //---------------------------
 
-  //Choose scenario
-  int* scenario_selected = scenarioManager->get_scenario_selected();
-  ImGui::Combo("##007", scenario_selected, "Default\0AI module\0WP4 auto\0WP5 train on-board\0WP5 train on-edge\0");
+  //Choose configuration
+  int* config_selected = configManager->get_config();
+  ImGui::Combo("##007", config_selected, "Default\0AI module\0WP4 car\0WP5 train\0");
 
   //Start scenario
-  bool scenario_started = *scenarioManager->get_scenario_started();
-  if(scenario_started == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start scenario", ImVec2(item_width, 0))){
-      scenarioManager->scenario_start();
-    }
-  }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(133, 45, 45, 255));
-    if(ImGui::Button("Stop scenario", ImVec2(item_width, 0))){
-      scenarioManager->scenario_stop();
-    }
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Start scenario", ImVec2(item_width, 0))){
+    node_player->update();
+    configManager->make_watcher();
   }
   ImGui::PopStyleColor(1);
 
   //Start watchers
   if(ImGui::Button("Watchers", ImVec2(item_width, 0))){
-    scenarioManager->make_watcher();
+    configManager->make_watcher();
   }
 
   //Start config
   if(ImGui::Button("Configure", ImVec2(item_width, 0))){
-    scenarioManager->make_configuration();
+    node_player->update();
   }
 
   //---------------------------
@@ -223,7 +216,9 @@ void GUI_Obstacle::state_online(){
   string colorization;
   if(*onlineManager->get_with_heatmap()){
     colorization = "Heatmap";
-  }else{
+  }else if (*onlineManager->get_with_intensity()){
+    colorization = "Intensity";
+  }else if (*onlineManager->get_with_unicolor()){
     colorization = "Unicolor";
   }
   ImGui::Text("Online - Colorization");

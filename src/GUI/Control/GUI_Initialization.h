@@ -8,7 +8,7 @@ class Scene;
 class Loader;
 class Pather;
 class Obstacle;
-class Scenario;
+class Configuration;
 
 
 class GUI_Initialization
@@ -27,7 +27,7 @@ private:
   Loader* loaderManager;
   Pather* pathManager;
   Obstacle* obstacleManager;
-  Scenario* scenarioManager;
+  Configuration* configManager;
 };
 
 #endif
