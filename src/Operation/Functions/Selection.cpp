@@ -242,9 +242,8 @@ void Selection::mark_supressAll(){
 
   //---------------------------
 }
-bool Selection::mark_supressSelectedPoints_all(){
+void Selection::mark_supressSelectedPoints_all(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-  bool atLeastOne = false;
   //---------------------------
 
   for(int i=0;i<list_cloud->size();i++){
@@ -255,12 +254,10 @@ bool Selection::mark_supressSelectedPoints_all(){
 
     if(idx.size() != 0){
       this->mark_supressSelectedPoints(cloud);
-      atLeastOne = true;
     }
   }
 
   //---------------------------
-  return atLeastOne;
 }
 void Selection::mark_supressSelectedPoints(Cloud* cloud){
   for(int i=0; i<cloud->nb_subset; i++){

@@ -328,17 +328,32 @@ void GUI_Dynamic::parameter_online(){
     }
 
     //Option: heatmap with relative height
-    bool* heatmap_rltHeight = onlineManager->get_with_heatmap_rltHeight();
     if(colorization == 0){
+      static int heatmap_mode;
+      if(onlineManager->get_with_heatmap_rltHeight()){
+        heatmap_mode = 0;
+      }else if(onlineManager->get_with_heatmap_intensity()){
+        heatmap_mode = 1;
+      }
+
       ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-      ImGui::Checkbox("Heatmap relative height", heatmap_rltHeight);
-    }
-    if(colorization == 0 && *heatmap_rltHeight){
-      vec2* height_range = onlineManager->get_heatmap_height_range();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
+      if(ImGui::RadioButton("Height", &heatmap_mode, 0)){
+        *onlineManager->get_with_heatmap_rltHeight() = true;
+        *onlineManager->get_with_heatmap_intensity() = false;
+      }
+      ImGui::SameLine();
+      if(ImGui::RadioButton("Intensity##444", &heatmap_mode, 1)){
+        *onlineManager->get_with_heatmap_rltHeight() = false;
+        *onlineManager->get_with_heatmap_intensity() = true;
+      }
+
+      if(heatmap_mode == 0){
+        vec2* height_range = onlineManager->get_heatmap_height_range();
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+        ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+        ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
+      }
     }
 
     //Option: Intensity range

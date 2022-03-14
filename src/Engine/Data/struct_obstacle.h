@@ -11,6 +11,7 @@
 struct Obstac{ //Obstacle detection stuff
   //---------------------------
 
+  bool is_predicted = false;
   glm::vec4 unicolor;
   std::vector<std::string> name;
   std::vector<glm::vec3> position;

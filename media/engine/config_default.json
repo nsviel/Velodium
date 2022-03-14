@@ -29,11 +29,10 @@
       "with_save_image" : false
    },
    "module" : {
-      "scenario" : 0,
       "with_camera_follow" : true,
-      "with_color_heatmap" : true,
+      "with_color_heatmap" : false,
       "with_color_intensity" : false,
-      "with_color_unicolor" : false,
+      "with_color_unicolor" : true,
       "with_cylinder_cleaning" : false,
       "with_slam" : true
    },

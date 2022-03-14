@@ -23,6 +23,7 @@ public:
 
   //Pred-defined configurations
   void preconf_default(Json::Value& root);
+  void preconf_capture(Json::Value& root);
   void preconf_AI_module(Json::Value& root);
   void preconf_WP4_car(Json::Value& root);
   void preconf_WP5_train(Json::Value& root);

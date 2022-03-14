@@ -5,7 +5,7 @@
 #include "../../common.h"
 
 class Load_node;
-class Extractore;
+class Extractor;
 class Scene;
 
 class file_PTS;
@@ -44,7 +44,7 @@ private:
   void load_insertIntoDatabase(vector<dataFile*> data_vec);
 
 private:
-  Extractore* extractManager;
+  Extractor* extractManager;
   Scene* sceneManager;
   Cloud* cloud;
 

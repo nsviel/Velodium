@@ -7,7 +7,6 @@ class GUI_module;
 class GUI_Lidar;
 class Network;
 class MQTT;
-class Alert;
 class SFTP;
 class SSH;
 class Scene;
@@ -36,7 +35,6 @@ private:
   GUI_Lidar* gui_lidarManager;
   Network* netManager;
   MQTT* mqttManager;
-  Alert* alertManager;
   SFTP* sftpManager;
   SSH* sshManager;
 

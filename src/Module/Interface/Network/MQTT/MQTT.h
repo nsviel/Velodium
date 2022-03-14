@@ -17,10 +17,10 @@ public:
 public:
   //Monolitic functions
   void mqtt_test_localhost();
+  void mqtt_send_message(string message);
 
   //Separated functions
-  void mqtt_connexion();
-  void mqtt_send_message(string message);
+  bool mqtt_connexion();
   void mqtt_disconnect();
 
   inline string* get_message(){return &client_message;}

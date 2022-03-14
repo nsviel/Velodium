@@ -12,12 +12,12 @@ class Glyphs;
 class Configuration;
 
 
-class Extractore
+class Extractor
 {
 public:
   //Constructor / Destructor
-  Extractore(Load_node* node_load);
-  ~Extractore();
+  Extractor(Load_node* node_load);
+  ~Extractor();
 
 public:
   //Main function

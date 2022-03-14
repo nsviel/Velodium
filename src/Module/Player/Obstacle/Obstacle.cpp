@@ -1,10 +1,11 @@
 #include "Obstacle.h"
 
+#include "Warning.h"
+
 #include "../../Module_node.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Prediction.h"
 #include "../../Interface/Network/Network.h"
-#include "../../Interface/Network/MQTT/Alert.h"
 #include "../../Interface/LiDAR/Capture.h"
 
 #include "../../../Engine/Engine_node.h"
@@ -25,16 +26,17 @@ Obstacle::Obstacle(Module_node* node_module){
   Interface_node* node_interface = node_module->get_node_interface();
   Network* netManager = node_interface->get_netManager();
 
-  this->alertManager = netManager->get_alertManager();
   this->captureManager = node_interface->get_captureManager();
   this->predManager = node_interface->get_predManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
+  this->warningManager = new Warning(netManager->get_mqttManager());
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
 
   this->gt_color = vec4(0, 1, 0, 1.0f);
   this->pr_color = vec4(0.1, 0.1, 0.1, 1.0f);
+  this->with_warning = true;
 
   //---------------------------
 }
@@ -50,12 +52,7 @@ void Obstacle::runtime_obstacle(){
     bool* is_prediction = predManager->get_is_prediction();
 
     if(*is_prediction){
-      //Build obstacle glyphs
-      this->build_obstacleGlyph_pr(cloud);
-      this->build_obstacleGlyph_pr(cloud);
-
-      //Send obstacle warning
-      //alertManager->send_prediction_by_mqtt(subset);
+      this->build_cloud_obstacle(cloud);
 
       //Reverse flag
       *is_prediction = false;
@@ -77,7 +74,7 @@ void Obstacle::add_obstacle_pred(){
   predManager->compute_prediction(cloud, path_vec);
 
   //Build glyphs
-  this->build_obstacleGlyph_pr(cloud);
+  this->build_cloud_obstacle(cloud);
 
   //---------------------------
 }
@@ -92,7 +89,7 @@ void Obstacle::add_obstacle_pred(string path_dir){
   predManager->compute_prediction(cloud, path_vec);
 
   //Build glyphs
-  this->build_obstacleGlyph_pr(cloud);
+  this->build_cloud_obstacle(cloud);
 
   //---------------------------
 }
@@ -107,18 +104,29 @@ void Obstacle::add_obstacle_grTr(){
   predManager->compute_groundTruth(cloud, path_vec);
 
   //Build glyphs
-  this->build_obstacleGlyph_gt(cloud);
+  this->build_cloud_obstacle(cloud);
 
   //---------------------------
 }
 
 //Subfunctions
-void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
+void Obstacle::build_cloud_obstacle(Cloud* cloud){
   //---------------------------
 
+  //Process prediction if the ieme subset are not already processed
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    this->build_obstacleGlyph_gt(subset);
+
+    if(subset->obstacle_pr.is_predicted == false){
+      //Build obstacle glyph
+      this->build_obstacleGlyph_pr(subset);
+      this->build_obstacleGlyph_gt(subset);
+
+      //Send MQTT warning
+      if(with_warning){
+        warningManager->send_warning(subset);
+      }
+    }
   }
 
   //---------------------------
@@ -144,37 +152,26 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
 
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
-  //---------------------------
-
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    this->build_obstacleGlyph_pr(subset);
-  }
-
-  //---------------------------
-}
 void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   Obstac* obstacle_pr = &subset->obstacle_pr;
   //---------------------------
 
-  if(obstacle_pr->oobb.size() == 0 && obstacle_pr->name.size() != 0){
-    for(int i=0; i<obstacle_pr->name.size(); i++){
-      Glyph* glyph = glyphManager->create_glyph_ostacle();
+  for(int i=0; i<obstacle_pr->name.size(); i++){
+    Glyph* glyph = glyphManager->create_glyph_ostacle();
 
-      vec3 To = obstacle_pr->position[i];
-      vec3 Ro = vec3(0, 0, obstacle_pr->heading[i]);
-      vec3 So = obstacle_pr->dimension[i];
-      mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
-      vec4 color = AI_color_dic.find(obstacle_pr->name[i])->second;
+    vec3 To = obstacle_pr->position[i];
+    vec3 Ro = vec3(0, 0, obstacle_pr->heading[i]);
+    vec3 So = obstacle_pr->dimension[i];
+    mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
+    vec4 color = AI_color_dic.find(obstacle_pr->name[i])->second;
 
-      oobbManager->update_oobb(glyph, transf);
-      glyphManager->update_glyph_location(glyph);
-      glyphManager->update_glyph_color(glyph, color);
-      obstacle_pr->oobb.push_back(*glyph);
+    oobbManager->update_oobb(glyph, transf);
+    glyphManager->update_glyph_location(glyph);
+    glyphManager->update_glyph_color(glyph, color);
+    obstacle_pr->oobb.push_back(*glyph);
 
-      delete glyph;
-    }
+    obstacle_pr->is_predicted == true;
+    delete glyph;
   }
 
   //---------------------------

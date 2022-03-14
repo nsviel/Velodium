@@ -5,7 +5,6 @@
 
 #include <libssh/libssh.h>
 
-class Alert;
 class MQTT;
 class SFTP;
 class SSH;
@@ -23,15 +22,15 @@ public:
   void send_file(string path_source, string path_target);
   void start_connection();
   void stop_connection();
-  
+
   //Subfunctions
   void select_sourcePath();
   void select_targetPath();
 
   inline MQTT* get_mqttManager(){return mqttManager;}
-  inline Alert* get_alertManager(){return alertManager;}
   inline SFTP* get_sftpManager(){return sftpManager;}
   inline SSH* get_sshManager(){return sshManager;}
+
   inline string* get_path_source(){return &path_source;}
   inline string* get_path_target(){return &path_target;}
   inline bool get_is_connected(){return is_connected;}
@@ -40,7 +39,6 @@ public:
 
 private:
   MQTT* mqttManager;
-  Alert* alertManager;
   SFTP* sftpManager;
   SSH* sshManager;
 

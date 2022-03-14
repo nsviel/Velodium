@@ -9,7 +9,7 @@
 #include <thread>
 
 class Engine_node;
-class Extractore;
+class Extractor;
 
 class UDP_frame;
 class UDP_server;
@@ -33,7 +33,7 @@ public:
   inline bool* get_is_scala_capturing(){return &is_capturing;}
 
 private:
-  Extractore* extractManager;
+  Extractor* extractManager;
 
   Subset* subset_capture;
   string path_scala;

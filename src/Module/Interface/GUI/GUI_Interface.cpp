@@ -5,7 +5,6 @@
 #include "../Interface_node.h"
 #include "../Network/Network.h"
 #include "../Network/MQTT/MQTT.h"
-#include "../Network/MQTT/Alert.h"
 #include "../Network/SFTP/SFTP.h"
 #include "../Network/SFTP/SSH.h"
 
@@ -30,7 +29,6 @@ GUI_Interface::GUI_Interface(GUI_module* node_gui){
   this->sceneManager = node_engine->get_sceneManager();
   this->netManager = node_interface->get_netManager();
   this->mqttManager = netManager->get_mqttManager();
-  this->alertManager = netManager->get_alertManager();
   this->sftpManager = netManager->get_sftpManager();
   this->sshManager = netManager->get_sshManager();
   this->gui_lidarManager = new GUI_Lidar(node_gui);
@@ -156,7 +154,7 @@ void GUI_Interface::mqtt_connection(){
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Test Alert", ImVec2(item_width, 0))){
     Subset* subset = sceneManager->get_subset_selected();
-    alertManager->send_prediction_by_mqtt(subset);
+    mqttManager->mqtt_send_message(*message);
   }
   ImGui::PopStyleColor(1);
 

@@ -46,6 +46,7 @@ public:
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
   inline bool* get_with_heatmap(){return &with_heatmap;}
   inline bool* get_with_heatmap_rltHeight(){return &with_heatmap_rltHeight;}
+  inline bool* get_with_heatmap_intensity(){return &with_heatmap_intensity;}
   inline bool* get_with_intensity(){return &with_intensity;}
   inline bool* get_with_unicolor(){return &with_unicolor;}
   inline bool* get_with_save_frame(){return &with_save_frame;}
@@ -81,6 +82,7 @@ private:
   bool with_cylinder_cleaning;
   bool with_heatmap;
   bool with_heatmap_rltHeight;
+  bool with_heatmap_intensity;
   bool with_intensity;
   bool with_unicolor;
   bool with_remove_lastSubset;

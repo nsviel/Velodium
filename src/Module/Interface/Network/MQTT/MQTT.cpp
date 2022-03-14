@@ -30,6 +30,7 @@ MQTT::MQTT(){
 }
 MQTT::~MQTT(){}
 
+//Test localHost
 void MQTT::mqtt_test_localhost(){
   //---------------------------
 
@@ -47,43 +48,59 @@ void MQTT::mqtt_test_localhost(){
 
   //---------------------------
 }
-
-
-void MQTT::mqtt_connexion(){
-  if(client == nullptr){
+void MQTT::mqtt_send_message(string message){
+  //Check for connection
+  if(mqtt_connexion()){
     //---------------------------
-
-    //Initialize connection parameters
-    this->client = new mqtt::async_client(broker_address, client_ID, persist_dir);
 
     callback cb;
     client->set_callback(cb);
-    auto connect_option = mqtt::connect_options_builder().clean_session().finalize();
 
-    //Serveur connection
-    mqtt::token_ptr token = client->connect(connect_option);
-    token->wait();
+    // First use a message pointer.
+    mqtt::message_ptr pubmsg = mqtt::make_message(broker_topic, message);
+    pubmsg->set_qos(qos);
+    client->publish(pubmsg)->wait_for(timeout);
 
     //---------------------------
-    cout << "Connection server '" << broker_address << "' [OK]" << endl;
+    cout << "Sending message [OK]" << endl;
   }
 }
-void MQTT::mqtt_send_message(string message){
+
+//Connection functions
+bool MQTT::mqtt_connexion(){
   //---------------------------
 
-  //Check for connection
-  this->mqtt_connexion();
+  if(client == nullptr){
+    //Initialize connection parameters
+    this->client = new mqtt::async_client(broker_address, client_ID, persist_dir);
 
-  callback cb;
-  client->set_callback(cb);
+    try {
+      callback cb;
+      client->set_callback(cb);
+      auto connect_option = mqtt::connect_options_builder().clean_session().finalize();
 
-  // First use a message pointer.
-  mqtt::message_ptr pubmsg = mqtt::make_message(broker_topic, message);
-  pubmsg->set_qos(qos);
-  client->publish(pubmsg)->wait_for(timeout);
+      //Serveur connection
+      mqtt::token_ptr token = client->connect(connect_option);
+      // Blocks the current thread until the action this token is associated with has completed
+      token->wait();
+    }
+    catch (const mqtt::exception& exc) {
+      std::cerr << exc.what() << std::endl;
+      return false;
+    }
+
+    if(client->is_connected()){
+      cout << "Connection server '" << broker_address << "' [OK]" << endl;
+      return true;
+    }
+  }else{
+    if(client->is_connected()){
+      return true;
+    }
+  }
 
   //---------------------------
-  cout << "Sending message [OK]" << endl;
+  return false;
 }
 void MQTT::mqtt_disconnect(){
   //---------------------------

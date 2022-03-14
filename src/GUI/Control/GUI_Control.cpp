@@ -180,12 +180,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //Suppr key - Delete selected
     if (ImGui::IsKeyPressed(261)){
-      bool atLeastOne = selectionManager->mark_supressSelectedPoints_all();
-
-      if(atLeastOne == false){
-        Cloud* cloud = sceneManager->get_cloud_selected();
-        sceneManager->remove_cloud(cloud);
-      }
+      selectionManager->mark_supressSelectedPoints_all();
       break;
     }
 

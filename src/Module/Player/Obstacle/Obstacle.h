@@ -6,7 +6,7 @@
 class Scene;
 class Glyphs;
 class Saver;
-class Alert;
+class Warning;
 class OOBB;
 class Transforms;
 class Module_node;
@@ -32,15 +32,16 @@ public:
   void add_obstacle_grTr();
 
   //Subfunctions
-  void build_obstacleGlyph_gt(Cloud* cloud);
+  void build_cloud_obstacle(Cloud* cloud);
   void build_obstacleGlyph_gt(Subset* subset);
-  void build_obstacleGlyph_pr(Cloud* cloud);
   void build_obstacleGlyph_pr(Subset* subset);
+
+  inline bool* get_with_warning(){return &with_warning;}
 
 private:
   Scene* sceneManager;
   OOBB* oobbManager;
-  Alert* alertManager;
+  Warning* warningManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
   Capture* captureManager;
@@ -49,6 +50,7 @@ private:
 
   vec4 gt_color;
   vec4 pr_color;
+  bool with_warning;
 };
 
 #endif

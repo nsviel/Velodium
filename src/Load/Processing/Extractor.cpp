@@ -1,4 +1,4 @@
-#include "Extractore.h"
+#include "Extractor.h"
 
 #include "../Load_node.h"
 
@@ -11,7 +11,7 @@
 
 
 //Constructor / Destructor
-Extractore::Extractore(Load_node* node_load){
+Extractor::Extractor(Load_node* node_load){
   //---------------------------
 
   Engine_node* node_engine = node_load->get_node_engine();
@@ -24,10 +24,10 @@ Extractore::Extractore(Load_node* node_load){
 
   //---------------------------
 }
-Extractore::~Extractore(){}
+Extractor::~Extractor(){}
 
 //Main function
-Cloud* Extractore::extractData(vector<dataFile*> data){
+Cloud* Extractor::extractData(vector<dataFile*> data){
   Cloud* cloud = new Cloud();
   //---------------------------
 
@@ -70,7 +70,7 @@ Cloud* Extractore::extractData(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractore::extractData(udpPacket& data){
+Subset* Extractor::extractData(udpPacket& data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -92,7 +92,7 @@ Subset* Extractore::extractData(udpPacket& data){
   //---------------------------
   return subset;
 }
-void Extractore::extractData_frame(Cloud* cloud, dataFile* data){
+void Extractor::extractData_frame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -120,7 +120,7 @@ void Extractore::extractData_frame(Cloud* cloud, dataFile* data){
 
   //---------------------------
 }
-void Extractore::extractData_oneFrame(Cloud* cloud, dataFile* data){
+void Extractor::extractData_oneFrame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -164,7 +164,7 @@ void Extractore::extractData_oneFrame(Cloud* cloud, dataFile* data){
 }
 
 //Subfunctions
-void Extractore::check_data(dataFile* data){
+void Extractor::check_data(dataFile* data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -205,7 +205,7 @@ void Extractore::check_data(dataFile* data){
 
   //---------------------------
 }
-void Extractore::check_data(udpPacket& data){
+void Extractor::check_data(udpPacket& data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -236,7 +236,7 @@ void Extractore::check_data(udpPacket& data){
 
   //---------------------------
 }
-void Extractore::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
+void Extractor::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   //---------------------------
 
   //Calculate number of point
@@ -277,7 +277,7 @@ void Extractore::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void Extractore::init_subsetParameters(Subset* subset, string name, int ID){
+void Extractor::init_subsetParameters(Subset* subset, string name, int ID){
   //---------------------------
 
   //Subset VAO
@@ -293,7 +293,7 @@ void Extractore::init_subsetParameters(Subset* subset, string name, int ID){
 
   //---------------------------
 }
-void Extractore::init_frameParameters(Subset* subset){
+void Extractor::init_frameParameters(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -301,7 +301,7 @@ void Extractore::init_frameParameters(Subset* subset){
 
   //---------------------------
 }
-void Extractore::init_randomColor(){
+void Extractor::init_randomColor(){
   //---------------------------
 
   //---> Compute a random color for each cloud
@@ -309,16 +309,16 @@ void Extractore::init_randomColor(){
 
   //First cloud color
   if(ID == 0){
-    color_rdm.x = 0.08;
-    color_rdm.y = 0.3;
-    color_rdm.z = 0.44;
+    color_rdm.x = (float) 175/255;
+    color_rdm.y = (float) 175/255;
+    color_rdm.z = (float) 175/255;
     ID++;
   }
 
   //---------------------------
 }
 
-void Extractore::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
+void Extractor::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------
 
@@ -340,7 +340,7 @@ void Extractore::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
 
   //---------------------------
 }
-void Extractore::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
+void Extractor::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
   //---------------------------
 
   if(is_intensity){
@@ -349,7 +349,7 @@ void Extractore::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
 
   //---------------------------
 }
-void Extractore::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
+void Extractor::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
   //---------------------------
 
   if(is_timestamp){
@@ -362,7 +362,7 @@ void Extractore::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
 
   //---------------------------
 }
-void Extractore::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
+void Extractor::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
   uint normalVBO;
   //---------------------------
 
@@ -372,7 +372,7 @@ void Extractore::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
 
   //---------------------------
 }
-void Extractore::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
+void Extractor::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
   uint colorVBO;
   //---------------------------
 

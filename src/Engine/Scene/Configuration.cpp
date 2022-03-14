@@ -141,9 +141,9 @@ void Configuration::preconf_default(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = true;
+  module["with_color_heatmap"] = false;
   module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = false;
+  module["with_color_unicolor"] = true;
   root["module"] = module;
 
   //Interface
@@ -154,6 +154,80 @@ void Configuration::preconf_default(Json::Value& root){
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
   interface["with_save_frame"] = false;
+  interface["with_remove_lastSubset"] = false;
+  root["interface"] = interface;
+
+  //---------------------------
+}
+void Configuration::preconf_capture(Json::Value& root){
+  //---------------------------
+
+  //OpenGL stuff
+  Json::Value window;
+  window["title"] = "Velodium";
+  window["resolution_width"] = 1024;
+  window["resolution_height"] = 500;
+  window["resolution_ratio"] = 4.0f/3.0f;
+  window["background_color"] = 0.86f;
+  window["forceVersion"] = false;
+  window["visualization"] = true;
+  root["window"] = window;
+
+  //GUI
+  Json::Value gui;
+  gui["leftPanel_width"] = 220;
+  gui["leftPanel_mid"] = 200;
+  gui["topPanel_height"] = 18;
+  gui["botPanel_height"] = 100;
+  root["gui"] = gui;
+
+  //Parameters
+  Json::Value param;
+  param["path_media"] = "../media/";
+  param["cloud_translation"] = 0.01;
+  param["cloud_rotation"] = 5; //Degree
+  param["cloud_movement"] = true;
+  param["point_size"] = 3;
+  param["clean_directories"] = true;
+  param["check_directories"] = true;
+  root["parameter"] = param;
+
+  //Camera
+  Json::Value camera;
+  camera["fov"] = 65.0f;
+  camera["initial_pos"] = 5.0f;
+  camera["clip_near"] = 0.1f;
+  camera["clip_far"] = 10000.0f;
+  camera["speed_mouse"] = 0.003f;
+  camera["speed_move"] = 3.0f;
+  camera["speed_zoom"] = 0.1f;
+  root["camera"] = camera;
+
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = true;
+  glyph["grid_visibility"] = true;
+  glyph["normal_visibility"] = false;
+  root["glyph"] = glyph;
+
+  //Module
+  Json::Value module;
+  module["with_slam"] = true;
+  module["with_camera_follow"] = true;
+  module["with_cylinder_cleaning"] = false;
+  module["with_color_heatmap"] = true;
+  module["with_color_intensity"] = false;
+  module["with_color_unicolor"] = false;
+  root["module"] = module;
+
+  //Interface
+  Json::Value interface;
+  interface["lidar_scala"] = false;
+  interface["lidar_velodyne"] = true;
+  interface["with_prediction"] = true;
+  interface["with_gps"] = false;
+  interface["with_save_image"] = false;
+  interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
   root["interface"] = interface;
 
@@ -215,9 +289,9 @@ void Configuration::preconf_AI_module(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = true;
+  module["with_color_heatmap"] = false;
   module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = false;
+  module["with_color_unicolor"] = true;
   root["module"] = module;
 
   //Interface

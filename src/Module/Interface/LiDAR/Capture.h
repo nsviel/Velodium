@@ -6,7 +6,7 @@
 class Module_node;
 class Scene;
 class Loader;
-class Extractore;
+class Extractor;
 class Module_node;
 
 class Scala;
