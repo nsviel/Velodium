@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Slam;
-class Heatmap;
+class Color;
 class Camera;
 class Engine;
 class Filter;
@@ -36,30 +36,18 @@ public:
   void cloud_size_controler(Cloud* cloud);
   void set_cloud_visibility(Cloud* cloud, int& ID_subset);
 
-  //Colorization
-  void color_heatmap(Cloud* cloud, int i);
-  void color_intensity(Subset* subset);
-  void color_unicolor(Subset* subset, vec4 color);
-
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline bool* get_with_slam(){return &with_slam;}
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
-  inline bool* get_with_heatmap(){return &with_heatmap;}
-  inline bool* get_with_heatmap_rltHeight(){return &with_heatmap_rltHeight;}
-  inline bool* get_with_heatmap_intensity(){return &with_heatmap_intensity;}
-  inline bool* get_with_intensity(){return &with_intensity;}
-  inline bool* get_with_unicolor(){return &with_unicolor;}
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
-
-  inline vec2* get_heatmap_height_range(){return &HM_height_range;}
   inline bool* get_with_remove_lastSubset(){return &with_remove_lastSubset;}
   inline int* get_visibility_range(){return &visibility_range;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
 
 private:
   Scene* sceneManager;
-  Heatmap* heatmapManager;
+  Color* colorManager;
   Camera* cameraManager;
   Slam* slamManager;
   Filter* filterManager;
@@ -67,7 +55,6 @@ private:
   Interface_node* node_interface;
   Configuration* configManager;
 
-  vec2 HM_height_range;
   vec2 camera_moved_trans;
   float camera_moved_rotat;
   float camera_distPos;
@@ -80,11 +67,6 @@ private:
   bool with_camera_top;
   bool with_camera_root;
   bool with_cylinder_cleaning;
-  bool with_heatmap;
-  bool with_heatmap_rltHeight;
-  bool with_heatmap_intensity;
-  bool with_intensity;
-  bool with_unicolor;
   bool with_remove_lastSubset;
   bool with_save_frame;
   bool with_save_image;

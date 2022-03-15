@@ -167,7 +167,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
 bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   //---------------------------
 
-  if (frame->nb_residual < nb_residual_min){
+  if(frame->ID != 0 && frame->nb_residual < nb_residual_min){
     string log = "Not enough keypoints: " + to_string(frame->nb_residual) + "/" + to_string(nb_residual_min);
     console.AddLog("error", log);
     return false;

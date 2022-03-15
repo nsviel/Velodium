@@ -5,6 +5,7 @@
 
 class Operation_node;
 class Scene;
+class Color;
 class Attribut;
 
 
@@ -29,6 +30,7 @@ public:
 private:
   Scene* sceneManager;
   Attribut* attribManager;
+  Color* colorManager;
 };
 
 #endif

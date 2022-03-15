@@ -12,7 +12,7 @@
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Operation_node.h"
-#include "../../../Operation/Functions/Heatmap.h"
+#include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Transformation/Filter.h"
 
 #include "imgui/imgui.h"
@@ -231,22 +231,22 @@ void GUI_Dynamic::parameter_offline(){
     }
 
     //Set or not heatmap for the entire cloud
-    static bool heatmap = false;
-    if(ImGui::Checkbox("Heatmap", &heatmap)){
-      if(cloud != nullptr){
-        heatmapManager->set_Heatmap(cloud, heatmap);
+    if(cloud != nullptr){
+      bool heatmap = cloud->heatmap;
+      if(ImGui::Checkbox("Heatmap", &heatmap)){
+        heatmapManager->make_cloud_heatmap(cloud);
       }
     }
 
     //Set heatmap range
-    vec2 heatmap_range = *heatmapManager->get_heatmap_range();
+    vec2 heatmap_range = *heatmapManager->get_range_normalization();
     int min = (int) (heatmap_range.x * 255);
     int max = (int) (heatmap_range.y * 255);
 
     if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-      vec2* range = heatmapManager->get_heatmap_range();
+      vec2* range = heatmapManager->get_range_normalization();
       *range = vec2((float)min / 255, (float)max / 255);
-      heatmapManager->set_Heatmap(cloud, heatmap);
+      heatmapManager->make_cloud_heatmap(cloud);
     }
 
     //---------------------------
@@ -300,75 +300,6 @@ void GUI_Dynamic::parameter_online(){
       ImGui::InputInt("Nb image", save_image_max);
     }
 
-    //Colorization
-    static int colorization;
-    if(*onlineManager->get_with_heatmap()){
-      colorization = 0;
-    }else if(*onlineManager->get_with_intensity()){
-      colorization = 1;
-    }else if(*onlineManager->get_with_unicolor()){
-      colorization = 2;
-    }
-    if(ImGui::RadioButton("Heatmap", &colorization, 0)){
-      *onlineManager->get_with_heatmap() = true;
-      *onlineManager->get_with_intensity() = false;
-      *onlineManager->get_with_unicolor() = false;
-    }
-    ImGui::SameLine();
-    if(ImGui::RadioButton("Intensity", &colorization, 1)){
-      *onlineManager->get_with_heatmap() = false;
-      *onlineManager->get_with_intensity() = true;
-      *onlineManager->get_with_unicolor() = false;
-    }
-    ImGui::SameLine();
-    if(ImGui::RadioButton("Unicolor", &colorization, 2)){
-      *onlineManager->get_with_heatmap() = false;
-      *onlineManager->get_with_intensity() = false;
-      *onlineManager->get_with_unicolor() = true;
-    }
-
-    //Option: heatmap with relative height
-    if(colorization == 0){
-      static int heatmap_mode;
-      if(onlineManager->get_with_heatmap_rltHeight()){
-        heatmap_mode = 0;
-      }else if(onlineManager->get_with_heatmap_intensity()){
-        heatmap_mode = 1;
-      }
-
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-      if(ImGui::RadioButton("Height", &heatmap_mode, 0)){
-        *onlineManager->get_with_heatmap_rltHeight() = true;
-        *onlineManager->get_with_heatmap_intensity() = false;
-      }
-      ImGui::SameLine();
-      if(ImGui::RadioButton("Intensity##444", &heatmap_mode, 1)){
-        *onlineManager->get_with_heatmap_rltHeight() = false;
-        *onlineManager->get_with_heatmap_intensity() = true;
-      }
-
-      if(heatmap_mode == 0){
-        vec2* height_range = onlineManager->get_heatmap_height_range();
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-        ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-        ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
-      }
-    }
-
-    //Option: Intensity range
-    if(colorization == 1){
-      //Set heatmap range
-      vec2 intensity_range = *heatmapManager->get_heatmap_range();
-      int min = (int) (intensity_range.x * 255);
-      int max = (int) (intensity_range.y * 255);
-
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-      if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-        vec2* range = heatmapManager->get_heatmap_range();
-        *range = vec2((float)min / 255, (float)max / 255);
-      }
-    }
 
     //Cylinder cleaning filter
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();

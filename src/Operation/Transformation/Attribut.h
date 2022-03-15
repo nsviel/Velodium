@@ -36,18 +36,7 @@ public:
   void make_supressPoints(vector<vec3>& XYZ, vector<int>& idx);
   void cloudsData();
   vector<float> get_z_vector(vector<vec3>& xyz);
-
-  //Color
-  void set_cloud_color(Cloud* cloud, vec4 RGBA);
-  void set_subset_color(Subset* subset, vec4 RGBA);
-  void set_enhancedColor(Subset* subset);
-  void set_randomizeAllPointsColor(Subset* subset);
-  void set_restoreInitialColor(Subset* subset);
-  void set_colorRGB_all();
-  void set_colorRGB(Subset* subset);
-  void set_colorI_all();
-  void set_colorI(Subset* subset);
-
+  
   //Normal
   void compute_normals(Subset* subset);
   void compute_normals_Hough(Subset* subset);

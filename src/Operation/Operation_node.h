@@ -11,6 +11,7 @@ class Selection;
 class CoordTransform;
 class Extraction;
 class Fitting;
+class Color;
 
 
 class Operation_node
@@ -30,6 +31,7 @@ public:
   inline Attribut* get_attribManager(){return attribManager;}
   inline Extraction* get_extractionManager(){return extractionManager;}
   inline Fitting* get_fittingManager(){return fittingManager;}
+  inline Color* get_colorManager(){return colorManager;}
 
 private:
   Engine_node* node_engine;
@@ -41,6 +43,7 @@ private:
   CoordTransform* coordManager;
   Extraction* extractionManager;
   Fitting* fittingManager;
+  Color* colorManager;
 };
 
 #endif

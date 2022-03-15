@@ -347,6 +347,7 @@ void GUI_Slam::statistics(){
   vec3 rotat_rlt = vec3(0, 0, 0);
   int map_size_abs = 0;
   int map_size_rlt = 0;
+  int nb_residual = 0;
 
   if(!sceneManager->get_is_list_empty()){
     Subset* subset = sceneManager->get_subset_selected();
@@ -359,6 +360,7 @@ void GUI_Slam::statistics(){
     rotat_rlt = frame->rotat_rlt;
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
+    nb_residual = frame->nb_residual;
   }
 
   //SLAM time computation
@@ -392,6 +394,9 @@ void GUI_Slam::statistics(){
   ImGui::Text("Nb voxel rlt: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
+  ImGui::Text("Nb residual: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual);
 
   //---------------------------
 }

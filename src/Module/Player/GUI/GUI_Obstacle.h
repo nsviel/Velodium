@@ -10,6 +10,7 @@ class Interface_node;
 class CoordTransform;
 class Player_node;
 class Configuration;
+class Color;
 
 
 class GUI_Obstacle
@@ -44,6 +45,7 @@ private:
   Scene* sceneManager;
   Configuration* configManager;
   GUI_module* node_gui;
+  Color* colorManager;
 
   int label_ID;
   int item_width;

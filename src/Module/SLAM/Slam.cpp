@@ -116,7 +116,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   mapManager->compute_gridSampling(subset);
 
   this->compute_optimization(frame, frame_m1);
-  this->compute_assessment(cloud, subset_ID);
+  //this->compute_assessment(cloud, subset_ID);
 
   mapManager->add_pointsToLocalMap(frame);
   mapManager->end_clearTooFarVoxels(frame->trans_e);

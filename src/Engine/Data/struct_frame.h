@@ -72,7 +72,7 @@ struct Frame{ //SLAM stuff
     this->map_size_abs = 0;
     this->map_size_rlt = 0;
     this->is_slamed = false;
-    this->nb_residual = 1000;
+    this->nb_residual = 0;
 
     this->trans_abs = glm::vec3(0, 0, 0);
     this->rotat_abs = glm::vec3(0, 0, 0);

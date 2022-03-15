@@ -116,6 +116,7 @@ void Configuration::preconf_default(Json::Value& root){
   param["point_size"] = 2;
   param["clean_directories"] = true;
   param["check_directories"] = true;
+  param["color_mode"] = 0;
   root["parameter"] = param;
 
   //Camera
@@ -141,9 +142,6 @@ void Configuration::preconf_default(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = false;
-  module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = true;
   root["module"] = module;
 
   //Interface
@@ -190,6 +188,7 @@ void Configuration::preconf_capture(Json::Value& root){
   param["point_size"] = 3;
   param["clean_directories"] = true;
   param["check_directories"] = true;
+  param["color_mode"] = 0;
   root["parameter"] = param;
 
   //Camera
@@ -215,9 +214,6 @@ void Configuration::preconf_capture(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = true;
-  module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface
@@ -264,6 +260,7 @@ void Configuration::preconf_AI_module(Json::Value& root){
   param["point_size"] = 3;
   param["clean_directories"] = true;
   param["check_directories"] = true;
+  param["color_mode"] = 0;
   root["parameter"] = param;
 
   //Camera
@@ -289,9 +286,6 @@ void Configuration::preconf_AI_module(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = false;
-  module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = true;
   root["module"] = module;
 
   //Interface
@@ -338,6 +332,7 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   param["point_size"] = 2;
   param["clean_directories"] = true;
   param["check_directories"] = true;
+  param["color_mode"] = 0;
   root["parameter"] = param;
 
   //Camera
@@ -363,9 +358,6 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = true;
-  module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface
@@ -412,6 +404,7 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   param["point_size"] = 2;
   param["clean_directories"] = true;
   param["check_directories"] = true;
+  param["color_mode"] = 0;
   root["parameter"] = param;
 
   //Camera
@@ -437,9 +430,6 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
-  module["with_color_heatmap"] = true;
-  module["with_color_intensity"] = false;
-  module["with_color_unicolor"] = false;
   root["module"] = module;
 
   //Interface

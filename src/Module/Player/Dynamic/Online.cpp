@@ -7,7 +7,7 @@
 #include "../../Interface/LiDAR/Capture.h"
 
 #include "../../../Operation/Operation_node.h"
-#include "../../../Operation/Functions/Heatmap.h"
+#include "../../../Operation/Color/Color.h"
 #include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Operation/Transformation/Filter.h"
 
@@ -33,13 +33,13 @@ Online::Online(Module_node* node_module){
   Engine_node* node_engine = node_module->get_node_engine();
 
   this->filterManager = node_ope->get_filterManager();
-  this->heatmapManager = node_ope->get_heatmapManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
   this->slamManager = node_module->get_slamManager();
   this->configManager = node_engine->get_configManager();
   this->node_interface = node_module->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
+  this->colorManager = node_ope->get_colorManager();
 
   this->visibility_range = 15;
 
@@ -52,7 +52,6 @@ Online::~Online(){}
 void Online::update_configuration(){
   //---------------------------
 
-  this->HM_height_range = vec2(-2.5, 1.75);
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
@@ -61,12 +60,6 @@ void Online::update_configuration(){
   this->with_camera_top = false;
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_root = false;
-
-  this->with_heatmap = configManager->parse_json_b("module", "with_color_heatmap");
-  this->with_heatmap_rltHeight = true;
-  this->with_intensity = configManager->parse_json_b("module", "with_color_intensity");
-  this->with_unicolor = configManager->parse_json_b("module", "with_color_unicolor");
-
   this->with_justOneFrame = false;
   this->with_save_frame = configManager->parse_json_b("interface", "with_save_frame");
   this->with_save_image = configManager->parse_json_b("interface", "with_save_image");
@@ -104,16 +97,8 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
     filterManager->filter_subset_cylinder(subset);
   }
 
-  //Colorization options
-  if(with_heatmap){
-    this->color_heatmap(cloud, ID_subset);
-  }
-  else if(with_intensity){
-    this->color_intensity(subset);
-  }
-  else if(with_unicolor){
-    this->color_unicolor(subset, cloud->unicolor);
-  }
+  //Colorization
+  colorManager->make_colorization(subset);
 
   //Save subset frame
   if(with_save_frame){
@@ -297,47 +282,4 @@ void Online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
   }
 
   //---------------------------
-}
-
-//Colorization
-void Online::color_heatmap(Cloud* cloud, int ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-  //---------------------------
-
-  if(with_heatmap_rltHeight){
-    vec2* HT_range = heatmapManager->get_height_range();
-    HT_range->x = subset->frame.trans_abs.z + HM_height_range.x;
-    HT_range->y = subset->frame.trans_abs.z + HM_height_range.y;
-  }
-
-  //Make heatmap on the current subset
-  Subset* subset_buffer = sceneManager->get_subset_buffer_byID(cloud, ID_subset);
-  heatmapManager->set_Heatmap(subset, subset_buffer, with_heatmap);
-
-  //---------------------------
-}
-void Online::color_intensity(Subset* subset){
-  vector<vec4>& RGB = subset->RGB;
-  vector<float>& Is = subset->I;
-  //---------------------------
-
-  if(Is.size() != 0){
-    for(int i=0; i<RGB.size(); i++){
-      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
-    }
-  }
-
-  //---------------------------
-  sceneManager->update_subset_color(subset);
-}
-void Online::color_unicolor(Subset* subset, vec4 color){
-  vector<vec4>& RGB = subset->RGB;
-  //---------------------------
-
-  for(int i=0; i<RGB.size(); i++){
-    RGB[i] = color;
-  }
-
-  //---------------------------
-  sceneManager->update_subset_color(subset);
 }

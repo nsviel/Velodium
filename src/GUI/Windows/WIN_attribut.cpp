@@ -7,7 +7,8 @@
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Transformation/Transforms.h"
-#include "../../Operation/Functions/Heatmap.h"
+#include "../../Operation/Color/Heatmap.h"
+#include "../../Operation/Color/Color.h"
 #include "../../Operation/Operation_node.h"
 #include "../../Specific/fct_maths.h"
 
@@ -24,6 +25,7 @@ WIN_attribut::WIN_attribut(Operation_node* node_ope){
   this->heatmapManager = node_ope->get_heatmapManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
+  this->colorManager = node_ope->get_colorManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->transformManager = new Transforms();
 
@@ -208,9 +210,9 @@ void WIN_attribut::window_intensity(){
     if(ImGui::Button("Intensity / Color all", ImVec2(200,0))){
       colorON = !colorON;
       if(colorON){
-        attribManager->set_colorRGB_all();
+        colorManager->set_color_RGB(cloud);
       }else{
-        attribManager->set_colorI_all();
+        colorManager->set_color_I(cloud);
       }
     }
 
@@ -354,7 +356,7 @@ void WIN_attribut::window_color(){
     } ImGui::NextColumn();
     if(ImGui::RadioButton("RGB*I##1", &e, 5)){
       if(subset->I.size() != 0 && subset->has_color){
-        attribManager->set_enhancedColor(subset);
+        colorManager->set_color_enhanced(cloud);
       }else{
         cout<<"Selected cloud: I="<<subset->I.size()<<" | Color="<<subset->has_color<<endl;
       }
@@ -365,7 +367,7 @@ void WIN_attribut::window_color(){
         Cloud* cloud = *next(list_cloud->begin(),i);
 
         if(subset->I.size() != 0 && subset->has_color){
-          attribManager->set_enhancedColor(subset);
+          colorManager->set_color_enhanced(cloud);
         }
       }
     } ImGui::NextColumn();
@@ -390,8 +392,8 @@ void WIN_attribut::window_color(){
       }
     }
     if(ImGui::Button("Random color for all points", ImVec2(150,0))){
-      attribManager->set_randomizeAllPointsColor(subset);
-      sceneManager->update_subset_color(subset);
+      colorManager->set_color_random(cloud);
+      sceneManager->update_cloud_color(cloud);
     }
 
     //---------------------------
@@ -412,7 +414,7 @@ void WIN_attribut::window_heatmap(){
     //Apply heatMap on one cloud
     if(ImGui::Button("Apply", ImVec2(75,0))){
       if(cloud != nullptr){
-        heatmapManager->set_Heatmap(cloud);
+        heatmapManager->make_cloud_heatmap(cloud);
       }
     }
     ImGui::SameLine();
@@ -422,40 +424,31 @@ void WIN_attribut::window_heatmap(){
     if(ImGui::Button("Apply all", ImVec2(75,0))){
       if(cloud != nullptr){
         heatAll = !heatAll;
-        heatmapManager->set_Heatmap_all(heatAll);
+        heatmapManager->make_heatmap_all(heatAll);
       }
     }
 
     //Select heatmap channel
     static int style_idx = 0;
 
-    int* HMmode = heatmapManager->get_HeatmapField();
+    int* HMmode = heatmapManager->get_heatmap_mode();
     ImGui::SetNextItemWidth(75);
     ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
     ImGui::SameLine();
 
     //Normalize palette
-    bool* normalizeON = heatmapManager->get_param_Normalized();
+    bool* normalizeON = heatmapManager->get_is_normalization();
     ImGui::Checkbox("Normalized", normalizeON);
-
-    //Height range configuration
-    if(*HMmode == 0){
-      vec2* range = heatmapManager->get_height_range();
-      if(ImGui::DragFloatRange2("Height range", &range->x, &range->y, 0.01f, -20.0f, 50.0f, "%.2f", "%.2f")){
-        heatmapManager->compute_subset_heatmap_ON(subset);
-        sceneManager->update_subset_color(subset);
-      }
-    }
 
     //Intensity range configuration
     if(*HMmode == 1){
       //Set heatmap range
-      vec2 heatmap_range = *heatmapManager->get_heatmap_range();
+      vec2 heatmap_range = *heatmapManager->get_range_normalization();
       int min = (int) (heatmap_range.x * 255);
       int max = (int) (heatmap_range.y * 255);
 
       if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-        vec2* range = heatmapManager->get_heatmap_range();
+        vec2* range = heatmapManager->get_range_normalization();
         *range = vec2((float)min / 255, (float)max / 255);
       }
     }

@@ -21,6 +21,7 @@
 #include "../../../Engine/Scene/Configuration.h"
 #include "../../../GUI/GUI_node.h"
 #include "../../../Operation/Operation_node.h"
+#include "../../../Operation/Color/Color.h"
 #include "../../../Operation/Functions/CoordTransform.h"
 
 
@@ -39,6 +40,7 @@ GUI_Obstacle::GUI_Obstacle(GUI_module* node){
   this->obstacleManager = node_player->get_obstacleManager();
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
+  this->colorManager = node_ope->get_colorManager();
 
   this->item_width = 100;
 
@@ -213,17 +215,10 @@ void GUI_Obstacle::state_online(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");
 
-  string colorization;
-  if(*onlineManager->get_with_heatmap()){
-    colorization = "Heatmap";
-  }else if (*onlineManager->get_with_intensity()){
-    colorization = "Intensity";
-  }else if (*onlineManager->get_with_unicolor()){
-    colorization = "Unicolor";
-  }
+  string color_name = colorManager->get_color_mode_name();
   ImGui::Text("Online - Colorization");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", colorization.c_str());
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", color_name.c_str());
 
   //---------------------------
   ImGui::Separator();

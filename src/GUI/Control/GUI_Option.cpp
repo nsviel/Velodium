@@ -18,8 +18,8 @@
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
 #include "../../Operation/Operation_node.h"
-#include "../../Operation/Functions/Heatmap.h"
-#include "../../Operation/Transformation/Attribut.h"
+#include "../../Operation/Color/Heatmap.h"
+#include "../../Operation/Color/Color.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 #include "imgui/imgui.h"
@@ -38,7 +38,7 @@ GUI_option::GUI_option(GUI_node* node_gui){
   this->glyphManager = node_engine->get_glyphManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->attribManager = node_ope->get_attribManager();
+  this->colorManager = node_ope->get_colorManager();
   this->pathManager = node_load->get_pathManager();
   this->configManager = node_engine->get_configManager();
 
@@ -152,7 +152,7 @@ void GUI_option::option_heatmap(){
     //Heatmap
     if(ImGui::Button("Apply##238", ImVec2(75,0))){
       if(!sceneManager->get_is_list_empty()){
-        heatmapManager->set_Heatmap(cloud);
+        heatmapManager->make_cloud_heatmap(cloud);
       }
     }
     ImGui::SameLine();
@@ -162,17 +162,17 @@ void GUI_option::option_heatmap(){
     if(ImGui::Button("Apply all", ImVec2(75,0))){
       if(!sceneManager->get_is_list_empty()){
         heatAll = !heatAll;
-        heatmapManager->set_Heatmap_all(heatAll);
+        heatmapManager->make_heatmap_all(heatAll);
       }
     }
 
-    int* HMmode = heatmapManager->get_HeatmapField();
+    int* HMmode = heatmapManager->get_heatmap_mode();
     ImGui::SetNextItemWidth(75);
     ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
     ImGui::SameLine();
 
     //Normalize heatmap
-    bool* normalizeON = heatmapManager->get_param_Normalized();
+    bool* normalizeON = heatmapManager->get_is_normalization();
     ImGui::Checkbox("Normalized", normalizeON);
 
     //Display palette color
@@ -227,21 +227,7 @@ void GUI_option::option_colors(){
       ImGui::SetNextItemWidth(colorEditSize);
       if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
         if(!sceneManager->get_is_list_empty()){
-          attribManager->set_cloud_color(cloud, cloud_color);
-        }
-      }
-    }
-
-    //Uniform subset color
-    if(cloud != nullptr){
-      Subset* subset = sceneManager->get_subset_selected();
-      vec4 subset_color = subset->unicolor;
-
-      ImGui::SetNextItemWidth(colorEditSize);
-      if(ImGui::ColorEdit4("Cloud subset", (float*)&subset_color, ImGuiColorEditFlags_AlphaBar)){
-        if(!sceneManager->get_is_list_empty()){
-          Subset* subset = sceneManager->get_subset_selected();
-          attribManager->set_subset_color(subset, subset_color);
+          colorManager->set_color_new(cloud, cloud_color);
         }
       }
     }

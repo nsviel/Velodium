@@ -5,6 +5,7 @@
 #include "../../Specific/fct_maths.h"
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Transformation/Attribut.h"
+#include "../../Operation/Color/Color.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -20,6 +21,7 @@ WIN_cloud::WIN_cloud(Operation_node* node_ope){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
+  this->colorManager = node_ope->get_colorManager();
 
   //---------------------------
 }
@@ -52,7 +54,7 @@ void WIN_cloud::window_cloudInfo(){
     flags |= ImGuiColorEditFlags_AlphaBar;
     if(ImGui::ColorEdit4("Color", (float*)&color_PC, flags)){
       if(cloud != nullptr){
-        attribManager->set_cloud_color(cloud, color_PC);
+        colorManager->set_color_new(cloud, color_PC);
       }
     }
     ImGui::Separator();

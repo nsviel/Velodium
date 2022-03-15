@@ -9,6 +9,7 @@ class Transforms;
 class Glyphs;
 class Heatmap;
 class Operation_node;
+class Color;
 
 
 class WIN_attribut
@@ -27,6 +28,7 @@ public:
 private:
   Scene* sceneManager;
   Attribut* attribManager;
+  Color* colorManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
   Heatmap* heatmapManager;

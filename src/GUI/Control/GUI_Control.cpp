@@ -16,7 +16,7 @@
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Functions/Selection.h"
 #include "../../Operation/Functions/Extraction.h"
-#include "../../Operation/Functions/Heatmap.h"
+#include "../../Operation/Color/Heatmap.h"
 
 #include "imgui/imgui.h"
 
@@ -198,7 +198,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //H key - Heatmap
     if (ImGui::IsKeyPressed(72) && !io.WantCaptureMouse){
-      heatmapManager->set_Heatmap(cloud);
+      heatmapManager->make_cloud_heatmap(cloud);
       break;
     }
 

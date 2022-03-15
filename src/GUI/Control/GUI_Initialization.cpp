@@ -59,8 +59,11 @@ void GUI_Initialization::init_gui(){
   if(ImGui::Button("Tunel", ImVec2(100,0))){
     this->init_mode(6);
   }
-  if(ImGui::Button("IA module", ImVec2(100,0))){
+  if(ImGui::Button("Nuscene", ImVec2(100,0))){
     this->init_mode(7);
+  }
+  if(ImGui::Button("IA module", ImVec2(100,0))){
+    this->init_mode(8);
   }
 
   //---------------------------
@@ -116,7 +119,12 @@ void GUI_Initialization::init_mode(int mode){
       loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
       break;
     }
-    case 7:{//AI prediction
+    case 7:{//Nuscene
+      sceneManager->remove_cloud_all();
+      pathManager->loading_directoryFrames("/home/aether/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
+      break;
+    }
+    case 8:{//AI prediction
       sceneManager->remove_cloud_all();
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
       obstacleManager->add_obstacle_pred("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
