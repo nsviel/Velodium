@@ -34,13 +34,13 @@ GUI::GUI(GUI_node* node_gui){
   Configuration* configManager = node_engine->get_configManager();
 
   this->dimManager = node_engine->get_dimManager();
-  this->gui_moduleManager = node_gui->get_gui_moduleManager();
-  this->gui_winManager = node_gui->get_gui_winManager();
-  this->gui_controlManager = node_gui->get_gui_controlManager();
-  this->gui_optionManager = node_gui->get_gui_optionManager();
-  this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
-  this->gui_menuBarManager = node_gui->get_gui_menuBarManager();
-  this->gui_consolManager = node_gui->get_gui_consolManager();
+  this->gui_module = node_gui->get_gui_module();
+  this->gui_window = node_gui->get_gui_window();
+  this->gui_control = node_gui->get_gui_control();
+  this->gui_option = node_gui->get_gui_option();
+  this->gui_leftPanel = node_gui->get_gui_leftPanel();
+  this->gui_menuBar = node_gui->get_gui_menuBar();
+  this->gui_consol = node_gui->get_gui_consol();
 
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
@@ -122,13 +122,13 @@ void GUI::Gui_loop(){
   ImGui::NewFrame();
   //---------------------------
 
-  gui_consolManager->design_consol();
-  gui_menuBarManager->design_MenuBar();
-  gui_controlManager->make_control();
-  gui_winManager->window_Draw();
+  gui_consol->design_consol();
+  gui_menuBar->design_MenuBar();
+  gui_control->make_control();
+  gui_window->window_Draw();
 
   if(is_visualization){
-    gui_leftPanelManager->design_leftPanel();
+    gui_leftPanel->design_leftPanel();
   }
 
   this->Gui_Dimensions();
@@ -148,8 +148,8 @@ void GUI::Gui_render(){
 
 //Subfunctions
 void GUI::Gui_Dimensions(){
-  vec2 lbp_dim = gui_leftPanelManager->get_lbp_dim();
-  vec2 bp_dim = gui_consolManager->get_bp_dim();
+  vec2 lbp_dim = gui_leftPanel->get_lbp_dim();
+  vec2 bp_dim = gui_consol->get_bp_dim();
   ImGuiIO io = ImGui::GetIO();
   //---------------------------
 

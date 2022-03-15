@@ -229,13 +229,13 @@ void GUI_Obstacle::parameter_online(){
   //---------------------------
 
   //Online parameters
-  GUI_Player* gui_player = node_gui->get_gui_playerManager();
+  GUI_Player* gui_player = node_gui->get_gui_player();
   GUI_Dynamic* gui_dynamic = gui_player->get_gui_dynamic();
   gui_dynamic->parameter_online();
 
   //SLAM parameters
-  GUI_Slam* gui_slamManager = node_gui->get_gui_slamManager();
-  gui_slamManager->parameter_slam();
+  GUI_Slam* gui_slam = node_gui->get_gui_slam();
+  gui_slam->parameter_slam();
 
   //---------------------------
 }

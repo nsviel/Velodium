@@ -38,8 +38,8 @@ public:
   inline void set_backgroundColorPtr(vec3* value){this->backgColor = value;}
 
 private:
-  GUI_control* gui_controlManager;
-  GUI_option* gui_optionManager;
+  GUI_control* gui_control;
+  GUI_option* gui_option;
 
   Configuration* configManager;
   Scene* sceneManager;

@@ -34,7 +34,7 @@ GUI_option::GUI_option(GUI_node* node_gui){
   Load_node* node_load = node_engine->get_node_load();
 
   this->renderManager = node_engine->get_renderManager();
-  this->gui_controlManager = node_gui->get_gui_controlManager();
+  this->gui_control = node_gui->get_gui_control();
   this->glyphManager = node_engine->get_glyphManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
@@ -250,9 +250,9 @@ void GUI_option::option_parameters(){
     //---------------------------
 
     //cloud movement
-    float* transCoef = gui_controlManager->get_transCoef();
+    float* transCoef = gui_control->get_transCoef();
     ImGui::DragFloat("Translation", transCoef, 0.001, 0, 100, "%.4f");
-    float* rotatDegree = gui_controlManager->get_rotatDegree();
+    float* rotatDegree = gui_control->get_rotatDegree();
     ImGui::DragFloat("Rotation", rotatDegree, 0.5, 0, 90, "%.4f");
 
     //Point cloud scaling
@@ -376,7 +376,7 @@ void GUI_option::option_mode(){
     }
 
     //Mouse wheel mode
-    int* wheel_mode = gui_controlManager->get_mouseWheelMode();
+    int* wheel_mode = gui_control->get_mouseWheelMode();
     ImGui::Text("Mouse wheel");
     ImGui::Combo("##1", wheel_mode, "Frame ID\0Cloud rotation\0");
 

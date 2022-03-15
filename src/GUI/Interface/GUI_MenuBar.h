@@ -43,9 +43,9 @@ private:
   CoreGLengine* glManager;
 
   GUI_node* node_gui;
-  GUI_windows* gui_winManager;
+  GUI_windows* gui_window;
   GUI_option* optionManager;
-  GUI_leftPanel* gui_leftPanelManager;
+  GUI_leftPanel* gui_leftPanel;
   GUI_Dynamic* gui_dynamic;
   GUI_Initialization* gui_init;
 };

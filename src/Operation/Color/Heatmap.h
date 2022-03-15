@@ -31,9 +31,8 @@ public:
   void mode_It(Subset* subset);
 
   //Heatmap functions
-  void set_heatmap_mode(Subset* subset);
-  void set_heatmap(Subset* subset, vector<float>& v_in);
-  void unset_heatmap(Subset* subset);
+  void heatmap_set(Subset* subset, vector<float>& v_in);
+  void heatmap_unset(Subset* subset);
 
   //Plot functions
   void plot_colorPalette(Subset* subset);
@@ -52,7 +51,7 @@ private:
   vec2 range_norm;
   vec2 range_height;
   vec2 range_intensity;
-  
+
   bool is_normalization;
   int heatmap_mode;
 };

@@ -30,14 +30,13 @@ GUI_Color::GUI_Color(GUI_node* node_gui){
 }
 GUI_Color::~GUI_Color(){}
 
-
 void GUI_Color::colorization_choice(){
   //---------------------------
 
   int* color_mode = colorManager->get_color_mode();
   ImGui::RadioButton("Unicolor", color_mode, 0);
   ImGui::SameLine();
-  ImGui::RadioButton("Intensity", color_mode, 1);
+  ImGui::RadioButton("Intensity##0", color_mode, 1);
   ImGui::SameLine();
   ImGui::RadioButton("Heatmap", color_mode, 2);
 
@@ -60,7 +59,7 @@ void GUI_Color::option_intensity(){
   int max = (int) (intensity_range.y * 255);
 
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-  if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
+  if(ImGui::DragIntRange2("Intensity##1", &min, &max, 1, 0, 255, "%d", "%d")){
     vec2* range = heatmapManager->get_range_normalization();
     *range = vec2((float) (min / 255), (float) (max / 255));
   }
@@ -74,7 +73,7 @@ void GUI_Color::option_heatmap(){
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
   ImGui::RadioButton("Height", heatmap_mode, 0);
   ImGui::SameLine();
-  ImGui::RadioButton("Intensity", heatmap_mode, 1);
+  ImGui::RadioButton("Intensity##2", heatmap_mode, 1);
   ImGui::SameLine();
   ImGui::RadioButton("Distance", heatmap_mode, 2);
 
@@ -90,14 +89,13 @@ void GUI_Color::option_heatmap(){
   //Heatmap - Intensity
   if(*heatmap_mode == 1){
     //Set heatmap range
-    vec2 intensity_range = *heatmapManager->get_range_intensity();
-    int min = (int) (intensity_range.x * 255);
-    int max = (int) (intensity_range.y * 255);
+    vec2* intensity_range = heatmapManager->get_range_intensity();
+    int min = (int) (intensity_range->x * 255);
+    int max = (int) (intensity_range->y * 255);
 
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-      vec2* range = heatmapManager->get_range_intensity();
-      *range = vec2((float)min / 255, (float)max / 255);
+    if(ImGui::DragIntRange2("Intensity##3", &min, &max, 1, 0, 255, "%d", "%d")){
+      *intensity_range = vec2((float)min / 255, (float)max / 255);
     }
   }
 

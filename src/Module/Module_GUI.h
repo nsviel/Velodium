@@ -8,6 +8,7 @@
 #include "../GUI/GUI_node.h"
 #include "../Engine/Engine_node.h"
 #include "../Operation/Operation_node.h"
+#include "../Operation/Operation_GUI.h"
 #include "../common.h"
 
 
@@ -23,9 +24,10 @@ public:
     this->node_engine = node_gui->get_node_engine();
     this->node_ope = node_gui->get_node_ope();
 
-    this->gui_playerManager = new GUI_Player(this);
-    this->gui_slamManager = new GUI_Slam(this);
-    this->gui_node_interface = new GUI_Interface(this);
+    this->gui_operation = node_gui->get_gui_operation();
+    this->gui_player = new GUI_Player(this);
+    this->gui_slam = new GUI_Slam(this);
+    this->gui_interface = new GUI_Interface(this);
 
     this->module_velodyne = true;
     this->module_player = true;
@@ -47,7 +49,7 @@ public:
       // Dynamic & obstacle stuff
       if(module_player){
         if(ImGui::BeginTabItem("Player")){
-          gui_playerManager->design_player();
+          gui_player->design_player();
           ImGui::EndTabItem();
         }
       }
@@ -55,7 +57,7 @@ public:
       // Interface stuff
       if(module_velodyne){
         if(ImGui::BeginTabItem("Interface")){
-          gui_node_interface->design_Interface();
+          gui_interface->design_Interface();
           ImGui::EndTabItem();
         }
       }
@@ -63,7 +65,7 @@ public:
       // SLAM
       if(module_slam){
         if(ImGui::BeginTabItem("SLAM")){
-          gui_slamManager->design_SLAM();
+          gui_slam->design_SLAM();
           ImGui::EndTabItem();
         }
       }
@@ -77,7 +79,7 @@ public:
   void runtime(){
     //-------------------------------
 
-    gui_playerManager->runtime();
+    gui_player->runtime();
 
     //-------------------------------
   }
@@ -87,9 +89,10 @@ public:
   inline Module_node* get_node_module(){return node_module;}
 
   inline GUI_node* get_node_gui(){return node_gui;}
-  inline GUI_Slam* get_gui_slamManager(){return gui_slamManager;}
-  inline GUI_Player* get_gui_playerManager(){return gui_playerManager;}
-  inline GUI_Interface* get_gui_node_interface(){return gui_node_interface;}
+  inline GUI_Slam* get_gui_slam(){return gui_slam;}
+  inline GUI_Player* get_gui_player(){return gui_player;}
+  inline GUI_Interface* get_gui_interface(){return gui_interface;}
+  inline GUI_operation* get_gui_operation(){return gui_operation;}
 
 private:
   Module_node* node_module;
@@ -97,9 +100,10 @@ private:
   Operation_node* node_ope;
 
   GUI_node* node_gui;
-  GUI_Player* gui_playerManager;
-  GUI_Slam* gui_slamManager;
-  GUI_Interface* gui_node_interface;
+  GUI_Player* gui_player;
+  GUI_Slam* gui_slam;
+  GUI_Interface* gui_interface;
+  GUI_operation* gui_operation;
 
   bool module_velodyne;
   bool module_player;

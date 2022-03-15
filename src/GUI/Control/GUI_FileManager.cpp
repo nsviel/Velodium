@@ -20,7 +20,7 @@ GUI_fileManager::GUI_fileManager(GUI_node* node_gui){
 
   Engine_node* node_engine = node_gui->get_node_engine();
 
-  this->gui_winManager = node_gui->get_gui_winManager();
+  this->gui_window = node_gui->get_gui_window();
   this->dimManager = node_engine->get_dimManager();
   this->sceneManager = node_engine->get_sceneManager();
 

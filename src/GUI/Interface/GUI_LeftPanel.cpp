@@ -19,9 +19,9 @@ GUI_leftPanel::GUI_leftPanel(GUI_node* node_gui){
   Engine_node* node_engine = node_gui->get_node_engine();
 
   this->dimManager = node_engine->get_dimManager();
-  this->gui_winManager = node_gui->get_gui_winManager();
+  this->gui_window = node_gui->get_gui_window();
   this->gui_fileManager = node_gui->get_gui_fileManager();
-  this->gui_moduleManager = node_gui->get_gui_moduleManager();
+  this->gui_module = node_gui->get_gui_module();
 
   //-------------------------------
 }
@@ -103,7 +103,7 @@ void GUI_leftPanel::panel_bot(){
   ImGui::Begin("LeftPanel##botInner", NULL, window_flags);
 
   //Working areas
-  gui_moduleManager->display_moduleTabs();
+  gui_module->display_moduleTabs();
 
   ImGui::PopStyleVar();
 

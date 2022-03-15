@@ -33,8 +33,8 @@ public:
 private:
   Dimension* dimManager;
 
-  GUI_windows* gui_winManager;
-  GUI_module* gui_moduleManager;
+  GUI_windows* gui_window;
+  GUI_module* gui_module;
   GUI_fileManager* gui_fileManager;
 
   vec2 dim_lbp;

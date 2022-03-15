@@ -30,9 +30,6 @@
    },
    "module" : {
       "with_camera_follow" : true,
-      "with_color_heatmap" : false,
-      "with_color_intensity" : false,
-      "with_color_unicolor" : true,
       "with_cylinder_cleaning" : false,
       "with_slam" : true
    },
@@ -42,6 +39,7 @@
       "cloud_movement" : true,
       "cloud_rotation" : 5,
       "cloud_translation" : 0.01,
+      "color_mode" : 0,
       "path_media" : "../media/",
       "point_size" : 2
    },

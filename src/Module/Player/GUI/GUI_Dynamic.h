@@ -12,6 +12,7 @@ class Offline;
 class Online;
 class Interface_node;
 class GUI_Interface;
+class GUI_Color;
 
 
 class GUI_Dynamic
@@ -40,7 +41,8 @@ private:
   Interface_node* node_interface;
   Offline* offlineManager;
   Online* onlineManager;
-  GUI_Interface* gui_node_interface;
+  GUI_Interface* gui_interface;
+  GUI_Color* gui_color;
 
   int item_width;
 };

@@ -121,7 +121,7 @@ void file_PCAP::Loader_vlp16(string pathFile){
 
       for(int j=0; j<frame->xyz.size(); j++){
         frame_data->location.push_back(frame->xyz[j]);
-        frame_data->intensity.push_back(frame->I[j] / 255);
+        frame_data->intensity.push_back(frame->I[j]);
         frame_data->timestamp.push_back(frame->t[j]);
         frame_data->azimuth.push_back(frame->A[j]);
         frame_data->distance.push_back(frame->R[j]);

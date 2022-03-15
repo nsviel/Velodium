@@ -12,8 +12,10 @@
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Operation_node.h"
+#include "../../../Operation/Operation_GUI.h"
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Transformation/Filter.h"
+#include "../../../Operation/Color/GUI/GUI_Color.h"
 
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
@@ -27,6 +29,7 @@ GUI_Dynamic::GUI_Dynamic(GUI_module* node_gui){
   Operation_node* node_ope = node_gui->get_node_ope();
   Module_node* node_module = node_gui->get_node_module();
   Player_node* node_player = node_module->get_node_player();
+  GUI_operation* gui_operation = node_gui->get_gui_operation();
 
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
@@ -34,6 +37,7 @@ GUI_Dynamic::GUI_Dynamic(GUI_module* node_gui){
   this->offlineManager = node_player->get_offlineManager();
   this->node_interface = node_module->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
+  this->gui_color = gui_operation->get_gui_color();
 
   this->item_width = 100;
 
@@ -300,6 +304,8 @@ void GUI_Dynamic::parameter_online(){
       ImGui::InputInt("Nb image", save_image_max);
     }
 
+    //Colorization
+    gui_color->colorization_choice();
 
     //Cylinder cleaning filter
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();

@@ -39,15 +39,15 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
 
   Engine_node* node_engine = node_gui->get_node_engine();
   Module_node* node_module = node_gui->get_node_module();
-  GUI_module* gui_moduleManager = node_gui->get_gui_moduleManager();
+  GUI_module* gui_module = node_gui->get_gui_module();
   Operation_node* node_ope = node_gui->get_node_ope();
-  GUI_Player* gui_player = gui_moduleManager->get_gui_playerManager();
+  GUI_Player* gui_player = gui_module->get_gui_player();
   Load_node* node_load = node_engine->get_node_load();
 
-  this->gui_init = node_gui->get_gui_initManager();
-  this->optionManager = node_gui->get_gui_optionManager();
-  this->gui_winManager = node_gui->get_gui_winManager();
-  this->gui_leftPanelManager = node_gui->get_gui_leftPanelManager();
+  this->gui_init = node_gui->get_gui_initialization();
+  this->optionManager = node_gui->get_gui_option();
+  this->gui_window = node_gui->get_gui_window();
+  this->gui_leftPanel = node_gui->get_gui_leftPanel();
   this->gui_dynamic = gui_player->get_gui_dynamic();
   this->sceneManager = node_engine->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();

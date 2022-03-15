@@ -20,8 +20,8 @@ Operation_node::Operation_node(Engine_node* node){
 
   this->fittingManager = new Fitting(this);
   this->attribManager = new Attribut(this);
-  this->colorManager = new Color(this);
   this->heatmapManager = new Heatmap(this);
+  this->colorManager = new Color(this);
   this->filterManager = new Filter(this);
   this->coordManager = new CoordTransform(this);
   this->selectionManager = new Selection(this);

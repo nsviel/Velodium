@@ -26,7 +26,7 @@ public:
 private:
   Scene* sceneManager;
   Dimension* dimManager;
-  GUI_windows* gui_winManager;
+  GUI_windows* gui_window;
 };
 
 #endif

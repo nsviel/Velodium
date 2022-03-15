@@ -12,6 +12,7 @@ class GUI_menuBar;
 class GUI_leftPanel;
 class GUI_consol;
 class GUI_module;
+class GUI_operation;
 class GUI_node;
 
 
@@ -35,13 +36,14 @@ public:
 
 private:
   Dimension* dimManager;
-  GUI_module* gui_moduleManager;
-  GUI_windows* gui_winManager;
-  GUI_control* gui_controlManager;
-  GUI_option* gui_optionManager;
-  GUI_leftPanel* gui_leftPanelManager;
-  GUI_menuBar* gui_menuBarManager;
-  GUI_consol* gui_consolManager;
+  GUI_module* gui_module;
+  GUI_operation* gui_operation;
+  GUI_windows* gui_window;
+  GUI_control* gui_control;
+  GUI_option* gui_option;
+  GUI_leftPanel* gui_leftPanel;
+  GUI_menuBar* gui_menuBar;
+  GUI_consol* gui_consol;
 
   bool is_visualization;
 };
