@@ -265,6 +265,33 @@ namespace{
     //-----------------------------
     return vec_out;
   }
+  template<typename Type> std::vector<Type> fct_normalize(std::vector<Type>& vec, float value_to_avoid){
+    std::vector<Type> vec_out(vec);
+    int size = vec.size();
+    //-----------------------------
+
+    //Retrieve min & max
+    Type min = vec[0];
+    Type max = vec[0];
+    for(int i=0; i<size; i++){
+      if(vec[i] != value_to_avoid){
+        if(vec[i] > max) max = vec[i];
+        if(vec[i] < min) min = vec[i];
+      }
+    }
+
+    //Normalization
+    for(int i=0; i<size; i++){
+      if(vec[i] != value_to_avoid){
+        vec_out[i] = (vec[i] - min) / (max - min);
+      }else{
+        vec_out[i] = vec[i];
+      }
+    }
+
+    //-----------------------------
+    return vec_out;
+  }
   template<typename Type> std::vector<Type> fct_normalize_01(std::vector<Type>& vec){
     std::vector<Type> vec_out(vec);
     int size = vec.size();

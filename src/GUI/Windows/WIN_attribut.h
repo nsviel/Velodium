@@ -8,7 +8,8 @@ class Attribut;
 class Transforms;
 class Glyphs;
 class Heatmap;
-class Operation_node;
+class GUI_node;
+class GUI_Color;
 class Color;
 
 
@@ -16,16 +17,16 @@ class WIN_attribut
 {
 public:
   //Constructor / Destructor
-  WIN_attribut(Operation_node* node_ope);
+  WIN_attribut(GUI_node* node_gui);
   ~WIN_attribut();
 
 public:
   void window_normal();
   void window_intensity();
   void window_color();
-  void window_heatmap();
 
 private:
+  GUI_Color* gui_color;
   Scene* sceneManager;
   Attribut* attribManager;
   Color* colorManager;

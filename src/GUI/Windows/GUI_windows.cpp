@@ -26,7 +26,7 @@ GUI_windows::GUI_windows(GUI_node* node_gui){
 
   this->win_opengl = new WIN_opengl(node_engine);
   this->win_operation = new WIN_operation(node_ope);
-  this->win_attribut = new WIN_attribut(node_ope);
+  this->win_attribut = new WIN_attribut(node_gui);
   this->win_cloud = new WIN_cloud(node_ope);
   this->win_loading = new WIN_loading(node_engine);
 
@@ -53,7 +53,6 @@ void GUI_windows::window_init(){
   window_tab.show_color = false;
   window_tab.show_selection = false;
   window_tab.show_fitting = false;
-  window_tab.show_heatmap = false;
   window_tab.show_shader = false;
 
   //---------------------------
@@ -77,7 +76,6 @@ void GUI_windows::window_Draw(){
   win_operation->window_fitting();
   win_operation->window_selection();
 
-  win_attribut->window_heatmap();
   win_attribut->window_normal();
   win_attribut->window_intensity();
   win_attribut->window_color();

@@ -54,14 +54,14 @@ void GUI_Color::option_intensity(){
   //---------------------------
 
   //Set heatmap range
-  vec2 intensity_range = *heatmapManager->get_range_intensity();
+  vec2 intensity_range = *colorManager->get_range_intensity();
   int min = (int) (intensity_range.x * 255);
   int max = (int) (intensity_range.y * 255);
 
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-  if(ImGui::DragIntRange2("Intensity##1", &min, &max, 1, 0, 255, "%d", "%d")){
-    vec2* range = heatmapManager->get_range_normalization();
-    *range = vec2((float) (min / 255), (float) (max / 255));
+  if(ImGui::DragIntRange2("Intensity##0001", &min, &max, 1, 0, 255, "%d", "%d")){
+    vec2* range = colorManager->get_range_intensity();
+    *range = vec2((float)min / 255, (float)max / 255);
   }
 
   //---------------------------
@@ -98,6 +98,10 @@ void GUI_Color::option_heatmap(){
       *intensity_range = vec2((float)min / 255, (float)max / 255);
     }
   }
+
+  //Normalize palette
+  bool* normalizeON = heatmapManager->get_is_normalization();
+  ImGui::Checkbox("Normalized", normalizeON);
 
   //---------------------------
 }

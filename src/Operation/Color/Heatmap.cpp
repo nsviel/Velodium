@@ -199,8 +199,8 @@ void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
   float red, green, blue, alpha;
 
   vector<float> v_norm;
-  if(true){
-    v_norm = fct_normalize(v_in);
+  if(is_normalization){
+    v_norm = fct_normalize(v_in, -1);
   }else{
     v_norm = v_in;
   }

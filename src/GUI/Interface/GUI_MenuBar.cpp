@@ -160,11 +160,11 @@ void GUI_menuBar::MenuBar_icons(){
   if(ImGui::Button(ICON_FA_EYE, ImVec2(iconSize,iconSize))){
     if(!sceneManager->get_is_list_empty()){
       //Heatmap window
-      window_tab.show_heatmap = !window_tab.show_heatmap;
+      window_tab.show_color = !window_tab.show_color;
     }
   }
   if(ImGui::IsItemHovered()){
-    ImGui::SetTooltip("Heatmap");
+    ImGui::SetTooltip("Colorization");
   }
 
   //Camera

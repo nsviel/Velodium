@@ -32,11 +32,13 @@ public:
   string get_color_mode_name();
 
   inline int* get_color_mode(){return &color_mode;}
+  inline vec2* get_range_intensity(){return &range_intensity;}
 
 private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
 
+  vec2 range_intensity;
   int color_mode;
 };
 

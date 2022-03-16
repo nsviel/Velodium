@@ -27,6 +27,7 @@ Color::Color(Operation_node* node_ope){
   this->heatmapManager = node_ope->get_heatmapManager();
 
   this->color_mode = configManager->parse_json_i("parameter", "color_mode");
+  this->range_intensity = vec2(0.0f, 1.0f);
 
   //---------------------------
 }
@@ -70,8 +71,24 @@ void Color::color_intensity(Subset* subset){
   //---------------------------
 
   if(Is.size() != 0){
+    //Normalize intensity wrt range
+    vector<float> In;
+    for(int i=0; i<Is.size(); i++){
+      if(Is[i] < range_intensity.x || Is[i] > range_intensity.y){
+        In.push_back(-1);
+      }else{
+        In.push_back(Is[i]);
+      }
+    }
+    In = fct_normalize(In, -1);
+
+    //Apply intensity and discard for not-in-range intensities
     for(int i=0; i<RGB.size(); i++){
-      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
+      if(In[i] == -1){
+        RGB[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+      }else{
+        RGB[i] = vec4(In[i], In[i], In[i], 1.0f);
+      }
     }
   }
 

@@ -9,7 +9,9 @@
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Color/Color.h"
+#include "../../Operation/Color/GUI/GUI_Color.h"
 #include "../../Operation/Operation_node.h"
+#include "../../Operation/Operation_GUI.h"
 #include "../../Specific/fct_maths.h"
 
 #include "Window_table.h"
@@ -17,11 +19,14 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_attribut::WIN_attribut(Operation_node* node_ope){
+WIN_attribut::WIN_attribut(GUI_node* node_gui){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Operation_node* node_ope = node_gui->get_node_ope();
+  Engine_node* node_engine = node_gui->get_node_engine();
+  GUI_operation* gui_operation = node_gui->get_gui_operation();
 
+  this->gui_color = gui_operation->get_gui_color();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
@@ -311,159 +316,16 @@ void WIN_attribut::window_color(){
   Cloud* cloud = sceneManager->get_cloud_selected();
 
   if(window_tab.show_color && cloud != nullptr){
-    ImGui::Begin("Color", &window_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Colorization", &window_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
-    //Color channel
-    ImGui::Text("Color channel");
-    static int e = 0;
-    ImGui::Separator();
-    ImGui::Columns(2);
-    ImGui::Text("Selected cloud"); ImGui::NextColumn();
-    ImGui::Text("All cloud"); ImGui::NextColumn();
-    if(ImGui::RadioButton("I    ##1", &e, 1)){
-      if(subset->I.size() != 0){
-        sceneManager->update_subset_IntensityToColor(subset);
-      }
-    } ImGui::NextColumn();
-    if(ImGui::RadioButton("I    ##2", &e, 2)){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        if(subset->I.size() != 0){
-          sceneManager->update_subset_IntensityToColor(subset);
-        }
-      }
-    } ImGui::NextColumn();
-    if(ImGui::RadioButton("RGB  ##1", &e, 3)){
-      if(subset->has_color){
-        subset->RGB = subset->RGB;
-        sceneManager->update_subset_color(subset);
-      }
-    } ImGui::NextColumn();
-    if(ImGui::RadioButton("RGB  ##2", &e, 4)){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        if(subset->has_color){
-          subset->RGB = subset->RGB;
-          sceneManager->update_subset_color(subset);
-        }
-      }
-    } ImGui::NextColumn();
-    if(ImGui::RadioButton("RGB*I##1", &e, 5)){
-      if(subset->I.size() != 0 && subset->has_color){
-        colorManager->set_color_enhanced(cloud);
-      }else{
-        cout<<"Selected cloud: I="<<subset->I.size()<<" | Color="<<subset->has_color<<endl;
-      }
-    } ImGui::NextColumn();
-    if(ImGui::RadioButton("RGB*I##2", &e, 6)){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        if(subset->I.size() != 0 && subset->has_color){
-          colorManager->set_color_enhanced(cloud);
-        }
-      }
-    } ImGui::NextColumn();
-    ImGui::Columns(1);
-    ImGui::Separator();
-
-    //Color functions
-    if(ImGui::Button("Supress color all clouds", ImVec2(150,0))){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-      for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
-
-        for(int i=0;i<list_cloud->size();i++){
-          Subset* subset = sceneManager->get_subset(cloud,i);
-          if(subset->has_color){
-            subset->RGB.clear();
-          }
-          subset->has_color = false;
-        }
-
-        sceneManager->update_cloud_dataFormat(cloud);
-      }
-    }
-    if(ImGui::Button("Random color for all points", ImVec2(150,0))){
-      colorManager->set_color_random(cloud);
-      sceneManager->update_cloud_color(cloud);
-    }
+    gui_color->colorization_choice();
 
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
       window_tab.show_color = false;
-    }
-    ImGui::End();
-  }
-}
-void WIN_attribut::window_heatmap(){
-  if(window_tab.show_heatmap){
-    ImGui::Begin(ICON_FA_EYE " Heatmap", &window_tab.show_heatmap, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
-    //---------------------------
-
-    //Apply heatMap on one cloud
-    if(ImGui::Button("Apply", ImVec2(75,0))){
-      if(cloud != nullptr){
-        heatmapManager->make_cloud_heatmap(cloud);
-      }
-    }
-    ImGui::SameLine();
-
-    //Heatmap all clouds
-    static bool heatAll = false;
-    if(ImGui::Button("Apply all", ImVec2(75,0))){
-      if(cloud != nullptr){
-        heatAll = !heatAll;
-        heatmapManager->make_heatmap_all(heatAll);
-      }
-    }
-
-    //Select heatmap channel
-    static int style_idx = 0;
-
-    int* HMmode = heatmapManager->get_heatmap_mode();
-    ImGui::SetNextItemWidth(75);
-    ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
-    ImGui::SameLine();
-
-    //Normalize palette
-    bool* normalizeON = heatmapManager->get_is_normalization();
-    ImGui::Checkbox("Normalized", normalizeON);
-
-    //Intensity range configuration
-    if(*HMmode == 1){
-      //Set heatmap range
-      vec2 heatmap_range = *heatmapManager->get_range_normalization();
-      int min = (int) (heatmap_range.x * 255);
-      int max = (int) (heatmap_range.y * 255);
-
-      if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-        vec2* range = heatmapManager->get_range_normalization();
-        *range = vec2((float)min / 255, (float)max / 255);
-      }
-    }
-
-    //Display color palette
-    if(ImGui::Button("Palette", ImVec2(75,0))){
-      if(cloud != nullptr && cloud->heatmap){
-        heatmapManager->plot_colorPalette(subset);
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      window_tab.show_heatmap = false;
     }
     ImGui::End();
   }

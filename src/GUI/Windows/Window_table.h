@@ -13,7 +13,6 @@ struct Window_tab{
   bool show_fitting;
   bool show_saving;
   bool show_modifyFileInfo;
-  bool show_heatmap;
   bool show_extractCloud;
   bool show_cutCloud;
   bool show_normal;
