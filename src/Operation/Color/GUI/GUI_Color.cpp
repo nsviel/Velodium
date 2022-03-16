@@ -31,6 +31,7 @@ GUI_Color::GUI_Color(GUI_node* node_gui){
 GUI_Color::~GUI_Color(){}
 
 void GUI_Color::colorization_choice(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Colorization");
   //---------------------------
 
   int* color_mode = colorManager->get_color_mode();
@@ -49,6 +50,9 @@ void GUI_Color::colorization_choice(){
   if(*color_mode == 2){
     this->option_heatmap();
   }
+
+  //---------------------------
+  ImGui::Separator();
 }
 void GUI_Color::option_intensity(){
   //---------------------------
@@ -102,6 +106,30 @@ void GUI_Color::option_heatmap(){
   //Normalize palette
   bool* normalizeON = heatmapManager->get_is_normalization();
   ImGui::Checkbox("Normalized", normalizeON);
+
+  //---------------------------
+}
+void GUI_Color::heatmap(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Heatmap");
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Apply heatMap on one cloud
+  if(ImGui::Button("Apply", ImVec2(75,0))){
+    if(cloud != nullptr){
+      heatmapManager->make_cloud_heatmap(cloud);
+    }
+  }
+  ImGui::SameLine();
+
+  //Heatmap all clouds
+  static bool heatAll = false;
+  if(ImGui::Button("Apply all", ImVec2(75,0))){
+    if(cloud != nullptr){
+      heatAll = !heatAll;
+      heatmapManager->make_heatmap_all(heatAll);
+    }
+  }
 
   //---------------------------
 }

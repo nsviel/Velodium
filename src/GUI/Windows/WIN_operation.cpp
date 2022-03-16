@@ -456,9 +456,60 @@ void WIN_operation::window_transformation(){
         trans[2] = 0;
       }
     }
+    ImGui::Separator();
 
     //---------------------------
+    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Cloud rotation");
+    if(ImGui::Button("X ->")){
+      if(cloud != nullptr){
+        vec3 radian = transformManager->fct_degreeToRadian(vec3(90, 0, 0));
+        transformManager->make_rotation(subset, subset->COM, radian);
+        sceneManager->update_subset_location(subset);
+      }
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("X <-")){
+      if(cloud != nullptr){
+        vec3 radian = transformManager->fct_degreeToRadian(vec3(-90, 0, 0));
+        transformManager->make_rotation(subset, subset->COM, radian);
+        sceneManager->update_subset_location(subset);
+      }
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Y ->")){
+      if(cloud != nullptr){
+        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, 90, 0));
+        transformManager->make_rotation(subset, subset->COM, radian);
+        sceneManager->update_subset_location(subset);
+      }
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Y <-")){
+      if(cloud != nullptr){
+        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, -90, 0));
+        transformManager->make_rotation(subset, subset->COM, radian);
+        sceneManager->update_subset_location(subset);
+      }
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Z ->")){
+      if(cloud != nullptr){
+        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, 0, 90));
+        transformManager->make_rotation(subset, subset->COM, radian);
+        sceneManager->update_subset_location(subset);
+      }
+    }
+    ImGui::SameLine();
+    if(ImGui::Button("Z <-")){
+      if(cloud != nullptr){
+        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, 0, -90));
+        transformManager->make_rotation(subset, subset->COM, radian);
+        sceneManager->update_subset_location(subset);
+      }
+    }
     ImGui::Separator();
+
+    //---------------------------
     if(ImGui::Button("Close")){
       window_tab.show_transformation = false;
     }

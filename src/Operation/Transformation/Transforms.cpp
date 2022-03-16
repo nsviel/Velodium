@@ -36,16 +36,16 @@ void Transforms::make_translation(Cloud* cloud, vec3 trans){
 
   //---------------------------
 }
-void Transforms::make_rotation(Cloud* cloud, vec3 COM, vec3 angles){
+void Transforms::make_rotation(Cloud* cloud, vec3 COM, vec3 radian){
   //Rotation matrice creation - rx, ry, rz are in radian !
   glm::mat4 Rx(1.0);
   glm::mat4 Ry(1.0);
   glm::mat4 Rz(1.0);
   //---------------------------
 
-  float rx = angles.x;
-  float ry = angles.y;
-  float rz = angles.z;
+  float rx = radian.x;
+  float ry = radian.y;
+  float rz = radian.z;
 
   Rx[1][1]=cos(rx);
   Rx[2][1]=sin(rx);
@@ -70,7 +70,7 @@ void Transforms::make_rotation(Cloud* cloud, vec3 COM, vec3 angles){
 
     if(subset->visibility){
       subset->rotat *= rotation;
-      this->make_Transformation(subset, subset->root, rotation);
+      this->make_Transformation(subset, COM, rotation);
     }
 
   }
@@ -112,16 +112,16 @@ void Transforms::make_translation(Subset* subset, vec3 trans){
   subset->trans *= translation;
   this->make_Transformation(subset, subset->root, translation);
 }
-void Transforms::make_rotation(Subset* subset, vec3 COM, vec3 angles){
+void Transforms::make_rotation(Subset* subset, vec3 COM, vec3 radian){
   //Rotation matrice creation - rx, ry, rz are in radian !
   glm::mat4 Rx(1.0);
   glm::mat4 Ry(1.0);
   glm::mat4 Rz(1.0);
   //---------------------------
 
-  float rx = angles.x;
-  float ry = angles.y;
-  float rz = angles.z;
+  float rx = radian.x;
+  float ry = radian.y;
+  float rz = radian.z;
 
   Rx[1][1]=cos(rx);
   Rx[2][1]=sin(rx);
@@ -142,7 +142,7 @@ void Transforms::make_rotation(Subset* subset, vec3 COM, vec3 angles){
 
   //---------------------------
   subset->rotat *= rotation;
-  this->make_Transformation(subset, subset->root, rotation);
+  this->make_Transformation(subset, COM, rotation);
 }
 void Transforms::make_scaling(Subset* subset, float Sxyz){
   //---------------------------

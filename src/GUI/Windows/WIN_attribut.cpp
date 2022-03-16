@@ -321,6 +321,7 @@ void WIN_attribut::window_color(){
     //---------------------------
 
     gui_color->colorization_choice();
+    gui_color->heatmap();
 
     //---------------------------
     ImGui::Separator();

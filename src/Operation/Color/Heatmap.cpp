@@ -25,7 +25,7 @@ Heatmap::Heatmap(Operation_node* node_ope){
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
 
-  this->heatmap_mode = 0;
+  this->heatmap_mode = 1;
   this->is_normalization = true;
   this->range_norm = vec2(0.0f, 1.0f);
   this->range_height = vec2(-2.0f, 2.0f);
@@ -60,15 +60,14 @@ void Heatmap::make_cloud_heatmap(Cloud* cloud){
 
     //Apply heatmap
     if(cloud->heatmap == false){
-      this->make_subset_heatmap(subset);
       subset_buf->RGB = subset->RGB;
+      this->make_subset_heatmap(subset);
       cloud->heatmap = true;
     }
-
     //Reverse heatmap
-    if(cloud->heatmap == true){
-      this->heatmap_unset(subset);
-      subset_buf->RGB = subset_ini->RGB;
+    else{
+      //this->heatmap_unset(subset);
+      subset->RGB = subset_buf->RGB;
       cloud->heatmap = false;
     }
   }

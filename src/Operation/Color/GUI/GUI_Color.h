@@ -20,6 +20,7 @@ public:
   void colorization_choice();
   void option_intensity();
   void option_heatmap();
+  void heatmap();
 
 private:
   Scene* sceneManager;
