@@ -91,13 +91,7 @@ def lidar_2_thread():
     capture = pcapy.open_live(fct_param.lidar_2_dev, 1300 , 1 , 0)
     client_sock = fct_socket.create_client_socket()
 
-    #Main lidar loop
-    start = time.time()
-
     while(fct_param.run):
-        #Display number of captured packets
-        fct_display.loop_nb_packet();
-
         #Receive packet
         (header, packet) = capture.next()
         fct_param.lidar_2_nb_packet += 1
@@ -105,16 +99,5 @@ def lidar_2_thread():
         #write packet
         if(fct_param.with_writing):
             wrpcap(fct_param.path_lidar_2, packet, append=True)
-
-        # Send packet to velodium server
-        if(fct_param.with_forwarding):
-            #Remove network queue data
-            packet = packet[42:]
-
-            #Send Pur data
-            client_sock.sendto(packet, (fct_param.velo_IP, fct_param.velo_port))
-
-    end = time.time()
-    fct_param.duration = end - start
 
     #-------------

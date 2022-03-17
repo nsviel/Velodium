@@ -1,5 +1,4 @@
 #Files
-from src import fct_param
 from src import fct_file
 from src import fct_loop
 from src import fct_signal
@@ -19,7 +18,7 @@ fct_file.check_directories()
 fct_loop.lidar_2_loop()
 fct_loop.lidar_1_loop()
 
-#Show final stats
+# [STATS] Show final statistics
 fct_display.show_stat()
 
 #-------------
