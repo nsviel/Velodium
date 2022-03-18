@@ -26,7 +26,6 @@ public:
 public:
   //Recording functions
   void lidar_start_watcher();
-  //void lidar_create_subset(udpPacket* udp_packet);
   Subset* get_subset_capture();
 
   //LiDAR motor
@@ -48,6 +47,7 @@ public:
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
   inline bool* get_is_velo_capturing(){return &is_capturing;}
+  inline int* get_capture_port(){return &capture_port;}
   inline int get_rot_freq(){return rot_freq;}
   inline int get_rot_rpm(){return rot_rpm;}
   inline int get_fov_min(){return fov_min;}
@@ -65,6 +65,7 @@ private:
 
   int rot_freq, rot_rpm;
   int fov_min, fov_max;
+  int capture_port;
   bool is_newSubset;
   bool is_capturing;
   bool is_rotating;

@@ -21,7 +21,7 @@ GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
   this->scalaManager = captureManager->get_scalaManager();
   this->veloManager = captureManager->get_veloManager();
 
-  this->item_width = 150;
+  this->item_width = 100;
 
   //---------------------------
 }
@@ -44,11 +44,11 @@ void GUI_Lidar::design_Scala(){
   this->scala_state();
   this->scala_capture();
   this->scala_file();
+  this->scala_parameter();
 
   //---------------------------
   ImGui::Separator();
 }
-
 
 //Velodyne subfunctions
 void GUI_Lidar::velo_state(){
@@ -77,25 +77,25 @@ void GUI_Lidar::velo_capture(){
   if(is_capturing == false){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start capture", ImVec2(item_width + 7, 0))){
+    if(ImGui::Button("Start capture", ImVec2(157, 0))){
       captureManager->start_new_capture();
     }
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop capture", ImVec2(item_width + 7, 0))){
+    if(ImGui::Button("Stop capture", ImVec2(157, 0))){
       captureManager->stop_capture();
     }
   }
   ImGui::PopStyleColor(1);
 
   //LiDAR motor
-  if(ImGui::Button("Start motor", ImVec2(item_width/2, 0))){
+  if(ImGui::Button("Start motor", ImVec2(75, 0))){
     veloManager->lidar_start_motor();
   }
   //Stop button
   ImGui::SameLine();
-  if(ImGui::Button("Stop motor", ImVec2(item_width/2, 0))){
+  if(ImGui::Button("Stop motor", ImVec2(75, 0))){
     veloManager->lidar_stop_motor();
   }
 
@@ -105,9 +105,15 @@ void GUI_Lidar::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
 
+    //Connection port
+    int* velo_port = veloManager->get_capture_port();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputInt("Port", velo_port);
+
     //Set RPM parameter
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "RPM");
     static int rot_freq_desired = 10;
+    ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("##007", &rot_freq_desired, 5, 20, "%d Hz");
     ImGui::SameLine();
     ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%d rpm", rot_freq_desired * 60);
@@ -120,6 +126,7 @@ void GUI_Lidar::velo_parameter(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Field Of View");
     int fov_min = veloManager->get_fov_min();
     int fov_max = veloManager->get_fov_max();
+    ImGui::SetNextItemWidth(item_width);
     ImGui::DragIntRange2("##008", &fov_min, &fov_max, 0, 0, 359, "%d°", "%d°");
     if(ImGui::Button("Set##2", ImVec2(item_width, 0))){
       veloManager->lidar_set_cameraFOV(fov_min, fov_max);
@@ -141,11 +148,11 @@ void GUI_Lidar::scala_state(){
 void GUI_Lidar::scala_file(){
   //---------------------------
 
-  if(ImGui::Button("Load in dir", ImVec2(item_width/2, 0))){
+  if(ImGui::Button("Load in dir", ImVec2(75, 0))){
     //scalaManager->loading("");
   }
   ImGui::SameLine();
-  if(ImGui::Button("Load fast", ImVec2(item_width/2, 0))){
+  if(ImGui::Button("Load fast", ImVec2(75, 0))){
     //scalaManager->loading("/home/aether/Desktop/Velodium/media/scala");
   }
 
@@ -159,17 +166,29 @@ void GUI_Lidar::scala_capture(){
   if(is_capturing == false){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if(ImGui::Button("Start capture", ImVec2(item_width + 7, 0))){
+    if(ImGui::Button("Start capture", ImVec2(157, 0))){
       captureManager->start_new_capture();
     }
   }else{
     //Stop button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(200, 50, 50, 255));
-    if(ImGui::Button("Stop capture", ImVec2(item_width + 7, 0))){
+    if(ImGui::Button("Stop capture", ImVec2(157, 0))){
       captureManager->stop_capture();
     }
   }
   ImGui::PopStyleColor(1);
 
   //---------------------------
+}
+void GUI_Lidar::scala_parameter(){
+  if(ImGui::CollapsingHeader("Parameters##2")){
+    //---------------------------
+
+    //Connection port
+    int* scala_port = scalaManager->get_capture_port();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputInt("Port", scala_port);
+
+    //---------------------------
+  }
 }

@@ -31,6 +31,7 @@ public:
   inline Subset* get_subset_capture(){return subset_capture;}
   inline bool* get_is_newSubset(){return &is_new_subset;}
   inline bool* get_is_scala_capturing(){return &is_capturing;}
+  inline int* get_capture_port(){return &capture_port;}
 
 private:
   Extractor* extractManager;
@@ -41,6 +42,7 @@ private:
   bool flag_newScala;
   bool is_capturing;
   bool is_new_subset;
+  int capture_port;
   std::thread thread_scala;
 };
 

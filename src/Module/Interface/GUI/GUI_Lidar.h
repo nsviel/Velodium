@@ -30,6 +30,7 @@ public:
   void scala_state();
   void scala_file();
   void scala_capture();
+  void scala_parameter();
 
 private:
   Scala* scalaManager;

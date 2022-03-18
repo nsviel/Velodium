@@ -14,19 +14,17 @@ public:
 
 public:
   //Main functions
-  vector<int> read_UDP_packets();
+  vector<int> read_UDP_packets(int port);
 
   //Subfunctions
-  void server_binding();
+  void server_binding(int port);
   void server_read_data();
 
 private:
-  int PORT;
-  int BUF_SIZE;
-  int sock;
-  bool is_binded;
-
   vector<int> packet_dec;
+  bool is_binded;
+  int packet_size;
+  int sock;
 };
 
 #endif

@@ -33,6 +33,7 @@ Velodyne::Velodyne(Engine_node* node_engine){
   this->frameManager = new UDP_frame();
   this->subset_capture = new Subset();
 
+  this->capture_port = 2370;
   this->rot_freq = 0;
   this->rot_rpm = 0;
   this->fov_min = 0;
@@ -57,7 +58,7 @@ void Velodyne::lidar_start_watcher(){
   thread_capture = std::thread([&]() {
     while (is_capturing){
       //Get packet in decimal format
-      vector<int> packet_dec = udpServManager->read_UDP_packets();
+      vector<int> packet_dec = udpServManager->read_UDP_packets(capture_port);
 
       //Parse decimal packet into point cloud
       udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);

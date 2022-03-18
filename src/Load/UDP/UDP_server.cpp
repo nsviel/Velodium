@@ -15,8 +15,7 @@
 UDP_server::UDP_server(){
   //---------------------------
 
-  this->PORT = 2368;
-  this->BUF_SIZE = 1206;
+  this->packet_size = 1206;
   this->is_binded = false;
 
   //---------------------------
@@ -24,10 +23,10 @@ UDP_server::UDP_server(){
 UDP_server::~UDP_server(){}
 
 //Main function
-vector<int> UDP_server::read_UDP_packets(){
+vector<int> UDP_server::read_UDP_packets(int port){
   //---------------------------
 
-  this->server_binding();
+  this->server_binding(port);
   this->server_read_data();
 
   //---------------------------
@@ -35,7 +34,7 @@ vector<int> UDP_server::read_UDP_packets(){
 }
 
 //Subfunctions
-void UDP_server::server_binding(){
+void UDP_server::server_binding(int port){
   if(is_binded == false){
     //cout << "Connect to read UDP packets..." << endl;
     //---------------------------
@@ -52,7 +51,7 @@ void UDP_server::server_binding(){
     sockaddr_in addr;
     addr.sin_family    = AF_INET; // IPv4
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(PORT);
+    addr.sin_port = htons(port);
 
     // Bind the socket with the server address
     int binding = bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
@@ -69,13 +68,13 @@ void UDP_server::server_binding(){
   }
 }
 void UDP_server::server_read_data(){
-  char buffer[BUF_SIZE] = {0};
+  char buffer[packet_size] = {0};
   sockaddr_in from;
   socklen_t fromlen = sizeof(from);
   //---------------------------
 
   //The thread blocks here until a packet is received (MSG_WAITALL)
-  int udp_size = recvfrom(sock, buffer, BUF_SIZE, MSG_WAITALL, reinterpret_cast<sockaddr*>(&from), &fromlen);
+  int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&from), &fromlen);
 
   //Once packet received, process it
   packet_dec.clear();
