@@ -3,7 +3,6 @@
 //ID = subset absolute ID
 //map_frame_ID = frame ID / the relative slam ID
 
-#include "CT_ICP/SLAM_optim_ceres.h"
 #include "CT_ICP/SLAM_optim_gn.h"
 #include "CT_ICP/SLAM_assessment.h"
 #include "CT_ICP/SLAM_localMap.h"
@@ -32,7 +31,7 @@ Slam::Slam(Engine_node* node){
   this->glyphManager = node_engine->get_glyphManager();;
 
   this->normalManager = new SLAM_normal();
-  this->ceresManager = new SLAM_optim_ceres(normalManager);
+  //this->ceresManager = new SLAM_optim_ceres(normalManager);
   this->gnManager = new SLAM_optim_gn(normalManager);
   this->assessManager = new SLAM_assessment(this);
   this->mapManager = new SLAM_localMap();
@@ -269,7 +268,7 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
     if(solver_GN){
       gnManager->optim_GN(frame, frame_m1, map);
     }else if(solver_ceres){
-      ceresManager->optim_test(frame, frame_m1, map);
+      //ceresManager->optim_test(frame, frame_m1, map);
     }
   }
 

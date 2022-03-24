@@ -99,34 +99,36 @@ void CoreGLengine::init_OGL(){
   string win_title = configManager->parse_json_s("window", "title");
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
-  //GLFW
-  glfwInit();
-  if(forceVersion){
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
-  }
-  glfwWindowHint(GLFW_SAMPLES, 16);
-  glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+  if(is_visualization){
+    //GLFW
+    glfwInit();
+    if(forceVersion){
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
+    }
+    glfwWindowHint(GLFW_SAMPLES, 16);
+    glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-  window = glfwCreateWindow(resolution_width, resolution_height, "window", NULL, NULL);
-  if(window == NULL){
-    std::cout << "Failed to create GLFW window" << std::endl;
-    glfwTerminate();
-  }
+    window = glfwCreateWindow(resolution_width, resolution_height, "window", NULL, NULL);
+    if(window == NULL){
+      std::cout << "Failed to create GLFW window" << std::endl;
+      glfwTerminate();
+    }
 
-  glfwMakeContextCurrent(window);
-  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-  glfwSetWindowTitle(window, win_title.c_str());
+    glfwMakeContextCurrent(window);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetWindowTitle(window, win_title.c_str());
 
-  //Enable OpenGL alpha channel for RGB
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //Enable OpenGL alpha channel for RGB
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  //GLEW
-  glewInit();
-  if(coreGL_verbose){
-    std::cout << "GLEW initiated" << std::endl;
+    //GLEW
+    glewInit();
+    if(coreGL_verbose){
+      std::cout << "GLEW initiated" << std::endl;
+    }
   }
 
   //---------------------------

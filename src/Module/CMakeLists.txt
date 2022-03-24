@@ -1,7 +1,7 @@
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-find_package(Ceres REQUIRED)
 find_package(tsl-robin-map REQUIRED)
 find_package(libssh REQUIRED)
+#find_package(Ceres REQUIRED)
 
 set(ALL_LIBS
     Eigen3::Eigen

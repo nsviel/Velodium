@@ -1,3 +1,4 @@
+#ifdef USE_CERES
 #ifndef POINT_TO_PLANE_H
 #define POINT_TO_PLANE_H
 
@@ -33,4 +34,6 @@ protected:
 
 using PTPR = ceres::AutoDiffCostFunction<PTPF, 1, 4, 3>;
 
+
+#endif
 #endif

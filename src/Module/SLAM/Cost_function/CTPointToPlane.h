@@ -1,3 +1,4 @@
+#ifdef USE_CERES
 #ifndef CT_POINT_TO_PLANE_H
 #define CT_POINT_TO_PLANE_H
 
@@ -51,5 +52,5 @@ struct CTPTPF {
 using CTPTPR = ceres::AutoDiffCostFunction<CTPTPF, 1, 3, 3>;
 
 
-
+#endif
 #endif

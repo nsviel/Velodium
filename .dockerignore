@@ -4,4 +4,9 @@ media/point_cloud/frames_lot/*
 media/point_cloud/frames_other/*
 media/point_cloud/scala/*
 media/point_cloud/test/*
-
+doc
+doc/*
+docker
+docker/*
+Dockerfile
+.git

@@ -1,3 +1,4 @@
+#ifdef USE_CERES
 #include "SLAM_optim_ceres.h"
 
 #include "../../../Specific/fct_terminal.h"
@@ -410,3 +411,6 @@ void SLAM_optim_ceres::ceres_solve(ceres::Problem* ceres_problem){
 
   //---------------------------
 }
+
+
+#endif

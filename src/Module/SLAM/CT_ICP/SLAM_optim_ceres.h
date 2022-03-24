@@ -1,3 +1,4 @@
+#ifdef USE_CERES
 #ifndef SLAM_OPTIM_CERES_H
 #define SLAM_OPTIM_CERES_H
 
@@ -55,4 +56,5 @@ private:
 };
 
 
+#endif
 #endif

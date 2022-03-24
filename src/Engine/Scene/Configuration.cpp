@@ -312,7 +312,7 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   window["resolution_ratio"] = 4.0f/3.0f;
   window["background_color"] = 0.86f;
   window["forceVersion"] = false;
-  window["visualization"] = true;
+  window["visualization"] = false;
   root["window"] = window;
 
   //GUI

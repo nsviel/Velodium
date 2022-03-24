@@ -26,7 +26,7 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   Engine_node* node_engine = node_gui->get_node_engine();
 
   this->slamManager = node_module->get_slamManager();
-  this->ceresManager = slamManager->get_slam_ceres();
+  //this->ceresManager = slamManager->get_slam_ceres();
   this->gnManager = slamManager->get_slam_gn();
   this->normalManager = slamManager->get_slam_normal();
   this->assessManager = slamManager->get_slam_assess();
@@ -162,7 +162,7 @@ void GUI_Slam::parameter_optimization(){
     static int iter_max = 5;
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
-      ceresManager->set_iter_max(iter_max);
+      //ceresManager->set_iter_max(iter_max);
       gnManager->set_iter_max(iter_max);
     }
     if(ImGui::IsItemHovered()){

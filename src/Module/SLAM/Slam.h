@@ -11,7 +11,7 @@ class Engine_node;
 class Scene;
 class Glyphs;
 
-class SLAM_optim_ceres;
+//class SLAM_optim_ceres;
 class SLAM_optim_gn;
 class SLAM_assessment;
 class SLAM_localMap;
@@ -32,7 +32,7 @@ public:
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return normalManager;}
-  inline SLAM_optim_ceres* get_slam_ceres(){return ceresManager;}
+  //inline SLAM_optim_ceres* get_slam_ceres(){return ceresManager;}
   inline SLAM_optim_gn* get_slam_gn(){return gnManager;}
   inline SLAM_assessment* get_slam_assess(){return assessManager;}
   inline SLAM_localMap* get_slam_map(){return mapManager;}
@@ -63,7 +63,7 @@ private:
   Scene* sceneManager;
   Glyphs* glyphManager;
 
-  SLAM_optim_ceres* ceresManager;
+  //SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
   SLAM_assessment* assessManager;

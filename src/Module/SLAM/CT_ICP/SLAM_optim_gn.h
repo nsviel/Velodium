@@ -7,10 +7,6 @@
 
 #include "../../../common.h"
 
-#include <ceres/internal/eigen.h>
-#include <ceres/ceres.h>
-#include <ceres/rotation.h>
-
 
 class SLAM_optim_gn
 {
