@@ -99,16 +99,18 @@ void GUI_Lidar::velo_capture(){
     veloManager->lidar_stop_motor();
   }
 
+  //Connection port
+  int* velo_port = veloManager->get_capture_port();
+  ImGui::SetNextItemWidth(item_width);
+  if(ImGui::InputInt("Port", velo_port)){
+    veloManager->lidar_stop_watcher();
+  }
+
   //---------------------------
 }
 void GUI_Lidar::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
-
-    //Connection port
-    int* velo_port = veloManager->get_capture_port();
-    ImGui::SetNextItemWidth(item_width);
-    ImGui::InputInt("Port", velo_port);
 
     //Set RPM parameter
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "RPM");

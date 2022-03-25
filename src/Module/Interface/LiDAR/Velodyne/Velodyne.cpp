@@ -77,6 +77,15 @@ void Velodyne::lidar_start_watcher(){
 
   //---------------------------
 }
+void Velodyne::lidar_stop_watcher(){
+  //---------------------------
+
+  this->is_capturing = false;
+  *udpServManager->get_is_binded() = false;
+  udpServManager->server_unbinding();
+
+  //---------------------------
+}
 Subset* Velodyne::get_subset_capture(){
   //---------------------------
 
@@ -117,6 +126,7 @@ void Velodyne::lidar_start_motor(){
 void Velodyne::lidar_stop_motor(){
   //---------------------------
 
+  //Send stop motor command
   if(rot_freq > 0){
     int err = system("curl -s --connect-timeout 1 --data rpm=0 http://192.168.1.201/cgi/setting");
     rot_freq = 0;
@@ -127,9 +137,11 @@ void Velodyne::lidar_stop_motor(){
     sleep(1);
   }
 
+  //Set state
+  this->lidar_stop_watcher();
+  this->is_rotating = false;
+
   //---------------------------
-  is_rotating = false;
-  is_capturing = false;
 }
 
 //LiDAR status

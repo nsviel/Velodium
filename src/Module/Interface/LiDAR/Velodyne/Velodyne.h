@@ -26,6 +26,7 @@ public:
 public:
   //Recording functions
   void lidar_start_watcher();
+  void lidar_stop_watcher();
   Subset* get_subset_capture();
 
   //LiDAR motor
