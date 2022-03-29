@@ -182,6 +182,7 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   //Update number of cloud subset
   cloud->nb_subset = cloud->subset.size();
   cloud->ID_selected = subset->ID;
+  cloud->subset_selected = subset;
 
   //---------------------------
 }

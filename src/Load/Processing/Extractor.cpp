@@ -62,6 +62,7 @@ Cloud* Extractor::extractData(vector<dataFile*> data){
     Subset* subset_buf = new Subset(*subset);
     Subset* subset_ini = new Subset(*subset);
 
+    cloud->subset_selected = subset;
     cloud->subset.push_back(subset);
     cloud->subset_buffer.push_back(subset_buf);
     cloud->subset_init.push_back(subset_ini);

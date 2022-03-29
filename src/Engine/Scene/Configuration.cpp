@@ -139,8 +139,8 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Module
   Json::Value module;
-  module["with_slam"] = true;
-  module["with_camera_follow"] = true;
+  module["with_slam"] = false;
+  module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
   root["module"] = module;
 
