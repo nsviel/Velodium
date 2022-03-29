@@ -153,7 +153,6 @@ void GUI_Interface::mqtt_connection(){
   //Connect to MQTT broker
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Test Alert", ImVec2(item_width, 0))){
-    Subset* subset = sceneManager->get_subset_selected();
     mqttManager->mqtt_send_message(*message);
   }
   ImGui::PopStyleColor(1);

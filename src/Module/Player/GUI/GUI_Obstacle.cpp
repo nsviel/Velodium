@@ -61,24 +61,26 @@ void GUI_Obstacle::design_Obstacle(){
   //---------------------------
 }
 void GUI_Obstacle::runtime_display_naming(){
-  Subset* subset = sceneManager->get_subset_selected();
-  if(subset == nullptr) return;
-  this->label_ID = 0;
-  //---------------------------
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  if(cloud != nullptr){
+    //---------------------------
 
-  Obstac* obstacle_pr = &subset->obstacle_pr;
+    Subset* subset = cloud->subset_selected;
+    Obstac* obstacle_pr = &subset->obstacle_pr;
 
-  for(int j=0; j<obstacle_pr->name.size(); j++){
-    string name = obstacle_pr->name[j];
-    vec3 position = obstacle_pr->position[j];
-    position.z = obstacle_pr->dimension[j].z;
+    this->label_ID = 0;
+    for(int j=0; j<obstacle_pr->name.size(); j++){
+      string name = obstacle_pr->name[j];
+      vec3 position = obstacle_pr->position[j];
+      position.z = obstacle_pr->dimension[j].z;
 
-    this->compute_draw_text(name, position);
+      this->compute_draw_text(name, position);
 
-    this->label_ID++;
+      this->label_ID++;
+    }
+
+    //---------------------------
   }
-
-  //---------------------------
 }
 
 //Actions

@@ -40,6 +40,7 @@ struct Cloud{ //Global set of the cloud
   glm::vec4 unicolor;
 
   //Data
+  Subset* subset_selected;
   std::list<Subset*> subset;
   std::list<Subset*> subset_voxel;
   std::list<Subset*> subset_buffer;

@@ -350,8 +350,8 @@ void GUI_Slam::statistics(){
   int nb_residual = 0;
 
   if(!sceneManager->get_is_list_empty()){
-    Subset* subset = sceneManager->get_subset_selected();
-    Frame* frame = &subset->frame;
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Frame* frame = &cloud->subset_selected->frame;
 
     time = frame->time_slam;
     trans_abs = frame->trans_abs;

@@ -163,7 +163,7 @@ void WIN_cloud::window_asciiData(){
   if(window_tab.show_asciiData){
     ImGui::Begin("Data", &window_tab.show_asciiData);
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
 
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->RGB;
@@ -236,7 +236,7 @@ void WIN_cloud::window_asciiData(){
 
 //Sub functions
 void WIN_cloud::cloud_stats_location(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   vector<vec3>& XYZ = subset->xyz;
   vec3 XYZ_COM = subset->COM;
   vec3 XYZ_Min = subset->min;
@@ -265,7 +265,7 @@ void WIN_cloud::cloud_stats_location(Cloud* cloud){
   }
 }
 void WIN_cloud::cloud_stats_intensity(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   vector<float>& Is = subset->I;
   //---------------------------
 
@@ -284,7 +284,7 @@ void WIN_cloud::cloud_stats_intensity(Cloud* cloud){
   }
 }
 void WIN_cloud::cloud_stats_distance(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   vector<float>& dist = subset->R;
   //---------------------------
 
@@ -303,7 +303,7 @@ void WIN_cloud::cloud_stats_distance(Cloud* cloud){
   cout<<"__________"<<endl;
 }
 void WIN_cloud::cloud_stats_cosIt(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   vector<float>& cosIt =  subset->cosIt;
   vector<float>& It =  subset->It;
   //---------------------------

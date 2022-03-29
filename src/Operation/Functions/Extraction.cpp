@@ -32,7 +32,7 @@ Extraction::~Extraction(){}
 
 //Extraction
 void Extraction::fct_extractCloud(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   //---------------------------
 
@@ -89,7 +89,7 @@ void Extraction::fct_extractCloud(Cloud* cloud){
   }
 }
 void Extraction::fct_extractSelected(Cloud* cloud){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   //---------------------------
 
@@ -170,7 +170,7 @@ void Extraction::fct_cutCloud_all(){
   for(int i=0;i<list_cloud->size();i++){
     //Select ieme Point Cloud
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
 
     vector<vec3>& XYZ = subset->xyz;
     vector<int> idx;
@@ -392,7 +392,7 @@ void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
 }
 void Extraction::set_AABB_min(vec3 min_in){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   //---------------------------
 
@@ -424,7 +424,7 @@ void Extraction::set_AABB_min(vec3 min_in){
 }
 void Extraction::set_AABB_max(vec3 max_in){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   //---------------------------
 

@@ -33,7 +33,7 @@ void Attribut::compute_cloudAttributs_all(){
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     this->compute_cloudAttributs(subset);
   }
 
@@ -44,7 +44,7 @@ void Attribut::compute_cloudAttributs_list(list<Cloud*>* list){
 
   for(int i=0;i<list->size();i++){
     Cloud* cloud = *next(list->begin(),i);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     this->compute_cloudAttributs(subset);
   }
 
@@ -347,7 +347,7 @@ void Attribut::cloudsData(){
   myfile << "\n";
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_selected_init();
 
     if(subset->name.find("rdm") != std::string::npos){
@@ -588,7 +588,7 @@ void Attribut::compute_normals_planFitting(Subset* subset){
 void Attribut::compute_normals_invert(){
   if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_selected_init();
     vector<vec3>& normals = subset->N;
     //---------------------------
@@ -646,7 +646,7 @@ void Attribut::compute_checkForNan(Subset* subset){
 void Attribut::compute_intensityInversion(){
   if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     if(subset->I.size() != 0){
@@ -703,7 +703,7 @@ void Attribut::fct_convert2048to255(Subset* subset){
 void Attribut::fct_moins(){
   if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     vector<float>& Is = subset->I;
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->RGB;
@@ -720,7 +720,7 @@ void Attribut::fct_moins(){
 }
 void Attribut::fct_IsRange(vec2 range){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   vector<float>& Is = subset->I;
   const vector<float>& Is_ini = subset_init->I;
@@ -740,7 +740,7 @@ void Attribut::fct_IsRange(vec2 range){
 }
 vec2 Attribut::get_IsRange(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   vector<float>& Is = subset->I;
   //---------------------------
 

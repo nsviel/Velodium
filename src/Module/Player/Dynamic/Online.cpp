@@ -265,19 +265,15 @@ void Online::cloud_size_controler(Cloud* cloud){
 void Online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
-
-  //Unset alll other subset visibility
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset_loop = sceneManager->get_subset(cloud, i);
-    subset_loop->visibility = false;
-  }
-
+  
   //Set visibility just for wanted subsets
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset_loop = sceneManager->get_subset(cloud, i);
+    Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset_loop->ID > ID_subset - visibility_range && subset_loop->ID <= ID_subset){
-      subset_loop->visibility = true;
+    if(subset->ID > ID_subset - visibility_range && subset->ID <= ID_subset){
+      subset->visibility = true;
+    }else{
+      subset->visibility = false;
     }
   }
 

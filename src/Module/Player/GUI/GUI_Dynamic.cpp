@@ -82,7 +82,7 @@ void GUI_Dynamic::runtime_player_mouse(){
 void GUI_Dynamic::player_run(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Timeline");
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   //---------------------------
 
   //Display set of player buttons
@@ -178,7 +178,7 @@ void GUI_Dynamic::player_selection(){
   //---------------------------
 
   if(cloud != nullptr && cloud->nb_subset > 2){
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     Subset* subset_first = sceneManager->get_subset(cloud, 0);
     Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
     int subset_selected_ID = cloud->ID_selected;
@@ -201,7 +201,7 @@ void GUI_Dynamic::player_selection(){
 void GUI_Dynamic::parameter_offline(){
   if(ImGui::CollapsingHeader("Offline params")){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     bool* with_restart = offlineManager->get_with_restart();
@@ -260,7 +260,7 @@ void GUI_Dynamic::parameter_offline(){
 void GUI_Dynamic::parameter_online(){
   if(ImGui::CollapsingHeader("Parameter - online")){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     //SLAM activated at each frame

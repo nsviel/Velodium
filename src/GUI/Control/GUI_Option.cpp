@@ -146,7 +146,6 @@ void GUI_option::option_glyphs(){
 void GUI_option::option_heatmap(){
   if(ImGui::CollapsingHeader("Heatmap")){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = sceneManager->get_subset_selected();
     //---------------------------
 
     //Heatmap
@@ -178,7 +177,7 @@ void GUI_option::option_heatmap(){
     //Display palette color
     if(ImGui::Button("Palette", ImVec2(75,0))){
       if(cloud != nullptr && cloud->heatmap){
-        heatmapManager->plot_colorPalette(subset);
+        heatmapManager->plot_colorPalette(cloud->subset_selected);
       }
     }
 

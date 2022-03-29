@@ -239,7 +239,6 @@ void GUI_control::control_keyboard_translation(){
 
   for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
     if(!io.MouseDown[1] && !io.WantCaptureMouse && cloud != nullptr){
-      Subset* subset = sceneManager->get_subset_selected();
       float transCoef = cloud_trans_speed;
 
       //Shift speed up
@@ -251,8 +250,8 @@ void GUI_control::control_keyboard_translation(){
       if(io.KeysDown[87]){
         vec3 translation = vec3(transCoef,0,0);
 
-        transformManager.make_translation(subset, translation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_translation(cloud->subset_selected, translation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -261,8 +260,8 @@ void GUI_control::control_keyboard_translation(){
       if(io.KeysDown[83]){
         vec3 translation = vec3(-transCoef,0,0);
 
-        transformManager.make_translation(subset, translation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_translation(cloud->subset_selected, translation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -271,8 +270,8 @@ void GUI_control::control_keyboard_translation(){
       if(io.KeysDown[68]){
         vec3 translation = vec3(0,transCoef,0);
 
-        transformManager.make_translation(subset, translation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_translation(cloud->subset_selected, translation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -281,8 +280,8 @@ void GUI_control::control_keyboard_translation(){
       if(io.KeysDown[65]){
         vec3 translation = vec3(0,-transCoef,0);
 
-        transformManager.make_translation(subset, translation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_translation(cloud->subset_selected, translation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -291,8 +290,8 @@ void GUI_control::control_keyboard_translation(){
       if(io.KeysDown[81]){
         vec3 translation = vec3(0,0,transCoef);
 
-        transformManager.make_translation(subset, translation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_translation(cloud->subset_selected, translation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -301,8 +300,8 @@ void GUI_control::control_keyboard_translation(){
       if(io.KeysDown[69]){
         vec3 translation = vec3(0,0,-transCoef);
 
-        transformManager.make_translation(subset, translation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_translation(cloud->subset_selected, translation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -312,8 +311,8 @@ void GUI_control::control_keyboard_translation(){
         float r = cloud_rotat_degree*M_PI/180;
         vec3 rotation = vec3(0,0,r);
 
-        transformManager.make_rotation(subset, vec3(0,0,0), rotation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_rotation(cloud->subset_selected, vec3(0,0,0), rotation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;
@@ -323,8 +322,8 @@ void GUI_control::control_keyboard_translation(){
         float r = cloud_rotat_degree*M_PI/180;
         vec3 rotation = vec3(0,0,-r);
 
-        transformManager.make_rotation(subset, vec3(0,0,0), rotation);
-        sceneManager->update_subset_location(subset);
+        transformManager.make_rotation(cloud->subset_selected, vec3(0,0,0), rotation);
+        sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);
 
         break;

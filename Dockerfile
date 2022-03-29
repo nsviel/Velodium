@@ -23,6 +23,12 @@ RUN cmake .. && make -j4
 EXPOSE 2370
 VOLUME /app/media/data
 
+# Env vars for the nvidia-container-runtime.
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
+ENV MESA_GL_VERSION_OVERRIDE=3.3
+ENV LIBGL_ALWAYS_SOFTWARE=1
+
 # Run application
-CMD ["./executable", "train"]
+CMD ["./executable"]
 

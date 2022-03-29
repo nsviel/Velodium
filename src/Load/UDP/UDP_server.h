@@ -18,7 +18,10 @@ public:
 
   //Subfunctions
   void server_binding(int port);
+  void server_unbinding();
   void server_read_data();
+
+  inline bool* get_is_binded(){return &is_binded;}
 
 private:
   vector<int> packet_dec;

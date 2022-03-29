@@ -271,7 +271,7 @@ void WIN_loading::loading_file_pcap(){
 
 void WIN_loading::saving_action(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->subset_selected;
   //---------------------------
 
   //Save subset

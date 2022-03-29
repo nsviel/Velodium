@@ -46,7 +46,7 @@ void WIN_attribut::window_normal(){
 
   if(window_tab.show_normal && cloud != nullptr){
     ImGui::Begin("Attributs", &window_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
     //---------------------------
 
@@ -80,7 +80,7 @@ void WIN_attribut::window_normal(){
     if(ImGui::Button("Compute", ImVec2(200,0))){
       if(cloud != nullptr){
         //---------------------------
-        Subset* subset = sceneManager->get_subset_selected();
+        Subset* subset = cloud->subset_selected;
         Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
 
         if(normalMethod == 0){
@@ -204,7 +204,7 @@ void WIN_attribut::window_intensity(){
 
   if(window_tab.show_intensity && cloud != nullptr){
     ImGui::Begin("Intensity", &window_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_selected_init();
     //---------------------------
 
@@ -317,7 +317,7 @@ void WIN_attribut::window_color(){
 
   if(window_tab.show_color && cloud != nullptr){
     ImGui::Begin("Colorization", &window_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     gui_color->colorization_choice();

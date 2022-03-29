@@ -67,6 +67,14 @@ void UDP_server::server_binding(int port){
 
   }
 }
+void UDP_server::server_unbinding(){
+  //---------------------------
+
+  this->is_binded = false;
+  close(sock);
+
+  //---------------------------
+}
 void UDP_server::server_read_data(){
   char buffer[packet_size] = {0};
   sockaddr_in from;

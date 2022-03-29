@@ -159,8 +159,7 @@ void Glyphs::runtime_glyph_subset(Subset* subset){
 }
 void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
   Scene* sceneManager = node_engine->get_sceneManager();
-  Subset* subset_selected = sceneManager->get_subset_selected();
-  if(subset_ID != subset_selected->ID || subset_ID < 2) return;
+  if(subset_ID != cloud->subset_selected->ID || subset_ID < 2) return;
   //---------------------------
 
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 2);
