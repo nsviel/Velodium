@@ -15,7 +15,7 @@ class Glyphs;
 class SLAM_optim_gn;
 class SLAM_assessment;
 class SLAM_localMap;
-class SLAM_configuration;
+class SLAM_parameter;
 
 
 class Slam
@@ -36,7 +36,7 @@ public:
   inline SLAM_optim_gn* get_slam_gn(){return gnManager;}
   inline SLAM_assessment* get_slam_assess(){return assessManager;}
   inline SLAM_localMap* get_slam_map(){return mapManager;}
-  inline SLAM_configuration* get_slam_config(){return configManager;}
+  inline SLAM_parameter* get_slam_param(){return paramManager;}
   inline SLAM_assessment* get_assessManager(){return assessManager;}
 
   inline bool* get_verbose(){return &verbose;}
@@ -68,7 +68,7 @@ private:
   SLAM_normal* normalManager;
   SLAM_assessment* assessManager;
   SLAM_localMap* mapManager;
-  SLAM_configuration* configManager;
+  SLAM_parameter* paramManager;
 
   bool ID_all;
   bool solver_GN, solver_ceres;

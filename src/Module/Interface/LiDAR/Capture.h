@@ -50,8 +50,7 @@ private:
   Scala* scalaManager;
   Velodyne* veloManager;
 
-  bool lidar_velodyne;
-  bool lidar_scala;
+  string lidar_model;
   bool is_capturing;
   bool is_new_capture;
   int ID_capture;

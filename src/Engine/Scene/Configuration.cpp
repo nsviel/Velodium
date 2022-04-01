@@ -146,8 +146,7 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Interface
   Json::Value interface;
-  interface["lidar_scala"] = false;
-  interface["lidar_velodyne"] = true;
+  interface["lidar_model"] = "velodyne_vlp16";
   interface["with_prediction"] = false;
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
@@ -218,8 +217,7 @@ void Configuration::preconf_capture(Json::Value& root){
 
   //Interface
   Json::Value interface;
-  interface["lidar_scala"] = false;
-  interface["lidar_velodyne"] = true;
+  interface["lidar_model"] = "velodyne_vlp16";
   interface["with_prediction"] = true;
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
@@ -290,8 +288,7 @@ void Configuration::preconf_AI_module(Json::Value& root){
 
   //Interface
   Json::Value interface;
-  interface["lidar_scala"] = false;
-  interface["lidar_velodyne"] = true;
+  interface["lidar_model"] = "velodyne_vlp64";
   interface["with_prediction"] = true;
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
@@ -312,7 +309,7 @@ void Configuration::preconf_WP4_car(Json::Value& root){
   window["resolution_ratio"] = 4.0f/3.0f;
   window["background_color"] = 0.86f;
   window["forceVersion"] = false;
-  window["visualization"] = false;
+  window["visualization"] = true;
   root["window"] = window;
 
   //GUI
@@ -362,8 +359,7 @@ void Configuration::preconf_WP4_car(Json::Value& root){
 
   //Interface
   Json::Value interface;
-  interface["lidar_scala"] = true;
-  interface["lidar_velodyne"] = false;
+  interface["lidar_model"] = "scala";
   interface["with_prediction"] = true;
   interface["with_gps"] = false;
   interface["with_save_image"] = true;
@@ -384,7 +380,7 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   window["resolution_ratio"] = 4.0f/3.0f;
   window["background_color"] = 0.86f;
   window["forceVersion"] = false;
-  window["visualization"] = false;
+  window["visualization"] = true;
   root["window"] = window;
 
   //GUI
@@ -434,8 +430,7 @@ void Configuration::preconf_WP5_train(Json::Value& root){
 
   //Interface
   Json::Value interface;
-  interface["lidar_scala"] = false;
-  interface["lidar_velodyne"] = true;
+  interface["lidar_model"] = "velodyne_vlp16";
   interface["with_prediction"] = true;
   interface["with_gps"] = true;
   interface["with_save_image"] = false;

@@ -1,5 +1,5 @@
-#ifndef SLAM_CONFIGURATION_H
-#define SLAM_CONFIGURATION_H
+#ifndef SLAM_PARAMETER_H
+#define SLAM_PARAMETER_H
 
 #include "../../../common.h"
 
@@ -10,16 +10,17 @@ class SLAM_assessment;
 class SLAM_localMap;
 
 
-class SLAM_configuration
+class SLAM_parameter
 {
 public:
   //Constructor / Destructor
-  SLAM_configuration(Slam* slam);
-  ~SLAM_configuration();
+  SLAM_parameter(Slam* slam);
+  ~SLAM_parameter();
 
 public:
   //Main function
   void make_config(int conf);
+  void make_config(string conf);
 
   //Subfunctions
   void make_config_0();

@@ -1,4 +1,4 @@
-#include "SLAM_configuration.h"
+#include "SLAM_parameter.h"
 
 #include "../Slam.h"
 #include "SLAM_normal.h"
@@ -8,7 +8,7 @@
 
 
 //Constructor / Destructor
-SLAM_configuration::SLAM_configuration(Slam* slam){
+SLAM_parameter::SLAM_parameter(Slam* slam){
   //---------------------------
 
   this->slamManager = slam;
@@ -21,10 +21,10 @@ SLAM_configuration::SLAM_configuration(Slam* slam){
 
   //---------------------------
 }
-SLAM_configuration::~SLAM_configuration(){}
+SLAM_parameter::~SLAM_parameter(){}
 
 //Configuration functions
-void SLAM_configuration::make_config(int conf){
+void SLAM_parameter::make_config(int conf){
   //---------------------------
 
   switch(conf){
@@ -41,7 +41,21 @@ void SLAM_configuration::make_config(int conf){
   //---------------------------
   this->predefined_conf = conf;
 }
-void SLAM_configuration::make_config_0(){
+void SLAM_parameter::make_config(string conf){
+  //---------------------------
+
+  if(conf == "velodyne_vlp64"){
+    this->make_config_0();
+    this->predefined_conf = 0;
+  }
+  else if(conf == "velodyne_vlp16" || conf == "scala"){
+    this->make_config_1();
+    this->predefined_conf = 1;
+  }
+
+  //---------------------------
+}
+void SLAM_parameter::make_config_0(){
   //---------------------------
 
   //Slam
@@ -109,7 +123,7 @@ void SLAM_configuration::make_config_0(){
 
   //---------------------------
 }
-void SLAM_configuration::make_config_1(){
+void SLAM_parameter::make_config_1(){
   //---------------------------
 
   //Slam
@@ -179,7 +193,7 @@ void SLAM_configuration::make_config_1(){
 }
 
 //Setting functions
-void SLAM_configuration::set_predefined_conf(int conf){
+void SLAM_parameter::set_predefined_conf(int conf){
   //---------------------------
 
   switch(conf){
@@ -196,7 +210,7 @@ void SLAM_configuration::set_predefined_conf(int conf){
   //---------------------------
   this->predefined_conf = conf;
 }
-void SLAM_configuration::set_nb_thread(int value){
+void SLAM_parameter::set_nb_thread(int value){
   //---------------------------
 
   slamManager->set_nb_thread(value);

@@ -32,8 +32,7 @@ Capture::Capture(Module_node* node){
   this->scalaManager = new Scala(node_engine);
   this->veloManager = new Velodyne(node_engine);
 
-  this->lidar_velodyne = configManager->parse_json_b("interface", "lidar_velodyne");
-  this->lidar_scala = configManager->parse_json_b("interface", "lidar_scala");
+  this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
   this->ID_capture = 0;
   this->is_capturing = false;
 
@@ -45,10 +44,10 @@ Capture::~Capture(){}
 void Capture::start_new_capture(){
   //---------------------------
 
-  if(lidar_velodyne){
+  if(lidar_model == "velodyne_vlp16"){
     this->capture_vlp16();
   }
-  if(lidar_scala){
+  else if(lidar_model == "scala"){
     this->capture_scala();
   }
 
@@ -57,10 +56,10 @@ void Capture::start_new_capture(){
 void Capture::stop_capture(){
   //---------------------------
 
-  if(lidar_velodyne){
+  if(lidar_model == "velodyne_vlp16"){
     *veloManager->get_is_velo_capturing() = false;
   }
-  if(lidar_scala){
+  else if(lidar_model == "scala"){
     *scalaManager->get_is_scala_capturing() = false;
   }
 
@@ -77,7 +76,7 @@ void Capture::runtime_capturing(){
   new_subset = nullptr;
 
   //Check for new Subset
-  if(lidar_velodyne){
+  if(lidar_model == "velodyne_vlp16"){
     bool *new_capture = veloManager->get_is_newSubset();
 
     if(*new_capture){
@@ -88,7 +87,7 @@ void Capture::runtime_capturing(){
       *new_capture = false;
     }
   }
-  if(lidar_scala){
+  else if(lidar_model == "scala"){
     bool* new_capture = scalaManager->get_is_newSubset();
     if(*new_capture){
       //Pick new subset
@@ -176,7 +175,7 @@ void Capture::operation_new_subset(Subset* subset){
   if(subset->xyz.size() != 0){
     //Update subset data
     sceneManager->update_subset_location(subset);
-    
+
     //Insert the subset inside the capture cloud
     sceneManager->add_new_subset(cloud_capture, subset);
 

@@ -14,22 +14,21 @@
       "normal_visibility" : false
    },
    "gui" : {
-      "botPanel_height" : 100,
-      "leftPanel_mid" : 200,
-      "leftPanel_width" : 220,
+      "botPanel_height" : 282,
+      "leftPanel_mid" : 1,
+      "leftPanel_width" : 0,
       "topPanel_height" : 18
    },
    "interface" : {
-      "lidar_scala" : true,
-      "lidar_velodyne" : false,
-      "with_gps" : false,
+      "lidar_model" : "velodyne_vlp16",
+      "with_gps" : true,
       "with_prediction" : true,
       "with_remove_lastSubset" : true,
       "with_save_frame" : true,
-      "with_save_image" : true
+      "with_save_image" : false
    },
    "module" : {
-      "with_camera_follow" : true,
+      "with_camera_follow" : false,
       "with_cylinder_cleaning" : false,
       "with_slam" : true
    },
@@ -46,10 +45,10 @@
    "window" : {
       "background_color" : 0.86000001430511475,
       "forceVersion" : false,
-      "resolution_height" : 500,
+      "resolution_height" : 200,
       "resolution_ratio" : 1.3333333730697632,
-      "resolution_width" : 1024,
+      "resolution_width" : 500,
       "title" : "Velodium",
-      "visualization" : false
+      "visualization" : true
    }
 }

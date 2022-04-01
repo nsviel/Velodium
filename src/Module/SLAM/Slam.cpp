@@ -6,13 +6,14 @@
 #include "CT_ICP/SLAM_optim_gn.h"
 #include "CT_ICP/SLAM_assessment.h"
 #include "CT_ICP/SLAM_localMap.h"
-#include "CT_ICP/SLAM_configuration.h"
+#include "CT_ICP/SLAM_parameter.h"
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Transformation/Transforms.h"
 
 #include <chrono>
@@ -27,6 +28,8 @@ Slam::Slam(Engine_node* node){
   this->node_engine = node;
   //---------------------------
 
+  Configuration* configManager = node_engine->get_configManager();
+
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();;
 
@@ -35,7 +38,7 @@ Slam::Slam(Engine_node* node){
   this->gnManager = new SLAM_optim_gn(normalManager);
   this->assessManager = new SLAM_assessment(this);
   this->mapManager = new SLAM_localMap();
-  this->configManager = new SLAM_configuration(this);
+  this->paramManager = new SLAM_parameter(this);
 
   this->solver_ceres = false;
   this->solver_GN = true;
@@ -49,7 +52,7 @@ Slam::Slam(Engine_node* node){
   this->map_size_old = 0;
   this->nb_thread = 8;
 
-  configManager->make_config(0);
+  paramManager->make_config(configManager->parse_json_s("interface", "lidar_model"));
 
   //---------------------------
 }

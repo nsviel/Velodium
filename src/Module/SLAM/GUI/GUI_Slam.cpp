@@ -6,7 +6,7 @@
 #include "../CT_ICP/SLAM_normal.h"
 #include "../CT_ICP/SLAM_assessment.h"
 #include "../CT_ICP/SLAM_localMap.h"
-#include "../CT_ICP/SLAM_configuration.h"
+#include "../CT_ICP/SLAM_parameter.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
@@ -31,7 +31,7 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   this->normalManager = slamManager->get_slam_normal();
   this->assessManager = slamManager->get_slam_assess();
   this->mapManager = slamManager->get_slam_map();
-  this->configManager = slamManager->get_slam_config();
+  this->paramManager = slamManager->get_slam_param();
   this->sceneManager = node_engine->get_sceneManager();
 
   this->item_width = 100;
@@ -89,9 +89,9 @@ void GUI_Slam::parameter_configuration(){
   //---------------------------
 
   //Configuration model
-  int slam_conf = *configManager->get_predefined_conf();
+  int slam_conf = *paramManager->get_predefined_conf();
   if(ImGui::Combo("Configuration", &slam_conf, "vlp_64\0vlp_16\0")){
-    configManager->set_predefined_conf(slam_conf);
+    paramManager->set_predefined_conf(slam_conf);
   }
 
   //---------------------------
