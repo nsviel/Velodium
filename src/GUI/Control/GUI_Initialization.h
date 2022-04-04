@@ -9,6 +9,7 @@ class Loader;
 class Pather;
 class Obstacle;
 class Configuration;
+class SLAM_parameter;
 
 
 class GUI_Initialization
@@ -28,6 +29,7 @@ private:
   Pather* pathManager;
   Obstacle* obstacleManager;
   Configuration* configManager;
+  SLAM_parameter* slam_param;
 };
 
 #endif

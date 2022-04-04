@@ -11,6 +11,8 @@
 #include "../../Module/Module_node.h"
 #include "../../Module/Player/Player_node.h"
 #include "../../Module/Player/Obstacle/Obstacle.h"
+#include "../../Module/SLAM/Slam.h"
+#include "../../Module/SLAM/CT_ICP/SLAM_parameter.h"
 
 
 //Constructor / Destructor
@@ -21,12 +23,14 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
   Module_node* node_module = node_gui->get_node_module();
   Player_node* node_player = node_module->get_node_player();
   Load_node* node_load = node_engine->get_node_load();
+  Slam* slamManager = node_module->get_slamManager();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->obstacleManager = node_player->get_obstacleManager();
   this->loaderManager = node_load->get_loadManager();
   this->pathManager = node_load->get_pathManager();
+  this->slam_param = slamManager->get_slam_param();
 
   //---------------------------
 }
@@ -44,26 +48,20 @@ void GUI_Initialization::init_gui(){
   if(ImGui::Button("Torus", ImVec2(100,0))){
     this->init_mode(1);
   }
-  if(ImGui::Button("PCAP file", ImVec2(100,0))){
+  if(ImGui::Button("VLP16 - PCAP file", ImVec2(100,0))){
     this->init_mode(2);
   }
-  if(ImGui::Button("Frames move", ImVec2(100,0))){
+  if(ImGui::Button("VLP16 - Nuscene", ImVec2(100,0))){
     this->init_mode(3);
   }
-  if(ImGui::Button("More frames", ImVec2(100,0))){
+  if(ImGui::Button("VLP64 - Kitty", ImVec2(100,0))){
     this->init_mode(4);
   }
-  if(ImGui::Button("Other frames", ImVec2(100,0))){
+  if(ImGui::Button("HDL32 - Tunel", ImVec2(100,0))){
     this->init_mode(5);
   }
-  if(ImGui::Button("Tunel", ImVec2(100,0))){
+  if(ImGui::Button("AI interface", ImVec2(100,0))){
     this->init_mode(6);
-  }
-  if(ImGui::Button("Nuscene", ImVec2(100,0))){
-    this->init_mode(7);
-  }
-  if(ImGui::Button("IA module", ImVec2(100,0))){
-    this->init_mode(8);
   }
 
   //---------------------------
@@ -96,36 +94,31 @@ void GUI_Initialization::init_mode(int mode){
     }
     case 2:{//PCAP
       sceneManager->remove_cloud_all();
+      slam_param->make_config("velodyne_vlp16");
       loaderManager->load_cloud("../media/engine/fastScene/pcap_test.pcap");
       break;
     }
-    case 3:{//Frames in movement
+    case 3:{//Nuscene
       sceneManager->remove_cloud_all();
-      pathManager->loading_directoryFrames("../media/point_cloud/frames/");
-      break;
-    }
-    case 4:{//more Frames in movement
-      sceneManager->remove_cloud_all();
-      pathManager->loading_directoryFrames("../media/point_cloud/frames_lot/");
-      break;
-    }
-    case 5:{//Frame other
-      sceneManager->remove_cloud_all();
-      pathManager->loading_directoryFrames("../media/point_cloud/frames_other/");
-      break;
-    }
-    case 6:{//Frame other
-      sceneManager->remove_cloud_all();
-      loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
-      break;
-    }
-    case 7:{//Nuscene
-      sceneManager->remove_cloud_all();
+      slam_param->make_config("velodyne_vlp16");
       pathManager->loading_directoryFrames("/home/aether/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
       break;
     }
-    case 8:{//AI prediction
+    case 4:{//Frames in movement
       sceneManager->remove_cloud_all();
+      slam_param->make_config("velodyne_vlp64");
+      pathManager->loading_directoryFrames("../media/point_cloud/frames/");
+      break;
+    }
+    case 5:{//Tunnel
+      sceneManager->remove_cloud_all();
+      slam_param->make_config("velodyne_hdl32");
+      loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
+      break;
+    }
+    case 6:{//AI prediction
+      sceneManager->remove_cloud_all();
+      slam_param->make_config("velodyne_vlp64");
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
       obstacleManager->add_obstacle_pred("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
       configManager->make_preconfig(1);

@@ -25,6 +25,9 @@ public:
   //Subfunctions
   void make_config_0();
   void make_config_1();
+  void make_config_2();
+
+  //Setters
   void set_predefined_conf(int conf);
   void set_nb_thread(int value);
 
