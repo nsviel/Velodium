@@ -20,15 +20,15 @@
       "topPanel_height" : 18
    },
    "interface" : {
-      "lidar_model" : "velodyne_vlp16",
-      "with_gps" : true,
+      "lidar_model" : "velodyne_vlp64",
+      "with_gps" : false,
       "with_prediction" : true,
-      "with_remove_lastSubset" : true,
+      "with_remove_lastSubset" : false,
       "with_save_frame" : true,
       "with_save_image" : false
    },
    "module" : {
-      "with_camera_follow" : false,
+      "with_camera_follow" : true,
       "with_cylinder_cleaning" : false,
       "with_slam" : true
    },
@@ -40,7 +40,7 @@
       "cloud_translation" : 0.01,
       "color_mode" : 0,
       "path_media" : "../media/",
-      "point_size" : 2
+      "point_size" : 3
    },
    "window" : {
       "background_color" : 0.86000001430511475,

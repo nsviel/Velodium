@@ -61,28 +61,6 @@ void Configuration::make_preconfig(int config){
 
   //---------------------------
 }
-void Configuration::make_watcher(){
-  //---------------------------
-
-  switch(config){
-    case 0:{//Null scenario
-      //captureManager->stop_capture();
-      break;
-    }
-
-    case 2:{//WP4 scenario
-      //captureManager->start_new_capture();
-      break;
-    }
-
-    case 3:{//WP5 scenario
-      //captureManager->start_new_capture();
-      break;
-    }
-  }
-
-  //---------------------------
-}
 
 //Pred-defined configuration
 void Configuration::preconf_default(Json::Value& root){
@@ -139,14 +117,14 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Module
   Json::Value module;
-  module["with_slam"] = false;
-  module["with_camera_follow"] = false;
+  module["with_slam"] = true;
+  module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
   root["module"] = module;
 
   //Interface
   Json::Value interface;
-  interface["lidar_model"] = "velodyne_vlp16";
+  interface["lidar_model"] = "velodyne_vlp64";
   interface["with_prediction"] = false;
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
@@ -210,8 +188,8 @@ void Configuration::preconf_capture(Json::Value& root){
 
   //Module
   Json::Value module;
-  module["with_slam"] = true;
-  module["with_camera_follow"] = true;
+  module["with_slam"] = false;
+  module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
   root["module"] = module;
 
@@ -375,8 +353,8 @@ void Configuration::preconf_WP5_train(Json::Value& root){
   //OpenGL stuff
   Json::Value window;
   window["title"] = "Velodium";
-  window["resolution_width"] = 500;
-  window["resolution_height"] = 200;
+  window["resolution_width"] = 1024;
+  window["resolution_height"] = 500;
   window["resolution_ratio"] = 4.0f/3.0f;
   window["background_color"] = 0.86f;
   window["forceVersion"] = false;
@@ -385,10 +363,10 @@ void Configuration::preconf_WP5_train(Json::Value& root){
 
   //GUI
   Json::Value gui;
-  gui["leftPanel_width"] = 0;
-  gui["leftPanel_mid"] = 1;
+  gui["leftPanel_width"] = 220;
+  gui["leftPanel_mid"] = 200;
   gui["topPanel_height"] = 18;
-  gui["botPanel_height"] = 300 - 18;
+  gui["botPanel_height"] = 100;
   root["gui"] = gui;
 
   //Parameters

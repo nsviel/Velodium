@@ -20,7 +20,7 @@
       "topPanel_height" : 18
    },
    "interface" : {
-      "lidar_model" : "velodyne_vlp16",
+      "lidar_model" : "velodyne_vlp64",
       "with_gps" : false,
       "with_prediction" : false,
       "with_remove_lastSubset" : false,
@@ -28,9 +28,9 @@
       "with_save_image" : false
    },
    "module" : {
-      "with_camera_follow" : false,
+      "with_camera_follow" : true,
       "with_cylinder_cleaning" : false,
-      "with_slam" : false
+      "with_slam" : true
    },
    "parameter" : {
       "check_directories" : true,

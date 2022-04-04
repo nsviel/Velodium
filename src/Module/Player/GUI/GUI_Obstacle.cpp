@@ -89,26 +89,19 @@ void GUI_Obstacle::state_configuration(){
   //---------------------------
 
   //Choose configuration
-  int* config_selected = configManager->get_config();
-  ImGui::Combo("##007", config_selected, "Default\0AI module\0WP4 car\0WP5 train\0");
+  int config_selected = *configManager->get_config();
+  if(ImGui::Combo("##007", &config_selected, "Default\0AI module\0WP4 car\0WP5 train\0")){
+    configManager->make_preconfig(config_selected);
+    node_player->update();
+  }
 
   //Start scenario
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Start scenario", ImVec2(item_width, 0))){
-    node_player->update();
-    configManager->make_watcher();
+  if(ImGui::Button("Start##1", ImVec2(item_width, 0))){
+    //Start watcher here
+    //create maybe a new class which manage watchers
   }
   ImGui::PopStyleColor(1);
-
-  //Start watchers
-  if(ImGui::Button("Watchers", ImVec2(item_width, 0))){
-    configManager->make_watcher();
-  }
-
-  //Start config
-  if(ImGui::Button("Configure", ImVec2(item_width, 0))){
-    node_player->update();
-  }
 
   //---------------------------
   ImGui::Separator();

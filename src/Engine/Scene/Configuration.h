@@ -19,8 +19,7 @@ public:
   //Main functions
   void make_configuration();
   void make_preconfig(int config);
-  void make_watcher();
-
+  
   //Pred-defined configurations
   void preconf_default(Json::Value& root);
   void preconf_capture(Json::Value& root);

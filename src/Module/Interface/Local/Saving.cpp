@@ -56,7 +56,7 @@ void Saving::save_image(){
 
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
-  frame->time_save_image = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+  frame->time_save_image = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 void Saving::save_image_path(){
   //---------------------------
@@ -88,5 +88,5 @@ void Saving::save_frame(Subset* subset){
 
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
-  frame->time_save_frame = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+  frame->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
