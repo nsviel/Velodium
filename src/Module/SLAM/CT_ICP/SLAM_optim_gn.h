@@ -31,7 +31,7 @@ private:
   void update_frame(Frame* frame, Eigen::VectorXd& X);
   void update_keypoints(Frame* frame);
 
-  Eigen::Matrix3d compute_rotationMatrix(float Rx, float Ry, float Rz);
+  Eigen::Matrix3f compute_rotationMatrix(float Rx, float Ry, float Rz);
 
 private:
   SLAM_normal* normalManager;

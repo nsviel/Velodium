@@ -349,7 +349,7 @@ void GUI_Slam::statistics(){
   int map_size_rlt = 0;
   int nb_residual = 0;
 
-  if(!sceneManager->get_is_list_empty()){
+  if(sceneManager->get_is_list_empty() == false){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Frame* frame = &cloud->subset_selected->frame;
 

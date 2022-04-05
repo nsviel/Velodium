@@ -31,7 +31,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
   //Compute all point normal
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i], map);
+    vector<Eigen::Vector3f> kNN = compute_kNN_search(frame->xyz[i], map);
     this->compute_normal(kNN, i);
   }
 
@@ -47,7 +47,7 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
 }
 
 //Sub function
-vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, voxelMap* map){
+vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, voxelMap* map){
   priority_queue_iNN priority_queue;
   //---------------------------
 
@@ -64,14 +64,14 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
         string voxel_id = to_string(vi) + " " + to_string(vj) + " " + to_string(vk);
 
         //If we found a voxel with at least one point
-        vector<Eigen::Vector3d> voxel_ijk;
+        vector<Eigen::Vector3f> voxel_ijk;
 
         if (map->find(voxel_id) != map->end()){
           voxel_ijk = map->find(voxel_id).value();
 
         //We store all NN voxel point
           for (int i=0; i < voxel_ijk.size(); i++) {
-            Eigen::Vector3d neighbor = voxel_ijk[i];
+            Eigen::Vector3f neighbor = voxel_ijk[i];
             float distance = (neighbor - point).norm();
 
             //If the voxel is full
@@ -95,7 +95,7 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
 
   //Retrieve the kNN of the query point
   auto size = priority_queue.size();
-  vector<Eigen::Vector3d> kNN(size);
+  vector<Eigen::Vector3f> kNN(size);
   for(int i=0; i<size; i++){
     kNN[size - 1 - i] = std::get<1>(priority_queue.top());
     priority_queue.pop();
@@ -104,7 +104,7 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
   //---------------------------
   return kNN;
 }
-void SLAM_normal::compute_normal(vector<Eigen::Vector3d>& kNN, int i){
+void SLAM_normal::compute_normal(vector<Eigen::Vector3f>& kNN, int i){
   // Computes normal and planarity coefficient
   //---------------------------
 
@@ -113,9 +113,9 @@ void SLAM_normal::compute_normal(vector<Eigen::Vector3d>& kNN, int i){
     this->NN[i] = kNN[0];
 
     //Compute normales
-    Eigen::Matrix3d covMat = fct_covarianceMat(kNN);
-    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> es(covMat);
-    Eigen::Vector3d normal = es.eigenvectors().col(0).normalized();
+    Eigen::Matrix3f covMat = fct_covarianceMat(kNN);
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> es(covMat);
+    Eigen::Vector3f normal = es.eigenvectors().col(0).normalized();
     this->Nxyz[i] = normal;
 
     // Compute planarity coefficient / weight from the eigen values
@@ -144,7 +144,7 @@ void SLAM_normal::compute_normals_reorientToOrigin(Frame* frame){
     }
 
     //Reoriente to origin
-    Eigen::Vector3d origine = Eigen::Vector3d::Zero();
+    Eigen::Vector3f origine = Eigen::Vector3f::Zero();
     float dist_XYZ = fct_distance(frame->xyz[i], origine);
     float dist_N = fct_distance(frame->xyz[i] + Nxyz[i], origine);
     if(dist_N > dist_XYZ){

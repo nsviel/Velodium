@@ -355,10 +355,13 @@ void Extractor::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
 
   if(is_timestamp){
     subset->ts = timestampOBJ;
+    subset->has_timestamp = true;
   }
   else{
+    //If not timestamp, set all timestamp at 0
     vector<float> ts (subset->xyz.size(), 0);
     subset->ts = ts;
+    subset->has_timestamp = false;
   }
 
   //---------------------------

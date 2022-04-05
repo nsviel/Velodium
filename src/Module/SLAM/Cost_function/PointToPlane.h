@@ -10,7 +10,7 @@
 // A Cost Functor a standard Point-to-Plane
 class PTPF{
 public:
-  PTPF(Eigen::Vector3d& point, Eigen::Vector3d& target, Eigen::Vector3d& normal, double w = 1.0) :
+  PTPF(Eigen::Vector3f& point, Eigen::Vector3f& target, Eigen::Vector3f& normal, double w = 1.0) :
   reference_point(point), target_point(target), reference_normal(normal), weight(w) {}
 
   template<typename T> bool operator()(const T *const rot_params, const T *const trans_params, T *residual) const {
@@ -26,9 +26,9 @@ public:
   static constexpr int NumResiduals() { return 1; }
 
 protected:
-  Eigen::Vector3d reference_point;
-  Eigen::Vector3d target_point;
-  Eigen::Vector3d reference_normal;
+  Eigen::Vector3f reference_point;
+  Eigen::Vector3f target_point;
+  Eigen::Vector3f reference_normal;
   double weight = 1.0;
 };
 

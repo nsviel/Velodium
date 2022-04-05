@@ -70,8 +70,8 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap* map){
 
     //Parameter block
     ceres::Problem* ceres_problem = new ceres::Problem();
-    Eigen::Vector3d trans_b = frame->trans_b;
-    Eigen::Vector3d trans_e = frame->trans_e;
+    Eigen::Vector3f trans_b = frame->trans_b;
+    Eigen::Vector3f trans_e = frame->trans_e;
     double* trans_b_ptr = &trans_b.x();
     double* trans_e_ptr = &trans_e.x();
     ceres_problem->AddParameterBlock(trans_b_ptr, 3);
@@ -80,9 +80,9 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap* map){
     //Compute residuals
     vector_residual.clear();
     for(int i=0; i<frame->xyz.size(); i++){
-      Eigen::Vector3d point = frame->xyz[i];
-      Eigen::Vector3d normal = frame->Nptp[i];
-      Eigen::Vector3d iNN = frame->NN[i];
+      Eigen::Vector3f point = frame->xyz[i];
+      Eigen::Vector3f normal = frame->Nptp[i];
+      Eigen::Vector3f iNN = frame->NN[i];
       float ts_n = frame->ts_n[i];
 
       CTPTPF* cost_functor = new CTPTPF(iNN, point, normal, ts_n);
@@ -134,13 +134,13 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
 
     //Parameter block
     ceres::Problem* ceres_problem = new ceres::Problem();
-    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+    Eigen::Vector3f trans_b = frame->trans_b;
     double* quat_b_ptr = &quat_b.x();
     double* trans_b_ptr = &trans_b.x();
 
-    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-    Eigen::Vector3d trans_e = frame->trans_e;
+    Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+    Eigen::Vector3f trans_e = frame->trans_e;
     double* quat_e_ptr = &quat_e.x();
     double* trans_e_ptr = &trans_e.x();
 
@@ -153,9 +153,9 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
     //Compute residuals
     vector_residual.clear();
     for(int i=0; i<frame->xyz.size(); i++){
-      Eigen::Vector3d point = frame->xyz[i];
-      Eigen::Vector3d normal = frame->Nptp[i];
-      Eigen::Vector3d iNN = frame->NN[i];
+      Eigen::Vector3f point = frame->xyz[i];
+      Eigen::Vector3f normal = frame->Nptp[i];
+      Eigen::Vector3f iNN = frame->NN[i];
       float a2D = frame->a2D[i];
       float ts_n = frame->ts_n[i];
 
@@ -182,8 +182,8 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
     float beta_orientation_consistency = 0;
     float beta_small_velocity = 0.01;
 
-    Eigen::Vector3d previous_velocity = frame_m1->trans_e - frame_m1->trans_b;
-    Eigen::Quaterniond previous_orientation = Eigen::Quaterniond(frame_m1->rotat_e);
+    Eigen::Vector3f previous_velocity = frame_m1->trans_e - frame_m1->trans_b;
+    Eigen::Quaternionf previous_orientation = Eigen::Quaternionf(frame_m1->rotat_e);
     ceres::CostFunction* cost_function_LCF = new ceres::AutoDiffCostFunction<LCF,LCF::NumResiduals(), 3>(new LCF(frame_m1->trans_e, sqrt(nb_residual* beta_location_consistency)));
     ceres_problem->AddResidualBlock(cost_function_LCF, nullptr, &trans_b.x());
     ceres::CostFunction* cost_function_CVF = new ceres::AutoDiffCostFunction<CVF,CVF::NumResiduals(), 3, 3>(new CVF(previous_velocity, sqrt(nb_residual * beta_constant_velocity)));
@@ -221,15 +221,15 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
 void SLAM_optim_ceres::frame_update(Frame* frame){
   //---------------------------
 
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
 
   for (int i=0; i<frame->xyz.size(); i++){
 
     float ts_n = frame->ts_n[i];
-    Eigen::Vector3d& point = frame->xyz[i];
+    Eigen::Vector3f& point = frame->xyz[i];
 
-    //Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    //Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     point = point + trans_e;
   }
@@ -240,18 +240,18 @@ void SLAM_optim_ceres::frame_update(Frame* frame){
 void SLAM_optim_ceres::frame_update_secured(Frame* frame){
   //---------------------------
 
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
 
   for (int i=0; i<frame->xyz.size(); i++){
 
     float ts_n = frame->ts_n[i];
-    Eigen::Vector3d& point = frame->xyz[i];
+    Eigen::Vector3f& point = frame->xyz[i];
 
-    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     point = R * point + t;
   }
@@ -262,22 +262,22 @@ void SLAM_optim_ceres::frame_update_secured(Frame* frame){
 void SLAM_optim_ceres::frame_distort(Frame* frame){
   //---------------------------
 
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
 
   // Distorts the frame (put all raw_points in the coordinate frame of the pose at the end of the acquisition)
-  Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
-  Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
+  Eigen::Quaternionf quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
+  Eigen::Vector3f trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
 
   for (int i(0); i < frame->xyz.size(); ++i) {
 
     float ts_n = frame->ts_n[i];
-    Eigen::Vector3d point = frame->xyz[i];
+    Eigen::Vector3f point = frame->xyz[i];
 
-    Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    Eigen::Quaternionf quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     // Distort Raw Keypoints
     frame->xyz[i] = quat_e_inv * (quat_n * point + t) + trans_e_inv;
@@ -296,9 +296,9 @@ void SLAM_optim_ceres::ceres_computePointResidual(Frame* frame){
 
   //#pragma omp parallel for num_threads(nb_threads)
   for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3d point = frame->xyz[i];
-    Eigen::Vector3d normal = frame->Nptp[i];
-    Eigen::Vector3d iNN = frame->NN[i];
+    Eigen::Vector3f point = frame->xyz[i];
+    Eigen::Vector3f normal = frame->Nptp[i];
+    Eigen::Vector3f iNN = frame->NN[i];
     float a2D = frame->a2D[i];
     float ts_n = frame->ts_n[i];
 
@@ -327,10 +327,10 @@ void SLAM_optim_ceres::ceres_addParameter(ceres::Problem* ceres_problem, Frame* 
   ceres::EigenQuaternionParameterization parameterization;
   //---------------------------
 
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
 
   quat_b_ptr = &quat_b.x();
   quat_e_ptr = &quat_e.x();
@@ -370,13 +370,13 @@ void SLAM_optim_ceres::ceres_addConstraintResidual(ceres::Problem* ceres_problem
   float beta_orientation_consistency = 0;
   float beta_small_velocity = 0.01;
 
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
 
-  Eigen::Vector3d previous_velocity = frame_m1->trans_e - frame_m1->trans_b;
-  Eigen::Quaterniond previous_orientation = Eigen::Quaterniond(frame_m1->rotat_e);
+  Eigen::Vector3f previous_velocity = frame_m1->trans_e - frame_m1->trans_b;
+  Eigen::Quaternionf previous_orientation = Eigen::Quaternionf(frame_m1->rotat_e);
 
   // Location Consistency Functor
   ceres::CostFunction* cost_function_LCF = new ceres::AutoDiffCostFunction<LCF,LCF::NumResiduals(), 3>(new LCF(frame_m1->trans_e, sqrt(number_of_residuals* beta_location_consistency)));

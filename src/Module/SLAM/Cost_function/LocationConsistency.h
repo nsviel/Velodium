@@ -10,7 +10,7 @@ struct LCF {
 
     static constexpr int NumResiduals() { return 3; }
 
-    LCF(const Eigen::Vector3d &previous_location, double beta) : beta_(beta), previous_location_(previous_location) {}
+    LCF(const Eigen::Vector3f &previous_location, double beta) : beta_(beta), previous_location_(previous_location) {}
 
     template<typename T>
     bool operator()(const T *const location_params, T *residual) const {
@@ -22,13 +22,13 @@ struct LCF {
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 private:
-    Eigen::Vector3d previous_location_;
+    Eigen::Vector3f previous_location_;
     double beta_ = 1.0;
 };
 /*
 class LocationConsistencyFunctor{
 public:
-  LocationConsistencyFunctor(const Eigen::Vector3d& previous_location, double beta) : beta_(beta), previous_location_(previous_location) {}
+  LocationConsistencyFunctor(const Eigen::Vector3f& previous_location, double beta) : beta_(beta), previous_location_(previous_location) {}
   static constexpr int NumResiduals(){
     return 3;
   }
@@ -40,7 +40,7 @@ public:
   }
 
 protected:
-   Eigen::Vector3d previous_location_;
+   Eigen::Vector3f previous_location_;
    double beta_ = 1.0;
 };*/
 

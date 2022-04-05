@@ -36,7 +36,7 @@ namespace{
     //---------------------------
     return mat_glm;
   }
-  glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3d mat_eig){
+  glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3f mat_eig){
     glm::mat4 mat_glm;
     //---------------------------
 
@@ -49,11 +49,11 @@ namespace{
     //---------------------------
     return mat_glm;
   }
-  glm::vec3 eigen_to_glm_vec3_d(Eigen::Vector3d eig_vec){
+  glm::vec3 eigen_to_glm_vec3_d(Eigen::Vector3f eig_vec){
     glm::vec3 glm_vec = glm::vec3(eig_vec(0), eig_vec(1), eig_vec(2));
     return glm_vec;
   }
-  std::vector<glm::vec3> eigen_to_glm_vectorvec3_d(std::vector<Eigen::Vector3d> eig_vec){
+  std::vector<glm::vec3> eigen_to_glm_vectorvec3_d(std::vector<Eigen::Vector3f> eig_vec){
     vector<glm::vec3> glm_vec;
     //---------------------------
 
@@ -92,8 +92,8 @@ namespace{
     //---------------------------
     return vec_eig;
   }
-  Eigen::Vector3d glm_to_eigen_vec3_d(const glm::vec3& vec_glm){
-    Eigen::Vector3d vec_eig = Eigen::Vector3d::Zero();
+  Eigen::Vector3f glm_to_eigen_vec3_d(const glm::vec3& vec_glm){
+    Eigen::Vector3f vec_eig = Eigen::Vector3f::Zero();
     //---------------------------
 
     for(int i=0; i<3; i++){
@@ -114,8 +114,8 @@ namespace{
     //---------------------------
     return vec_eig;
   }
-  Eigen::Vector3d glm_to_eigen_mat4_vec3d(const glm::mat4& mat_glm){
-    Eigen::Vector3d vec_eig = Eigen::Vector3d::Zero();
+  Eigen::Vector3f glm_to_eigen_mat4_vec3d(const glm::mat4& mat_glm){
+    Eigen::Vector3f vec_eig = Eigen::Vector3f::Zero();
     //---------------------------
 
     for(int i=0; i<3; i++){
@@ -151,8 +151,8 @@ namespace{
     //---------------------------
     return mat_eig;
   }
-  Eigen::Matrix3d glm_to_eigen_mat4_mat3d(const glm::mat4& mat_glm){
-    Eigen::Matrix3d mat_eig = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3f glm_to_eigen_mat4_mat3d(const glm::mat4& mat_glm){
+    Eigen::Matrix3f mat_eig = Eigen::Matrix3f::Zero();
     //---------------------------
 
     for(int i=0; i<3; i++){

@@ -546,7 +546,7 @@ vec3 Transforms::compute_anglesFromTransformationMatrix(const mat4& mat){
   //---------------------------
   return angles;
 }
-vec3 Transforms::compute_anglesFromTransformationMatrix(const Eigen::Matrix3d& mat){
+vec3 Transforms::compute_anglesFromTransformationMatrix(const Eigen::Matrix3f& mat){
   vec3 angles;
   //---------------------------
 

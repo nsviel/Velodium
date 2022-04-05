@@ -134,13 +134,26 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
 
 //SLAM sub-functions
 bool Slam::check_conditions(Cloud* cloud, int subset_ID){
+  //Check for computing conditions
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
 
-  //Check for computing conditions
-  if(subset->xyz.size() == 0) return false;
-  if(subset_ID >= 2 && cloud->subset.size() < 2) return false;
+  //Data error
+  if(subset->xyz.size() == 0){
+    console.AddLog("error" ,"SLAM - no data points");
+    return false;
+  }
+  if(subset_ID >= 2 && cloud->subset.size() < 2){
+    console.AddLog("error" ,"SLAM - no enough subsets");
+    return false;
+  }
+  if(subset->has_timestamp == false){
+    console.AddLog("error" ,"SLAM - no subset timestamp");
+    return false;
+  }
+
+  //No ponctual SLAM condition
   if(frame->is_slamed == true) return false;
   if(subset_ID < map_frame_begin_ID) return false;
   if(cloud->ID != ID_cloud && ID_cloud != -1){
@@ -202,16 +215,16 @@ void Slam::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
 
   //i == 0 is the reference frame
   if(frame->ID < 2){
-    frame->rotat_b = Eigen::Matrix3d::Identity();
-    frame->rotat_e = Eigen::Matrix3d::Identity();
-    frame->trans_b = Eigen::Vector3d::Zero();
-    frame->trans_e = Eigen::Vector3d::Zero();
+    frame->rotat_b = Eigen::Matrix3f::Identity();
+    frame->rotat_e = Eigen::Matrix3f::Identity();
+    frame->trans_b = Eigen::Vector3f::Zero();
+    frame->trans_e = Eigen::Vector3f::Zero();
   }
   //Second frame
   else if(frame->ID == 2){
     // Different for the second frame due to the bootstrapped elasticity
-    Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
-    Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
+    Eigen::Matrix3f rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
+    Eigen::Vector3f trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 
     frame->rotat_b = frame_m1->rotat_e;
     frame->trans_b = frame_m1->trans_e;
@@ -221,10 +234,10 @@ void Slam::init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2){
   //Other frame
   else if(frame->ID > 2){
     // When continuous: use the previous begin_pose as reference
-    Eigen::Matrix3d rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
-    Eigen::Vector3d trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
-    Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
-    Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
+    Eigen::Matrix3f rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
+    Eigen::Vector3f trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
+    Eigen::Matrix3f rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
+    Eigen::Vector3f trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 
     frame->rotat_b = rotat_next_b;
     frame->trans_b = trans_next_b;
@@ -238,22 +251,22 @@ void Slam::init_distortion(Frame* frame){
   //---------------------------
 
   if(frame->ID > 1){
-    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-    Eigen::Vector3d trans_b = frame->trans_b;
-    Eigen::Vector3d trans_e = frame->trans_e;
+    Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+    Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+    Eigen::Vector3f trans_b = frame->trans_b;
+    Eigen::Vector3f trans_e = frame->trans_e;
 
     // Distorts the frame (put all raw_points in the coordinate frame of the pose at the end of the acquisition)
-    Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
-    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
+    Eigen::Quaternionf quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
+    Eigen::Vector3f trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
 
     for (int i=0; i < frame->xyz.size(); i++) {
 
       float ts_n = frame->ts_n[i];
-      Eigen::Vector3d& point = frame->xyz_raw[i];
+      Eigen::Vector3f& point = frame->xyz_raw[i];
 
-      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
-      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+      Eigen::Quaternionf quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+      Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
       point = quat_e_inv * (quat_n * point + t) + trans_e_inv;
@@ -297,15 +310,15 @@ void Slam::compute_updateLocation(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
+  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
 
   //Update frame root
-  Eigen::Vector3d root = glm_to_eigen_vec3_d(subset->root);
-  Eigen::Matrix3d R = quat_b.toRotationMatrix();
-  Eigen::Vector3d t = trans_b;
+  Eigen::Vector3f root = glm_to_eigen_vec3_d(subset->root);
+  Eigen::Matrix3f R = quat_b.toRotationMatrix();
+  Eigen::Vector3f t = trans_b;
   root = R * root + t;
   subset->root = eigen_to_glm_vec3_d(root);
   frame->is_slamed = true;
@@ -313,11 +326,11 @@ void Slam::compute_updateLocation(Subset* subset){
   //Update subset position
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<subset->xyz.size(); i++){
-    Eigen::Vector3d point = glm_to_eigen_vec3_d(subset->xyz[i]);
+    Eigen::Vector3f point = glm_to_eigen_vec3_d(subset->xyz[i]);
     float ts_n = subset->ts_n[i];
 
-    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
     point = R * point + t;
 
     subset->xyz[i] = eigen_to_glm_vec3_d(point);

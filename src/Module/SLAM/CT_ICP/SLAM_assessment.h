@@ -21,7 +21,7 @@ public:
   bool compute_assessment_rlt(Cloud* cloud, int i);
   bool compute_assessment_rsd(Frame* frame);
 
-  float AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
+  float AngularDistance(Eigen::Matrix3f& rota, Eigen::Matrix3f& rotb);
   void compute_stat_mean(Cloud* cloud, int ID);
 
   inline float* get_thres_ego_trans(){return &thres_ego_trans;}

@@ -27,13 +27,13 @@ public:
 
 private:
   //Sub functions
-  vector<Eigen::Vector3d> compute_kNN_search(Eigen::Vector3d &point, voxelMap* map);
-  void compute_normal(vector<Eigen::Vector3d>& kNN, int i);
+  vector<Eigen::Vector3f> compute_kNN_search(Eigen::Vector3f &point, voxelMap* map);
+  void compute_normal(vector<Eigen::Vector3f>& kNN, int i);
   void compute_normals_reorientToOrigin(Frame* frame);
 
 private:
-  vector<Eigen::Vector3d> Nxyz;
-  vector<Eigen::Vector3d> NN;
+  vector<Eigen::Vector3f> Nxyz;
+  vector<Eigen::Vector3f> NN;
   vector<float> a2D;
 
   float size_voxelMap;

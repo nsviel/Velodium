@@ -178,7 +178,7 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
 }
 
 //Subfunctions
-float SLAM_assessment::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &rotb){
+float SLAM_assessment::AngularDistance(Eigen::Matrix3f &rota, Eigen::Matrix3f &rotb){
   //---------------------------
 
   float norm = ((rota * rotb.transpose()).trace() - 1) / 2;

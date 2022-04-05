@@ -13,7 +13,7 @@ struct CTPTPF {
   static constexpr int NumResiduals() { return 1; }
 
   //Initialization
-  CTPTPF(const Eigen::Vector3d &iNN_, const Eigen::Vector3d &keypoint_, const Eigen::Vector3d &normal_, double ts_n_, double weight_ = 1.0){
+  CTPTPF(const Eigen::Vector3f &iNN_, const Eigen::Vector3f &keypoint_, const Eigen::Vector3f &normal_, double ts_n_, double weight_ = 1.0){
     point_raw = keypoint_;
     iNN = iNN_;
     normal = normal_;
@@ -48,9 +48,9 @@ struct CTPTPF {
     return true;
   }
 
-  Eigen::Vector3d point_raw;
-  Eigen::Vector3d iNN;
-  Eigen::Vector3d normal;
+  Eigen::Vector3f point_raw;
+  Eigen::Vector3f iNN;
+  Eigen::Vector3f normal;
   double ts_n;
   double weight;
 };

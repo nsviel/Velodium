@@ -13,7 +13,7 @@ struct CTPTPF {
   static constexpr int NumResiduals() { return 1; }
 
   //Initialization
-  CTPTPF(const Eigen::Vector3d &trg, const Eigen::Vector3d &src, const Eigen::Vector3d &norm, double ts){
+  CTPTPF(const Eigen::Vector3f &trg, const Eigen::Vector3f &src, const Eigen::Vector3f &norm, double ts){
     target = trg; source = src; normal = norm; ts_n = ts;
   }
 
@@ -43,9 +43,9 @@ struct CTPTPF {
     return true;
   }
 
-  Eigen::Vector3d source;
-  Eigen::Vector3d target;
-  Eigen::Vector3d normal;
+  Eigen::Vector3f source;
+  Eigen::Vector3f target;
+  Eigen::Vector3f normal;
   double ts_n;
 };
 

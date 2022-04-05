@@ -15,7 +15,7 @@ public:
   void compute_gridSampling(Subset* subset);
   void add_pointsToSlamMap(Subset* subset);
   void add_pointsToLocalMap(Frame* frame);
-  void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
+  void end_clearTooFarVoxels(Eigen::Vector3f &current_location);
   void end_slamVoxelization(Cloud* cloud, int frame_max);
   void reset();
 

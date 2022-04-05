@@ -8,20 +8,20 @@
 struct Frame{ //SLAM stuff
   int ID;
 
-  std::vector<Eigen::Vector3d> xyz;
-  std::vector<Eigen::Vector3d> xyz_raw;
-  std::vector<Eigen::Vector3d> Nptp;
-  std::vector<Eigen::Vector3d> NN; // Nearest Neighbor
+  std::vector<Eigen::Vector3f> xyz;
+  std::vector<Eigen::Vector3f> xyz_raw;
+  std::vector<Eigen::Vector3f> Nptp;
+  std::vector<Eigen::Vector3f> NN; // Nearest Neighbor
   std::vector<float> a2D;
   std::vector<float> ts_n;
 
   //Begin pose
-  Eigen::Matrix3d rotat_b;
-  Eigen::Vector3d trans_b;
+  Eigen::Matrix3f rotat_b;
+  Eigen::Vector3f trans_b;
 
   //End pose
-  Eigen::Matrix3d rotat_e;
-  Eigen::Vector3d trans_e;
+  Eigen::Matrix3f rotat_e;
+  Eigen::Vector3f trans_e;
 
   //Assessment stats
   float ego_trans;
@@ -60,10 +60,10 @@ struct Frame{ //SLAM stuff
     this->diff_rotat = 0;
     this->opti_score = 0;
 
-    this->rotat_b = Eigen::Matrix3d::Identity();
-    this->rotat_e = Eigen::Matrix3d::Identity();
-    this->trans_b = Eigen::Vector3d::Zero();
-    this->trans_e = Eigen::Vector3d::Zero();
+    this->rotat_b = Eigen::Matrix3f::Identity();
+    this->rotat_e = Eigen::Matrix3f::Identity();
+    this->trans_b = Eigen::Vector3f::Zero();
+    this->trans_e = Eigen::Vector3f::Zero();
 
     this->time_save_image = 0;
     this->time_save_frame = 0;

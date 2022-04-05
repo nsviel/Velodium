@@ -94,7 +94,7 @@ void GUI_Dynamic::player_run(){
   //Range of displayed frames
   int* player_subset_range = onlineManager->get_visibility_range();
   int nb_subset_max = *player_subset_range;
-  if(cloud != nullptr){
+  if(cloud != nullptr && sceneManager->get_is_list_empty() == false){
     nb_subset_max = cloud->nb_subset - 1;
   }
   ImGui::SetNextItemWidth(140);

@@ -21,7 +21,7 @@ namespace{
     //---------------------------
     return dist;
   }
-  float fct_distance_origin(Eigen::Vector3d pt1){
+  float fct_distance_origin(Eigen::Vector3f pt1){
     //Euclidean distance
     float dist;
     //---------------------------
@@ -41,7 +41,7 @@ namespace{
     //---------------------------
     return dist;
   }
-  float fct_distance(Eigen::Vector3d pt1, Eigen::Vector3d pt2){
+  float fct_distance(Eigen::Vector3f pt1, Eigen::Vector3f pt2){
     //Euclidean distance
     //---------------------------
 
@@ -71,8 +71,8 @@ namespace{
     //---------------------------
     return centroid;
   }
-  Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d> XYZ){
-    Eigen::Vector3d centroid = Eigen::Vector3d::Zero();
+  Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f> XYZ){
+    Eigen::Vector3f centroid = Eigen::Vector3f::Zero();
     int size = XYZ.size();
     //---------------------------
 
@@ -128,18 +128,18 @@ namespace{
     //---------------------------
     return out;
   }
-  Eigen::Matrix3d fct_covarianceMat(std::vector<Eigen::Vector3d> vec){
+  Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f> vec){
     //---------------------------
 
     // Centroide
-    Eigen::Vector3d centroid = fct_centroid(vec);
+    Eigen::Vector3f centroid = fct_centroid(vec);
 
     //Covariance matrix
-    Eigen::Matrix3d covMat = Eigen::Matrix3d::Zero();
+    Eigen::Matrix3f covMat = Eigen::Matrix3f::Zero();
     for(int i=0; i<vec.size(); i++){
       for (int j=0; j<3; j++){
         for (int k=j; k<3; k++){
-          Eigen::Vector3d point = vec[i];
+          Eigen::Vector3f point = vec[i];
           covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
         }
       }
@@ -432,7 +432,7 @@ namespace{
   }
 
   //Geometric functions
-  double fct_angularDistance(const Eigen::Matrix3d &rota, const Eigen::Matrix3d &rotb) {
+  double fct_angularDistance(const Eigen::Matrix3f &rota, const Eigen::Matrix3f &rotb) {
     double norm = ((rota * rotb.transpose()).trace() - 1) / 2;
     norm = std::acos(norm) * 180 / M_PI;
     return norm;

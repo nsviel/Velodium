@@ -72,6 +72,7 @@ void Online::update_configuration(){
 void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //This function is called each time a new subset arrives
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  cloud->subset_selected = subset;
   //---------------------------
 
   //Control subset visibilities
@@ -126,7 +127,7 @@ void Online::compute_displayStats(Subset* subset){
 
   //Consol result
   string stats = subset->name + ": ";
-  if(with_slam){
+  if(with_slam && frame->is_slamed){
     stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
   }
   if(with_save_image){
@@ -204,7 +205,7 @@ void Online::camera_position(Subset* subset){
   //Camera follow absolute movement
   else{
     Frame* frame = &subset->frame;
-    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Vector3f trans_b = frame->trans_b;
     vec3 camPos = cameraManager->get_camPos();
 
     float x = camPos.x + trans_b(0) - camera_moved_trans.x;
@@ -265,7 +266,7 @@ void Online::cloud_size_controler(Cloud* cloud){
 void Online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
-  
+
   //Set visibility just for wanted subsets
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
