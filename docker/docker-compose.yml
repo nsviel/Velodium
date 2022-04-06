@@ -24,7 +24,7 @@ services:
   ai:
     image: "ai_img"
     volumes:
-        - "../Louis/docker_shared/install_required.sh:/install_required.sh"
+        - "../../Louis/docker_shared/install_required.sh:/install_required.sh"
     stdin_open: true
     tty: true
     deploy:

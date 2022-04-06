@@ -26,7 +26,7 @@ SLAM_assessment::SLAM_assessment(Slam* slam){
   this->thres_pose_trans = 3.0f;
   this->thres_pose_rotat = 15.0f;
   this->thres_optimMinNorm = 0.3f;
-  this->thres_diff_angle = 0.5f;
+  this->thres_diff_angle = 1.0f;
 
   this->nb_rlt_previous_mean = 10;
   this->nb_rlt_previous_pose = 5;
