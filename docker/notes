@@ -1,0 +1,49 @@
+Abstract 
+#-------------
+3 dockers:
+    Velodium        =>
+    AI component    => 1 docker compose
+    Pywardium
+
+Docker 
+#-------------
+Installation
+    sudo apt install docker.io docker-compose
+
+Pour construrie une image
+    sudo docker build -t test .
+
+Pour netoyer les images
+    docker system prune
+
+Pour autorisation root du daemon :
+    sudo usermod -aG docker ${USER}
+    su - ${USER}
+
+-d : detached
+-p PORT:PORT : rediriger ou ouvre un port pour l'application
+-t NAME : permet de donner un nom à l'image créer
+-it : short for --interactive + --tty, avec docker run permet de rentrer directement dans le container
+
+Nvidia-docker toolkit
+#------------
+Installation
+    distribution="ubuntu20.04" && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+    sudo apt-get update
+    sudo apt-get install -y nvidia-docker2
+    sudo systemctl restart docker
+
+Docker compose:
+#-------------
+installation :
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
+
+Build all sub-containers (equ. docker run)
+    docker-compose up
+
+Stop all sub-containers
+    docker-compose stop
+    docker-compose down
+
+Validate all sub-container syntax
+    docker-compose config

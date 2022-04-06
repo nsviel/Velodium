@@ -2,7 +2,7 @@ version: '3'
 
 services:
   velodium:
-    image: "glx"
+    image: "velodium"
     environment:
       - "DISPLAY=$DISPLAY"
     volumes:
@@ -13,5 +13,7 @@ services:
     ports:
       - 2370:2370
     network_mode: "host"
-  #aimodule:
-  #  build:
+  ai:
+    image: "ai_image"
+    ipc: "host"
+
