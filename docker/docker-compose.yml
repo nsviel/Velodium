@@ -24,7 +24,8 @@ services:
   ai:
     image: "ai_img"
     volumes:
-        - "../Louis/docker_shared/install_required.sh:/install_required.sh"
+        - "../../Louis/docker_shared/install_required.sh:/install_required.sh"
+        - "../../models/once_models/sup_models/second_no_intensity/default/ckpt/checkpoint_epoch_80.pth:/model.pth"
     stdin_open: true
     tty: true
     deploy:
