@@ -155,6 +155,9 @@ bool Slam::check_conditions(Cloud* cloud, int subset_ID){
 
   //No ponctual SLAM condition
   if(frame->is_slamed == true) return false;
+  if(map_frame_ID == 0){
+    this->map_frame_begin_ID = subset_ID;
+  }
   if(subset_ID < map_frame_begin_ID) return false;
   if(cloud->ID != ID_cloud && ID_cloud != -1){
     this->reset_slam();
@@ -168,10 +171,6 @@ void Slam::init_frameID(Cloud* cloud, int subset_ID){
   //---------------------------
 
   frame->ID = map_frame_ID;
-
-  if(map_frame_ID == 0){
-    this->map_frame_begin_ID = subset_ID;
-  }
   this->ID_cloud = cloud->ID;
   this->map_frame_ID++;
 

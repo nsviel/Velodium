@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  velodium:
+    build: release/Velodium/
+    environment:
+      - "DISPLAY"
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    ports:
+      - 2370:2370
+  #aimodule:
+  #  build:

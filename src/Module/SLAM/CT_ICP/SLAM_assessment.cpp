@@ -24,7 +24,7 @@ SLAM_assessment::SLAM_assessment(Slam* slam){
   this->thres_ego_rotat = 15.0f;
   this->thres_pose_trans = 3.0f;
   this->thres_pose_rotat = 15.0f;
-  this->thres_optimMinNorm = 0.2f;
+  this->thres_optimMinNorm = 0.3f;
 
   this->nb_rlt_previous_mean = 10;
   this->nb_rlt_previous_pose = 5;
@@ -176,6 +176,8 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   //---------------------------
   return true;
 }
+
+//Mettre des assessment sur la rotation max selon X et Y
 
 //Subfunctions
 float SLAM_assessment::AngularDistance(Eigen::Matrix3f &rota, Eigen::Matrix3f &rotb){

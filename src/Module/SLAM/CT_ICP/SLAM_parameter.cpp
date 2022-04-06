@@ -64,6 +64,7 @@ void SLAM_parameter::make_config(string conf){
   //---------------------------
 }
 void SLAM_parameter::make_config_0(){
+  //velodyne_vlp64
   //---------------------------
 
   //Slam
@@ -84,9 +85,9 @@ void SLAM_parameter::make_config_0(){
 
   *thres_ego_trans = 2.0f;
   *thres_ego_rotat = 15.0f;
-  *thres_pose_trans = 3.0f;
+  *thres_pose_trans = 4.0f;
   *thres_pose_rotat = 15.0f;
-  *thres_optimMinNorm = 0.2f;
+  *thres_optimMinNorm = 0.4f;
   *nb_residual_min = 100;
   *nb_rlt_previous_mean = 10;
   *nb_rlt_previous_pose = 4;
@@ -132,6 +133,7 @@ void SLAM_parameter::make_config_0(){
   //---------------------------
 }
 void SLAM_parameter::make_config_1(){
+  //velodyne_vlp16
   //---------------------------
 
   //Slam
@@ -154,7 +156,7 @@ void SLAM_parameter::make_config_1(){
   *thres_ego_rotat = 15.0f;
   *thres_pose_trans = 3.0f;
   *thres_pose_rotat = 15.0f;
-  *thres_optimMinNorm = 0.2f;
+  *thres_optimMinNorm = 0.3f;
   *nb_residual_min = 50;
   *nb_rlt_previous_mean = 10;
   *nb_rlt_previous_pose = 4;
@@ -200,6 +202,7 @@ void SLAM_parameter::make_config_1(){
   //---------------------------
 }
 void SLAM_parameter::make_config_2(){
+  //velodyne_hdl32
   //---------------------------
 
   //Slam
@@ -222,7 +225,7 @@ void SLAM_parameter::make_config_2(){
   *thres_ego_rotat = 15.0f;
   *thres_pose_trans = 3.0f;
   *thres_pose_rotat = 15.0f;
-  *thres_optimMinNorm = 0.2f;
+  *thres_optimMinNorm = 0.3f;
   *nb_residual_min = 50;
   *nb_rlt_previous_mean = 10;
   *nb_rlt_previous_pose = 4;

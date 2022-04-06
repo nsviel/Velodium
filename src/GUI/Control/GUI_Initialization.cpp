@@ -40,11 +40,9 @@ GUI_Initialization::~GUI_Initialization(){}
 void GUI_Initialization::init_gui(){
   //---------------------------
 
-  //Two Buddha point cloud to register
   if(ImGui::Button("Buddha", ImVec2(100,0))){
     this->init_mode(0);
   }
-  //Two Torus point cloud to register
   if(ImGui::Button("Torus", ImVec2(100,0))){
     this->init_mode(1);
   }
@@ -54,15 +52,15 @@ void GUI_Initialization::init_gui(){
   if(ImGui::Button("VLP16 - Nuscene", ImVec2(100,0))){
     this->init_mode(3);
   }
-  if(ImGui::Button("VLP64 - Kitty", ImVec2(100,0))){
+  if(ImGui::Button("VLP64 - Kitti", ImVec2(100,0))){
     this->init_mode(4);
   }
   if(ImGui::Button("HDL32 - Tunel", ImVec2(100,0))){
     this->init_mode(5);
   }
-  if(ImGui::Button("AI interface", ImVec2(100,0))){
+  /*if(ImGui::Button("AI interface", ImVec2(100,0))){
     this->init_mode(6);
-  }
+  }*/
 
   //---------------------------
 }
@@ -92,31 +90,31 @@ void GUI_Initialization::init_mode(int mode){
       loaderManager->load_cloud("../media/engine/fastScene/torus_2.ply");
       break;
     }
-    case 2:{//PCAP
+    case 2:{//VLP16 PCAP
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp16");
       loaderManager->load_cloud("../media/engine/fastScene/pcap_test.pcap");
       break;
     }
-    case 3:{//Nuscene
+    case 3:{//VLP16 Nuscene
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp16");
       pathManager->loading_directoryFrames("/home/aether/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
       break;
     }
-    case 4:{//Frames in movement
+    case 4:{//VLP16 kitti
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp64");
-      pathManager->loading_directoryFrames("../media/point_cloud/frames/");
+      pathManager->loading_directoryFrames("../media/point_cloud/kitti/");
       break;
     }
-    case 5:{//Tunnel
+    case 5:{//HDL32 Tunnel
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_hdl32");
-      loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/HDL32-V2_Tunnel.pcap");
+      loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/pcap/HDL32/HDL32-V2_Tunnel.pcap");
       break;
     }
-    case 6:{//AI prediction
+    case 6:{//AI setup
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp64");
       pathManager->loading_directoryFrames("../media/point_cloud/frames/");
