@@ -338,53 +338,50 @@ void Slam::compute_updateLocation(Subset* subset){
   //---------------------------
   sceneManager->update_subset_location(subset);
 }
-void Slam::compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset){
+void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
   voxelMap* map = mapManager->get_localmap();
   //---------------------------
 
   //Fill stats
-  frame->time_slam = duration;
-  frame->map_size_abs = map->size();
-  frame->map_size_rlt = map->size() - map_size_old;
+  frame_m0->time_slam = duration;
+  frame_m0->map_size_abs = map->size();
+  frame_m0->map_size_rlt = map->size() - map_size_old;
   this->map_size_old = map->size();
 
   //Transformation parameters
-  vec3 trans_abs = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
+  vec3 trans_abs = vec3(frame_m0->trans_b(0), frame_m0->trans_b(1), frame_m0->trans_b(2));
   vec3 trans_rlt;
-  if(frame->ID == 0){
+  if(frame_m0->ID == 0){
     trans_rlt = vec3(0, 0, 0);
   }else if(frame_m1 != nullptr){
-    trans_rlt.x = frame->trans_b(0) - frame_m1->trans_b(0);
-    trans_rlt.y = frame->trans_b(1) - frame_m1->trans_b(1);
-    trans_rlt.z = frame->trans_b(2) - frame_m1->trans_b(2);
+    trans_rlt.x = frame_m0->trans_b(0) - frame_m1->trans_b(0);
+    trans_rlt.y = frame_m0->trans_b(1) - frame_m1->trans_b(1);
+    trans_rlt.z = frame_m0->trans_b(2) - frame_m1->trans_b(2);
   }
 
   Transforms transformManager;
-  vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
+  vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
 
   vec3 rotat_rlt;
-  if(frame->ID == 0){
+  if(frame_m0->ID == 0){
     rotat_rlt = vec3(0, 0, 0);
   }
   else if(frame_m1 != nullptr){
-    vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
+    vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
     vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
-
-    rotat_rlt.x = f0_rotat.x - f0_rotat.x;
-    rotat_rlt.y = f0_rotat.y - f1_rotat.y;
-    rotat_rlt.z = f0_rotat.z - f1_rotat.z;
+    rotat_rlt = f0_rotat - f1_rotat;
   }
 
-  frame->trans_abs = trans_abs;
-  frame->rotat_abs = rotat_abs;
-  frame->trans_rlt = trans_rlt;
-  frame->rotat_rlt = rotat_rlt;
+  frame_m0->trans_abs = trans_abs;
+  frame_m0->rotat_abs = rotat_abs;
+  frame_m0->trans_rlt = trans_rlt;
+  frame_m0->rotat_rlt = rotat_rlt;
 
   //Terminal result
   if(verbose){
     cout<<"[sucess] SLAM - "<<subset->name.c_str();
-    cout<<" "<<to_string(frame->ID)<<"/"<< ID_max;
-    cout<< " [" <<frame->time_slam<< " ms]"<<endl;
+    cout<<" "<<to_string(frame_m0->ID)<<"/"<< ID_max;
+    cout<< " [" <<frame_m0->time_slam<< " ms]"<<endl;
   }
 
   //---------------------------

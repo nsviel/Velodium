@@ -29,6 +29,7 @@ public:
   inline float* get_thres_pose_trans(){return &thres_pose_trans;}
   inline float* get_thres_pose_rotat(){return &thres_pose_rotat;}
   inline float* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
+  inline float* get_thres_diff_angle(){return &thres_diff_angle;}
   inline int* get_nb_residual_min(){return &nb_residual_min;}
   inline int* get_nb_rlt_previous_mean(){return &nb_rlt_previous_mean;}
   inline int* get_nb_rlt_previous_pose(){return &nb_rlt_previous_pose;}
@@ -42,6 +43,7 @@ private:
   float thres_pose_trans;
   float thres_pose_rotat;
   float thres_optimMinNorm;
+  float thres_diff_angle;
 
   float sum_ego_trans;
   float sum_ego_rotat;

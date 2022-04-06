@@ -21,4 +21,18 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+  ai:
+    image: "ai_img"
+    volumes:
+        - "../Louis/docker_shared/install_required.sh:/install_required.sh"
+    stdin_open: true
+    tty: true
+    deploy:
+       resources:
+         reservations:
+           devices:
+             - driver: nvidia
+               count: 1
+               capabilities: [gpu]
+
 

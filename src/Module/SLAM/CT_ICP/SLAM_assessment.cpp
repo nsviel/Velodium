@@ -6,6 +6,7 @@
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Specific/fct_maths.h"
 
 
@@ -25,6 +26,7 @@ SLAM_assessment::SLAM_assessment(Slam* slam){
   this->thres_pose_trans = 3.0f;
   this->thres_pose_rotat = 15.0f;
   this->thres_optimMinNorm = 0.3f;
+  this->thres_diff_angle = 0.5f;
 
   this->nb_rlt_previous_mean = 10;
   this->nb_rlt_previous_pose = 5;
@@ -110,18 +112,24 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
 bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  Transforms transformManager;
   bool sucess = true;
   //---------------------------
 
   //Compute relative stats for current frame
+  vec3 diff_angle = vec3(0);
   if(frame_m0->ID >= 1){
     frame_m0->ego_trans = (frame_m0->trans_e - frame_m0->trans_b).norm();
     frame_m0->ego_rotat = AngularDistance(frame_m0->rotat_b, frame_m0->rotat_e);
     frame_m0->diff_trans = (frame_m0->trans_b - frame_m1->trans_b).norm() + (frame_m0->trans_e - frame_m1->trans_e).norm();
     frame_m0->diff_rotat = AngularDistance(frame_m1->rotat_b, frame_m0->rotat_b) + AngularDistance(frame_m1->rotat_e, frame_m0->rotat_e);
     frame_m0->opti_score = gnManager->get_opti_score();
+    vec3 angles_m0 = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    vec3 angles_m1 = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
+    diff_angle = angles_m1 - angles_m0;
   }
 
+  //Make verification tests
   if(frame_m0->ID >= nb_rlt_previous_pose){
     this->compute_stat_mean(cloud, subset_ID);
 
@@ -157,6 +165,18 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
     if(frame_m0->opti_score > sum_opti_score + 1){
       cout<<"[error] Optimization relative score too important ";
       cout<<"["<<frame_m0->opti_score<<"/"<<sum_opti_score<<"]"<<endl;
+      sucess = false;
+    }
+
+    //Test 6: restriction on X & Y rotation axis
+    if(diff_angle.x > thres_diff_angle){
+      cout<<"[error] Relative X axis rotation angle too high ";
+      cout<<"["<<diff_angle.x<<"/"<<thres_diff_angle<<"]"<<endl;
+      sucess = false;
+    }
+    if(diff_angle.y > thres_diff_angle){
+      cout<<"[error] Relative Y axis rotation angle too high ";
+      cout<<"["<<diff_angle.y<<"/"<<thres_diff_angle<<"]"<<endl;
       sucess = false;
     }
   }

@@ -285,6 +285,14 @@ void GUI_Slam::parameter_robustesse(){
       ImGui::SetTooltip("Minimal optimization score to obtain to validate ICP");
     }
 
+    //Maximal X and Y axis rotation angle
+    float* thres_diff_angle = assessManager->get_thres_diff_angle();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("Max X and Y axis diff angle", thres_diff_angle, 0.001f, 3.0f, "%.1f");
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Maximal X and Y axis rotation angle");
+    }
+
     //Maximum displacement in a frame
     float* thres_ego_trans = assessManager->get_thres_ego_trans();
     ImGui::SetNextItemWidth(item_width);
