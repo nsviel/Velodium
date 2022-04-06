@@ -9,4 +9,5 @@ doc/*
 docker
 docker/*
 Dockerfile
+docker-compose.yml
 .git
