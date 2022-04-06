@@ -4,7 +4,7 @@ services:
   velodium:
     image: "velodium"
     environment:
-      - "DISPLAY=$DISPLAY"
+      - DISPLAY
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
       - ~/.Xauthority:/root/.Xauthority
@@ -16,4 +16,3 @@ services:
   ai:
     image: "ai_image"
     ipc: "host"
-
