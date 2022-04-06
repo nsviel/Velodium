@@ -5,6 +5,7 @@ services:
     image: "velodium"
     environment:
       - DISPLAY
+      - gpus="all"
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
       - ~/.Xauthority:/root/.Xauthority
@@ -13,6 +14,11 @@ services:
     ports:
       - 2370:2370
     network_mode: "host"
-  ai:
-    image: "ai_image"
-    ipc: "host"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
