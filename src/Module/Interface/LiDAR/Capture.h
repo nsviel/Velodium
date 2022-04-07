@@ -22,7 +22,7 @@ public:
 
 public:
   //Main functions
-  void start_new_capture();
+  void start_new_capture(string model);
   void stop_capture();
   void runtime_capturing();
 

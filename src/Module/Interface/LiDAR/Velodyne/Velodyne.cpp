@@ -61,15 +61,17 @@ void Velodyne::lidar_start_watcher(){
       vector<int> packet_dec = udpServManager->read_UDP_packets(capture_port);
 
       //Parse decimal packet into point cloud
-      udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);
+      if(packet_dec.size() != 0){
+        udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);
 
-      //Iteratively build a complete frame
-      bool frame_rev = frameManager->build_frame(packet_udp);
+        //Iteratively build a complete frame
+        bool frame_rev = frameManager->build_frame(packet_udp);
 
-      if(frame_rev){
-        udpPacket* frame = frameManager->get_endedFrame();
-        this->udp_capture = *frame;
-        this->is_newSubset = true;
+        if(frame_rev){
+          udpPacket* frame = frameManager->get_endedFrame();
+          this->udp_capture = *frame;
+          this->is_newSubset = true;
+        }
       }
     }
   });

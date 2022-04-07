@@ -43,14 +43,20 @@ Capture::Capture(Interface_node* node){
 Capture::~Capture(){}
 
 //Main functions
-void Capture::start_new_capture(){
+void Capture::start_new_capture(string model){
   //---------------------------
 
-  if(lidar_model == "velodyne_vlp16"){
+  if(model == "velodyne_vlp16"){
     this->capture_vlp16();
+    this->lidar_model = "velodyne_vlp16";
   }
-  else if(lidar_model == "scala"){
+  else if(model == "scala"){
     this->capture_scala();
+    this->lidar_model = "scala";
+  }
+  else{
+    string log = "Could not capture " + model + " LiDAR";
+    console.AddLog("error", log);
   }
 
   //---------------------------
@@ -101,7 +107,7 @@ void Capture::runtime_capturing(){
   }
 
   //If new subset, include it in the capture cloud
-  if(new_subset != nullptr){
+  if(new_subset != nullptr && cloud_capture != nullptr){say(cloud_capture->nb_subset);
     //Make new subset stuff
     this->operation_new_subset(new_subset);
   }
@@ -121,25 +127,21 @@ void Capture::capture_vlp16(){
   //If lidar hasn't start, start it
   if(*is_rotating == false){
     veloManager->lidar_start_motor();
-  }*/
+  }
 
   //If all OK start new capture
-  //if(*is_rotating && *is_connected){
-  if(true){
-    veloManager->lidar_start_watcher();
+  //if(*is_rotating && *is_connected){*/
 
-    //Create new empty cloud
-    loaderManager->load_cloud_empty();
-    cloud_capture = loaderManager->get_createdcloud();
-    cloud_capture->ID_subset = 0;
-    cloud_capture->name = "Capture_vlp16_" + to_string(ID_capture);
+  veloManager->lidar_start_watcher();
 
-    this->is_capturing = true;
-    ID_capture++;
-  }else{
-    console.AddLog("error", "Problem new Vlp16 capture");
-    return;
-  }
+  //Create new empty cloud
+  loaderManager->load_cloud_empty();
+  cloud_capture = loaderManager->get_createdcloud();
+  cloud_capture->ID_subset = 0;
+  cloud_capture->name = "Capture_vlp16_" + to_string(ID_capture);
+
+  this->is_capturing = true;
+  ID_capture++;
 
   //---------------------------
   console.AddLog("success", "Watcher - Vlp16 capture");

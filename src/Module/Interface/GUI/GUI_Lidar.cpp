@@ -78,7 +78,7 @@ void GUI_Lidar::velo_capture(){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Start capture", ImVec2(157, 0))){
-      captureManager->start_new_capture();
+      captureManager->start_new_capture("velodyne_vlp16");
     }
   }else{
     //Stop button
@@ -169,7 +169,7 @@ void GUI_Lidar::scala_capture(){
     //Start button
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Start capture", ImVec2(157, 0))){
-      captureManager->start_new_capture();
+      captureManager->start_new_capture("scala");
     }
   }else{
     //Stop button

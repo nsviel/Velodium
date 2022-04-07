@@ -41,14 +41,16 @@ void Scene::remove_cloud(Cloud* cloud){
     this->selection_setCloud(oID);
 
     //Delete subsets
-    for(int i=0; i<cloud->nb_subset; i++){
+    int size = cloud->nb_subset;
+    for(int i=0; i<size; i++){
       Subset* subset = *next(cloud->subset.begin(), i);
       glyphManager->remove_glyph_subset(subset);
       this->remove_subset(cloud, subset->ID);
     }
 
     //Delete cloud
-    delete cloud_selected;
+    delete cloud;
+    cloud = nullptr;
 
     //Delete cloud iterator in list
     list<Cloud*>::iterator it = next(list_cloud->begin(), oID);
@@ -66,9 +68,11 @@ void Scene::remove_cloud(Cloud* cloud){
     string log = "Cloud "+ name +" removed";
     console.AddLog("#", log);
   }
+
+  //If cloud list empty
   if(list_cloud->size() == 0){
     glyphManager->reset_scene();
-    cloud_selected = nullptr;
+    this->cloud_selected = nullptr;
   }
 
   //---------------------------
@@ -619,6 +623,10 @@ Subset* Scene::get_subset_init_byID(Cloud* cloud, int ID){
 }
 Subset* Scene::get_subset_byID(Cloud* cloud, int ID){
   //---------------------------
+
+  if(cloud == nullptr){
+    return nullptr;
+  }
 
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);

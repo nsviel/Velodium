@@ -72,6 +72,7 @@ void Online::update_configuration(){
 void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //This function is called each time a new subset arrives
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  if(subset == nullptr) return;
   cloud->subset_selected = subset;
   //---------------------------
 
@@ -143,9 +144,10 @@ void Online::compute_displayStats(Subset* subset){
 
 //Camera funtions
 void Online::camera_followUp(Cloud* cloud, int ID_subset){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  if(subset == nullptr) return;
   //---------------------------
 
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   Frame* frame = &subset->frame;
 
   if(frame->ID >= 4){
@@ -157,28 +159,32 @@ void Online::camera_followUp(Cloud* cloud, int ID_subset){
     vec3 pos_m1 = frame_m1->trans_abs;
     vec3 pos_m2 = frame_m2->trans_abs;
     vec3 pos_m3 = frame_m3->trans_abs;
+    vec3 pos_diff = pos_m0 - pos_m1;
 
-    vec3 E = vec3(0,0,0);
-    for(int i=0; i<3; i++){
-      E[i] += pos_m0[i];
-      E[i] += pos_m1[i];
-      E[i] += pos_m2[i];
-      E[i] += pos_m3[i];
+    //If the displacment is enough
+    if(pos_diff.x > 0.1 || pos_diff.y > 0.1){
+      vec3 E = vec3(0,0,0);
+      for(int i=0; i<3; i++){
+        E[i] += pos_m0[i];
+        E[i] += pos_m1[i];
+        E[i] += pos_m2[i];
+        E[i] += pos_m3[i];
 
-      E[i] = E[i] / 4;
+        E[i] = E[i] / 4;
+      }
+
+      E = pos_m0 - E;
+      vec3 C = pos_m1 - camera_distPos * (E / fct_distance_origin(E));
+
+      //Camera pose
+      vec3 camPos = cameraManager->get_camPos();
+      vec3 camPos_new = vec3(C.x, C.y, camPos.z);
+      cameraManager->set_cameraPos(camPos_new);
+
+      //Camera orientation
+      float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
+      cameraManager->set_angle_azimuth(cam_angle);
     }
-
-    E = pos_m0 - E;
-    vec3 C = pos_m1 - camera_distPos * (E / fct_distance_origin(E));
-
-    //Camera pose
-    vec3 camPos = cameraManager->get_camPos();
-    vec3 camPos_new = vec3(C.x, C.y, camPos.z);
-    cameraManager->set_cameraPos(camPos_new);
-
-    //Camera orientation
-    float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
-    cameraManager->set_angle_azimuth(cam_angle);
   }
 
   //this->camera_position(subset);
@@ -265,6 +271,7 @@ void Online::cloud_size_controler(Cloud* cloud){
 }
 void Online::set_cloud_visibility(Cloud* cloud, int& ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  if(subset == nullptr) return;
   //---------------------------
 
   //Set visibility just for wanted subsets

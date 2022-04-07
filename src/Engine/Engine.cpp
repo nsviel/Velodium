@@ -72,7 +72,7 @@ void Engine::runtime_draw_clouds(){
         //Display for all visible subsets
         if(subset->visibility){
           glBindVertexArray(subset->VAO);
-          glDrawArrays(GL_POINTS, 0, subset->xyz.size());
+          glDrawArrays(GL_POINTS, 0, subset->xyz.size()); // Error here during capture via pywardium
 
           //Subset glyph stuff
           glyphManager->runtime_glyph_subset(subset);

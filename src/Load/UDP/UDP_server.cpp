@@ -36,7 +36,6 @@ vector<int> UDP_server::read_UDP_packets(int port){
 //Subfunctions
 void UDP_server::server_binding(int port){
   if(is_binded == false){
-    //cout << "Connect to read UDP packets..." << endl;
     //---------------------------
 
     // Creating socket file descriptor
@@ -86,15 +85,13 @@ void UDP_server::server_read_data(){
 
   //Once packet received, process it
   packet_dec.clear();
-  for(int i=0; i<udp_size; i++){
-    bitset<8> octet(buffer[i]);
+  if(udp_size != 0 && udp_size != 512){
+    for(int i=0; i<udp_size; i++){
+      bitset<8> octet(buffer[i]);
 
-    int octet_32 = octet.to_ulong();
-    packet_dec.push_back(octet_32);
-  }
-
-  if(packet_dec.size() == 0){
-    cout << "Problem data capture" << endl;
+      int octet_32 = octet.to_ulong();
+      packet_dec.push_back(octet_32);
+    }
   }
 
   //---------------------------

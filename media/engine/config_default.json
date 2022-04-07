@@ -39,6 +39,7 @@
       "cloud_rotation" : 5,
       "cloud_translation" : 0.01,
       "color_mode" : 0,
+      "path_data" : "../media/data/",
       "path_media" : "../media/",
       "point_size" : 2
    },

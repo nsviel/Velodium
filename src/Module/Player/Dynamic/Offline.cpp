@@ -45,11 +45,6 @@ void Offline::select_bySubsetID(Cloud* cloud, int ID_subset){
 
   bool range_ok = select_rangeLimit(cloud, ID_subset);
   if(range_ok){
-    //If we go from ID_0 to ID_1, compute also for ID_0
-    if(ID_subset == 1){
-      onlineManager->compute_onlineOpe(cloud, 0);
-    }
-
     onlineManager->compute_onlineOpe(cloud, ID_subset);
   }
 
@@ -59,6 +54,12 @@ bool Offline::select_rangeLimit(Cloud* cloud, int& ID_subset){
   Subset* subset_first = sceneManager->get_subset(cloud, 0);
   Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
   //---------------------------
+
+  //Check if subset exists
+  Subset* subset = sceneManager->get_subset(cloud, ID_subset);
+  if(subset == nullptr){
+    return false;
+  }
 
   //If frame desired ID is superior to the number of subset restart it
   if(player_returnToZero){
