@@ -55,7 +55,7 @@ void Online::update_configuration(){
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
-  this->nb_subset_max = 20;
+  this->nb_subset_max = 50;
 
   this->with_camera_top = false;
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");

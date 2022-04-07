@@ -76,7 +76,7 @@ void SSH::ssh_autentification(){
     char* password = getpass("Password: ");
     int rc = ssh_userauth_password(ssh, NULL, password);
 
-    if (rc != SSH_AUTH_SUCCESS){
+    if (rc != SSH_AUTH_sucess){
       fprintf(stderr, "Error authenticating with password: %s\n", ssh_get_error(ssh));
       cout<<"New tentative: "<<to_string(i + 1)<<"/"<<to_string(nb_tentatives)<<endl;
       sucess = false;

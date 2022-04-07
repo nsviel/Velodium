@@ -54,7 +54,7 @@ bool Saver::save_cloud(Cloud* cloud, string filePath){
     sucess = plyManager->Exporter_cloud(filePath, format, cloud);
   }
 
-  //Say if save is successfull
+  //Say if save is sucessfull
   if(!sucess){
     console.AddLog("error", "Failing saving point cloud");
     return false;
@@ -81,7 +81,7 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath){
     sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
   }
 
-  //Say if save is successfull
+  //Say if save is sucessfull
   if(!sucess){
     console.AddLog("error", "Failing saving point cloud");
     return false;
@@ -108,7 +108,7 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath, string fi
     sucess = plyManager->Exporter_subset(dirPath, ply_format, subset, fileName);
   }
 
-  //Say if save is successfull
+  //Say if save is sucessfull
   if(!sucess){
     console.AddLog("error", "Failing saving point cloud");
     return false;
@@ -135,7 +135,7 @@ bool Saver::save_subset_silent(Subset* subset, string format, string dirPath){
     sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
   }
 
-  //Say if save is successfull
+  //Say if save is sucessfull
   if(!sucess){
     console.AddLog("error", "Failing saving point cloud");
     return false;
