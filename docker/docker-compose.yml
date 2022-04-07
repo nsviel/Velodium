@@ -9,11 +9,12 @@ services:
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
       - ~/.Xauthority:/root/.Xauthority
+      - "../media/data/capture:/capture"
     devices:
       - "/dev/dri:/dev/dri"
-    ports:
-      - 2370:2370
-    network_mode: "host"
+        #ports:
+        #- 2370:2370
+        #network_mode: "host"
     deploy:
       resources:
         reservations:
@@ -26,6 +27,7 @@ services:
     volumes:
         - "../../Louis/docker_shared/install_required.sh:/install_required.sh"
         - "../../models/once_models/sup_models/second_no_intensity/default/ckpt/checkpoint_epoch_80.pth:/model.pth"
+        - "../media/data/capture:/capture"
     stdin_open: true
     tty: true
     deploy:
