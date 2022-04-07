@@ -12,9 +12,8 @@ services:
       - "../media/data/capture:/capture"
     devices:
       - "/dev/dri:/dev/dri"
-        #ports:
-        #- 2370:2370
-        #network_mode: "host"
+    ports:
+      - 2370:2370
     deploy:
       resources:
         reservations:
