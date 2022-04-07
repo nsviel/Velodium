@@ -15,10 +15,7 @@ Filemanager::Filemanager(Interface_node* node){
   this->node_interface = node;
   //---------------------------
 
-  this->gpsManager = node_interface->get_gpsManager();
-  this->saveManager = node_interface->get_saveManager();
-  this->predManager = node_interface->get_predManager();
-
+  this->path_data_dir = get_absolutePath_build() + "../../data/";
   this->is_clean_dir = true;
 
   //---------------------------
@@ -29,6 +26,10 @@ Filemanager::~Filemanager(){}
 void Filemanager::clean_directories(){
   if(is_clean_dir){
     //---------------------------
+
+    GPS* gpsManager = node_interface->get_gpsManager();
+    Saving* saveManager = node_interface->get_saveManager();
+    Prediction* predManager = node_interface->get_predManager();
 
     //Get directory paths
     string path_gps = gpsManager->get_path_gps();
@@ -50,8 +51,11 @@ void Filemanager::clean_directories(){
 void Filemanager::check_directories(){
   //---------------------------
 
+  GPS* gpsManager = node_interface->get_gpsManager();
+  Saving* saveManager = node_interface->get_saveManager();
+  Prediction* predManager = node_interface->get_predManager();
+
   //Get directory paths
-  string path_capture = node_interface->get_dir_path();
   string path_gps = gpsManager->get_path_gps();
   string path_image = saveManager->get_path_image();
   string path_frame = saveManager->get_path_frame();
@@ -59,7 +63,7 @@ void Filemanager::check_directories(){
   string path_grThr = predManager->get_path_grThr();
 
   //Clean directories
-  create_new_dir(path_capture);
+  create_new_dir(path_data_dir);
   create_new_dir(path_image);
   create_new_dir(path_frame);
   create_new_dir(path_predi);

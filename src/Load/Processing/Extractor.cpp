@@ -268,7 +268,7 @@ void Extractor::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->heatmap = false;
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;
-  cloud->saveas = get_absolutePath_build() + "/../media/data/";
+  cloud->saveas = get_absolutePath_build() + "../media/data/";
 
   //ID
   int* ID_cloud = sceneManager->get_new_ID_cloud();

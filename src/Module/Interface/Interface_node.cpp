@@ -18,16 +18,14 @@
 Interface_node::Interface_node(Module_node* node_module){
   //---------------------------
 
-  Engine_node* node_engine = node_module->get_node_engine();
+  this->node_engine = node_module->get_node_engine();
 
-  this->saveManager = new Saving(node_engine);
+  this->fileManager = new Filemanager(this);
+  this->saveManager = new Saving(this);
   this->predManager = new Prediction(node_engine);
   this->captureManager = new Capture(node_module);
   this->gpsManager = new GPS(node_engine);
   this->netManager = new Network();
-  this->fileManager = new Filemanager(this);
-
-  this->path_dir = get_absolutePath_build() + "/../../capture";
 
   //---------------------------
   this->init();

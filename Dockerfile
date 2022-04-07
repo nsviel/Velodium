@@ -29,5 +29,5 @@ EXPOSE 2370
 VOLUME /app/media/data
 
 # Run application
-CMD ["./executable"]
+CMD ["./executable", "ai"]
 

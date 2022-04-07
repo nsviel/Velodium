@@ -1,5 +1,9 @@
 #include "Saving.h"
 
+#include "Filemanager.h"
+
+#include "../Interface_node.h"
+
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -13,16 +17,18 @@
 
 
 //Constructor / Destructor
-Saving::Saving(Engine_node* node_engine){
+Saving::Saving(Interface_node* node){
   //---------------------------
 
+  Engine_node* node_engine = node->get_node_engine();
   Load_node* node_load = node_engine->get_node_load();
+  Filemanager* fileManager = node->get_fileManager();
 
   this->renderManager = node_engine->get_renderManager();
   this->saverManager = node_load->get_saveManager();
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_dir = get_absolutePath_build() + "/../../capture/";
+  this->path_dir = fileManager->get_path_data_dir();
   this->path_frame = path_dir + "frame/";
   this->path_image = path_dir + "image/";
 

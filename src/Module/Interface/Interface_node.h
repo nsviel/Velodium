@@ -11,6 +11,7 @@ class Network;
 class Capture;
 class Watcher;
 class Filemanager;
+class Engine_node;
 
 
 class Interface_node
@@ -30,10 +31,11 @@ public:
   inline Prediction* get_predManager(){return predManager;}
   inline Network* get_netManager(){return netManager;}
   inline Capture* get_captureManager(){return captureManager;}
-
-  inline string get_dir_path(){return path_dir;}
-
+  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Filemanager* get_fileManager(){return fileManager;}
+  
 private:
+  Engine_node* node_engine;
   GPS* gpsManager;
   Saving* saveManager;
   Prediction* predManager;
@@ -41,8 +43,6 @@ private:
   Capture* captureManager;
   Filemanager* fileManager;
   Watcher* watcherManager;
-
-  string path_dir;
 };
 
 #endif
