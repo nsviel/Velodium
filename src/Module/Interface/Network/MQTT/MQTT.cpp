@@ -15,7 +15,8 @@ MQTT::MQTT(){
   //---------------------------
 
   //Connection
-  this->broker_address = "tcp://localhost:1883";
+  //this->broker_address = "tcp://localhost:1883";
+  this->broker_address = "tcp:10.201.20.106:1883";//Ordi nathan labo
   this->broker_topic = "Obstacle";
   this->client_message = "Hello world!";
   this->client_ID = "AI_module";
