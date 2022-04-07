@@ -88,6 +88,7 @@ void Configuration::preconf_default(Json::Value& root){
   //Parameters
   Json::Value param;
   param["path_media"] = "../media/";
+  param["path_data"] = "../media/data/";
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
@@ -159,6 +160,7 @@ void Configuration::preconf_capture(Json::Value& root){
   //Parameters
   Json::Value param;
   param["path_media"] = "../media/";
+  param["path_data"] = "../media/data/";
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
@@ -230,6 +232,7 @@ void Configuration::preconf_ai_module(Json::Value& root){
   //Parameters
   Json::Value param;
   param["path_media"] = "../media/";
+  param["path_data"] = "../../data/";
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
@@ -301,6 +304,7 @@ void Configuration::preconf_wp4_car(Json::Value& root){
   //Parameters
   Json::Value param;
   param["path_media"] = "../media/";
+  param["path_data"] = "../../data/";
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
@@ -372,6 +376,7 @@ void Configuration::preconf_wp5_train(Json::Value& root){
   //Parameters
   Json::Value param;
   param["path_media"] = "../media/";
+  param["path_data"] = "../../data/";
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
