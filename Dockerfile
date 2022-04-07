@@ -30,7 +30,7 @@ EXPOSE 2370
 RUN mkdir \
     ../../data \
     ../../data/frame \
-    ../../data/prediction
+    ../../data/prediction \
     ../../data/image \
     ../../data/gps
 VOLUME ../../data
