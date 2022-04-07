@@ -26,8 +26,8 @@ RUN cmake .. && make -j4
 
 # Open port & Shared directory
 EXPOSE 2370
-RUN mkdir ../data
-VOLUME ../data
+RUN mkdir ../../data
+VOLUME ../../data
 
 # Run application
 CMD ["./executable", "ai"]
