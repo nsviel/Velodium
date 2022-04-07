@@ -15,16 +15,17 @@
 
 
 //Constructor / Destructor
-Interface_node::Interface_node(Module_node* node_module){
+Interface_node::Interface_node(Module_node* node){
   //---------------------------
 
+  this->node_module = node;
   this->node_engine = node_module->get_node_engine();
 
   this->fileManager = new Filemanager(this);
   this->saveManager = new Saving(this);
-  this->predManager = new Prediction(node_engine);
-  this->captureManager = new Capture(node_module);
-  this->gpsManager = new GPS(node_engine);
+  this->predManager = new Prediction(this);
+  this->captureManager = new Capture(this);
+  this->gpsManager = new GPS(this);
   this->netManager = new Network();
 
   //---------------------------

@@ -18,7 +18,7 @@ class Interface_node
 {
 public:
   //Constructor / Destructor
-  Interface_node(Module_node* node_module);
+  Interface_node(Module_node* node);
   ~Interface_node();
 
 public:
@@ -26,16 +26,18 @@ public:
   void init();
   void runtime();
 
+  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Module_node* get_node_module(){return node_module;}
   inline GPS* get_gpsManager(){return gpsManager;}
   inline Saving* get_saveManager(){return saveManager;}
   inline Prediction* get_predManager(){return predManager;}
   inline Network* get_netManager(){return netManager;}
   inline Capture* get_captureManager(){return captureManager;}
-  inline Engine_node* get_node_engine(){return node_engine;}
   inline Filemanager* get_fileManager(){return fileManager;}
-  
+
 private:
   Engine_node* node_engine;
+  Module_node* node_module;
   GPS* gpsManager;
   Saving* saveManager;
   Prediction* predManager;

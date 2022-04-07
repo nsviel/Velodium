@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Module_node;
+class Interface_node;
 class Scene;
 class Loader;
 class Extractor;
@@ -17,7 +17,7 @@ class Capture
 {
 public:
   //Constructor / Destructor
-  Capture(Module_node* node_module);
+  Capture(Interface_node* node_module);
   ~Capture();
 
 public:

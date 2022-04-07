@@ -8,7 +8,7 @@
 
 #include <thread>
 
-class Engine_node;
+class Interface_node;
 class Extractor;
 
 class UDP_frame;
@@ -20,7 +20,7 @@ class Scala
 {
 public:
   //Constructor / Destructor
-  Scala(Engine_node* node_engine);
+  Scala(Interface_node* node);
   ~Scala();
 
 public:

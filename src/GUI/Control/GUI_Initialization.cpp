@@ -117,8 +117,7 @@ void GUI_Initialization::init_mode(int mode){
     case 6:{//AI setup
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp64");
-      pathManager->loading_directoryFrames("../media/point_cloud/frames/");
-      obstacleManager->add_obstacle_pred("/home/aether/Desktop/Velodium/media/data/capture_test/prediction/");
+      pathManager->loading_directoryFrames("../media/point_cloud/kitti/");
       configManager->make_preconfig(1);
       break;
     }

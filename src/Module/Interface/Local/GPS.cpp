@@ -1,5 +1,8 @@
 #include "GPS.h"
 
+#include "../Interface_node.h"
+#include "../Local/Filemanager.h"
+
 #include "../../../Engine/Scene/Configuration.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Engine_node.h"
@@ -13,16 +16,16 @@
 
 
 //Constructor / Destructor
-GPS::GPS(Engine_node* node_engine){
+GPS::GPS(Interface_node* node){
   //---------------------------
 
+  Engine_node* node_engine = node->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
+  Filemanager* fileManager = node->get_fileManager();
 
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_dir = get_absolutePath_build() + "../media/data/capture/";
-  this->path_gps = path_dir + "gps/";
-
+  this->path_gps = fileManager->get_path_data_dir() + "gps/";
   this->with_gps = configManager->parse_json_b("interface", "with_gps");
   this->is_gps = false;
 
