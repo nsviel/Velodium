@@ -27,7 +27,12 @@ RUN cmake .. && make -j4
 
 # Open port & Shared directory
 EXPOSE 2370
-RUN mkdir ../../data
+RUN mkdir \
+    ../../data \
+    ../../data/frame \
+    ../../data/prediction
+    ../../data/image \
+    ../../data/gps
 VOLUME ../../data
 
 # Run application
