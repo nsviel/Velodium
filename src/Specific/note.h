@@ -47,7 +47,7 @@ void Prediction::start_watcher_prediction(){
   this->is_whatching = true;
 
   //---------------------------
-  console.AddLog("sucess", "Watcher - Prediction running...");
+  console.AddLog("success", "Watcher - Prediction running...");
 }
 void Prediction::stop_watcher_prediction(){
   //---------------------------

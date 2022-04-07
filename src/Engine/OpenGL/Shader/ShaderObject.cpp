@@ -80,11 +80,11 @@ GLuint ShaderObject::shader_compilation(string file_path, GLenum shaderType){
 	}
 
 	//Compile ShaderObject
-	int sucess, InfoLogLength;
+	int success, InfoLogLength;
 	char const* sourcePointer = shaderCode.c_str();
 	glShaderSource(shaderID, 1, &sourcePointer , NULL);
 	glCompileShader(shaderID);
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &sucess);
+	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
 	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 
 	//Bind to program

@@ -71,19 +71,19 @@ void SSH::ssh_autentification(){
   //---------------------------
 
   //With password
-  bool sucess = true;
+  bool success = true;
    for(int i=0; i<nb_tentatives; i++){
     char* password = getpass("Password: ");
     int rc = ssh_userauth_password(ssh, NULL, password);
 
-    if (rc != SSH_AUTH_sucess){
+    if (rc != SSH_AUTH_SUCCESS){
       fprintf(stderr, "Error authenticating with password: %s\n", ssh_get_error(ssh));
       cout<<"New tentative: "<<to_string(i + 1)<<"/"<<to_string(nb_tentatives)<<endl;
-      sucess = false;
+      success = false;
     }else{
       cout<<"Identification OK."<<endl;
       ssh_connected = true;
-      sucess = true;
+      success = true;
       break;
     }
   }
@@ -95,7 +95,7 @@ void SSH::ssh_autentification(){
    fprintf(stderr, "Error authenticating with public key: %s\n", ssh_get_error(ssh));
  }*/
 
-  if(sucess == false){
+  if(success == false){
     cout<<"Exit program..."<<endl;
     exit(0);
   }
@@ -106,7 +106,7 @@ void SSH::ssh_verify_knownhost(){
   //SSH host file: (~/.ssh/known_hosts on UNIX)
   //---------------------------
 
-  bool sucess = true;
+  bool success = true;
   unsigned char *hash = NULL;
   ssh_key srv_pubkey = NULL;
   size_t hlen;

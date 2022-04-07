@@ -4137,13 +4137,13 @@ namespace Generators {
                 return false;
             }
 
-            const auto sucess = m_generator.next();
+            const auto success = m_generator.next();
             // If the underlying generator does not contain enough values
             // then we cut short as well
-            if (!sucess) {
+            if (!success) {
                 m_returned = m_target;
             }
-            return sucess;
+            return success;
         }
     };
 
@@ -4182,12 +4182,12 @@ namespace Generators {
 
     private:
         bool nextImpl() {
-            bool sucess = m_generator.next();
-            if (!sucess) {
+            bool success = m_generator.next();
+            if (!success) {
                 return false;
             }
-            while (!m_predicate(m_generator.get()) && (sucess = m_generator.next()) == true);
-            return sucess;
+            while (!m_predicate(m_generator.get()) && (success = m_generator.next()) == true);
+            return success;
         }
     };
 
@@ -4230,8 +4230,8 @@ namespace Generators {
             // In the first case, we need to poke the underlying generator.
             // If it happily moves, we are left in that state, otherwise it is time to start reading from our cache
             if (m_current_repeat == 0) {
-                const auto sucess = m_generator.next();
-                if (!sucess) {
+                const auto success = m_generator.next();
+                if (!success) {
                     ++m_current_repeat;
                 }
                 return m_current_repeat < m_target_repeats;
@@ -4271,11 +4271,11 @@ namespace Generators {
             return m_cache;
         }
         bool next() override {
-            const auto sucess = m_generator.next();
-            if (sucess) {
+            const auto success = m_generator.next();
+            if (success) {
                 m_cache = m_function(m_generator.get());
             }
-            return sucess;
+            return success;
         }
     };
 
@@ -4516,7 +4516,7 @@ namespace Catch {
         virtual bool allowThrows() const = 0;
         virtual std::ostream& stream() const = 0;
         virtual std::string name() const = 0;
-        virtual bool includesucessfulResults() const = 0;
+        virtual bool includesuccessfulResults() const = 0;
         virtual bool shouldDebugBreak() const = 0;
         virtual bool warnAboutMissingAssertions() const = 0;
         virtual bool warnAboutNoTests() const = 0;
@@ -5276,7 +5276,7 @@ namespace Catch {
         bool listReporters = false;
         bool listTestNamesOnly = false;
 
-        bool showsucessfulTests = false;
+        bool showsuccessfulTests = false;
         bool shouldDebugBreak = false;
         bool noThrow = false;
         bool showHelp = false;
@@ -5343,7 +5343,7 @@ namespace Catch {
         bool allowThrows() const override;
         std::ostream& stream() const override;
         std::string name() const override;
-        bool includesucessfulResults() const override;
+        bool includesuccessfulResults() const override;
         bool warnAboutMissingAssertions() const override;
         bool warnAboutNoTests() const override;
         ShowDurations::OrNot showDurations() const override;
@@ -6011,11 +6011,11 @@ namespace Catch {
             FileName = LightGrey,
             Warning = BrightYellow,
             ResultError = BrightRed,
-            Resultsucess = BrightGreen,
+            Resultsuccess = BrightGreen,
             ResultExpectedFailure = Warning,
 
             Error = BrightRed,
-            sucess = Green,
+            success = Green,
 
             OriginalExpression = Cyan,
             ReconstructedExpression = BrightYellow,
@@ -6578,7 +6578,7 @@ namespace Catch {
                 return CompleteInvoker<FunctionReturnType<Fun, Args...>>::invoke(std::forward<Fun>(fun), std::forward<Args>(args)...);
             }
 
-            const std::string benchmarkErrorMsg = "a benchmark failed to run sucessfully";
+            const std::string benchmarkErrorMsg = "a benchmark failed to run successfully";
         } // namespace Detail
 
         template <typename Fun>
@@ -7506,8 +7506,8 @@ namespace TestCaseTracking {
         virtual ~ITracker();
 
         // dynamic queries
-        virtual bool isComplete() const = 0; // sucessfully completed or failed
-        virtual bool issucessfullyCompleted() const = 0;
+        virtual bool isComplete() const = 0; // successfully completed or failed
+        virtual bool issuccessfullyCompleted() const = 0;
         virtual bool isOpen() const = 0; // Started but not complete
         virtual bool hasChildren() const = 0;
         virtual bool hasStarted() const = 0;
@@ -7515,7 +7515,7 @@ namespace TestCaseTracking {
         virtual ITracker& parent() = 0;
 
         // actions
-        virtual void close() = 0; // sucessfully complete
+        virtual void close() = 0; // successfully complete
         virtual void fail() = 0;
         virtual void markAsNeedingAnotherRun() = 0;
 
@@ -7560,7 +7560,7 @@ namespace TestCaseTracking {
             Executing,
             ExecutingChildren,
             NeedsAnotherRun,
-            Completedsucessfully,
+            Completedsuccessfully,
             Failed
         };
 
@@ -7574,7 +7574,7 @@ namespace TestCaseTracking {
         TrackerBase( NameAndLocation const& nameAndLocation, TrackerContext& ctx, ITracker* parent );
 
         bool isComplete() const override;
-        bool issucessfullyCompleted() const override;
+        bool issuccessfullyCompleted() const override;
         bool isOpen() const override;
         bool hasChildren() const override;
         bool hasStarted() const override {
@@ -8176,7 +8176,7 @@ namespace Catch {
         FatalConditionHandler m_fatalConditionhandler;
         bool m_lastAssertionPassed = false;
         bool m_shouldReportUnexpected = true;
-        bool m_includesucessfulResults;
+        bool m_includesuccessfulResults;
     };
 
     void seedRng(IConfig const& config);
@@ -8312,12 +8312,12 @@ namespace Catch {
         m_resultData( data )
     {}
 
-    // Result was a sucess
+    // Result was a success
     bool AssertionResult::succeeded() const {
         return Catch::isOk( m_resultData.resultType );
     }
 
-    // Result was a sucess, or failure is suppressed
+    // Result was a success, or failure is suppressed
     bool AssertionResult::isOk() const {
         return Catch::isOk( m_resultData.resultType ) || shouldSuppressFailure( m_info.resultDisposition );
     }
@@ -9820,9 +9820,9 @@ namespace Catch {
             | Opt( config.listTags )
                 ["-t"]["--list-tags"]
                 ( "list all/matching tags" )
-            | Opt( config.showsucessfulTests )
-                ["-s"]["--sucess"]
-                ( "include sucessful tests in output" )
+            | Opt( config.showsuccessfulTests )
+                ["-s"]["--success"]
+                ( "include successful tests in output" )
             | Opt( config.shouldDebugBreak )
                 ["-b"]["--break"]
                 ( "break into debugger on failure" )
@@ -9999,7 +9999,7 @@ namespace Catch {
     bool Config::allowThrows() const                   { return !m_data.noThrow; }
     std::ostream& Config::stream() const               { return m_stream->stream(); }
     std::string Config::name() const                   { return m_data.name.empty() ? m_data.processName : m_data.name; }
-    bool Config::includesucessfulResults() const      { return m_data.showsucessfulTests; }
+    bool Config::includesuccessfulResults() const      { return m_data.showsuccessfulTests; }
     bool Config::warnAboutMissingAssertions() const    { return !!(m_data.warnings & WarnAbout::NoAssertions); }
     bool Config::warnAboutNoTests() const              { return !!(m_data.warnings & WarnAbout::NoTests); }
     ShowDurations::OrNot Config::showDurations() const { return m_data.showDurations; }
@@ -10832,7 +10832,7 @@ namespace Catch {
             // the stack reserve should be rare enough anyway.
             Catch::cerr()
                 << "Failed to reserve piece of stack."
-                << " Stack overflows will not be reported sucessfully.";
+                << " Stack overflows will not be reported successfully.";
         }
     }
 
@@ -12696,7 +12696,7 @@ namespace Catch {
                 // value, but we do not want to invoke the side-effect if
                 // this generator is still waiting for any child to start.
                 if ( should_wait_for_child ||
-                     ( m_runState == Completedsucessfully &&
+                     ( m_runState == Completedsuccessfully &&
                        m_generator->next() ) ) {
                     m_children.clear();
                     m_runState = Executing;
@@ -12720,7 +12720,7 @@ namespace Catch {
         m_config(_config),
         m_reporter(std::move(reporter)),
         m_lastAssertionInfo{ StringRef(), SourceLineInfo("",0), StringRef(), ResultDisposition::Normal },
-        m_includesucessfulResults( m_config->includesucessfulResults() || m_reporter->getPreferences().shouldReportAllAssertions )
+        m_includesuccessfulResults( m_config->includesuccessfulResults() || m_reporter->getPreferences().shouldReportAllAssertions )
     {
         m_context.setRunner(this);
         m_context.setConfig(m_config);
@@ -12759,7 +12759,7 @@ namespace Catch {
             m_trackerContext.startCycle();
             m_testCaseTracker = &SectionTracker::acquire(m_trackerContext, TestCaseTracking::NameAndLocation(testInfo.name, testInfo.lineInfo));
             runCurrentTest(redirectedCout, redirectedCerr);
-        } while (!m_testCaseTracker->issucessfullyCompleted() && !aborting());
+        } while (!m_testCaseTracker->issuccessfullyCompleted() && !aborting());
 
         Totals deltaTotals = m_totals.delta(prevTotals);
         if (testInfo.expectedToFail() && deltaTotals.testCases.passed > 0) {
@@ -13049,7 +13049,7 @@ namespace Catch {
         bool result = expr.getResult() != negated;
 
         if( result ) {
-            if (!m_includesucessfulResults) {
+            if (!m_includesuccessfulResults) {
                 assertionPassed();
             }
             else {
@@ -14404,10 +14404,10 @@ namespace TestCaseTracking {
     {}
 
     bool TrackerBase::isComplete() const {
-        return m_runState == Completedsucessfully || m_runState == Failed;
+        return m_runState == Completedsuccessfully || m_runState == Failed;
     }
-    bool TrackerBase::issucessfullyCompleted() const {
-        return m_runState == Completedsucessfully;
+    bool TrackerBase::issuccessfullyCompleted() const {
+        return m_runState == Completedsuccessfully;
     }
     bool TrackerBase::isOpen() const {
         return m_runState != NotStarted && !isComplete();
@@ -14465,15 +14465,15 @@ namespace TestCaseTracking {
                 break;
 
             case Executing:
-                m_runState = Completedsucessfully;
+                m_runState = Completedsuccessfully;
                 break;
             case ExecutingChildren:
                 if( std::all_of(m_children.begin(), m_children.end(), [](ITrackerPtr const& t){ return t->isComplete(); }) )
-                    m_runState = Completedsucessfully;
+                    m_runState = Completedsuccessfully;
                 break;
 
             case NotStarted:
-            case Completedsucessfully:
+            case Completedsuccessfully:
             case Failed:
                 CATCH_INTERNAL_ERROR( "Illogical state: " << m_runState );
 
@@ -14865,7 +14865,7 @@ namespace Catch {
       }
       endMode();
       addFilter();
-      return true; //sucess
+      return true; //success
     }
 
     std::string TestSpecParser::preprocessPattern() {
@@ -15884,7 +15884,7 @@ void printTotals(std::ostream& out, const Totals& totals) {
             "Failed " << pluralise(totals.testCases.failed, "test case") << ", "
             "failed " << pluralise(totals.assertions.failed, "assertion") << '.';
     } else {
-        Colour colour(Colour::Resultsucess);
+        Colour colour(Colour::Resultsuccess);
         out <<
             "Passed " << bothOrAll(totals.testCases.passed)
             << pluralise(totals.testCases.passed, "test case") <<
@@ -15911,7 +15911,7 @@ public:
 
         switch (result.getResultType()) {
         case ResultWas::Ok:
-            printResultType(Colour::Resultsucess, passedString());
+            printResultType(Colour::Resultsuccess, passedString());
             printOriginalExpression();
             printReconstructedExpression();
             if (!result.hasExpression())
@@ -15921,7 +15921,7 @@ public:
             break;
         case ResultWas::ExpressionFailed:
             if (result.isOk())
-                printResultType(Colour::Resultsucess, failedString() + std::string(" - but was ok"));
+                printResultType(Colour::Resultsuccess, failedString() + std::string(" - but was ok"));
             else
                 printResultType(Colour::Error, failedString());
             printOriginalExpression();
@@ -16077,8 +16077,8 @@ private:
 
             bool printInfoMessages = true;
 
-            // Drop out if result was sucessful and we're not printing those
-            if( !m_config->includesucessfulResults() && result.isOk() ) {
+            // Drop out if result was successful and we're not printing those
+            if( !m_config->includesuccessfulResults() && result.isOk() ) {
                 if( result.getResultType() != ResultWas::Warning )
                     return false;
                 printInfoMessages = false;
@@ -16146,7 +16146,7 @@ public:
         printInfoMessages(_printInfoMessages) {
         switch (result.getResultType()) {
         case ResultWas::Ok:
-            colour = Colour::sucess;
+            colour = Colour::success;
             passOrFail = "PASSED";
             //if( result.hasMessage() )
             if (_stats.infoMessages.size() == 1)
@@ -16156,7 +16156,7 @@ public:
             break;
         case ResultWas::ExpressionFailed:
             if (result.isOk()) {
-                colour = Colour::sucess;
+                colour = Colour::success;
                 passOrFail = "FAILED - but was ok";
             } else {
                 colour = Colour::Error;
@@ -16484,9 +16484,9 @@ void ConsoleReporter::assertionStarting(AssertionInfo const&) {}
 bool ConsoleReporter::assertionEnded(AssertionStats const& _assertionStats) {
     AssertionResult const& result = _assertionStats.assertionResult;
 
-    bool includeResults = m_config->includesucessfulResults() || !result.isOk();
+    bool includeResults = m_config->includesuccessfulResults() || !result.isOk();
 
-    // Drop out if result was sucessful but we're not printing them.
+    // Drop out if result was successful but we're not printing them.
     if (!includeResults && result.getResultType() != ResultWas::Warning)
         return false;
 
@@ -16707,7 +16707,7 @@ void ConsoleReporter::printTotals( Totals const& totals ) {
     if (totals.testCases.total() == 0) {
         stream << Colour(Colour::Warning) << "No tests ran\n";
     } else if (totals.assertions.total() > 0 && totals.testCases.allPassed()) {
-        stream << Colour(Colour::Resultsucess) << "All tests passed";
+        stream << Colour(Colour::Resultsuccess) << "All tests passed";
         stream << " ("
             << pluralise(totals.assertions.passed, "assertion") << " in "
             << pluralise(totals.testCases.passed, "test case") << ')'
@@ -16718,7 +16718,7 @@ void ConsoleReporter::printTotals( Totals const& totals ) {
         columns.push_back(SummaryColumn("", Colour::None)
                           .addRow(totals.testCases.total())
                           .addRow(totals.assertions.total()));
-        columns.push_back(SummaryColumn("passed", Colour::sucess)
+        columns.push_back(SummaryColumn("passed", Colour::success)
                           .addRow(totals.testCases.passed)
                           .addRow(totals.assertions.passed));
         columns.push_back(SummaryColumn("failed", Colour::ResultError)
@@ -16763,9 +16763,9 @@ void ConsoleReporter::printTotalsDivider(Totals const& totals) {
         stream << Colour(Colour::Error) << std::string(failedRatio, '=');
         stream << Colour(Colour::ResultExpectedFailure) << std::string(failedButOkRatio, '=');
         if (totals.testCases.allPassed())
-            stream << Colour(Colour::Resultsucess) << std::string(passedRatio, '=');
+            stream << Colour(Colour::Resultsuccess) << std::string(passedRatio, '=');
         else
-            stream << Colour(Colour::sucess) << std::string(passedRatio, '=');
+            stream << Colour(Colour::success) << std::string(passedRatio, '=');
     } else {
         stream << Colour(Colour::Warning) << std::string(CATCH_CONFIG_CONSOLE_WIDTH - 1, '=');
     }
@@ -17324,7 +17324,7 @@ namespace Catch {
 
         AssertionResult const& result = assertionStats.assertionResult;
 
-        bool includeResults = m_config->includesucessfulResults() || !result.isOk();
+        bool includeResults = m_config->includesuccessfulResults() || !result.isOk();
 
         if( includeResults || result.getResultType() == ResultWas::Warning ) {
             // Print any info messages in <Info> tags.
@@ -17339,14 +17339,14 @@ namespace Catch {
             }
         }
 
-        // Drop out if result was sucessful but we're not printing them.
+        // Drop out if result was successful but we're not printing them.
         if( !includeResults && result.getResultType() != ResultWas::Warning )
             return true;
 
         // Print the expression if there is one.
         if( result.hasExpression() ) {
             m_xml.startElement( "Expression" )
-                .writeAttribute( "sucess", result.succeeded() )
+                .writeAttribute( "success", result.succeeded() )
                 .writeAttribute( "type", result.getTestMacroName() );
 
             writeSourceInfo( result.getSourceInfo() );
@@ -17398,7 +17398,7 @@ namespace Catch {
         StreamingReporterBase::sectionEnded( sectionStats );
         if( --m_sectionDepth > 0 ) {
             XmlWriter::ScopedElement e = m_xml.scopedElement( "OverallResults" );
-            e.writeAttribute( "sucesses", sectionStats.assertions.passed );
+            e.writeAttribute( "successes", sectionStats.assertions.passed );
             e.writeAttribute( "failures", sectionStats.assertions.failed );
             e.writeAttribute( "expectedFailures", sectionStats.assertions.failedButOk );
 
@@ -17412,7 +17412,7 @@ namespace Catch {
     void XmlReporter::testCaseEnded( TestCaseStats const& testCaseStats ) {
         StreamingReporterBase::testCaseEnded( testCaseStats );
         XmlWriter::ScopedElement e = m_xml.scopedElement( "OverallResult" );
-        e.writeAttribute( "sucess", testCaseStats.totals.assertions.allOk() );
+        e.writeAttribute( "success", testCaseStats.totals.assertions.allOk() );
 
         if ( m_config->showDurations() == ShowDurations::Always )
             e.writeAttribute( "durationInSeconds", m_testCaseTimer.getElapsedSeconds() );
@@ -17429,11 +17429,11 @@ namespace Catch {
         StreamingReporterBase::testGroupEnded( testGroupStats );
         // TODO: Check testGroupStats.aborting and act accordingly.
         m_xml.scopedElement( "OverallResults" )
-            .writeAttribute( "sucesses", testGroupStats.totals.assertions.passed )
+            .writeAttribute( "successes", testGroupStats.totals.assertions.passed )
             .writeAttribute( "failures", testGroupStats.totals.assertions.failed )
             .writeAttribute( "expectedFailures", testGroupStats.totals.assertions.failedButOk );
         m_xml.scopedElement( "OverallResultsCases")
-            .writeAttribute( "sucesses", testGroupStats.totals.testCases.passed )
+            .writeAttribute( "successes", testGroupStats.totals.testCases.passed )
             .writeAttribute( "failures", testGroupStats.totals.testCases.failed )
             .writeAttribute( "expectedFailures", testGroupStats.totals.testCases.failedButOk );
         m_xml.endElement();
@@ -17442,11 +17442,11 @@ namespace Catch {
     void XmlReporter::testRunEnded( TestRunStats const& testRunStats ) {
         StreamingReporterBase::testRunEnded( testRunStats );
         m_xml.scopedElement( "OverallResults" )
-            .writeAttribute( "sucesses", testRunStats.totals.assertions.passed )
+            .writeAttribute( "successes", testRunStats.totals.assertions.passed )
             .writeAttribute( "failures", testRunStats.totals.assertions.failed )
             .writeAttribute( "expectedFailures", testRunStats.totals.assertions.failedButOk );
         m_xml.scopedElement( "OverallResultsCases")
-            .writeAttribute( "sucesses", testRunStats.totals.testCases.passed )
+            .writeAttribute( "successes", testRunStats.totals.testCases.passed )
             .writeAttribute( "failures", testRunStats.totals.testCases.failed )
             .writeAttribute( "expectedFailures", testRunStats.totals.testCases.failedButOk );
         m_xml.endElement();

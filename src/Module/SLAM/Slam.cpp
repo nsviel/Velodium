@@ -293,11 +293,11 @@ void Slam::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
 
   //Compute assessment
-  bool sucess = true;
-  sucess = assessManager->compute_assessment(cloud, subset_ID);
+  bool success = true;
+  success = assessManager->compute_assessment(cloud, subset_ID);
 
-  //If unsucess, reinitialize transformations
-  if(sucess == false){
+  //If unsuccess, reinitialize transformations
+  if(success == false){
     Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
     frame->reset();
     this->reset_slam();
@@ -379,7 +379,7 @@ void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, 
 
   //Terminal result
   if(verbose){
-    cout<<"[sucess] SLAM - "<<subset->name.c_str();
+    cout<<"[success] SLAM - "<<subset->name.c_str();
     cout<<" "<<to_string(frame_m0->ID)<<"/"<< ID_max;
     cout<< " [" <<frame_m0->time_slam<< " ms]"<<endl;
   }

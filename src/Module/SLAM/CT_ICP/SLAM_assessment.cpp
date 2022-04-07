@@ -42,16 +42,16 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
 
   //Check absolute values
-  bool sucess_abs = compute_assessment_abs(frame_m0, frame_m1);
+  bool success_abs = compute_assessment_abs(frame_m0, frame_m1);
 
   //Check relative values
-  bool sucess_rlt = compute_assessment_rlt(cloud, subset_ID);
+  bool success_rlt = compute_assessment_rlt(cloud, subset_ID);
 
   //Check number of residuals
-  bool sucess_rsd = compute_assessment_rsd(frame_m0);
+  bool success_rsd = compute_assessment_rsd(frame_m0);
 
   //Check for any error
-  if(!sucess_abs || !sucess_rlt || !sucess_rsd){
+  if(!success_abs || !success_rlt || !success_rsd){
     string log = "SLAM computation failed";
     console.AddLog("error", log);
     return false;
@@ -61,7 +61,7 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID){
   return true;
 }
 bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
-  bool sucess = true;
+  bool success = true;
   //---------------------------
 
   if(frame_m0->ID >= 1 && frame_m0->ID < 5){
@@ -70,7 +70,7 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
     if(frame_m0->ego_trans > thres_ego_trans){
       cout<<"[error] Ego translation too important ";
       cout<<"["<<frame_m0->ego_trans<<"/"<<thres_ego_trans<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 2: Ego angular distance
@@ -78,7 +78,7 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
     if(frame_m0->ego_rotat > thres_ego_rotat){
       cout<<"[error] Ego rotation too important ";
       cout<<"["<<frame_m0->ego_rotat<<"/"<<thres_ego_rotat<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 3: check relative distance and orientation between two poses
@@ -88,12 +88,12 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
       if(frame_m0->diff_trans > thres_pose_trans){
         cout<<"[error] Pose translation too important ";
         cout<<"["<<frame_m0->diff_trans<<"/"<<thres_pose_trans<<"]"<<endl;
-        sucess = false;
+        success = false;
       }
       if(frame_m0->diff_rotat > thres_pose_rotat){
         cout<<"[error] Pose rotation too important ";
         cout<<"["<<frame_m0->diff_rotat<<"/"<<thres_pose_rotat<<"]"<<endl;
-        sucess = false;
+        success = false;
       }
     }
 
@@ -102,18 +102,18 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
     if(frame_m0->opti_score > thres_optimMinNorm){
       cout<<"[error] Optimization score too important ";
       cout<<"["<<frame_m0->opti_score<<"/"<<thres_optimMinNorm<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
   }
 
   //---------------------------
-  return sucess;
+  return success;
 }
 bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   Transforms transformManager;
-  bool sucess = true;
+  bool success = true;
   //---------------------------
 
   //Compute relative stats for current frame
@@ -137,52 +137,52 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
     if(frame_m0->ego_trans > sum_ego_trans + 1){
       cout<<"[error] Ego relative translation too important ";
       cout<<"["<<frame_m0->ego_trans<<"/"<<sum_ego_trans<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 2: Ego angular distance
     if(frame_m0->ego_rotat > sum_ego_rotat + 1 && sum_ego_rotat != 0){
       cout<<"[error] Ego relative rotation too important ";
       cout<<"["<<frame_m0->ego_rotat<<"/"<<sum_ego_rotat<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 3: check relative distance between two poses
     if(frame_m0->diff_trans > sum_diff_trans + 1){
       cout<<"[error] Pose relative translation too important ";
       cout<<"["<<frame_m0->diff_trans<<"/"<<sum_diff_trans<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 4: check relative rotation between two poses
     if(frame_m0->diff_rotat > sum_diff_rotat + 1 && frame_m0->diff_rotat != 0 && sum_diff_rotat != 0){
       cout<<"[error] Pose relative rotation too important ";
       cout<<"["<<frame_m0->diff_rotat<<"/"<<sum_diff_rotat<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 5: check if ICP has converged
     if(frame_m0->opti_score > sum_opti_score + 1){
       cout<<"[error] Optimization relative score too important ";
       cout<<"["<<frame_m0->opti_score<<"/"<<sum_opti_score<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
 
     //Test 6: restriction on X & Y rotation axis
     if(diff_angle.x > thres_diff_angle){
       cout<<"[error] Relative X axis rotation angle too high ";
       cout<<"["<<diff_angle.x<<"/"<<thres_diff_angle<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
     if(diff_angle.y > thres_diff_angle){
       cout<<"[error] Relative Y axis rotation angle too high ";
       cout<<"["<<diff_angle.y<<"/"<<thres_diff_angle<<"]"<<endl;
-      sucess = false;
+      success = false;
     }
   }
 
   //---------------------------
-  return sucess;
+  return success;
 }
 bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   //---------------------------

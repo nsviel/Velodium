@@ -39,7 +39,7 @@ Saver::~Saver(){}
 //Main function
 bool Saver::save_cloud(Cloud* cloud, string filePath){
   string format = filePath.substr(filePath.find_last_of(".") + 1);
-  bool sucess = false;
+  bool success = false;
   //---------------------------
 
   //If no format, add default ply
@@ -47,26 +47,26 @@ bool Saver::save_cloud(Cloud* cloud, string filePath){
 
   //Check file format
   if     (format == "pts"){
-    sucess = ptsManager->Exporter(filePath, cloud);
+    success = ptsManager->Exporter(filePath, cloud);
   }
   else if(format == "ply"){
     string format = "binary";
-    sucess = plyManager->Exporter_cloud(filePath, format, cloud);
+    success = plyManager->Exporter_cloud(filePath, format, cloud);
   }
 
-  //Say if save is sucessfull
-  if(!sucess){
+  //Say if save is successfull
+  if(!success){
     console.AddLog("error", "Failing saving point cloud");
     return false;
   }
 
   //---------------------------
   string log = "Saved" + filePath;
-  console.AddLog("sucess", log);
+  console.AddLog("success", log);
   return true;
 }
 bool Saver::save_subset(Subset* subset, string format, string dirPath){
-  bool sucess = false;
+  bool success = false;
   //---------------------------
 
   //If no format, add default ply
@@ -74,26 +74,26 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath){
 
   //Check file format
   if     (format == "pts"){
-    sucess = ptsManager->Exporter(dirPath, subset);
+    success = ptsManager->Exporter(dirPath, subset);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
+    success = plyManager->Exporter_subset(dirPath, ply_format, subset);
   }
 
-  //Say if save is sucessfull
-  if(!sucess){
+  //Say if save is successfull
+  if(!success){
     console.AddLog("error", "Failing saving point cloud");
     return false;
   }
 
   //---------------------------
   string log = "Saved at " + dirPath;
-  console.AddLog("sucess", log);
+  console.AddLog("success", log);
   return true;
 }
 bool Saver::save_subset(Subset* subset, string format, string dirPath, string fileName){
-  bool sucess = false;
+  bool success = false;
   //---------------------------
 
   //If no format, add default ply
@@ -101,26 +101,26 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath, string fi
 
   //Check file format
   if     (format == "pts"){
-    sucess = ptsManager->Exporter(dirPath, subset);
+    success = ptsManager->Exporter(dirPath, subset);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset, fileName);
+    success = plyManager->Exporter_subset(dirPath, ply_format, subset, fileName);
   }
 
-  //Say if save is sucessfull
-  if(!sucess){
+  //Say if save is successfull
+  if(!success){
     console.AddLog("error", "Failing saving point cloud");
     return false;
   }
 
   //---------------------------
   string log = "Saved at " + dirPath;
-  console.AddLog("sucess", log);
+  console.AddLog("success", log);
   return true;
 }
 bool Saver::save_subset_silent(Subset* subset, string format, string dirPath){
-  bool sucess = false;
+  bool success = false;
   //---------------------------
 
   //If no format, add default ply
@@ -128,15 +128,15 @@ bool Saver::save_subset_silent(Subset* subset, string format, string dirPath){
 
   //Check file format
   if     (format == "pts"){
-    sucess = ptsManager->Exporter(dirPath, subset);
+    success = ptsManager->Exporter(dirPath, subset);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    sucess = plyManager->Exporter_subset(dirPath, ply_format, subset);
+    success = plyManager->Exporter_subset(dirPath, ply_format, subset);
   }
 
-  //Say if save is sucessfull
-  if(!sucess){
+  //Say if save is successfull
+  if(!success){
     console.AddLog("error", "Failing saving point cloud");
     return false;
   }

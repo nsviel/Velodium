@@ -26,8 +26,8 @@ protected:
 		cout << "\tListener failure for token: " << tok.get_message_id() << endl;
 	}
 
-	void on_sucess(const mqtt::token& tok) override {
-		cout << "\tListener sucess for token: " << tok.get_message_id() << endl;
+	void on_success(const mqtt::token& tok) override {
+		cout << "\tListener success for token: " << tok.get_message_id() << endl;
 	}
 };
 
@@ -40,8 +40,8 @@ class delivery_action_listener : public action_listener{
 		done_ = true;
 	}
 
-	void on_sucess(const mqtt::token& tok) override {
-		action_listener::on_sucess(tok);
+	void on_success(const mqtt::token& tok) override {
+		action_listener::on_success(tok);
 		done_ = true;
 	}
 

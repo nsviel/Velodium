@@ -89,9 +89,9 @@ struct ConsoleApp{
         ImGui::TextColored(ImVec4(1.0f,0.0f,0.0f,1.0f), "error");ImGui::SameLine();
         ImGui::Text("]");ImGui::SameLine();
       }
-      if (code == "sucess"){
+      if (code == "success"){
         ImGui::Text("[");ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "sucess");ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "success");ImGui::SameLine();
         ImGui::Text("]");ImGui::SameLine();
       }
       if (code == "ok"){
