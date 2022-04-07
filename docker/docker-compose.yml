@@ -13,7 +13,6 @@ services:
       - "/dev/dri:/dev/dri"
     ports:
       - 2370:2370
-    network_mode: "host"
     deploy:
       resources:
         reservations:

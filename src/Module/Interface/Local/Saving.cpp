@@ -22,7 +22,7 @@ Saving::Saving(Engine_node* node_engine){
   this->saverManager = node_load->get_saveManager();
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
+  this->path_dir = get_absolutePath_build() + "/../../capture/";
   this->path_frame = path_dir + "frame/";
   this->path_image = path_dir + "image/";
 

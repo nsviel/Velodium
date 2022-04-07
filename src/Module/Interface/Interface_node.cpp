@@ -27,7 +27,7 @@ Interface_node::Interface_node(Module_node* node_module){
   this->netManager = new Network();
   this->fileManager = new Filemanager(this);
 
-  this->path_dir = get_absolutePath_build() + "/../media/data";
+  this->path_dir = get_absolutePath_build() + "/../../capture";
 
   //---------------------------
   this->init();
