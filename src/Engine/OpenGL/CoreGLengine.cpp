@@ -52,16 +52,12 @@ void CoreGLengine::arg(int argc, char* argv[]){
   if(argc > 1){
     string command_1 = argv[1];
 
-    if(command_1 == "AI"){
+    if(command_1 == "ai"){
       configManager->make_preconfig(1);
       node_engine->update();
     }
     else if(command_1 == "car"){
       configManager->make_preconfig(2);
-      node_engine->update();
-    }
-    else if(command_1 == "train"){
-      configManager->make_preconfig(3);
       node_engine->update();
     }
     else if(command_1 == "train"){

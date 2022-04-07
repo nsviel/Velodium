@@ -6,14 +6,14 @@
 #include <thread>
 
 class Scene;
-class Engine_node;
+class Interface_node;
 
 
 class GPS
 {
 public:
   //Constructor / Destructor
-  GPS(Engine_node* node_engine);
+  GPS(Interface_node* node);
   ~GPS();
 
 public:
@@ -29,7 +29,6 @@ public:
 private:
   Scene* sceneManager;
 
-  string path_dir;
   string path_gps;
 
   bool is_gps;

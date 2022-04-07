@@ -4,6 +4,9 @@
 
 #include "Scala.h"
 
+#include "../../Local/Filemanager.h"
+#include "../../Interface_node.h"
+
 #include "../../../../Load/UDP/UDP_frame.h"
 #include "../../../../Load/UDP/UDP_server.h"
 #include "../../../../Load/UDP/UDP_parser_Scala.h"
@@ -20,13 +23,15 @@
 
 
 //Constructor / Destructor
-Scala::Scala(Engine_node* node_engine){
+Scala::Scala(Interface_node* node){
   //---------------------------
 
+  Filemanager* fileManager = node->get_fileManager();
+  Engine_node* node_engine = node->get_node_engine();
   Load_node* node_load = node_engine->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
-  this->path_scala = get_absolutePath_build() + "../media/data/capture/scala";
+  this->path_scala = fileManager->get_path_data_dir() + "scala/";
   this->is_capturing = false;
   this->capture_port = 2371;
 

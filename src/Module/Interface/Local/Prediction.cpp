@@ -1,5 +1,9 @@
 #include "Prediction.h"
 
+#include "Filemanager.h"
+
+#include "../Interface_node.h"
+
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
@@ -13,17 +17,17 @@
 
 
 //Constructor / Destructor
-Prediction::Prediction(Engine_node* node_engine){
+Prediction::Prediction(Interface_node* node){
   //---------------------------
 
+  Engine_node* node_engine = node->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
+  Filemanager* fileManager = node->get_fileManager();
 
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_dir = get_absolutePath_build() + "../media/data/capture/";
-  this->path_predi = path_dir + "prediction/";
-  this->path_grThr = path_dir + "groundtruth/";
-
+  this->path_predi = fileManager->get_path_data_dir() + "prediction/";
+  this->path_grThr = fileManager->get_path_data_dir() + "groundtruth/";
   this->with_prediction = configManager->parse_json_b("interface", "with_prediction");
   this->is_prediction = false;
 

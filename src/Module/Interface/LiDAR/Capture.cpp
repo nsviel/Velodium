@@ -3,6 +3,8 @@
 #include "Scala/Scala.h"
 #include "Velodyne/Velodyne.h"
 
+#include "../Interface_node.h"
+
 #include "../../Module_node.h"
 #include "../../Player/Player_node.h"
 #include "../../Player/Dynamic/Online.h"
@@ -19,17 +21,17 @@
 
 
 //Constructor / Destructor
-Capture::Capture(Module_node* node){
-  this->node_module = node;
+Capture::Capture(Interface_node* node){
   //---------------------------
 
-  Engine_node* node_engine = node_module->get_node_engine();
+  Engine_node* node_engine = node->get_node_engine();
   Load_node* node_load = node_engine->get_node_load();
   Configuration* configManager = node_engine->get_configManager();
 
+  this->node_module = node->get_node_module();
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loadManager();
-  this->scalaManager = new Scala(node_engine);
+  this->scalaManager = new Scala(node);
   this->veloManager = new Velodyne(node_engine);
 
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");

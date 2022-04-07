@@ -5,7 +5,7 @@
 
 #include <thread>
 
-class Engine_node;
+class Interface_node;
 class Scene;
 
 
@@ -13,7 +13,7 @@ class Prediction
 {
 public:
   //Constructor / Destructor
-  Prediction(Engine_node* node_engine);
+  Prediction(Interface_node* node);
   ~Prediction();
 
 public:
@@ -43,7 +43,6 @@ private:
 
   bool is_prediction;
   bool with_prediction;
-  string path_dir;
   string path_predi;
   string path_grThr;
 };
