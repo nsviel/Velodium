@@ -8,7 +8,7 @@ Configuration::Configuration(){
   //---------------------------
 
   this->path_default = get_absolutePath_build() + "../media/engine/config_default.json";
-  this->path_AI = get_absolutePath_build() + "../media/engine/config_AI.json";
+  this->path_ai = get_absolutePath_build() + "../media/engine/config_AI.json";
   this->path_WP4_car = get_absolutePath_build() + "../media/engine/config_WP4.json";
   this->path_WP5_train = get_absolutePath_build() + "../media/engine/config_WP5.json";
   this->path_config = path_default;
@@ -40,7 +40,7 @@ void Configuration::make_preconfig(int config){
       break;
     }
     case 1:{ //AI module
-      this->path_config = path_AI;
+      this->path_config = path_ai;
       this->config = 1;
       this->make_configuration();
       break;
@@ -205,7 +205,7 @@ void Configuration::preconf_capture(Json::Value& root){
 
   //---------------------------
 }
-void Configuration::preconf_AI_module(Json::Value& root){
+void Configuration::preconf_ai_module(Json::Value& root){
   //---------------------------
 
   //OpenGL stuff
@@ -276,7 +276,7 @@ void Configuration::preconf_AI_module(Json::Value& root){
 
   //---------------------------
 }
-void Configuration::preconf_WP4_car(Json::Value& root){
+void Configuration::preconf_wp4_car(Json::Value& root){
   //---------------------------
 
   //OpenGL stuff
@@ -347,7 +347,7 @@ void Configuration::preconf_WP4_car(Json::Value& root){
 
   //---------------------------
 }
-void Configuration::preconf_WP5_train(Json::Value& root){
+void Configuration::preconf_wp5_train(Json::Value& root){
   //---------------------------
 
   //OpenGL stuff
@@ -436,15 +436,15 @@ void Configuration::create_jsonfile(){
         break;
       }
       case 1:{ //Default
-        this->preconf_AI_module(root);
+        this->preconf_ai_module(root);
         break;
       }
       case 2:{ //WP4 auto
-        this->preconf_WP4_car(root);
+        this->preconf_wp4_car(root);
         break;
       }
       case 3:{ //WP5 train
-        this->preconf_WP5_train(root);
+        this->preconf_wp5_train(root);
         break;
       }
     }
