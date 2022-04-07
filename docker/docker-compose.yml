@@ -5,11 +5,15 @@ services:
     image: "velodium"
     environment:
       - DISPLAY
-      - gpus="all"
+      #- gpus="all"
+    #command: bash -c "touch /data/test.txt && tail -F anything && /Velodium/build/executable"
+    #stdin_open: true
+    #tty: true
     volumes:
       - "/tmp/.X11-unix:/tmp/.X11-unix"
       - ~/.Xauthority:/root/.Xauthority
-      - "../media/data/capture:/capture"
+      #- "../media/data/data:/data"
+      - "../data:/data"
     devices:
       - "/dev/dri:/dev/dri"
     ports:
@@ -26,7 +30,8 @@ services:
     volumes:
         - "../../Louis/docker_shared/install_required.sh:/install_required.sh"
         - "../../models/once_models/sup_models/second_no_intensity/default/ckpt/checkpoint_epoch_80.pth:/model.pth"
-        - "../media/data/capture:/capture"
+        #- "../media/data/data:/data"
+        - "../data:/data"
     stdin_open: true
     tty: true
     deploy:
