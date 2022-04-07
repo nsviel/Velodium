@@ -20,7 +20,7 @@ Prediction::Prediction(Engine_node* node_engine){
 
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
+  this->path_dir = get_absolutePath_build() + "../media/data/capture/";
   this->path_predi = path_dir + "prediction/";
   this->path_grThr = path_dir + "groundtruth/";
 

@@ -33,7 +33,7 @@ Offline::Offline(Module_node* node_module, Online* online){
   this->player_ispaused = false;
   this->player_returnToZero = false;
   this->player_flag_1s = false;
-  this->player_saveas = get_absolutePath_build() + "/../media/data/";
+  this->player_saveas = get_absolutePath_build() + "../media/data/";
 
   //---------------------------
 }

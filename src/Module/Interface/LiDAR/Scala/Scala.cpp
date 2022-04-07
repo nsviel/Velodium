@@ -26,7 +26,7 @@ Scala::Scala(Engine_node* node_engine){
   Load_node* node_load = node_engine->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
-  this->path_scala = get_absolutePath_build() + "/../media/data/capture/scala";
+  this->path_scala = get_absolutePath_build() + "../media/data/capture/scala";
   this->is_capturing = false;
   this->capture_port = 2371;
 

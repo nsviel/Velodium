@@ -244,8 +244,8 @@ void GUI_Obstacle::parameter_interfacing(){
       //node_interface->select_dir_path();
     }
     ImGui::SameLine();
-    string dir_path = node_interface->get_dir_path();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
+    //string dir_path = node_interface->get_dir_path();
+    //ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
 
     //Add predictions
     if(ImGui::Button("Add predictions")){

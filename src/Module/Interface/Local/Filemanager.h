@@ -3,9 +3,6 @@
 
 #include "../../../common.h"
 
-class GPS;
-class Saving;
-class Prediction;
 class Interface_node;
 
 
@@ -21,12 +18,12 @@ public:
   void check_directories();
   void select_dir_path();
 
+  inline string get_path_data_dir(){return path_data_dir;}
+
 private:
-  GPS* gpsManager;
-  Saving* saveManager;
-  Prediction* predManager;
   Interface_node* node_interface;
 
+  string path_data_dir;
   bool is_clean_dir;
 };
 

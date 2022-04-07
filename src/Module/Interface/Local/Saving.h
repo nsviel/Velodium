@@ -6,6 +6,7 @@
 #include <thread>
 #include <queue>
 
+class Interface_node;
 class Engine_node;
 class Scene;
 class Saver;
@@ -16,7 +17,7 @@ class Saving
 {
 public:
   //Constructor / Destructor
-  Saving(Engine_node* node_engine);
+  Saving(Interface_node* node);
   ~Saving();
 
 public:

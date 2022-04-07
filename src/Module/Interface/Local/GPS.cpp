@@ -20,7 +20,7 @@ GPS::GPS(Engine_node* node_engine){
 
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_dir = get_absolutePath_build() + "/../media/data/capture/";
+  this->path_dir = get_absolutePath_build() + "../media/data/capture/";
   this->path_gps = path_dir + "gps/";
 
   this->with_gps = configManager->parse_json_b("interface", "with_gps");
