@@ -16,17 +16,18 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
 
 # Install dependancy libraries
-COPY install.sh /app/install.sh
-RUN /app/install.sh
+COPY install.sh /velodium/install.sh
+RUN /velodium/install.sh
 
 # Copy & build application
-COPY . /app
-WORKDIR /app/build
+COPY . /velodium
+WORKDIR /velodium/build
 RUN cmake .. && make -j4
 
 # Open port & Shared directory
 EXPOSE 2370
-VOLUME /app/media/data
+RUN mkdir ../data
+VOLUME ../data
 
 # Run application
 CMD ["./executable", "ai"]
