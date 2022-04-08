@@ -12,7 +12,7 @@
 Network::Network(){
   //---------------------------
 
-  this->mqttManager = new MQTT();
+  this->mqttManager = new MQTT(this);
   this->sftpManager = new SFTP();
   this->sshManager = new SSH();
 

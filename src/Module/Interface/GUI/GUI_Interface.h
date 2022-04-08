@@ -21,7 +21,6 @@ public:
 
 public:
   void design_Interface();
-  void design_Network();
 
   void ssh_connection();
   void ssh_parameter();

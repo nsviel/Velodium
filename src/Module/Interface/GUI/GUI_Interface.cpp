@@ -4,6 +4,7 @@
 
 #include "../Interface_node.h"
 #include "../Network/Network.h"
+#include "../Network/struct_wallet.h"
 #include "../Network/MQTT/MQTT.h"
 #include "../Network/SFTP/SFTP.h"
 #include "../Network/SFTP/SSH.h"
@@ -45,12 +46,6 @@ void GUI_Interface::design_Interface(){
   if(ImGui::BeginTabBar("Interface", ImGuiTabBarFlags_None)){
     //-------------------------------
 
-    // Offline cloud player
-    if(ImGui::BeginTabItem("Network")){
-      this->design_Network();
-      ImGui::EndTabItem();
-    }
-
     // LiDAR management
     if(ImGui::BeginTabItem("LiDAR")){
       gui_lidarManager->design_Velodyne();
@@ -58,25 +53,26 @@ void GUI_Interface::design_Interface(){
       ImGui::EndTabItem();
     }
 
+    // Offline cloud player
+    if(ImGui::BeginTabItem("SSH")){
+      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "SSH connexion");
+      this->ssh_connection();
+      this->ssh_parameter();
+
+      ImGui::EndTabItem();
+    }
+
+    // MQTT management
+    if(ImGui::BeginTabItem("MQTT")){
+      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
+      this->mqtt_connection();
+      this->mqtt_parameter();
+
+      ImGui::EndTabItem();
+    }
+
     ImGui::EndTabBar();
   }
-
-  //---------------------------
-}
-void GUI_Interface::design_Network(){
-  //---------------------------
-
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "SSH connexion");
-  this->ssh_connection();
-  this->ssh_parameter();
-
-  ImGui::Separator();
-
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
-  this->mqtt_connection();
-  this->mqtt_parameter();
-
-  ImGui::Separator();
 
   //---------------------------
 }
@@ -139,20 +135,20 @@ void GUI_Interface::ssh_parameter(){
 void GUI_Interface::mqtt_connection(){
   //---------------------------
 
+  ImGui::Text("Broker connected ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", mqttManager->get_is_connected() ? "ON" : "OFF");
+
   //Connect to MQTT broker
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Test MQTT", ImVec2(item_width, 0))){
+  if(ImGui::Button("Full test", ImVec2(item_width, 0))){
     mqttManager->mqtt_test_localhost();
   }
-  ImGui::PopStyleColor(1);
-
-  //Text mesage
-  string* message = mqttManager->get_message();
-  ImGui::InputText("Message", message);
+  ImGui::SameLine();
 
   //Connect to MQTT broker
-  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Test Alert", ImVec2(item_width, 0))){
+  string* message = mqttManager->get_message();
+  if(ImGui::Button("Continuous test", ImVec2(item_width, 0))){
     mqttManager->mqtt_send_message(*message);
   }
   ImGui::PopStyleColor(1);
@@ -160,22 +156,38 @@ void GUI_Interface::mqtt_connection(){
   //---------------------------
 }
 void GUI_Interface::mqtt_parameter(){
-  if(ImGui::CollapsingHeader("Parameters##2")){
-    //---------------------------
+  //---------------------------
 
-    // Topic
-    string* topic = mqttManager->get_topic();
-    ImGui::InputText("Topic", topic);
+  //Text mesage
+  string* message = mqttManager->get_message();
+  ImGui::SetNextItemWidth(item_width + 20);
+  ImGui::InputText("Message", message);
 
-    //Client ID
-    string* client_ID = mqttManager->get_client_ID();
-    ImGui::InputText("Client ID", client_ID);
-
-    //Server adress
-    string* server_address = mqttManager->get_broker_address();
-    ImGui::InputText("Server adress", server_address);
-
-    //---------------------------
-    ImGui::Separator();
+  //Destinataire
+  Wallet* wallet = mqttManager->get_wallet();
+  ImGui::SetNextItemWidth(item_width + 20);
+  string label = "[" + wallet->selected_ip + "]";
+  if (ImGui::BeginCombo(label.c_str(), wallet->selected_name.c_str())){
+    for (int i=0; i<wallet->wallet_name.size(); i++){
+      string name = wallet->wallet_name[i];
+      if(ImGui::Selectable(name.c_str())){
+        wallet->selected_name = name;
+        wallet->selected_ip = wallet->wallet_dic.find(name)->second;
+      }
+    }
+    ImGui::EndCombo();
   }
+
+  // Topic
+  string* topic = mqttManager->get_topic();
+  ImGui::SetNextItemWidth(item_width + 20);
+  ImGui::InputText("Topic", topic);
+
+  //Client ID
+  string* client_ID = mqttManager->get_client_ID();
+  ImGui::SetNextItemWidth(item_width + 20);
+  ImGui::InputText("Client ID", client_ID);
+
+  //---------------------------
+  ImGui::Separator();
 }
