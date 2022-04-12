@@ -8,40 +8,45 @@
 #include "mqtt/async_client.h"
 #include <chrono>
 
-class Network;
-
 
 class MQTT
 {
 public:
   //Constructor / Destructor
-  MQTT(Network* netManager);
+  MQTT(Wallet* wallet);
   ~MQTT();
 
 public:
   //Monolitic functions
-  void mqtt_wallet();
   void mqtt_test_localhost();
   void mqtt_send_message(string message);
+  void mqtt_build_address();
 
   //Separated functions
-  bool mqtt_connexion();
+  void mqtt_connection();
   void mqtt_disconnect();
 
-  inline Wallet* get_wallet(){return &wallet;}
   inline string* get_message(){return &client_message;}
   inline string* get_topic(){return &broker_topic;}
   inline string* get_client_ID(){return &client_ID;}
+  inline string* get_selected_ip(){return &selected_ip;}
+  inline string* get_selected_dest(){return &selected_dest;}
+  inline int* get_selected_port(){return &selected_port;}
   inline bool get_is_connected(){return is_connected;}
 
 private:
   mqtt::async_client* client;
-  Wallet wallet;
 
-  //Connection
+  //Broker
   string broker_topic;
   string client_message;
   string client_ID;
+
+  //Connection
+  string selected_dest;
+  string selected_ip;
+  string selected_address;
+  int selected_port;
 
   //Parameters
   int qos;

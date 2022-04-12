@@ -78,10 +78,23 @@ void GUI_Interface::design_Interface(){
 }
 
 void GUI_Interface::ssh_connection(){
+  Wallet* wallet = netManager->get_wallet();
   //---------------------------
 
-  int* adress_ID = sshManager->get_ssh_adress_ID();
-  ImGui::Combo("IP", adress_ID, "localHost\0Ordi Louis\0");
+  //Destinataire
+  string* selected_ip = sshManager->get_selected_ip();
+  string* selected_dest = sshManager->get_selected_dest();
+  ImGui::SetNextItemWidth(item_width + 20);
+  if (ImGui::BeginCombo((*selected_ip).c_str(), (*selected_dest).c_str())){
+    for (int i=0; i<wallet->wallet_name.size(); i++){
+      string name = wallet->wallet_name[i];
+      if(ImGui::Selectable(name.c_str())){
+        *selected_dest = name;
+        *selected_ip = wallet->wallet_dic.find(name)->second;
+      }
+    }
+    ImGui::EndCombo();
+  }
 
   bool is_connected = netManager->get_is_connected();
   if(is_connected == false){
@@ -156,6 +169,7 @@ void GUI_Interface::mqtt_connection(){
   //---------------------------
 }
 void GUI_Interface::mqtt_parameter(){
+  Wallet* wallet = netManager->get_wallet();
   //---------------------------
 
   //Text mesage
@@ -164,18 +178,26 @@ void GUI_Interface::mqtt_parameter(){
   ImGui::InputText("Message", message);
 
   //Destinataire
-  Wallet* wallet = mqttManager->get_wallet();
+  string* selected_ip = mqttManager->get_selected_ip();
+  string* selected_dest = mqttManager->get_selected_dest();
   ImGui::SetNextItemWidth(item_width + 20);
-  string label = "[" + wallet->selected_ip + "]";
-  if (ImGui::BeginCombo(label.c_str(), wallet->selected_name.c_str())){
+  if (ImGui::BeginCombo((*selected_ip).c_str(), (*selected_dest).c_str())){
     for (int i=0; i<wallet->wallet_name.size(); i++){
       string name = wallet->wallet_name[i];
       if(ImGui::Selectable(name.c_str())){
-        wallet->selected_name = name;
-        wallet->selected_ip = wallet->wallet_dic.find(name)->second;
+        *selected_dest = name;
+        *selected_ip = wallet->wallet_dic.find(name)->second;
+        mqttManager->mqtt_build_address();
       }
     }
     ImGui::EndCombo();
+  }
+
+  //Connection port
+  int* mqtt_port = mqttManager->get_selected_port();
+  ImGui::SetNextItemWidth(item_width + 20);
+  if(ImGui::InputInt("Port", mqtt_port)){
+    mqttManager->mqtt_build_address();
   }
 
   // Topic

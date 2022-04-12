@@ -3,8 +3,6 @@
 
 #include "MQTT_callback.h"
 
-#include "../Network.h"
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -14,13 +12,18 @@
 
 
 //Constructor / Destructor
-MQTT::MQTT(Network* netManager){
+MQTT::MQTT(Wallet* wallet){
   //---------------------------
 
   //Connection
   this->client_message = "Hello world!";
   this->client_ID = "ai_module";
   this->broker_topic = "ai_obstacle";
+
+  this->selected_dest = "localhost";
+  this->selected_ip = "127.0.0.1";
+  this->selected_port = 1883;
+  this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
 
   //Parameters
   this->qos = 1;
@@ -30,40 +33,12 @@ MQTT::MQTT(Network* netManager){
   this->is_connected = false;
 
   //---------------------------
-  this->mqtt_wallet();
 }
 MQTT::~MQTT(){}
 
 //Test localHost
-void MQTT::mqtt_wallet(){
-  //---------------------------
-
-  //Create IP adresse wallet
-  this->wallet.wallet_dic = {
-    { "localhost", "tcp://localhost:1883" },
-    { "ordi_nathan", "tcp:10.201.20.106:1883" },
-    { "ordi_louis", "tcp:10.201.20.110:1883" },
-    { "server_mine", "tcp:10.201.224.13:1883" },
-  };
-
-  //Concatenate it into combo format
-  this->wallet.wallet_name.clear();
-  this->wallet.wallet_ip.clear();
-  for (auto const& [key, val] : wallet.wallet_dic){
-    this->wallet.wallet_name.push_back(key);
-    this->wallet.wallet_ip.push_back(val);
-  }
-
-  this->wallet.selected_name = "localhost";
-  this->wallet.selected_ip = "tcp://localhost:1883";
-
-  //---------------------------
-}
 void MQTT::mqtt_test_localhost(){
   //---------------------------
-
-  // Initialize connection parameters
-  this->mqtt_connexion();
 
   // First use a message pointer.
   this->mqtt_send_message(client_message);
@@ -74,10 +49,13 @@ void MQTT::mqtt_test_localhost(){
   //---------------------------
 }
 void MQTT::mqtt_send_message(string message){
-  //Check for connection
-  if(mqtt_connexion()){
-    //---------------------------
+  //---------------------------
 
+  // Initialize connection parameters
+  this->mqtt_connection();
+
+  //Check for connection
+  if(is_connected){
     callback cb;
     client->set_callback(cb);
 
@@ -89,59 +67,73 @@ void MQTT::mqtt_send_message(string message){
     //---------------------------
     cout << "Sending message [OK]" << endl;
   }
+
+  //---------------------------
+}
+void MQTT::mqtt_build_address(){
+  //---------------------------
+
+  this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
+  this->mqtt_disconnect();
+
+  //---------------------------
 }
 
 //Connection functions
-bool MQTT::mqtt_connexion(){
+void MQTT::mqtt_connection(){
   //---------------------------
 
-  if(client == nullptr){
+  if(is_connected == false){
     //Initialize connection parameters
-    this->client = new mqtt::async_client(wallet.selected_ip, client_ID, persist_dir);
+    //Problem ici parce que c'est pas terrible de refaire un nouveau pointer each time
+    if(client != nullptr) delete client;
+    this->client = new mqtt::async_client(selected_address, client_ID, persist_dir);
 
     try {
       callback cb;
       client->set_callback(cb);
-      auto connect_option = mqtt::connect_options_builder().clean_session().finalize();
+      auto connect_option = mqtt::connect_options_builder()
+        .automatic_reconnect(true)
+        .clean_session()
+        .finalize();
 
       //Serveur connection
       mqtt::token_ptr token = client->connect(connect_option);
-      // Blocks the current thread until the action this token is associated with has completed
-      token->wait();
+      token->wait_for(std::chrono::seconds(2));
+
+      //Display success
+      if(client->is_connected()){
+        string log = "Connection MQTT broker '" + selected_address + "'";
+        console.AddLog("ok", log);
+        this->is_connected = true;
+      }else{
+        string log = "Connection MQTT broker '" + selected_address + "' failed";
+        console.AddLog("error", log);
+      }
     }
     catch (const mqtt::exception& exc) {
-      std::cerr << exc.what() << std::endl;
-      return false;
-    }
-
-    if(client->is_connected()){
-      cout << "Connection server '" << wallet.selected_ip << "' [OK]" << endl;
-      this->is_connected = true;
-      return true;
-    }
-  }else{
-    if(client->is_connected()){
-      this->is_connected = true;
-      return true;
+      string log = "Connection MQTT broker '" + selected_address + "' failed";
+      console.AddLog("error", log);
+      this->is_connected = false;
     }
   }
 
   //---------------------------
-  this->is_connected = false;
-  return false;
 }
 void MQTT::mqtt_disconnect(){
-  //---------------------------
+  if(is_connected){
+    //---------------------------
 
-  callback cb;
-  client->set_callback(cb);
+    callback cb;
+    client->set_callback(cb);
 
-  // Disconnect
-  client->disconnect()->wait();
-  delete client;
-  client = nullptr;
+    // Disconnect
+    client->disconnect()->wait();
+    delete client;
+    client = nullptr;
 
-  //---------------------------
-  this->is_connected = false;
-  cout << "Disconnecting... [OK]" << endl;
+    //---------------------------
+    this->is_connected = false;
+    cout << "Disconnecting... [OK]" << endl;
+  }
 }

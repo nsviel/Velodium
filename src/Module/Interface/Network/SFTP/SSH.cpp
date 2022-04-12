@@ -4,12 +4,14 @@
 
 
 //Constructor / Destructor
-SSH::SSH(){
+SSH::SSH(Wallet* wallet){
   //---------------------------
 
-  this->ssh_port = 22;
-  this->ssh_adress_ID = 0;
+  this->wallet = wallet;
+  this->selected_port = 22;
   this->ssh_connected = false;
+  this->selected_dest = "localhost";
+  this->selected_ip = "127.0.0.1";
 
   //---------------------------
 }
@@ -27,25 +29,13 @@ void SSH::ssh_startConnexion(){
   //SSH allocation
   ssh = ssh_new();
 
-  //SSH adressing
-  switch(ssh_adress_ID){
-    case 0:{//Localhost
-      this->ssh_adress = "127.0.0.1";
-      break;
-    }
-    case 1:{//Ordi Louis
-      this->ssh_adress = "10.201.20.110";
-      break;
-    }
-  }
-
   //Options
-  ssh_options_set(ssh, SSH_OPTIONS_HOST, ssh_adress.c_str());
-  ssh_options_set(ssh, SSH_OPTIONS_PORT, &ssh_port);
+  ssh_options_set(ssh, SSH_OPTIONS_HOST, selected_ip.c_str());
+  ssh_options_set(ssh, SSH_OPTIONS_PORT, &selected_port);
 
   int rc = ssh_connect(ssh);
   if (rc != SSH_OK){
-    fprintf(stderr, "Error connecting to localhost: %s\n", ssh_adress.c_str());
+    fprintf(stderr, "Error connecting to localhost: %s\n", selected_ip.c_str());
     return;
   }
 

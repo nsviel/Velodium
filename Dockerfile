@@ -27,6 +27,8 @@ RUN cmake .. && make -j4
 
 # Open port & Shared directory
 EXPOSE 2370
+EXPOSE 1883
+
 RUN mkdir \
     /data \
     /data/frame \

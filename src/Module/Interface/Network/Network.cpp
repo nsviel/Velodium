@@ -12,9 +12,9 @@
 Network::Network(){
   //---------------------------
 
-  this->mqttManager = new MQTT(this);
+  this->mqttManager = new MQTT(wallet);
+  this->sshManager = new SSH(wallet);
   this->sftpManager = new SFTP();
-  this->sshManager = new SSH();
 
   this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
   this->path_target = "/home/aether/Desktop/";
@@ -25,6 +25,7 @@ Network::Network(){
   this->is_mqtt_watcher = false;
 
   //---------------------------
+  this->create_wallet();
 }
 Network::~Network(){}
 
@@ -63,6 +64,21 @@ void Network::send_file(string path_source, string path_target){
 }
 
 //Subfunctions
+void Network::create_wallet(){
+  //---------------------------
+
+  this->wallet = new Wallet();
+  this->wallet->wallet_dic = {
+    { "localhost", "127.0.0.1" },
+    { "mine_ordi_nathan", "10.201.20.106" },
+    { "mine_ordi_louis", "10.201.20.110" },
+    { "mine_server", "10.201.224.13" },
+    { "home_portable_nathan", "192.168.1.27" },
+  };
+  this->wallet->make_concatenation();
+
+  //---------------------------
+}
 void Network::select_sourcePath(){
   //---------------------------
 

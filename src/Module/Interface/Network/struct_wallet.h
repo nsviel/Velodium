@@ -13,8 +13,15 @@ struct Wallet{
   std::vector<std::string> wallet_name;
   std::vector<std::string> wallet_ip;
 
-  std::string selected_name;
-  std::string selected_ip;
+  //Concatenate it into combo format
+  void make_concatenation(){
+    this->wallet_name.clear();
+    this->wallet_ip.clear();
+    for (auto const& [key, val] : wallet_dic){
+      this->wallet_name.push_back(key);
+      this->wallet_ip.push_back(val);
+    }
+  }
 
   //---------------------------
 };

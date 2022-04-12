@@ -1,6 +1,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
+#include "struct_wallet.h"
 #include "../../../common.h"
 
 #include <libssh/libssh.h>
@@ -24,12 +25,14 @@ public:
   void stop_connection();
 
   //Subfunctions
+  void create_wallet();
   void select_sourcePath();
   void select_targetPath();
 
   inline MQTT* get_mqttManager(){return mqttManager;}
   inline SFTP* get_sftpManager(){return sftpManager;}
   inline SSH* get_sshManager(){return sshManager;}
+  inline Wallet* get_wallet(){return wallet;}
 
   inline string* get_path_source(){return &path_source;}
   inline string* get_path_target(){return &path_target;}
@@ -41,6 +44,7 @@ private:
   MQTT* mqttManager;
   SFTP* sftpManager;
   SSH* sshManager;
+  Wallet* wallet;
 
   string name_file;
   string path_source;
