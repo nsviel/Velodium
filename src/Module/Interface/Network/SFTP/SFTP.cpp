@@ -7,27 +7,18 @@
 SFTP::SFTP(){
   //---------------------------
 
-
+  this->sftp_connected = false;
 
   //---------------------------
 }
 SFTP::~SFTP(){}
 
-void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
-  sftp = sftp_new(ssh);
+void SFTP::sftp_send_file(ssh_session& ssh, string path_src, string path_trg){
   //---------------------------
 
-  //CHeck SFTP connexion
-  if (sftp == NULL){
-    fprintf(stderr, "Error allocating SFTP SSH: %s\n", ssh_get_error(ssh));
-    return;
-  }
-
-  //Init SFTP
-  int rc = sftp_init(sftp);
-  if (rc != SSH_OK){
-    fprintf(stderr, "Error initializing SFTP SSH.\n");
-    sftp_free(sftp);
+  //Check connection
+  if(sftp_connected == false){
+    cout<<"SFTP not connected"<<endl;
     return;
   }
 
@@ -35,7 +26,7 @@ void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
   int access_type = O_WRONLY | O_CREAT | O_TRUNC;
   sftp_file file = sftp_open(sftp, path_trg.c_str(), access_type, S_IRWXU);
   if (file == NULL){
-    fprintf(stderr, "Can't open file for writing: %s\n", ssh_get_error(ssh));
+    cout<<"Can't open file for writing: "<<ssh_get_error(ssh)<<endl;
     return;
   }
 
@@ -48,7 +39,7 @@ void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
     if (fin.gcount() > 0){
       ssize_t nwritten = sftp_write(file, buffer, fin.gcount());
       if (nwritten != fin.gcount()){
-        fprintf(stderr, "Error writing to file: %s\n", ssh_get_error(ssh));
+        cout<<"Error writing to file: "<<ssh_get_error(ssh)<<endl;
         sftp_close(file);
         return;
       }
@@ -58,35 +49,57 @@ void SFTP::sftp_sendFile(ssh_session& ssh, string path_src, string path_trg){
   //Close and stop transfert
   rc = sftp_close(file);
   if (rc != SSH_OK){
-    fprintf(stderr, "Can't close the written file: %s\n", ssh_get_error(ssh));
+    cout<<"Can't close the written file: "<<ssh_get_error(ssh)<<endl;
     return;
   }
 
   //---------------------------
-  sftp_free(sftp);
 }
-void SFTP::sftp_createDirectory(ssh_session& ssh, string dirName){
-  sftp = sftp_new(ssh);
+void SFTP::sftp_create_directory(ssh_session& ssh, string dirName){
   //---------------------------
 
-  //Check STFP connexion
-  if (sftp == NULL){
-    fprintf(stderr, "Error allocating SFTP SSH: %s\n", ssh_get_error(ssh));
-    return;
-  }
-
-  //Init STFP connexion
-  int rc = sftp_init(sftp);
-  if (rc != SSH_OK){
-    fprintf(stderr, "Error initializing SFTP SSH.\n");
-    sftp_free(sftp);
+  //Check connection
+  if(sftp_connected == false){
+    cout<<"SFTP not connected"<<endl;
     return;
   }
 
   //Create new directory
   rc = sftp_mkdir(sftp, dirName.c_str(), S_IRWXU);
   if (rc != SSH_OK){
-    fprintf(stderr, "Can't create directory.\n");
+    cout<<"[SFTP] Can't create directory."<<endl;
+  }
+
+  //---------------------------
+}
+
+void SFTP::sftp_new_session(){
+  //---------------------------
+
+  //Start new session
+  this->sftp = sftp_new(ssh);
+  if(sftp == NULL){
+    cout<<"Error allocating SFTP SSH: "<<ssh_get_error(ssh)<<endl;
+    return;
+  }
+
+  //Init SFTP
+  int rc = sftp_init(sftp);
+  if (rc != SSH_OK){
+    cout<<"Error initializing SFTP SSH."<<endl;
+    sftp_free(sftp);
+    return;
+  }
+
+  //---------------------------
+  this->sftp_connected = true;
+}
+void SFTP::sftp_disconnection(){
+  //---------------------------
+
+  if(sftp_connected){
+    sftp_free(sftp);
+    this->sftp_connected = false;
   }
 
   //---------------------------

@@ -58,7 +58,7 @@ void Network::send_file(string path_source, string path_target){
 
   //Send file
   ssh_session* ssh = sshManager->get_ssh_session();
-  sftpManager->sftp_sendFile(*ssh, path_source, path_target);
+  sftpManager->sftp_send_file(*ssh, path_source, path_target);
 
   //---------------------------
 }

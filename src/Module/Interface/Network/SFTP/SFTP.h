@@ -17,11 +17,15 @@ public:
   ~SFTP();
 
 public:
-  void sftp_sendFile(ssh_session& ssh, string path_src, string path_trg);
-  void sftp_createDirectory(ssh_session& ssh, string dirName);
+  void sftp_send_file(ssh_session& ssh, string path_src, string path_trg);
+  void sftp_create_directory(ssh_session& ssh, string dirName);
+
+  void sftp_new_session();
+  void sftp_disconnection();
 
 private:
   sftp_session sftp;
+  bool sftp_connected;
 };
 
 #endif
