@@ -12,6 +12,7 @@ PP_edl::PP_edl(Dimension* dim){
   this->with_edl = true;
   this->edl_strength = 500.0;
   this->edl_distance = 1.0;
+  this->edl_radius = 1.0;
   this->clip_far = 10000.0;
   this->clip_near = 0.1;
 
@@ -33,10 +34,12 @@ void PP_edl::setup_edl(GLuint program_ID){
 
   auto edl_stgh_loc = glGetUniformLocation(program_ID, "EDL_STRENGTH");
   auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
+  auto edl_radi_loc = glGetUniformLocation(program_ID, "EDL_RADIUS");
   auto with_edl_loc = glGetUniformLocation(program_ID, "EDL_ON");
 
   glUniform1f(edl_stgh_loc, (float)edl_strength);
   glUniform1f(edl_dist_loc, (float)edl_distance);
+  glUniform1f(edl_radi_loc, (float)edl_radius);
   glUniform1i(with_edl_loc, (int)with_edl);
 
   auto color_texture_loc = glGetUniformLocation(program_ID, "tex_color");

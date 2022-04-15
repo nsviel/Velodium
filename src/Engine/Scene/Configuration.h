@@ -19,7 +19,7 @@ public:
   //Main functions
   void make_configuration();
   void make_preconfig(int config);
-  
+
   //Pred-defined configurations
   void preconf_default(Json::Value& root);
   void preconf_capture(Json::Value& root);
@@ -28,7 +28,7 @@ public:
   void preconf_wp5_train(Json::Value& root);
 
   //json stuff
-  void create_jsonfile();
+  void create_jsonfile(string path_file);
   void update_jsonfile(string field, string title, string value);
   bool is_file_exist(string fileName);
 
@@ -43,8 +43,8 @@ public:
 private:
   string path_config;
   string path_default;
-  string path_WP4_car;
-  string path_WP5_train;
+  string path_wp4_car;
+  string path_wp5_train;
   string path_ai;
 
   int config;

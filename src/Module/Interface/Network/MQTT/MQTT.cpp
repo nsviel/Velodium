@@ -12,7 +12,7 @@
 
 
 //Constructor / Destructor
-MQTT::MQTT(Wallet* wallet){
+MQTT::MQTT(){
   //---------------------------
 
   //Connection

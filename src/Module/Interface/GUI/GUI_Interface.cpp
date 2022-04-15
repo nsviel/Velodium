@@ -122,28 +122,33 @@ void GUI_Interface::ssh_connection(){
   //---------------------------
 }
 void GUI_Interface::ssh_parameter(){
-  if(ImGui::CollapsingHeader("Parameters")){
-    //---------------------------
+  //---------------------------
 
-    //Source path
-    string path_source = *netManager->get_path_source();
-    if(ImGui::Button("Source", ImVec2(40,0))){
-      netManager->select_sourcePath();
-    }
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", path_source.c_str());
-
-    //Target path
-    string path_target = *netManager->get_path_target();
-    if(ImGui::Button("Target", ImVec2(40,0))){
-      netManager->select_targetPath();
-    }
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", path_target.c_str());
-
-    //---------------------------
-    ImGui::Separator();
+  //Connection port
+  int* ssh_port = sshManager->get_selected_port();
+  ImGui::SetNextItemWidth(item_width + 20);
+  if(ImGui::InputInt("Port", ssh_port)){
+    sshManager->ssh_disconnection();
   }
+
+  //Source path
+  string path_source = *netManager->get_path_source();
+  if(ImGui::Button("Source", ImVec2(40,0))){
+    netManager->select_sourcePath();
+  }
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", path_source.c_str());
+
+  //Target path
+  string path_target = *netManager->get_path_target();
+  if(ImGui::Button("Target", ImVec2(40,0))){
+    netManager->select_targetPath();
+  }
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", path_target.c_str());
+
+  //---------------------------
+  ImGui::Separator();
 }
 void GUI_Interface::mqtt_connection(){
   //---------------------------

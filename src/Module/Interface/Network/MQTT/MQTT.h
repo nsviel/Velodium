@@ -13,7 +13,7 @@ class MQTT
 {
 public:
   //Constructor / Destructor
-  MQTT(Wallet* wallet);
+  MQTT();
   ~MQTT();
 
 public:

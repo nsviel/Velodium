@@ -12,8 +12,8 @@
 Network::Network(){
   //---------------------------
 
-  this->mqttManager = new MQTT(wallet);
-  this->sshManager = new SSH(wallet);
+  this->mqttManager = new MQTT();
+  this->sshManager = new SSH();
   this->sftpManager = new SFTP();
 
   this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
@@ -33,7 +33,7 @@ Network::~Network(){}
 void Network::start_connection(){
   //---------------------------
 
-  sshManager->ssh_startConnexion();
+  sshManager->ssh_connection();
   this->is_connected = *sshManager->get_ssh_connected();
 
   //---------------------------
@@ -41,7 +41,7 @@ void Network::start_connection(){
 void Network::stop_connection(){
   //---------------------------
 
-  sshManager->ssh_stopConnexion();
+  sshManager->ssh_disconnection();
   this->is_connected = *sshManager->get_ssh_connected();
 
   //---------------------------

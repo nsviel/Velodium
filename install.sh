@@ -1,12 +1,15 @@
-#-------------
-#INSTALLATION
-#-------------
-
 #!/bin/sh
-echo Installation...
+
+#-----------------
+#INSTALLATION BASH
+#-----------------
+
+echo "---- [\e[92mInstallation\e[0m] ----"
 sudo apt update
 
 #Install dependancies -> Essential
+echo "[\e[92mok\e[0m] Install package dependencies"
+sudo apt update 
 sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev
 
 
@@ -24,15 +27,15 @@ sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3
 #sudo make install
 #cd ../.. && rm -r ceres-solver 
 
-#Install Eclysp Paho for MQTT 
-#version C
+#Install Eclyspe Paho for MQTT 
+echo "[\e[92mok\e[0m] Install Eclyspe Paho version C"
 git clone https://github.com/eclipse/paho.mqtt.c
 cd paho.mqtt.c && cmake . -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
 sudo make install
 sudo ldconfig
 cd .. && rm -r paho.mqtt.c
 
-#version C++
+echo "[\e[92m#\e[0m] Install Eclyspe Paho version C++"
 git clone https://github.com/eclipse/paho.mqtt.cpp
 cd paho.mqtt.cpp && cmake -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
 sudo cmake --build build/ --target install
@@ -40,13 +43,16 @@ sudo ldconfig
 cd .. && rm -r paho.mqtt.cpp
 
 #Install robin-map
+echo "[\e[92m#\e[0m] Install robin-map"
 git clone https://github.com/Tessil/robin-map.git
 cd robin-map && mkdir build && cd build
 cmake .. && make -j5 && sudo make install
 cd ../.. && rm -r robin-map
 
+#Last parameter
+echo "[\e[92m#\e[0m] Linux parametrization"
 export MESA_GL_VERSION_OVERRIDE=3.3
 
 #End
-echo Installation finished
+echo "---- [\e[92mInstallation finished\e[0m] ----"
 

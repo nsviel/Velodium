@@ -55,11 +55,12 @@ void UDP_server::server_binding(int port){
     // Bind the socket with the server address
     int binding = bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 
-    if(binding < 0){
+    //Check final success
+    if(binding >= 0){
+      this->is_binded = true;
+    }else{
       cout << "bind failed" << endl;
       this->is_binded = false;
-    }else{
-      this->is_binded = true;
     }
 
     //---------------------------

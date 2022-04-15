@@ -10,6 +10,7 @@ uniform float A;
 uniform float B;
 uniform float EDL_STRENGTH;
 uniform float EDL_DISTANCE;
+uniform float EDL_RADIUS;
 uniform bool EDL_ON;
 uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
@@ -53,7 +54,7 @@ void main()
     float depth_norm = compute_depth_normalized(depth_buffer);
 
     //Check neighborhood influence
-    vec2 texel_size = 1.0 / vec2(GL_WIDTH, GL_HEIGHT);
+    vec2 texel_size = EDL_RADIUS / vec2(GL_WIDTH, GL_HEIGHT);
     vec2 NN_response = vec2(0.0);
     NN_response += neighbor_contribution(depth_norm, vec2(-texel_size.x, 0.0));
     NN_response += neighbor_contribution(depth_norm, vec2(+texel_size.x, 0.0));

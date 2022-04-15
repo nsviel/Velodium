@@ -90,8 +90,7 @@ void CoreGLengine::init_OGL(){
   //Parametrization
   int resolution_width = configManager->parse_json_i("window", "resolution_width");
   int resolution_height = configManager->parse_json_i("window", "resolution_height");
-  bool forceVersion = configManager->parse_json_b("opengl", "forceVersion");
-  bool coreGL_verbose = configManager->parse_json_b("opengl", "verbose_coreGL");
+  bool forceVersion = configManager->parse_json_b("window", "forceVersion");
   string win_title = configManager->parse_json_s("window", "title");
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
@@ -122,9 +121,6 @@ void CoreGLengine::init_OGL(){
 
     //GLEW
     glewInit();
-    if(coreGL_verbose){
-      std::cout << "GLEW initiated" << std::endl;
-    }
   }
 
   //---------------------------

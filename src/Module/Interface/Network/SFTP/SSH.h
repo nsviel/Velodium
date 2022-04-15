@@ -16,14 +16,17 @@ class SSH
 {
 public:
   //Constructor / Destructor
-  SSH(Wallet* wallet);
+  SSH();
   ~SSH();
 
 public:
-  void ssh_startConnexion();
-  void ssh_stopConnexion();
-  void ssh_autentification();
-  void ssh_verify_knownhost();
+  void ssh_connection();
+  void ssh_disconnection();
+
+  //Subfunctions
+  void ssh_new_session();
+  void ssh_autentification_server();
+  void ssh_autentification_user();
 
   inline ssh_session* get_ssh_session(){return &ssh;}
   inline bool* get_ssh_connected(){return &ssh_connected;}
