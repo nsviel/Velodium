@@ -3,6 +3,7 @@
 #include "SSH.h"
 
 #include "../../../../Specific/fct_maths.h"
+#include "../../../../Specific/fct_system.h"
 
 
 //Constructor / Destructor
@@ -60,6 +61,12 @@ void SFTP::sftp_send_file(string path_src, string path_trg, string file_name){
   if(sftp_connected){
     ssh_session ssh = sshManager->get_ssh_session();
     //---------------------------
+
+    //Check if source file exists
+    if(is_file_exist(path_src) == false){
+      cout<<"File "<<path_src<<" doesn't exists"<<endl;
+      return;
+    }
 
     //Select the file where we are writting
     int access_type = O_WRONLY | O_CREAT | O_TRUNC;

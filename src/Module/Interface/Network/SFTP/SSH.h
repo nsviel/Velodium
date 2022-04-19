@@ -28,6 +28,11 @@ public:
   bool ssh_autentification_server();
   bool ssh_autentification_user();
 
+  //User identification methods
+  int authenticate_pubkey();
+  int authenticate_kbdint();
+  int authenticate_password();
+
   inline ssh_session get_ssh_session(){return ssh;}
   inline bool* get_ssh_connected(){return &ssh_connected;}
   inline string* get_selected_ip(){return &selected_ip;}

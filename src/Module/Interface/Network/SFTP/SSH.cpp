@@ -157,34 +157,116 @@ bool SSH::ssh_autentification_server(){
   return true;
 }
 bool SSH::ssh_autentification_user(){
+  //---------------------------
+
+  //Check if no user identification is ok
+  int rc = ssh_userauth_none(ssh, NULL);
+  if (rc == SSH_AUTH_SUCCESS || rc == SSH_AUTH_ERROR) {
+    return true;
+  }
+
+  //Else check other identification methods
+  int method = ssh_userauth_list(ssh, NULL);
+
+  if (method & SSH_AUTH_METHOD_PUBLICKEY){
+    rc = authenticate_pubkey();
+    if (rc == SSH_AUTH_SUCCESS) return true;
+  }
+  if (method & SSH_AUTH_METHOD_INTERACTIVE){
+    rc = authenticate_kbdint();
+    if (rc == SSH_AUTH_SUCCESS) return true;
+  }
+  if (method & SSH_AUTH_METHOD_PASSWORD){
+    rc = authenticate_password();
+    if (rc == SSH_AUTH_SUCCESS) return true;
+  }
+
+  //---------------------------
+  return false;
+}
+
+int SSH::authenticate_pubkey(){
+  //---------------------------
+
+  int rc = ssh_userauth_publickey_auto(ssh, NULL, NULL);
+  if (rc == SSH_AUTH_ERROR){
+     fprintf(stderr, "Authentication failed: %s\n",
+       ssh_get_error(ssh));
+     return SSH_AUTH_ERROR;
+  }
+
+  //---------------------------
+  return rc;
+}
+int SSH::authenticate_kbdint(){
+  //---------------------------
+
+  int rc = ssh_userauth_kbdint(ssh, NULL, NULL);
+  while (rc == SSH_AUTH_INFO){
+    const char *name, *instruction;
+    int nprompts, iprompt;
+
+    name = ssh_userauth_kbdint_getname(ssh);
+    instruction = ssh_userauth_kbdint_getinstruction(ssh);
+    nprompts = ssh_userauth_kbdint_getnprompts(ssh);
+
+    if (strlen(name) > 0)
+      printf("%s\n", name);
+    if (strlen(instruction) > 0)
+      printf("%s\n", instruction);
+    for (iprompt = 0; iprompt < nprompts; iprompt++){
+      const char *prompt;
+      char echo;
+
+      prompt = ssh_userauth_kbdint_getprompt(ssh, iprompt, &echo);
+      if (echo){
+        char buffer[128], *ptr;
+
+        printf("%s", prompt);
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+          return SSH_AUTH_ERROR;
+        buffer[sizeof(buffer) - 1] = '\0';
+        if ((ptr = strchr(buffer, '\n')) != NULL)
+          *ptr = '\0';
+        if (ssh_userauth_kbdint_setanswer(ssh, iprompt, buffer) < 0)
+          return SSH_AUTH_ERROR;
+        memset(buffer, 0, strlen(buffer));
+      }
+      else
+      {
+        char *ptr;
+
+        ptr = getpass(prompt);
+        if (ssh_userauth_kbdint_setanswer(ssh, iprompt, ptr) < 0)
+          return SSH_AUTH_ERROR;
+      }
+    }
+    rc = ssh_userauth_kbdint(ssh, NULL, NULL);
+  }
+
+  //---------------------------
+  return rc;
+}
+int SSH::authenticate_password(){
   int nb_tentatives = 3;
+  int rc;
   //---------------------------
 
   //With password
   bool success = true;
-   for(int i=0; i<nb_tentatives; i++){
+  for(int i=0; i<nb_tentatives; i++){
     char* password = getpass("Password: ");
     int rc = ssh_userauth_password(ssh, NULL, password);
 
     if (rc != SSH_AUTH_SUCCESS){
       cout<<"Error authenticating with password: "<<ssh_get_error(ssh)<<endl;
       cout<<"New tentative: "<<to_string(i + 1)<<"/"<<to_string(nb_tentatives)<<endl;
-      success = false;
     }else{
       cout<<"Identification OK."<<endl;
-      ssh_connected = true;
-      success = true;
       break;
     }
   }
 
-  //With public key
-  /*int rc = ssh_userauth_publickey_auto(ssh, NULL, NULL);
-  if (rc == SSH_AUTH_ERROR){
-    cout<< "Error authenticating with public key: "<<ssh_get_error(ssh)<<endl;
-  }*/
-  cout<<"User authentificated"<<endl;
-
   //---------------------------
-  return true;
+  return rc;
 }
