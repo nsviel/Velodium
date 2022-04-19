@@ -8,6 +8,7 @@
 #include "Object/OOBB.h"
 #include "Object/Mark.h"
 #include "Object/Normal.h"
+#include "Object/Trajectory.h"
 
 #include "../Engine_node.h"
 #include "../Scene/Configuration.h"
@@ -30,6 +31,7 @@ Glyphs::Glyphs(Engine_node* node){
   this->normObject = new Normal();
   this->oobbObject = new OOBB();
   this->markObject = new Mark();
+  this->trajObject = new Trajectory();
 
   this->is_visualization = configManager->parse_json_b("window", "visualization");
   this->ID_glyph = 0;
@@ -51,6 +53,7 @@ void Glyphs::init_scene_object(Configuration* configManager){
   this->create_glyph_scene(gridObject->get_grid_sub());
   this->create_glyph_scene(gridObject->get_grid_plane());
   this->create_glyph_scene(axisObject->get_axis_scene());
+  this->create_glyph_scene(trajObject->get_glyph());
   this->create_glyph_scene(aabb);
 
   aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
@@ -58,7 +61,6 @@ void Glyphs::init_scene_object(Configuration* configManager){
 
   //---------------------------
 }
-
 void Glyphs::reset_scene(){
   //---------------------------
 
@@ -78,6 +80,9 @@ void Glyphs::reset_scene(){
     aabb->location.clear();
     this->update_glyph_location(aabb);
   }
+
+  //Reset specific glyphs
+  trajObject->reset();
 
   //---------------------------
 }
@@ -203,6 +208,11 @@ void Glyphs::update_glyph_subset(Subset* subset){
   normObject->update_normal_subset(subset);
   this->update_glyph_location(&subset->normal);
   this->update_glyph_color(&subset->normal);
+
+  //Trajectory
+  trajObject->update(&subset->frame);
+  this->update_glyph_location(trajObject->get_glyph());
+  this->update_glyph_color(trajObject->get_glyph());
 
   //---------------------------
 }

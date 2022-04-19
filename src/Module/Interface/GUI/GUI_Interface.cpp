@@ -114,9 +114,7 @@ void GUI_Interface::ssh_connection(){
 
   //Send file
   if(ImGui::Button("Send file", ImVec2(item_width, 0))){
-    string path_source = *netManager->get_path_source();
-    string path_target = *netManager->get_path_target();
-    netManager->send_file(path_source, path_target);
+    netManager->send_file();
   }
 
   //---------------------------

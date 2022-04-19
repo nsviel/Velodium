@@ -8,22 +8,26 @@
 #include <fcntl.h>
 #include <fstream>
 
+class SSH;
+
 
 class SFTP
 {
 public:
   //Constructor / Destructor
-  SFTP();
+  SFTP(SSH* ssh);
   ~SFTP();
 
 public:
-  void sftp_send_file(ssh_session& ssh, string path_src, string path_trg);
-  void sftp_create_directory(ssh_session& ssh, string dirName);
-
   void sftp_new_session();
   void sftp_disconnection();
 
+  void sftp_send_file(string path_src, string path_trg, string file_name);
+  void sftp_create_directory(string dirName);
+
 private:
+  SSH* sshManager;
+
   sftp_session sftp;
   bool sftp_connected;
 };

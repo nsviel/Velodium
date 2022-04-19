@@ -23,14 +23,22 @@ void SSH::ssh_connection(){
     // Run new SSH session
     this->ssh_new_session();
 
-    // Verify the server's identity
-    this->ssh_autentification_server();
+    // Authenticate server
+    bool server_connected = ssh_autentification_server();
 
-    // Authenticate ourselves
-    //this->ssh_autentification_user();
+    // Authenticate user
+    bool user_connected = ssh_autentification_user();
 
     //Set connection flag on
-    ssh_connected = true;
+    if(server_connected && user_connected){
+      ssh_connected = true;
+      string log = "Connected to " + selected_ip + " with SSH";
+      console.AddLog("success", log);
+    }
+    else{
+      string log = "Problem connection SSH";
+      console.AddLog("error", log);
+    }
   }
 
   //---------------------------
@@ -70,7 +78,7 @@ void SSH::ssh_new_session(){
 
   //---------------------------
 }
-void SSH::ssh_autentification_server(){
+bool SSH::ssh_autentification_server(){
   //SSH host file: (~/.ssh/known_hosts on UNIX)
   //---------------------------
 
@@ -82,9 +90,9 @@ void SSH::ssh_autentification_server(){
 
   //Public key stuff
   rc = ssh_get_server_publickey(ssh, &srv_pubkey);
-  if (rc < 0) {return;}
+  if (rc < 0) {return false;}
   rc = ssh_get_publickey_hash(srv_pubkey, SSH_PUBLICKEY_HASH_SHA1, &hash, &hlen);
-  if (rc < 0) {return;}
+  if (rc < 0) {return false;}
   ssh_key_free(srv_pubkey);
 
   //Check is the server is known
@@ -98,13 +106,13 @@ void SSH::ssh_autentification_server(){
       cout<< "Host key for server changed"<<endl;
       cout<< "For security reasons, connection will be stopped"<<endl;
       ssh_clean_pubkey_hash(&hash);
-      return;
+      return false;
     }
     case SSH_KNOWN_HOSTS_OTHER:{
       cout<< "The host key for this server was not found but an other type of key exists."<<endl;
       cout<< "An attacker might change the default server key to confuse your client into thinking the key does not exist"<<endl;
       ssh_clean_pubkey_hash(&hash);
-      return;
+      return false;
     }
     case SSH_KNOWN_HOSTS_NOT_FOUND:{
       cout<< "Could not find known host file."<<endl;
@@ -122,28 +130,33 @@ void SSH::ssh_autentification_server(){
       //Get response
       char buf[10];
       char* p = fgets(buf, sizeof(buf), stdin);
-      if (p == NULL) {return;}
+      if (p == NULL) {return false;}
       string input(buf);
       if(input == "" || input == "y" || input == "Y" || input == "yes"){
         rc = ssh_session_update_known_hosts(ssh);
         if (rc < 0) {
           cout<< "Error "<<strerror(errno)<<endl;
-          return;
+          return false;
         }
       }
+
+      //Feedback success
+      cout<<"Host key added"<<endl;
       break;
     }
     case SSH_KNOWN_HOSTS_ERROR:{
       cout<< "Error "<<ssh_get_error(ssh)<<endl;
       ssh_clean_pubkey_hash(&hash);
-      return;
+      return false;
     }
   }
 
-  //---------------------------
   ssh_clean_pubkey_hash(&hash);
+
+  //---------------------------
+  return true;
 }
-void SSH::ssh_autentification_user(){
+bool SSH::ssh_autentification_user(){
   int nb_tentatives = 3;
   //---------------------------
 
@@ -166,16 +179,12 @@ void SSH::ssh_autentification_user(){
   }
 
   //With public key
-  /*int rc;
-  rc = ssh_userauth_publickey_auto(ssh, NULL, NULL);
+  /*int rc = ssh_userauth_publickey_auto(ssh, NULL, NULL);
   if (rc == SSH_AUTH_ERROR){
-   cout<< "Error authenticating with public key: %s\n", ssh_get_error(ssh));
- }*/
-
-  if(success == false){
-    cout<<"Exit program..."<<endl;
-    exit(0);
-  }
+    cout<< "Error authenticating with public key: "<<ssh_get_error(ssh)<<endl;
+  }*/
+  cout<<"User authentificated"<<endl;
 
   //---------------------------
+  return true;
 }

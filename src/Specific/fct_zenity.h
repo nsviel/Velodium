@@ -51,31 +51,6 @@ namespace{
     //---------------------------
     return path_vec;
   }
-  std::string zenity_file(std::string title, std::string path_dir){
-    std::string path_saving = "";
-    //---------------------------
-
-    //Open Zenity window
-    std::string zenity = "zenity --file-selection --save --title=" + title + " --filename=" + path_dir;
-    FILE *file = popen(zenity.c_str(), "r");
-    char filename[1024];
-    char* path_char = fgets(filename, 1024, file);
-
-    //Check if empty
-    if ((path_char != NULL) && (path_char[0] != '\0')) {
-      std::string path_str(path_char);
-
-      //Supress unwanted line break
-      if (path_str.find('\n')){
-        path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
-      }
-
-      path_saving = path_str;
-    }
-
-    //---------------------------
-    return path_saving;
-  }
   std::string zenity_directory(std::string title, std::string path_dir){
     std::string path_directory = "";
     //---------------------------
@@ -100,6 +75,30 @@ namespace{
 
     //---------------------------
     return path_directory;
+  }
+  void zenity_file(std::string& path_file){
+    std::string path_saving = "";
+    //---------------------------
+
+    //Open Zenity window
+    std::string zenity = "zenity --file-selection --save --filename=" + path_file;
+    FILE *file = popen(zenity.c_str(), "r");
+    char filename[1024];
+    char* path_char = fgets(filename, 1024, file);
+
+    //Check if empty
+    if ((path_char != NULL) && (path_char[0] != '\0')) {
+      std::string path_str(path_char);
+
+      //Supress unwanted line break
+      if (path_str.find('\n')){
+        path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
+      }
+
+      path_file = path_str;
+    }
+
+    //---------------------------
   }
   void zenity_directory(std::string& path_dir){
     //---------------------------

@@ -20,7 +20,7 @@ public:
 
 public:
   //Main function
-  void send_file(string path_source, string path_target);
+  void send_file();
   void start_connection();
   void stop_connection();
 

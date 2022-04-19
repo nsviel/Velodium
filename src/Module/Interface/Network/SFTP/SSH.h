@@ -25,10 +25,10 @@ public:
 
   //Subfunctions
   void ssh_new_session();
-  void ssh_autentification_server();
-  void ssh_autentification_user();
+  bool ssh_autentification_server();
+  bool ssh_autentification_user();
 
-  inline ssh_session* get_ssh_session(){return &ssh;}
+  inline ssh_session get_ssh_session(){return ssh;}
   inline bool* get_ssh_connected(){return &ssh_connected;}
   inline string* get_selected_ip(){return &selected_ip;}
   inline string* get_selected_dest(){return &selected_dest;}

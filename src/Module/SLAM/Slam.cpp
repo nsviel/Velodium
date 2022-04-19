@@ -13,6 +13,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object/Trajectory.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Transformation/Transforms.h"
 

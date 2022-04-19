@@ -14,7 +14,7 @@ Network::Network(){
 
   this->mqttManager = new MQTT();
   this->sshManager = new SSH();
-  this->sftpManager = new SFTP();
+  this->sftpManager = new SFTP(sshManager);
 
   this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
   this->path_target = "/home/aether/Desktop/";
@@ -46,19 +46,15 @@ void Network::stop_connection(){
 
   //---------------------------
 }
-void Network::send_file(string path_source, string path_target){
+void Network::send_file(){
   //---------------------------
 
-  //Check if ssh is established
-  bool ssh_connected = *sshManager->get_ssh_connected();
-  if(ssh_connected == false){
-    cout<<"SSH not connected."<<endl;
-    return;
-  }
+  //SSH connection
+  sshManager->ssh_connection();
 
   //Send file
-  ssh_session* ssh = sshManager->get_ssh_session();
-  sftpManager->sftp_send_file(*ssh, path_source, path_target);
+  sftpManager->sftp_new_session();
+  sftpManager->sftp_send_file(path_source, path_target, name_file);
 
   //---------------------------
 }
@@ -83,12 +79,7 @@ void Network::select_sourcePath(){
   //---------------------------
 
   //Select file to send
-  zenity_file("source", path_source);
-
-  //Supress unwanted line break
-  if (path_source.find('\n')){
-    path_source.erase(std::remove(path_source.begin(), path_source.end(), '\n'), path_source.end());
-  }
+  zenity_file(path_source);
 
   //Retrieve name file
   name_file = path_source.substr(path_source.find_last_of("/\\") + 1);
@@ -105,11 +96,6 @@ void Network::select_targetPath(){
 
   //Select file to send
   zenity_directory(path_target);
-
-  //Supress unwanted line break
-  if (path_source.find('\n')){
-    path_target.erase(std::remove(path_target.begin(), path_target.end(), '\n'), path_target.end());
-  }
 
   //---------------------------
 }
