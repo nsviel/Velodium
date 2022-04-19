@@ -4,8 +4,10 @@
 #include <atomic>
 #include "mqtt/async_client.h"
 
+
 // A callback class for use with the main MQTT client.
-class callback : public virtual mqtt::callback{
+class callback : public virtual mqtt::callback
+{
 public:
 	void connection_lost(const string& cause) override {
 		cout << "\nConnection lost" << endl;
@@ -13,14 +15,11 @@ public:
 			cout << "\tcause: " << cause << endl;
     }
 	}
-
-	void delivery_complete(mqtt::delivery_token_ptr tok) override {
-		//cout << "\tDelivery complete for token: " << (tok ? tok->get_message_id() : -1) << endl;
-	}
 };
 
 // A base action listener.
-class action_listener : public virtual mqtt::iaction_listener{
+class action_listener : public virtual mqtt::iaction_listener
+{
 protected:
 	void on_failure(const mqtt::token& tok) override {
 		cout << "\tListener failure for token: " << tok.get_message_id() << endl;
@@ -32,7 +31,8 @@ protected:
 };
 
 // A derived action listener for publish events.
-class delivery_action_listener : public action_listener{
+class delivery_action_listener : public action_listener
+{
 	atomic<bool> done_;
 
 	void on_failure(const mqtt::token& tok) override {

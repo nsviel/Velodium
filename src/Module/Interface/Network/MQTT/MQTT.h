@@ -17,14 +17,15 @@ public:
   ~MQTT();
 
 public:
-  //Monolitic functions
+  //Connection functions
+  void mqtt_connection();
+  void mqtt_disconnect();
+
+  //Subfunctions
   void mqtt_test_localhost();
   void mqtt_send_message(string message);
   void mqtt_build_address();
-
-  //Separated functions
-  void mqtt_connection();
-  void mqtt_disconnect();
+  void mqtt_check_deconnection();
 
   inline string* get_message(){return &client_message;}
   inline string* get_topic(){return &broker_topic;}

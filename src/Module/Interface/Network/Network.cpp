@@ -69,7 +69,8 @@ void Network::create_wallet(){
     { "mine_ordi_nathan", "10.201.20.106" },
     { "mine_ordi_louis", "10.201.20.110" },
     { "mine_server", "10.201.224.13" },
-    { "home_portable_nathan", "192.168.1.27" },
+    { "portable_nathan_home", "192.168.1.27" },
+    { "portable_nathan_mine", "192.168.153.147" },
   };
   this->wallet->make_concatenation();
 

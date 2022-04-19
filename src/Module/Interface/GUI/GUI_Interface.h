@@ -5,11 +5,7 @@
 
 class GUI_module;
 class GUI_Lidar;
-class Network;
-class MQTT;
-class SFTP;
-class SSH;
-class Scene;
+class GUI_Network;
 
 
 class GUI_Interface
@@ -21,21 +17,14 @@ public:
 
 public:
   void design_Interface();
-
-  void ssh_connection();
-  void ssh_parameter();
-  void mqtt_connection();
-  void mqtt_parameter();
-
+  void design_Lidar();
+  void design_Network();
+  
   inline GUI_Lidar* get_gui_lidarManager(){return gui_lidarManager;}
 
 private:
-  Scene* sceneManager;
   GUI_Lidar* gui_lidarManager;
-  Network* netManager;
-  MQTT* mqttManager;
-  SFTP* sftpManager;
-  SSH* sshManager;
+  GUI_Network* gui_netManager;
 
   int item_width;
 };

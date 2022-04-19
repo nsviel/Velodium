@@ -36,64 +36,20 @@ MQTT::MQTT(){
 }
 MQTT::~MQTT(){}
 
-//Test localHost
-void MQTT::mqtt_test_localhost(){
-  //---------------------------
-
-  // First use a message pointer.
-  this->mqtt_send_message(client_message);
-
-  // Disconnect
-  this->mqtt_disconnect();
-
-  //---------------------------
-}
-void MQTT::mqtt_send_message(string message){
-  //---------------------------
-
-  // Initialize connection parameters
-  this->mqtt_connection();
-
-  //Check for connection
-  if(is_connected){
-    callback cb;
-    client->set_callback(cb);
-
-    // First use a message pointer.
-    mqtt::message_ptr pubmsg = mqtt::make_message(broker_topic, message);
-    pubmsg->set_qos(qos);
-    client->publish(pubmsg)->wait_for(timeout);
-
-    //---------------------------
-    cout << "Sending message [OK]" << endl;
-  }
-
-  //---------------------------
-}
-void MQTT::mqtt_build_address(){
-  //---------------------------
-
-  this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
-  this->mqtt_disconnect();
-
-  //---------------------------
-}
-
 //Connection functions
 void MQTT::mqtt_connection(){
+  this->mqtt_check_deconnection();
   //---------------------------
 
   if(is_connected == false){
     //Initialize connection parameters
-    //Problem ici parce que c'est pas terrible de refaire un nouveau pointer each time
-    if(client != nullptr) delete client;
     this->client = new mqtt::async_client(selected_address, client_ID, persist_dir);
 
     try {
       callback cb;
-      client->set_callback(cb);
+      // /client->set_callback(cb);
       auto connect_option = mqtt::connect_options_builder()
-        .automatic_reconnect(true)
+        .automatic_reconnect(false)
         .clean_session()
         .finalize();
 
@@ -121,9 +77,10 @@ void MQTT::mqtt_connection(){
   //---------------------------
 }
 void MQTT::mqtt_disconnect(){
-  if(is_connected){
-    //---------------------------
+  this->mqtt_check_deconnection();
+  //---------------------------
 
+  if(is_connected){
     callback cb;
     client->set_callback(cb);
 
@@ -132,8 +89,66 @@ void MQTT::mqtt_disconnect(){
     delete client;
     client = nullptr;
 
-    //---------------------------
     this->is_connected = false;
     cout << "Disconnecting... [OK]" << endl;
   }
+
+  //---------------------------
+}
+
+//Subfunctions
+void MQTT::mqtt_test_localhost(){
+  this->selected_ip = "127.0.0.1";
+  //---------------------------
+
+  //Connect to localhost
+  this->mqtt_connection();
+
+  // Send message
+  this->mqtt_send_message(client_message);
+
+  // Disconnect
+  this->mqtt_disconnect();
+
+  //---------------------------
+}
+void MQTT::mqtt_send_message(string message){
+  if(is_connected){
+    //---------------------------
+
+    //Callback
+    callback cb;
+    client->set_callback(cb);
+
+    // First use a message pointer.
+    mqtt::message_ptr pubmsg = mqtt::make_message(broker_topic, message);
+    pubmsg->set_qos(qos);
+    client->publish(pubmsg)->wait_for(timeout);
+
+    //Result
+    cout << "Sending message [OK]" << endl;
+
+    //---------------------------
+  }
+}
+void MQTT::mqtt_build_address(){
+  //---------------------------
+
+  this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
+  this->mqtt_disconnect();
+
+  //---------------------------
+}
+void MQTT::mqtt_check_deconnection(){
+  //---------------------------
+
+  if(client != nullptr){
+    if(client->is_connected() == false && is_connected == true){
+      is_connected = false;
+      delete client;
+      client = nullptr;
+    }
+  }
+
+  //---------------------------
 }
