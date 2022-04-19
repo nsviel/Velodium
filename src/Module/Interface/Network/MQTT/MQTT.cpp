@@ -98,6 +98,7 @@ void MQTT::mqtt_disconnect(){
 
 //Subfunctions
 void MQTT::mqtt_test_localhost(){
+  string old_ip = selected_ip;
   this->selected_ip = "127.0.0.1";
   //---------------------------
 
@@ -111,6 +112,7 @@ void MQTT::mqtt_test_localhost(){
   this->mqtt_disconnect();
 
   //---------------------------
+  this->selected_ip = old_ip;
 }
 void MQTT::mqtt_send_message(string message){
   if(is_connected){

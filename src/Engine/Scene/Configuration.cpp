@@ -197,6 +197,11 @@ void Configuration::preconf_wp4_car(Json::Value& root){
   param["path_data"] = "../../data/";
   root["parameter"] = param;
 
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = false;
+  root["glyph"] = glyph;
+
   //Module
   Json::Value module;
   module["with_slam"] = true;
@@ -224,16 +229,10 @@ void Configuration::preconf_wp5_train(Json::Value& root){
   param["path_data"] = "../../data/";
   root["parameter"] = param;
 
-  //Camera
-  Json::Value camera;
-  camera["fov"] = 65.0f;
-  camera["initial_pos"] = 5.0f;
-  camera["clip_near"] = 0.1f;
-  camera["clip_far"] = 10000.0f;
-  camera["speed_mouse"] = 0.003f;
-  camera["speed_move"] = 3.0f;
-  camera["speed_zoom"] = 0.1f;
-  root["camera"] = camera;
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = false;
+  root["glyph"] = glyph;
 
   //Module
   Json::Value module;

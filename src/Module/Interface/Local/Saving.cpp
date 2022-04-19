@@ -42,13 +42,16 @@ Saving::~Saving(){}
 
 //Output: frame & Image saving
 void Saving::save_image(){
-  Frame* frame = sceneManager->get_frame_selected();
-  auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
   //Save image
+  //string path = path_image + "image_" + to_string(save_image_ID);
+  //renderManager->render_screenshot(path);
+
+  //Put screenshot flag on
   string path = path_image + "image_" + to_string(save_image_ID);
-  renderManager->render_screenshot(path);
+  *renderManager->get_save_path() = path;
+  *renderManager->get_is_screenshot() = true;
   save_image_ID++;
 
   //Keep only a certain number of image
@@ -61,8 +64,6 @@ void Saving::save_image(){
   }
 
   //---------------------------
-  auto t2 = std::chrono::high_resolution_clock::now();
-  frame->time_save_image = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 void Saving::save_image_path(){
   //---------------------------

@@ -23,7 +23,7 @@ Renderer::Renderer(Dimension* dim){
 }
 Renderer::~Renderer(){}
 
-
+//Init
 void Renderer::init_rendering_fbo_1(){
   vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------
@@ -112,6 +112,7 @@ void Renderer::init_rendering_quad(){
   //---------------------------
 }
 
+//Render
 void Renderer::render_fbo_1(){
   //---------------------------
 
@@ -151,6 +152,8 @@ void Renderer::render_quad(){
 
   //---------------------------
 }
+
+//Screenshot functions
 void Renderer::render_screenshot(string path){
   GLFWwindow* window = dimManager->get_window();
   //---------------------------
@@ -188,7 +191,14 @@ void Renderer::render_screenshot(string path){
 
   //---------------------------
 }
+void Renderer::render_screenshot_online(){
+  if(is_screenshot){
+    this->render_screenshot(save_path);
+    this->is_screenshot = false;
+  }
+}
 
+//Update
 void Renderer::update_texture(){
   vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------

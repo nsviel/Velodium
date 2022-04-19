@@ -33,6 +33,7 @@ Scala::Scala(Interface_node* node){
   this->extractManager = node_load->get_extractManager();
   this->path_scala = fileManager->get_path_data_dir() + "scala/";
   this->is_capturing = false;
+  this->is_new_subset = false;
   this->capture_port = 2371;
 
   //---------------------------

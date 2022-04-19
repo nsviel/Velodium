@@ -131,9 +131,6 @@ void Online::compute_displayStats(Subset* subset){
   if(with_slam && frame->is_slamed){
     stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
   }
-  if(with_save_image){
-    stats += "[Image- " + to_string((int)frame->time_save_image) + " ms] ";
-  }
   if(with_save_frame){
     stats += "[Frame- " + to_string((int)frame->time_save_frame) + " ms] ";
   }

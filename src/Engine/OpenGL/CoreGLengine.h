@@ -68,7 +68,6 @@ private:
   Configuration* configManager;
 
   float time_loop;
-  bool is_visualization;
   bool openglRunning;
   bool flag_resized;
 };

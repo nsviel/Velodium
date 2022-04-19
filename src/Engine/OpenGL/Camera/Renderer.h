@@ -21,12 +21,16 @@ public:
   void render_fbo_1();
   void render_fbo_2();
   void render_quad();
+  
   void render_screenshot(string path);
+  void render_screenshot_online();
 
   void update_texture();
   void update_quad();
 
   inline vec4* get_screen_color(){return &screen_color;}
+  inline string* get_save_path(){return &save_path;}
+  inline bool* get_is_screenshot(){return &is_screenshot;}
 
 private:
   Dimension* dimManager;
@@ -41,6 +45,8 @@ private:
   GLuint tex_edl_ID;
 
   vec4 screen_color;
+  string save_path;
+  bool is_screenshot;
   bool with_fullscreen;
 };
 
