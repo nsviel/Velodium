@@ -90,7 +90,7 @@ void GUI_Slam::parameter_configuration(){
 
   //Configuration model
   int slam_conf = *paramManager->get_predefined_conf();
-  if(ImGui::Combo("Configuration", &slam_conf, "vlp_64\0vlp_16\0")){
+  if(ImGui::Combo("Configuration", &slam_conf, "vlp_64\0vlp_16\0hdl_32\0")){
     paramManager->set_predefined_conf(slam_conf);
   }
 

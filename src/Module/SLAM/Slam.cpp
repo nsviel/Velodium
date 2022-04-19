@@ -392,6 +392,7 @@ void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, 
 void Slam::reset_slam(){
   //---------------------------
 
+  glyphManager->reset_scene();
   mapManager->reset();
   this->map_frame_ID = 0;
 

@@ -204,7 +204,7 @@ void SLAM_parameter::make_config_1(){
 void SLAM_parameter::make_config_2(){
   //velodyne_hdl32
   //---------------------------
-
+  
   //Slam
   bool* solver_gn = slamManager->get_solver_gn();
   bool* solver_ceres = slamManager->get_solver_ceres();
@@ -223,10 +223,10 @@ void SLAM_parameter::make_config_2(){
 
   *thres_ego_trans = 2.0f;
   *thres_ego_rotat = 15.0f;
-  *thres_pose_trans = 3.0f;
+  *thres_pose_trans = 4.0f;
   *thres_pose_rotat = 15.0f;
-  *thres_optimMinNorm = 0.3f;
-  *nb_residual_min = 50;
+  *thres_optimMinNorm = 0.4f;
+  *nb_residual_min = 100;
   *nb_rlt_previous_mean = 10;
   *nb_rlt_previous_pose = 4;
 
@@ -235,15 +235,15 @@ void SLAM_parameter::make_config_2(){
   int* max_number_neighbors = normalManager->get_max_number_neighbors();
   int* voxel_searchSize = normalManager->get_voxel_searchSize();
 
-  *size_voxelMap = 0.5f;
-  *max_number_neighbors = 50;
+  *size_voxelMap = 1.0f;
+  *max_number_neighbors = 20;
   *voxel_searchSize = 1;
 
   //Optim gn
   float*PTP_distance_max = gnManager->get_PTP_distance_max();
   int* iter_max = gnManager->get_iter_max();
 
-  *PTP_distance_max = 0.7f;
+  *PTP_distance_max = 0.5f;
   *iter_max = 5;
 
   //Local map
@@ -256,13 +256,13 @@ void SLAM_parameter::make_config_2(){
   float* grid_voxel_size = mapManager->get_grid_voxel_size();
   int* map_max_voxelNbPoints = mapManager->get_map_max_voxelNbPoints();
 
-  *voxel_size_localMap = 0.5f;
-  *voxel_size_slamMap = 0.5f;
-  *min_root_distance = 0.0f;
+  *voxel_size_localMap = 1.0f;
+  *voxel_size_slamMap = 0.5;
+  *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
   *min_voxel_distance = 0.05f;
-  *grid_voxel_size = 0.06f;
+  *grid_voxel_size = 1.0f;
   *map_max_voxelNbPoints = 20;
 
   //Specific functions
@@ -276,12 +276,16 @@ void SLAM_parameter::set_predefined_conf(int conf){
   //---------------------------
 
   switch(conf){
-    case 0:{//64 fibers
+    case 0:{//VLP-64
       this->make_config_0();
       break;
     }
-    case 1:{//16 fibers
+    case 1:{//VLP-16
       this->make_config_1();
+      break;
+    }
+    case 2:{//HDL-32
+      this->make_config_2();
       break;
     }
   }
