@@ -21,7 +21,7 @@ public:
   void render_fbo_1();
   void render_fbo_2();
   void render_quad();
-  
+
   void render_screenshot(string path);
   void render_screenshot_online();
 
@@ -31,6 +31,7 @@ public:
   inline vec4* get_screen_color(){return &screen_color;}
   inline string* get_save_path(){return &save_path;}
   inline bool* get_is_screenshot(){return &is_screenshot;}
+  inline float get_time_screenshot(){return time_screenshot;}
 
 private:
   Dimension* dimManager;
@@ -45,6 +46,7 @@ private:
   GLuint tex_edl_ID;
 
   vec4 screen_color;
+  float time_screenshot;
   string save_path;
   bool is_screenshot;
   bool with_fullscreen;

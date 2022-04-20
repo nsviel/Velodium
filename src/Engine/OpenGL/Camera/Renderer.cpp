@@ -193,8 +193,16 @@ void Renderer::render_screenshot(string path){
 }
 void Renderer::render_screenshot_online(){
   if(is_screenshot){
+    auto t1 = std::chrono::high_resolution_clock::now();
+    //---------------------------
+
     this->render_screenshot(save_path);
     this->is_screenshot = false;
+
+    //---------------------------
+    auto t2 = std::chrono::high_resolution_clock::now();
+    this->time_screenshot = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+    say(time_screenshot);
   }
 }
 
