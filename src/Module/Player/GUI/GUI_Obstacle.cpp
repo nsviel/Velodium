@@ -223,6 +223,10 @@ void GUI_Obstacle::state_online(){
 void GUI_Obstacle::parameter_online(){
   //---------------------------
 
+  //With MQTT warning
+  bool* with_warning = obstacleManager->get_with_warning();
+  ImGui::Checkbox("With MQTT warning", with_warning);
+
   //Online parameters
   GUI_Player* gui_player = node_gui->get_gui_player();
   GUI_Dynamic* gui_dynamic = gui_player->get_gui_dynamic();

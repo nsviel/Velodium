@@ -173,7 +173,8 @@ void Renderer::render_screenshot(string path){
     glReadBuffer(GL_FRONT);
 
     //Configure buffer
-    uint8_t* pixels = new uint8_t[3 * gl_dim.x * gl_dim.y];
+    int size = 3 * gl_dim.x * gl_dim.y;
+    uint8_t* pixels = new uint8_t[size];
     glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
     //Freeimage
@@ -260,7 +261,8 @@ void Renderer::render_screenshot_freeimage(string path){
     glReadBuffer(GL_FRONT);
 
     //Configure buffer
-    uint8_t* pixels = new uint8_t[3 * gl_dim.x * gl_dim.y];
+    int size = 3 * gl_dim.x * gl_dim.y;
+    uint8_t* pixels = new uint8_t[size];
     glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
     //Freeimage
