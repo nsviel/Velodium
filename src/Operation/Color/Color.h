@@ -19,6 +19,7 @@ public:
   //Colorization functions
   void make_colorization(Subset* subset);
   void make_colorization(Subset* subset, vec4 RGB_in);
+  void make_colorization_specific(Subset* subset);
 
   //Specific functions
   void color_unicolor(Subset* subset);
@@ -42,6 +43,7 @@ private:
   Heatmap* heatmapManager;
 
   vec2 range_intensity;
+  vec4 specific_color;
   int color_mode;
 };
 

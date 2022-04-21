@@ -28,6 +28,7 @@ Color::Color(Operation_node* node_ope){
 
   this->color_mode = configManager->parse_json_i("parameter", "color_mode");
   this->range_intensity = vec2(0.0f, 1.0f);
+  this->specific_color = vec4(1, 1, 1, 1);
 
   //---------------------------
 }
@@ -60,6 +61,17 @@ void Color::make_colorization(Subset* subset, vec4 RGB_in){
 
   for(int i=0; i<RGB.size(); i++){
     RGB[i] = RGB_in;
+  }
+
+  //---------------------------
+  sceneManager->update_subset_color(subset);
+}
+void Color::make_colorization_specific(Subset* subset){
+  vector<vec4>& RGB = subset->RGB;
+  //---------------------------
+
+  for(int i=0; i<RGB.size(); i++){
+    RGB[i] = specific_color;
   }
 
   //---------------------------

@@ -61,6 +61,7 @@ void Online::update_configuration(){
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_root = false;
   this->with_justOneFrame = false;
+  this->with_subset_specific_color = false;
   this->with_save_frame = configManager->parse_json_b("interface", "with_save_frame");
   this->with_save_image = configManager->parse_json_b("interface", "with_save_image");
   this->with_slam = configManager->parse_json_b("module", "with_slam");
@@ -100,12 +101,15 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   }
 
   //Colorization
-  if(ID_subset>2){
-    Subset* subset_m1 = sceneManager->get_subset_byID(cloud, ID_subset-1);
-    colorManager->make_colorization(subset_m1);
-    colorManager->make_colorization(subset, vec4(1,1,1,1));
+  if(with_subset_specific_color){
+    colorManager->make_colorization_specific(subset);
+    if(ID_subset>2){
+      Subset* subset_m1 = sceneManager->get_subset_byID(cloud, ID_subset-1);
+      colorManager->make_colorization(subset_m1);
+    }
+  }else{
+    colorManager->make_colorization(subset);
   }
-
 
   //Save subset frame
   if(with_save_frame){

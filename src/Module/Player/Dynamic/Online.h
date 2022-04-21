@@ -63,6 +63,7 @@ private:
 
   bool with_justOneFrame;
   bool with_camera_follow;
+  bool with_subset_specific_color;
   bool with_slam;
   bool with_camera_top;
   bool with_camera_root;
