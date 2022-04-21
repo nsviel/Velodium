@@ -65,6 +65,7 @@ void MQTT::mqtt_connection(){
       }else{
         string log = "Connection MQTT broker '" + selected_address + "' failed";
         console.AddLog("error", log);
+        delete client;
       }
     }
     catch (const mqtt::exception& exc) {

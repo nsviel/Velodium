@@ -23,6 +23,9 @@ public:
   void render_quad();
 
   void render_screenshot(string path);
+  void render_screenshot_stb_image(string path);
+  void render_screenshot_pbo(string path);
+  void render_screenshot_freeimage(string path);
   void render_screenshot_online();
 
   void update_texture();
@@ -44,6 +47,7 @@ private:
   GLuint tex_color_ID;
   GLuint tex_depth_ID;
   GLuint tex_edl_ID;
+  GLuint pbo;
 
   vec4 screen_color;
   float time_screenshot;

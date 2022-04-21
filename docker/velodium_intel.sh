@@ -9,3 +9,4 @@ docker run \
   --env="DISPLAY=$DISPLAY" \
   --publish="1883" \
   velodium
+

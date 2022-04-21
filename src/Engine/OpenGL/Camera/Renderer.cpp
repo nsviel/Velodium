@@ -1,7 +1,11 @@
 #include "Renderer.h"
 
-#include "../../OpenGL/Dimension.h"
+#include "../Dimension.h"
+
 #include "../../Scene/Configuration.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "../../../../extern/stb_image_write.h"
 
 #include <FreeImage.h>
 #include <cstdint>
@@ -18,6 +22,8 @@ Renderer::Renderer(Dimension* dim){
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
   this->with_fullscreen = true;
+  this->is_screenshot = false;
+  glGenBuffers(1 , &pbo);
 
   //---------------------------
 }
@@ -167,6 +173,30 @@ void Renderer::render_screenshot(string path){
     glReadBuffer(GL_FRONT);
 
     //Configure buffer
+    uint8_t* pixels = new uint8_t[3 * gl_dim.x * gl_dim.y];
+    glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    //Freeimage
+    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 3 * gl_dim.x, 24, 0xFF0000, 0x00FF00,0x0000FF, false);
+    FreeImage_Save(FIF_BMP, image, path.c_str(), 0);
+    FreeImage_Unload(image);
+  }
+
+  //---------------------------
+}
+void Renderer::render_screenshot_stb_image(string path){
+  GLFWwindow* window = dimManager->get_window();
+  //---------------------------
+
+  if(window != nullptr){
+    vec2 gl_dim = dimManager->get_gl_dim();
+    vec2 gl_pos = dimManager->get_gl_pos();
+
+    //Parameters
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+    glReadBuffer(GL_FRONT);
+
+    //Configure buffer
     GLsizei nrChannels = 3;
     GLsizei stride = nrChannels * gl_dim.x;
     stride += (stride % 4) ? (4 - stride % 4) : 0;
@@ -184,8 +214,58 @@ void Renderer::render_screenshot(string path){
     }
 
     //Freeimage
-    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, stride, 24, 0x0000FF, 0x00FF00, 0xFF0000, false);
+    stbi_write_bmp(path.c_str(), gl_dim.x, gl_dim.y, 3, pixels);
+  }
+
+  //---------------------------
+}
+void Renderer::render_screenshot_pbo(string path){
+  GLFWwindow* window = dimManager->get_window();
+  //---------------------------
+
+  if(window != nullptr){
+    vec2 gl_dim = dimManager->get_gl_dim();
+    vec2 gl_pos = dimManager->get_gl_pos();
+
+    int pbo_size = gl_dim.x * gl_dim.y * 3;
+    uint8_t* pixels = new uint8_t[pbo_size];
+
+
+    glReadBuffer(GL_BACK);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+    glReadPixels(0, 0, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    void*buffer_ptr = glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, pbo_size, GL_MAP_READ_BIT);
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+    memcpy(pixels, buffer_ptr, pbo_size);
+
+    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 0, 24, 0x0000FF, 0x00FF00, 0xFF0000, false);
     FreeImage_Save(FIF_JPEG, image, path.c_str(), 0);
+    FreeImage_Unload(image);
+  }
+
+  //---------------------------
+}
+void Renderer::render_screenshot_freeimage(string path){
+  GLFWwindow* window = dimManager->get_window();
+  //---------------------------
+
+  if(window != nullptr){
+    vec2 gl_dim = dimManager->get_gl_dim();
+    vec2 gl_pos = dimManager->get_gl_pos();
+
+    //Parameters
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+    glReadBuffer(GL_FRONT);
+
+    //Configure buffer
+    uint8_t* pixels = new uint8_t[3 * gl_dim.x * gl_dim.y];
+    glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    //Freeimage
+    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 3 * gl_dim.x, 24, 0xFF0000, 0x00FF00,0x0000FF, false);
+    FreeImage_Save(FIF_BMP, image, path.c_str(), 0);
     FreeImage_Unload(image);
   }
 

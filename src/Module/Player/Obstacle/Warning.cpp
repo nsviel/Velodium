@@ -17,6 +17,7 @@ void Warning::send_warning(Subset* subset){
   //---------------------------
 
   string warning = build_jsonFile(subset);
+  mqttManager->mqtt_connection();
   mqttManager->mqtt_send_message(warning);
 
   //---------------------------
