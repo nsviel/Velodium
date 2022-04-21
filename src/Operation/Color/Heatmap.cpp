@@ -32,6 +32,7 @@ Heatmap::Heatmap(Operation_node* node_ope){
   this->range_intensity = vec2(0.0f, 1.0f);
 
   //---------------------------
+  this->define_colormap();
 }
 Heatmap::~Heatmap(){}
 
@@ -188,15 +189,9 @@ void Heatmap::mode_It(Subset* subset){
 //Processing functions
 void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
   vector<vec4>& RGB = subset->RGB;
-  const int NUM_COLORS = 4;
-  static float color[NUM_COLORS][3] = { {0,0,1}, {0,1,0}, {1,1,0}, {1,0,0} };
   //---------------------------
 
-  int idx1;        // |-- Our desired color will be between these two indexes in "color".
-  int idx2;        // |
-  float fractBetween = 0;  // Fraction between "idx1" and "idx2" where our value is.
-  float red, green, blue, alpha;
-
+  //Normalization of the input vector
   vector<float> v_norm;
   if(is_normalization){
     v_norm = fct_normalize(v_in, -1);
@@ -204,17 +199,17 @@ void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
     v_norm = v_in;
   }
 
+  //Compute heatmap from input vector
   for(int i=0; i<RGB.size(); i++){
     if(v_in[i] != -1 && isnan(v_norm[i]) == false){
-      float value = v_norm[i];
-      value = value * (NUM_COLORS-1);        // Will multiply value by 3.
-      idx1  = floor(value);                  // Our desired color will be after this index.
-      idx2  = idx1+1;                        // ... and before this index (inclusive).
-      fractBetween = value - float(idx1);    // Distance between the two indexes (0-1).
+      float value = v_norm[i] * (colormap_selected.size()-1);        // Will multiply value by 3.
+      float idx1  = floor(value);                  // Our desired color will be after this index.
+      float idx2  = idx1 + 1;                        // ... and before this index (inclusive).
+      float fractBetween = value - float(idx1);    // Distance between the two indexes (0-1).
 
-      red   = (color[idx2][0] - color[idx1][0]) * fractBetween + color[idx1][0];
-      green = (color[idx2][1] - color[idx1][1]) * fractBetween + color[idx1][1];
-      blue  = (color[idx2][2] - color[idx1][2]) * fractBetween + color[idx1][2];
+      float red   = (colormap_selected[idx2][0] - colormap_selected[idx1][0]) * fractBetween + colormap_selected[idx1][0];
+      float green = (colormap_selected[idx2][1] - colormap_selected[idx1][1]) * fractBetween + colormap_selected[idx1][1];
+      float blue  = (colormap_selected[idx2][2] - colormap_selected[idx1][2]) * fractBetween + colormap_selected[idx1][2];
 
       RGB[i] = vec4(red, green, blue, 1.0f);
     }
@@ -248,6 +243,19 @@ void Heatmap::heatmap_unset(Subset* subset){
 }
 
 //Plotting
+void Heatmap::define_colormap(){
+  //---------------------------
+
+  vector<vec3> colormap_viridis = {vec3(0.267004, 0.004874, 0.329415), vec3(0.252194, 0.269783, 0.531579),
+                          vec3(0.180629, 0.429975, 0.557282), vec3(0.133743, 0.548535, 0.553541),
+                          vec3(0.137339, 0.662252, 0.515571), vec3(0.304148, 0.764704, 0.419943),
+                          vec3(0.575563, 0.844566, 0.256415), vec3(0.993248, 0.906157, 0.143936)};
+  vector<vec3> colormap_rainbow = {vec3(0,0,1), vec3(0,1,0), vec3(1,1,0), vec3(1,0,0)};
+  
+  this->colormap_selected = colormap_viridis;
+
+  //---------------------------
+}
 void Heatmap::plot_colorPalette(Subset* subset){
   vector<vec4>& RGB = subset->RGB;
   vector<float> v_in;

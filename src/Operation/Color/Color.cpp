@@ -54,6 +54,17 @@ void Color::make_colorization(Subset* subset){
 
   //---------------------------
 }
+void Color::make_colorization(Subset* subset, vec4 RGB_in){
+  vector<vec4>& RGB = subset->RGB;
+  //---------------------------
+
+  for(int i=0; i<RGB.size(); i++){
+    RGB[i] = RGB_in;
+  }
+
+  //---------------------------
+  sceneManager->update_subset_color(subset);
+}
 void Color::color_unicolor(Subset* subset){
   vector<vec4>& RGB = subset->RGB;
   //---------------------------

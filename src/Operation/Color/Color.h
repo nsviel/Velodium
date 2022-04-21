@@ -16,8 +16,11 @@ public:
   ~Color();
 
 public:
-  //Color subset functions
+  //Colorization functions
   void make_colorization(Subset* subset);
+  void make_colorization(Subset* subset, vec4 RGB_in);
+
+  //Specific functions
   void color_unicolor(Subset* subset);
   void color_intensity(Subset* subset);
   void color_heatmap(Subset* subset);

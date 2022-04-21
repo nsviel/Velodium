@@ -13,9 +13,9 @@
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Engine/Scene/Object/OOBB.h"
 #include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Color/color.h"
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
-#include "../../../Specific/color.h"
 
 
 //Constructor / Destructor

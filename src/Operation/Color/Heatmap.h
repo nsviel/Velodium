@@ -35,6 +35,7 @@ public:
   void heatmap_unset(Subset* subset);
 
   //Plot functions
+  void define_colormap();
   void plot_colorPalette(Subset* subset);
 
   //Setters / Getters
@@ -48,10 +49,10 @@ private:
   Scene* sceneManager;
   Attribut* attribManager;
 
+  vector<vec3> colormap_selected;
   vec2 range_norm;
   vec2 range_height;
   vec2 range_intensity;
-
   bool is_normalization;
   int heatmap_mode;
 };

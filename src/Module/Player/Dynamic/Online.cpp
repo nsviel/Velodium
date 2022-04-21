@@ -100,7 +100,12 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   }
 
   //Colorization
-  colorManager->make_colorization(subset);
+  if(ID_subset>2){
+    Subset* subset_m1 = sceneManager->get_subset_byID(cloud, ID_subset-1);
+    colorManager->make_colorization(subset_m1);
+    colorManager->make_colorization(subset, vec4(1,1,1,1));
+  }
+
 
   //Save subset frame
   if(with_save_frame){
