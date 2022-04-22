@@ -21,7 +21,7 @@ SLAM_localMap::SLAM_localMap(){
   this->map_max_voxelNbPoints = 20;
   this->min_voxel_distance = 0.05;
   this->grid_voxel_size = 1;
-  this->max_total_point = 1500;
+  this->max_total_point = 2000;
 
   this->slamMap_voxelized = false;
 
