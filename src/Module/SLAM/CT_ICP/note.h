@@ -6,9 +6,9 @@ void CT_ICP::add_pointsToLocalMap(Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3f point = frame->xyz[i];
 
-    int vx = static_cast<int>(point(0) / size_voxelMap);
-    int vy = static_cast<int>(point(1) / size_voxelMap);
-    int vz = static_cast<int>(point(2) / size_voxelMap);
+    short vx = static_cast<short>(point(0) / size_voxelMap);
+    short vy = static_cast<short>(point(1) / size_voxelMap);
+    short vz = static_cast<short>(point(2) / size_voxelMap);
 
     //Search for pre-existing voxel in local map
     string voxel_id = to_string(vx) + " " + to_string(vy) + " " + to_string(vz);

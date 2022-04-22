@@ -61,15 +61,15 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
       for (int vk = vz - voxel_searchSize; vk <= vz + voxel_searchSize; vk++){
 
         //Search for pre-existing voxel in local map
-        string voxel_id = to_string(vi) + " " + to_string(vj) + " " + to_string(vk);
+        int key = (vi*200 + vj)*100 + vk;
 
         //If we found a voxel with at least one point
         vector<Eigen::Vector3f> voxel_ijk;
 
-        if (map->find(voxel_id) != map->end()){
-          voxel_ijk = map->find(voxel_id).value();
+        if (map->find(key) != map->end()){
+          voxel_ijk = map->find(key).value();
 
-        //We store all NN voxel point
+          //We store all NN voxel point
           for (int i=0; i < voxel_ijk.size(); i++) {
             Eigen::Vector3f neighbor = voxel_ijk[i];
             float distance = (neighbor - point).norm();

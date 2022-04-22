@@ -11,6 +11,7 @@
 #include "../../../Specific/fct_zenity.h"
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Load/Load_node.h"
 #include "../../../Load/Processing/Saver.h"
 
@@ -24,6 +25,7 @@ Offline::Offline(Module_node* node_module, Online* online){
   Player_node* node_player = node_module->get_node_player();
   Load_node* node_load = node_engine->get_node_load();
 
+  this->glyphManager = node_engine->get_glyphManager();;
   this->sceneManager = node_engine->get_sceneManager();
   this->saveManager = node_load->get_saveManager();
   this->timerManager = new Timer();
@@ -43,10 +45,14 @@ Offline::~Offline(){}
 void Offline::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 
+  //If in side range, make operation on subset
   bool range_ok = select_rangeLimit(cloud, ID_subset);
   if(range_ok){
     onlineManager->compute_onlineOpe(cloud, ID_subset);
   }
+
+  //Update glyphs
+  glyphManager->update_glyph_cloud(cloud);
 
   //---------------------------
 }

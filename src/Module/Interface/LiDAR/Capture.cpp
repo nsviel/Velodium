@@ -107,7 +107,7 @@ void Capture::runtime_capturing(){
   }
 
   //If new subset, include it in the capture cloud
-  if(new_subset != nullptr && cloud_capture != nullptr){say(cloud_capture->nb_subset);
+  if(new_subset != nullptr && cloud_capture != nullptr){
     //Make new subset stuff
     this->operation_new_subset(new_subset);
   }

@@ -31,17 +31,30 @@ void Trajectory::create(){
 
   //---------------------------
 }
-void Trajectory::update(Frame* frame){
+void Trajectory::update(Cloud*cloud){
   //---------------------------
 
-  vec3 trans_abs = frame->trans_abs;
-  vec4 color = trajectory->color_unique;
+  this->reset();
+  for(int j=0; j<cloud->subset.size(); j++){
+    Subset* subset = *next(cloud->subset.begin(), j);
 
-  trajectory->location.push_back(trans_abs);
-  trajectory->color.push_back(color);
+    if(subset->visibility){
+      Frame* frame = &subset->frame;
 
-  trajectory->location.push_back(trans_abs);
-  trajectory->color.push_back(color);
+      vec3 trans_abs = frame->trans_abs;
+      vec3 trans_rlt = frame->trans_rlt;
+      vec4 color = trajectory->color_unique;
+
+      //Add begin point
+      trajectory->location.push_back(trans_abs - trans_rlt);
+      trajectory->color.push_back(color);
+
+      //Add end pose
+      trajectory->location.push_back(trans_abs);
+      trajectory->color.push_back(color);
+    }
+
+  }
 
   //---------------------------
 }
@@ -51,10 +64,6 @@ void Trajectory::reset(){
   //Clear previous data
   trajectory->location.clear();
   trajectory->color.clear();
-
-  //Add an empty begin point
-  trajectory->location.push_back(vec3(0,0,0));
-  trajectory->color.push_back(color);
 
   //---------------------------
 }

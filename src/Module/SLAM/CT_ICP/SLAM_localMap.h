@@ -42,6 +42,7 @@ private:
   float max_voxel_distance;
   float min_voxel_distance;
   float grid_voxel_size;
+  int max_total_point;
   int map_max_voxelNbPoints;
   bool slamMap_voxelized;
 };

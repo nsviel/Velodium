@@ -1,5 +1,6 @@
 #include "SLAM_localMap.h"
 
+#include "../../../Engine/Data/struct_voxelMap.h"
 #include "../../../Specific/fct_maths.h"
 #include "../../../Specific/fct_transtypage.h"
 
@@ -20,6 +21,7 @@ SLAM_localMap::SLAM_localMap(){
   this->map_max_voxelNbPoints = 20;
   this->min_voxel_distance = 0.05;
   this->grid_voxel_size = 1;
+  this->max_total_point = 1500;
 
   this->slamMap_voxelized = false;
 
@@ -50,17 +52,18 @@ void SLAM_localMap::compute_gridSampling(Subset* subset){
 
   //Subsample the scan with voxels
   gridMap grid;
+  Eigen::Vector3d key;
+  Eigen::Vector4d point;
   for (int j=0; j<subset->xyz.size(); j++){
-    Eigen::Vector3f xyz = glm_to_eigen_vec3_d(subset->xyz[j]);
-    float ts_n = subset->ts_n[j];
+    vec3& xyz = subset->xyz[j];
 
-    int kx = static_cast<int>(xyz(0) / grid_voxel_size);
-    int ky = static_cast<int>(xyz(1) / grid_voxel_size);
-    int kz = static_cast<int>(xyz(2) / grid_voxel_size);
-    string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
+    int kx = static_cast<int>(xyz.x / grid_voxel_size);
+    int ky = static_cast<int>(xyz.y / grid_voxel_size);
+    int kz = static_cast<int>(xyz.z / grid_voxel_size);
+    int key = (kx*200 + ky)*100 + kz;
 
-    Eigen::Vector4d point(xyz(0), xyz(1), xyz(2), ts_n);
-    grid[voxel_id].push_back(point);
+    point << xyz.x, xyz.y, xyz.z, subset->ts_n[j];
+    grid[key].push_back(point);
   }
 
   //Clear vectors
@@ -77,6 +80,10 @@ void SLAM_localMap::compute_gridSampling(Subset* subset){
 
       frame_xyz.push_back(xyz);
       frame_ts_n.push_back(point(3));
+
+      if(frame_xyz.size() > max_total_point){
+        break;
+      }
     }
   }
   frame_raw = frame_xyz;
@@ -90,32 +97,32 @@ void SLAM_localMap::add_pointsToSlamMap(Subset* subset){
   if(slamMap_voxelized){
 
     for (int i=0; i<subset->xyz.size(); i++){
-      vec3 point = subset->xyz[i];
+      vec3& xyz = subset->xyz[i];
 
-      int kx = static_cast<int>(point.x / voxel_size_slamMap);
-      int ky = static_cast<int>(point.y / voxel_size_slamMap);
-      int kz = static_cast<int>(point.z / voxel_size_slamMap);
-      string voxel_id = to_string(kx) + " " + to_string(ky) + " " + to_string(kz);
+      int kx = static_cast<int>(xyz.x / voxel_size_slamMap);
+      int ky = static_cast<int>(xyz.y / voxel_size_slamMap);
+      int kz = static_cast<int>(xyz.z / voxel_size_slamMap);
+      int key = (kx*200 + ky)*100 + kz;
 
       //if the voxel already exists
-      if(map_cloud->find(voxel_id) != map_cloud->end()){
+      if(map_cloud->find(key) != map_cloud->end()){
         //Get corresponding voxel
-        vector<vec3>& voxel_xyz = map_cloud->find(voxel_id).value();
+        vector<vec3>& voxel_xyz = map_cloud->find(key).value();
 
         //If the voxel is not full
         if (voxel_xyz.size() < map_max_voxelNbPoints){
-          voxel_xyz.push_back(point);
-          subset->xyz_voxel.push_back(point);
+          voxel_xyz.push_back(xyz);
+          subset->xyz_voxel.push_back(xyz);
         }
       }
       //else create it
       else{
         vector<vec3> vec;
 
-        vec.push_back(point);
-        subset->xyz_voxel.push_back(point);
+        vec.push_back(xyz);
+        subset->xyz_voxel.push_back(xyz);
 
-        map_cloud->insert({voxel_id, vec});
+        map_cloud->insert({key, vec});
       }
     }
   }
@@ -130,17 +137,15 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
     float dist = fct_distance_origin(point);
 
     if(dist > min_root_distance && dist < max_root_distance){
-      int vx = static_cast<int>(point(0) / voxel_size_localMap);
-      int vy = static_cast<int>(point(1) / voxel_size_localMap);
-      int vz = static_cast<int>(point(2) / voxel_size_localMap);
-
-      //Search for pre-existing voxel in local map
-      string voxel_id = to_string(vx) + " " + to_string(vy) + " " + to_string(vz);
+      int kx = static_cast<int>(point(0) / voxel_size_localMap);
+      int ky = static_cast<int>(point(1) / voxel_size_localMap);
+      int kz = static_cast<int>(point(2) / voxel_size_localMap);
+      int key = (kx*200 + ky)*100 + kz;
 
       //if the voxel already exists
-      if(map->find(voxel_id) != map->end()){
+      if(map->find(key) != map->end()){
         //Get corresponding voxel
-        vector<Eigen::Vector3f>& voxel_xyz = map->find(voxel_id).value();
+        vector<Eigen::Vector3f>& voxel_xyz = map->find(key).value();
 
         //If the voxel is not full
         if (voxel_xyz.size() < map_max_voxelNbPoints){
@@ -166,7 +171,7 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
       else{
         vector<Eigen::Vector3f> vec;
         vec.push_back(point);
-        map->insert({voxel_id, vec});
+        map->insert({key, vec});
       }
     }
   }
@@ -187,7 +192,7 @@ void SLAM_localMap::end_slamVoxelization(Cloud* cloud, int frame_max){
   //---------------------------
 }
 void SLAM_localMap::end_clearTooFarVoxels(Eigen::Vector3f &current_location){
-  vector<string> voxels_to_erase;
+  vector<int> voxels_to_erase;
   //---------------------------
 
   for(auto it = map->begin(); it != map->end(); ++it){

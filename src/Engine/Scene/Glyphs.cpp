@@ -209,11 +209,6 @@ void Glyphs::update_glyph_subset(Subset* subset){
   this->update_glyph_location(&subset->normal);
   this->update_glyph_color(&subset->normal);
 
-  //Trajectory
-  trajObject->update(&subset->frame);
-  this->update_glyph_location(trajObject->get_glyph());
-  this->update_glyph_color(trajObject->get_glyph());
-
   //---------------------------
 }
 void Glyphs::update_glyph_cloud(Cloud* cloud){
@@ -223,6 +218,11 @@ void Glyphs::update_glyph_cloud(Cloud* cloud){
   aabbObject->update_aabb(cloud);
   this->update_glyph_location(aabbObject->get_aabb());
   this->update_glyph_color(aabbObject->get_aabb());
+
+  //Trajectory
+  trajObject->update(cloud);
+  this->update_glyph_location(trajObject->get_glyph());
+  this->update_glyph_color(trajObject->get_glyph());
 
   //---------------------------
 }

@@ -8,5 +8,6 @@ docker run \
   --device="/dev/dri:/dev/dri" \
   --env="DISPLAY=$DISPLAY" \
   --publish="1883" \
+  --publish="2370:2370/udp" \
   velodium
 

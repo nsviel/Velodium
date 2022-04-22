@@ -96,6 +96,11 @@ namespace{
     float duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     std::cout<<what<<" time: "<<duration<<"us"<<std::endl;
   }
+  void toc_ns(std::string what){
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    float duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+    std::cout<<what<<" time: "<<duration<<"ns"<<std::endl;
+  }
   float toc(){
     std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
     float duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();

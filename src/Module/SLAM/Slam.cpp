@@ -281,8 +281,8 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 
   if(frame->ID >= 1){
-    if(solver_GN){
-      gnManager->optim_GN(frame, frame_m1, map);
+    if(solver_GN){tic();
+      gnManager->optim_GN(frame, frame_m1, map);toc("optim");
     }else if(solver_ceres){
       //ceresManager->optim_test(frame, frame_m1, map);
     }

@@ -15,7 +15,7 @@ public:
 
 public:
   void create();
-  void update(Frame* frame);
+  void update(Cloud*cloud);
   void reset();
 
   inline Glyph* get_glyph(){return trajectory;}
