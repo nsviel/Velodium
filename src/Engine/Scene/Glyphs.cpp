@@ -83,6 +83,7 @@ void Glyphs::reset_scene(){
 
   //Reset specific glyphs
   trajObject->reset();
+  this->update_glyph_location(trajObject->get_glyph());
 
   //---------------------------
 }

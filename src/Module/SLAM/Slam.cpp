@@ -281,8 +281,8 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
   //---------------------------
 
   if(frame->ID >= 1){
-    if(solver_GN){tic();
-      gnManager->optim_GN(frame, frame_m1, map);toc("optim");
+    if(solver_GN){
+      gnManager->optim_GN(frame, frame_m1, map);
     }else if(solver_ceres){
       //ceresManager->optim_test(frame, frame_m1, map);
     }
@@ -316,24 +316,24 @@ void Slam::compute_updateLocation(Subset* subset){
   Eigen::Vector3f trans_e = frame->trans_e;
 
   //Update frame root
-  Eigen::Vector3f root = glm_to_eigen_vec3_d(subset->root);
   Eigen::Matrix3f R = quat_b.toRotationMatrix();
   Eigen::Vector3f t = trans_b;
-  root = R * root + t;
+  Eigen::Vector3f root = R * glm_to_eigen_vec3_d(subset->root) + t;
   subset->root = eigen_to_glm_vec3_d(root);
   frame->is_slamed = true;
 
   //Update subset position
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<subset->xyz.size(); i++){
-    Eigen::Vector3f point = glm_to_eigen_vec3_d(subset->xyz[i]);
+    //Compute paramaters
     float ts_n = subset->ts_n[i];
-
     Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
     Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-    point = R * point + t;
 
-    subset->xyz[i] = eigen_to_glm_vec3_d(point);
+    //Apply transformation
+    Eigen::Vector3f point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
+    point = R * point + t;
+    subset->xyz[i] = vec3(point(0), point(1), point(2));
   }
 
   //---------------------------

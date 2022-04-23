@@ -13,8 +13,8 @@ struct Comparator {bool operator()(const iNN &left, const iNN &right) const {ret
 using priority_queue_iNN = std::priority_queue<iNN, std::vector<iNN>, Comparator>;
 
 typedef tsl::robin_map<int, std::vector<Eigen::Vector3f>> voxelMap;
-typedef tsl::robin_map<int, std::vector<Eigen::Vector4d>> gridMap;
+typedef tsl::robin_map<int, std::vector<Eigen::Vector4f>> gridMap;
 typedef tsl::robin_map<int, std::vector<glm::vec3>> slamMap;
 
-
+typedef tsl::robin_map<int, std::vector<Eigen::Vector3f>>::iterator it_voxelMap;
 #endif

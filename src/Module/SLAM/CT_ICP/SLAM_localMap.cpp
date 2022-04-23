@@ -46,47 +46,45 @@ void SLAM_localMap::compute_gridSampling(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  vector<Eigen::Vector3f>& frame_xyz = frame->xyz;
-  vector<Eigen::Vector3f>& frame_raw = frame->xyz_raw;
-  vector<float>& frame_ts_n = frame->ts_n;
-
   //Subsample the scan with voxels
   gridMap grid;
-  Eigen::Vector3d key;
-  Eigen::Vector4d point;
-  for (int j=0; j<subset->xyz.size(); j++){
-    vec3& xyz = subset->xyz[j];
+  Eigen::Vector4f point;
+  for (int i=0; i<subset->xyz.size(); i++){
+    vec3& xyz = subset->xyz[i];
 
     int kx = static_cast<int>(xyz.x / grid_voxel_size);
     int ky = static_cast<int>(xyz.y / grid_voxel_size);
     int kz = static_cast<int>(xyz.z / grid_voxel_size);
     int key = (kx*200 + ky)*100 + kz;
 
-    point << xyz.x, xyz.y, xyz.z, subset->ts_n[j];
+    point << xyz.x, xyz.y, xyz.z, subset->ts_n[i];
     grid[key].push_back(point);
   }
 
   //Clear vectors
-  frame_xyz.clear();
-  frame_raw.clear();
-  frame_ts_n.clear();
+  frame->xyz.clear();
+  frame->xyz_raw.clear();
+  frame->ts_n.clear();
 
   //Take one point inside each voxel
   gridMap::iterator it;
-  for(auto it = grid.begin(); it != grid.end(); ++it) {
+  for(auto it = grid.begin(); it != grid.end(); it++) {
     if (it->second.size() > 0) {
-      Eigen::Vector4d point = it->second[0];
+      //Take one random point
+      int rdm = rand() % it->second.size();
+
+      Eigen::Vector4f point = it->second[rdm];
       Eigen::Vector3f xyz(point(0), point(1), point(2));
 
-      frame_xyz.push_back(xyz);
-      frame_ts_n.push_back(point(3));
+      frame->xyz.push_back(xyz);
+      frame->ts_n.push_back(point(3));
 
-      if(frame_xyz.size() > max_total_point){
+      if(frame->xyz.size() > max_total_point){
         break;
       }
     }
   }
-  frame_raw = frame_xyz;
+  frame->xyz_raw = frame->xyz;
 
   //---------------------------
 }

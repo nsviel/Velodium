@@ -1,6 +1,7 @@
 #include "GUI_Color.h"
 
 #include "../Color.h"
+#include "../Colormap.h"
 #include "../Heatmap.h"
 
 #include "../../Operation_node.h"
@@ -23,6 +24,7 @@ GUI_Color::GUI_Color(GUI_node* node_gui){
   this->colorManager = node_ope->get_colorManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->sceneManager = node_engine->get_sceneManager();
+  this->colormapManager = heatmapManager->get_colormapManager();
 
   this->item_width = 100;
 
@@ -30,9 +32,35 @@ GUI_Color::GUI_Color(GUI_node* node_gui){
 }
 GUI_Color::~GUI_Color(){}
 
+void GUI_Color::select_colormap(){
+  //---------------------------
+
+  static int colormap = 0;
+  ImGui::SetNextItemWidth(item_width);
+  if(ImGui::Combo("##144", &colormap, "Viridis\0Magma\0Rainbow\0")){
+    switch(colormap){
+      case 0:{
+        colormapManager->choose("viridis");
+        break;
+      }
+      case 1:{
+        colormapManager->choose("magma");
+        break;
+      }
+      case 2:{
+        colormapManager->choose("rainbow");
+        break;
+      }
+    }
+  }
+
+  //---------------------------
+}
 void GUI_Color::colorization_choice(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Colorization");
   //---------------------------
+
+  this->select_colormap();
 
   int* color_mode = colorManager->get_color_mode();
   ImGui::RadioButton("Unicolor", color_mode, 0);

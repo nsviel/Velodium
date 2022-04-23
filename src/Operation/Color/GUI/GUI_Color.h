@@ -7,6 +7,7 @@ class Scene;
 class GUI_node;
 class Heatmap;
 class Color;
+class Colormap;
 
 
 class GUI_Color
@@ -17,6 +18,7 @@ public:
   ~GUI_Color();
 
 public:
+  void select_colormap();
   void colorization_choice();
   void option_intensity();
   void option_heatmap();
@@ -26,6 +28,7 @@ private:
   Scene* sceneManager;
   Color* colorManager;
   Heatmap* heatmapManager;
+  Colormap* colormapManager;
 
   int item_width;
 };

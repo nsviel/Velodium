@@ -174,13 +174,6 @@ void GUI_option::option_heatmap(){
     bool* normalizeON = heatmapManager->get_is_normalization();
     ImGui::Checkbox("Normalized", normalizeON);
 
-    //Display palette color
-    if(ImGui::Button("Palette", ImVec2(75,0))){
-      if(cloud != nullptr && cloud->heatmap){
-        heatmapManager->plot_colorPalette(cloud->subset_selected);
-      }
-    }
-
     //---------------------------
     ImGui::Separator();
   }

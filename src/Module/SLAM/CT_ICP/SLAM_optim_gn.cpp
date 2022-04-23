@@ -25,7 +25,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map){
   X = Eigen::VectorXd(0);
   //---------------------------
 
-  for (int iter=0; iter < iter_max; iter++){ 
+  for (int iter=0; iter < iter_max; iter++){
     //Initialization
     Eigen::MatrixXd J = Eigen::MatrixXd::Zero(12, 12);
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
@@ -82,6 +82,9 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
   frame->nb_residual = 0;
   //---------------------------
 
+  //compute residual parameters
+  vector<Eigen::VectorXd> vec_u(frame->xyz.size());
+  #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3f point = frame->xyz[i];
     Eigen::Vector3f point_raw = frame->xyz_raw[i];
@@ -90,12 +93,13 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
     float ts_n = frame->ts_n[i];
     float a2D = frame->a2D[i];
 
+    //Compute point-to-plane distance
     float PTP_distance = 0;
     for(int j=0; j<3; j++){
       PTP_distance += normal[j] * (point[j] - iNN[j]);
     }
 
-    if (abs(PTP_distance) < PTP_distance_max && isnan(a2D) == false) {
+    if(abs(PTP_distance) < PTP_distance_max && isnan(a2D) == false){
       //Compute normal of the iNN point
       Eigen::Vector3f iNN_N = a2D * a2D * normal;
 
@@ -128,24 +132,31 @@ void SLAM_optim_gn::compute_residuals(Frame* frame, Eigen::MatrixXd& J, Eigen::V
       float ney = ts_n * iNN_N[1];
       float nez = ts_n * iNN_N[2];
 
-      Eigen::VectorXd u(12);
-      u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez;
+      Eigen::VectorXd u(13);
+      u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez, residual;
+      vec_u[i] = u;
+    }
+  }
+
+  //Apply residual
+  for(int i=0; i<frame->xyz.size(); i++){
+    if(vec_u[i].size() != 0){
       for (int j = 0; j < 12; j++) {
         for (int k = 0; k < 12; k++) {
-          J(j, k) = J(j, k) + u[j] * u[k];
+          J(j, k) = J(j, k) + vec_u[i][j] * vec_u[i][k];
         }
-        b(j) = b(j) - u[j] * residual;
+        b(j) = b(j) - vec_u[i][j] * vec_u[i][12];
       }
     }
   }
 
-  // Normalize equation -> Utility ?
+  // Normalize equation
   #pragma omp parallel for num_threads(nb_thread)
   for (int i=0; i < 12; i++) {
     for (int j=0; j < 12; j++) {
-        J(i, j) = J(i, j) / frame->nb_residual;
+        J(i, j) /= frame->nb_residual;
     }
-    b(i) = b(i) / frame->nb_residual;
+    b(i) /= frame->nb_residual;
   }
 
   //---------------------------

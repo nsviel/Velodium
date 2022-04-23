@@ -20,13 +20,12 @@ SLAM_normal::~SLAM_normal(){}
 
 //Main function
 void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
-  int size = frame->xyz.size();
   //---------------------------
 
   //Reset variable conteners
-  Nxyz.clear(); Nxyz.resize(size);
-  NN.clear(); NN.resize(size);
-  a2D.clear(); a2D.resize(size);
+  Nxyz.clear(); Nxyz.resize(frame->xyz.size());
+  NN.clear(); NN.resize(frame->xyz.size());
+  a2D.clear(); a2D.resize(frame->xyz.size());
 
   //Compute all point normal
   #pragma omp parallel for num_threads(nb_thread)
@@ -56,35 +55,38 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
   int vz = static_cast<int>(point[2] / size_voxelMap);
 
   //Search inside all surrounding voxels
+  int cpt = 0;
   for (int vi = vx - voxel_searchSize; vi <= vx + voxel_searchSize; vi++){
     for (int vj = vy - voxel_searchSize; vj <= vy + voxel_searchSize; vj++){
       for (int vk = vz - voxel_searchSize; vk <= vz + voxel_searchSize; vk++){
 
         //Search for pre-existing voxel in local map
         int key = (vi*200 + vj)*100 + vk;
+        it_voxelMap it = map->find(key);
 
         //If we found a voxel with at least one point
-        vector<Eigen::Vector3f> voxel_ijk;
-
-        if (map->find(key) != map->end()){
-          voxel_ijk = map->find(key).value();
+        if(it != map->end()){
+          vector<Eigen::Vector3f>& voxel_ijk = it.value();
 
           //We store all NN voxel point
-          for (int i=0; i < voxel_ijk.size(); i++) {
-            Eigen::Vector3f neighbor = voxel_ijk[i];
-            float distance = (neighbor - point).norm();
+          for(int i=0; i < voxel_ijk.size(); i++){
+            float dist = (voxel_ijk[i] - point).norm();
 
             //If the voxel is full
-            if (priority_queue.size() == max_number_neighbors) {
-              float dist_lastPtVoxel = std::get<0>(priority_queue.top());
-
-              if (distance < dist_lastPtVoxel) {
+            if(priority_queue.size() == max_number_neighbors){
+              if(dist < std::get<0>(priority_queue.top())){
                 priority_queue.pop();
-                priority_queue.emplace(distance, neighbor);
-              }
+                priority_queue.emplace(dist, voxel_ijk[i]);
 
-            } else{
-              priority_queue.emplace(distance, neighbor);
+                //If we have made lot of emplace, break loop
+                //Could be source of errors (!)
+                cpt++;
+                if(cpt > 30){
+                  break;
+                }
+              }
+            }else{
+              priority_queue.emplace(dist, voxel_ijk[i]);
             }
           }
         }
@@ -94,7 +96,7 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
   }
 
   //Retrieve the kNN of the query point
-  auto size = priority_queue.size();
+  int size = priority_queue.size();
   vector<Eigen::Vector3f> kNN(size);
   for(int i=0; i<size; i++){
     kNN[size - 1 - i] = std::get<1>(priority_queue.top());

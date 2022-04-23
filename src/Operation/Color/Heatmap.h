@@ -1,13 +1,12 @@
 #ifndef HEATMAP_H
 #define HEATMAP_H
 
+#include "../../common.h"
+
 class Operation_node;
 class Scene;
 class Attribut;
-
-#include "gnuplot/gnuplot-iostream.h"
-
-#include "../../common.h"
+class Colormap;
 
 
 class Heatmap
@@ -34,22 +33,19 @@ public:
   void heatmap_set(Subset* subset, vector<float>& v_in);
   void heatmap_unset(Subset* subset);
 
-  //Plot functions
-  void define_colormap();
-  void plot_colorPalette(Subset* subset);
-
   //Setters / Getters
   inline int* get_heatmap_mode(){return &heatmap_mode;}
   inline bool* get_is_normalization(){ return &is_normalization;}
   inline vec2* get_range_normalization(){return &range_norm;}
   inline vec2* get_range_height(){return &range_height;}
   inline vec2* get_range_intensity(){return &range_intensity;}
+  inline Colormap* get_colormapManager(){return colormapManager;}
 
 private:
   Scene* sceneManager;
   Attribut* attribManager;
+  Colormap* colormapManager;
 
-  vector<vec3> colormap_selected;
   vec2 range_norm;
   vec2 range_height;
   vec2 range_intensity;
