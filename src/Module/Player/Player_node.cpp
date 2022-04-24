@@ -34,3 +34,10 @@ void Player_node::runtime(){
 
   //---------------------------
 }
+void Player_node::reset(){
+  //---------------------------
+
+  onlineManager->camera_reset();
+
+  //---------------------------
+}

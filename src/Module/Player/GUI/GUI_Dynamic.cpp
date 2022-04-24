@@ -271,6 +271,12 @@ void GUI_Dynamic::parameter_online(){
     bool* with_camera_follow = onlineManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", with_camera_follow);
 
+    //Camera follow absolute position
+    if(*with_camera_follow){
+      bool* with_camera_absolute = onlineManager->get_with_camera_absolute();
+      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
+    }
+
     //Remove last subset
     bool* with_remove_lastSubset = onlineManager->get_with_remove_lastSubset();
     ImGui::Checkbox("Remove last subset", with_remove_lastSubset);

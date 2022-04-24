@@ -57,6 +57,7 @@ void Online::update_configuration(){
   this->camera_distPos = 5;
   this->nb_subset_max = 50;
 
+  this->with_camera_absolute = false;
   this->with_camera_top = false;
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_root = false;
@@ -183,40 +184,24 @@ void Online::camera_followUp(Cloud* cloud, int ID_subset){
       vec3 C = pos_m1 - camera_distPos * (E / fct_distance_origin(E));
 
       //Camera pose
-      vec3 camPos = cameraManager->get_camPos();
-      vec3 camPos_new = vec3(C.x, C.y, camPos.z);
-      cameraManager->set_cameraPos(camPos_new);
+      this->camera_position(subset, C);
 
       //Camera orientation
-      float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
-      cameraManager->set_angle_azimuth(cam_angle);
+      this->camera_orientation(E);
     }
   }
 
-  //this->camera_position(subset);
-  //this->camera_orientation(subset);
-
   //---------------------------
 }
-void Online::camera_position(Subset* subset){
+void Online::camera_position(Subset* subset, vec3 C){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  /*
-  //Camera relative movement
-  vec3 trans_rlt = frame->trans_rlt;
-  vec3* camPos = cameraManager->get_camPosPtr();
-  *camPos = *camPos + trans_rlt;
-  */
-
-  //Camera attached to subset root
-  if(with_camera_root){
-    vec3* camPos = cameraManager->get_camPosPtr();
-    *camPos = subset->root;
-  }
-  //Camera follow absolute movement
-  else{
-    Frame* frame = &subset->frame;
+  if(with_camera_absolute){
+    vec3 camPos = cameraManager->get_camPos();
+    vec3 camPos_new = vec3(C.x, C.y, camPos.z);
+    cameraManager->set_cameraPos(camPos_new);
+  }else{
     Eigen::Vector3f trans_b = frame->trans_b;
     vec3 camPos = cameraManager->get_camPos();
 
@@ -226,32 +211,26 @@ void Online::camera_position(Subset* subset){
 
     vec3 camPos_new = vec3(x, y, z);
 
-    camera_moved_trans = vec3(trans_b(0), trans_b(1), 0);
+    this->camera_moved_trans = vec3(trans_b(0), trans_b(1), 0);
     cameraManager->set_cameraPos(camPos_new);
   }
 
   //---------------------------
 }
-void Online::camera_orientation(Subset* subset){
-  Frame* frame = &subset->frame;
+void Online::camera_orientation(vec3 E){
   //---------------------------
 
-  /*
-  Transforms transformManager;
-  vec3 rotat_rlt = frame->rotat_rlt;
-  float* hAngle = cameraManager->get_angle_azimuth();
-  *hAngle = *hAngle + rotat_rlt.z * M_PI / 180;
-  */
+  if(with_camera_absolute){
+    float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
+    cameraManager->set_angle_azimuth(cam_angle);
+  }
 
-  Transforms transformManager;
-  vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame->rotat_b);
-  float hAngle = *cameraManager->get_angle_azimuth();
+  //---------------------------
+}
+void Online::camera_reset(){
+  //---------------------------
 
-  float rotat_abs_rad = rotat_abs.z * M_PI / 180;
-  float hAngle_new = hAngle + rotat_abs_rad - camera_moved_rotat;
-
-  camera_moved_rotat = rotat_abs_rad;
-  cameraManager->set_angle_azimuth(hAngle_new);
+  this->camera_moved_trans = vec3(0, 0, 0);
 
   //---------------------------
 }

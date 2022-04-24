@@ -60,8 +60,6 @@ void GUI_Color::colorization_choice(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Colorization");
   //---------------------------
 
-  this->select_colormap();
-
   int* color_mode = colorManager->get_color_mode();
   ImGui::RadioButton("Unicolor", color_mode, 0);
   ImGui::SameLine();
@@ -100,6 +98,8 @@ void GUI_Color::option_intensity(){
 }
 void GUI_Color::option_heatmap(){
   //---------------------------
+
+  this->select_colormap();
 
   int* heatmap_mode = heatmapManager->get_heatmap_mode();
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);

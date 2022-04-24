@@ -28,6 +28,7 @@ void Module_node::reset(){
   //---------------------------
 
   slamManager->reset_slam();
+  node_player->reset();
 
   //---------------------------
 }

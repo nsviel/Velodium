@@ -19,6 +19,7 @@ public:
 public:
   void update();
   void runtime();
+  void reset();
 
   inline Online* get_onlineManager(){return onlineManager;}
   inline Offline* get_offlineManager(){return offlineManager;}

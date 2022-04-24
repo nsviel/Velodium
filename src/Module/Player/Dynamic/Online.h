@@ -29,8 +29,9 @@ public:
 
   //Camera functions
   void camera_followUp(Cloud* cloud, int i);
-  void camera_position(Subset* subset);
-  void camera_orientation(Subset* subset);
+  void camera_position(Subset* subset, vec3 C);
+  void camera_orientation(vec3 E);
+  void camera_reset();
 
   //Other functions
   void cloud_size_controler(Cloud* cloud);
@@ -42,6 +43,7 @@ public:
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
   inline bool* get_with_remove_lastSubset(){return &with_remove_lastSubset;}
+  inline bool* get_with_camera_absolute(){return &with_camera_absolute;}
   inline int* get_visibility_range(){return &visibility_range;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
 
@@ -61,6 +63,7 @@ private:
   int visibility_range;
   int nb_subset_max;
 
+  bool with_camera_absolute;
   bool with_justOneFrame;
   bool with_camera_follow;
   bool with_subset_specific_color;
