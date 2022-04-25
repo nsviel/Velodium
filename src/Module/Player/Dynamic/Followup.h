@@ -16,8 +16,11 @@ public:
   ~Followup();
 
 public:
-  //Camera functions
+  //Main function
   void camera_followUp(Cloud* cloud, int i);
+
+  //Subfunctions
+  void camera_displacment(Cloud* cloud, int ID_subset);
   void camera_position(Subset* subset, vec3 C);
   void camera_orientation(vec3 E);
   void camera_reset();

@@ -4,6 +4,8 @@
 #include "../../../common.h"
 
 class Module_node;
+class Player_node;
+
 class Scene;
 class Timer;
 class Online;
@@ -15,7 +17,7 @@ class Offline
 {
 public:
   //Constructor / Destructor
-  Offline(Module_node* node_module, Online* online);
+  Offline(Player_node* node);
   ~Offline();
 
 public:

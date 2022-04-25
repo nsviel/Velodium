@@ -2,6 +2,8 @@
 
 #include "Followup.h"
 
+#include "../Player_node.h"
+
 #include "../../Module_node.h"
 #include "../../SLAM/Slam.h"
 #include "../../Interface/Interface_node.h"
@@ -27,9 +29,10 @@
 
 
 //Constructor / Destructor
-Online::Online(Module_node* node_module){
+Online::Online(Player_node* node){
   //---------------------------
 
+  Module_node* node_module = node->get_node_module();
   Operation_node* node_ope = node_module->get_node_ope();
   Engine_node* node_engine = node_module->get_node_engine();
   Interface_node* node_interface = node_module->get_node_interface();
@@ -42,6 +45,7 @@ Online::Online(Module_node* node_module){
   this->colorManager = node_ope->get_colorManager();
   this->saveManager = node_interface->get_saveManager();
   this->captureManager = node_interface->get_captureManager();
+  this->followManager = node->get_followManager();
 
   this->visibility_range = 15;
 
@@ -81,13 +85,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   }
 
   //If camera follow up option activated
-  /*if(with_camera_follow){
-    this->camera_followUp(cloud, ID_subset);
-  }
-  //Ortho top view option
-  if(with_camera_top){
-    cameraManager->input_projView(2);
-  }*/
+  followManager->camera_followUp(cloud, ID_subset);
 
   //Make cleaning on the current subset
   if(with_cylinder_cleaning){

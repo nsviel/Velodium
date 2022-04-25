@@ -13,11 +13,11 @@ Player_node::Player_node(Module_node* node){
   this->node_module = node;
   //---------------------------
 
-  this->onlineManager = new Online(node_module);
-  this->offlineManager = new Offline(node_module, onlineManager);
-  this->obstacleManager = new Obstacle(node_module);
   this->followManager = new Followup(this);
-
+  this->onlineManager = new Online(this);
+  this->offlineManager = new Offline(this);
+  this->obstacleManager = new Obstacle(this);
+  
   //---------------------------
 }
 Player_node::~Player_node(){}

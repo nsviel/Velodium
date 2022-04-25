@@ -3,13 +3,15 @@
 
 #include "../../../common.h"
 
+class Module_node;
+class Player_node;
+
 class Scene;
 class Glyphs;
 class Saver;
 class Warning;
 class OOBB;
 class Transforms;
-class Module_node;
 class Capture;
 class Prediction;
 class Pather;
@@ -19,7 +21,7 @@ class Obstacle
 {
 public:
   //Constructor / Destructor
-  Obstacle(Module_node* node_module);
+  Obstacle(Player_node* node);
   ~Obstacle();
 
 public:

@@ -25,17 +25,36 @@ Followup::Followup(Player_node* node){
   this->camera_moved_rotat = 0;
   this->camera_distPos = 5;
 
+  this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_absolute = false;
   this->with_camera_top = false;
-  this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
   this->with_camera_root = false;
 
   //---------------------------
 }
 Followup::~Followup(){}
 
-//Camera funtions
+//Main function
 void Followup::camera_followUp(Cloud* cloud, int ID_subset){
+  //---------------------------
+
+  //Follow up camera
+  if(with_camera_follow){
+    this->camera_displacment(cloud, ID_subset);
+  }
+
+  //Ortho top view option
+  if(with_camera_top){
+    cameraManager->input_projView(2);
+  }else{
+    cameraManager->input_projView(0);
+  }
+
+  //---------------------------
+}
+
+//Subfunctions
+void Followup::camera_displacment(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   if(subset == nullptr) return;
   //---------------------------

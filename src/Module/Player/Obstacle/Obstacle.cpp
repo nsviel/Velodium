@@ -2,6 +2,8 @@
 
 #include "Warning.h"
 
+#include "../Player_node.h"
+
 #include "../../Module_node.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Prediction.h"
@@ -19,9 +21,10 @@
 
 
 //Constructor / Destructor
-Obstacle::Obstacle(Module_node* node_module){
+Obstacle::Obstacle(Player_node* node){
   //---------------------------
 
+  Module_node* node_module = node->get_node_module();
   Engine_node* node_engine = node_module->get_node_engine();
   Interface_node* node_interface = node_module->get_node_interface();
   Network* netManager = node_interface->get_netManager();

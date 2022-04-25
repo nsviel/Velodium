@@ -3,6 +3,9 @@
 
 #include "../../../common.h"
 
+class Player_node;
+class Module_node;
+
 class Slam;
 class Color;
 class Camera;
@@ -11,16 +14,16 @@ class Filter;
 class Dimension;
 class Scene;
 class Configuration;
-class Module_node;
 class Saving;
 class Capture;
+class Followup;
 
 
 class Online
 {
 public:
   //Constructor / Destructor
-  Online(Module_node* node_module);
+  Online(Player_node* node);
   ~Online();
 
 public:
@@ -51,6 +54,7 @@ private:
   Configuration* configManager;
   Saving* saveManager;
   Capture* captureManager;
+  Followup* followManager;
 
   int visibility_range;
   int nb_subset_max;
