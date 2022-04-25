@@ -97,10 +97,10 @@ bool Offline::select_rangeLimit(Cloud* cloud, int& ID_subset){
 //Player functions
 void Offline::player_runtime(){
   //Continually running, wait for flag to proceed
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  if(player_flag_1s){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+  if(player_flag_1s && cloud != nullptr){
     this->select_bySubsetID(cloud, cloud->ID_selected + 1);
 
     player_flag_1s = false;

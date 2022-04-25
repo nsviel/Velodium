@@ -31,8 +31,7 @@ Engine::~Engine(){}
 void Engine::loop_scene(){
   //---------------------------
 
-  //Runtime
-  node_engine->runtime();
+
 
   //Draw glyph stuff
   if(is_visualization){
@@ -44,7 +43,8 @@ void Engine::loop_scene(){
     //Runtime functions
     node_gui->runtime();
   }
-
+  //Runtime
+  node_engine->runtime();
   //---------------------------
 }
 void Engine::loop_gui(){

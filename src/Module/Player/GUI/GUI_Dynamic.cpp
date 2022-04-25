@@ -132,15 +132,21 @@ void GUI_Dynamic::player_button(){
   bool is_playing = *offlineManager->get_player_isrunning();
   if(is_playing == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if (ImGui::Button(ICON_FA_PLAY "##36")){
+      if(cloud != nullptr){
+        offlineManager->player_start();
+      }
+    }
+    ImGui::PopStyleColor(1);
   }else{
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
-  }
-  if (ImGui::Button(ICON_FA_PLAY "##36")){
-    if(cloud != nullptr){
-      offlineManager->player_start();
+    if (ImGui::Button(ICON_FA_PLAY "##36")){
+      if(cloud != nullptr){
+        offlineManager->player_pause();
+      }
     }
+    ImGui::PopStyleColor(1);
   }
-  ImGui::PopStyleColor(1);
   ImGui::SameLine();
 
   //Pause button
@@ -276,6 +282,7 @@ void GUI_Dynamic::parameter_online(){
     //Camera follow absolute position
     if(*with_camera_follow){
       bool* with_camera_absolute = followManager->get_with_camera_absolute();
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
       ImGui::Checkbox("Absolute positionning", with_camera_absolute);
     }
 

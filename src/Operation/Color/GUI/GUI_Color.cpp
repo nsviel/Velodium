@@ -99,6 +99,7 @@ void GUI_Color::option_intensity(){
 void GUI_Color::option_heatmap(){
   //---------------------------
 
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
   this->select_colormap();
 
   int* heatmap_mode = heatmapManager->get_heatmap_mode();
@@ -112,9 +113,9 @@ void GUI_Color::option_heatmap(){
   //Heatmap - Height
   if(*heatmap_mode == 0){
     vec2* height_range = heatmapManager->get_range_height();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
   }
 
@@ -133,6 +134,7 @@ void GUI_Color::option_heatmap(){
 
   //Normalize palette
   bool* normalizeON = heatmapManager->get_is_normalization();
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
   ImGui::Checkbox("Normalized", normalizeON);
 
   //---------------------------

@@ -76,9 +76,6 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   cloud->subset_selected = subset;
   //---------------------------
 
-  //Control subset visibilities
-  this->compute_visibility(cloud, ID_subset);
-
   //Make slam on the current subset
   if(with_slam){
     slamManager->compute_slam_online(cloud, ID_subset);
@@ -110,6 +107,9 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //Provide info about computation
   this->compute_displayStats(subset);
+
+  //Control subset visibilities
+  this->compute_visibility(cloud, ID_subset);
 
   //---------------------------
 }

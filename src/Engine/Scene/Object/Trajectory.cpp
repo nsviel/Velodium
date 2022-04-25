@@ -37,10 +37,9 @@ void Trajectory::update(Cloud*cloud){
   this->reset();
   for(int j=0; j<cloud->subset.size(); j++){
     Subset* subset = *next(cloud->subset.begin(), j);
+    Frame* frame = &subset->frame;
 
-    if(subset->visibility){
-      Frame* frame = &subset->frame;
-
+    if(subset->visibility && frame->is_slamed){
       vec3 trans_abs = frame->trans_abs;
       vec3 trans_rlt = frame->trans_rlt;
       vec4 color = trajectory->color_unique;

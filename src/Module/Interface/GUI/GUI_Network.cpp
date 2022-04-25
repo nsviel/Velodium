@@ -118,12 +118,14 @@ void GUI_Network::mqtt_connection(){
   ImGui::Text("Broker connected ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", mqttManager->get_is_connected() ? "ON" : "OFF");
+  ImGui::Separator();
 
   //Connect to MQTT broker
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Test", ImVec2(item_width, 0))){
     mqttManager->mqtt_test_localhost();
   }
+  ImGui::Separator();
 
   //Connect to MQTT broker
   if(ImGui::Button("Connection", ImVec2(item_width, 0))){
@@ -143,6 +145,7 @@ void GUI_Network::mqtt_connection(){
   ImGui::PopStyleColor(1);
 
   //---------------------------
+  ImGui::Separator();
 }
 void GUI_Network::mqtt_parameter(){
   Wallet* wallet = netManager->get_wallet();
