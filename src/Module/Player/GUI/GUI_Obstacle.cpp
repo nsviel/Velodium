@@ -6,6 +6,7 @@
 #include "../Player_node.h"
 #include "../Obstacle/Obstacle.h"
 #include "../Dynamic/Online.h"
+#include "../Dynamic/Followup.h"
 
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Prediction.h"
@@ -189,13 +190,14 @@ void GUI_Obstacle::state_online(){
   Module_node* node_module = node_gui->get_node_module();
   Player_node* node_player = node_module->get_node_player();
   Online* onlineManager = node_player->get_onlineManager();
+  Followup* followManager = node_player->get_followManager();
 
   bool with_slam = *onlineManager->get_with_slam();
   ImGui::Text("Online - SLAM");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_slam ? "ON" : "OFF");
 
-  bool with_camera_follow = *onlineManager->get_with_camera_follow();
+  bool with_camera_follow = *followManager->get_with_camera_follow();
   ImGui::Text("Online - Camera follow");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_camera_follow ? "ON" : "OFF");

@@ -13,6 +13,7 @@ class Online;
 class Interface_node;
 class GUI_Interface;
 class GUI_Color;
+class Followup;
 
 
 class GUI_Dynamic
@@ -35,6 +36,7 @@ public:
   void runtime_player_mouse();
 
 private:
+  Followup* followManager;
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;

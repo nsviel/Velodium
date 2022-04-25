@@ -3,6 +3,7 @@
 #include "../Player_node.h"
 #include "../Dynamic/Online.h"
 #include "../Dynamic/Offline.h"
+#include "../Dynamic/Followup.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
@@ -38,6 +39,7 @@ GUI_Dynamic::GUI_Dynamic(GUI_module* node_gui){
   this->node_interface = node_module->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
   this->gui_color = gui_operation->get_gui_color();
+  this->followManager = node_player->get_followManager();
 
   this->item_width = 100;
 
@@ -268,12 +270,12 @@ void GUI_Dynamic::parameter_online(){
     ImGui::Checkbox("SLAM", with_slam);
 
     //Camera auto displacement
-    bool* with_camera_follow = onlineManager->get_with_camera_follow();
+    bool* with_camera_follow = followManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", with_camera_follow);
 
     //Camera follow absolute position
     if(*with_camera_follow){
-      bool* with_camera_absolute = onlineManager->get_with_camera_absolute();
+      bool* with_camera_absolute = followManager->get_with_camera_absolute();
       ImGui::Checkbox("Absolute positionning", with_camera_absolute);
     }
 
