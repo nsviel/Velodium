@@ -31,6 +31,7 @@ struct Glyph{
   glm::vec3 min;
   glm::vec4 color_unique;
   std::vector<glm::vec3> location;
+  std::vector<glm::vec3> location_init;
   std::vector<glm::vec3> normal;
   std::vector<glm::vec4> color;
 

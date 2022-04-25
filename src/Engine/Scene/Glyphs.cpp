@@ -9,6 +9,7 @@
 #include "Object/Mark.h"
 #include "Object/Normal.h"
 #include "Object/Trajectory.h"
+#include "Object/Car.h"
 
 #include "../Engine_node.h"
 #include "../Scene/Configuration.h"
@@ -32,6 +33,7 @@ Glyphs::Glyphs(Engine_node* node){
   this->oobbObject = new OOBB();
   this->markObject = new Mark();
   this->trajObject = new Trajectory();
+  this->carObject = new Car();
 
   this->is_visualization = configManager->parse_json_b("window", "visualization");
   this->ID_glyph = 0;
@@ -55,6 +57,7 @@ void Glyphs::init_scene_object(Configuration* configManager){
   this->create_glyph_scene(axisObject->get_axis_scene());
   this->create_glyph_scene(trajObject->get_glyph());
   this->create_glyph_scene(aabb);
+  this->create_glyph_scene(carObject->get_glyph());
 
   aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
   grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");

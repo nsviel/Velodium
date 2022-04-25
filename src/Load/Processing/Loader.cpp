@@ -211,6 +211,24 @@ bool Loader::load_cloud_oneFrame(){
   //---------------------------
   return true;
 }
+vector<vec3> Loader::load_vertices(string filePath){
+  //---------------------------
+
+  //Check file existence
+  if(is_file_exist(filePath) == false){
+    string log = "File doesn't exists: " + filePath;
+    console.AddLog("error", log);
+  }
+
+  //Check file format & retrieve data
+  vector<dataFile*> data_vec = load_retrieve_data(filePath);
+
+  //Extract data
+  vector<vec3> xyz = data_vec[0]->location;
+
+  //---------------------------
+  return xyz;
+}
 
 //Sub-functions
 vector<dataFile*> Loader::load_retrieve_data(string filePath){

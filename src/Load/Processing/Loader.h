@@ -33,6 +33,7 @@ public:
   bool load_cloud_creation(Cloud* cloud_in);
   bool load_cloud_empty();
   bool load_cloud_oneFrame();
+  vector<vec3> load_vertices(string filePath);
 
   inline Cloud* get_createdcloud(){return cloud;}
   inline file_PTS* get_ptsManager(){return ptsManager;}

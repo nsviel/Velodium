@@ -11,6 +11,7 @@ class AABB;
 class Normal;
 class OOBB;
 class Mark;
+class Car;
 class Configuration;
 class Trajectory;
 
@@ -66,6 +67,7 @@ private:
   OOBB* oobbObject;
   Trajectory* trajObject;
   Mark* markObject;
+  Car* carObject;
 
   list<Glyph*>* list_glyph;
   bool is_visualization;

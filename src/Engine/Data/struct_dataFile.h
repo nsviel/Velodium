@@ -19,6 +19,7 @@ struct dataFile{
   std::vector<float> timestamp;
   std::vector<float> distance;
   std::vector<float> azimuth;
+  std::vector<int> location_idx;
 };
 
 
