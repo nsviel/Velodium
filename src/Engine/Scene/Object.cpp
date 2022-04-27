@@ -132,8 +132,7 @@ void Object::update_glyph_subset(Subset* subset){
 
   //Subset normal
   normObject->update_normal_subset(subset);
-  glyphManager->update_glyph_location(&subset->normal);
-  glyphManager->update_glyph_color(&subset->normal);
+  this->update_object(&subset->normal);
 
   //---------------------------
 }
@@ -141,12 +140,16 @@ void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 
   //Update cloud AABB
-  /*aabbObject->update_aabb(cloud);
-  this->update_object(aabbObject->get_aabb());*/
+  aabbObject->update_aabb(cloud);
+  this->update_object(aabbObject->get_aabb());
 
   //Trajectory
   trajObject->update(cloud);
   this->update_object(trajObject->get_glyph());
+
+  //Subset axis
+  carObject->update(cloud);
+  glyphManager->update_glyph_location(carObject->get_glyph());
 
   //---------------------------
 }

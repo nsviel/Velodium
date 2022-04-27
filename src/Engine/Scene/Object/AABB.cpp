@@ -7,7 +7,7 @@ AABB::AABB(){
 
   this->color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
   this->width = 1;
-  
+
   this->create_aabb_scene();
 
   //---------------------------
@@ -34,8 +34,6 @@ void AABB::create_aabb_scene(){
   //---------------------------
 }
 void AABB::update_aabb(Cloud* cloud){
-  vector<vec3>& XYZ = aabb->location;
-  vector<vec4>& RGB = aabb->color;
   vec3 min = cloud->min;
   vec3 max = cloud->max;
   //---------------------------

@@ -54,7 +54,7 @@ namespace{
     //---------------------------
     return dist;
   }
-  glm::vec3 fct_centroid(std::vector<glm::vec3> vec){
+  glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
     glm::vec3 centroid = glm::vec3(0, 0, 0);
     //---------------------------
 
@@ -71,7 +71,7 @@ namespace{
     //---------------------------
     return centroid;
   }
-  Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f> XYZ){
+  Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ){
     Eigen::Vector3f centroid = Eigen::Vector3f::Zero();
     int size = XYZ.size();
     //---------------------------
@@ -128,7 +128,7 @@ namespace{
     //---------------------------
     return out;
   }
-  Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f> vec){
+  Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f>& vec){
     //---------------------------
 
     // Centroide

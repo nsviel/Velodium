@@ -32,9 +32,9 @@ Engine_node::Engine_node(CoreGLengine* ogl){
   this->renderManager = new Renderer(dimManager);
   this->viewportManager = new Viewport(dimManager);
   this->glyphManager = new Glyphs(this);
-  this->sceneManager = new Scene(this);
   this->objectManager = new Object(this);
-
+  this->sceneManager = new Scene(this);
+  
   this->node_load = new Load_node(this);
   this->node_ope = new Operation_node(this);
   this->node_module = new Module_node(this);

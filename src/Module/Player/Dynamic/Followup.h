@@ -21,8 +21,9 @@ public:
 
   //Subfunctions
   void camera_displacment(Cloud* cloud, int ID_subset);
-  void camera_position(Subset* subset, vec3 C);
-  void camera_orientation(vec3 E);
+  vec3 camera_payload(Cloud* cloud, int ID_subset);
+  void camera_position(Subset* subset, vec3 E);
+  void camera_orientation(Subset* subset, vec3 E);
   void camera_reset();
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}
@@ -33,8 +34,9 @@ private:
   Camera* cameraManager;
 
   vec2 camera_moved_trans;
+  int camera_nb_pose;
   float camera_moved_rotat;
-  float camera_distPos;
+  float camera_distFromPos;
 
   bool with_camera_absolute;
   bool with_camera_follow;

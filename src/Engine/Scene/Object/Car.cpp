@@ -1,12 +1,14 @@
 #include "Car.h"
 
 #include "../../../Load/Format/file_OBJ.h"
+#include "../../../Operation/Transformation/Transforms.h"
 
 
 //Constructor / destructor
 Car::Car(){
   //---------------------------
 
+  this->transformManager = new Transforms();
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
   this->width = 2;
 
@@ -38,9 +40,14 @@ void Car::create(){
 
   //---------------------------
 }
-void Car::update(Cloud*cloud){
+void Car::update(Cloud* cloud){
+  Subset* subset = cloud->subset_selected;
+  Frame* frame = &subset->frame;
   //---------------------------
 
+  vec3 trans_abs = frame->trans_abs;
+  car->location = car->location_init;
+  transformManager->make_translation(car->location, trans_abs);
 
   //---------------------------
 }

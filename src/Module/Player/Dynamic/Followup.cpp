@@ -23,10 +23,11 @@ Followup::Followup(Player_node* node){
 
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
-  this->camera_distPos = 5;
+  this->camera_distFromPos = 5;
+  this->camera_nb_pose = 5;
 
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
-  this->with_camera_absolute = false;
+  this->with_camera_absolute = true;
   this->with_camera_top = false;
   this->with_camera_root = false;
 
@@ -59,47 +60,58 @@ void Followup::camera_displacment(Cloud* cloud, int ID_subset){
   if(subset == nullptr) return;
   //---------------------------
 
-  Frame* frame = &subset->frame;
+  Frame* frame_m0 = &subset->frame;
 
-  if(frame->ID >= 4){
-    Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID_subset-1);
-    Frame* frame_m2 = sceneManager->get_frame_byID(cloud, ID_subset-2);
-    Frame* frame_m3 = sceneManager->get_frame_byID(cloud, ID_subset-3);
+  if(frame_m0->ID >= camera_nb_pose){
+    //Camera payload
+    vec3 E = camera_payload(cloud, ID_subset);
 
-    vec3 pos_m0 = frame->trans_abs;
-    vec3 pos_m1 = frame_m1->trans_abs;
-    vec3 pos_m2 = frame_m2->trans_abs;
-    vec3 pos_m3 = frame_m3->trans_abs;
-    vec3 pos_diff = pos_m0 - pos_m1;
+    //Camera pose
+    this->camera_position(subset, E);
 
-    //If the displacment is enough
-    if(pos_diff.x > 0.1 || pos_diff.y > 0.1){
-      vec3 E = vec3(0,0,0);
-      for(int i=0; i<3; i++){
-        E[i] += pos_m0[i];
-        E[i] += pos_m1[i];
-        E[i] += pos_m2[i];
-        E[i] += pos_m3[i];
-
-        E[i] = E[i] / 4;
-      }
-
-      E = pos_m0 - E;
-      vec3 C = pos_m1 - camera_distPos * (E / fct_distance_origin(E));
-
-      //Camera pose
-      this->camera_position(subset, C);
-
-      //Camera orientation
-      this->camera_orientation(E);
-    }
+    //Camera orientation
+    this->camera_orientation(subset, E);
   }
 
   //---------------------------
 }
-void Followup::camera_position(Subset* subset, vec3 C){
+vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
+  vec3 E = vec3(0, 0, 0);
+  //---------------------------
+
+  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, ID_subset);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID_subset-1);
+  vec3 pos_m0 = frame_m0->trans_abs;
+  vec3 pos_m1 = frame_m1->trans_abs;
+  float pos_dist = fct_distance(pos_m0, pos_m1);
+
+  //If the displacment is enough
+  if(pos_dist > 0.1){
+    //Sum all pose values
+    for(int i=0; i<camera_nb_pose; i++){
+      Frame* frame = sceneManager->get_frame_byID(cloud, ID_subset-i);
+      vec3& pos = frame->trans_abs;
+
+      for(int j=0; j<3; j++){
+        E[j] += pos[j];
+      }
+    }
+
+    //Get mean
+    for(int j=0; j<3; j++){
+      E[j] = E[j] / camera_nb_pose;
+    }
+  }
+
+  //---------------------------
+  return E;
+}
+void Followup::camera_position(Subset* subset, vec3 E){
   Frame* frame = &subset->frame;
   //---------------------------
+
+  //Camera pose
+  vec3 C = frame->trans_abs - camera_distFromPos * (E / fct_distance_origin(E));
 
   if(with_camera_absolute){
     vec3 camPos = cameraManager->get_camPos();
@@ -121,7 +133,8 @@ void Followup::camera_position(Subset* subset, vec3 C){
 
   //---------------------------
 }
-void Followup::camera_orientation(vec3 E){
+void Followup::camera_orientation(Subset* subset, vec3 E){
+  Frame* frame = &subset->frame;
   //---------------------------
 
   if(with_camera_absolute){

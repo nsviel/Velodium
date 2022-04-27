@@ -159,6 +159,55 @@ void Transforms::make_scaling(Subset* subset, float Sxyz){
   //---------------------------
 }
 
+void Transforms::make_translation(vector<vec3>& XYZ, vec3 trans){
+  //Translation matrice creation
+  glm::mat4 translation(1.0);
+  //---------------------------
+
+  translation[0][3] = trans.x;
+  translation[1][3] = trans.y;
+  translation[2][3] = trans.z;
+
+  //Apply
+  this->make_Transformation_atomic(XYZ, vec3(0, 0, 0), translation);
+
+  //---------------------------
+}
+void Transforms::make_rotation(vector<vec3>& XYZ, vec3 radian){
+  //Rotation matrice creation - rx, ry, rz are in radian !
+  glm::mat4 Rx(1.0);
+  glm::mat4 Ry(1.0);
+  glm::mat4 Rz(1.0);
+  //---------------------------
+
+  float rx = radian.x;
+  float ry = radian.y;
+  float rz = radian.z;
+
+  Rx[1][1]=cos(rx);
+  Rx[2][1]=sin(rx);
+  Rx[1][2]=-sin(rx);
+  Rx[2][2]=cos(rx);
+
+  Ry[0][0]=cos(ry);
+  Ry[0][2]=sin(ry);
+  Ry[2][0]=-sin(ry);
+  Ry[2][2]=cos(ry);
+
+  Rz[0][0]=cos(rz);
+  Rz[1][0]=sin(rz);
+  Rz[0][1]=-sin(rz);
+  Rz[1][1]=cos(rz);
+
+  glm::mat4 rotation = Rx * Ry * Rz;
+
+  //Apply
+  vec3 COM = fct_centroid(XYZ);
+  this->make_Transformation_atomic(XYZ, COM, rotation);
+
+  //---------------------------
+}
+
 void Transforms::make_Transformation(Subset* subset, vec3 COM, mat4 transfMat){
   vector<vec3>& XYZ = subset->xyz;
   vector<vec3>& N = subset->N;

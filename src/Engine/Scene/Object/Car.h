@@ -5,6 +5,8 @@
 #include "../../Data/struct_glyph.h"
 #include "../../Data/struct_frame.h"
 
+class Transforms;
+
 
 class Car
 {
@@ -15,12 +17,13 @@ public:
 
 public:
   void create();
-  void update(Cloud*cloud);
+  void update(Cloud* cloud);
   void reset();
 
   inline Glyph* get_glyph(){return car;}
 
 private:
+  Transforms* transformManager;
   Glyph* car;
   vec4 color;
   int width;

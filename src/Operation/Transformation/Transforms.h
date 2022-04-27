@@ -20,6 +20,9 @@ public:
   void make_rotation(Subset* subset, vec3 COM, vec3 angles);
   void make_scaling(Subset* subset, float scaling);
 
+  void make_translation(vector<vec3>& XYZ, vec3 trans);
+  void make_rotation(vector<vec3>& XYZ, vec3 radian);
+
   void make_Transformation(Subset* subset, vec3 COM, mat4 transfMat);
   void make_Transformation_atomic(vector<vec3>& XYZ, vec3 COM, mat4 Transformation);
   void make_Transformation_point(vec3& XYZ, vec3 COM, mat4 Transformation);
