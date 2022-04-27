@@ -5,6 +5,7 @@
 #include "Scene/Configuration.h"
 #include "Scene/Scene.h"
 #include "Scene/Glyphs.h"
+#include "Scene/Object.h"
 
 #include "OpenGL/Dimension.h"
 #include "OpenGL/CoreGLengine.h"
@@ -32,6 +33,7 @@ Engine_node::Engine_node(CoreGLengine* ogl){
   this->viewportManager = new Viewport(dimManager);
   this->glyphManager = new Glyphs(this);
   this->sceneManager = new Scene(this);
+  this->objectManager = new Object(this);
 
   this->node_load = new Load_node(this);
   this->node_ope = new Operation_node(this);
@@ -56,7 +58,7 @@ void Engine_node::reset(){
   //---------------------------
 
   cameraManager->viewport_reset();
-  glyphManager->reset_scene();
+  objectManager->reset_scene_object();
   sceneManager->reset_cloud_all();
 
   //---------------------------

@@ -6,6 +6,7 @@
 class Scene;
 class Glyphs;
 class GUI;
+class Object;
 
 class Engine_node;
 class GUI_node;
@@ -33,6 +34,7 @@ private:
   Scene* sceneManager;
   Glyphs* glyphManager;
   GUI* guiManager;
+  Object* objectManager;
 
   Engine_node* node_engine;
   GUI_node* node_gui;

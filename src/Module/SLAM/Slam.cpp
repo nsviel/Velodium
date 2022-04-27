@@ -12,7 +12,7 @@
 #include "../../Specific/fct_maths.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/Trajectory.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -32,7 +32,7 @@ Slam::Slam(Engine_node* node){
   Configuration* configManager = node_engine->get_configManager();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();;
+  this->objectManager = node_engine->get_objectManager();
 
   this->normalManager = new SLAM_normal();
   //this->ceresManager = new SLAM_optim_ceres(normalManager);
@@ -130,7 +130,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   auto t2 = high_resolution_clock::now();
   float duration = duration_cast<milliseconds>(t2 - t1).count();
   this->compute_statistics(duration, frame, frame_m1, subset);
-  glyphManager->update_glyph_subset(subset);
+  objectManager->update_glyph_subset(subset);
 }
 
 //SLAM sub-functions
@@ -392,7 +392,7 @@ void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, 
 void Slam::reset_slam(){
   //---------------------------
 
-  glyphManager->reset_scene();
+  objectManager->reset_scene_object();
   mapManager->reset();
   this->map_frame_ID = 0;
 

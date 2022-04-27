@@ -9,7 +9,7 @@
 
 class Engine_node;
 class Scene;
-class Glyphs;
+class Object;
 
 //class SLAM_optim_ceres;
 class SLAM_optim_gn;
@@ -61,7 +61,7 @@ private:
 private:
   Engine_node* node_engine;
   Scene* sceneManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
 
   //SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;

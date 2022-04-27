@@ -7,7 +7,7 @@ class Module_node;
 class Player_node;
 
 class Scene;
-class Glyphs;
+class Object;
 class Saver;
 class Warning;
 class OOBB;
@@ -45,7 +45,7 @@ private:
   OOBB* oobbManager;
   Warning* warningManager;
   Transforms* transformManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
   Capture* captureManager;
   Prediction* predManager;
   Pather* pathManager;

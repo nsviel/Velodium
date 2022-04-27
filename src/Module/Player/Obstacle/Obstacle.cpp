@@ -12,7 +12,7 @@
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyphs.h"
+#include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/OOBB.h"
 #include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Operation/Color/color.h"
@@ -32,7 +32,7 @@ Obstacle::Obstacle(Player_node* node){
   this->captureManager = node_interface->get_captureManager();
   this->predManager = node_interface->get_predManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->objectManager = node_engine->get_objectManager();
   this->warningManager = new Warning(netManager->get_mqttManager());
   this->oobbManager = new OOBB();
   this->transformManager = new Transforms();
@@ -139,7 +139,7 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
   //---------------------------
 
   for(int j=0; j<obstacle_gt->name.size(); j++){
-    Glyph* glyph = glyphManager->create_glyph_ostacle();
+    Glyph* glyph = objectManager->create_glyph_ostacle();
 
     vec3 To = obstacle_gt->position[j];
     vec3 Ro = vec3(0, 0, obstacle_gt->heading[j]);
@@ -147,8 +147,7 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
     mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
 
     oobbManager->update_oobb(glyph, transf);
-    glyphManager->update_glyph_location(glyph);
-    glyphManager->update_glyph_color(glyph, gt_color);
+    objectManager->update_object(glyph);
     obstacle_gt->oobb.push_back(*glyph);
     delete glyph;
   }
@@ -160,7 +159,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   //---------------------------
 
   for(int i=0; i<obstacle_pr->name.size(); i++){
-    Glyph* glyph = glyphManager->create_glyph_ostacle();
+    Glyph* glyph = objectManager->create_glyph_ostacle();
 
     vec3 To = obstacle_pr->position[i];
     vec3 Ro = vec3(0, 0, obstacle_pr->heading[i]);
@@ -169,8 +168,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
     vec4 color = AI_color_dic.find(obstacle_pr->name[i])->second;
 
     oobbManager->update_oobb(glyph, transf);
-    glyphManager->update_glyph_location(glyph);
-    glyphManager->update_glyph_color(glyph, color);
+    objectManager->update_object(glyph, color);
     obstacle_pr->oobb.push_back(*glyph);
 
     obstacle_pr->is_predicted == true;

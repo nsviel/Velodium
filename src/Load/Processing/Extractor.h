@@ -8,7 +8,7 @@
 
 class Load_node;
 class Scene;
-class Glyphs;
+class Object;
 class Configuration;
 
 
@@ -43,7 +43,7 @@ private:
 
 private:
   Scene* sceneManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
   Configuration* configManager;
 
   int ID, oneFrame_VAO;

@@ -3,12 +3,12 @@
 
 #include "../../common.h"
 
-class Data;
-class Engine_node;
-class Glyphs;
-
 #include <list>
 #include <GLFW/glfw3.h>
+
+class Data;
+class Engine_node;
+class Object;
 
 
 class Scene
@@ -83,7 +83,7 @@ public:
 
 private:
   Data* dataManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
 
   list<Cloud*>* list_cloud;
   Cloud* cloud_selected;

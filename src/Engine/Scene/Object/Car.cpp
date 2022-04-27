@@ -23,13 +23,13 @@ void Car::create(){
   car->name = "Car";
   car->draw_width = width;
   car->visibility = true;
-  car->draw_type = "quad_strip";
+  car->draw_type = "quad";
   car->permanent = true;
   car->color_unique = color;
 
   //Load car model
   file_OBJ objManager;
-  dataFile* data = objManager.Loader("../media/engine/Marks/car.obj");
+  dataFile* data = objManager.Loader_complete("../media/engine/Marks/car.obj");
   car->location = data->location;
   car->location_init = data->location;
   for(int i=0; i<car->location.size(); i++){

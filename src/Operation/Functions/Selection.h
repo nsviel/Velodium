@@ -3,7 +3,7 @@
 
 class Operation_node;
 class Scene;
-class Glyphs;
+class Object;
 class Transforms;
 class Attribut;
 class Camera;
@@ -61,7 +61,7 @@ private:
   Scene* sceneManager;
   Attribut* attribManager;
   Transforms* transformManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
   Camera* cameraManager;
   CoordTransform* coordManager;
 

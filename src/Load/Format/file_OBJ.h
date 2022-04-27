@@ -14,6 +14,7 @@ public:
 
 public:
   dataFile* Loader(string filePath);
+  dataFile* Loader_complete(string filePath);
 
 private:
   //Datatypes

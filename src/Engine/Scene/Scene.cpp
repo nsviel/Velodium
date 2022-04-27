@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-#include "Glyphs.h"
+#include "Object.h"
 
 #include "../Engine_node.h"
 #include "../Scene/Configuration.h"
@@ -15,7 +15,7 @@ Scene::Scene(Engine_node* node_engine){
 
   Configuration* configManager = node_engine->get_configManager();
 
-  this->glyphManager = node_engine->get_glyphManager();
+  this->objectManager = node_engine->get_objectManager();
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
   this->list_cloud = new list<Cloud*>;
@@ -44,7 +44,6 @@ void Scene::remove_cloud(Cloud* cloud){
     int size = cloud->nb_subset;
     for(int i=0; i<size; i++){
       Subset* subset = *next(cloud->subset.begin(), i);
-      glyphManager->remove_glyph_subset(subset);
       this->remove_subset(cloud, subset->ID);
     }
 
@@ -71,7 +70,7 @@ void Scene::remove_cloud(Cloud* cloud){
 
   //If cloud list empty
   if(list_cloud->size() == 0){
-    glyphManager->reset_scene();
+    objectManager->reset_scene_object();
     this->cloud_selected = nullptr;
   }
 
@@ -282,7 +281,7 @@ void Scene::update_cloud_glyphs(Cloud* cloud){
   //---------------------------
 
   this->update_cloud_MinMax(cloud);
-  glyphManager->update_glyph_cloud(cloud);
+  objectManager->update_glyph_cloud(cloud);
 
   //---------------------------
 }
@@ -375,7 +374,7 @@ void Scene::update_subset_glyphs(Subset* subset){
   //---------------------------
 
   this->update_subset_MinMax(subset);
-  glyphManager->update_glyph_subset(subset);
+  objectManager->update_glyph_subset(subset);
 
   //---------------------------
 }
@@ -384,7 +383,7 @@ void Scene::update_subset(Subset* subset){
   //---------------------------
 
   this->update_subset_MinMax(subset);
-  glyphManager->update_glyph_subset(subset);
+  objectManager->update_glyph_subset(subset);
 
   //---------------------------
 }
@@ -498,9 +497,9 @@ void Scene::selection_setNext(){
       cloud_selected = *next(list_cloud->begin(),0);
     }
     this->update_cloud_MinMax(cloud_selected);
-    glyphManager->update_glyph_cloud(cloud_selected);
+    objectManager->update_glyph_cloud(cloud_selected);
   }else{
-    glyphManager->reset_scene();
+    objectManager->reset_scene_object();
   }
 
   //---------------------------

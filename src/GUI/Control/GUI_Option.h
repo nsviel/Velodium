@@ -6,7 +6,7 @@ class GUI_node;
 
 class Scene;
 class Pather;
-class Glyphs;
+class Object;
 class Color;
 class Heatmap;
 class Transforms;
@@ -45,7 +45,7 @@ private:
   Scene* sceneManager;
   Color* colorManager;
   Transforms* transformManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
   Heatmap* heatmapManager;
   Pather* pathManager;
   Renderer* renderManager;

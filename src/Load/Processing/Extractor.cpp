@@ -3,7 +3,7 @@
 #include "../Load_node.h"
 
 #include "../../Engine/Engine_node.h"
-#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_maths.h"
@@ -18,7 +18,7 @@ Extractor::Extractor(Load_node* node_load){
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->objectManager = node_engine->get_objectManager();
 
   this->ID = 0;
 
@@ -57,7 +57,7 @@ Cloud* Extractor::extractData(vector<dataFile*> data){
     }
 
     //Create associated glyphs
-    glyphManager->create_glyph_subset(subset);
+    objectManager->create_glyph_subset(subset);
 
     Subset* subset_buf = new Subset(*subset);
     Subset* subset_ini = new Subset(*subset);
@@ -88,7 +88,7 @@ Subset* Extractor::extractData(udpPacket& data){
   this->extract_Color(subset, data.rgb);
 
   //Create associated glyphs
-  glyphManager->create_glyph_subset(subset);
+  objectManager->create_glyph_subset(subset);
 
   //---------------------------
   return subset;
@@ -111,7 +111,7 @@ void Extractor::extractData_frame(Cloud* cloud, dataFile* data){
   this->extract_Timestamp(subset, data->timestamp);
 
   //Create associated glyphs
-  glyphManager->create_glyph_subset(subset);
+  objectManager->create_glyph_subset(subset);
 
   cloud->subset.push_back(subset);
   cloud->subset_init.push_back(subset);

@@ -2,15 +2,6 @@
 
 #include "Scene.h"
 
-#include "Object/Grid.h"
-#include "Object/Axis.h"
-#include "Object/AABB.h"
-#include "Object/OOBB.h"
-#include "Object/Mark.h"
-#include "Object/Normal.h"
-#include "Object/Trajectory.h"
-#include "Object/Car.h"
-
 #include "../Engine_node.h"
 #include "../Scene/Configuration.h"
 
@@ -26,84 +17,15 @@ Glyphs::Glyphs(Engine_node* node){
   Configuration* configManager = node_engine->get_configManager();
 
   this->list_glyph = new list<Glyph*>;
-  this->gridObject = new Grid();
-  this->axisObject = new Axis();
-  this->aabbObject = new AABB();
-  this->normObject = new Normal();
-  this->oobbObject = new OOBB();
-  this->markObject = new Mark();
-  this->trajObject = new Trajectory();
-  this->carObject = new Car();
-
   this->is_visualization = configManager->parse_json_b("window", "visualization");
   this->ID_glyph = 0;
 
   //---------------------------
-  this->init_scene_object(configManager);
 }
 Glyphs::~Glyphs(){}
 
 //Main functions
-void Glyphs::init_scene_object(Configuration* configManager){
-  //---------------------------
-
-  Glyph* aabb = aabbObject->get_aabb();
-  Glyph* grid = gridObject->get_grid();
-
-  this->create_glyph_scene(markObject->get_selection_frame());
-  this->create_glyph_scene(grid);
-  this->create_glyph_scene(gridObject->get_grid_sub());
-  this->create_glyph_scene(gridObject->get_grid_plane());
-  this->create_glyph_scene(axisObject->get_axis_scene());
-  this->create_glyph_scene(trajObject->get_glyph());
-  this->create_glyph_scene(aabb);
-  this->create_glyph_scene(carObject->get_glyph());
-
-  aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
-  grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");
-
-  //---------------------------
-}
-void Glyphs::reset_scene(){
-  //---------------------------
-
-  //Remove non permanent glyphs
-  for(int i=0; i<list_glyph->size(); i++){
-    Glyph* glyph = *next(list_glyph->begin(),i);
-
-    if(glyph->permanent == false){
-      this->remove_glyph_scene(glyph->ID);
-      i = 0;
-    }
-  }
-
-  //Invisibilize all cloud dependant glyphs
-  Glyph* aabb = aabbObject->get_aabb();
-  if(aabb != nullptr){
-    aabb->location.clear();
-    this->update_glyph_location(aabb);
-  }
-
-  //Reset specific glyphs
-  trajObject->reset();
-  this->update_glyph_location(trajObject->get_glyph());
-
-  //---------------------------
-}
-void Glyphs::reset_color(){
-  //---------------------------
-
-  Glyph* aabb = aabbObject->get_aabb();
-  Glyph* grid = gridObject->get_grid();
-
-  this->update_glyph_color(aabb, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-  this->update_glyph_color(grid, vec4(0.5f, 0.5f, 0.5f, 1.0f));
-
-  //---------------------------
-}
-
-//Runtime functions
-void Glyphs::runtime_glyph_scene(){
+void Glyphs::runtime_scene_glyph(){
   //---------------------------
 
   for(int i=0;i<list_glyph->size();i++){
@@ -124,8 +46,14 @@ void Glyphs::runtime_glyph_scene(){
       else if(glyph->draw_type == "triangle"){
         glDrawArrays(GL_TRIANGLES, 0, glyph->location.size());
       }
+      else if(glyph->draw_type == "quad"){
+        glDrawArrays(GL_QUADS, 0, glyph->location.size());
+      }
       else if(glyph->draw_type == "quad_strip"){
         glDrawArrays(GL_QUAD_STRIP, 0, glyph->location.size());
+      }
+      else if(glyph->draw_type == "polygon"){
+        glDrawArrays(GL_POLYGON, 0, glyph->location.size());
       }
       else{
         glDrawArrays(GL_POINTS, 0, glyph->location.size());
@@ -138,25 +66,16 @@ void Glyphs::runtime_glyph_scene(){
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }
-void Glyphs::runtime_glyph_subset(Subset* subset){
+void Glyphs::draw_glyph(Glyph* glyph){
   //---------------------------
 
-  if(subset->visibility){
-    //Subset axis
-    Glyph* axis = &subset->axis;
-    if(axis->visibility){
-      glBindVertexArray(axis->VAO);
-      glLineWidth(axis->draw_width);
-      glDrawArrays(GL_LINES, 0, axis->location.size());
-    }
+  if(glyph->visibility){
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
 
-    //Normal
-    Glyph* normal = &subset->normal;
-    if(normal->visibility){
-      glBindVertexArray(normal->VAO);
-      glLineWidth(normal->draw_width);
-      glDrawArrays(GL_LINES, 0, normal->location.size());
-    }
+    glBindVertexArray(glyph->VAO);
+    glLineWidth(glyph->draw_width);
+    glDrawArrays(GL_LINES, 0, glyph->location.size());
 
     glLineWidth(1);
     glBindVertexArray(0);
@@ -201,35 +120,6 @@ void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
 }
 
 //Glyph update
-void Glyphs::update_glyph_subset(Subset* subset){
-  //---------------------------
-
-  //Subset axis
-  axisObject->update_axis_subset(subset);
-  this->update_glyph_location(&subset->axis);
-
-  //Subset normal
-  normObject->update_normal_subset(subset);
-  this->update_glyph_location(&subset->normal);
-  this->update_glyph_color(&subset->normal);
-
-  //---------------------------
-}
-void Glyphs::update_glyph_cloud(Cloud* cloud){
-  //---------------------------
-
-  //Update cloud AABB
-  aabbObject->update_aabb(cloud);
-  this->update_glyph_location(aabbObject->get_aabb());
-  this->update_glyph_color(aabbObject->get_aabb());
-
-  //Trajectory
-  trajObject->update(cloud);
-  this->update_glyph_location(trajObject->get_glyph());
-  this->update_glyph_color(trajObject->get_glyph());
-
-  //---------------------------
-}
 void Glyphs::update_glyph_location(Glyph* glyph){
   vector<vec3>& XYZ = glyph->location;
   //---------------------------
@@ -330,6 +220,21 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
 
   //---------------------------
 }
+void Glyphs::remove_temporary_glyph(){
+  //---------------------------
+
+  //Remove non permanent glyphs
+  for(int i=0; i<list_glyph->size(); i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
+
+    if(glyph->permanent == false){
+      this->remove_glyph_scene(glyph->ID);
+      i = 0;
+    }
+  }
+
+  //---------------------------
+}
 void Glyphs::remove_glyph_scene(int ID){
   //---------------------------
 
@@ -345,12 +250,6 @@ void Glyphs::remove_glyph_scene(int ID){
 
   //---------------------------
 }
-void Glyphs::remove_glyph_subset(Subset* subset){
-  //---------------------------
-
-
-  //---------------------------
-}
 void Glyphs::create_glyph_scene(Glyph* glyph){
   //---------------------------
 
@@ -358,29 +257,6 @@ void Glyphs::create_glyph_scene(Glyph* glyph){
   list_glyph->push_back(glyph);
 
   //---------------------------
-}
-void Glyphs::create_glyph_subset(Subset* subset){
-  //---------------------------
-
-  //Cloud axis stuff
-  axisObject->create_axis_subset(subset);
-  this->insert_into_gpu(&subset->axis);
-
-  //Normal stuff
-  normObject->create_normal_subset(subset);
-  this->insert_into_gpu(&subset->normal);
-
-  //---------------------------
-}
-Glyph* Glyphs::create_glyph_ostacle(){
-  //---------------------------
-
-  //Creat new OOBB object
-  Glyph* glyph = oobbObject->create_oobb();
-  this->insert_into_gpu(glyph);
-
-  //---------------------------
-  return glyph;
 }
 Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
   Glyph* glyph = new Glyph();

@@ -10,7 +10,7 @@ class Scene;
 class Timer;
 class Online;
 class Saver;
-class Glyphs;
+class Object;
 
 
 class Offline
@@ -45,7 +45,7 @@ private:
   Timer* timerManager;
   Online* onlineManager;
   Saver* saveManager;
-  Glyphs* glyphManager;
+  Object* objectManager;
 
   string player_saveas;
   bool player_isrunning;

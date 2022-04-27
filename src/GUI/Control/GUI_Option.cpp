@@ -9,7 +9,7 @@
 #include "../../Engine/Engine.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/AABB.h"
 #include "../../Engine/Scene/Object/Grid.h"
 #include "../../Engine/Scene/Object/Axis.h"
@@ -35,7 +35,7 @@ GUI_option::GUI_option(GUI_node* node_gui){
 
   this->renderManager = node_engine->get_renderManager();
   this->gui_control = node_gui->get_gui_control();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->objectManager = node_engine->get_objectManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->colorManager = node_ope->get_colorManager();
@@ -70,7 +70,7 @@ void GUI_option::option_glyphs(){
   //Display grid
   static bool grid_ON = true;
   if(ImGui::Checkbox("Grid", &grid_ON)){
-    Grid* gridObject = glyphManager->get_object_grid();
+    Grid* gridObject = objectManager->get_object_grid();
     Glyph* grid = gridObject->get_grid();
 
     grid->visibility = grid_ON;
@@ -80,7 +80,7 @@ void GUI_option::option_glyphs(){
   //Subgrid
   static bool grid_sub_ON = false;
   if(ImGui::Checkbox("Subgrid", &grid_sub_ON)){
-    Grid* gridObject = glyphManager->get_object_grid();
+    Grid* gridObject = objectManager->get_object_grid();
     Glyph* grid_sub = gridObject->get_grid_sub();
     Glyph* grid_plane = gridObject->get_grid_plane();
 
@@ -92,7 +92,7 @@ void GUI_option::option_glyphs(){
   //Display Bounding Box
   static bool aabb_ON = true;
   if(ImGui::Checkbox("AABB", &aabb_ON)){
-    AABB* aabbObject = glyphManager->get_object_aabb();
+    AABB* aabbObject = objectManager->get_object_aabb();
     Glyph* aabb = aabbObject->get_aabb();
 
     aabb->visibility = aabb_ON;
@@ -116,7 +116,7 @@ void GUI_option::option_glyphs(){
   //Display Axis
   static bool axis_scene_ON = true;
   if(ImGui::Checkbox("Axis", &axis_scene_ON)){
-    Axis* axisObject = glyphManager->get_object_axis();
+    Axis* axisObject = objectManager->get_object_axis();
     Glyph* axis_scene = axisObject->get_axis_scene();
 
     axis_scene->visibility = axis_scene_ON;
@@ -129,15 +129,15 @@ void GUI_option::option_glyphs(){
   static float circleRadius = 1;
   ImGui::PushItemWidth(50);
   if(ImGui::DragFloat("##456", &circleRadius, 0.001, 0, 5, "%.3f")){
-    //glyphManager->obj_axisCircle(circleRadius);
+    //objectManager->obj_axisCircle(circleRadius);
   }
   ImGui::SameLine();
 
   //Display Axis circle
   static bool axisCircleON = false;
   if(ImGui::Checkbox("Axis circle", &axisCircleON)){
-    //glyphManager->obj_axisCircle(circleRadius);
-    //glyphManager->set_visibility("axisCircle", axisCircleON);
+    //objectManager->obj_axisCircle(circleRadius);
+    //objectManager->set_visibility("axisCircle", axisCircleON);
   }
 
   //---------------------------
@@ -191,25 +191,25 @@ void GUI_option::option_colors(){
 
     /*/Normals color
     ImGui::SetNextItemWidth(colorEditSize);
-    vec4* color_normals = glyphManager->get_glyph_color("normal");
+    vec4* color_normals = objectManager->get_glyph_color("normal");
     if(ImGui::ColorEdit4("Normals", (float*)color_normals)){
-      glyphManager->update_glyph_color("normal", *color_normals);
+      objectManager->update_object("normal", *color_normals);
     }*/
 
     //Grid color
     ImGui::SetNextItemWidth(colorEditSize);
-    Grid* gridObject = glyphManager->get_object_grid();
+    Grid* gridObject = objectManager->get_object_grid();
     vec4* grid_color = gridObject->get_grid_color();
     if(ImGui::ColorEdit4("Grid", (float*)grid_color)){
-      glyphManager->update_glyph_color(gridObject->get_grid(), *grid_color);
+      objectManager->update_object(gridObject->get_grid(), *grid_color);
     }
 
     //Bounding box color
     ImGui::SetNextItemWidth(colorEditSize);
-    AABB* aabbObject = glyphManager->get_object_aabb();
+    AABB* aabbObject = objectManager->get_object_aabb();
     vec4* aabb_color = aabbObject->get_aabb_color();
     if(ImGui::ColorEdit4("AABB", (float*)aabb_color)){
-      glyphManager->update_glyph_color(aabbObject->get_aabb(), *aabb_color);
+      objectManager->update_object(aabbObject->get_aabb(), *aabb_color);
     }
 
     //Uniform cloud color
@@ -231,7 +231,7 @@ void GUI_option::option_colors(){
       vec4* screen_color = renderManager->get_screen_color();
       *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
-      glyphManager->reset_color();
+      objectManager->reset_color_object();
     }
   }
 }
@@ -308,12 +308,12 @@ void GUI_option::option_parameters(){
       if(cpt_nor <= 1){
         cpt_nor = 1;
       }
-      //glyphManager->set_size_normal(cpt_nor);
+      //objectManager->set_size_normal(cpt_nor);
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if(ImGui::ArrowButton("##right_n", ImGuiDir_Right)){
       cpt_nor++;
-      //glyphManager->set_size_normal(cpt_nor);
+      //objectManager->set_size_normal(cpt_nor);
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
@@ -334,12 +334,12 @@ void GUI_option::option_mode(){
       vec4* screen_color = renderManager->get_screen_color();
 
       /*if(darkMode == true){
-        glyphManager->update_glyph_color("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        glyphManager->update_glyph_color("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        objectManager->update_object("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        objectManager->update_object("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
         *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
       }else{
-        glyphManager->update_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        glyphManager->update_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        objectManager->update_object("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        objectManager->update_object("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
         *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
       }*/
     }
@@ -350,16 +350,16 @@ void GUI_option::option_mode(){
       vec4* screen_color = renderManager->get_screen_color();
 
       /*if(visualization == true){
-        glyphManager->set_visibility("axis", false);
-        glyphManager->set_visibility("axiscloud", false);
-        glyphManager->set_visibility("grid", false);
-        glyphManager->set_visibility("aabb", false);
+        objectManager->set_visibility("axis", false);
+        objectManager->set_visibility("axiscloud", false);
+        objectManager->set_visibility("grid", false);
+        objectManager->set_visibility("aabb", false);
         *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
       }else{
-        glyphManager->set_visibility("axis", true);
-        glyphManager->set_visibility("axiscloud", true);
-        glyphManager->set_visibility("grid", true);
-        glyphManager->set_visibility("aabb", true);
+        objectManager->set_visibility("axis", true);
+        objectManager->set_visibility("axiscloud", true);
+        objectManager->set_visibility("grid", true);
+        objectManager->set_visibility("aabb", true);
 
         if(darkMode == true){
           *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);

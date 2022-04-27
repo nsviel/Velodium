@@ -2,6 +2,7 @@
 
 #include "Engine_node.h"
 #include "Scene/Glyphs.h"
+#include "Scene/Object.h"
 #include "Scene/Scene.h"
 #include "Scene/Configuration.h"
 
@@ -20,6 +21,7 @@ Engine::Engine(Engine_node* engine){
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->guiManager = node_gui->get_guiManager();
+  this->objectManager = node_engine->get_objectManager();
 
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
@@ -33,7 +35,7 @@ void Engine::loop_scene(){
 
   //Draw glyph stuff
   if(is_visualization){
-    glyphManager->runtime_glyph_scene();
+    glyphManager->runtime_scene_glyph();
 
     //Draw clouds
     this->runtime_draw_clouds();
@@ -75,7 +77,7 @@ void Engine::runtime_draw_clouds(){
           glDrawArrays(GL_POINTS, 0, subset->xyz.size()); // Error here during capture via pywardium
 
           //Subset glyph stuff
-          glyphManager->runtime_glyph_subset(subset);
+          objectManager->runtime_subset_object(subset);
           glyphManager->runtime_glyph_pred(cloud, subset->ID);
         }
       }

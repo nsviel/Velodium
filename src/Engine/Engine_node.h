@@ -17,6 +17,7 @@ class Viewport;
 class Dimension;
 class Engine;
 class CoreGLengine;
+class Object;
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -51,6 +52,7 @@ public:
   inline Viewport* get_viewportManager(){return viewportManager;}
   inline Engine* get_engineManager(){return engineManager;}
   inline CoreGLengine* get_glManager(){return glManager;}
+  inline Object* get_objectManager(){return objectManager;}
 
 private:
   Operation_node* node_ope;
@@ -68,6 +70,7 @@ private:
   Viewport* viewportManager;
   Dimension* dimManager;
   Engine* engineManager;
+  Object* objectManager;
 };
 
 #endif

@@ -8,7 +8,7 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/Mark.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
@@ -29,7 +29,7 @@ Selection::Selection(Operation_node* node_ope){
   this->transformManager = new Transforms();
   this->attribManager = node_ope->get_attribManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->objectManager = node_engine->get_objectManager();
 
   this->gui_X = 0;
   this->gui_Y = 0;
@@ -137,12 +137,12 @@ void Selection::mark_pointCreation(vec3 point){
         idx.push_back(j);
 
         if(markMode == "cube"){
-          //int ID = glyphManager->loadGlyph("../media/engine/Marks/cube.pts", point, "point", false);
-          //glyphManager->update_glyph_color(ID, vec3(1.0f, 1.0f, 1.0f));
+          //int ID = objectManager->loadGlyph("../media/engine/Marks/cube.pts", point, "point", false);
+          //objectManager->update_glyph_color(ID, vec3(1.0f, 1.0f, 1.0f));
           //list_glyph.push_back(ID);
         }
         if(markMode == "sphere"){
-          //int ID = glyphManager->loadGlyph("../media/engine/Marks/sphere.pts", point, "point", false);
+          //int ID = objectManager->loadGlyph("../media/engine/Marks/sphere.pts", point, "point", false);
           //list_glyph.push_back(ID);
         }
 
@@ -177,7 +177,7 @@ bool Selection::mark_pointSupression(vec3 point){
         idx.erase(it_idx);
 
         int ID = *next(list_glyph.begin(), 0);
-        glyphManager->remove_glyph_scene(ID);
+        //objectManager->remove_glyph_scene(ID);
         list<int>::iterator it = next(list_glyph.begin(), 0);
         list_glyph.erase(it);
 
@@ -292,10 +292,10 @@ void Selection::mark_pointLocation(){
         int idx_ = *next(idx.begin(),j);
         int ID = *next(list_glyph.begin(),cpt);
 
-        Glyph* glyph = glyphManager->get_glyph(ID);
-        glyphManager->update_glyph_MinMax(glyph);
+        Glyph* glyph = objectManager->get_glyph(ID);
+        objectManager->update_glyph_MinMax(glyph);
         transformManager->make_positionning_glyph(glyph->location, glyph->COM, XYZ[idx_]);
-        glyphManager->update_glyph_location(glyph);
+        objectManager->update_glyph_location(glyph);
 
         cpt++;
       }
@@ -305,7 +305,7 @@ void Selection::mark_pointLocation(){
   //If too much ptMark, supress them
   while(cpt < list_glyph.size()){
     int ID = *next(list_glyph.begin(), 0);
-    glyphManager->remove_glyph_scene(ID);
+    objectManager->remove_glyph_scene(ID);
     list<int>::iterator it = next(list_glyph.begin(), 0);
     list_glyph.erase(it);
   }*/
@@ -401,9 +401,8 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     }
   }
 
-  Mark* markObject = glyphManager->get_object_mark();
-  Glyph* glyph = markObject->get_selection_frame();
-  glyph->location.clear();
+  Mark* markObject = objectManager->get_object_mark();
+  objectManager->reset_object(markObject->get_selection_frame());
 
   //--------------------------
 }
@@ -429,10 +428,10 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   xyz.push_back(pt2);
 
   //Update frame glyph
-  Mark* markObject = glyphManager->get_object_mark();
-  Glyph* glyph = markObject->get_selection_frame();
-  glyph->location = xyz;
-  glyphManager->update_glyph_location(glyph);
+  Mark* markObject = objectManager->get_object_mark();
+  Glyph* frame = markObject->get_selection_frame();
+  frame->location = xyz;
+  objectManager->update_object(frame);
 
   //---------------------------
 }
@@ -520,7 +519,7 @@ void Selection::mark_planeCreation(){
   }
 
   //---------------------------
-  //ID_plane = glyphManager->create_glyph(XYZ, RGB, "triangle", false);
+  //ID_plane = objectManager->create_glyph(XYZ, RGB, "triangle", false);
 }
 void Selection::mark_planeABpoints(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
@@ -555,7 +554,7 @@ void Selection::mark_planeLocation(){
     if(idx.size() == 2){
       this->mark_planeCreation();
     }else if(ID_plane != -1){
-      glyphManager->remove_glyph_scene(ID_plane);
+      objectManager->remove_glyph_scene(ID_plane);
     }
   }
 
@@ -570,7 +569,7 @@ void Selection::mark_planeLocation(){
 
     //Plane marks
     if(ID_plane != -1){
-      Glyph* glyph = glyphManager->get_glyph(ID_plane);
+      Glyph* glyph = objectManager->get_glyph(ID_plane);
       vector<vec3>& XYZ_plane = glyph->location;
       if(idx.size() >= 2 && XYZ_plane.size() != 0){
         int i0 = *next(idx.begin(), 0);
@@ -587,7 +586,7 @@ void Selection::mark_planeLocation(){
         XYZ_plane[4] = D;
         XYZ_plane[5] = A;
 
-        glyphManager->update_glyph_location(glyph);
+        objectManager->update_glyph_location(glyph);
       }
     }
   }
