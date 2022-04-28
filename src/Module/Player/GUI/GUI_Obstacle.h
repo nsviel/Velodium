@@ -8,7 +8,6 @@ class GUI_module;
 
 class Scene;
 class Obstacle;
-class Interface_node;
 class CoordTransform;
 class Player_node;
 class Configuration;
@@ -27,14 +26,10 @@ public:
   void design_Obstacle();
   void runtime_display_naming();
 
-  //Actions
-  void state_configuration();
+  //Subfunctions
   void compute_draw_text(string text, vec3 position);
-
-  //Watchers
+  void state_configuration();
   void state_online();
-
-  //Parameters
   void parameter_online();
   void parameter_interfacing();
 
@@ -44,7 +39,6 @@ private:
 
   Player_node* node_player;
   Obstacle* obstacleManager;
-  Interface_node* node_interface;
   CoordTransform* coordManager;
   Scene* sceneManager;
   Configuration* configManager;

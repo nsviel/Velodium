@@ -58,7 +58,7 @@ void MQTT::mqtt_connection(){
       token->wait_for(std::chrono::seconds(2));
 
       //Display success
-      if(client->is_connected()){say(client->is_connected());
+      if(client->is_connected()){
         string log = "Connection MQTT broker '" + selected_address + "'";
         console.AddLog("ok", log);
         this->is_connected = true;
@@ -147,8 +147,8 @@ void MQTT::mqtt_build_address(){
 void MQTT::mqtt_check_deconnection(){
   //---------------------------
 
-  if(client != nullptr){
-    if(client->is_connected() == false && is_connected == true){
+  if(client != nullptr && is_connected == true){
+    if(client->is_connected() == false){
       is_connected = false;
       delete client;
       client = nullptr;
