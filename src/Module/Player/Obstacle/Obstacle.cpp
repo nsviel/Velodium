@@ -8,7 +8,6 @@
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Local/Prediction.h"
 #include "../../Interface/Network/Network.h"
-#include "../../Interface/LiDAR/Capture.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -29,7 +28,6 @@ Obstacle::Obstacle(Player_node* node){
   Interface_node* node_interface = node_module->get_node_interface();
   Network* netManager = node_interface->get_netManager();
 
-  this->captureManager = node_interface->get_captureManager();
   this->predManager = node_interface->get_predManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();

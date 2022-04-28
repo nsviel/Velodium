@@ -3,11 +3,6 @@
 
 #include "../../../../common.h"
 
-#include <sys/types.h>
-#include <sys/select.h>
-#include <sys/socket.h>
-#include <microhttpd.h>
-#define PORT 8888
 
 
 class HTTP_server
@@ -17,10 +12,12 @@ public:
   ~HTTP_server();
 
 public:
-
+  void start_deamon();
+  void stop_deamon();
+  void loop();
 
 private:
-
+  struct MHD_Daemon* daemon;
 };
 
 #endif

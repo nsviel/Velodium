@@ -56,42 +56,6 @@ void Object::init_scene_object(){
 
   //---------------------------
 }
-void Object::reset_scene_object(){
-  //---------------------------
-
-  //Remove non permanent glyphs
-  glyphManager->remove_temporary_glyph();
-
-  //Invisibilize all cloud dependant glyphs
-  this->reset_object(aabbObject->get_aabb());
-
-  //Reset specific glyphs
-  this->reset_object(trajObject->get_glyph());
-
-  //---------------------------
-}
-void Object::reset_color_object(){
-  //---------------------------
-
-  Glyph* aabb = aabbObject->get_aabb();
-  Glyph* grid = gridObject->get_grid();
-
-  glyphManager->update_glyph_color(aabb, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-  glyphManager->update_glyph_color(grid, vec4(0.5f, 0.5f, 0.5f, 1.0f));
-
-  //---------------------------
-}
-void Object::reset_object(Glyph* glyph){
-  //---------------------------
-
-  if(glyph != nullptr){
-    glyph->location.clear();
-    glyph->color.clear();
-    glyphManager->update_glyph_location(glyph);
-  }
-
-  //---------------------------
-}
 void Object::runtime_subset_object(Subset* subset){
   //---------------------------
 
@@ -107,6 +71,7 @@ void Object::runtime_subset_object(Subset* subset){
 
   //---------------------------
 }
+
 void Object::update_object(Glyph* glyph){
   //---------------------------
 
@@ -153,6 +118,44 @@ void Object::update_glyph_cloud(Cloud* cloud){
 
   //---------------------------
 }
+
+void Object::reset_scene_object(){
+  //---------------------------
+
+  //Remove non permanent glyphs
+  glyphManager->remove_temporary_glyph();
+
+  //Invisibilize all cloud dependant glyphs
+  this->reset_object(aabbObject->get_aabb());
+
+  //Reset specific glyphs
+  this->reset_object(trajObject->get_glyph());
+
+  //---------------------------
+}
+void Object::reset_color_object(){
+  //---------------------------
+
+  Glyph* aabb = aabbObject->get_aabb();
+  Glyph* grid = gridObject->get_grid();
+
+  glyphManager->update_glyph_color(aabb, vec4(1.0f, 1.0f, 1.0f, 1.0f));
+  glyphManager->update_glyph_color(grid, vec4(0.5f, 0.5f, 0.5f, 1.0f));
+
+  //---------------------------
+}
+void Object::reset_object(Glyph* glyph){
+  //---------------------------
+
+  if(glyph != nullptr){
+    glyph->location.clear();
+    glyph->color.clear();
+    glyphManager->update_glyph_location(glyph);
+  }
+
+  //---------------------------
+}
+
 void Object::create_glyph_subset(Subset* subset){
   //---------------------------
 

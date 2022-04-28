@@ -1,7 +1,8 @@
 #include "Interface_node.h"
 
 #include "Interface.h"
-#include "Local/GPS.h"
+#include "Network/GPS.h"
+#include "Network/HTTP/HTTP_server.h"
 #include "Local/Saving.h"
 #include "Local/Prediction.h"
 #include "Network/Network.h"
@@ -29,6 +30,7 @@ Interface_node::Interface_node(Module_node* node){
   this->gpsManager = new GPS(this);
   this->netManager = new Network();
   this->interfaceManager = new Interface(this);
+  this->httpManager = new HTTP_server();
 
   //---------------------------
   this->init();
@@ -47,6 +49,7 @@ void Interface_node::init(){
 void Interface_node::runtime(){
   //---------------------------
 
+  httpManager->loop();
   interfaceManager->runtime_loop();
 
   //---------------------------

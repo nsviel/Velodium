@@ -291,6 +291,7 @@ void Extractor::init_subsetParameters(Subset* subset, string name, int ID){
   subset->ID = ID;
   subset->name = "frame_" + to_string(ID);
   subset->root = vec3(0.0);
+  subset->angle = -1000;
 
   //---------------------------
 }

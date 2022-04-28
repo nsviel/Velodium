@@ -2,7 +2,7 @@
 
 #include "Interface_node.h"
 #include "Local/Saving.h"
-#include "Local/GPS.h"
+#include "Network/GPS.h"
 #include "Local/Prediction.h"
 #include "LiDAR/Capture.h"
 

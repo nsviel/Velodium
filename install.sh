@@ -53,7 +53,7 @@ cd ../.. && rm -r robin-map
 git clone https://github.com/etr/libhttpserver
 cd libhttpserver && ./bootstrap
 mkdir build && cd build && ../configure
-make -j4 && make install
+make -j4 && sudo make install
 
 
 #Last parametrization

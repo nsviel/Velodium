@@ -11,6 +11,7 @@ Car::Car(){
   this->transformManager = new Transforms();
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
   this->width = 2;
+  this->lidar_height = 1.3;
 
   //---------------------------
   this->create();
@@ -25,7 +26,7 @@ void Car::create(){
   car->name = "Car";
   car->draw_width = width;
   car->visibility = true;
-  car->draw_type = "quad";
+  car->draw_type = "quad_strip";
   car->permanent = true;
   car->color_unique = color;
 
@@ -46,8 +47,13 @@ void Car::update(Cloud* cloud){
   //---------------------------
 
   vec3 trans_abs = frame->trans_abs;
+  trans_abs.z -= lidar_height;
   car->location = car->location_init;
   transformManager->make_translation(car->location, trans_abs);
+
+  if(subset->angle != -1000){
+    transformManager->make_rotation(car->location, vec3(0, 0, subset->angle));
+  }
 
   //---------------------------
 }

@@ -6,7 +6,7 @@
 #include "../Interface_node.h"
 #include "../Interface.h"
 #include "../Local/Saving.h"
-#include "../Local/GPS.h"
+#include "../Network/GPS.h"
 #include "../Local/Prediction.h"
 
 #include "../../Module_node.h"

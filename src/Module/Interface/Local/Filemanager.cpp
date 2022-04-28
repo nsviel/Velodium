@@ -1,9 +1,9 @@
 #include "Filemanager.h"
 
-#include "GPS.h"
 #include "Saving.h"
 #include "Prediction.h"
 
+#include "../Network/GPS.h"
 #include "../Interface_node.h"
 
 #include "../../../Specific/fct_system.h"

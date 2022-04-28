@@ -13,6 +13,7 @@ class Watcher;
 class Filemanager;
 class Engine_node;
 class Interface;
+class HTTP_server;
 
 
 class Interface_node
@@ -48,6 +49,7 @@ private:
   Filemanager* fileManager;
   Watcher* watcherManager;
   Interface* interfaceManager;
+  HTTP_server* httpManager;
 };
 
 #endif

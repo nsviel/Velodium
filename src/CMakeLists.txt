@@ -26,6 +26,7 @@ set(ALL_LIBS
     -llapack
     -ljsoncpp
     -ldl
+    -lmicrohttpd
     -lboost_iostreams
     -llz4
     -lfreeimage 

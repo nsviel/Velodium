@@ -27,7 +27,7 @@ Followup::Followup(Player_node* node){
   this->camera_nb_pose = 5;
 
   this->with_camera_follow = configManager->parse_json_b("module", "with_camera_follow");
-  this->with_camera_absolute = true;
+  this->with_camera_absolute = false;
   this->with_camera_top = false;
   this->with_camera_root = false;
 
@@ -103,6 +103,9 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
     }
   }
 
+  //Trouevr un truc pour lisser, genre une moyenne d'angle sur quelques poses
+  E = pos_m0 - E;
+
   //---------------------------
   return E;
 }
@@ -134,12 +137,12 @@ void Followup::camera_position(Subset* subset, vec3 E){
   //---------------------------
 }
 void Followup::camera_orientation(Subset* subset, vec3 E){
-  Frame* frame = &subset->frame;
   //---------------------------
 
+  subset->angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
+
   if(with_camera_absolute){
-    float cam_angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
-    cameraManager->set_angle_azimuth(cam_angle);
+    cameraManager->set_angle_azimuth(subset->angle);
   }
 
   //---------------------------

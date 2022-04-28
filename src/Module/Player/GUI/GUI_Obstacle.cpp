@@ -8,12 +8,7 @@
 #include "../Dynamic/Online.h"
 #include "../Dynamic/Followup.h"
 
-#include "../../Interface/Interface_node.h"
 #include "../../Interface/GUI/GUI_Interface.h"
-
-#include "../../Interface/Local/Prediction.h"
-#include "../../Interface/Local/GPS.h"
-#include "../../Interface/Network/Network.h"
 #include "../../Interface/GUI/GUI_Lidar.h"
 #include "../../Interface/LiDAR/Capture.h"
 #include "../../Module_GUI.h"
@@ -23,7 +18,6 @@
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
-#include "../../../GUI/GUI_node.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Color/Color.h"
 #include "../../../Operation/Functions/CoordTransform.h"

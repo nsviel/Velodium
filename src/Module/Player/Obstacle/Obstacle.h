@@ -8,11 +8,9 @@ class Player_node;
 
 class Scene;
 class Object;
-class Saver;
 class Warning;
 class OOBB;
 class Transforms;
-class Capture;
 class Prediction;
 class Pather;
 
@@ -46,7 +44,6 @@ private:
   Warning* warningManager;
   Transforms* transformManager;
   Object* objectManager;
-  Capture* captureManager;
   Prediction* predManager;
   Pather* pathManager;
 

@@ -26,6 +26,7 @@ private:
   Transforms* transformManager;
   Glyph* car;
   vec4 color;
+  float lidar_height;
   int width;
 };
 
