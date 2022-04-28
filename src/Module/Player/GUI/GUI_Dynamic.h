@@ -10,9 +10,9 @@ class Heatmap;
 class Filter;
 class Offline;
 class Online;
-class Interface_node;
 class GUI_Interface;
 class GUI_Color;
+class GUI_Interface;
 class Followup;
 
 
@@ -20,7 +20,7 @@ class GUI_Dynamic
 {
 public:
   //Constructor / Destructor
-  GUI_Dynamic(GUI_module* node_gui);
+  GUI_Dynamic(GUI_module* gui_module);
   ~GUI_Dynamic();
 
 public:
@@ -40,7 +40,6 @@ private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
-  Interface_node* node_interface;
   Offline* offlineManager;
   Online* onlineManager;
   GUI_Interface* gui_interface;

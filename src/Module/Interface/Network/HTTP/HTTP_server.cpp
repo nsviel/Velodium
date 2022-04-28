@@ -1,9 +1,9 @@
-#include "HTTP_boost.h"
+#include "HTTP_server.h"
 
 //Constructor / Destructor
-http_boost::http_boost(){
+HTTP_server::HTTP_server(){
   //---------------------------
 
   //---------------------------
 }
-http_boost::~http_boost(){}
+HTTP_server::~HTTP_server(){}

@@ -12,7 +12,7 @@ class GUI_Player
 {
 public:
   //Constructor / Destructor
-  GUI_Player(GUI_module* node_gui_module);
+  GUI_Player(GUI_module* gui_module);
   ~GUI_Player();
 
 public:

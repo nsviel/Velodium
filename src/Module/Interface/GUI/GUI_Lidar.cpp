@@ -11,10 +11,10 @@
 
 
 //Constructor / Destructor
-GUI_Lidar::GUI_Lidar(GUI_module* node_gui){
+GUI_Lidar::GUI_Lidar(GUI_module* gui_module){
   //---------------------------
 
-  Module_node* node_module = node_gui->get_node_module();
+  Module_node* node_module = gui_module->get_node_module();
   Interface_node* node_interface = node_module->get_node_interface();
 
   this->captureManager = node_interface->get_captureManager();
@@ -45,6 +45,24 @@ void GUI_Lidar::design_Scala(){
   this->scala_capture();
   this->scala_file();
   this->scala_parameter();
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Lidar::state_watcher(){
+  //---------------------------
+
+  //Watchers Velodyne
+  bool is_velodyne_watcher = captureManager->get_is_capture_watcher();
+  ImGui::Text("Watcher - Velodyne");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_velodyne_watcher ? "ON" : "OFF");
+
+  //Watcher Scala
+  bool is_scala_watcher = captureManager->get_is_capture_watcher();
+  ImGui::Text("Watcher - Scala");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_scala_watcher ? "ON" : "OFF");
 
   //---------------------------
   ImGui::Separator();

@@ -12,6 +12,7 @@ class Capture;
 class Watcher;
 class Filemanager;
 class Engine_node;
+class Interface;
 
 
 class Interface_node
@@ -34,6 +35,7 @@ public:
   inline Network* get_netManager(){return netManager;}
   inline Capture* get_captureManager(){return captureManager;}
   inline Filemanager* get_fileManager(){return fileManager;}
+  inline Interface* get_interfaceManager(){return interfaceManager;}
 
 private:
   Engine_node* node_engine;
@@ -45,6 +47,7 @@ private:
   Capture* captureManager;
   Filemanager* fileManager;
   Watcher* watcherManager;
+  Interface* interfaceManager;
 };
 
 #endif

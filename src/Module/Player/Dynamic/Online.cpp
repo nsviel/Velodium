@@ -7,8 +7,7 @@
 #include "../../Module_node.h"
 #include "../../SLAM/Slam.h"
 #include "../../Interface/Interface_node.h"
-#include "../../Interface/Local/Saving.h"
-#include "../../Interface/LiDAR/Capture.h"
+#include "../../Interface/Interface.h"
 
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Color/Color.h"
@@ -43,11 +42,8 @@ Online::Online(Player_node* node){
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->colorManager = node_ope->get_colorManager();
-  this->saveManager = node_interface->get_saveManager();
-  this->captureManager = node_interface->get_captureManager();
   this->followManager = node->get_followManager();
-
-  this->visibility_range = 15;
+  this->interfaceManager = node_interface->get_interfaceManager();
 
   //---------------------------
   this->update_configuration();
@@ -58,14 +54,10 @@ Online::~Online(){}
 void Online::update_configuration(){
   //---------------------------
 
-  this->nb_subset_max = 50;
-  this->with_justOneFrame = false;
+  this->visibility_range = 15;
   this->with_subset_specific_color = false;
-  this->with_save_frame = configManager->parse_json_b("interface", "with_save_frame");
-  this->with_save_image = configManager->parse_json_b("interface", "with_save_image");
   this->with_slam = configManager->parse_json_b("module", "with_slam");
   this->with_cylinder_cleaning = configManager->parse_json_b("module", "with_cylinder_cleaning");
-  this->with_remove_lastSubset = configManager->parse_json_b("interface", "with_remove_lastSubset");
 
   //---------------------------
 }
@@ -89,27 +81,17 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
     filterManager->filter_subset_cylinder(subset);
   }
 
-  //Save subset frame
-  if(with_save_frame){
-    saveManager->save_frame(subset);
-  }
-
-  //Save rendered image
-  if(with_save_image){
-    saveManager->save_image();
-  }
-
   //Colorization
   this->compute_colorization(cloud, ID_subset);
-
-  //Regulate the number of cloud frame
-  this->compute_size_controler(cloud);
 
   //Provide info about computation
   this->compute_displayStats(subset);
 
   //Control subset visibilities
   this->compute_visibility(cloud, ID_subset);
+
+  //Compute dynamic output/input
+  interfaceManager->dynamic_loop(cloud, ID_subset);
 
   //---------------------------
 }
@@ -127,23 +109,6 @@ void Online::compute_colorization(Cloud* cloud, int ID_subset){
     }
   }else{
     colorManager->make_colorization(subset);
-  }
-
-  //---------------------------
-}
-void Online::compute_size_controler(Cloud* cloud){
-  //---------------------------
-
-  //If option, remove all other subset
-  if(with_justOneFrame){
-    sceneManager->remove_subset_last(cloud);
-  }
-  //Remove old frame if option is activated
-  else{
-    bool is_capturing = captureManager->get_is_capture_watcher();
-    if(cloud->subset.size() > nb_subset_max && is_capturing){
-      sceneManager->remove_subset_last(cloud);
-    }
   }
 
   //---------------------------
@@ -175,7 +140,7 @@ void Online::compute_displayStats(Subset* subset){
   if(with_slam && frame->is_slamed){
     stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
   }
-  if(with_save_frame){
+  if(*interfaceManager->get_with_save_frame()){
     stats += "[Frame- " + to_string((int)frame->time_save_frame) + " ms] ";
   }
   console.AddLog("#", stats);

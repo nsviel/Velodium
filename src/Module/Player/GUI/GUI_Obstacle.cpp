@@ -9,6 +9,8 @@
 #include "../Dynamic/Followup.h"
 
 #include "../../Interface/Interface_node.h"
+#include "../../Interface/GUI/GUI_Interface.h"
+
 #include "../../Interface/Local/Prediction.h"
 #include "../../Interface/Local/GPS.h"
 #include "../../Interface/Network/Network.h"
@@ -18,6 +20,7 @@
 #include "../../Module_node.h"
 #include "../../SLAM/GUI/GUI_Slam.h"
 
+#include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
 #include "../../../GUI/GUI_node.h"
@@ -28,16 +31,16 @@
 
 //Constructor / Destructor
 GUI_Obstacle::GUI_Obstacle(GUI_module* node){
-  this->node_gui = node;
+  this->gui_module = node;
   //---------------------------
 
-  Module_node* node_module = node_gui->get_node_module();
-  Operation_node* node_ope = node_gui->get_node_ope();
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Module_node* node_module = gui_module->get_node_module();
+  Operation_node* node_ope = gui_module->get_node_ope();
+  Engine_node* node_engine = gui_module->get_node_engine();
 
+  this->gui_interface = gui_module->get_gui_interface();
   this->node_player = node_module->get_node_player();
   this->coordManager = node_ope->get_coordManager();
-  this->node_interface = node_module->get_node_interface();
   this->obstacleManager = node_player->get_obstacleManager();
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
@@ -54,7 +57,7 @@ void GUI_Obstacle::design_Obstacle(){
   //---------------------------
 
   this->state_configuration();
-  this->state_watcher();
+  gui_interface->state_watcher();
   this->state_online();
   this->parameter_online();
   this->parameter_interfacing();
@@ -84,29 +87,7 @@ void GUI_Obstacle::runtime_display_naming(){
   }
 }
 
-//Actions
-void GUI_Obstacle::state_configuration(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Configuration");
-  //---------------------------
-
-  //Choose configuration
-  int config_selected = *configManager->get_config();
-  if(ImGui::Combo("##007", &config_selected, "Default\0AI module\0WP4 car\0WP5 train\0")){
-    configManager->make_preconfig(config_selected);
-    node_player->update();
-  }
-
-  //Start scenario
-  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Start##1", ImVec2(item_width, 0))){
-    //Start watcher here
-    //create maybe a new class which manage watchers
-  }
-  ImGui::PopStyleColor(1);
-
-  //---------------------------
-  ImGui::Separator();
-}
+//Subfunctions
 void GUI_Obstacle::compute_draw_text(string text, vec3 position){
   //---------------------------
 
@@ -148,37 +129,24 @@ void GUI_Obstacle::compute_draw_text(string text, vec3 position){
 
   //---------------------------
 }
-
-//State
-void GUI_Obstacle::state_watcher(){
+void GUI_Obstacle::state_configuration(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Configuration");
   //---------------------------
 
-  //Watchers
-  Module_node* node_module = node_gui->get_node_module();
-  Interface_node* node_interface = node_module->get_node_interface();
-  Capture* captureManager = node_interface->get_captureManager();
-  Prediction* predManager = node_interface->get_predManager();
-  GPS* gpsManager = node_interface->get_gpsManager();
+  //Choose configuration
+  int config_selected = *configManager->get_config();
+  if(ImGui::Combo("##007", &config_selected, "Default\0AI module\0WP4 car\0WP5 train\0")){
+    configManager->make_preconfig(config_selected);
+    node_player->update();
+  }
 
-  bool is_velodyne_watcher = captureManager->get_is_capture_watcher();
-  ImGui::Text("Watcher - Velodyne");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_velodyne_watcher ? "ON" : "OFF");
-
-  bool is_scala_watcher = captureManager->get_is_capture_watcher();
-  ImGui::Text("Watcher - Scala");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_scala_watcher ? "ON" : "OFF");
-
-  bool with_prediction = *predManager->get_with_prediction();
-  ImGui::Text("Runtime - AI");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
-
-  bool with_gps = *gpsManager->get_with_gps();
-  ImGui::Text("Runtime - GPS");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_gps ? "ON" : "OFF");
+  //Start scenario
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Start##1", ImVec2(item_width, 0))){
+    //Start watcher here
+    //create maybe a new class which manage watchers
+  }
+  ImGui::PopStyleColor(1);
 
   //---------------------------
   ImGui::Separator();
@@ -187,7 +155,7 @@ void GUI_Obstacle::state_online(){
   //---------------------------
 
   //Specific module
-  Module_node* node_module = node_gui->get_node_module();
+  Module_node* node_module = gui_module->get_node_module();
   Player_node* node_player = node_module->get_node_player();
   Online* onlineManager = node_player->get_onlineManager();
   Followup* followManager = node_player->get_followManager();
@@ -202,40 +170,30 @@ void GUI_Obstacle::state_online(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_camera_follow ? "ON" : "OFF");
 
-  bool with_save_frame = *onlineManager->get_with_save_frame();
-  ImGui::Text("Online - Save frame");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_frame ? "ON" : "OFF");
-
-  bool with_save_image = *onlineManager->get_with_save_image();
-  ImGui::Text("Online - Save image");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");
-
   string color_name = colorManager->get_color_mode_name();
   ImGui::Text("Online - Colorization");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", color_name.c_str());
 
+  gui_interface->state_dynamic();
+
   //---------------------------
   ImGui::Separator();
 }
-
-//Parameters
 void GUI_Obstacle::parameter_online(){
   //---------------------------
 
   //With MQTT warning
   bool* with_warning = obstacleManager->get_with_warning();
-  ImGui::Checkbox("With MQTT warning", with_warning);
+  ImGui::Checkbox("With MQTT prediction", with_warning);
 
   //Online parameters
-  GUI_Player* gui_player = node_gui->get_gui_player();
+  GUI_Player* gui_player = gui_module->get_gui_player();
   GUI_Dynamic* gui_dynamic = gui_player->get_gui_dynamic();
   gui_dynamic->parameter_online();
 
   //SLAM parameters
-  GUI_Slam* gui_slam = node_gui->get_gui_slam();
+  GUI_Slam* gui_slam = gui_module->get_gui_slam();
   gui_slam->parameter_slam();
 
   //---------------------------

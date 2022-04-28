@@ -10,7 +10,7 @@ sudo apt update
 #Install dependancies -> Essential
 echo "[\e[92mok\e[0m] Install package dependencies"
 sudo apt update 
-sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev
+sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev libmicrohttpd12 libgnutls28-dev libmicrohttpd-dev
 
 
 #Install pcl library - V1.2 is requiered
@@ -49,7 +49,14 @@ cd robin-map && mkdir build && cd build
 cmake .. && make -j5 && sudo make install
 cd ../.. && rm -r robin-map
 
-#Last parameter
+#Install libhttpserver
+git clone https://github.com/etr/libhttpserver
+cd libhttpserver && ./bootstrap
+mkdir build && cd build && ../configure
+make -j4 && make install
+
+
+#Last parametrization
 echo "[\e[92m#\e[0m] Linux parametrization"
 export MESA_GL_VERSION_OVERRIDE=3.3
 

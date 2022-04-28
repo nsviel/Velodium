@@ -1,5 +1,6 @@
 #include "Interface_node.h"
 
+#include "Interface.h"
 #include "Local/GPS.h"
 #include "Local/Saving.h"
 #include "Local/Prediction.h"
@@ -27,6 +28,7 @@ Interface_node::Interface_node(Module_node* node){
   this->captureManager = new Capture(this);
   this->gpsManager = new GPS(this);
   this->netManager = new Network();
+  this->interfaceManager = new Interface(this);
 
   //---------------------------
   this->init();
@@ -45,9 +47,7 @@ void Interface_node::init(){
 void Interface_node::runtime(){
   //---------------------------
 
-  captureManager->runtime_capturing();
-  gpsManager->runtime_gps();
-  predManager->runtime_prediction();
+  interfaceManager->runtime_loop();
 
   //---------------------------
 }

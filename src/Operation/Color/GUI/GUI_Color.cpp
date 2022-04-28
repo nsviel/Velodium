@@ -32,30 +32,7 @@ GUI_Color::GUI_Color(GUI_node* node_gui){
 }
 GUI_Color::~GUI_Color(){}
 
-void GUI_Color::select_colormap(){
-  //---------------------------
-
-  static int colormap = 0;
-  ImGui::SetNextItemWidth(item_width);
-  if(ImGui::Combo("##144", &colormap, "Viridis\0Magma\0Rainbow\0")){
-    switch(colormap){
-      case 0:{
-        colormapManager->choose("viridis");
-        break;
-      }
-      case 1:{
-        colormapManager->choose("magma");
-        break;
-      }
-      case 2:{
-        colormapManager->choose("rainbow");
-        break;
-      }
-    }
-  }
-
-  //---------------------------
-}
+//Main function
 void GUI_Color::colorization_choice(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Colorization");
   //---------------------------
@@ -80,6 +57,8 @@ void GUI_Color::colorization_choice(){
   //---------------------------
   ImGui::Separator();
 }
+
+//Option functions
 void GUI_Color::option_intensity(){
   //---------------------------
 
@@ -99,47 +78,14 @@ void GUI_Color::option_intensity(){
 void GUI_Color::option_heatmap(){
   //---------------------------
 
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-  this->select_colormap();
-
-  int* heatmap_mode = heatmapManager->get_heatmap_mode();
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-  ImGui::RadioButton("Height", heatmap_mode, 0);
-  ImGui::SameLine();
-  ImGui::RadioButton("Intensity##2", heatmap_mode, 1);
-  ImGui::SameLine();
-  ImGui::RadioButton("Distance", heatmap_mode, 2);
-
-  //Heatmap - Height
-  if(*heatmap_mode == 0){
-    vec2* height_range = heatmapManager->get_range_height();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
-  }
-
-  //Heatmap - Intensity
-  if(*heatmap_mode == 1){
-    //Set heatmap range
-    vec2* intensity_range = heatmapManager->get_range_intensity();
-    int min = (int) (intensity_range->x * 255);
-    int max = (int) (intensity_range->y * 255);
-
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::DragIntRange2("Intensity##3", &min, &max, 1, 0, 255, "%d", "%d")){
-      *intensity_range = vec2((float)min / 255, (float)max / 255);
-    }
-  }
-
-  //Normalize palette
-  bool* normalizeON = heatmapManager->get_is_normalization();
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-  ImGui::Checkbox("Normalized", normalizeON);
+  this->heatmap_select_colormap();
+  this->heatmap_mode();
+  this->heatmap_mode_height();
+  this->heatmap_mode_intensity();
 
   //---------------------------
 }
-void GUI_Color::heatmap(){
+void GUI_Color::heatmap_application(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Heatmap");
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
@@ -158,6 +104,82 @@ void GUI_Color::heatmap(){
     if(cloud != nullptr){
       heatAll = !heatAll;
       heatmapManager->make_heatmap_all(heatAll);
+    }
+  }
+
+  //---------------------------
+}
+void GUI_Color::heatmap_select_colormap(){
+  //---------------------------
+
+  //Select colormap
+  static int colormap = 0;
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+  if(ImGui::Combo("##144", &colormap, "Viridis\0Magma\0Rainbow\0")){
+    switch(colormap){
+      case 0:{
+        colormapManager->choose("viridis");
+        break;
+      }
+      case 1:{
+        colormapManager->choose("magma");
+        break;
+      }
+      case 2:{
+        colormapManager->choose("rainbow");
+        break;
+      }
+    }
+  }
+  ImGui::SameLine();
+
+  //Colormap normalization
+  bool* normalizeON = heatmapManager->get_is_normalization();
+  ImGui::Checkbox("Normalized", normalizeON);
+
+  //---------------------------
+}
+void GUI_Color::heatmap_mode(){
+  //---------------------------
+
+  //Heatmap mode
+  int* heatmap_mode = heatmapManager->get_heatmap_mode();
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+  ImGui::RadioButton("Height", heatmap_mode, 0);
+  ImGui::SameLine();
+  ImGui::RadioButton("Intensity##2", heatmap_mode, 1);
+  ImGui::SameLine();
+  ImGui::RadioButton("Distance", heatmap_mode, 2);
+
+  //---------------------------
+}
+void GUI_Color::heatmap_mode_height(){
+  int* heatmap_mode = heatmapManager->get_heatmap_mode();
+  //---------------------------
+
+  if(*heatmap_mode == 0){
+    vec2* height_range = heatmapManager->get_range_height();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("Z min", &height_range->x, 0.1f, 1.0f, "%.2f");
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("Z max", &height_range->y, 0.1f, 1.0f, "%.2f");
+  }
+
+  //---------------------------
+}
+void GUI_Color::heatmap_mode_intensity(){
+  int* heatmap_mode = heatmapManager->get_heatmap_mode();
+  //---------------------------
+
+  if(*heatmap_mode == 1){
+    //Set heatmap range
+    vec2* intensity_range = heatmapManager->get_range_intensity();
+    int min = (int) (intensity_range->x * 255);
+    int max = (int) (intensity_range->y * 255);
+
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    if(ImGui::DragIntRange2("Intensity##3", &min, &max, 1, 0, 255, "%d", "%d")){
+      *intensity_range = vec2((float)min / 255, (float)max / 255);
     }
   }
 

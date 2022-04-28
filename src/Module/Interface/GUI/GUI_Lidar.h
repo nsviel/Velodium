@@ -1,25 +1,26 @@
 #ifndef GUI_LIDAR_H
 #define GUI_LIDAR_H
 
+#include "../../../common.h"
+
 class Scala;
 class Velodyne;
 class Capture;
 class GUI_module;
-
-#include "../../../common.h"
 
 
 class GUI_Lidar
 {
 public:
   //Constructor / Destructor
-  GUI_Lidar(GUI_module* node_gui);
+  GUI_Lidar(GUI_module* gui_module);
   ~GUI_Lidar();
 
 public:
   //Main function
   void design_Velodyne();
   void design_Scala();
+  void state_watcher();
 
   //Velodyn functions
   void velo_state();

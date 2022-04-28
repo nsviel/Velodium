@@ -7,11 +7,11 @@
 
 
 //Constructor / Destructor
-GUI_Player::GUI_Player(GUI_module* node_gui_module){
+GUI_Player::GUI_Player(GUI_module* gui_module){
   //---------------------------
 
-  this->gui_dynamic = new GUI_Dynamic(node_gui_module);
-  this->gui_obstacle = new GUI_Obstacle(node_gui_module);
+  this->gui_dynamic = new GUI_Dynamic(gui_module);
+  this->gui_obstacle = new GUI_Obstacle(gui_module);
 
   this->item_width = 100;
   

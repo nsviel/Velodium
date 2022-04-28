@@ -18,11 +18,17 @@ public:
   ~GUI_Color();
 
 public:
-  void select_colormap();
+  //Main function
   void colorization_choice();
+
+  //Option functions
   void option_intensity();
   void option_heatmap();
-  void heatmap();
+  void heatmap_select_colormap();
+  void heatmap_application();
+  void heatmap_mode();
+  void heatmap_mode_height();
+  void heatmap_mode_intensity();
 
 private:
   Scene* sceneManager;

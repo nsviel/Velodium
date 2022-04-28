@@ -7,8 +7,7 @@
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
-#include "../../Interface/Interface_node.h"
-#include "../../Interface/Local/Saving.h"
+#include "../../Interface/GUI/GUI_Interface.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -23,22 +22,22 @@
 
 
 //Constructor / Destructor
-GUI_Dynamic::GUI_Dynamic(GUI_module* node_gui){
+GUI_Dynamic::GUI_Dynamic(GUI_module* gui_module){
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
-  Operation_node* node_ope = node_gui->get_node_ope();
-  Module_node* node_module = node_gui->get_node_module();
+  Engine_node* node_engine = gui_module->get_node_engine();
+  Operation_node* node_ope = gui_module->get_node_ope();
+  Module_node* node_module = gui_module->get_node_module();
   Player_node* node_player = node_module->get_node_player();
-  GUI_operation* gui_operation = node_gui->get_gui_operation();
+  GUI_operation* gui_operation = gui_module->get_gui_operation();
 
+  this->gui_color = gui_operation->get_gui_color();
+  this->gui_interface = gui_module->get_gui_interface();
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->onlineManager = node_player->get_onlineManager();
   this->offlineManager = node_player->get_offlineManager();
-  this->node_interface = node_module->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
-  this->gui_color = gui_operation->get_gui_color();
   this->followManager = node_player->get_followManager();
 
   this->item_width = 100;
@@ -207,20 +206,23 @@ void GUI_Dynamic::player_selection(){
   //---------------------------
 }
 void GUI_Dynamic::parameter_offline(){
-  if(ImGui::CollapsingHeader("Offline params")){
+  if(ImGui::CollapsingHeader("Parameter - offline")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
+    //Restart to zero when arrive to the end of cloud frames
     bool* with_restart = offlineManager->get_with_restart();
     ImGui::Checkbox("Loop when end", with_restart);
 
+    //Filter all cloud subset with cylinder cleaner
     if (ImGui::Button("Cylinder cleaning", ImVec2(120,0))){
       if(cloud != nullptr){
         filterManager->filter_cloud_cylinder(cloud);
       }
     }
 
+    //Display all cloud frames
     if(ImGui::Button("All frame visible", ImVec2(120,0))){
       if(cloud != nullptr){
         for(int i=0; i<cloud->nb_subset; i++){
@@ -230,13 +232,7 @@ void GUI_Dynamic::parameter_offline(){
       }
     }
 
-    //Choice of the LiDAR model
-    ImGui::SetNextItemWidth(75);
-    static int lidar_model = 0;
-    if (ImGui::Combo("##1", &lidar_model, "VLP-16\0HDL-32\0")){
-
-    }
-
+    //Setup cloud point size
     if(cloud != nullptr){
       int* point_size = &cloud->point_size;
       ImGui::SliderInt("Point size", point_size, 1, 20);
@@ -248,17 +244,6 @@ void GUI_Dynamic::parameter_offline(){
       if(ImGui::Checkbox("Heatmap", &heatmap)){
         heatmapManager->make_cloud_heatmap(cloud);
       }
-    }
-
-    //Set heatmap range
-    vec2 heatmap_range = *heatmapManager->get_range_normalization();
-    int min = (int) (heatmap_range.x * 255);
-    int max = (int) (heatmap_range.y * 255);
-
-    if(ImGui::DragIntRange2("Intensity", &min, &max, 1, 0, 255, "%d", "%d")){
-      vec2* range = heatmapManager->get_range_normalization();
-      *range = vec2((float)min / 255, (float)max / 255);
-      heatmapManager->make_cloud_heatmap(cloud);
     }
 
     //---------------------------
@@ -279,49 +264,6 @@ void GUI_Dynamic::parameter_online(){
     bool* with_camera_follow = followManager->get_with_camera_follow();
     ImGui::Checkbox("Camera follow up", with_camera_follow);
 
-    //Camera follow absolute position
-    if(*with_camera_follow){
-      bool* with_camera_absolute = followManager->get_with_camera_absolute();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
-    }
-
-    //Remove last subset
-    bool* with_remove_lastSubset = onlineManager->get_with_remove_lastSubset();
-    ImGui::Checkbox("Remove last subset", with_remove_lastSubset);
-
-    //Save frame in folder for AI module
-    bool* with_save_frame = onlineManager->get_with_save_frame();
-    ImGui::Checkbox("Save frame", with_save_frame);
-    if(*with_save_frame){
-      Saving* saveManager = node_interface->get_saveManager();
-      int* save_frame_max = saveManager->get_save_frame_max();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputInt("Nb frame", save_frame_max);
-    }
-
-    //Option: unlimited frame saving
-    static bool with_unlimit_saving = false;
-    ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
-    if(with_unlimit_saving){
-      Saving* saveManager = node_interface->get_saveManager();
-      int* save_frame_max = saveManager->get_save_frame_max();
-      *save_frame_max = 500000000;
-    }
-
-    //Save image for interfacing
-    bool* with_save_image = onlineManager->get_with_save_image();
-    ImGui::Checkbox("Save image", with_save_image);
-    if(*with_save_image){
-      Saving* saveManager = node_interface->get_saveManager();
-      int* save_image_max = saveManager->get_save_image_max();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputInt("Nb image", save_image_max);
-    }
-
-    //Colorization
-    gui_color->colorization_choice();
-
     //Cylinder cleaning filter
     bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
     ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
@@ -336,6 +278,19 @@ void GUI_Dynamic::parameter_online(){
       ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
     }
+
+    //Camera follow absolute position
+    if(*with_camera_follow){
+      bool* with_camera_absolute = followManager->get_with_camera_absolute();
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
+    }
+
+    //GUI interface parameters
+    gui_interface->parameter_dynamic();
+
+    //Colorization
+    gui_color->colorization_choice();
 
     //---------------------------
     ImGui::Separator();

@@ -58,13 +58,14 @@ void MQTT::mqtt_connection(){
       token->wait_for(std::chrono::seconds(2));
 
       //Display success
-      if(client->is_connected()){
+      if(client->is_connected()){say(client->is_connected());
         string log = "Connection MQTT broker '" + selected_address + "'";
         console.AddLog("ok", log);
         this->is_connected = true;
       }else{
         string log = "Connection MQTT broker '" + selected_address + "' failed";
         console.AddLog("error", log);
+        this->is_connected = false;
         delete client;
       }
     }
@@ -72,6 +73,7 @@ void MQTT::mqtt_connection(){
       string log = "Connection MQTT broker '" + selected_address + "' failed";
       console.AddLog("error", log);
       this->is_connected = false;
+      delete client;
     }
   }
 

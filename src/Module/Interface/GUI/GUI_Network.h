@@ -14,7 +14,7 @@ class GUI_Network
 {
 public:
   //Constructor / Destructor
-  GUI_Network(GUI_module* node_gui);
+  GUI_Network(GUI_module* gui_module);
   ~GUI_Network();
 
 public:

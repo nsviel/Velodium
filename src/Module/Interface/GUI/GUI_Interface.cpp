@@ -3,16 +3,29 @@
 #include "GUI_Lidar.h"
 #include "GUI_Network.h"
 
+#include "../Interface_node.h"
+#include "../Interface.h"
+#include "../Local/Saving.h"
+#include "../Local/GPS.h"
+#include "../Local/Prediction.h"
+
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
 
 
 //Constructor / Destructor
-GUI_Interface::GUI_Interface(GUI_module* node_gui){
+GUI_Interface::GUI_Interface(GUI_module* gui_module){
   //---------------------------
 
-  this->gui_lidarManager = new GUI_Lidar(node_gui);
-  this->gui_netManager = new GUI_Network(node_gui);
+  Module_node* node_module = gui_module->get_node_module();
+  Interface_node* node_interface = node_module->get_node_interface();
+
+  this->gui_lidarManager = new GUI_Lidar(gui_module);
+  this->gui_netManager = new GUI_Network(gui_module);
+  this->interfaceManager = node_interface->get_interfaceManager();
+  this->saveManager = node_interface->get_saveManager();
+  this->predManager = node_interface->get_predManager();
+  this->gpsManager = node_interface->get_gpsManager();
 
   this->item_width = 100;
 
@@ -69,6 +82,75 @@ void GUI_Interface::design_Network(){
 
     ImGui::EndTabItem();
   }
-  
+
   //---------------------------
+}
+
+void GUI_Interface::parameter_dynamic(){
+  //---------------------------
+
+  //Save frame in folder for AI module
+  bool* with_save_frame = interfaceManager->get_with_save_frame();
+  ImGui::Checkbox("Save frame", with_save_frame);
+  if(*with_save_frame){
+    int* save_frame_max = saveManager->get_save_frame_max();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::InputInt("Nb frame", save_frame_max);
+  }
+
+  //Option: unlimited frame saving
+  static bool with_unlimit_saving = false;
+  ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
+  if(with_unlimit_saving){
+    int* save_frame_max = saveManager->get_save_frame_max();
+    *save_frame_max = 500000000;
+  }
+
+  //Save image for interfacing
+  bool* with_save_image = interfaceManager->get_with_save_image();
+  ImGui::Checkbox("Save image", with_save_image);
+  if(*with_save_image){
+    int* save_image_max = saveManager->get_save_image_max();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::InputInt("Nb image", save_image_max);
+  }
+
+  //---------------------------
+}
+void GUI_Interface::state_watcher(){
+  //---------------------------
+
+  //Runtime AI
+  bool with_prediction = *predManager->get_with_prediction();
+  ImGui::Text("Runtime - AI");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
+
+  //Runtime GPS
+  bool with_gps = *gpsManager->get_with_gps();
+  ImGui::Text("Runtime - GPS");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_gps ? "ON" : "OFF");
+
+  //watchers lidar
+  gui_lidarManager->state_watcher();
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Interface::state_dynamic(){
+  //---------------------------
+
+  bool with_save_frame = *interfaceManager->get_with_save_frame();
+  ImGui::Text("Online - Save frame");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_frame ? "ON" : "OFF");
+
+  bool with_save_image = *interfaceManager->get_with_save_image();
+  ImGui::Text("Online - Save image");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");
+
+  //---------------------------
+  ImGui::Separator();
 }

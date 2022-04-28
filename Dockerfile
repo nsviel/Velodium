@@ -7,8 +7,12 @@ ENV TZ Europe/Paris
 RUN mkdir app \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-    sudo xterm build-essential mesa-utils cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev libcurl4-openssl-dev libfreeimage-dev libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev libgl1-mesa-glx libgl1-mesa-dri \
-    libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 \
+    sudo xterm build-essential mesa-utils cmake \ # Essential
+    libglfw3-dev libglew-dev libeigen3-dev libglm-dev gnuplot libflann-dev \ # Velodium core
+    libcurl4-openssl-dev libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev  libfreeimage-dev \ # Communication
+    libboost-all-dev libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev \ # ?
+    libmicrohttpd12 libgnutls28-dev libmicrohttpd-dev \ # For HTTP server
+    libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 libgl1-mesa-glx libgl1-mesa-dri \ # For X11 management
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

@@ -16,10 +16,10 @@
 
 
 //Constructor / Destructor
-GUI_Network::GUI_Network(GUI_module* node_gui){
+GUI_Network::GUI_Network(GUI_module* gui_module){
   //---------------------------
 
-  Module_node* node_module = node_gui->get_node_module();
+  Module_node* node_module = gui_module->get_node_module();
   Interface_node* node_interface = node_module->get_node_interface();
 
   this->netManager = node_interface->get_netManager();

@@ -12,6 +12,7 @@
 #include "../../Load/Processing/Pather.h"
 #include "../../Module/Module_GUI.h"
 #include "../../Module/Player/GUI/GUI_Dynamic.h"
+#include "../../Module/Player/GUI/GUI_Player.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
