@@ -56,6 +56,8 @@ void Velodyne::lidar_start_watcher(){
 
   //Start udp packets watcher
   thread_capture = std::thread([&]() {
+    udpServManager->server_binding(capture_port);
+
     while (is_capturing){
       //Get packet in decimal format
       vector<int> packet_dec = udpServManager->read_UDP_packets(capture_port);
@@ -74,6 +76,8 @@ void Velodyne::lidar_start_watcher(){
         }
       }
     }
+
+    udpServManager->server_unbinding();
   });
   thread_capture.detach();
 
@@ -83,8 +87,7 @@ void Velodyne::lidar_stop_watcher(){
   //---------------------------
 
   this->is_capturing = false;
-  *udpServManager->get_is_binded() = false;
-  udpServManager->server_unbinding();
+  frameManager->reset_frame();
 
   //---------------------------
 }

@@ -26,8 +26,7 @@ UDP_server::~UDP_server(){}
 vector<int> UDP_server::read_UDP_packets(int port){
   //---------------------------
 
-  this->server_binding(port);
-  this->server_read_data();
+  this->server_read_data(port);
 
   //---------------------------
   return packet_dec;
@@ -39,8 +38,7 @@ void UDP_server::server_binding(int port){
     //---------------------------
 
     // Creating socket file descriptor
-    sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-
+    this->sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if(sock < 0){
       cout << "socket creation failed" << endl;
       exit(EXIT_FAILURE);
@@ -56,7 +54,7 @@ void UDP_server::server_binding(int port){
     int binding = bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
 
     //Check final success
-    if(binding >= 0){
+    if(binding == 0){
       this->is_binded = true;
     }else{
       cout << "bind failed" << endl;
@@ -64,25 +62,27 @@ void UDP_server::server_binding(int port){
     }
 
     //---------------------------
-
   }
 }
 void UDP_server::server_unbinding(){
   //---------------------------
 
-  this->is_binded = false;
   close(sock);
+  this->is_binded = false;
 
   //---------------------------
 }
-void UDP_server::server_read_data(){
+void UDP_server::server_read_data(int port){
   char buffer[packet_size] = {0};
-  sockaddr_in from;
-  socklen_t fromlen = sizeof(from);
+  sockaddr_in addr;
+  addr.sin_family    = AF_INET; // IPv4
+  addr.sin_addr.s_addr = INADDR_ANY;
+  addr.sin_port = htons(port);
+  unsigned int length = sizeof(addr);
   //---------------------------
 
   //The thread blocks here until a packet is received (MSG_WAITALL)
-  int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&from), &fromlen);
+  int udp_size = recvfrom(sock, buffer, packet_size, MSG_DONTWAIT, reinterpret_cast<sockaddr*>(&addr), &length);
 
   //Once packet received, process it
   packet_dec.clear();
