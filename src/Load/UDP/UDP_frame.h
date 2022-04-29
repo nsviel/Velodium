@@ -15,6 +15,7 @@ public:
 public:
   //Main functions
   bool build_frame(udpPacket* cloud);
+  void reset_frame();
 
   //Subfunctions
   void add_cloudsToFrame(udpPacket* cloud);

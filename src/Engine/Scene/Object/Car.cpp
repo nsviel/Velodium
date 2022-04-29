@@ -47,9 +47,11 @@ void Car::update(Cloud* cloud){
   //---------------------------
 
   vec3 trans_abs = frame->trans_abs;
-  trans_abs.z -= lidar_height;
-  car->location = car->location_init;
-  transformManager->make_translation(car->location, trans_abs);
+  if(trans_abs != vec3(0, 0, 0)){
+    trans_abs.z -= lidar_height;
+    car->location = car->location_init;
+    transformManager->make_translation(car->location, trans_abs);
+  }
 
   if(subset->angle != -1000){
     transformManager->make_rotation(car->location, vec3(0, 0, subset->angle));

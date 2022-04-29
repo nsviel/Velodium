@@ -5,8 +5,8 @@
 UDP_frame::UDP_frame(){
   //---------------------------
 
-  frame_onrun = new udpPacket();
-  frame_ended = new udpPacket();
+  this->frame_onrun = new udpPacket();
+  this->frame_ended = new udpPacket();
 
   //---------------------------
 }
@@ -57,6 +57,17 @@ bool UDP_frame::build_frame(udpPacket* packet_udp){
   //---------------------------
   delete packet_udp;
   return frame_ended;
+}
+void UDP_frame::reset_frame(){
+  //---------------------------
+
+  delete frame_onrun;
+  delete frame_ended;
+
+  this->frame_onrun = new udpPacket();
+  this->frame_ended = new udpPacket();
+
+  //---------------------------
 }
 
 //Subfunctions
