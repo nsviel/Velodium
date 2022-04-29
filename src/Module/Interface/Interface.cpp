@@ -43,7 +43,7 @@ void Interface::runtime_loop(){
 
   //---------------------------
 }
-void Interface::dynamic_loop(Cloud* cloud, int ID_subset){
+void Interface::update_dynamic(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
 

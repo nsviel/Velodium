@@ -20,6 +20,7 @@
 #include "../../../Engine/Engine.h"
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Configuration.h"
 
 #include "../../../Specific/fct_maths.h"
@@ -44,6 +45,7 @@ Online::Online(Player_node* node){
   this->colorManager = node_ope->get_colorManager();
   this->followManager = node->get_followManager();
   this->interfaceManager = node_interface->get_interfaceManager();
+  this->objectManager = node_engine->get_objectManager();
 
   //---------------------------
   this->update_configuration();
@@ -90,8 +92,11 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Control subset visibilities
   this->compute_visibility(cloud, ID_subset);
 
-  //Compute dynamic output/input
-  interfaceManager->dynamic_loop(cloud, ID_subset);
+  //Update dynamic interfaces
+  interfaceManager->update_dynamic(cloud, ID_subset);
+
+  //Update dynamic glyphs
+  objectManager->update_dynamic(cloud);
 
   //---------------------------
 }

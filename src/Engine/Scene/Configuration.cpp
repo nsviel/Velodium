@@ -170,6 +170,11 @@ void Configuration::preconf_capture(Json::Value& root){
 void Configuration::preconf_ai_module(Json::Value& root){
   //---------------------------
 
+  //Parameters
+  Json::Value param;
+  param["path_data"] = "../../data/";
+  root["parameter"] = param;
+
   //Module
   Json::Value module;
   module["with_slam"] = true;

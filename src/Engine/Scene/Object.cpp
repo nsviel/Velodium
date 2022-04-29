@@ -72,6 +72,21 @@ void Object::runtime_subset_object(Subset* subset){
   //---------------------------
 }
 
+void Object::update_dynamic(Cloud* cloud){
+  //---------------------------
+
+  //Trajectory
+  trajObject->update(cloud);
+  this->update_object(trajObject->get_glyph());
+
+  //Car 
+  Glyph* glyph = carObject->get_glyph();
+  glyph->visibility = true;
+  carObject->update(cloud);
+  glyphManager->update_glyph_location(glyph);
+
+  //---------------------------
+}
 void Object::update_object(Glyph* glyph){
   //---------------------------
 
@@ -108,14 +123,6 @@ void Object::update_glyph_cloud(Cloud* cloud){
   aabbObject->update_aabb(cloud);
   this->update_object(aabbObject->get_aabb());
 
-  //Trajectory
-  trajObject->update(cloud);
-  this->update_object(trajObject->get_glyph());
-
-  //Subset axis
-  carObject->update(cloud);
-  glyphManager->update_glyph_location(carObject->get_glyph());
-
   //---------------------------
 }
 
@@ -130,6 +137,9 @@ void Object::reset_scene_object(){
 
   //Reset specific glyphs
   this->reset_object(trajObject->get_glyph());
+
+  Glyph* glyph = carObject->get_glyph();
+  glyph->visibility = false;
 
   //---------------------------
 }

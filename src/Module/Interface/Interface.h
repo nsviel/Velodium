@@ -21,7 +21,7 @@ public:
 
 public:
   void runtime_loop();
-  void dynamic_loop(Cloud* cloud, int ID_subset);
+  void update_dynamic(Cloud* cloud, int ID_subset);
   void controler_nb_subset(Cloud* cloud);
 
   inline bool* get_with_save_frame(){return &with_save_frame;}

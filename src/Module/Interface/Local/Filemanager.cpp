@@ -20,7 +20,7 @@ Filemanager::Filemanager(Interface_node* node){
   Engine_node* node_engine = node->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
 
-  this->path_data_dir = get_absolutePath_build() + "../../data/";
+  this->path_data_dir = configManager->parse_json_s("parameter", "path_data");
   this->is_clean_dir = true;
 
   //---------------------------

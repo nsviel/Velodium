@@ -16,6 +16,7 @@ class Scene;
 class Configuration;
 class Followup;
 class Interface;
+class Object;
 
 
 class Online
@@ -48,6 +49,7 @@ private:
   Configuration* configManager;
   Followup* followManager;
   Interface* interfaceManager;
+  Object* objectManager;
 
   int visibility_range;
   bool with_subset_specific_color;

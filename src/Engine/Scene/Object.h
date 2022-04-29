@@ -27,14 +27,18 @@ public:
 public:
   //Main functions
   void init_scene_object();
-  void reset_scene_object();
-  void reset_color_object();
-  void reset_object(Glyph* glyph);
   void runtime_subset_object(Subset* subset);
+
+  void update_dynamic(Cloud* cloud);
   void update_glyph_subset(Subset* subset);
   void update_glyph_cloud(Cloud* cloud);
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);
+
+  void reset_scene_object();
+  void reset_color_object();
+  void reset_object(Glyph* glyph);
+
   void create_glyph_subset(Subset* subset);
   Glyph* create_glyph_ostacle();
 

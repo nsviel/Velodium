@@ -25,7 +25,7 @@ void Car::create(){
   //Create glyph
   car->name = "Car";
   car->draw_width = width;
-  car->visibility = true;
+  car->visibility = false;
   car->draw_type = "quad_strip";
   car->permanent = true;
   car->color_unique = color;
