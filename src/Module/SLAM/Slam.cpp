@@ -302,6 +302,7 @@ void Slam::compute_assessment(Cloud* cloud, int subset_ID){
     Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
     frame->reset();
     this->reset_slam();
+    this->reset_visibility(cloud, subset_ID);
   }
 
   //---------------------------
@@ -392,9 +393,26 @@ void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, 
 void Slam::reset_slam(){
   //---------------------------
 
+  //Reset SLAM objects
   objectManager->reset_scene_object();
   mapManager->reset();
   this->map_frame_ID = 0;
+
+  //---------------------------
+}
+void Slam::reset_visibility(Cloud* cloud, int subset_ID){
+  //---------------------------
+
+  //Set visibility just for last subset
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = sceneManager->get_subset(cloud, i);
+
+    if(subset->ID == subset_ID){
+      subset->visibility = true;
+    }else{
+      subset->visibility = false;
+    }
+  }
 
   //---------------------------
 }

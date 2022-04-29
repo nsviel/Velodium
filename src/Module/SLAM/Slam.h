@@ -47,7 +47,6 @@ public:
   inline void set_ID_all(bool value){ID_all = value;}
 
 private:
-  bool check_conditions(Cloud* cloud, int subset_ID);
   void init_frameID(Cloud* cloud, int ID);
   void init_frameTimestamp(Subset* subset);
   void init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
@@ -57,6 +56,9 @@ private:
   void compute_assessment(Cloud* cloud, int ID);
   void compute_updateLocation(Subset* subset);
   void compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset);
+
+  bool check_conditions(Cloud* cloud, int subset_ID);
+  void reset_visibility(Cloud* cloud, int subset_ID);
 
 private:
   Engine_node* node_engine;
