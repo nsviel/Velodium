@@ -6,6 +6,8 @@
 #include "../Network/GPS.h"
 #include "../Interface_node.h"
 
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Configuration.h"
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
 
@@ -14,6 +16,9 @@
 Filemanager::Filemanager(Interface_node* node){
   this->node_interface = node;
   //---------------------------
+
+  Engine_node* node_engine = node->get_node_engine();
+  Configuration* configManager = node_engine->get_configManager();
 
   this->path_data_dir = get_absolutePath_build() + "../../data/";
   this->is_clean_dir = true;
