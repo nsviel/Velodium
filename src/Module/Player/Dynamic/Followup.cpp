@@ -103,9 +103,6 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
     }
   }
 
-  //Trouevr un truc pour lisser, genre une moyenne d'angle sur quelques poses
-  E = pos_m0 - E;
-
   //---------------------------
   return E;
 }
@@ -116,11 +113,14 @@ void Followup::camera_position(Subset* subset, vec3 E){
   //Camera pose
   vec3 C = frame->trans_abs - camera_distFromPos * (E / fct_distance_origin(E));
 
+  //Forced absolute camera position
   if(with_camera_absolute){
     vec3 camPos = cameraManager->get_camPos();
     vec3 camPos_new = vec3(C.x, C.y, camPos.z);
     cameraManager->set_cameraPos(camPos_new);
-  }else{
+  }
+  //Forced relative camera position
+  else{
     Eigen::Vector3f trans_b = frame->trans_b;
     vec3 camPos = cameraManager->get_camPos();
 
@@ -137,12 +137,18 @@ void Followup::camera_position(Subset* subset, vec3 E){
   //---------------------------
 }
 void Followup::camera_orientation(Subset* subset, vec3 E){
+  Frame* frame = &subset->frame;
   //---------------------------
 
+  //Smooth angle
+  float angle_smooth = atan(E.y, E.x) - atan(0.0f, 1.0f);
+
+  //Hard angle
+  E = frame->trans_abs - E;
   subset->angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
 
   if(with_camera_absolute){
-    cameraManager->set_angle_azimuth(subset->angle);
+    cameraManager->set_angle_azimuth(angle_smooth);
   }
 
   //---------------------------

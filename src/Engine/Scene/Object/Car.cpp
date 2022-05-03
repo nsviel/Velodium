@@ -26,7 +26,7 @@ void Car::create(){
   car->name = "Car";
   car->draw_width = width;
   car->visibility = false;
-  car->draw_type = "quad_strip";
+  car->draw_type = "quad";
   car->permanent = true;
   car->color_unique = color;
 

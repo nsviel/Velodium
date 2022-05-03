@@ -79,7 +79,7 @@ void Object::update_dynamic(Cloud* cloud){
   trajObject->update(cloud);
   this->update_object(trajObject->get_glyph());
 
-  //Car 
+  //Car
   Glyph* glyph = carObject->get_glyph();
   glyph->visibility = true;
   carObject->update(cloud);
@@ -133,13 +133,15 @@ void Object::reset_scene_object(){
   glyphManager->remove_temporary_glyph();
 
   //Invisibilize all cloud dependant glyphs
-  this->reset_object(aabbObject->get_aabb());
+  Glyph* aabb = aabbObject->get_aabb();
+  this->reset_object(aabb);
 
   //Reset specific glyphs
-  this->reset_object(trajObject->get_glyph());
+  Glyph* traj = trajObject->get_glyph();
+  this->reset_object(traj);
 
-  Glyph* glyph = carObject->get_glyph();
-  glyph->visibility = false;
+  Glyph* car = carObject->get_glyph();
+  car->visibility = false;
 
   //---------------------------
 }
