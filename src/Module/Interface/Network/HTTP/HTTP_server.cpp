@@ -54,7 +54,7 @@ int HTTP_server::answer_to_connection(void *cls, struct MHD_Connection *connecti
   printf ("New [method] %s method for [url] %s using [version] %s\n", method, url, version);
   MHD_get_connection_values (connection, MHD_HEADER_KIND, &print_out_key, NULL);
 
-  // unexpected method
+  //Check input method
   if(strcmp(method, "GET") != 0){
     return MHD_NO;
   }

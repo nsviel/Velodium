@@ -1,8 +1,8 @@
 #ifndef UDP_FRAME_H
 #define UDP_FRAME_H
 
-#include "../../Engine/Data/struct_UDPpacket.h"
-#include "../../common.h"
+#include "../../../../../Engine/Data/struct_UDPpacket.h"
+#include "../../../../../common.h"
 
 
 class UDP_frame

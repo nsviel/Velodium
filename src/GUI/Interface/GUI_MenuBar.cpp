@@ -248,8 +248,8 @@ void GUI_menuBar::MenuBar_appInfo(){
     ImGui::Text("Free RAM: %5.1f MB - %.1f%%\n", si.freeram / megabyte, percentFreeRam);
 
     //Number of concurrency threads
-    const auto processor_count = std::thread::hardware_concurrency();
-    ImGui::Text("Max nb thread: %d\n", processor_count);
+    int num_threads = std::thread::hardware_concurrency();
+    ImGui::Text("Max nb thread: %d\n", num_threads);
     ImGui::Separator();
 
     //Framerate

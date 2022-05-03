@@ -11,10 +11,6 @@
 class Interface_node;
 class Extractor;
 
-class UDP_frame;
-class UDP_server;
-class UDP_parser_Scala;
-
 
 class Scala
 {
