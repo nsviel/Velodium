@@ -5,7 +5,15 @@
 #include <sys/types.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <microhttpd.h>
+
+#include <fcntl.h>    /* For O_RDWR */
+#include <unistd.h>   /* For open(), creat() */
+
+
+#define FILENAME "picture.bmp"
+#define MIMETYPE "image/bmp"
 
 
 //Constructor / Destructor
@@ -40,13 +48,22 @@ void HTTP_server::stop_deamon(){
 
   //---------------------------
 }
+void HTTP_server::loop(){
+  //---------------------------
+
+
+
+
+  //---------------------------
+  return;
+}
 
 int print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value){
   printf ("%s: %s\n", key, value);
   return MHD_YES;
 }
 
-//Subfunctions
+//Daemon functions
 int HTTP_server::answer_to_connection(void *cls, struct MHD_Connection *connection, const char *url,
   const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **history){
   //---------------------------
@@ -67,20 +84,60 @@ int HTTP_server::answer_to_connection(void *cls, struct MHD_Connection *connecti
   }
   *history = NULL;
 
-  const char *page = (char*)cls;
-  struct MHD_Response* response = MHD_create_response_from_buffer(strlen(page), (void*)page, MHD_RESPMEM_PERSISTENT);
+
+
+  struct stat sbuf;
+
+  int fd = open (FILENAME, O_RDONLY);
+  if(fd == -1 || fstat (fd, &sbuf) != 0){
+    // error accessing file
+    if (fd != -1){
+      close (fd);
+    }
+
+    const char *errorstr = "<html><body>An internal server error has occurred!</body></html>";
+    struct MHD_Response* response = MHD_create_response_from_buffer (strlen (errorstr), (void *) errorstr, MHD_RESPMEM_PERSISTENT);
+    int ret;
+    if(response){
+      ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
+      MHD_destroy_response (response);
+      return MHD_YES;
+    }
+    else{
+      return MHD_NO;
+    }
+
+    if (ret){
+      const char *errorstr = "<html><body>An internal server error has occurred!</body></html>";
+      struct MHD_Response* response = MHD_create_response_from_buffer (strlen(errorstr), (void*) errorstr, MHD_RESPMEM_PERSISTENT);
+      if(response){
+        ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
+        MHD_destroy_response (response);
+        return MHD_YES;
+      }
+      else{
+        return MHD_NO;
+      }
+    }
+  }
+
+  struct MHD_Response* response = MHD_create_response_from_fd_at_offset64(sbuf.st_size, fd, 0);
+  MHD_add_response_header(response, "Content-Type", MIMETYPE);
   int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
   MHD_destroy_response(response);
 
+
+
+
+
+
+
+  /*
+  const char *page = (char*)cls;
+  struct MHD_Response* response = MHD_create_response_from_buffer(strlen(page), (void*)page, MHD_RESPMEM_PERSISTENT);
+  int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+  MHD_destroy_response(response);*/
+
   //---------------------------
   return ret;
-}
-void HTTP_server::loop(){
-  //---------------------------
-
-
-
-
-  //---------------------------
-  return;
 }

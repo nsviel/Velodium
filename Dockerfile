@@ -6,7 +6,7 @@ ENV TZ Europe/Paris
 # Install dependancy packages
 RUN mkdir app \
     && apt-get update \
-    && apt-get install -y --no-install-recommends sudo xterm build-essential mesa-utils cmake libglfw3-dev libglew-dev libeigen3-dev libglm-dev gnuplot libflann-dev libcurl4-openssl-dev libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev  libfreeimage-dev libboost-all-dev libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev libmicrohttpd-dev libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 libgl1-mesa-glx libgl1-mesa-dri \
+    && apt-get install -y --no-install-recommends sudo xterm build-essential mesa-utils cmake libglfw3-dev libglew-dev libeigen3-dev libglm-dev gnuplot libflann-dev libcurl4-openssl-dev libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev  libfreeimage-dev libboost-all-dev libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev libmicrohttpd-dev libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 libgl1-mesa-glx libgl1-mesa-dri libmicrohttpd12 libgnutls28-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
