@@ -49,7 +49,22 @@ void Saving::save_image(){
   //renderManager->render_screenshot(path);
 
   //Put screenshot flag on
-  string path = path_image + "image_" + to_string(save_image_ID);
+  /*string path = path_image + "image_" + to_string(save_image_ID);
+  *renderManager->get_save_path() = path;
+  *renderManager->get_is_screenshot() = true;
+  save_image_ID++;
+
+  //Keep only a certain number of image
+  if(save_image_vec.size() < save_image_max){
+    save_image_vec.push(path);
+  }else{
+    std::remove (save_image_vec.front().c_str());
+    save_image_vec.pop();
+    save_image_vec.push(path);
+  }*/
+
+  //Put screenshot flag on
+  string path = path_image + "image";
   *renderManager->get_save_path() = path;
   *renderManager->get_is_screenshot() = true;
   save_image_ID++;
@@ -64,6 +79,7 @@ void Saving::save_image(){
   }
 
   //---------------------------
+  this->path_image_last = path;
 }
 void Saving::save_image_path(){
   //---------------------------

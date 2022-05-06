@@ -30,7 +30,7 @@ Interface_node::Interface_node(Module_node* node){
   this->gpsManager = new GPS(this);
   this->netManager = new Network();
   this->interfaceManager = new Interface(this);
-  this->httpManager = new HTTP_server();
+  this->httpManager = new HTTP_server(this);
 
   //---------------------------
   this->init();

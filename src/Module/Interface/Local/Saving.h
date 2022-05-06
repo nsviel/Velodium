@@ -27,6 +27,7 @@ public:
   void save_frame(Subset* subset);
 
   inline string get_path_image(){return path_image;}
+  inline string get_path_image_last(){return path_image_last;}
   inline string get_path_frame(){return path_frame;}
   inline int* get_save_frame_max(){return &save_frame_max;}
   inline int* get_save_image_max(){return &save_image_max;}
@@ -42,6 +43,7 @@ private:
   string path_dir;
   string path_frame;
   string path_image;
+  string path_image_last;
   float time_save_image;
   float time_save_frame;
   int save_frame_max;

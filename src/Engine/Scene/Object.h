@@ -48,6 +48,7 @@ public:
   inline Normal* get_object_normal(){return normObject;}
   inline Mark* get_object_mark(){return markObject;}
   inline Trajectory* get_object_trajectory(){return trajObject;}
+  inline Car* get_object_car(){return carObject;}
 
 private:
   Glyphs* glyphManager;

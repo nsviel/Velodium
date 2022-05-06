@@ -136,7 +136,6 @@ void GUI_Interface::state_watcher(){
   gui_lidarManager->state_watcher();
 
   //---------------------------
-  ImGui::Separator();
 }
 void GUI_Interface::state_dynamic(){
   //---------------------------
@@ -152,5 +151,4 @@ void GUI_Interface::state_dynamic(){
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");
 
   //---------------------------
-  ImGui::Separator();
 }

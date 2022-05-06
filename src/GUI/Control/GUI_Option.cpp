@@ -14,6 +14,8 @@
 #include "../../Engine/Scene/Object/Grid.h"
 #include "../../Engine/Scene/Object/Axis.h"
 #include "../../Engine/Scene/Object/Normal.h"
+#include "../../Engine/Scene/Object/Car.h"
+#include "../../Engine/Scene/Object/Trajectory.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
@@ -120,6 +122,20 @@ void GUI_option::option_glyphs(){
     Glyph* axis_scene = axisObject->get_axis_scene();
 
     axis_scene->visibility = axis_scene_ON;
+  }
+  ImGui::NextColumn();
+
+  //Dynamic (trajectiry & car)
+  static bool dynamic_ON = true;
+  if(ImGui::Checkbox("Dynamic", &dynamic_ON)){
+    Car* carObject = objectManager->get_object_car();
+    Trajectory* trajObject = objectManager->get_object_trajectory();
+
+    Glyph* car = carObject->get_glyph();
+    Glyph* traj = trajObject->get_glyph();
+
+    car->visibility = dynamic_ON;
+    traj->visibility = dynamic_ON;
   }
   ImGui::NextColumn();
 
