@@ -37,6 +37,7 @@ public:
   inline Capture* get_captureManager(){return captureManager;}
   inline Filemanager* get_fileManager(){return fileManager;}
   inline Interface* get_interfaceManager(){return interfaceManager;}
+  inline HTTP_server* get_httpManager(){return httpManager;}
 
 private:
   Engine_node* node_engine;

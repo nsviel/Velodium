@@ -49,7 +49,6 @@ void Interface_node::init(){
 void Interface_node::runtime(){
   //---------------------------
 
-  httpManager->loop();
   interfaceManager->runtime_loop();
 
   //---------------------------
