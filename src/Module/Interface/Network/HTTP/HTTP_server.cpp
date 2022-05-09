@@ -130,12 +130,20 @@ int HTTP_server::http_get_image(void *cls, struct MHD_Connection *connection){
   //---------------------------
   return ret;
 }
+
+
+
+
+static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,const char *filename, const char *content_type,const char *transfer_encoding, const char *data,uint64_t off, size_t size){
+  return MHD_YES;
+}
 int HTTP_server::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size){
   //---------------------------
 
-  struct MHD_PostProcessor* pp;
+  struct MHD_PostProcessor* pp = MHD_create_post_processor (connection, 512, iterate_post, NULL);
+  say(*upload_data_size);
 
-  if (*upload_data_size != 0){
+  if (*upload_data_size != 0){sayHello();
     MHD_post_process (pp, upload_data, *upload_data_size);
 
     string geo_string(upload_data);

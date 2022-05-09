@@ -8,6 +8,9 @@
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
 #include "../../Interface/GUI/GUI_Interface.h"
+#include "../../Interface/Interface_node.h"
+#include "../../Interface/LiDAR/Capture.h"
+#include "../../Interface/LiDAR/Velodyne/Velodyne.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -29,6 +32,7 @@ GUI_Dynamic::GUI_Dynamic(GUI_module* gui_module){
   Operation_node* node_ope = gui_module->get_node_ope();
   Module_node* node_module = gui_module->get_node_module();
   Player_node* node_player = node_module->get_node_player();
+  Interface_node* node_interface = node_module->get_node_interface();
   GUI_operation* gui_operation = gui_module->get_gui_operation();
 
   this->gui_color = gui_operation->get_gui_color();
@@ -39,6 +43,7 @@ GUI_Dynamic::GUI_Dynamic(GUI_module* gui_module){
   this->offlineManager = node_player->get_offlineManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->followManager = node_player->get_followManager();
+  this->captureManager = node_interface->get_captureManager();
 
   this->item_width = 100;
 
@@ -127,55 +132,58 @@ void GUI_Dynamic::player_button(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  //Play button
-  bool is_playing = *offlineManager->get_player_isrunning();
-  if(is_playing == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if (ImGui::Button(ICON_FA_PLAY "##36")){
-      if(cloud != nullptr){
-        offlineManager->player_start();
-      }
+  //Offline / Online mode
+  string* player_mode = offlineManager->get_player_mode();
+  if(*player_mode == "offline"){
+    if (ImGui::Button("Offline##444")){
+      *player_mode = "online";
     }
-    ImGui::PopStyleColor(1);
   }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
-    if (ImGui::Button(ICON_FA_PLAY "##36")){
-      if(cloud != nullptr){
-        offlineManager->player_pause();
-      }
-    }
-    ImGui::PopStyleColor(1);
-  }
-  ImGui::SameLine();
-
-  //Pause button
-  bool is_paused = *offlineManager->get_player_ispaused();
-  if(is_paused){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
-  }
-  if (ImGui::Button(ICON_FA_PAUSE "##37")){
-    if(cloud != nullptr){
-      offlineManager->player_pause();
+    if (ImGui::Button("Online##445")){
+      *player_mode = "offline";
     }
   }
-  if(is_paused){
-    ImGui::PopStyleColor(1);
-  }
-  ImGui::SameLine();
 
-  //Stop button
-  if (ImGui::Button(ICON_FA_STOP "##37")){
-    if(cloud != nullptr){
-      offlineManager->player_stop();
+  //Offline mode
+  if(*player_mode == "offline"){
+    //Play button
+    this->button_offline_play(cloud);
+    ImGui::SameLine();
+
+    //Pause button
+    this->button_offline_pause(cloud);
+    ImGui::SameLine();
+
+    //Stop button
+    this->button_offline_stop(cloud);
+    ImGui::SameLine();
+
+    //Frequency choice
+    int freq = *offlineManager->get_frequency();
+    ImGui::SetNextItemWidth(40);
+    if(ImGui::SliderInt("Hz", &freq, 1, 25)){
+      offlineManager->player_setFrequency(freq);
     }
   }
-  ImGui::SameLine();
+  //Online mode
+  else{
+    this->button_online_play(cloud);
+    ImGui::SameLine();
 
-  //Frequency choice
-  int freq = *offlineManager->get_frequency();
-  ImGui::SetNextItemWidth(40);
-  if(ImGui::SliderInt("Hz", &freq, 1, 25)){
-    offlineManager->player_setFrequency(freq);
+    //Pause button
+    this->button_online_pause(cloud);
+    ImGui::SameLine();
+
+    //Stop button
+    this->button_online_stop(cloud);
+
+    //Connection port
+    Velodyne* veloManager = captureManager->get_veloManager();
+    int* velo_port = veloManager->get_capture_port();
+    ImGui::SetNextItemWidth(75);
+    if(ImGui::InputInt("##555", velo_port)){
+      veloManager->lidar_stop_watcher();
+    }
   }
 
   //---------------------------
@@ -295,4 +303,108 @@ void GUI_Dynamic::parameter_online(){
     //---------------------------
     ImGui::Separator();
   }
+}
+
+void GUI_Dynamic::button_offline_play(Cloud* cloud){
+  bool is_playing = *offlineManager->get_player_isrunning();
+  //---------------------------
+
+  if(is_playing == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if (ImGui::Button(ICON_FA_PLAY "##36")){
+      if(cloud != nullptr){
+        offlineManager->player_start();
+      }
+    }
+    ImGui::PopStyleColor(1);
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+    if (ImGui::Button(ICON_FA_PLAY "##36")){
+      if(cloud != nullptr){
+        offlineManager->player_pause();
+      }
+    }
+    ImGui::PopStyleColor(1);
+  }
+
+  //---------------------------
+}
+void GUI_Dynamic::button_offline_pause(Cloud* cloud){
+  bool is_paused = *offlineManager->get_player_ispaused();
+  //---------------------------
+
+  if(is_paused){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
+  if (ImGui::Button(ICON_FA_PAUSE "##37")){
+    if(cloud != nullptr){
+      offlineManager->player_pause();
+    }
+  }
+  if(is_paused){
+    ImGui::PopStyleColor(1);
+  }
+
+  //---------------------------
+}
+void GUI_Dynamic::button_offline_stop(Cloud* cloud){
+  //---------------------------
+
+  if (ImGui::Button(ICON_FA_STOP "##37")){
+    if(cloud != nullptr){
+      offlineManager->player_stop();
+    }
+  }
+
+  //---------------------------
+}
+
+void GUI_Dynamic::button_online_play(Cloud* cloud){
+  bool* is_capturing = captureManager->get_is_capturing();
+  //---------------------------
+
+  if(*is_capturing == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if (ImGui::Button(ICON_FA_PLAY "##36")){
+      captureManager->start_new_capture("velodyne_vlp16");
+    }
+    ImGui::PopStyleColor(1);
+  }else{
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+    if (ImGui::Button(ICON_FA_PLAY "##36")){
+      *is_capturing = false;
+    }
+    ImGui::PopStyleColor(1);
+  }
+
+  //---------------------------
+}
+void GUI_Dynamic::button_online_pause(Cloud* cloud){
+  bool* is_capturing = captureManager->get_is_capturing();
+  //---------------------------
+
+  if(*is_capturing == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
+  if (ImGui::Button(ICON_FA_PAUSE "##37")){
+    *is_capturing = !*is_capturing;
+  }
+  if(*is_capturing == false){
+    ImGui::PopStyleColor(1);
+  }
+
+
+
+  //---------------------------
+}
+void GUI_Dynamic::button_online_stop(Cloud* cloud){
+  //---------------------------
+
+  if (ImGui::Button(ICON_FA_STOP "##37")){
+    if(cloud != nullptr){
+      captureManager->stop_capture();
+    }
+  }
+
+  //---------------------------
 }

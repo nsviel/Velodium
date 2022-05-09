@@ -34,15 +34,6 @@ Interface::Interface(Interface_node* node){
 }
 Interface::~Interface(){}
 
-void Interface::runtime_loop(){
-  //---------------------------
-
-  captureManager->runtime_capturing();
-  gpsManager->runtime_gps();
-  predManager->runtime_prediction();
-
-  //---------------------------
-}
 void Interface::update_dynamic(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
@@ -71,7 +62,7 @@ void Interface::controler_nb_subset(Cloud* cloud){
   }
   //Remove old frame if option is activated
   else{
-    bool is_capturing = captureManager->get_is_capture_watcher();
+    bool is_capturing = *captureManager->get_is_capturing();
     if(cloud->subset.size() > nb_subset_max && is_capturing){
       sceneManager->remove_subset_last(cloud);
     }

@@ -49,7 +49,9 @@ void Interface_node::init(){
 void Interface_node::runtime(){
   //---------------------------
 
-  interfaceManager->runtime_loop();
+  captureManager->runtime_capturing();
+  gpsManager->runtime_gps();
+  predManager->runtime_prediction();
 
   //---------------------------
 }

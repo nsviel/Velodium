@@ -9,9 +9,12 @@
 #include "../../../Specific/fct_timer.h"
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
+
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"
+#include "../../../Engine/Scene/Configuration.h"
+
 #include "../../../Load/Load_node.h"
 #include "../../../Load/Processing/Saver.h"
 
@@ -24,11 +27,20 @@ Offline::Offline(Player_node* node){
   Engine_node* node_engine = node_module->get_node_engine();
   Load_node* node_load = node_engine->get_node_load();
 
+  this->configManager = node_engine->get_configManager();
   this->onlineManager = node->get_onlineManager();
   this->objectManager = node_engine->get_objectManager();;
   this->sceneManager = node_engine->get_sceneManager();
   this->saveManager = node_load->get_saveManager();
   this->timerManager = new Timer();
+
+  //---------------------------
+  this->update_configuration();
+}
+Offline::~Offline(){}
+
+void Offline::update_configuration(){
+  //---------------------------
 
   this->player_frequency = 10;
   this->player_isrunning = false;
@@ -36,10 +48,10 @@ Offline::Offline(Player_node* node){
   this->player_returnToZero = false;
   this->player_flag_1s = false;
   this->player_saveas = get_absolutePath_build() + "../media/data/";
+  this->player_mode = configManager->parse_json_s("module", "player_mode");
 
   //---------------------------
 }
-Offline::~Offline(){}
 
 //Selection functions
 void Offline::select_bySubsetID(Cloud* cloud, int ID_subset){

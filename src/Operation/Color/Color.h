@@ -17,12 +17,12 @@ public:
 
 public:
   //Colorization functions
-  void make_colorization(Subset* subset);
+  void make_colorization(Cloud* cloud, int ID_subset);
   void make_colorization(Subset* subset, vec4 RGB_in);
   void make_colorization_specific(Subset* subset);
 
   //Specific functions
-  void color_unicolor(Subset* subset);
+  void color_unicolor(Subset* subset, vec4 color);
   void color_intensity(Subset* subset);
   void color_heatmap(Subset* subset);
 

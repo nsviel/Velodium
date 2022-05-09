@@ -41,18 +41,22 @@ void Object::init_scene_object(){
 
   Glyph* aabb = aabbObject->get_aabb();
   Glyph* grid = gridObject->get_grid();
+  Glyph* car = carObject->get_glyph();
+  Glyph* traj = trajObject->get_glyph();
 
   glyphManager->create_glyph_scene(markObject->get_selection_frame());
   glyphManager->create_glyph_scene(grid);
   glyphManager->create_glyph_scene(gridObject->get_grid_sub());
   glyphManager->create_glyph_scene(gridObject->get_grid_plane());
   glyphManager->create_glyph_scene(axisObject->get_axis_scene());
-  glyphManager->create_glyph_scene(trajObject->get_glyph());
+  glyphManager->create_glyph_scene(traj);
   glyphManager->create_glyph_scene(aabb);
-  glyphManager->create_glyph_scene(carObject->get_glyph());
+  glyphManager->create_glyph_scene(car);
 
   aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
   grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");
+  car->visibility = configManager->parse_json_b("glyph", "trajectory_visibility");
+  traj->visibility = configManager->parse_json_b("glyph", "trajectory_visibility");
 
   //---------------------------
 }
@@ -76,14 +80,14 @@ void Object::update_dynamic(Cloud* cloud){
   //---------------------------
 
   //Trajectory
+  Glyph* traj = trajObject->get_glyph();
   trajObject->update(cloud);
-  this->update_object(trajObject->get_glyph());
+  this->update_object(traj);
 
   //Car
-  Glyph* glyph = carObject->get_glyph();
-  glyph->visibility = true;
+  Glyph* car = carObject->get_glyph();
   carObject->update(cloud);
-  glyphManager->update_glyph_location(glyph);
+  glyphManager->update_glyph_location(car);
 
   //---------------------------
 }

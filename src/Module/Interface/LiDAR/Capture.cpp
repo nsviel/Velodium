@@ -37,6 +37,7 @@ Capture::Capture(Interface_node* node){
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
   this->ID_capture = 0;
   this->is_capturing = false;
+  this->is_capture_finished = true;
 
   //---------------------------
 }
@@ -46,17 +47,25 @@ Capture::~Capture(){}
 void Capture::start_new_capture(string model){
   //---------------------------
 
-  if(model == "velodyne_vlp16"){
-    this->capture_vlp16();
-    this->lidar_model = "velodyne_vlp16";
-  }
-  else if(model == "scala"){
-    this->capture_scala();
-    this->lidar_model = "scala";
-  }
-  else{
-    string log = "Could not capture " + model + " LiDAR";
-    console.AddLog("error", log);
+  if(is_capture_finished && is_capturing == false){
+    //Default : vlp16
+    if(model == "" || model == "velodyne_vlp16"){
+      this->capture_vlp16();
+      this->lidar_model = "velodyne_vlp16";
+      this->is_capture_finished = false;
+    }
+    else if(model == "scala"){
+      this->capture_scala();
+      this->lidar_model = "scala";
+      this->is_capture_finished = false;
+    }
+    else{
+      this->is_capture_finished = true;
+      string log = "Could not capture " + model + " LiDAR";
+      console.AddLog("error", log);
+    }
+  }else if(is_capture_finished == false && is_capturing == false){
+    this->is_capturing = true;
   }
 
   //---------------------------
@@ -72,47 +81,50 @@ void Capture::stop_capture(){
   }
 
   this->is_capturing = false;
+  this->is_capture_finished = true;
 
   //---------------------------
   console.AddLog("#", "Watcher capture OFF");
 }
 void Capture::runtime_capturing(){
-  //---------------------------
+  if(is_capturing){
+    //---------------------------
 
-  //Initiate
-  Subset* new_subset;
-  new_subset = nullptr;
+    //Initiate
+    Subset* new_subset;
+    new_subset = nullptr;
 
-  //Check for new Subset
-  if(lidar_model == "velodyne_vlp16"){
-    bool *new_capture = veloManager->get_is_newSubset();
+    //Check for new Subset
+    if(lidar_model == "velodyne_vlp16"){
+      bool *new_capture = veloManager->get_is_newSubset();
 
-    if(*new_capture){
-      //Pick new subset
-      new_subset = veloManager->get_subset_capture();
+      if(*new_capture){
+        //Pick new subset
+        new_subset = veloManager->get_subset_capture();
 
-      //Unset new Subset flag
-      *new_capture = false;
+        //Unset new Subset flag
+        *new_capture = false;
+      }
     }
-  }
-  else if(lidar_model == "scala"){
-    bool* new_capture = scalaManager->get_is_newSubset();
-    if(*new_capture){
-      //Pick new subset
-      new_subset = new Subset(*scalaManager->get_subset_capture());
+    else if(lidar_model == "scala"){
+      bool* new_capture = scalaManager->get_is_newSubset();
+      if(*new_capture){
+        //Pick new subset
+        new_subset = new Subset(*scalaManager->get_subset_capture());
 
-      //Unset new Subset flag
-      *new_capture = false;
+        //Unset new Subset flag
+        *new_capture = false;
+      }
     }
-  }
 
-  //If new subset, include it in the capture cloud
-  if(new_subset != nullptr && cloud_capture != nullptr){
-    //Make new subset stuff
-    this->operation_new_subset(new_subset);
-  }
+    //If new subset, include it in the capture cloud
+    if(new_subset != nullptr && cloud_capture != nullptr){
+      //Make new subset stuff
+      this->operation_new_subset(new_subset);
+    }
 
-  //---------------------------
+    //---------------------------
+  }
 }
 
 //LiDAR specific functions

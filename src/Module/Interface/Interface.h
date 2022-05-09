@@ -20,7 +20,6 @@ public:
   ~Interface();
 
 public:
-  void runtime_loop();
   void update_dynamic(Cloud* cloud, int ID_subset);
   void controler_nb_subset(Cloud* cloud);
 

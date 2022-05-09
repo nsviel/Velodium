@@ -11,7 +11,8 @@
    "glyph" : {
       "aabb_visibility" : true,
       "grid_visibility" : true,
-      "normal_visibility" : false
+      "normal_visibility" : false,
+      "trajectory_visibility" : false
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -20,12 +21,12 @@
       "topPanel_height" : 18
    },
    "interface" : {
-      "lidar_model" : "scala",
+      "lidar_model" : "velodyne_vlp64",
       "with_gps" : false,
       "with_prediction" : true,
-      "with_remove_lastSubset" : true,
+      "with_remove_lastSubset" : false,
       "with_save_frame" : true,
-      "with_save_image" : true
+      "with_save_image" : false
    },
    "module" : {
       "with_camera_follow" : true,

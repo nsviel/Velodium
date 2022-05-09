@@ -11,6 +11,7 @@ class Timer;
 class Online;
 class Saver;
 class Object;
+class Configuration;
 
 
 class Offline
@@ -21,6 +22,8 @@ public:
   ~Offline();
 
 public:
+  void update_configuration();
+
   //Selection function
   void select_bySubsetID(Cloud* cloud, int ID_subset);
   bool select_rangeLimit(Cloud* cloud, int& ID_subset);
@@ -39,6 +42,7 @@ public:
   inline bool* get_player_ispaused(){return &player_ispaused;}
   inline bool* get_with_restart(){return &player_returnToZero;}
   inline string* get_player_saveas(){return &player_saveas;}
+  inline string* get_player_mode(){return &player_mode;}
 
 private:
   Scene* sceneManager;
@@ -46,8 +50,10 @@ private:
   Online* onlineManager;
   Saver* saveManager;
   Object* objectManager;
+  Configuration* configManager;
 
   string player_saveas;
+  string player_mode;
   bool player_isrunning;
   bool player_ispaused;
   bool player_returnToZero;

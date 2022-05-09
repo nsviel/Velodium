@@ -43,6 +43,7 @@ public:
 private:
   string path_config;
   string path_default;
+  string path_capture;
   string path_wp4_car;
   string path_wp5_train;
   string path_ai;

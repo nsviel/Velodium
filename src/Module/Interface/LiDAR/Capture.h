@@ -37,9 +37,7 @@ public:
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
   inline Cloud* get_cloud_capture(){return cloud_capture;}
-
-  inline bool get_is_capture_watcher(){return is_capturing;}
-  inline bool* get_is_new_capture(){return &is_new_capture;}
+  inline bool* get_is_capturing(){return &is_capturing;}
 
 private:
   Module_node* node_module;
@@ -51,8 +49,8 @@ private:
   Velodyne* veloManager;
 
   string lidar_model;
+  bool is_capture_finished;
   bool is_capturing;
-  bool is_new_capture;
   int ID_capture;
 };
 

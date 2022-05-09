@@ -53,13 +53,13 @@ void GUI_Lidar::state_watcher(){
   //---------------------------
 
   //Watchers Velodyne
-  bool is_velodyne_watcher = captureManager->get_is_capture_watcher();
+  bool is_velodyne_watcher = *captureManager->get_is_capturing();
   ImGui::Text("Watcher - Velodyne");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_velodyne_watcher ? "ON" : "OFF");
 
   //Watcher Scala
-  bool is_scala_watcher = captureManager->get_is_capture_watcher();
+  bool is_scala_watcher = *captureManager->get_is_capturing();
   ImGui::Text("Watcher - Scala");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_scala_watcher ? "ON" : "OFF");

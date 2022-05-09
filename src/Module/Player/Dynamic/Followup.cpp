@@ -16,10 +16,19 @@ Followup::Followup(Player_node* node){
 
   Module_node* node_module = node->get_node_module();
   Engine_node* node_engine = node_module->get_node_engine();
-  Configuration* configManager = node_engine->get_configManager();
 
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->cameraManager = node_engine->get_cameraManager();
+
+  //---------------------------
+  this->update_configuration();
+}
+Followup::~Followup(){}
+
+//Main function
+void Followup::update_configuration(){
+  //---------------------------
 
   this->camera_moved_trans = vec2(0, 0);
   this->camera_moved_rotat = 0;
@@ -33,9 +42,6 @@ Followup::Followup(Player_node* node){
 
   //---------------------------
 }
-Followup::~Followup(){}
-
-//Main function
 void Followup::camera_followUp(Cloud* cloud, int ID_subset){
   //---------------------------
 

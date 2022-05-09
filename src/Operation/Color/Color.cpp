@@ -35,12 +35,13 @@ Color::Color(Operation_node* node_ope){
 Color::~Color(){}
 
 //Color subset functions
-void Color::make_colorization(Subset* subset){
+void Color::make_colorization(Cloud* cloud, int ID_subset){
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
 
   switch(color_mode){
     case 0:{ // Unicolor
-      this->color_unicolor(subset);
+      this->color_unicolor(subset, cloud->unicolor);
       break;
     }
     case 1:{ // Intensity
@@ -77,12 +78,12 @@ void Color::make_colorization_specific(Subset* subset){
   //---------------------------
   sceneManager->update_subset_color(subset);
 }
-void Color::color_unicolor(Subset* subset){
+void Color::color_unicolor(Subset* subset, vec4 color){
   vector<vec4>& RGB = subset->RGB;
   //---------------------------
 
   for(int i=0; i<RGB.size(); i++){
-    RGB[i] = subset->unicolor;
+    RGB[i] = color;
   }
 
   //---------------------------

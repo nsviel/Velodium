@@ -56,6 +56,10 @@ void CoreGLengine::arg(int argc, char* argv[]){
       configManager->make_preconfig(1);
       node_engine->update();
     }
+    else if(command_1 == "capture"){
+      configManager->make_preconfig(1);
+      node_engine->update();
+    }
     else if(command_1 == "car"){
       configManager->make_preconfig(2);
       node_engine->update();

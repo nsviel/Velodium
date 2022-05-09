@@ -17,7 +17,7 @@ Player_node::Player_node(Module_node* node){
   this->onlineManager = new Online(this);
   this->offlineManager = new Offline(this);
   this->obstacleManager = new Obstacle(this);
-  
+
   //---------------------------
 }
 Player_node::~Player_node(){}
@@ -25,7 +25,9 @@ Player_node::~Player_node(){}
 void Player_node::update(){
   //---------------------------
 
+  followManager->update_configuration();
   onlineManager->update_configuration();
+  offlineManager->update_configuration();
 
   //---------------------------
 }

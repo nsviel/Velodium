@@ -84,7 +84,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   }
 
   //Colorization
-  this->compute_colorization(cloud, ID_subset);
+  colorManager->make_colorization(cloud, ID_subset);
 
   //Provide info about computation
   this->compute_displayStats(subset);
@@ -102,22 +102,6 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 }
 
 //Subfunctions
-void Online::compute_colorization(Cloud* cloud, int ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-  //---------------------------
-
-  if(with_subset_specific_color){
-    colorManager->make_colorization_specific(subset);
-    if(ID_subset>2){
-      Subset* subset_m1 = sceneManager->get_subset_byID(cloud, ID_subset-1);
-      colorManager->make_colorization(subset_m1);
-    }
-  }else{
-    colorManager->make_colorization(subset);
-  }
-
-  //---------------------------
-}
 void Online::compute_visibility(Cloud* cloud, int& ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   if(subset == nullptr) return;

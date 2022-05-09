@@ -129,7 +129,7 @@ void GUI_Obstacle::state_configuration(){
 
   //Choose configuration
   int config_selected = *configManager->get_config();
-  if(ImGui::Combo("##007", &config_selected, "Default\0AI module\0WP4 car\0WP5 train\0")){
+  if(ImGui::Combo("##007", &config_selected, "Default\0Capture\0AI module\0WP4 car\0WP5 train\0")){
     configManager->make_preconfig(config_selected);
     node_player->update();
   }

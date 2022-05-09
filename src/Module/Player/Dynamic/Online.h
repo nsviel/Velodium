@@ -33,7 +33,6 @@ public:
 
   //Other functions
   void compute_displayStats(Subset* subset);
-  void compute_colorization(Cloud* cloud, int ID_subset);
   void compute_visibility(Cloud* cloud, int& ID_subset);
 
   inline bool* get_with_slam(){return &with_slam;}

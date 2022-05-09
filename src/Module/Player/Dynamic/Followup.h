@@ -6,6 +6,7 @@
 class Scene;
 class Camera;
 class Player_node;
+class Configuration;
 
 
 class Followup
@@ -17,6 +18,7 @@ public:
 
 public:
   //Main function
+  void update_configuration();
   void camera_followUp(Cloud* cloud, int i);
 
   //Subfunctions
@@ -32,6 +34,7 @@ public:
 private:
   Scene* sceneManager;
   Camera* cameraManager;
+  Configuration* configManager;
 
   vec2 camera_moved_trans;
   int camera_nb_pose;

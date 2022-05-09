@@ -11,7 +11,8 @@
    "glyph" : {
       "aabb_visibility" : true,
       "grid_visibility" : true,
-      "normal_visibility" : false
+      "normal_visibility" : false,
+      "trajectory_visibility" : false
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -28,6 +29,7 @@
       "with_save_image" : false
    },
    "module" : {
+      "player_mode" : "offline",
       "with_camera_follow" : true,
       "with_cylinder_cleaning" : false,
       "with_slam" : true

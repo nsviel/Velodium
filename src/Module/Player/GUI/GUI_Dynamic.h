@@ -9,6 +9,7 @@ class Player_cloud;
 class Heatmap;
 class Filter;
 class Offline;
+class Capture;
 class Online;
 class GUI_Interface;
 class GUI_Color;
@@ -35,6 +36,15 @@ public:
   void parameter_online();
   void runtime_player_mouse();
 
+  //Specific button functions
+  void button_offline_play(Cloud* cloud);
+  void button_offline_pause(Cloud* cloud);
+  void button_offline_stop(Cloud* cloud);
+
+  void button_online_play(Cloud* cloud);
+  void button_online_pause(Cloud* cloud);
+  void button_online_stop(Cloud* cloud);
+
 private:
   Followup* followManager;
   Scene* sceneManager;
@@ -42,6 +52,7 @@ private:
   Filter* filterManager;
   Offline* offlineManager;
   Online* onlineManager;
+  Capture* captureManager;
   GUI_Interface* gui_interface;
   GUI_Color* gui_color;
 

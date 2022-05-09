@@ -12,6 +12,7 @@ Configuration::Configuration(){
 
   this->path_default = get_absolutePath_build() + "../media/engine/config_default.json";
   this->path_ai = get_absolutePath_build() + "../media/engine/config_ai.json";
+  this->path_capture = get_absolutePath_build() + "../media/engine/config_capture.json";
   this->path_wp4_car = get_absolutePath_build() + "../media/engine/config_wp4_car.json";
   this->path_wp5_train = get_absolutePath_build() + "../media/engine/config_wp5_train.json";
   this->path_config = path_default;
@@ -49,21 +50,27 @@ void Configuration::make_preconfig(int config){
       this->make_configuration();
       break;
     }
-    case 1:{ //AI module
-      this->path_config = path_ai;
+    case 1:{ //capture
+      this->path_config = path_capture;
       this->config = 1;
       this->make_configuration();
       break;
     }
-    case 2:{ //WP4 auto
-      this->path_config = path_wp4_car;
+    case 2:{ //AI module
+      this->path_config = path_ai;
       this->config = 2;
       this->make_configuration();
       break;
     }
-    case 3:{ //WP5 train
-      this->path_config = path_wp5_train;
+    case 3:{ //WP4 auto
+      this->path_config = path_wp4_car;
       this->config = 3;
+      this->make_configuration();
+      break;
+    }
+    case 4:{ //WP5 train
+      this->path_config = path_wp5_train;
+      this->config = 4;
       this->make_configuration();
       break;
     }
@@ -124,6 +131,7 @@ void Configuration::preconf_default(Json::Value& root){
   glyph["aabb_visibility"] = true;
   glyph["grid_visibility"] = true;
   glyph["normal_visibility"] = false;
+  glyph["trajectory_visibility"] = false;
   root["glyph"] = glyph;
 
   //Module
@@ -131,6 +139,7 @@ void Configuration::preconf_default(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = false;
+  module["player_mode"] = "offline";
   root["module"] = module;
 
   //Interface
@@ -153,6 +162,7 @@ void Configuration::preconf_capture(Json::Value& root){
   module["with_slam"] = false;
   module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
+  module["player_mode"] = "online";
   root["module"] = module;
 
   //Interface
@@ -274,6 +284,8 @@ void Configuration::create_jsonfile(string path_file){
       this->preconf_default(root);
     }else if(path_file == path_ai){
       this->preconf_ai_module(root);
+    }else if(path_file == path_capture){
+      this->preconf_capture(root);
     }else if(path_file == path_wp4_car){
       this->preconf_wp4_car(root);
     }else if(path_file == path_wp5_train){

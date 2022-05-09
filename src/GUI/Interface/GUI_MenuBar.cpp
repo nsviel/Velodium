@@ -185,7 +185,7 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 
   //Distance from left
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 75);
 
   gui_dynamic->player_button();
   ImGui::SameLine();
