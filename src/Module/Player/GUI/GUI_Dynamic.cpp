@@ -380,16 +380,17 @@ void GUI_Dynamic::button_online_play(Cloud* cloud){
   //---------------------------
 }
 void GUI_Dynamic::button_online_pause(Cloud* cloud){
-  bool* is_capturing = captureManager->get_is_capturing();
+  bool is_capturing = *captureManager->get_is_capturing();
   //---------------------------
 
-  if(*is_capturing == false){
+  if(is_capturing == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
   }
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
-    *is_capturing = !*is_capturing;
+    bool* capture = captureManager->get_is_capturing();
+    *capture = !*capture;
   }
-  if(*is_capturing == false){
+  if(is_capturing == false){
     ImGui::PopStyleColor(1);
   }
 

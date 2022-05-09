@@ -120,7 +120,9 @@ void GUI_option::option_glyphs(){
   if(ImGui::Checkbox("Axis", &axis_scene_ON)){
     Axis* axisObject = objectManager->get_object_axis();
     Glyph* axis_scene = axisObject->get_axis_scene();
+    bool* axis_subset_visibility = axisObject->get_axis_subset_visibility();
 
+    *axis_subset_visibility = axis_scene_ON;
     axis_scene->visibility = axis_scene_ON;
   }
   ImGui::NextColumn();

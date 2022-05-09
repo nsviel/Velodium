@@ -35,6 +35,7 @@ Capture::Capture(Interface_node* node){
   this->veloManager = new Velodyne(node_engine);
 
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
+  this->cloud_capture = nullptr;
   this->ID_capture = 0;
   this->is_capturing = false;
   this->is_capture_finished = true;
@@ -87,44 +88,46 @@ void Capture::stop_capture(){
   console.AddLog("#", "Watcher capture OFF");
 }
 void Capture::runtime_capturing(){
-  if(is_capturing){
-    //---------------------------
+  //---------------------------
 
-    //Initiate
-    Subset* new_subset;
-    new_subset = nullptr;
+  if(is_capturing == false){return;}
+  if(cloud_capture == nullptr){return;}
+  if(sceneManager->get_is_list_empty()){return;}
 
-    //Check for new Subset
-    if(lidar_model == "velodyne_vlp16"){
-      bool *new_capture = veloManager->get_is_newSubset();
+  //Initiate
+  Subset* new_subset;
+  new_subset = nullptr;
 
-      if(*new_capture){
-        //Pick new subset
-        new_subset = veloManager->get_subset_capture();
+  //Check for new Subset
+  if(lidar_model == "velodyne_vlp16"){
+    bool *new_capture = veloManager->get_is_newSubset();
 
-        //Unset new Subset flag
-        *new_capture = false;
-      }
+    if(*new_capture){
+      //Pick new subset
+      new_subset = veloManager->get_subset_capture();
+
+      //Unset new Subset flag
+      *new_capture = false;
     }
-    else if(lidar_model == "scala"){
-      bool* new_capture = scalaManager->get_is_newSubset();
-      if(*new_capture){
-        //Pick new subset
-        new_subset = new Subset(*scalaManager->get_subset_capture());
-
-        //Unset new Subset flag
-        *new_capture = false;
-      }
-    }
-
-    //If new subset, include it in the capture cloud
-    if(new_subset != nullptr && cloud_capture != nullptr){
-      //Make new subset stuff
-      this->operation_new_subset(new_subset);
-    }
-
-    //---------------------------
   }
+  else if(lidar_model == "scala"){
+    bool* new_capture = scalaManager->get_is_newSubset();
+    if(*new_capture){
+      //Pick new subset
+      new_subset = new Subset(*scalaManager->get_subset_capture());
+
+      //Unset new Subset flag
+      *new_capture = false;
+    }
+  }
+
+  //If new subset, include it in the capture cloud
+  if(new_subset != nullptr){
+    //Make new subset stuff
+    this->operation_new_subset(new_subset);
+  }
+
+  //---------------------------
 }
 
 //LiDAR specific functions
@@ -132,17 +135,6 @@ void Capture::capture_vlp16(){
   bool* is_rotating = veloManager->get_is_rotating();
   bool* is_connected = veloManager->get_is_connected();
   //---------------------------
-
-  /*//Check current lidar status
-  veloManager->lidar_check_status();
-
-  //If lidar hasn't start, start it
-  if(*is_rotating == false){
-    veloManager->lidar_start_motor();
-  }
-
-  //If all OK start new capture
-  //if(*is_rotating && *is_connected){*/
 
   veloManager->lidar_start_watcher();
 

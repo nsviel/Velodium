@@ -5,9 +5,10 @@
 Axis::Axis(){
   //---------------------------
 
-  this->create_axis_scene();
+  this->axis_subset_visibility = true;
 
   //---------------------------
+  this->create_axis_scene();
 }
 Axis::~Axis(){}
 
@@ -91,7 +92,7 @@ void Axis::create_axis_subset(Subset* subset){
   //Create glyph
   axis_subset.name = "subset_axis";
   axis_subset.draw_width = 3;
-  axis_subset.visibility = true;
+  axis_subset.visibility = axis_subset_visibility;
   axis_subset.draw_type = "line";
 
   //Axis colors
@@ -112,6 +113,7 @@ void Axis::update_axis_subset(Subset* subset){
   vec3 root = subset->root;
   //---------------------------
 
+  axis_subset->visibility = axis_subset_visibility;
   XYZ.clear();
 
   //Axis rotation
