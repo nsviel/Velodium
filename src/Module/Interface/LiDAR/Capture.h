@@ -43,6 +43,8 @@ public:
   inline Cloud* get_cloud_capture(){return cloud_capture;}
   inline bool* get_is_capturing(){return &is_capturing;}
   inline int* get_capture_port(){return &capture_port;}
+  inline int get_capture_time(){return capture_time;}
+  inline int get_capture_nb_point(){return capture_nb_point;}
 
 private:
   Module_node* node_module;
@@ -57,7 +59,9 @@ private:
   string lidar_model;
   bool is_capture_finished;
   bool is_capturing;
+  int capture_time;
   int capture_port;
+  int capture_nb_point;
   int ID_capture;
 };
 

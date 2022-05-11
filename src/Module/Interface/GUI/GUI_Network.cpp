@@ -123,7 +123,7 @@ void GUI_Network::http_connection(){
 
   ImGui::Text("Daemon activated ");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", mqttManager->get_is_connected() ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", httpManager->get_is_daemon() ? "ON" : "OFF");
   ImGui::Separator();
 
   //---------------------------

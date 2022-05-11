@@ -74,6 +74,18 @@ void GUI_Lidar::velo_state(){
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Velodyne");
 
+  //Capture time
+  ImGui::Text("Capture time");
+  ImGui::SameLine();
+  int capture_time = captureManager->get_capture_time();
+  ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d ms", capture_time);
+
+  //Number of points
+  ImGui::Text("Number of points");
+  ImGui::SameLine();
+  int capture_nb_point = captureManager->get_capture_nb_point();
+  ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d", capture_nb_point);
+
   //Motor state
   ImGui::Text("State");
   ImGui::SameLine();
@@ -88,7 +100,7 @@ void GUI_Lidar::velo_state(){
   //---------------------------
 }
 void GUI_Lidar::velo_capture(){
-  bool is_capturing = *veloManager->get_is_velo_capturing();
+  bool is_capturing = *veloManager->get_is_capturing();
   //---------------------------
 
   //Capturing button
