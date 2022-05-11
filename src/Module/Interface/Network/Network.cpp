@@ -16,18 +16,27 @@ Network::Network(){
   this->sshManager = new SSH();
   this->sftpManager = new SFTP(sshManager);
 
-  this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
-  this->path_target = "/home/aether/Desktop/";
-  this->name_file = "frame_0001.ply";
-
   this->is_connected = false;
   this->is_image_watcher = false;
   this->is_mqtt_watcher = false;
 
   //---------------------------
+  this->update_configuration();
   this->create_wallet();
 }
 Network::~Network(){}
+
+void Network::update_configuration(){
+  //---------------------------
+
+  this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
+  this->path_target = "/home/aether/Desktop/";
+  this->name_file = "frame_0001.ply";
+
+  mqttManager->update_configuration();
+
+  //---------------------------
+}
 
 //Main function
 void Network::start_connection(){

@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[])
 {
-  std::cout<<"--Begin program--"<<std::endl;
+  std::cout<<"--- \033[1;34mBegin program\033[0m ---"<<std::endl;
   //---------------------------
 
   CoreGLengine GLengine;
@@ -16,6 +16,6 @@ int main(int argc, char* argv[])
   GLengine.loop();
 
   //---------------------------
-  std::cout<<"--Close program--"<<std::endl;
+  std::cout<<"--- \033[1;34mClose program\033[0m ---"<<std::endl;
   return 0;
 }

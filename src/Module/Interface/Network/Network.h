@@ -19,6 +19,8 @@ public:
   ~Network();
 
 public:
+  void update_configuration();
+  
   //Main function
   void send_file();
   void start_connection();

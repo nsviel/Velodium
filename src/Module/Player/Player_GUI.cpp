@@ -2,6 +2,7 @@
 
 #include "GUI/GUI_Dynamic.h"
 #include "GUI/GUI_Obstacle.h"
+#include "GUI/GUI_State.h"
 
 #include "../Module_GUI.h"
 
@@ -12,6 +13,7 @@ GUI_Player::GUI_Player(GUI_module* gui_module){
 
   this->gui_dynamic = new GUI_Dynamic(gui_module);
   this->gui_obstacle = new GUI_Obstacle(gui_module);
+  this->gui_state = new GUI_State(gui_module);
 
   this->item_width = 100;
 
@@ -23,12 +25,18 @@ GUI_Player::~GUI_Player(){}
 void GUI_Player::design_player(){
   //---------------------------
 
-  if(ImGui::BeginTabBar("State##156", ImGuiTabBarFlags_None)){
+  if(ImGui::BeginTabBar("Player##156", ImGuiTabBarFlags_None)){
     //-------------------------------
 
     // Obstacle detection
+    if(ImGui::BeginTabItem("State")){
+      gui_state->design_state();
+      ImGui::EndTabItem();
+    }
+
+    // Obstacle detection
     if(ImGui::BeginTabItem("Obstacle")){
-      gui_obstacle->design_Obstacle();
+      gui_obstacle->design_obstacle();
       ImGui::EndTabItem();
     }
 

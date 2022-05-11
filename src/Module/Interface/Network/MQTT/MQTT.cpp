@@ -15,6 +15,17 @@
 MQTT::MQTT(){
   //---------------------------
 
+  this->client = nullptr;
+  this->is_connected = false;
+
+  //---------------------------
+  this->update_configuration();
+}
+MQTT::~MQTT(){}
+
+void MQTT::update_configuration(){
+  //---------------------------
+
   //Connection
   this->client_message = "Hello world!";
   this->client_ID = "ai_module";
@@ -29,12 +40,9 @@ MQTT::MQTT(){
   this->qos = 1;
   this->persist_dir	= "./persist";
   this->timeout = std::chrono::seconds(2);
-  this->client = nullptr;
-  this->is_connected = false;
 
   //---------------------------
 }
-MQTT::~MQTT(){}
 
 //Connection functions
 void MQTT::mqtt_connection(){

@@ -17,6 +17,8 @@ public:
   ~MQTT();
 
 public:
+  void update_configuration();
+  
   //Connection functions
   void mqtt_connection();
   void mqtt_disconnect();

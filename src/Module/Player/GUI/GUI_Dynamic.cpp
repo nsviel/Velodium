@@ -86,10 +86,12 @@ void GUI_Dynamic::runtime_player_mouse(){
 
 //Subfunctions
 void GUI_Dynamic::player_run(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Timeline");
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = cloud->subset_selected;
   //---------------------------
+
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Mode");
+  ImGui::SameLine();
 
   //Display set of player buttons
   this->player_button();

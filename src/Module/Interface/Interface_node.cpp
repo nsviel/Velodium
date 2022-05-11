@@ -53,6 +53,8 @@ void Interface_node::update(){
   saveManager->update_configuration();
   captureManager->update_configuration();
   fileManager->update_configuration();
+  netManager->update_configuration();
+  httpManager->update_configuration();
 
   //---------------------------
 }

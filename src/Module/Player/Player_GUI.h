@@ -6,6 +6,7 @@
 class GUI_module;
 class GUI_Dynamic;
 class GUI_Obstacle;
+class GUI_State;
 
 
 class GUI_Player
@@ -22,10 +23,12 @@ public:
 
   inline GUI_Dynamic* get_gui_dynamic(){return gui_dynamic;}
   inline GUI_Obstacle* get_gui_obstacle(){return gui_obstacle;}
+  inline GUI_State* get_gui_state(){return gui_state;}
 
 private:
   GUI_Dynamic* gui_dynamic;
   GUI_Obstacle* gui_obstacle;
+  GUI_State* gui_state;
 
   int item_width;
 };

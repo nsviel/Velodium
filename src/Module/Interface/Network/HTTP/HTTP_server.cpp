@@ -19,32 +19,43 @@
 HTTP_server::HTTP_server(Interface_node* node){
   //---------------------------
 
-  Saving* saveManager = node->get_saveManager();
+  this->saveManager = node->get_saveManager();
+  
+  this->is_deamon = false;
+
+  //---------------------------
+  this->update_configuration();
+}
+HTTP_server::~HTTP_server(){}
+
+void HTTP_server::update_configuration(){
+  //---------------------------
 
   this->path_image = saveManager->get_path_image() + "image";
   this->server_port = 8888;
-  this->is_deamon = false;
+  this->with_http_demon = false;
 
   //---------------------------
   this->start_deamon();
 }
-HTTP_server::~HTTP_server(){}
 
 // ON / OFF http daemon
 void HTTP_server::start_deamon(){
-  //---------------------------
+  if(with_http_demon){
+    //---------------------------
 
-  const char* page = path_image.c_str();
-  this->daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
+    const char* page = path_image.c_str();
+    this->daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
 
-  if(daemon == NULL){
-    cout<<"[ERROR] Problem with HTTP server"<<endl;
-    this->is_deamon = false;
-  }else{
-    this->is_deamon = true;
+    if(daemon == NULL){
+      cout<<"[ERROR] Problem with HTTP server"<<endl;
+      this->is_deamon = false;
+    }else{
+      this->is_deamon = true;
+    }
+
+    //---------------------------
   }
-
-  //---------------------------
 }
 void HTTP_server::stop_deamon(){
   //---------------------------
