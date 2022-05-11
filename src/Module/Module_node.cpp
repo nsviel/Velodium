@@ -36,6 +36,7 @@ void Module_node::update(){
   //---------------------------
 
   node_player->update();
+  node_interface->update();
 
   //---------------------------
 }

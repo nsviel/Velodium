@@ -178,11 +178,10 @@ void GUI_Dynamic::player_button(){
     this->button_online_stop(cloud);
 
     //Connection port
-    Velodyne* veloManager = captureManager->get_veloManager();
-    int* velo_port = veloManager->get_capture_port();
+    int* velo_port = captureManager->get_capture_port();
     ImGui::SetNextItemWidth(75);
     if(ImGui::InputInt("##555", velo_port)){
-      veloManager->lidar_stop_watcher();
+      captureManager->stop_capture();
     }
   }
 

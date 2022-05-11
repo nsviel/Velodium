@@ -8,6 +8,7 @@ class Scene;
 class Loader;
 class Extractor;
 class Module_node;
+class Configuration;
 
 class Scala;
 class Velodyne;
@@ -22,9 +23,12 @@ public:
 
 public:
   //Main functions
+  void runtime_capturing();
+  void update_configuration();
+
+  //Start / stop functions
   void start_new_capture(string model);
   void stop_capture();
-  void runtime_capturing();
 
   //LiDAR specific functions
   void capture_vlp16();
@@ -38,11 +42,13 @@ public:
   inline Velodyne* get_veloManager(){return veloManager;}
   inline Cloud* get_cloud_capture(){return cloud_capture;}
   inline bool* get_is_capturing(){return &is_capturing;}
+  inline int* get_capture_port(){return &capture_port;}
 
 private:
   Module_node* node_module;
   Scene* sceneManager;
   Loader* loaderManager;
+  Configuration* configManager;
 
   Cloud* cloud_capture;
   Scala* scalaManager;
@@ -51,6 +57,7 @@ private:
   string lidar_model;
   bool is_capture_finished;
   bool is_capturing;
+  int capture_port;
   int ID_capture;
 };
 

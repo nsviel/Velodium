@@ -33,7 +33,6 @@ Velodyne::Velodyne(Engine_node* node_engine){
   this->frameManager = new UDP_frame();
   this->subset_capture = new Subset();
 
-  this->capture_port = 2370;
   this->rot_freq = 0;
   this->rot_rpm = 0;
   this->fov_min = 0;
@@ -50,7 +49,7 @@ Velodyne::Velodyne(Engine_node* node_engine){
 Velodyne::~Velodyne(){}
 
 //Capturing functions
-void Velodyne::lidar_start_watcher(){
+void Velodyne::lidar_start_watcher(int capture_port){
   this->is_capturing = true;
   //---------------------------
 

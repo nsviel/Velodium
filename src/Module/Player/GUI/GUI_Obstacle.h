@@ -6,6 +6,7 @@
 class GUI_Interface;
 class GUI_module;
 
+class Module_node;
 class Scene;
 class Obstacle;
 class CoordTransform;
@@ -37,6 +38,7 @@ private:
   GUI_Interface* gui_interface;
   GUI_module* gui_module;
 
+  Module_node* node_module;
   Player_node* node_player;
   Obstacle* obstacleManager;
   CoordTransform* coordManager;

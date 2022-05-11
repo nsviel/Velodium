@@ -26,21 +26,16 @@ Capture::Capture(Interface_node* node){
 
   Engine_node* node_engine = node->get_node_engine();
   Load_node* node_load = node_engine->get_node_load();
-  Configuration* configManager = node_engine->get_configManager();
 
+  this->configManager = node_engine->get_configManager();
   this->node_module = node->get_node_module();
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loadManager();
   this->scalaManager = new Scala(node);
   this->veloManager = new Velodyne(node_engine);
 
-  this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
-  this->cloud_capture = nullptr;
-  this->ID_capture = 0;
-  this->is_capturing = false;
-  this->is_capture_finished = true;
-
   //---------------------------
+  this->update_configuration();
 }
 Capture::~Capture(){}
 
@@ -129,6 +124,18 @@ void Capture::runtime_capturing(){
 
   //---------------------------
 }
+void Capture::update_configuration(){
+  //---------------------------
+
+  this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
+  this->capture_port = configManager->parse_json_i("interface", "capture_port");
+  this->cloud_capture = nullptr;
+  this->ID_capture = 0;
+  this->is_capturing = false;
+  this->is_capture_finished = true;
+
+  //---------------------------
+}
 
 //LiDAR specific functions
 void Capture::capture_vlp16(){
@@ -136,7 +143,7 @@ void Capture::capture_vlp16(){
   bool* is_connected = veloManager->get_is_connected();
   //---------------------------
 
-  veloManager->lidar_start_watcher();
+  veloManager->lidar_start_watcher(capture_port);
 
   //Create new empty cloud
   loaderManager->load_cloud_empty();

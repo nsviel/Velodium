@@ -21,6 +21,7 @@
       "topPanel_height" : 18
    },
    "interface" : {
+      "capture_port" : 2369,
       "lidar_model" : "velodyne_vlp16",
       "with_gps" : false,
       "with_prediction" : true,

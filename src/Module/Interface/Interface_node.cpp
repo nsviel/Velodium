@@ -46,6 +46,13 @@ void Interface_node::init(){
 
   //---------------------------
 }
+void Interface_node::update(){
+  //---------------------------
+
+  captureManager->update_configuration();
+
+  //---------------------------
+}
 void Interface_node::runtime(){
   //---------------------------
 

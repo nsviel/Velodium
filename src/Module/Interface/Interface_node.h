@@ -26,6 +26,7 @@ public:
 public:
   //Main functions
   void init();
+  void update();
   void runtime();
 
   inline Engine_node* get_node_engine(){return node_engine;}

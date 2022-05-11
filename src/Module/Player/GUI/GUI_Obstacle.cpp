@@ -28,10 +28,11 @@ GUI_Obstacle::GUI_Obstacle(GUI_module* node){
   this->gui_module = node;
   //---------------------------
 
-  Module_node* node_module = gui_module->get_node_module();
+
   Operation_node* node_ope = gui_module->get_node_ope();
   Engine_node* node_engine = gui_module->get_node_engine();
 
+  this->node_module = gui_module->get_node_module();
   this->gui_interface = gui_module->get_gui_interface();
   this->node_player = node_module->get_node_player();
   this->coordManager = node_ope->get_coordManager();
@@ -131,7 +132,7 @@ void GUI_Obstacle::state_configuration(){
   int config_selected = *configManager->get_config();
   if(ImGui::Combo("##007", &config_selected, "Default\0Capture\0AI module\0WP4 car\0WP5 train\0")){
     configManager->make_preconfig(config_selected);
-    node_player->update();
+    node_module->update();
   }
 
   //Start scenario

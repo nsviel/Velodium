@@ -145,6 +145,7 @@ void Configuration::preconf_default(Json::Value& root){
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp64";
+  interface["capture_port"] = 2370;
   interface["with_prediction"] = false;
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
@@ -168,6 +169,7 @@ void Configuration::preconf_capture(Json::Value& root){
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp16";
+  interface["capture_port"] = 2369;
   interface["with_prediction"] = true;
   interface["with_gps"] = false;
   interface["with_save_image"] = false;
