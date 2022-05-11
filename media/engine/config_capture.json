@@ -23,6 +23,7 @@
    "interface" : {
       "capture_port" : 2369,
       "lidar_model" : "velodyne_vlp16",
+      "nb_save_frame" : 200000,
       "with_gps" : false,
       "with_prediction" : true,
       "with_remove_lastSubset" : false,
@@ -36,15 +37,9 @@
       "with_slam" : false
    },
    "parameter" : {
-      "check_directories" : true,
-      "clean_directories" : true,
-      "cloud_movement" : true,
-      "cloud_rotation" : 5,
-      "cloud_translation" : 0.01,
-      "color_mode" : 0,
-      "path_data" : "../media/data/",
-      "path_media" : "../media/",
-      "point_size" : 2
+      "color_intensity_max" : 100,
+      "color_intensity_min" : 0,
+      "color_mode" : 1
    },
    "window" : {
       "background_color" : 0.86000001430511475,

@@ -2,7 +2,7 @@
 
 #include "SLAM/GUI/GUI_Slam.h"
 #include "Interface/GUI/GUI_Interface.h"
-#include "Player/GUI/GUI_Player.h"
+#include "Player/Player_GUI.h"
 
 #include "../GUI/GUI_node.h"
 #include "../Engine/Engine_node.h"
@@ -42,7 +42,7 @@ void GUI_module::display_moduleTabs(){
 
     // Dynamic & obstacle stuff
     if(module_player){
-      if(ImGui::BeginTabItem("Player")){
+      if(ImGui::BeginTabItem("State")){
         gui_player->design_player();
         ImGui::EndTabItem();
       }

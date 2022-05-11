@@ -49,7 +49,10 @@ void Interface_node::init(){
 void Interface_node::update(){
   //---------------------------
 
+  interfaceManager->update_configuration();
+  saveManager->update_configuration();
   captureManager->update_configuration();
+  fileManager->update_configuration();
 
   //---------------------------
 }

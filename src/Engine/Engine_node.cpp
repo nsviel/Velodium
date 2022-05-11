@@ -34,7 +34,7 @@ Engine_node::Engine_node(CoreGLengine* ogl){
   this->glyphManager = new Glyphs(this);
   this->objectManager = new Object(this);
   this->sceneManager = new Scene(this);
-  
+
   this->node_load = new Load_node(this);
   this->node_ope = new Operation_node(this);
   this->node_module = new Module_node(this);
@@ -46,7 +46,14 @@ Engine_node::Engine_node(CoreGLengine* ogl){
 }
 Engine_node::~Engine_node(){}
 
-void Engine_node::update(){}
+void Engine_node::update(){
+  //---------------------------
+
+  node_module->update();
+  node_ope->update();
+
+  //---------------------------
+}
 void Engine_node::runtime(){
   //---------------------------
 

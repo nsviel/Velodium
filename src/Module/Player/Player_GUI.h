@@ -1,7 +1,7 @@
 #ifndef GUI_PLAYER_H
 #define GUI_PLAYER_H
 
-#include "../../../common.h"
+#include "../../common.h"
 
 class GUI_module;
 class GUI_Dynamic;

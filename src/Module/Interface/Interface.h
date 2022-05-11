@@ -5,6 +5,7 @@
 
 class Interface_node;
 class Capture;
+class Configuration;
 class Prediction;
 class Saving;
 class Capture;
@@ -20,6 +21,7 @@ public:
   ~Interface();
 
 public:
+  void update_configuration();
   void update_dynamic(Cloud* cloud, int ID_subset);
   void controler_nb_subset(Cloud* cloud);
 
@@ -28,6 +30,7 @@ public:
   inline int* get_nb_subset_max(){return &nb_subset_max;}
 
 private:
+  Configuration* configManager;
   Capture* captureManager;
   Prediction* predManager;
   Saving* saveManager;

@@ -18,14 +18,22 @@ Filemanager::Filemanager(Interface_node* node){
   //---------------------------
 
   Engine_node* node_engine = node->get_node_engine();
-  Configuration* configManager = node_engine->get_configManager();
+
+  this->configManager = node_engine->get_configManager();
+
+  //---------------------------
+  this->update_configuration();
+}
+Filemanager::~Filemanager(){}
+
+void Filemanager::update_configuration(){
+  //---------------------------
 
   this->path_data_dir = configManager->parse_json_s("parameter", "path_data");
   this->is_clean_dir = true;
 
   //---------------------------
 }
-Filemanager::~Filemanager(){}
 
 //Subfunctions
 void Filemanager::clean_directories(){

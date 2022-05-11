@@ -6,6 +6,7 @@
 class Operation_node;
 class Scene;
 class Heatmap;
+class Configuration;
 
 
 class Color
@@ -16,6 +17,8 @@ public:
   ~Color();
 
 public:
+  void update_configuration();
+
   //Colorization functions
   void make_colorization(Cloud* cloud, int ID_subset);
   void make_colorization(Subset* subset, vec4 RGB_in);
@@ -41,6 +44,7 @@ public:
 private:
   Scene* sceneManager;
   Heatmap* heatmapManager;
+  Configuration* configManager;
 
   vec2 range_intensity;
   vec4 specific_color;

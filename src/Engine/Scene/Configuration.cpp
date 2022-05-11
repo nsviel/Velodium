@@ -113,6 +113,8 @@ void Configuration::preconf_default(Json::Value& root){
   param["clean_directories"] = true;
   param["check_directories"] = true;
   param["color_mode"] = 0;
+  param["color_intensity_min"] = 0;
+  param["color_intensity_max"] = 255;
   root["parameter"] = param;
 
   //Camera
@@ -151,6 +153,7 @@ void Configuration::preconf_default(Json::Value& root){
   interface["with_save_image"] = false;
   interface["with_save_frame"] = false;
   interface["with_remove_lastSubset"] = false;
+  interface["nb_save_frame"] = 20;
   root["interface"] = interface;
 
   //---------------------------
@@ -166,6 +169,13 @@ void Configuration::preconf_capture(Json::Value& root){
   module["player_mode"] = "online";
   root["module"] = module;
 
+  //Parameters
+  Json::Value param;
+  param["color_mode"] = 1;
+  param["color_intensity_min"] = 0;
+  param["color_intensity_max"] = 100;
+  root["parameter"] = param;
+
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp16";
@@ -175,6 +185,7 @@ void Configuration::preconf_capture(Json::Value& root){
   interface["with_save_image"] = false;
   interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
+  interface["nb_save_frame"] = 200000;
   root["interface"] = interface;
 
   //---------------------------

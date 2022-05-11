@@ -22,7 +22,8 @@ public:
   ~Operation_node();
 
 public:
-
+  void update();
+  
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Filter* get_filterManager(){return filterManager;}

@@ -30,3 +30,11 @@ Operation_node::Operation_node(Engine_node* node){
   //---------------------------
 }
 Operation_node::~Operation_node(){}
+
+void Operation_node::update(){
+  //---------------------------
+
+  colorManager->update_configuration();
+
+  //---------------------------
+}

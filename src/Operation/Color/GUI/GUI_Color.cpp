@@ -78,8 +78,8 @@ void GUI_Color::option_intensity(){
 void GUI_Color::option_heatmap(){
   //---------------------------
 
-  this->heatmap_select_colormap();
   this->heatmap_mode();
+  this->heatmap_select_colormap();
   this->heatmap_mode_height();
   this->heatmap_mode_intensity();
 
@@ -139,6 +139,7 @@ void GUI_Color::heatmap_select_colormap(){
 
   //---------------------------
 }
+
 void GUI_Color::heatmap_mode(){
   //---------------------------
 

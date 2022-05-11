@@ -1,9 +1,9 @@
-#include "GUI_Player.h"
+#include "Player_GUI.h"
 
-#include "GUI_Dynamic.h"
-#include "GUI_Obstacle.h"
+#include "GUI/GUI_Dynamic.h"
+#include "GUI/GUI_Obstacle.h"
 
-#include "../../Module_GUI.h"
+#include "../Module_GUI.h"
 
 
 //Constructor / Destructor
@@ -14,7 +14,7 @@ GUI_Player::GUI_Player(GUI_module* gui_module){
   this->gui_obstacle = new GUI_Obstacle(gui_module);
 
   this->item_width = 100;
-  
+
   //---------------------------
 }
 GUI_Player::~GUI_Player(){}
@@ -23,7 +23,7 @@ GUI_Player::~GUI_Player(){}
 void GUI_Player::design_player(){
   //---------------------------
 
-  if(ImGui::BeginTabBar("Player##156", ImGuiTabBarFlags_None)){
+  if(ImGui::BeginTabBar("State##156", ImGuiTabBarFlags_None)){
     //-------------------------------
 
     // Obstacle detection

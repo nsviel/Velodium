@@ -138,7 +138,7 @@ void GUI_Dynamic::player_button(){
     if (ImGui::Button("Offline##444")){
       *player_mode = "online";
     }
-  }else{
+  }else if(*player_mode == "online"){
     if (ImGui::Button("Online##445")){
       *player_mode = "offline";
     }
@@ -166,7 +166,7 @@ void GUI_Dynamic::player_button(){
     }
   }
   //Online mode
-  else{
+  else if(*player_mode == "online"){
     this->button_online_play(cloud);
     ImGui::SameLine();
 
@@ -176,6 +176,7 @@ void GUI_Dynamic::player_button(){
 
     //Stop button
     this->button_online_stop(cloud);
+    ImGui::SameLine();
 
     //Connection port
     int* velo_port = captureManager->get_capture_port();

@@ -7,6 +7,7 @@
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Configuration.h"
 #include "../../../Load/Load_node.h"
 #include "../../../Load/Processing/Saver.h"
 
@@ -22,34 +23,38 @@ Saving::Saving(Interface_node* node){
 
   Engine_node* node_engine = node->get_node_engine();
   Load_node* node_load = node_engine->get_node_load();
-  Filemanager* fileManager = node->get_fileManager();
 
+  this->fileManager = node->get_fileManager();
+  this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();
   this->saverManager = node_load->get_saveManager();
   this->sceneManager = node_engine->get_sceneManager();
+
+  //---------------------------
+  this->update_configuration();
+}
+Saving::~Saving(){}
+
+void Saving::update_configuration(){
+  //---------------------------
 
   this->path_dir = fileManager->get_path_data_dir();
   this->path_frame = path_dir + "frame/";
   this->path_image = path_dir + "image/";
 
-  this->save_frame_max = 20;
+  this->save_frame_max = configManager->parse_json_i("interface", "nb_save_frame");
   this->save_image_ID = 0;
   this->save_image_max = 20;
 
   //---------------------------
 }
-Saving::~Saving(){}
 
 //Output: frame & Image saving
 void Saving::save_image(){
   //---------------------------
 
-  //Save image
-  //string path = path_image + "image_" + to_string(save_image_ID);
-  //renderManager->render_screenshot(path);
-
   //Put screenshot flag on
-  /*string path = path_image + "image_" + to_string(save_image_ID);
+  string path = path_image + "image";
   *renderManager->get_save_path() = path;
   *renderManager->get_is_screenshot() = true;
   save_image_ID++;
@@ -61,10 +66,20 @@ void Saving::save_image(){
     std::remove (save_image_vec.front().c_str());
     save_image_vec.pop();
     save_image_vec.push(path);
-  }*/
+  }
+
+  //---------------------------
+  this->path_image_last = path;
+}
+void Saving::save_image_multiple(){
+  //---------------------------
+
+  //Save image
+  //string path = path_image + "image_" + to_string(save_image_ID);
+  //renderManager->render_screenshot(path);
 
   //Put screenshot flag on
-  string path = path_image + "image";
+  string path = path_image + "image_" + to_string(save_image_ID);
   *renderManager->get_save_path() = path;
   *renderManager->get_is_screenshot() = true;
   save_image_ID++;

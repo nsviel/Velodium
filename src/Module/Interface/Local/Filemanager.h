@@ -4,6 +4,7 @@
 #include "../../../common.h"
 
 class Interface_node;
+class Configuration;
 
 
 class Filemanager
@@ -14,6 +15,7 @@ public:
   ~Filemanager();
 
 public:
+  void update_configuration();
   void clean_directories();
   void check_directories();
   void select_dir_path();
@@ -22,6 +24,7 @@ public:
 
 private:
   Interface_node* node_interface;
+  Configuration* configManager;
 
   string path_data_dir;
   bool is_clean_dir;

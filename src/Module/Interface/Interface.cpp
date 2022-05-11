@@ -16,14 +16,22 @@ Interface::Interface(Interface_node* node){
   //---------------------------
 
   Engine_node* node_engine = node->get_node_engine();
-  Configuration* configManager = node_engine->get_configManager();
 
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->captureManager = node->get_captureManager();
   this->gpsManager = node->get_gpsManager();
   this->predManager = node->get_predManager();
   this->saveManager = node->get_saveManager();
   this->captureManager = node->get_captureManager();
+
+  //---------------------------
+  this->update_configuration();
+}
+Interface::~Interface(){}
+
+void Interface::update_configuration(){
+  //---------------------------
 
   this->nb_subset_max = 50;
   this->with_justOneFrame = false;
@@ -32,8 +40,6 @@ Interface::Interface(Interface_node* node){
 
   //---------------------------
 }
-Interface::~Interface(){}
-
 void Interface::update_dynamic(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------

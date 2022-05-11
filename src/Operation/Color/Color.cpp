@@ -21,18 +21,31 @@ Color::Color(Operation_node* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();
-  Configuration* configManager = node_engine->get_configManager();
 
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
 
+  //---------------------------
+  this->update_configuration();
+}
+Color::~Color(){}
+
+void Color::update_configuration(){
+  //---------------------------
+
+  int min = configManager->parse_json_i("parameter", "color_intensity_min");
+  int max = configManager->parse_json_i("parameter", "color_intensity_max");
+  vec2* heatmap_I_range = heatmapManager->get_range_intensity();
+  vec2 intensity_range = vec2((float) min/255, (float) max/255);
+
+  *heatmap_I_range = intensity_range;
   this->color_mode = configManager->parse_json_i("parameter", "color_mode");
-  this->range_intensity = vec2(0.0f, 1.0f);
+  this->range_intensity = intensity_range;
   this->specific_color = vec4(1, 1, 1, 1);
 
   //---------------------------
 }
-Color::~Color(){}
 
 //Color subset functions
 void Color::make_colorization(Cloud* cloud, int ID_subset){
@@ -78,6 +91,7 @@ void Color::make_colorization_specific(Subset* subset){
   //---------------------------
   sceneManager->update_subset_color(subset);
 }
+
 void Color::color_unicolor(Subset* subset, vec4 color){
   vector<vec4>& RGB = subset->RGB;
   //---------------------------

@@ -11,6 +11,8 @@ class Engine_node;
 class Scene;
 class Saver;
 class Renderer;
+class Configuration;
+class Filemanager;
 
 
 class Saving
@@ -21,8 +23,11 @@ public:
   ~Saving();
 
 public:
+  void update_configuration();
+
   //Output: frame & Image saving
   void save_image();
+  void save_image_multiple();
   void save_image_path();
   void save_frame(Subset* subset);
 
@@ -36,6 +41,8 @@ private:
   Scene* sceneManager;
   Saver* saverManager;
   Renderer* renderManager;
+  Configuration* configManager;
+  Filemanager* fileManager;
 
   queue<string> save_frame_vec;
   queue<string> save_image_vec;

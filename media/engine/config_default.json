@@ -23,6 +23,7 @@
    "interface" : {
       "capture_port" : 2370,
       "lidar_model" : "velodyne_vlp64",
+      "nb_save_frame" : 20,
       "with_gps" : false,
       "with_prediction" : false,
       "with_remove_lastSubset" : false,
@@ -41,6 +42,8 @@
       "cloud_movement" : true,
       "cloud_rotation" : 5,
       "cloud_translation" : 0.01,
+      "color_intensity_max" : 255,
+      "color_intensity_min" : 0,
       "color_mode" : 0,
       "path_data" : "../media/data/",
       "path_media" : "../media/",
