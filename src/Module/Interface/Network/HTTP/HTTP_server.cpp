@@ -20,7 +20,7 @@ HTTP_server::HTTP_server(Interface_node* node){
   //---------------------------
 
   this->saveManager = node->get_saveManager();
-  
+
   this->is_deamon = false;
 
   //---------------------------

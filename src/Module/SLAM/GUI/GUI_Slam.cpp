@@ -42,55 +42,51 @@ GUI_Slam::~GUI_Slam(){}
 
 //Main function
 void GUI_Slam::design_SLAM(){
-  //---------------------------
+  if(ImGui::BeginTabBar("tabs##123", ImGuiTabBarFlags_None)){
+    //-------------------------------
 
-  this->compute();
-  this->parameter_slam();
-  this->statistics();
+    ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
 
-  //---------------------------
-}
-
-void GUI_Slam::compute(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
-
-  //Compute algorithm
-  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Compute", ImVec2(item_width,0))){
-    if(cloud != nullptr){
-      sceneManager->reset_cloud(cloud);
-      slamManager->compute_slam(cloud);
-
-      sceneManager->update_cloud_location(cloud);
-      sceneManager->update_cloud_glyphs(cloud);
+    // SLAM State
+    if(ImGui::BeginTabItem("State##123")){
+      this->statistics();
+      ImGui::EndTabItem();
     }
+
+    // SLAM parameters
+    if(ImGui::BeginTabItem("Parameter##123")){
+      this->compute();
+      this->parameter_slam();
+      ImGui::EndTabItem();
+    }
+
+    ImGui::PopStyleColor();
+
+    //-------------------------------
+    ImGui::EndTabBar();
   }
-  ImGui::PopStyleColor(1);
+}
+
+void GUI_Slam::parameter_slam(){
+  //---------------------------
+
+  this->parameter_configuration();
+  this->parameter_general();
+  this->parameter_optimization();
+  this->parameter_localMap();
+  this->parameter_normal();
+  this->parameter_robustesse();
 
   //---------------------------
-}
-void GUI_Slam::parameter_slam(){
-  if(ImGui::CollapsingHeader("Parameter - slam")){
-    //---------------------------
-
-    this->parameter_configuration();
-    this->parameter_general();
-    this->parameter_optimization();
-    this->parameter_localMap();
-    this->parameter_normal();
-    this->parameter_robustesse();
-
-    //---------------------------
-    ImGui::Separator();
-  }
+  ImGui::Separator();
 }
 void GUI_Slam::parameter_configuration(){
   //---------------------------
 
   //Configuration model
   int slam_conf = *paramManager->get_predefined_conf();
-  if(ImGui::Combo("Configuration", &slam_conf, "vlp_64\0vlp_16\0hdl_32\0")){
+  ImGui::SetNextItemWidth(item_width);
+  if(ImGui::Combo("LiDAR", &slam_conf, "vlp_64\0vlp_16\0hdl_32\0")){
     paramManager->set_predefined_conf(slam_conf);
   }
 
@@ -345,9 +341,11 @@ void GUI_Slam::parameter_robustesse(){
     ImGui::TreePop();
   }
 }
+
 void GUI_Slam::statistics(){
   //---------------------------
 
+  bool is_slamed = false;
   float time = 0;
   vec3 trans_abs = vec3(0, 0, 0);
   vec3 rotat_abs = vec3(0, 0, 0);
@@ -361,6 +359,7 @@ void GUI_Slam::statistics(){
     Cloud* cloud = sceneManager->get_cloud_selected();
     Frame* frame = &cloud->subset_selected->frame;
 
+    is_slamed = frame->is_slamed;
     time = frame->time_slam;
     trans_abs = frame->trans_abs;
     rotat_abs = frame->rotat_abs;
@@ -371,9 +370,11 @@ void GUI_Slam::statistics(){
     nb_residual = frame->nb_residual;
   }
 
-  //SLAM time computation
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Time");
-  ImGui::Text("Computation:");
+  //SLAM applied
+  ImGui::Text("Applied:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_slamed ? "Yes" : "No");
+  ImGui::Text("Computation time:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);
 
@@ -408,7 +409,26 @@ void GUI_Slam::statistics(){
 
   //---------------------------
 }
+void GUI_Slam::compute(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
 
+  //Compute algorithm
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Compute", ImVec2(item_width,0))){
+    if(cloud != nullptr){
+      sceneManager->reset_cloud(cloud);
+      slamManager->compute_slam(cloud);
+
+      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_cloud_glyphs(cloud);
+    }
+  }
+  ImGui::PopStyleColor(1);
+
+  //---------------------------
+  ImGui::Separator();
+}
 vec3 GUI_Slam::compute_anglesFromTransformationMatrix(const mat4& mat){
   vec3 angles;
   //---------------------------

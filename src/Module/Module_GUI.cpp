@@ -42,7 +42,7 @@ void GUI_module::display_moduleTabs(){
 
     // Dynamic & obstacle stuff
     if(module_player){
-      if(ImGui::BeginTabItem("Player")){
+      if(ImGui::BeginTabItem("Obstacle")){
         gui_player->design_player();
         ImGui::EndTabItem();
       }

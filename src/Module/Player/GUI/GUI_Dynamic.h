@@ -34,6 +34,7 @@ public:
   void player_selection();
   void parameter_offline();
   void parameter_online();
+  void parameter_online_options();
   void runtime_player_mouse();
 
   //Specific button functions

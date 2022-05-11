@@ -262,49 +262,56 @@ void GUI_Dynamic::parameter_offline(){
 }
 void GUI_Dynamic::parameter_online(){
   if(ImGui::CollapsingHeader("Parameter - online")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = cloud->subset_selected;
     //---------------------------
 
-    //SLAM activated at each frame
-    bool* with_slam = onlineManager->get_with_slam();
-    ImGui::Checkbox("SLAM", with_slam);
-
-    //Camera auto displacement
-    bool* with_camera_follow = followManager->get_with_camera_follow();
-    ImGui::Checkbox("Camera follow up", with_camera_follow);
-
-    //Cylinder cleaning filter
-    bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
-    ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
-    if(*cylinderFilter){
-      float* r_min = filterManager->get_cyl_r_min();
-      float* r_max = filterManager->get_cyl_r_max();
-      float* z_min = filterManager->get_cyl_z_min();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
-    }
-
-    //Camera follow absolute position
-    if(*with_camera_follow){
-      bool* with_camera_absolute = followManager->get_with_camera_absolute();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
-    }
-
-    //GUI interface parameters
-    gui_interface->parameter_dynamic();
-
-    //Colorization
-    gui_color->colorization_choice();
+    this->parameter_online_options();
 
     //---------------------------
     ImGui::Separator();
   }
+}
+void GUI_Dynamic::parameter_online_options(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  Subset* subset = cloud->subset_selected;
+  //---------------------------
+
+  //SLAM activated at each frame
+  bool* with_slam = onlineManager->get_with_slam();
+  ImGui::Checkbox("SLAM", with_slam);
+
+  //Camera auto displacement
+  bool* with_camera_follow = followManager->get_with_camera_follow();
+  ImGui::Checkbox("Camera follow up", with_camera_follow);
+
+  //Camera follow absolute position
+  if(*with_camera_follow){
+    bool* with_camera_absolute = followManager->get_with_camera_absolute();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+    ImGui::Checkbox("Absolute positionning", with_camera_absolute);
+  }
+
+  //Cylinder cleaning filter
+  bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
+  ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
+  if(*cylinderFilter){
+    float* r_min = filterManager->get_cyl_r_min();
+    float* r_max = filterManager->get_cyl_r_max();
+    float* z_min = filterManager->get_cyl_z_min();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+    ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
+  }
+
+  //GUI interface parameters
+  gui_interface->parameter_dynamic();
+
+  //Colorization
+  gui_color->colorization_choice();
+
+  //---------------------------
 }
 
 void GUI_Dynamic::button_offline_play(Cloud* cloud){

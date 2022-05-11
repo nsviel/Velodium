@@ -115,6 +115,10 @@ void GUI_Obstacle::compute_draw_text(string text, vec3 position){
 void GUI_Obstacle::parameter_online(){
   //---------------------------
 
+  //SLAM parameters
+  GUI_Slam* gui_slam = gui_module->get_gui_slam();
+  gui_slam->parameter_configuration();
+
   //With MQTT warning
   bool* with_warning = obstacleManager->get_with_warning();
   ImGui::Checkbox("With MQTT prediction", with_warning);
@@ -122,11 +126,7 @@ void GUI_Obstacle::parameter_online(){
   //Online parameters
   GUI_Player* gui_player = gui_module->get_gui_player();
   GUI_Dynamic* gui_dynamic = gui_player->get_gui_dynamic();
-  gui_dynamic->parameter_online();
-
-  //SLAM parameters
-  GUI_Slam* gui_slam = gui_module->get_gui_slam();
-  gui_slam->parameter_slam();
+  gui_dynamic->parameter_online_options();
 
   //---------------------------
 }

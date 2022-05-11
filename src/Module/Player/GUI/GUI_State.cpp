@@ -62,13 +62,13 @@ void GUI_State::state_configuration(){
     node_engine->update();
   }
 
-  //Start scenario
+  /*//Start scenario
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Start##1", ImVec2(item_width, 0))){
     //Start watcher here
     //create maybe a new class which manage watchers
   }
-  ImGui::PopStyleColor(1);
+  ImGui::PopStyleColor(1);*/
 
   //---------------------------
   ImGui::Separator();

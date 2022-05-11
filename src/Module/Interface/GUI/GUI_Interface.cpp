@@ -66,6 +66,22 @@ void GUI_Interface::design_Lidar(){
 void GUI_Interface::design_Network(){
   //---------------------------
 
+  if(ImGui::BeginTabItem("MQTT")){
+    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connection");
+    gui_netManager->mqtt_connection();
+    gui_netManager->mqtt_parameter();
+
+    ImGui::EndTabItem();
+  }
+
+  if(ImGui::BeginTabItem("HTTP")){
+    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "HTTP connection");
+    gui_netManager->http_connection();
+    gui_netManager->http_parameter();
+
+    ImGui::EndTabItem();
+  }
+
   if(ImGui::BeginTabItem("SSH / SFTP")){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "SSH");
     gui_netManager->ssh_connection();
@@ -73,14 +89,6 @@ void GUI_Interface::design_Network(){
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "SFTP");
     gui_netManager->sftp_connection();
-
-    ImGui::EndTabItem();
-  }
-
-  if(ImGui::BeginTabItem("MQTT")){
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connexion");
-    gui_netManager->mqtt_connection();
-    gui_netManager->mqtt_parameter();
 
     ImGui::EndTabItem();
   }
@@ -138,7 +146,7 @@ void GUI_Interface::state_watcher(){
   bool with_daemon = httpManager->get_is_daemon();
   ImGui::Text("Daemon - HTTP");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", &with_daemon ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");
 
   //watchers lidar
   gui_lidarManager->state_watcher();
