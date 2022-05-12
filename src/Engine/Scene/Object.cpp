@@ -138,11 +138,11 @@ void Object::reset_scene_object(){
 
   //Invisibilize all cloud dependant glyphs
   Glyph* aabb = aabbObject->get_aabb();
-  this->reset_object(aabb);
+  aabb->location.clear();
 
   //Reset specific glyphs
   Glyph* traj = trajObject->get_glyph();
-  this->reset_object(traj);
+  traj->visibility = false;
 
   Glyph* car = carObject->get_glyph();
   car->visibility = false;

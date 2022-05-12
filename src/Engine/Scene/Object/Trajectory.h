@@ -18,9 +18,12 @@ public:
   void update(Cloud*cloud);
 
   inline Glyph* get_glyph(){return trajectory;}
+  inline bool* get_visibility(){return &visibility;}
 
 private:
   Glyph* trajectory;
+
+  bool visibility;
   vec4 color;
   int width;
 };

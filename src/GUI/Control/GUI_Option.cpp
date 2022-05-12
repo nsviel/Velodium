@@ -128,16 +128,16 @@ void GUI_option::option_glyphs(){
   ImGui::NextColumn();
 
   //Dynamic (trajectiry & car)
-  static bool dynamic_ON = true;
+  static bool dynamic_ON = false;
   if(ImGui::Checkbox("Dynamic", &dynamic_ON)){
     Car* carObject = objectManager->get_object_car();
     Trajectory* trajObject = objectManager->get_object_trajectory();
 
-    Glyph* car = carObject->get_glyph();
-    Glyph* traj = trajObject->get_glyph();
+    bool* car_visu = carObject->get_visibility();
+    bool* traj_visu = trajObject->get_visibility();
 
-    car->visibility = dynamic_ON;
-    traj->visibility = dynamic_ON;
+    *car_visu = dynamic_ON;
+    *traj_visu = dynamic_ON;
   }
   ImGui::NextColumn();
 

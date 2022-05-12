@@ -66,25 +66,6 @@ void Glyphs::runtime_scene_glyph(){
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }
-void Glyphs::draw_glyph(Glyph* glyph){
-  //---------------------------
-
-  if(glyph->visibility){
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(glyph->VAO);
-    glLineWidth(glyph->draw_width);
-    glDrawArrays(GL_LINES, 0, glyph->location.size());
-
-    glLineWidth(1);
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-  }
-
-  //---------------------------
-}
 void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
   Scene* sceneManager = node_engine->get_sceneManager();
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 2);
@@ -117,6 +98,25 @@ void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
   glBindVertexArray(0);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
+}
+void Glyphs::draw_glyph(Glyph* glyph){
+  //---------------------------
+
+  if(glyph->visibility){
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(glyph->VAO);
+    glLineWidth(glyph->draw_width);
+    glDrawArrays(GL_LINES, 0, glyph->location.size());
+
+    glLineWidth(1);
+    glBindVertexArray(0);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+  }
+
+  //---------------------------
 }
 
 //Glyph update

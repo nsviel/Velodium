@@ -21,11 +21,14 @@ public:
   void reset();
 
   inline Glyph* get_glyph(){return car;}
+  inline bool* get_visibility(){return &visibility;}
 
 private:
   Transforms* transformManager;
   Glyph* car;
+
   vec4 color;
+  bool visibility;
   float lidar_height;
   int width;
 };

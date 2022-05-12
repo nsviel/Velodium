@@ -10,6 +10,7 @@ Car::Car(){
 
   this->transformManager = new Transforms();
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  this->visibility = false;
   this->width = 2;
   this->lidar_height = 1.3;
 
@@ -45,6 +46,8 @@ void Car::update(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
   Frame* frame = &subset->frame;
   //---------------------------
+
+  car->visibility = visibility;
 
   vec3 trans_abs = frame->trans_abs;
   if(trans_abs != vec3(0, 0, 0)){

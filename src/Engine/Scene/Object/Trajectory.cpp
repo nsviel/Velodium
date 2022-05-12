@@ -6,6 +6,7 @@ Trajectory::Trajectory(){
   //---------------------------
 
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  this->visibility = false;
   this->width = 2;
 
   //---------------------------
@@ -20,7 +21,7 @@ void Trajectory::create(){
   //Create glyph
   trajectory->name = "Trajectory";
   trajectory->draw_width = width;
-  trajectory->visibility = true;
+  trajectory->visibility = false;
   trajectory->draw_type = "line";
   trajectory->permanent = true;
   trajectory->color_unique = color;
@@ -37,6 +38,7 @@ void Trajectory::update(Cloud*cloud){
   //Clear old values
   trajectory->location.clear();
   trajectory->color.clear();
+  trajectory->visibility = visibility;
 
   //Compute new trajectory values
   for(int j=0; j<cloud->subset.size(); j++){
