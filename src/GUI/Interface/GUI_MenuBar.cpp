@@ -81,8 +81,16 @@ void GUI_menuBar::MenuBar_menus(){
   //-------------------------
 
   if(ImGui::BeginMenu("File")){
-    if (ImGui::MenuItem("Open options", "o")){
+    string open = "Open [" + pathManager->get_open_mode() + "]";
+    if (ImGui::MenuItem(open.c_str())){
+      pathManager->loading();
+    }
+    if (ImGui::MenuItem("Open options")){
       window_tab.show_loading = true;
+    }
+    string save = "Save [" + pathManager->get_save_mode() + "]";
+    if (ImGui::MenuItem(save.c_str())){
+      pathManager->saving();
     }
     if (ImGui::MenuItem("Save options")){
       window_tab.show_saving = true;

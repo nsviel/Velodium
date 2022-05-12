@@ -48,6 +48,7 @@ public:
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
   inline bool* get_is_capturing(){return &is_capturing;}
+  inline bool get_is_first_run(){return is_first_run;}
   inline int get_rot_freq(){return rot_freq;}
   inline int get_rot_rpm(){return rot_rpm;}
   inline int get_fov_min(){return fov_min;}

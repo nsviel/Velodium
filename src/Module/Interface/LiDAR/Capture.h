@@ -23,8 +23,10 @@ public:
 
 public:
   //Main functions
-  void runtime_capturing();
   void update_configuration();
+  void runtime_capturing();
+  void runtime_velodyne();
+  void runtime_scala();
 
   //Start / stop functions
   void start_new_capture(string model);
@@ -60,6 +62,7 @@ private:
   string lidar_model;
   bool is_capture_finished;
   bool is_capturing;
+  bool is_first_run;
   int capture_time;
   int capture_port;
   int capture_nb_point;

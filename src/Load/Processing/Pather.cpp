@@ -49,10 +49,10 @@ void Pather::update_configuration(){
 void Pather::loading(){
   //---------------------------
 
-  if(save_mode == "cloud"){
+  if(open_mode == "cloud"){
     this->loading_cloud();
   }
-  else if(save_mode == "frame"){
+  else if(open_mode == "frame"){
     this->loading_frames();
   }
 

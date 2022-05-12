@@ -51,6 +51,7 @@ void Capture::update_configuration(){
   this->is_capture_finished = true;
   this->capture_time = 0;
   this->capture_nb_point = 0;
+  this->is_first_run = true;
 
   //---------------------------
 }
@@ -65,33 +66,53 @@ void Capture::runtime_capturing(){
     return;
   }
 
-  //Initiate
-  Subset* new_subset;
-  new_subset = nullptr;
-
   //Check for new Subset
   if(lidar_model == "velodyne_vlp16"){
-    bool *new_capture = veloManager->get_is_newSubset();
-
-    if(*new_capture){
-      //Pick new subset
-      new_subset = veloManager->get_subset_capture();
-
-      //Unset new Subset flag
-      *new_capture = false;
-      this->capture_time = toc();tic();
-      this->capture_nb_point_raw = new_subset->xyz.size();
-    }
+    this->runtime_velodyne();
   }
   else if(lidar_model == "scala"){
-    bool* new_capture = scalaManager->get_is_newSubset();
-    if(*new_capture){
-      //Pick new subset
-      new_subset = new Subset(*scalaManager->get_subset_capture());
+    this->runtime_scala();
+  }
 
-      //Unset new Subset flag
-      *new_capture = false;
-    }
+  //---------------------------
+}
+void Capture::runtime_velodyne(){
+  Subset* new_subset;
+  new_subset = nullptr;
+  //---------------------------
+
+  bool *new_capture = veloManager->get_is_newSubset();
+
+  if(*new_capture){
+    //Pick new subset
+    new_subset = veloManager->get_subset_capture();
+
+    //Unset new Subset flag
+    *new_capture = false;
+    this->capture_time = toc();tic();
+    this->capture_nb_point_raw = new_subset->xyz.size();
+  }
+
+  //If new subset, include it in the capture cloud
+  if(new_subset != nullptr){
+    //Make new subset stuff
+    this->operation_new_subset(new_subset);
+  }
+
+  //---------------------------
+}
+void Capture::runtime_scala(){
+  Subset* new_subset;
+  new_subset = nullptr;
+  //---------------------------
+
+  bool* new_capture = scalaManager->get_is_newSubset();
+  if(*new_capture){
+    //Pick new subset
+    new_subset = new Subset(*scalaManager->get_subset_capture());
+
+    //Unset new Subset flag
+    *new_capture = false;
   }
 
   //If new subset, include it in the capture cloud
@@ -188,6 +209,13 @@ void Capture::capture_scala(){
 //Subfunctions
 void Capture::operation_new_subset(Subset* subset){
   //---------------------------
+
+  //Do not record the first run
+  if(is_first_run){
+    sceneManager->remove_subset_last(cloud_capture);
+    cloud_capture->nb_subset = 0;
+    is_first_run = false;
+  }
 
   //Set new subset identifieurs
   subset->name = "frame_" + to_string(cloud_capture->ID_subset);

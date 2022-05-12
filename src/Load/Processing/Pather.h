@@ -55,6 +55,8 @@ public:
   inline void set_spaceSampling(float value){this->spaceSampling = value;}
   inline void set_nbLineSampling(int value){this->nbLineSampling = value;}
   inline Loader* get_loaderManager(){return loaderManager;}
+  inline string get_open_mode(){return open_mode;}
+  inline string get_save_mode(){return save_mode;}
 
 private:
   Scene* sceneManager;
