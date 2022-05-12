@@ -45,6 +45,7 @@ public:
   inline int* get_capture_port(){return &capture_port;}
   inline int get_capture_time(){return capture_time;}
   inline int get_capture_nb_point(){return capture_nb_point;}
+  inline int get_capture_nb_point_raw(){return capture_nb_point_raw;}
 
 private:
   Module_node* node_module;
@@ -62,6 +63,7 @@ private:
   int capture_time;
   int capture_port;
   int capture_nb_point;
+  int capture_nb_point_raw;
   int ID_capture;
 };
 

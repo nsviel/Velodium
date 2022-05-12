@@ -51,6 +51,7 @@ void Engine_node::update(){
 
   node_module->update();
   node_ope->update();
+  node_load->update();
 
   //---------------------------
 }

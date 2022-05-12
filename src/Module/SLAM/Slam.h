@@ -10,6 +10,7 @@
 class Engine_node;
 class Scene;
 class Object;
+class Configuration;
 
 //class SLAM_optim_ceres;
 class SLAM_optim_gn;
@@ -26,6 +27,7 @@ public:
   ~Slam();
 
 public:
+  void update_configuration();
   void compute_slam(Cloud* cloud);
   void compute_slam_online(Cloud* cloud, int ID);
   void reset_slam();
@@ -64,6 +66,7 @@ private:
   Engine_node* node_engine;
   Scene* sceneManager;
   Object* objectManager;
+  Configuration* configManager;
 
   //SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;

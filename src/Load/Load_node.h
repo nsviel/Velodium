@@ -15,18 +15,10 @@ class Load_node
 {
 public:
   //Constructor / Destructor
-  Load_node(Engine_node* engine){
-    this->node_engine = engine;
-    //---------------------------
-
-    this->extractManager = new Extractor(this);
-    this->saveManager = new Saver(this);
-    this->loadManager = new Loader(this);
-    this->pathManager = new Pather(this);
-
-    //---------------------------
-  }
+  Load_node(Engine_node* node);
   ~Load_node();
+
+  void update();
 
 public:
   inline Engine_node* get_node_engine(){return node_engine;}

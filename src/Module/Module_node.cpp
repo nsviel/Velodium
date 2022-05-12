@@ -37,6 +37,7 @@ void Module_node::update(){
 
   node_player->update();
   node_interface->update();
+  slamManager->update_configuration();
 
   //---------------------------
 }

@@ -80,7 +80,7 @@ void GUI_menuBar::MenuBar_menus(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //-------------------------
 
-  if (ImGui::BeginMenu("File")){
+  if(ImGui::BeginMenu("File")){
     if (ImGui::MenuItem("Open options", "o")){
       window_tab.show_loading = true;
     }
@@ -115,14 +115,17 @@ void GUI_menuBar::MenuBar_menus(){
 
     ImGui::EndMenu();
   }
-  if (ImGui::MenuItem(ICON_FA_FILE " Open")){
+  if(ImGui::MenuItem(ICON_FA_FILE " Open")){
     pathManager->loading();
   }
-  if (ImGui::BeginMenu(ICON_FA_COG " Option")){
+  if(ImGui::MenuItem(ICON_FA_BOOK " Save")){
+    pathManager->saving();
+  }
+  if(ImGui::BeginMenu(ICON_FA_COG " Option")){
     optionManager->design_Options();
     ImGui::EndMenu();
   }
-  if (ImGui::BeginMenu("Operation")){
+  if(ImGui::BeginMenu("Operation")){
     this->MenuBar_Operations();
     ImGui::EndMenu();
   }
@@ -137,7 +140,7 @@ void GUI_menuBar::MenuBar_icons(){
   //---------------------------
 
   //Distance from left
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 100);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
 
   //Parameters
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(22, 110, 161, 255));
@@ -185,7 +188,7 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 
   //Distance from left
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 75);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
 
   gui_dynamic->player_button();
   ImGui::SameLine();

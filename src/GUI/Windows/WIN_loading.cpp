@@ -270,29 +270,36 @@ void WIN_loading::loading_file_pcap(){
 }
 
 void WIN_loading::saving_action(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = cloud->subset_selected;
   //---------------------------
 
   //Save subset
   if(ImGui::Button("Save subset as", ImVec2(item_width, 0))){
-    pathManager->saving_subset(subset);
+    if(sceneManager->get_is_list_empty() == false){
+      Cloud* cloud = sceneManager->get_cloud_selected();
+      Subset* subset = cloud->subset_selected;
+      
+      pathManager->saving_subset(subset);
+    }
   }
 
   //Save a subset range
   static int frame_b = 0;
   static int frame_e = 100;
-  if (ImGui::Button("Save frames range", ImVec2(item_width, 0))){
+  if(ImGui::Button("Save frames range", ImVec2(item_width, 0))){
     pathManager->saving_subset_range(frame_b, frame_e);
   }
 
   //Save cloud
   if(ImGui::Button("Save cloud as", ImVec2(item_width, 0))){
-    pathManager->saving_cloud(cloud);
+    if(sceneManager->get_is_list_empty() == false){
+      Cloud* cloud = sceneManager->get_cloud_selected();
+
+      pathManager->saving_cloud(cloud);
+    }
   }
 
   //Save all present clouds
-  if (ImGui::Button("Save all clouds", ImVec2(item_width, 0))){
+  if(ImGui::Button("Save all clouds", ImVec2(item_width, 0))){
     pathManager->saving_cloud_all();
   }
 

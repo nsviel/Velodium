@@ -80,7 +80,7 @@ void Capture::runtime_capturing(){
       //Unset new Subset flag
       *new_capture = false;
       this->capture_time = toc();tic();
-      this->capture_nb_point = new_subset->xyz.size();
+      this->capture_nb_point_raw = new_subset->xyz.size();
     }
   }
   else if(lidar_model == "scala"){
@@ -196,6 +196,7 @@ void Capture::operation_new_subset(Subset* subset){
 
   //Supress null points
   this->supress_nullpoints(subset);
+  this->capture_nb_point = subset->xyz.size();
 
   //If ok insert subset into scene
   if(subset->xyz.size() != 0){

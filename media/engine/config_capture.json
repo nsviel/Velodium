@@ -39,7 +39,9 @@
    "parameter" : {
       "color_intensity_max" : 100,
       "color_intensity_min" : 0,
-      "color_mode" : 1
+      "color_mode" : 1,
+      "open_mode" : "frame",
+      "save_mode" : "saved_frame"
    },
    "window" : {
       "background_color" : 0.86000001430511475,

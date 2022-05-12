@@ -13,6 +13,7 @@
 
 #include <Eigen/Dense>
 #include <set>
+#include <filesystem>
 
 
 //Constructor / destructor
@@ -21,20 +22,43 @@ Pather::Pather(Load_node* node_load){
 
   Engine_node* node_engine = node_load->get_node_engine();
 
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loadManager();
   this->saverManager = node_load->get_saveManager();
 
-  this->spaceSampling = 0.08f;
-  this->nbLineSampling = 1000000;
-  this->path_current_dir = get_absolutePath_build() + '/';
-
   //---------------------------
+  this->update_configuration();
 }
 Pather::~Pather(){}
 
+void Pather::update_configuration(){
+  //---------------------------
+
+  this->spaceSampling = 0.08f;
+  this->nbLineSampling = 1000000;
+  this->path_current_dir = get_absolutePath_build() + '/';
+  this->open_mode = configManager->parse_json_s("parameter", "open_mode");
+  this->save_mode = configManager->parse_json_s("parameter", "save_mode");
+  this->path_saved_frame = configManager->parse_json_s("parameter", "path_data")  + "frame";
+
+  //---------------------------
+}
+
 //Loading functions
 void Pather::loading(){
+  //---------------------------
+
+  if(save_mode == "cloud"){
+    this->loading_cloud();
+  }
+  else if(save_mode == "frame"){
+    this->loading_frames();
+  }
+
+  //---------------------------
+}
+void Pather::loading_cloud(){
   //---------------------------
 
   //select files
@@ -174,6 +198,41 @@ void Pather::loading_treatment(){
 }
 
 //Other functions
+void Pather::saving(){
+  //---------------------------
+
+  if(save_mode == "cloud"){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    this->saving_cloud(cloud);
+  }
+  else if(save_mode == "frame"){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    this->saving_cloud_frame(cloud);
+  }
+  else if(save_mode == "saved_frame"){
+    this->saving_saved_frames();
+  }
+
+  //---------------------------
+}
+void Pather::saving_cloud_frame(Cloud* cloud){
+  //---------------------------
+
+  //Select saving path
+  string path_saving = this->zenity_directory();
+
+  //Save current cloud
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    string path = path_saving + subset->name;
+
+    if(subset != nullptr && path_saving != ""){
+      saverManager->save_subset(subset, ".ply", path);
+    }
+  }
+
+  //---------------------------
+}
 void Pather::saving_subset(Subset* subset){
   //---------------------------
 
@@ -230,6 +289,25 @@ void Pather::saving_cloud_all(){
 
     string pathFile = path_dir + "/" + cloud->name + ".pts";
     saverManager->save_cloud(cloud, pathFile);
+  }
+
+  //---------------------------
+}
+void Pather::saving_saved_frames(){
+  //---------------------------
+
+  //Select saving path
+  string path_saving = this->zenity_directory();
+  vector<string> file_path_vec = list_allPaths(path_saved_frame.c_str());
+  vector<string> file_name_vec = list_allFiles(path_saved_frame.c_str());
+
+  for(int i=0; i<file_path_vec.size(); i++){
+    string file_in = file_path_vec[i];
+    string file_out = path_saving + "/" + file_name_vec[i];
+
+    std::ifstream src(file_in, std::ios::binary);
+    std::ofstream dest(file_out, std::ios::binary);
+    dest << src.rdbuf();
   }
 
   //---------------------------

@@ -42,11 +42,8 @@ bool Saver::save_cloud(Cloud* cloud, string filePath){
   bool success = false;
   //---------------------------
 
-  //If no format, add default ply
-  if(format.at(0) == '/') format = "pts";
-
   //Check file format
-  if     (format == "pts"){
+  if(format.at(0) == '/' || format == "pts"){
     success = ptsManager->Exporter(filePath, cloud);
   }
   else if(format == "ply"){

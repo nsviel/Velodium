@@ -123,7 +123,10 @@ namespace{
     //Filtre and store files present in the folder
     while ((files = readdir(directory)) != NULL){
       std::string name = files->d_name;
-      path_vec.push_back(name);
+
+      if(name != "." && name != ".."){
+        path_vec.push_back(name);
+      }
     }
 
     //Close and return the file names list
@@ -145,8 +148,11 @@ namespace{
     //Filtre and store files present in the folder
     while ((files = readdir(directory)) != NULL){
       std::string path_file = files->d_name;
-      std::string path_full = path_dir + path_file;
-      path_vec.push_back(path_full);
+      std::string path_full = path_dir + "/" + path_file;
+
+      if(path_file != "." && path_file != ".."){
+        path_vec.push_back(path_full);
+      }
     }
 
     //Close and return the file names list

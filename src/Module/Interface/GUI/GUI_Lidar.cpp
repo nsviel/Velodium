@@ -83,6 +83,10 @@ void GUI_Lidar::velo_state(){
   //Number of points
   ImGui::Text("Number of points");
   ImGui::SameLine();
+  int capture_nb_point_raw = captureManager->get_capture_nb_point_raw();
+  ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d", capture_nb_point_raw);
+  ImGui::Text("Number of non-zero points");
+  ImGui::SameLine();
   int capture_nb_point = captureManager->get_capture_nb_point();
   ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d", capture_nb_point);
 

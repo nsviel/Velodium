@@ -7,6 +7,7 @@ class Load_node;
 class Scene;
 class Loader;
 class Saver;
+class Configuration;
 
 
 class Pather
@@ -17,8 +18,11 @@ public:
   ~Pather();
 
 public:
+  void update_configuration();
+
   //Loading function
   void loading();
+  void loading_cloud();
   void loading_frames();
   void loading_directoryFrames(string path);
   void loading_sampling();
@@ -27,10 +31,13 @@ public:
   void loading_fastScene(int mode);
 
   //Saving functions
+  void saving();
+  void saving_cloud_frame(Cloud* cloud);
   void saving_subset(Subset* subset);
   void saving_subset_range(int frame_b, int frame_e);
   void saving_cloud(Cloud* cloud);
   void saving_cloud_all();
+  void saving_saved_frames();
 
   //Specific functions
   void convertIscale();
@@ -53,9 +60,13 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Saver* saverManager;
+  Configuration* configManager;
 
   float spaceSampling;
   int nbLineSampling;
+  string open_mode;
+  string save_mode;
+  string path_saved_frame;
   string path_current_dir;
   uint modelID, comID;
 };

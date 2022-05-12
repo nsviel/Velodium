@@ -29,8 +29,7 @@ Slam::Slam(Engine_node* node){
   this->node_engine = node;
   //---------------------------
 
-  Configuration* configManager = node_engine->get_configManager();
-
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
 
@@ -40,6 +39,14 @@ Slam::Slam(Engine_node* node){
   this->assessManager = new SLAM_assessment(this);
   this->mapManager = new SLAM_localMap();
   this->paramManager = new SLAM_parameter(this);
+
+  //---------------------------
+  this->update_configuration();
+}
+Slam::~Slam(){}
+
+void Slam::update_configuration(){
+  //---------------------------
 
   this->solver_ceres = false;
   this->solver_GN = true;
@@ -53,11 +60,11 @@ Slam::Slam(Engine_node* node){
   this->map_size_old = 0;
   this->nb_thread = 8;
 
-  paramManager->make_config(configManager->parse_json_s("interface", "lidar_model"));
+  string lidar_model = configManager->parse_json_s("interface", "lidar_model");
+  paramManager->make_config(lidar_model);
 
   //---------------------------
 }
-Slam::~Slam(){}
 
 //Main functions
 void Slam::compute_slam(Cloud* cloud){

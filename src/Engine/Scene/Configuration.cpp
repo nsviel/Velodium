@@ -106,6 +106,8 @@ void Configuration::preconf_default(Json::Value& root){
   Json::Value param;
   param["path_media"] = "../media/";
   param["path_data"] = "../media/data/";
+  param["open_mode"] = "cloud";
+  param["save_mode"] = "cloud";
   param["cloud_translation"] = 0.01;
   param["cloud_rotation"] = 5; //Degree
   param["cloud_movement"] = true;
@@ -171,6 +173,8 @@ void Configuration::preconf_capture(Json::Value& root){
 
   //Parameters
   Json::Value param;
+  param["open_mode"] = "frame";
+  param["save_mode"] = "saved_frame";
   param["color_mode"] = 1;
   param["color_intensity_min"] = 0;
   param["color_intensity_max"] = 100;
