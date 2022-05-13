@@ -27,6 +27,7 @@ public:
 
   //Output: frame & Image saving
   void save_image();
+  void save_image_unique();
   void save_image_multiple();
   void save_image_path();
   void save_frame(Subset* subset);

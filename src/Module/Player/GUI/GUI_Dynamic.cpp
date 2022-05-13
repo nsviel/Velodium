@@ -215,10 +215,10 @@ void GUI_Dynamic::player_selection(){
 
   //---------------------------
 }
+
 void GUI_Dynamic::parameter_offline(){
   if(ImGui::CollapsingHeader("Parameter - offline")){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     //Restart to zero when arrive to the end of cloud frames

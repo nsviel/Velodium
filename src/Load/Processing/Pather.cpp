@@ -237,7 +237,7 @@ void Pather::saving_subset(Subset* subset){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_saving();
+  string path_saving = this->zenity_saving(subset->name);
 
   //Save current cloud
   if(subset != nullptr && path_saving != ""){
@@ -251,7 +251,7 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_saving();
+  string path_saving = this->zenity_directory();
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
@@ -267,7 +267,7 @@ void Pather::saving_cloud(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_saving();
+  string path_saving = this->zenity_saving(cloud->name);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
@@ -441,27 +441,30 @@ vector<string> Pather::zenity_loading(string title){
   //---------------------------
   return path_vec;
 }
-string Pather::zenity_saving(){
-  string path_saving = "";
+string Pather::zenity_saving(string filename){
   //---------------------------
 
+  string path_saving = "";
+  string path = path_current_dir + filename +".pts";
+
   //Open Zenity window
-  string zenity = "zenity --file-selection --save --title=Save --filename=" + path_current_dir;
+  string zenity = "zenity --file-selection --save --title=Save --filename=" + path;
   FILE *file = popen(zenity.c_str(), "r");
-  char filename[1024];
-  char* path_char = fgets(filename, 1024, file);
+  char path_buffer[1024];
+  char* path_char = fgets(path_buffer, 1024, file);
 
   //Check if empty
   if ((path_char != NULL) && (path_char[0] != '\0')) {
-    string path_str(path_char);
-
     //Supress unwanted line break
+    string path_str(path_char);
     if (path_str.find('\n')){
       path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
     }
-
     path_saving = path_str;
   }
+
+  //Set current directory
+  path_current_dir = path_saving.substr(0, path_saving.find_last_of("/") + 1);
 
   //---------------------------
   return path_saving;
@@ -487,6 +490,9 @@ string Pather::zenity_directory(){
 
     path_directory = path_str;
   }
+
+  //Set current directory
+  path_current_dir = path_directory;
 
   //---------------------------
   return path_directory;

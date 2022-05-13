@@ -26,7 +26,8 @@ public:
 
 public:
   //Main functions
-  void init_scene_object();
+  void init_object();
+  void update_configuration();
   void runtime_subset_object(Subset* subset);
 
   void update_dynamic(Cloud* cloud);

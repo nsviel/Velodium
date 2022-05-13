@@ -18,7 +18,7 @@ file_PTS::file_PTS(){
 }
 file_PTS::~file_PTS(){}
 
-//Main functions
+//Main load functions
 dataFile* file_PTS::Loader(string pathFile){
   data_out = new dataFile();
   data_out->name = "";
@@ -93,127 +93,7 @@ dataFile* file_PTS::Loader(string pathFile, int lmin, int lmax){
   return data_out;
 }
 
-bool file_PTS::Exporter(string path, Cloud* cloud){
-  //---------------------------
-
-  //Create file
-  if(path.substr(path.find_last_of(".") + 1) != "pts") path.append(".pts");
-  ofstream file;
-  file.open(path);
-  if(!file){
-    cout<<"Error in creating file !";
-    return 0;
-  }
-
-  int precision = 6;
-  file << fixed;
-
-  //Data : xyz (R) (rgb) (nxnynz)
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->RGB;
-    vector<vec3>& N = subset->N;
-    vector<float>& Is = subset->I;
-
-    //Write in the file
-    for(int i=0; i<XYZ.size(); i++){
-      //Location
-      file << setprecision(precision) << XYZ[i].x <<" "<< XYZ[i].y <<" "<< XYZ[i].z ;
-
-      //Intensity
-      if(subset->I.size() != 0){
-        if(export_IdataFormat == 0){
-          file << setprecision(precision) <<" "<< Is[i];
-        }
-        else if(export_IdataFormat == 1){
-          file << setprecision(0) <<" "<< int(Is[i]*255);
-        }
-        else if(export_IdataFormat == 2){
-          file << setprecision(0) <<" "<< int((Is[i]*4096)-2048);
-        }
-      }
-
-      //Color
-      if(subset->has_color){
-        file << setprecision(0) <<" "<< RGB[i].x * 255 <<" "<< RGB[i].y * 255 <<" "<< RGB[i].z * 255;
-      }
-
-      //Normal
-      if(subset->N.size() != 0){
-        file << setprecision(precision) <<" "<< N[i].x <<" "<< N[i].y <<" "<< N[i].z;
-      }
-    }
-  }
-
-  //line end
-  file << endl;
-
-  //---------------------------
-  file.close();
-  return true;
-  }
-bool file_PTS::Exporter(string path, Subset* subset){
-  //---------------------------
-
-  //Create file
-  if(path.substr(path.find_last_of(".") + 1) != "pts") path.append(".pts");
-  ofstream file;
-  file.open(path);
-  if(!file){
-    cout<<"Error in creating file !";
-    return 0;
-  }
-
-  //Data : xyz (R) (rgb) (nxnynz)
-  vector<vec3>& XYZ = subset->xyz;
-  vector<vec4>& RGB = subset->RGB;
-  vector<vec3>& N = subset->N;
-  vector<float>& Is = subset->I;
-
-  //Write in the file
-  int precision = 6;
-  file << XYZ.size() <<endl;
-  for(int i=0; i<XYZ.size(); i++){
-    //Line start
-    file << fixed;
-
-    //Location
-    file << setprecision(precision) << XYZ[i].x <<" "<< XYZ[i].y <<" "<< XYZ[i].z ;
-
-    //Intensity
-    if(subset->I.size() != 0){
-      if(export_IdataFormat == 0){
-        file << setprecision(precision) <<" "<< Is[i];
-      }
-      else if(export_IdataFormat == 1){
-        file << setprecision(0) <<" "<< int(Is[i]*255);
-      }
-      else if(export_IdataFormat == 2){
-        file << setprecision(0) <<" "<< int((Is[i]*4096)-2048);
-      }
-    }
-
-    //Color
-    if(subset->has_color){
-      file << setprecision(0) <<" "<< RGB[i].x * 255 <<" "<< RGB[i].y * 255 <<" "<< RGB[i].z * 255;
-    }
-
-    //Normal
-    if(subset->N.size() != 0){
-      file << setprecision(precision) <<" "<< N[i].x <<" "<< N[i].y <<" "<< N[i].z;
-    }
-
-    //line end
-    file << endl;
-  }
-
-  //---------------------------
-  file.close();
-  return true;
-}
-
-//Subfunctions
+//Sub load functions
 void file_PTS::Loader_init(){
   //---------------------------
 
@@ -417,6 +297,130 @@ void file_PTS::Loader_data(int FILE_config){
   }
 
   //---------------------------
+}
+
+//Main exporter functions
+bool file_PTS::Exporter(string path, Cloud* cloud){
+  //---------------------------
+
+  //Create file
+  if(path.substr(path.find_last_of(".") + 1) != "pts") path.append(".pts");
+  ofstream file;
+  file.open(path);
+  if(!file){
+    cout<<"Error in creating file !";
+    return 0;
+  }
+
+  //Set data representation format
+  int precision = 6;
+  file << fixed;
+
+  //Data : xyz (R) (rgb) (nxnynz)
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    vector<vec3>& XYZ = subset->xyz;
+    vector<vec4>& RGB = subset->RGB;
+    vector<vec3>& N = subset->N;
+    vector<float>& Is = subset->I;
+
+    //Write in the file
+    for(int i=0; i<XYZ.size(); i++){
+      //Location
+      file << setprecision(precision) << XYZ[i].x <<" "<< XYZ[i].y <<" "<< XYZ[i].z ;
+
+      //Intensity
+      if(subset->I.size() != 0){
+        if(export_IdataFormat == 0){
+          file << setprecision(precision) <<" "<< Is[i];
+        }
+        else if(export_IdataFormat == 1){
+          file << setprecision(0) <<" "<< int(Is[i]*255);
+        }
+        else if(export_IdataFormat == 2){
+          file << setprecision(0) <<" "<< int((Is[i]*4096)-2048);
+        }
+      }
+
+      //Color
+      if(subset->has_color){
+        file << setprecision(0) <<" "<< RGB[i].x * 255 <<" "<< RGB[i].y * 255 <<" "<< RGB[i].z * 255;
+      }
+
+      //Normal
+      if(subset->N.size() != 0){
+        file << setprecision(precision) <<" "<< N[i].x <<" "<< N[i].y <<" "<< N[i].z;
+      }
+
+      //line end
+      file << endl;
+    }
+  }
+
+  //Close file
+  file.close();
+
+  //---------------------------
+  return true;
+}
+bool file_PTS::Exporter(string path, Subset* subset){
+  //---------------------------
+
+  //Create file
+  if(path.substr(path.find_last_of(".") + 1) != "pts") path.append(".pts");
+  ofstream file;
+  file.open(path);
+  if(!file){
+    cout<<"Error in creating file !";
+    return 0;
+  }
+
+  //Data : xyz (R) (rgb) (nxnynz)
+  vector<vec3>& XYZ = subset->xyz;
+  vector<vec4>& RGB = subset->RGB;
+  vector<vec3>& N = subset->N;
+  vector<float>& Is = subset->I;
+
+  //Write in the file
+  int precision = 6;
+  file << XYZ.size() <<endl;
+  for(int i=0; i<XYZ.size(); i++){
+    //Line start
+    file << fixed;
+
+    //Location
+    file << setprecision(precision) << XYZ[i].x <<" "<< XYZ[i].y <<" "<< XYZ[i].z ;
+
+    //Intensity
+    if(subset->I.size() != 0){
+      if(export_IdataFormat == 0){
+        file << setprecision(precision) <<" "<< Is[i];
+      }
+      else if(export_IdataFormat == 1){
+        file << setprecision(0) <<" "<< int(Is[i]*255);
+      }
+      else if(export_IdataFormat == 2){
+        file << setprecision(0) <<" "<< int((Is[i]*4096)-2048);
+      }
+    }
+
+    //Color
+    if(subset->has_color){
+      file << setprecision(0) <<" "<< RGB[i].x * 255 <<" "<< RGB[i].y * 255 <<" "<< RGB[i].z * 255;
+    }
+
+    //Normal
+    if(subset->N.size() != 0){
+      file << setprecision(precision) <<" "<< N[i].x <<" "<< N[i].y <<" "<< N[i].z;
+    }
+
+    //line end
+    file << endl;
+  }
+
+  //---------------------------
+  file.close();
+  return true;
 }
 
 //Checking functions

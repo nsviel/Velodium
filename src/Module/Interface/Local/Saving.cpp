@@ -53,20 +53,26 @@ void Saving::update_configuration(){
 void Saving::save_image(){
   //---------------------------
 
+  if(save_image_max == 1){
+    this->save_image_unique();
+  }else if(save_image_max > 1){
+    this->save_image_multiple();
+  }else{
+    return;
+  }
+
+  //---------------------------
+}
+void Saving::save_image_unique(){
+  //---------------------------
+
   //Put screenshot flag on
-  string path = path_image + "image";
+  string path = path_image + "image_w";
   *renderManager->get_save_path() = path;
   *renderManager->get_is_screenshot() = true;
-  save_image_ID++;
 
-  //Keep only a certain number of image
-  if(save_image_vec.size() < save_image_max){
-    save_image_vec.push(path);
-  }else{
-    std::remove (save_image_vec.front().c_str());
-    save_image_vec.pop();
-    save_image_vec.push(path);
-  }
+  //Faire action pour copier path image_w en path image pret pour être lu
+  //Et vérifier si temps copy est > à temps écriture (normalement oui)
 
   //---------------------------
   this->path_image_last = path;

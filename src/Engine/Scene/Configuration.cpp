@@ -209,6 +209,12 @@ void Configuration::preconf_ai_module(Json::Value& root){
   module["with_cylinder_cleaning"] = false;
   root["module"] = module;
 
+  //Glyph
+  Json::Value glyph;
+  glyph["aabb_visibility"] = false;
+  glyph["trajectory_visibility"] = true;
+  root["glyph"] = glyph;
+
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp64";
@@ -232,6 +238,7 @@ void Configuration::preconf_wp4_car(Json::Value& root){
   //Glyph
   Json::Value glyph;
   glyph["aabb_visibility"] = false;
+  glyph["trajectory_visibility"] = true;
   root["glyph"] = glyph;
 
   //Module

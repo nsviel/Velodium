@@ -48,7 +48,7 @@ public:
 
   //Zenity stuff
   vector<string> zenity_loading(string title);
-  string zenity_saving();
+  string zenity_saving(string filename);
   string zenity_directory();
   void zenity_select_directory(string& path_dir);
 

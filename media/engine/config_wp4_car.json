@@ -9,10 +9,8 @@
       "speed_zoom" : 0.10000000149011612
    },
    "glyph" : {
-      "aabb_visibility" : true,
-      "grid_visibility" : true,
-      "normal_visibility" : false,
-      "trajectory_visibility" : false
+      "aabb_visibility" : false,
+      "trajectory_visibility" : true
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -21,12 +19,12 @@
       "topPanel_height" : 18
    },
    "interface" : {
-      "lidar_model" : "velodyne_vlp64",
+      "lidar_model" : "scala",
       "with_gps" : false,
       "with_prediction" : true,
-      "with_remove_lastSubset" : false,
+      "with_remove_lastSubset" : true,
       "with_save_frame" : true,
-      "with_save_image" : false
+      "with_save_image" : true
    },
    "module" : {
       "with_camera_follow" : true,

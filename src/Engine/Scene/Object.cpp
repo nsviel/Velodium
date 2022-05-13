@@ -31,32 +31,43 @@ Object::Object(Engine_node* node){
   this->carObject = new Car();
 
   //---------------------------
-  this->init_scene_object();
+  this->init_object();
+  this->update_configuration();
 }
 Object::~Object(){}
 
 //Main functions
-void Object::init_scene_object(){
+void Object::init_object(){
+  //---------------------------
+
+  glyphManager->create_glyph_scene(markObject->get_selection_frame());
+  glyphManager->create_glyph_scene(gridObject->get_grid());
+  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
+  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
+  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
+  glyphManager->create_glyph_scene(trajObject->get_glyph());
+  glyphManager->create_glyph_scene(aabbObject->get_aabb());
+  glyphManager->create_glyph_scene(carObject->get_glyph());
+
+  //---------------------------
+}
+void Object::update_configuration(){
   //---------------------------
 
   Glyph* aabb = aabbObject->get_aabb();
   Glyph* grid = gridObject->get_grid();
-  Glyph* car = carObject->get_glyph();
-  Glyph* traj = trajObject->get_glyph();
-
-  glyphManager->create_glyph_scene(markObject->get_selection_frame());
-  glyphManager->create_glyph_scene(grid);
-  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
-  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
-  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
-  glyphManager->create_glyph_scene(traj);
-  glyphManager->create_glyph_scene(aabb);
-  glyphManager->create_glyph_scene(car);
-
   aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
   grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");
-  car->visibility = configManager->parse_json_b("glyph", "trajectory_visibility");
-  traj->visibility = configManager->parse_json_b("glyph", "trajectory_visibility");
+
+  Glyph* car = carObject->get_glyph();
+  Glyph* traj = trajObject->get_glyph();
+  car->visibility = false;
+  traj->visibility = false;
+
+  bool* car_visu = carObject->get_visibility();
+  bool* traj_visu = trajObject->get_visibility();
+  *car_visu = configManager->parse_json_b("glyph", "trajectory_visibility");
+  *traj_visu = configManager->parse_json_b("glyph", "trajectory_visibility");
 
   //---------------------------
 }

@@ -51,6 +51,7 @@ void Capture::update_configuration(){
   this->is_capture_finished = true;
   this->capture_time = 0;
   this->capture_nb_point = 0;
+  this->capture_nb_point_raw = 0;
   this->is_first_run = true;
 
   //---------------------------

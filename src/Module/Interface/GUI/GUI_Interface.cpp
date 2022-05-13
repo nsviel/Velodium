@@ -108,21 +108,22 @@ void GUI_Interface::parameter_dynamic(){
     ImGui::InputInt("Nb frame", save_frame_max);
   }
 
-  //Option: unlimited frame saving
-  static bool with_unlimit_saving = false;
-  ImGui::Checkbox("Save unlimited frame", &with_unlimit_saving);
-  if(with_unlimit_saving){
-    int* save_frame_max = saveManager->get_save_frame_max();
-    *save_frame_max = 500000000;
-  }
-
   //Save image for interfacing
   bool* with_save_image = interfaceManager->get_with_save_image();
   ImGui::Checkbox("Save image", with_save_image);
   if(*with_save_image){
     int* save_image_max = saveManager->get_save_image_max();
+
+    static bool save_image_unique = false;
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-    ImGui::InputInt("Nb image", save_image_max);
+    if(ImGui::Checkbox("Unique", &save_image_unique)){
+      *save_image_max = 1;
+    }
+
+    if(save_image_unique == false){
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+      ImGui::InputInt("Nb image", save_image_max);
+    }
   }
 
   //---------------------------

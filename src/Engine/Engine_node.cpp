@@ -53,6 +53,8 @@ void Engine_node::update(){
   node_ope->update();
   node_load->update();
 
+  objectManager->update_configuration();
+
   //---------------------------
 }
 void Engine_node::runtime(){
