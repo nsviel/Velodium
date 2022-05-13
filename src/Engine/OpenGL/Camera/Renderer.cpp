@@ -7,6 +7,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../../../../extern/stb_image_write.h"
 
+#include <filesystem>
 #include <FreeImage.h>
 #include <cstdint>
 
@@ -160,11 +161,13 @@ void Renderer::render_quad(){
 }
 
 //Screenshot functions
-void Renderer::render_screenshot(string path){
+void Renderer::render_screenshot(string path_file){
   GLFWwindow* window = dimManager->get_window();
   //---------------------------
 
   if(window != nullptr){
+    //First, create image in writing mode
+    string path = path_file + "_w";
     vec2 gl_dim = dimManager->get_gl_dim();
     vec2 gl_pos = dimManager->get_gl_pos();
 
@@ -178,9 +181,12 @@ void Renderer::render_screenshot(string path){
     glReadPixels(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
     //Freeimage
-    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 3 * gl_dim.x, 24, 0xFF0000, 0x00FF00,0x0000FF, false);
+    FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 3 * gl_dim.x, 24,0xFF0000 , 0x00FF00, 0x0000FF, false);
     FreeImage_Save(FIF_BMP, image, path.c_str(), 0);
     FreeImage_Unload(image);
+
+    //Then copie created image into a ready-to-be-read image
+    std::filesystem::copy(path, path_file, std::filesystem::copy_options::update_existing);
   }
 
   //---------------------------

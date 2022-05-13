@@ -67,12 +67,9 @@ void Saving::save_image_unique(){
   //---------------------------
 
   //Put screenshot flag on
-  string path = path_image + "image_w";
+  string path = path_image + "image";
   *renderManager->get_save_path() = path;
   *renderManager->get_is_screenshot() = true;
-
-  //Faire action pour copier path image_w en path image pret pour être lu
-  //Et vérifier si temps copy est > à temps écriture (normalement oui)
 
   //---------------------------
   this->path_image_last = path;
