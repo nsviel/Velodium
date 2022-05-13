@@ -130,6 +130,13 @@ void Configuration::preconf_default(Json::Value& root){
   camera["speed_zoom"] = 0.1f;
   root["camera"] = camera;
 
+  //Network
+  Json::Value network;
+  network["with_http_demon"] = true;
+  network["http_port"] = 8888;
+  network["mqtt_port"] = 1883;
+  root["network"] = network;
+
   //Glyph
   Json::Value glyph;
   glyph["aabb_visibility"] = true;
@@ -156,6 +163,7 @@ void Configuration::preconf_default(Json::Value& root){
   interface["with_save_frame"] = false;
   interface["with_remove_lastSubset"] = false;
   interface["nb_save_frame"] = 20;
+  interface["nb_save_image"] = 20;
   root["interface"] = interface;
 
   //---------------------------
@@ -223,6 +231,7 @@ void Configuration::preconf_ai_module(Json::Value& root){
   interface["with_save_image"] = false;
   interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
+  interface["nb_save_image"] = 1;
   root["interface"] = interface;
 
   //---------------------------
@@ -256,6 +265,7 @@ void Configuration::preconf_wp4_car(Json::Value& root){
   interface["with_save_image"] = true;
   interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = true;
+  interface["nb_save_image"] = 1;
   root["interface"] = interface;
 
   //---------------------------

@@ -3,6 +3,11 @@
 
 #include "MQTT_callback.h"
 
+#include "../../Interface_node.h"
+
+#include "../../../../Engine/Engine_node.h"
+#include "../../../../Engine/Scene/Configuration.h"
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -12,9 +17,12 @@
 
 
 //Constructor / Destructor
-MQTT::MQTT(){
+MQTT::MQTT(Interface_node* node){
   //---------------------------
 
+  Engine_node* node_engine = node->get_node_engine();
+
+  this->configManager = node_engine->get_configManager();
   this->client = nullptr;
   this->is_connected = false;
 
@@ -33,7 +41,7 @@ void MQTT::update_configuration(){
 
   this->selected_dest = "localhost";
   this->selected_ip = "127.0.0.1";
-  this->selected_port = 1883;
+  this->selected_port = configManager->parse_json_i("network", "mqtt_port");
   this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
 
   //Parameters

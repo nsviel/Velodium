@@ -4,6 +4,9 @@
 #include "../../Interface_node.h"
 #include "../../Local/Saving.h"
 
+#include "../../../../Engine/Engine_node.h"
+#include "../../../../Engine/Scene/Configuration.h"
+
 #include <iostream>
 #include <sys/types.h>
 #include <sys/select.h>
@@ -19,6 +22,9 @@
 HTTP_server::HTTP_server(Interface_node* node){
   //---------------------------
 
+  Engine_node* node_engine = node->get_node_engine();
+
+  this->configManager = node_engine->get_configManager();
   this->saveManager = node->get_saveManager();
 
   this->is_deamon = false;
@@ -32,8 +38,8 @@ void HTTP_server::update_configuration(){
   //---------------------------
 
   this->path_image = saveManager->get_path_image() + "image";
-  this->server_port = 8888;
-  this->with_http_demon = false;
+  this->with_http_demon = configManager->parse_json_b("network", "with_http_demon");
+  this->server_port = configManager->parse_json_i("network", "http_port");
 
   //---------------------------
   this->start_deamon();
@@ -66,25 +72,6 @@ void HTTP_server::stop_deamon(){
 }
 
 //Daemon functions
-int HTTP_server::print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value){
-  //---------------------------
-
-  printf ("%s: %s\n", key, value);
-
-  //---------------------------
-  return MHD_YES;
-}
-void HTTP_server::print_info(struct MHD_Connection *connection, const char *url, const char *method, const char *version){
-  //---------------------------
-
-  cout<<"---------------------"<<endl;
-  printf ("New %s method for url %s using version %s\n", method, url, version);
-  cout<<"-------"<<endl;
-  MHD_get_connection_values (connection, MHD_HEADER_KIND, &print_out_key, NULL);
-  cout<<"---------------------"<<endl;
-
-  //---------------------------
-}
 int HTTP_server::http_answer(void *cls, struct MHD_Connection *connection, const char *url,
   const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **history){
   //---------------------------
@@ -95,8 +82,9 @@ int HTTP_server::http_answer(void *cls, struct MHD_Connection *connection, const
     return ret;
   }
   if(strcmp(method, "POST") == 0){
-    int ret = http_post_geolocalization(cls, connection, upload_data, upload_data_size);
-    return ret;
+    say(*upload_data_size);
+    //int ret = http_post_geolocalization(cls, connection, upload_data, *upload_data_size);
+    //return ret;
   }
   else{
     return MHD_NO;
@@ -141,13 +129,10 @@ int HTTP_server::http_get_image(void *cls, struct MHD_Connection *connection){
   //---------------------------
   return ret;
 }
-
-
-
-
 static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,const char *filename, const char *content_type,const char *transfer_encoding, const char *data,uint64_t off, size_t size){
   return MHD_YES;
 }
+
 int HTTP_server::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size){
   //---------------------------
 
@@ -166,6 +151,27 @@ int HTTP_server::http_post_geolocalization(void* cls, struct MHD_Connection *con
   else{
     return MHD_NO;
   }
+
+  //---------------------------
+}
+
+//Subfunctions
+int HTTP_server::print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value){
+  //---------------------------
+
+  printf ("%s: %s\n", key, value);
+
+  //---------------------------
+  return MHD_YES;
+}
+void HTTP_server::print_info(struct MHD_Connection *connection, const char *url, const char *method, const char *version){
+  //---------------------------
+
+  cout<<"---------------------"<<endl;
+  printf ("New %s method for url %s using version %s\n", method, url, version);
+  cout<<"-------"<<endl;
+  MHD_get_connection_values (connection, MHD_HEADER_KIND, &print_out_key, NULL);
+  cout<<"---------------------"<<endl;
 
   //---------------------------
 }

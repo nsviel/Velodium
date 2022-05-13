@@ -24,6 +24,7 @@
       "capture_port" : 2370,
       "lidar_model" : "velodyne_vlp64",
       "nb_save_frame" : 20,
+      "nb_save_image" : 20,
       "with_gps" : false,
       "with_prediction" : false,
       "with_remove_lastSubset" : false,
@@ -35,6 +36,11 @@
       "with_camera_follow" : true,
       "with_cylinder_cleaning" : false,
       "with_slam" : true
+   },
+   "network" : {
+      "http_port" : 8888,
+      "mqtt_port" : 1883,
+      "with_http_demon" : true
    },
    "parameter" : {
       "check_directories" : true,

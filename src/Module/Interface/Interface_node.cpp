@@ -28,7 +28,7 @@ Interface_node::Interface_node(Module_node* node){
   this->predManager = new Prediction(this);
   this->captureManager = new Capture(this);
   this->gpsManager = new GPS(this);
-  this->netManager = new Network();
+  this->netManager = new Network(this);
   this->interfaceManager = new Interface(this);
   this->httpManager = new HTTP_server(this);
 

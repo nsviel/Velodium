@@ -6,6 +6,7 @@
 
 #include <libssh/libssh.h>
 
+class Interface_node;
 class MQTT;
 class SFTP;
 class SSH;
@@ -15,12 +16,12 @@ class Network
 {
 public:
   //Constructor / Destructor
-  Network();
+  Network(Interface_node* node);
   ~Network();
 
 public:
   void update_configuration();
-  
+
   //Main function
   void send_file();
   void start_connection();

@@ -4,21 +4,29 @@
 #include "SFTP/SFTP.h"
 #include "SFTP/SSH.h"
 
+#include "../Interface_node.h"
+
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Configuration.h"
 #include "../../../Specific/fct_maths.h"
 #include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
-Network::Network(){
+Network::Network(Interface_node* node){
   //---------------------------
 
-  this->mqttManager = new MQTT();
+  this->mqttManager = new MQTT(node);
   this->sshManager = new SSH();
   this->sftpManager = new SFTP(sshManager);
 
   this->is_connected = false;
   this->is_image_watcher = false;
   this->is_mqtt_watcher = false;
+
+  this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
+  this->path_target = "/home/aether/Desktop/";
+  this->name_file = "frame_0001.ply";
 
   //---------------------------
   this->update_configuration();
@@ -28,10 +36,6 @@ Network::~Network(){}
 
 void Network::update_configuration(){
   //---------------------------
-
-  this->path_source = "/home/aether/Desktop/Point_cloud/frame_0001.ply";
-  this->path_target = "/home/aether/Desktop/";
-  this->name_file = "frame_0001.ply";
 
   mqttManager->update_configuration();
 

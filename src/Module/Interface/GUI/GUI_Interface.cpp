@@ -114,10 +114,19 @@ void GUI_Interface::parameter_dynamic(){
   if(*with_save_image){
     int* save_image_max = saveManager->get_save_image_max();
 
-    static bool save_image_unique = false;
+    static bool save_image_unique;
+    if(*save_image_max == 1){
+      save_image_unique = true;
+    }else{
+      save_image_unique = false;
+    }
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
     if(ImGui::Checkbox("Unique", &save_image_unique)){
-      *save_image_max = 1;
+      if(save_image_unique == true){
+        *save_image_max = 1;
+      }else{
+        *save_image_max = 20;
+      }
     }
 
     if(save_image_unique == false){

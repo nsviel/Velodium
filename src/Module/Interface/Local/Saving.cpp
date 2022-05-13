@@ -43,8 +43,8 @@ void Saving::update_configuration(){
   this->path_image = path_dir + "image/";
 
   this->save_frame_max = configManager->parse_json_i("interface", "nb_save_frame");
+  this->save_image_max = configManager->parse_json_i("interface", "nb_save_image");
   this->save_image_ID = 0;
-  this->save_image_max = 20;
 
   //---------------------------
 }

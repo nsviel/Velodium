@@ -8,17 +8,20 @@
 #include "mqtt/async_client.h"
 #include <chrono>
 
+class Interface_node;
+class Configuration;
+
 
 class MQTT
 {
 public:
   //Constructor / Destructor
-  MQTT();
+  MQTT(Interface_node* node);
   ~MQTT();
 
 public:
   void update_configuration();
-  
+
   //Connection functions
   void mqtt_connection();
   void mqtt_disconnect();
@@ -38,6 +41,7 @@ public:
   inline bool get_is_connected(){return is_connected;}
 
 private:
+  Configuration* configManager;
   mqtt::async_client* client;
 
   //Broker
