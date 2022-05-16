@@ -8,7 +8,7 @@
 #include "mqtt/async_client.h"
 #include <chrono>
 
-class Interface_node;
+class Network;
 class Configuration;
 
 
@@ -16,7 +16,7 @@ class MQTT
 {
 public:
   //Constructor / Destructor
-  MQTT(Interface_node* node);
+  MQTT(Network* net);
   ~MQTT();
 
 public:
@@ -42,6 +42,7 @@ public:
 
 private:
   Configuration* configManager;
+  Network* netManager;
   mqtt::async_client* client;
 
   //Broker

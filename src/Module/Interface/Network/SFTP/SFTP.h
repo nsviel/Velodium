@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <fstream>
 
+class Network;
 class SSH;
 
 
@@ -15,7 +16,7 @@ class SFTP
 {
 public:
   //Constructor / Destructor
-  SFTP(SSH* ssh);
+  SFTP(Network* netManager);
   ~SFTP();
 
 public:

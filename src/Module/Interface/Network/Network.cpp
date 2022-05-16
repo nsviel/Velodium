@@ -3,6 +3,7 @@
 #include "MQTT/MQTT.h"
 #include "SFTP/SFTP.h"
 #include "SFTP/SSH.h"
+#include "HTTP/HTTP_server.h"
 
 #include "../Interface_node.h"
 
@@ -14,11 +15,18 @@
 
 //Constructor / Destructor
 Network::Network(Interface_node* node){
+  this->node_interface = node;
   //---------------------------
 
-  this->mqttManager = new MQTT(node);
+  Engine_node* node_engine = node->get_node_engine();
+
+  this->configManager = node_engine->get_configManager();
+  this->create_wallet();
+  
+  this->mqttManager = new MQTT(this);
   this->sshManager = new SSH();
-  this->sftpManager = new SFTP(sshManager);
+  this->sftpManager = new SFTP(this);
+  this->httpManager = new HTTP_server(this);
 
   this->is_connected = false;
   this->is_image_watcher = false;
@@ -29,20 +37,37 @@ Network::Network(Interface_node* node){
   this->name_file = "frame_0001.ply";
 
   //---------------------------
-  this->update_configuration();
-  this->create_wallet();
 }
 Network::~Network(){}
 
+//Main function
 void Network::update_configuration(){
   //---------------------------
 
+  httpManager->update_configuration();
   mqttManager->update_configuration();
 
   //---------------------------
 }
+void Network::create_wallet(){
+  //---------------------------
 
-//Main function
+  this->wallet = new Wallet();
+  this->wallet->wallet_dic = configManager->parse_json_dict("wallet");
+  this->wallet->make_concatenation();
+
+  //---------------------------
+}
+string Network::get_ip_from_dest(string dest){
+  //---------------------------
+
+  string ip = wallet->wallet_dic[dest];
+
+  //---------------------------
+  return ip;
+}
+
+//Connection function
 void Network::start_connection(){
   //---------------------------
 
@@ -56,36 +81,6 @@ void Network::stop_connection(){
 
   sshManager->ssh_disconnection();
   this->is_connected = *sshManager->get_ssh_connected();
-
-  //---------------------------
-}
-void Network::send_file(){
-  //---------------------------
-
-  //SSH connection
-  sshManager->ssh_connection();
-
-  //Send file
-  sftpManager->sftp_new_session();
-  sftpManager->sftp_send_file(path_source, path_target, name_file);
-
-  //---------------------------
-}
-
-//Subfunctions
-void Network::create_wallet(){
-  //---------------------------
-
-  this->wallet = new Wallet();
-  this->wallet->wallet_dic = {
-    { "localhost", "127.0.0.1" },
-    { "mine_ordi_nathan", "10.201.20.106" },
-    { "mine_ordi_louis", "10.201.20.110" },
-    { "mine_server", "10.201.224.13" },
-    { "portable_nathan_home", "192.168.1.27" },
-    { "portable_nathan_mine", "192.168.153.147" },
-  };
-  this->wallet->make_concatenation();
 
   //---------------------------
 }
@@ -110,6 +105,18 @@ void Network::select_targetPath(){
 
   //Select file to send
   zenity_directory(path_target);
+
+  //---------------------------
+}
+void Network::send_file(){
+  //---------------------------
+
+  //SSH connection
+  sshManager->ssh_connection();
+
+  //Send file
+  sftpManager->sftp_new_session();
+  sftpManager->sftp_send_file(path_source, path_target, name_file);
 
   //---------------------------
 }

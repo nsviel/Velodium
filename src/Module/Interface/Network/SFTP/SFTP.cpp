@@ -1,16 +1,17 @@
 #include "SFTP.h"
 
 #include "SSH.h"
+#include "../Network.h"
 
 #include "../../../../Specific/fct_maths.h"
 #include "../../../../Specific/fct_system.h"
 
 
 //Constructor / Destructor
-SFTP::SFTP(SSH* ssh){
+SFTP::SFTP(Network* netManager){
   //---------------------------
 
-  this->sshManager = ssh;
+  this->sshManager = netManager->get_sshManager();
   this->sftp_connected = false;
 
   //---------------------------

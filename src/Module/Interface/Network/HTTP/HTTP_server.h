@@ -5,7 +5,7 @@
 
 #include <microhttpd.h>
 
-class Interface_node;
+class Network;
 class Saving;
 class Configuration;
 
@@ -13,7 +13,7 @@ class Configuration;
 class HTTP_server
 {
 public:
-  HTTP_server(Interface_node* node);
+  HTTP_server(Network* netManager);
   ~HTTP_server();
 
 public:

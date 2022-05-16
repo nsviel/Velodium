@@ -2,7 +2,6 @@
 
 #include "Interface.h"
 #include "Network/GPS.h"
-#include "Network/HTTP/HTTP_server.h"
 #include "Local/Saving.h"
 #include "Local/Prediction.h"
 #include "Network/Network.h"
@@ -30,7 +29,6 @@ Interface_node::Interface_node(Module_node* node){
   this->gpsManager = new GPS(this);
   this->netManager = new Network(this);
   this->interfaceManager = new Interface(this);
-  this->httpManager = new HTTP_server(this);
 
   //---------------------------
   this->init();
@@ -54,7 +52,6 @@ void Interface_node::update(){
   captureManager->update_configuration();
   fileManager->update_configuration();
   netManager->update_configuration();
-  httpManager->update_configuration();
 
   //---------------------------
 }

@@ -22,12 +22,13 @@ GUI_Network::GUI_Network(GUI_module* gui_module){
 
   Module_node* node_module = gui_module->get_node_module();
   Interface_node* node_interface = node_module->get_node_interface();
+  Network* netManager = node_interface->get_netManager();
 
   this->netManager = node_interface->get_netManager();
   this->mqttManager = netManager->get_mqttManager();
   this->sftpManager = netManager->get_sftpManager();
   this->sshManager = netManager->get_sshManager();
-  this->httpManager = node_interface->get_httpManager();
+  this->httpManager = netManager->get_httpManager();
 
   this->item_width = 100;
 

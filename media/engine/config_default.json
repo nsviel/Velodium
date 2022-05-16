@@ -39,6 +39,9 @@
    },
    "network" : {
       "http_port" : 8888,
+      "mqtt_broker_topic" : "ai_obstacle",
+      "mqtt_client_ID" : "ai_module",
+      "mqtt_dest" : "localhost",
       "mqtt_port" : 1883,
       "with_http_demon" : true
    },
@@ -56,6 +59,14 @@
       "path_media" : "../media/",
       "point_size" : 2,
       "save_mode" : "cloud"
+   },
+   "wallet" : {
+      "localhost" : "127.0.0.1",
+      "mine_ordi_louis" : "10.201.20.110",
+      "mine_ordi_nathan" : "10.201.20.106",
+      "mine_server" : "10.201.224.13",
+      "portable_nathan_home" : "192.168.1.27",
+      "portable_nathan_mine" : "192.168.153.147"
    },
    "window" : {
       "background_color" : 0.86000001430511475,

@@ -7,6 +7,7 @@
 #include "../Interface.h"
 #include "../Local/Saving.h"
 #include "../Network/GPS.h"
+#include "../Network/Network.h"
 #include "../Network/HTTP/HTTP_server.h"
 #include "../Local/Prediction.h"
 
@@ -20,6 +21,7 @@ GUI_Interface::GUI_Interface(GUI_module* gui_module){
 
   Module_node* node_module = gui_module->get_node_module();
   Interface_node* node_interface = node_module->get_node_interface();
+  Network* netManager = node_interface->get_netManager();
 
   this->gui_lidarManager = new GUI_Lidar(gui_module);
   this->gui_netManager = new GUI_Network(gui_module);
@@ -27,7 +29,7 @@ GUI_Interface::GUI_Interface(GUI_module* gui_module){
   this->saveManager = node_interface->get_saveManager();
   this->predManager = node_interface->get_predManager();
   this->gpsManager = node_interface->get_gpsManager();
-  this->httpManager = node_interface->get_httpManager();
+  this->httpManager = netManager->get_httpManager();
 
   this->item_width = 100;
 

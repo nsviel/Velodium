@@ -135,7 +135,20 @@ void Configuration::preconf_default(Json::Value& root){
   network["with_http_demon"] = true;
   network["http_port"] = 8888;
   network["mqtt_port"] = 1883;
+  network["mqtt_dest"] = "localhost";
+  network["mqtt_client_ID"] = "ai_module";
+  network["mqtt_broker_topic"] = "ai_obstacle";
   root["network"] = network;
+
+  //Wallet
+  Json::Value wallet;
+  wallet["localhost"] = "127.0.0.1";
+  wallet["mine_ordi_nathan"] = "10.201.20.106";
+  wallet["mine_ordi_louis"] = "10.201.20.110";
+  wallet["mine_server"] = "10.201.224.13";
+  wallet["portable_nathan_home"] = "192.168.1.27";
+  wallet["portable_nathan_mine"] = "192.168.153.147";
+  root["wallet"] = wallet;
 
   //Glyph
   Json::Value glyph;
@@ -391,6 +404,51 @@ string Configuration::parse_json_s(string field, string value){
 
   //---------------------------
   return result;
+}
+map<string, string> Configuration::parse_json_dict(string field){
+  //---------------------------
+
+  std::ifstream ifs(path_config);
+  Json::Reader reader;
+  Json::Value root;
+  reader.parse(ifs, root);
+
+  Json::Value& json_field = root[field];
+
+  //If value exist ok, but if not check default config file
+  map<string, string> dict;
+  if(root.isMember(field)){
+    for(Json::Value::const_iterator itr=json_field.begin(); itr!=json_field.end(); itr++){
+      string field_itr = itr.key().asString();
+      string result = json_field[field_itr].asString();
+      dict.insert ( std::pair<string, string>(field_itr, result) );
+    }
+  }else{
+    std::ifstream ifs_default(path_default);
+    Json::Reader reader;
+    Json::Value root;
+    reader.parse(ifs_default, root);
+
+    const Json::Value& json_field = root[field];
+
+    //Check finally if default has it, if not say it
+    if(root.isMember(field)){
+      for(Json::Value::const_iterator itr=json_field.begin(); itr!=json_field.end(); itr++){
+        string field_itr = itr.key().asString();
+        string result = json_field[field_itr].asString();
+        dict.insert ( std::pair<string, string>(field_itr, result) );
+      }
+    }else{
+      cout<<"Config problem: the field "<<field<<" does not exists !"<<endl;
+    }
+
+    ifs_default.close();
+  }
+
+  ifs.close();
+
+  //---------------------------
+  return dict;
 }
 float Configuration::parse_json_f(string field, string value){
   //---------------------------

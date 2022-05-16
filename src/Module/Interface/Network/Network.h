@@ -7,6 +7,8 @@
 #include <libssh/libssh.h>
 
 class Interface_node;
+class Configuration;
+class HTTP_server;
 class MQTT;
 class SFTP;
 class SSH;
@@ -20,22 +22,24 @@ public:
   ~Network();
 
 public:
-  void update_configuration();
-
   //Main function
+  void update_configuration();
+  void create_wallet();
+  string get_ip_from_dest(string dest);
+
+  //Connection function
   void send_file();
   void start_connection();
   void stop_connection();
-
-  //Subfunctions
-  void create_wallet();
   void select_sourcePath();
   void select_targetPath();
 
   inline MQTT* get_mqttManager(){return mqttManager;}
   inline SFTP* get_sftpManager(){return sftpManager;}
   inline SSH* get_sshManager(){return sshManager;}
+  inline HTTP_server* get_httpManager(){return httpManager;}
   inline Wallet* get_wallet(){return wallet;}
+  inline Interface_node* get_node_interface(){return node_interface;}
 
   inline string* get_path_source(){return &path_source;}
   inline string* get_path_target(){return &path_target;}
@@ -44,9 +48,12 @@ public:
   inline bool get_is_image_watcher(){return is_image_watcher;}
 
 private:
+  Configuration* configManager;
+  Interface_node* node_interface;
   MQTT* mqttManager;
   SFTP* sftpManager;
   SSH* sshManager;
+  HTTP_server* httpManager;
   Wallet* wallet;
 
   string name_file;

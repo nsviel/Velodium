@@ -3,6 +3,7 @@
 
 #include "MQTT_callback.h"
 
+#include "../Network.h"
 #include "../../Interface_node.h"
 
 #include "../../../../Engine/Engine_node.h"
@@ -17,10 +18,12 @@
 
 
 //Constructor / Destructor
-MQTT::MQTT(Interface_node* node){
+MQTT::MQTT(Network* net){
+  this->netManager = net;
   //---------------------------
 
-  Engine_node* node_engine = node->get_node_engine();
+  Interface_node* node_interface = netManager->get_node_interface();
+  Engine_node* node_engine = node_interface->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
   this->client = nullptr;
@@ -36,11 +39,11 @@ void MQTT::update_configuration(){
 
   //Connection
   this->client_message = "Hello world!";
-  this->client_ID = "ai_module";
-  this->broker_topic = "ai_obstacle";
+  this->client_ID = configManager->parse_json_s("network", "mqtt_client_ID");
+  this->broker_topic = configManager->parse_json_s("network", "mqtt_broker_topic");
 
-  this->selected_dest = "localhost";
-  this->selected_ip = "127.0.0.1";
+  this->selected_dest = configManager->parse_json_s("network", "mqtt_dest");
+  this->selected_ip = netManager->get_ip_from_dest(selected_dest);
   this->selected_port = configManager->parse_json_i("network", "mqtt_port");
   this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
 

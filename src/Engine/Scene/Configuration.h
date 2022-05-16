@@ -6,6 +6,7 @@
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
 #include <fstream>
+#include <map>
 
 
 class Configuration
@@ -33,6 +34,7 @@ public:
   bool is_file_exist(string fileName);
 
   //Basic parsing accesseurs
+  map<string, string> parse_json_dict(string field);
   float parse_json_f(string field, string value);
   string parse_json_s(string field, string value);
   int parse_json_i(string field, string value);

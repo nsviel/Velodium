@@ -1,6 +1,7 @@
 #include "HTTP_server.h"
 //http://localhost:8888/
 
+#include "../Network.h"
 #include "../../Interface_node.h"
 #include "../../Local/Saving.h"
 
@@ -19,13 +20,14 @@
 
 
 //Constructor / Destructor
-HTTP_server::HTTP_server(Interface_node* node){
+HTTP_server::HTTP_server(Network* netManager){
   //---------------------------
 
-  Engine_node* node_engine = node->get_node_engine();
+  Interface_node* node_interface = netManager->get_node_interface();
+  Engine_node* node_engine = node_interface->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
-  this->saveManager = node->get_saveManager();
+  this->saveManager = node_interface->get_saveManager();
 
   this->is_deamon = false;
 
