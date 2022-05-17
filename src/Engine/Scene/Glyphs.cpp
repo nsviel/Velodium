@@ -30,35 +30,7 @@ void Glyphs::runtime_scene_glyph(){
 
   for(int i=0;i<list_glyph->size();i++){
     Glyph* glyph = *next(list_glyph->begin(),i);
-
-    if(glyph->visibility){
-      // Bind the glyph VAO
-      glBindVertexArray(glyph->VAO);
-      if(glyph->draw_type == "point"){
-        glPointSize(glyph->draw_width);
-        glDrawArrays(GL_POINTS, 0, glyph->location.size());
-      }
-      else if(glyph->draw_type == "line"){
-        glLineWidth(glyph->draw_width);
-        glDrawArrays(GL_LINES, 0, glyph->location.size());
-        glLineWidth(1);
-      }
-      else if(glyph->draw_type == "triangle"){
-        glDrawArrays(GL_TRIANGLES, 0, glyph->location.size());
-      }
-      else if(glyph->draw_type == "quad"){
-        glDrawArrays(GL_QUADS, 0, glyph->location.size());
-      }
-      else if(glyph->draw_type == "quad_strip"){
-        glDrawArrays(GL_QUAD_STRIP, 0, glyph->location.size());
-      }
-      else if(glyph->draw_type == "polygon"){
-        glDrawArrays(GL_POLYGON, 0, glyph->location.size());
-      }
-      else{
-        glDrawArrays(GL_POINTS, 0, glyph->location.size());
-      }
-    }
+    this->draw_glyph(glyph);
   }
 
   //---------------------------
@@ -103,17 +75,32 @@ void Glyphs::draw_glyph(Glyph* glyph){
   //---------------------------
 
   if(glyph->visibility){
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
+    // Bind the glyph VAO
     glBindVertexArray(glyph->VAO);
-    glLineWidth(glyph->draw_width);
-    glDrawArrays(GL_LINES, 0, glyph->location.size());
-
-    glLineWidth(1);
-    glBindVertexArray(0);
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
+    if(glyph->draw_type == "point"){
+      glPointSize(glyph->draw_width);
+      glDrawArrays(GL_POINTS, 0, glyph->location.size());
+    }
+    else if(glyph->draw_type == "line"){
+      glLineWidth(glyph->draw_width);
+      glDrawArrays(GL_LINES, 0, glyph->location.size());
+      glLineWidth(1);
+    }
+    else if(glyph->draw_type == "triangle"){
+      glDrawArrays(GL_TRIANGLES, 0, glyph->location.size());
+    }
+    else if(glyph->draw_type == "quad"){
+      glDrawArrays(GL_QUADS, 0, glyph->location.size());
+    }
+    else if(glyph->draw_type == "quad_strip"){
+      glDrawArrays(GL_QUAD_STRIP, 0, glyph->location.size());
+    }
+    else if(glyph->draw_type == "polygon"){
+      glDrawArrays(GL_POLYGON, 0, glyph->location.size());
+    }
+    else{
+      glDrawArrays(GL_POINTS, 0, glyph->location.size());
+    }
   }
 
   //---------------------------

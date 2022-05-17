@@ -56,7 +56,8 @@ private:
 
   void compute_optimization(Frame* frame, Frame* frame_m1);
   void compute_assessment(Cloud* cloud, int ID);
-  void compute_updateLocation(Subset* subset);
+  void compute_updateLocation_subset(Subset* subset);
+  void compute_updateLocation_keypoint(Subset* subset);
   void compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset);
 
   bool check_conditions(Cloud* cloud, int subset_ID);

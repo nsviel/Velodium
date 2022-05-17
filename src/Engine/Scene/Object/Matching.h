@@ -13,10 +13,12 @@ public:
   ~Matching();
 
 public:
-
+  void create_keypoint_subset(Subset* subset);
+  void update_keypoint_subset(Subset* subset);
 
 private:
-
+  Glyph* keypoint;
+  vec4 color;
 };
 
 #endif

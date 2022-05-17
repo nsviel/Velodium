@@ -9,6 +9,7 @@
 #include "Object/OOBB.h"
 #include "Object/Mark.h"
 #include "Object/Normal.h"
+#include "Object/Matching.h"
 #include "Object/Trajectory.h"
 #include "Object/Car.h"
 
@@ -29,6 +30,7 @@ Object::Object(Engine_node* node){
   this->markObject = new Mark();
   this->trajObject = new Trajectory();
   this->carObject = new Car();
+  this->matchObject = new Matching();
 
   //---------------------------
   this->init_object();
@@ -82,6 +84,10 @@ void Object::runtime_subset_object(Subset* subset){
     //Normal
     Glyph* normal = &subset->normal;
     glyphManager->draw_glyph(normal);
+
+    //Keypoint
+    Glyph* keypoint = &subset->keypoint;
+    glyphManager->draw_glyph(keypoint);
   }
 
   //---------------------------
@@ -128,6 +134,10 @@ void Object::update_glyph_subset(Subset* subset){
   //Subset normal
   normObject->update_normal_subset(subset);
   this->update_object(&subset->normal);
+
+  //Subset keypoint
+  matchObject->update_keypoint_subset(subset);
+  this->update_object(&subset->keypoint);
 
   //---------------------------
 }
@@ -193,6 +203,10 @@ void Object::create_glyph_subset(Subset* subset){
   //Normal stuff
   normObject->create_normal_subset(subset);
   glyphManager->insert_into_gpu(&subset->normal);
+
+  //Keypoint stuff
+  matchObject->create_keypoint_subset(subset);
+  glyphManager->insert_into_gpu(&subset->keypoint);
 
   //---------------------------
 }

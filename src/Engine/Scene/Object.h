@@ -13,6 +13,7 @@ class AABB;
 class Normal;
 class OOBB;
 class Mark;
+class Matching;
 class Car;
 class Trajectory;
 
@@ -50,6 +51,7 @@ public:
   inline Mark* get_object_mark(){return markObject;}
   inline Trajectory* get_object_trajectory(){return trajObject;}
   inline Car* get_object_car(){return carObject;}
+  inline Matching* get_object_match(){return matchObject;}
 
 private:
   Glyphs* glyphManager;
@@ -58,6 +60,7 @@ private:
   Axis* axisObject;
   AABB* aabbObject;
   Normal* normObject;
+  Matching* matchObject;
   OOBB* oobbObject;
   Trajectory* trajObject;
   Mark* markObject;

@@ -93,7 +93,6 @@ void SLAM_localMap::add_pointsToSlamMap(Subset* subset){
 
   //Insert points into cloud global slam map
   if(slamMap_voxelized){
-
     for (int i=0; i<subset->xyz.size(); i++){
       vec3& xyz = subset->xyz[i];
 

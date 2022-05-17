@@ -96,7 +96,7 @@ void Slam::compute_slam(Cloud* cloud){
     mapManager->add_pointsToLocalMap(frame_m0);
     mapManager->end_clearTooFarVoxels(frame_m0->trans_e);
 
-    this->compute_updateLocation(subset);
+    this->compute_updateLocation_subset(subset);
 
     //--------------
     auto t2 = high_resolution_clock::now();
@@ -131,7 +131,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   mapManager->add_pointsToLocalMap(frame);
   mapManager->end_clearTooFarVoxels(frame->trans_e);
 
-  this->compute_updateLocation(subset);
+  this->compute_updateLocation_subset(subset);
 
   //---------------------------
   auto t2 = high_resolution_clock::now();
@@ -314,7 +314,7 @@ void Slam::compute_assessment(Cloud* cloud, int subset_ID){
 
   //---------------------------
 }
-void Slam::compute_updateLocation(Subset* subset){
+void Slam::compute_updateLocation_subset(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -344,7 +344,24 @@ void Slam::compute_updateLocation(Subset* subset){
     subset->xyz[i] = vec3(point(0), point(1), point(2));
   }
 
+  //Update keypoint position
+  vector<vec3> keypoint(frame->xyz.size());
+  #pragma omp parallel for num_threads(nb_thread)
+  for(int i=0; i<frame->xyz.size(); i++){
+    //Compute paramaters
+    float ts_n = subset->ts_n[i];
+    Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+    //Apply transformation
+    Eigen::Vector3f point = frame->xyz[i];
+    point = R * point + t;
+    keypoint[i] = vec3(point(0), point(1), point(2));
+  }
+  subset->keypoint.location = keypoint;say(subset->keypoint.location.size());
+
   //---------------------------
+  objectManager->update_glyph_subset(subset);
   sceneManager->update_subset_location(subset);
 }
 void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
