@@ -24,9 +24,11 @@ struct Subset{ //Cloud subset / part
   std::string name;
   std::string path;
   glm::vec4 unicolor;
+
   bool visibility;
   bool has_color;
   bool has_intensity;
+  bool has_normal;
   bool has_timestamp;
 
   //Main data

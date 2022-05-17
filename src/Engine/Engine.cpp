@@ -60,6 +60,8 @@ void Engine::runtime_draw_clouds(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
+  objectManager->runtime_subset_object();
+
   //By cloud
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);

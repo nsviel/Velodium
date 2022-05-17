@@ -14,14 +14,16 @@
 #include "Object/Car.h"
 
 #include "../Engine_node.h"
+#include "../Scene/Scene.h"
 
 
 //Constructor / Destructor
 Object::Object(Engine_node* node){
+  this->node_engine = node;
   //---------------------------
 
-  this->glyphManager = node->get_glyphManager();
-  this->configManager = node->get_configManager();
+  this->glyphManager = node_engine->get_glyphManager();
+  this->configManager = node_engine->get_configManager();
   this->gridObject = new Grid();
   this->axisObject = new Axis();
   this->aabbObject = new AABB();
@@ -84,9 +86,20 @@ void Object::runtime_subset_object(Subset* subset){
     //Normal
     Glyph* normal = &subset->normal;
     glyphManager->draw_glyph(normal);
+  }
+
+  //---------------------------
+}
+
+void Object::runtime_subset_object(){
+  Scene* sceneManager = node_engine->get_sceneManager();
+  //---------------------------
+
+  if(sceneManager->get_is_list_empty() == false){
+    Subset* subset_selected = sceneManager->get_subset_selected();
 
     //Keypoint
-    Glyph* keypoint = &subset->keypoint;
+    Glyph* keypoint = &subset_selected->keypoint;
     glyphManager->draw_glyph(keypoint);
   }
 

@@ -6,6 +6,7 @@
 class Engine_node;
 class Configuration;
 class Glyphs;
+class Scene;
 
 class Grid;
 class Axis;
@@ -29,6 +30,7 @@ public:
   //Main functions
   void init_object();
   void update_configuration();
+  void runtime_subset_object();
   void runtime_subset_object(Subset* subset);
 
   void update_dynamic(Cloud* cloud);
@@ -54,8 +56,10 @@ public:
   inline Matching* get_object_match(){return matchObject;}
 
 private:
+  Engine_node* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
+  Scene* sceneManager;
   Grid* gridObject;
   Axis* axisObject;
   AABB* aabbObject;

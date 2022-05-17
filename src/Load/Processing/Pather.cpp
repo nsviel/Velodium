@@ -10,9 +10,11 @@
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_system.h"
+#include "../../Specific/fct_maths.h"
 
 #include <Eigen/Dense>
 #include <set>
+#include <string>
 #include <filesystem>
 
 
@@ -85,7 +87,7 @@ void Pather::loading_frames(){
 
   //---------------------------
 }
-void Pather::loading_directoryFrames(string path){
+void Pather::loading_directory_frame(string path){
   //---------------------------
 
   //Supress unwanted line break
@@ -93,21 +95,9 @@ void Pather::loading_directoryFrames(string path){
     path.erase(std::remove(path.begin(), path.end(), '\n'), path.end());
   }
 
-  //Set order by name
-  std::set<std::experimental::filesystem::path> sorted_by_name;
-  for (auto &entry : std::experimental::filesystem::directory_iterator(path)){
-   sorted_by_name.insert(entry.path());
-  }
-
   //Get all frame path
-  vector<string> path_vec;
-  for(const auto& entry : sorted_by_name){
-    string path_file = entry.c_str();
-
-    if (path_file.find(".ply") != string::npos){
-      path_vec.push_back(path_file);
-    }
-  }
+  vector<string> path_vec = list_allPaths(path);
+  fct_sort_alpha_num(path_vec);
 
   if(path_vec.size() != 0){
     loaderManager->load_cloud_byFrame(path_vec);

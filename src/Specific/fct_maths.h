@@ -430,6 +430,24 @@ namespace{
 
     return idx;
   }
+  void fct_sort_alpha_num(std::vector<std::string>& vec){
+    //---------------------------
+
+    std::sort(vec.begin(), vec.end(), [](const std::string& a, const std::string& b) {
+      if (a[0] < b[0]) {
+          return true;
+      } else if (a[0] > b[0]) {
+          return false;
+      }
+      string a_num = a.substr(0, a.find_last_of("."));
+      a_num = a_num.substr(a.find_last_of("_") + 1);
+      string b_num = b.substr(0, b.find_last_of("."));
+      b_num = b_num.substr(b.find_last_of("_") + 1);
+      return std::stoi(a_num) < std::stoi(b_num);
+    });
+
+    //---------------------------
+  }
 
   //Geometric functions
   double fct_angularDistance(const Eigen::Matrix3f &rota, const Eigen::Matrix3f &rotb) {

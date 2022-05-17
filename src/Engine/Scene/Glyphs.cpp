@@ -78,7 +78,7 @@ void Glyphs::draw_glyph(Glyph* glyph){
     // Bind the glyph VAO
     glBindVertexArray(glyph->VAO);
     if(glyph->draw_type == "point"){
-      glPointSize(glyph->draw_width);
+      glPointSize(glyph->draw_size);
       glDrawArrays(GL_POINTS, 0, glyph->location.size());
     }
     else if(glyph->draw_type == "line"){

@@ -5,7 +5,7 @@
 Matching::Matching(){
   //---------------------------
 
-  this->color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+  this->color = vec4(0.0f, 0.7f, 0.9f, 1.0f);
 
   //---------------------------
 }
@@ -18,7 +18,6 @@ void Matching::create_keypoint_subset(Subset* subset){
   //Create glyph
   keypoint.name = "keypoint";
   keypoint.draw_size = 5;
-  keypoint.draw_width = 5;
   keypoint.draw_type = "point";
   keypoint.color_unique = color;
   keypoint.visibility = true;

@@ -169,6 +169,7 @@ void WIN_cloud::window_asciiData(){
     vector<vec4>& RGB = subset->RGB;
     vector<float>& Is = subset->I;
     vector<vec3>& N = subset->N;
+    vector<float>& ts = subset->ts;
     //---------------------------
 
     //Settings
@@ -188,7 +189,7 @@ void WIN_cloud::window_asciiData(){
     ImGui::NextColumn();
     ImGui::Text("XYZ");
     ImGui::NextColumn();
-    if(subset->I.size() != 0){
+    if(subset->has_intensity){
       ImGui::Text("I");
       ImGui::NextColumn();
     }
@@ -196,8 +197,12 @@ void WIN_cloud::window_asciiData(){
       ImGui::Text("RGB");
       ImGui::NextColumn();
     }
-    if(subset->N.size() != 0){
+    if(subset->has_normal){
       ImGui::Text("N");
+      ImGui::NextColumn();
+    }
+    if(subset->has_timestamp){
+      ImGui::Text("ts");
       ImGui::NextColumn();
     }
     ImGui::Separator();
@@ -211,18 +216,20 @@ void WIN_cloud::window_asciiData(){
       ImGui::Text("%f %f %f", XYZ[i].x, XYZ[i].y, XYZ[i].z);
       ImGui::NextColumn();
 
-      if(subset->I.size() != 0){
+      if(subset->has_intensity){
         ImGui::Text("%f", Is[i]);
         ImGui::NextColumn();
       }
-
       if(subset->has_color){
         ImGui::Text("%f %f %f", RGB[i].x, RGB[i].y, RGB[i].z);
         ImGui::NextColumn();
       }
-
-      if(subset->N.size() != 0){
+      if(subset->has_normal){
         ImGui::Text("%f %f %f", N[i].x, N[i].y, N[i].z);
+        ImGui::NextColumn();
+      }
+      if(subset->has_timestamp){
+        ImGui::Text("%f", ts[i]);
         ImGui::NextColumn();
       }
     }

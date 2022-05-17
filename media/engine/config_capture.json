@@ -1,0 +1,71 @@
+{
+   "camera" : {
+      "clip_far" : 10000,
+      "clip_near" : 0.10000000149011612,
+      "fov" : 65,
+      "initial_pos" : 5,
+      "speed_mouse" : 0.0030000000260770321,
+      "speed_move" : 3,
+      "speed_zoom" : 0.10000000149011612
+   },
+   "glyph" : {
+      "aabb_visibility" : true,
+      "grid_visibility" : true,
+      "normal_visibility" : false,
+      "trajectory_visibility" : false
+   },
+   "gui" : {
+      "botPanel_height" : 100,
+      "leftPanel_mid" : 200,
+      "leftPanel_width" : 220,
+      "topPanel_height" : 18
+   },
+   "interface" : {
+      "capture_port" : 2369,
+      "lidar_model" : "velodyne_vlp16",
+      "nb_save_frame" : 200000,
+      "with_gps" : false,
+      "with_prediction" : true,
+      "with_remove_lastSubset" : false,
+      "with_save_frame" : true,
+      "with_save_image" : false
+   },
+   "module" : {
+      "player_mode" : "online",
+      "with_camera_follow" : false,
+      "with_cylinder_cleaning" : false,
+      "with_slam" : false
+   },
+   "network" : {
+      "http_port" : 8888,
+      "mqtt_broker_topic" : "ai_obstacle",
+      "mqtt_client_ID" : "ai_module",
+      "mqtt_dest" : "localhost",
+      "mqtt_port" : 1883,
+      "with_http_demon" : true
+   },
+   "parameter" : {
+      "color_intensity_max" : 100,
+      "color_intensity_min" : 0,
+      "color_mode" : 1,
+      "open_mode" : "frame",
+      "save_mode" : "saved_frame"
+   },
+   "wallet" : {
+      "localhost" : "127.0.0.1",
+      "mine_ordi_louis" : "10.201.20.110",
+      "mine_ordi_nathan" : "10.201.20.106",
+      "mine_server" : "10.201.224.13",
+      "portable_nathan_home" : "192.168.1.27",
+      "portable_nathan_mine" : "192.168.153.147"
+   },
+   "window" : {
+      "background_color" : 0.86000001430511475,
+      "forceVersion" : false,
+      "resolution_height" : 500,
+      "resolution_ratio" : 1.3333333730697632,
+      "resolution_width" : 1024,
+      "title" : "Velodium",
+      "visualization" : true
+   }
+}
