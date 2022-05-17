@@ -104,14 +104,14 @@ void GUI_option::option_glyphs(){
   //Display normals
   static bool normal_ON = false;
   if(ImGui::Checkbox("Normal", &normal_ON)){
-
+    objectManager->set_object_visibility("normal");
   }
   ImGui::NextColumn();
 
   //Display ICP line correspondences
   static bool matchingON = false;
   if(ImGui::Checkbox("Match", &matchingON)){
-
+    objectManager->set_object_visibility("keypoint");
   }
   ImGui::NextColumn();
 

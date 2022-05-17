@@ -43,6 +43,7 @@ public:
   void reset_color_object();
   void reset_object(Glyph* glyph);
 
+  void set_object_visibility(string name);
   void create_glyph_subset(Subset* subset);
   Glyph* create_glyph_ostacle();
 

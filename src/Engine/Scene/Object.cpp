@@ -206,6 +206,18 @@ void Object::reset_object(Glyph* glyph){
   //---------------------------
 }
 
+void Object::set_object_visibility(string name){
+  //---------------------------
+
+  if(name == "normal"){
+
+  }else if(name == "keypoint"){
+    //Glyph* keypoint = &subset->keypoint;
+    //for(int i=0; i<keypoint)
+  }
+
+  //---------------------------
+}
 void Object::create_glyph_subset(Subset* subset){
   //---------------------------
 
