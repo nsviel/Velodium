@@ -358,7 +358,7 @@ void Slam::compute_updateLocation_subset(Subset* subset){
     point = R * point + t;
     keypoint[i] = vec3(point(0), point(1), point(2));
   }
-  subset->keypoint.location = keypoint;say(subset->keypoint.location.size());
+  subset->keypoint.location = keypoint;
 
   //---------------------------
   objectManager->update_glyph_subset(subset);
