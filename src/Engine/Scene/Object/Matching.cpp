@@ -6,6 +6,7 @@ Matching::Matching(){
   //---------------------------
 
   this->color = vec4(0.0f, 0.7f, 0.9f, 1.0f);
+  this->visibility = true;
 
   //---------------------------
 }
@@ -20,7 +21,7 @@ void Matching::create_keypoint_subset(Subset* subset){
   keypoint.draw_size = 5;
   keypoint.draw_type = "point";
   keypoint.color_unique = color;
-  keypoint.visibility = true;
+  keypoint.visibility = visibility;
 
   //---------------------------
   subset->keypoint = keypoint;

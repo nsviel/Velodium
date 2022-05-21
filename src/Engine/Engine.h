@@ -25,7 +25,8 @@ public:
   void loop_gui();
 
   //Subfunctions
-  void runtime_draw_clouds();
+  void runtime_draw_glyph();
+  void runtime_draw_cloud();
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline GUI_node* get_node_gui(){return node_gui;}

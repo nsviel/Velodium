@@ -16,6 +16,7 @@
 #include "../../Engine/Scene/Object/Normal.h"
 #include "../../Engine/Scene/Object/Car.h"
 #include "../../Engine/Scene/Object/Trajectory.h"
+#include "../../Engine/Scene/Object/Matching.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
@@ -65,97 +66,86 @@ void GUI_option::design_Options(){
 //Subfunctions
 void GUI_option::option_glyphs(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  ImGuiStyle& style = ImGui::GetStyle();
   ImGui::Columns(2);
   //---------------------------
 
   //Display grid
-  static bool grid_ON = true;
-  if(ImGui::Checkbox("Grid", &grid_ON)){
-    Grid* gridObject = objectManager->get_object_grid();
-    Glyph* grid = gridObject->get_grid();
-
-    grid->visibility = grid_ON;
-  }
+  Grid* gridObject = objectManager->get_object_grid();
+  Glyph* grid = gridObject->get_grid();
+  bool& grid_ON = grid->visibility;
+  ImGui::Checkbox("Grid", &grid_ON);
   ImGui::NextColumn();
 
   //Subgrid
-  static bool grid_sub_ON = false;
+  Glyph* grid_sub = gridObject->get_grid_sub();
+  bool& grid_sub_ON = grid_sub->visibility;
   if(ImGui::Checkbox("Subgrid", &grid_sub_ON)){
-    Grid* gridObject = objectManager->get_object_grid();
-    Glyph* grid_sub = gridObject->get_grid_sub();
     Glyph* grid_plane = gridObject->get_grid_plane();
-
-    grid_sub->visibility = grid_sub_ON;
     grid_plane->visibility = grid_sub_ON;
   }
   ImGui::NextColumn();
 
   //Display Bounding Box
-  static bool aabb_ON = true;
-  if(ImGui::Checkbox("AABB", &aabb_ON)){
-    AABB* aabbObject = objectManager->get_object_aabb();
-    Glyph* aabb = aabbObject->get_aabb();
-
-    aabb->visibility = aabb_ON;
-  }
+  AABB* aabbObject = objectManager->get_object_aabb();
+  Glyph* aabb = aabbObject->get_aabb();
+  bool& aabb_ON = aabb->visibility;
+  ImGui::Checkbox("AABB", &aabb_ON);
   ImGui::NextColumn();
 
   //Display normals
   static bool normal_ON = false;
   if(ImGui::Checkbox("Normal", &normal_ON)){
-    objectManager->set_object_visibility("normal");
+    if(sceneManager->get_is_list_empty() == false){
+      objectManager->set_object_visibility(cloud, "normal", normal_ON);
+    }
   }
   ImGui::NextColumn();
 
   //Display ICP line correspondences
-  static bool matchingON = false;
-  if(ImGui::Checkbox("Match", &matchingON)){
-    objectManager->set_object_visibility("keypoint");
+  Matching* matchObject = objectManager->get_object_match();
+  bool* keypoint_ON = matchObject->get_visibility();
+  if(ImGui::Checkbox("Keypoint", keypoint_ON)){
+    if(sceneManager->get_is_list_empty() == false){
+      objectManager->set_object_visibility(cloud, "keypoint", *keypoint_ON);
+    }
   }
   ImGui::NextColumn();
 
   //Display Axis
-  static bool axis_scene_ON = true;
+  Axis* axisObject = objectManager->get_object_axis();
+  Glyph* axis_scene = axisObject->get_axis_scene();
+  bool& axis_scene_ON = axis_scene->visibility;
   if(ImGui::Checkbox("Axis", &axis_scene_ON)){
-    Axis* axisObject = objectManager->get_object_axis();
-    Glyph* axis_scene = axisObject->get_axis_scene();
     bool* axis_subset_visibility = axisObject->get_axis_subset_visibility();
-
     *axis_subset_visibility = axis_scene_ON;
-    axis_scene->visibility = axis_scene_ON;
   }
   ImGui::NextColumn();
 
   //Dynamic (trajectiry & car)
-  static bool dynamic_ON = false;
-  if(ImGui::Checkbox("Dynamic", &dynamic_ON)){
-    Car* carObject = objectManager->get_object_car();
+  Car* carObject = objectManager->get_object_car();
+  bool* car_visu = carObject->get_visibility();
+  if(ImGui::Checkbox("Dynamic", car_visu)){
     Trajectory* trajObject = objectManager->get_object_trajectory();
-
-    bool* car_visu = carObject->get_visibility();
     bool* traj_visu = trajObject->get_visibility();
-
-    *car_visu = dynamic_ON;
-    *traj_visu = dynamic_ON;
+    *traj_visu = *car_visu;
   }
   ImGui::NextColumn();
 
   ImGui::Columns(1);
-
-  //Axis circle
-  static float circleRadius = 1;
-  ImGui::PushItemWidth(50);
-  if(ImGui::DragFloat("##456", &circleRadius, 0.001, 0, 5, "%.3f")){
-    //objectManager->obj_axisCircle(circleRadius);
-  }
-  ImGui::SameLine();
 
   //Display Axis circle
   static bool axisCircleON = false;
   if(ImGui::Checkbox("Axis circle", &axisCircleON)){
     //objectManager->obj_axisCircle(circleRadius);
     //objectManager->set_visibility("axisCircle", axisCircleON);
+  }
+  ImGui::SameLine();
+
+  //Axis circlev radius
+  static float circleRadius = 1;
+  ImGui::PushItemWidth(75);
+  if(ImGui::DragFloat("##456", &circleRadius, 0.001, 0, 5, "%.3f")){
+    //objectManager->obj_axisCircle(circleRadius);
   }
 
   //---------------------------

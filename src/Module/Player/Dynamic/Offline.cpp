@@ -152,6 +152,17 @@ void Offline::player_pause(){
 
   //---------------------------
 }
+void Offline::player_start_or_pause(){
+  //---------------------------
+
+  if(player_ispaused){
+    this->player_start();
+  }else{
+    this->player_pause();
+  }
+
+  //---------------------------
+}
 void Offline::player_stop(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   this->player_isrunning = false;

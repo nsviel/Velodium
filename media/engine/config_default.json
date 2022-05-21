@@ -34,7 +34,7 @@
    "module" : {
       "player_mode" : "offline",
       "with_camera_follow" : true,
-      "with_cylinder_cleaning" : false,
+      "with_cylinder_cleaning" : true,
       "with_slam" : true
    },
    "network" : {
@@ -54,6 +54,8 @@
       "color_intensity_max" : 255,
       "color_intensity_min" : 0,
       "color_mode" : 0,
+      "filter_cylinder_rmax" : 30,
+      "filter_cylinder_rmin" : 5,
       "open_mode" : "cloud",
       "path_data" : "../media/data/",
       "path_media" : "../media/",

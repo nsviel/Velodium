@@ -6,7 +6,6 @@
 class Engine_node;
 class Configuration;
 class Glyphs;
-class Scene;
 
 class Grid;
 class Axis;
@@ -27,23 +26,28 @@ public:
   ~Object();
 
 public:
-  //Main functions
-  void init_object();
-  void update_configuration();
-  void runtime_subset_object();
+  //Runtime functions
+  void runtime_glyph_scene();
+  void runtime_glyph_pred(Cloud* cloud, int subset_ID);
   void runtime_subset_object(Subset* subset);
+  void runtime_object_selected(Subset* subset);
 
+  //Update functions
+  void update_configuration();
   void update_dynamic(Cloud* cloud);
   void update_glyph_subset(Subset* subset);
   void update_glyph_cloud(Cloud* cloud);
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);
 
+  //Reset functions
   void reset_scene_object();
   void reset_color_object();
   void reset_object(Glyph* glyph);
 
-  void set_object_visibility(string name);
+  //Misc functions
+  void init_object();
+  void set_object_visibility(Cloud* cloud, string name, bool val);
   void create_glyph_subset(Subset* subset);
   Glyph* create_glyph_ostacle();
 
@@ -60,7 +64,6 @@ private:
   Engine_node* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
-  Scene* sceneManager;
   Grid* gridObject;
   Axis* axisObject;
   AABB* aabbObject;

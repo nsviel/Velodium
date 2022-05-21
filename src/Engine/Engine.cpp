@@ -35,10 +35,11 @@ void Engine::loop_scene(){
 
   //Draw glyph stuff
   if(is_visualization){
-    glyphManager->runtime_scene_glyph();
+    objectManager->runtime_glyph_scene();
 
     //Draw clouds
-    this->runtime_draw_clouds();
+    this->runtime_draw_cloud();
+    this->runtime_draw_glyph();
 
     //Runtime functions
     node_gui->runtime();
@@ -56,11 +57,9 @@ void Engine::loop_gui(){
 
   //---------------------------
 }
-void Engine::runtime_draw_clouds(){
+void Engine::runtime_draw_cloud(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
-
-  objectManager->runtime_subset_object();
 
   //By cloud
   for(int i=0; i<list_cloud->size(); i++){
@@ -77,10 +76,6 @@ void Engine::runtime_draw_clouds(){
         if(subset->visibility){
           glBindVertexArray(subset->VAO);
           glDrawArrays(GL_POINTS, 0, subset->xyz.size()); // Error here during capture via pywardium
-
-          //Subset glyph stuff
-          objectManager->runtime_subset_object(subset);
-          glyphManager->runtime_glyph_pred(cloud, subset->ID);
         }
       }
     }
@@ -91,4 +86,33 @@ void Engine::runtime_draw_clouds(){
   glBindVertexArray(0);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
+}
+void Engine::runtime_draw_glyph(){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  //---------------------------
+
+  //Selected subset
+  if(sceneManager->get_is_list_empty() == false){
+    Subset* subset_selected = sceneManager->get_subset_selected();
+    objectManager->runtime_object_selected(subset_selected);
+  }
+
+  //For all cloud
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
+
+    if(cloud->visibility){
+      for(int j=0; j<cloud->subset.size(); j++){
+        Subset* subset = *next(cloud->subset.begin(), j);
+
+        if(subset->visibility){
+          objectManager->runtime_subset_object(subset);
+          objectManager->runtime_glyph_pred(cloud, subset->ID);
+        }
+      }
+    }
+
+  }
+
+  //---------------------------
 }

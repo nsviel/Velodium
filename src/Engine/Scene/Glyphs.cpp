@@ -25,52 +25,6 @@ Glyphs::Glyphs(Engine_node* node){
 Glyphs::~Glyphs(){}
 
 //Main functions
-void Glyphs::runtime_scene_glyph(){
-  //---------------------------
-
-  for(int i=0;i<list_glyph->size();i++){
-    Glyph* glyph = *next(list_glyph->begin(),i);
-    this->draw_glyph(glyph);
-  }
-
-  //---------------------------
-  glBindVertexArray(0);
-  glDisableVertexAttribArray(0);
-  glDisableVertexAttribArray(1);
-}
-void Glyphs::runtime_glyph_pred(Cloud* cloud, int subset_ID){
-  Scene* sceneManager = node_engine->get_sceneManager();
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 2);
-  //---------------------------
-
-  //Check for conditions
-  Subset* subset_first = sceneManager->get_subset(cloud, 0);
-  if(cloud == nullptr || subset == nullptr) return;
-  if(subset_ID != cloud->subset_selected->ID) return;
-  if(subset_ID < subset_first->ID + 2) return;
-
-  //OOBB - prediction
-  vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
-  for(int i=0; i<oobb_pr.size(); i++){
-    glBindVertexArray(oobb_pr[i].VAO);
-    glLineWidth(oobb_pr[i].draw_width);
-    glDrawArrays(GL_LINES, 0, oobb_pr[i].location.size());
-  }
-
-  //OOBB - ground thruth
-  vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;
-  for(int i=0; i<oobb_gt.size(); i++){
-    glBindVertexArray(oobb_gt[i].VAO);
-    glLineWidth(oobb_gt[i].draw_width);
-    glDrawArrays(GL_LINES, 0, oobb_gt[i].location.size());
-  }
-
-  //---------------------------
-  glLineWidth(1);
-  glBindVertexArray(0);
-  glDisableVertexAttribArray(0);
-  glDisableVertexAttribArray(1);
-}
 void Glyphs::draw_glyph(Glyph* glyph){
   //---------------------------
 
@@ -101,6 +55,7 @@ void Glyphs::draw_glyph(Glyph* glyph){
     else{
       glDrawArrays(GL_POINTS, 0, glyph->location.size());
     }
+    glBindVertexArray(0);
   }
 
   //---------------------------

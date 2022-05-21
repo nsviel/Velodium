@@ -270,14 +270,13 @@ void WIN_loading::loading_file_pcap(){
 }
 
 void WIN_loading::saving_action(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
   //Save subset
   if(ImGui::Button("Save subset as", ImVec2(item_width, 0))){
     if(sceneManager->get_is_list_empty() == false){
-      Cloud* cloud = sceneManager->get_cloud_selected();
       Subset* subset = cloud->subset_selected;
-      
       pathManager->saving_subset(subset);
     }
   }
@@ -285,15 +284,21 @@ void WIN_loading::saving_action(){
   //Save a subset range
   static int frame_b = 0;
   static int frame_e = 100;
+  int subset_max;
+  if(sceneManager->get_is_list_empty()){
+    subset_max = 0;
+  }else{
+    subset_max = cloud->nb_subset - 1;
+  }
   if(ImGui::Button("Save frames range", ImVec2(item_width, 0))){
     pathManager->saving_subset_range(frame_b, frame_e);
   }
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width - 10);
+  ImGui::DragIntRange2("##008", &frame_b, &frame_e, 0, 0, subset_max, "%d", "%d");
 
   //Save cloud
   if(ImGui::Button("Save cloud as", ImVec2(item_width, 0))){
     if(sceneManager->get_is_list_empty() == false){
-      Cloud* cloud = sceneManager->get_cloud_selected();
-
       pathManager->saving_cloud(cloud);
     }
   }
@@ -308,17 +313,17 @@ void WIN_loading::saving_action(){
 void WIN_loading::saving_configuration(){
   //---------------------------
 
-  /*ImGui::Text("Intensity scale");
-  static int e = 3;
-  if(ImGui::RadioButton("[0;1]", &e, 1)){
-    loadconfigManager->save_option(e);
+  ImGui::Text("Intensity scale");
+  static int I_opt = 0;
+  if(ImGui::RadioButton("[0;1]", &I_opt, 0)){
+
+  }ImGui::SameLine();
+  if(ImGui::RadioButton("[0;255]", &I_opt, 1)){
+
+  }ImGui::SameLine();
+  if(ImGui::RadioButton("[-2048;2048]", &I_opt, 2)){
+
   }
-  if(ImGui::RadioButton("[0;255]", &e, 2)){
-    loadconfigManager->save_option(e);
-  }
-  if(ImGui::RadioButton("[-2048;2048]", &e, 3)){
-    loadconfigManager->save_option(e);
-  }*/
 
   //---------------------------
 }

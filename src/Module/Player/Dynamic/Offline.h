@@ -32,6 +32,7 @@ public:
   void player_runtime();
   void player_start();
   void player_pause();
+  void player_start_or_pause();
   void player_stop();
   void player_save(Cloud* cloud);
   void player_setFrequency(int frequency);

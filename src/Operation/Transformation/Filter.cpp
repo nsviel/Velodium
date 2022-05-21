@@ -6,6 +6,7 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_terminal.h"
 
@@ -16,18 +17,26 @@ Filter::Filter(Operation_node* node_ope){
 
   Engine_node* node_engine = node_ope->get_node_engine();
 
+  this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
 
+  //---------------------------
+  this->update_configuration();
+}
+Filter::~Filter(){}
+
+void Filter::update_configuration(){
+  //---------------------------
+
   this->verbose = false;
   this->sphereDiameter = 0.139f;
-  this->cyl_r_min = 5;
-  this->cyl_r_max = 30;
+  this->cyl_r_min = configManager->parse_json_f("parameter", "filter_cylinder_rmin");
+  this->cyl_r_max = configManager->parse_json_f("parameter", "filter_cylinder_rmax");
   this->cyl_z_min = -3;
 
   //---------------------------
 }
-Filter::~Filter(){}
 
 //Functions
 void Filter::filter_maxAngle(Cloud* cloud, float angleMax){

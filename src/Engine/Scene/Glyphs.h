@@ -19,10 +19,6 @@ public:
   void reset_color();
   void draw_glyph(Glyph* glyph);
 
-  //Runtime functions
-  void runtime_scene_glyph();
-  void runtime_glyph_pred(Cloud* cloud, int subset_ID);
-
   //Glyph update
   void update_glyph_location(Glyph* glyph);
   void update_glyph_color(Glyph* glyph);
@@ -35,6 +31,8 @@ public:
   void remove_temporary_glyph();
   void create_glyph_scene(Glyph* glyph);
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
+
+  inline list<Glyph*>* get_list_glyph(){return list_glyph;}
 
 private:
   Engine_node* node_engine;

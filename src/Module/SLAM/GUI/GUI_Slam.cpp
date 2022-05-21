@@ -354,10 +354,12 @@ void GUI_Slam::statistics(){
   int map_size_abs = 0;
   int map_size_rlt = 0;
   int nb_residual = 0;
+  int nb_keypoint = 0;
 
   if(sceneManager->get_is_list_empty() == false){
     Cloud* cloud = sceneManager->get_cloud_selected();
-    Frame* frame = &cloud->subset_selected->frame;
+    Subset* subset = cloud->subset_selected;
+    Frame* frame = &subset->frame;
 
     is_slamed = frame->is_slamed;
     time = frame->time_slam;
@@ -368,6 +370,7 @@ void GUI_Slam::statistics(){
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
     nb_residual = frame->nb_residual;
+    nb_keypoint = subset->keypoint.location.size();
   }
 
   //SLAM applied
@@ -397,15 +400,18 @@ void GUI_Slam::statistics(){
 
   //Local map data
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Local map");
+  ImGui::Text("Nb keypoint: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_keypoint);
+  ImGui::Text("Nb residual: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual);
   ImGui::Text("Nb voxel abs: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_abs);
   ImGui::Text("Nb voxel rlt: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
-  ImGui::Text("Nb residual: ");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual);
 
   //---------------------------
 }

@@ -4,6 +4,10 @@
 #include "../Windows/Window_table.h"
 
 #include "../../Load/Load_node.h"
+#include "../../Module/Module_node.h"
+#include "../../Module/Player/Player_node.h"
+#include "../../Module/Player/Dynamic/Offline.h"
+
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Camera/struct_viewport.h"
@@ -32,6 +36,8 @@ GUI_control::GUI_control(GUI_node* node){
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
   Load_node* node_load = node_engine->get_node_load();
+  Module_node* node_module = node_engine->get_node_module();
+  Player_node* node_player = node_module->get_node_player();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
@@ -42,6 +48,7 @@ GUI_control::GUI_control(GUI_node* node){
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_pathManager();
+  this->offlineManager = node_player->get_offlineManager();
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");
@@ -56,7 +63,7 @@ void GUI_control::make_control(){
   //---------------------------
 
   this->control_mouse();
-  this->control_frameSelection();
+  this->control_frame_selection();
   this->control_keyboard_oneAction();
   this->control_keyboard_translation();
   this->control_keyboard_ctrlAction();
@@ -130,7 +137,7 @@ void GUI_control::control_mouse_wheel(){
 
   //----------------------------
 }
-void GUI_control::control_frameSelection(){
+void GUI_control::control_frame_selection(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -226,6 +233,12 @@ void GUI_control::control_keyboard_oneAction(){
     //o key - Open options
     if(ImGui::IsKeyPressed(79) && !io.WantCaptureMouse){
       window_tab.show_loading = !window_tab.show_loading;
+      break;
+    }
+
+    //space key - Start / Pause player
+    if(ImGui::IsKeyPressed(32) && !io.WantCaptureMouse){
+      offlineManager->player_start_or_pause();
       break;
     }
   }

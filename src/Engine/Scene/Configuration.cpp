@@ -117,6 +117,8 @@ void Configuration::preconf_default(Json::Value& root){
   param["color_mode"] = 0;
   param["color_intensity_min"] = 0;
   param["color_intensity_max"] = 255;
+  param["filter_cylinder_rmin"] = 5;
+  param["filter_cylinder_rmax"] = 30;
   root["parameter"] = param;
 
   //Camera
@@ -162,7 +164,7 @@ void Configuration::preconf_default(Json::Value& root){
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = false;
+  module["with_cylinder_cleaning"] = true;
   module["player_mode"] = "offline";
   root["module"] = module;
 

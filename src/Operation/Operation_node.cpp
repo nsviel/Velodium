@@ -35,6 +35,7 @@ void Operation_node::update(){
   //---------------------------
 
   colorManager->update_configuration();
+  filterManager->update_configuration();
 
   //---------------------------
 }

@@ -16,6 +16,7 @@ class Selection;
 class Heatmap;
 class Dimension;
 class GUI_node;
+class Offline;
 
 
 class GUI_control
@@ -30,8 +31,7 @@ public:
   void make_control();
 
   //Subfunctions
-  void control_frameSelection();
-
+  void control_frame_selection();
   void control_mouse();
   void control_mouse_wheel();
 
@@ -57,6 +57,7 @@ private:
   Glyphs* glyphManager;
   Selection* selectionManager;
   Heatmap* heatmapManager;
+  Offline* offlineManager;
 
   float cloud_trans_speed;
   float cloud_rotat_degree;

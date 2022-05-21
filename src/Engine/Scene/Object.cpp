@@ -40,21 +40,80 @@ Object::Object(Engine_node* node){
 }
 Object::~Object(){}
 
-//Main functions
-void Object::init_object(){
+//Runtime functions
+void Object::runtime_subset_object(Subset* subset){
   //---------------------------
 
-  glyphManager->create_glyph_scene(markObject->get_selection_frame());
-  glyphManager->create_glyph_scene(gridObject->get_grid());
-  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
-  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
-  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
-  glyphManager->create_glyph_scene(trajObject->get_glyph());
-  glyphManager->create_glyph_scene(aabbObject->get_aabb());
-  glyphManager->create_glyph_scene(carObject->get_glyph());
+  if(subset->visibility){
+    //Subset axis
+    Glyph* axis = &subset->axis;
+    glyphManager->draw_glyph(axis);
+
+    //Normal
+    Glyph* normal = &subset->normal;
+    glyphManager->draw_glyph(normal);
+  }
 
   //---------------------------
 }
+void Object::runtime_object_selected(Subset* subset){
+  //---------------------------
+
+  //Keypoint
+  Glyph* keypoint = &subset->keypoint;
+
+  if(keypoint->visibility){
+    glyphManager->draw_glyph(keypoint);
+  }
+
+  //---------------------------
+}
+void Object::runtime_glyph_scene(){
+  list<Glyph*>* list_glyph = glyphManager->get_list_glyph();
+  //---------------------------
+
+  for(int i=0;i<list_glyph->size();i++){
+    Glyph* glyph = *next(list_glyph->begin(),i);
+    glyphManager->draw_glyph(glyph);
+  }
+
+  //---------------------------
+}
+void Object::runtime_glyph_pred(Cloud* cloud, int subset_ID){
+  Scene* sceneManager = node_engine->get_sceneManager();
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 2);
+  //---------------------------
+
+  //Check for conditions
+  Subset* subset_first = sceneManager->get_subset(cloud, 0);
+  if(cloud == nullptr || subset == nullptr) return;
+  if(subset_ID != cloud->subset_selected->ID) return;
+  if(subset_ID < subset_first->ID + 2) return;
+
+  //OOBB - prediction
+  vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
+  for(int i=0; i<oobb_pr.size(); i++){
+    glBindVertexArray(oobb_pr[i].VAO);
+    glLineWidth(oobb_pr[i].draw_width);
+    glDrawArrays(GL_LINES, 0, oobb_pr[i].location.size());
+  }
+
+  //OOBB - ground thruth
+  vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;
+  for(int i=0; i<oobb_gt.size(); i++){
+    glBindVertexArray(oobb_gt[i].VAO);
+    glLineWidth(oobb_gt[i].draw_width);
+    glDrawArrays(GL_LINES, 0, oobb_gt[i].location.size());
+  }
+
+  //---------------------------
+  glLineWidth(1);
+  glBindVertexArray(0);
+  glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+}
+
+//Update functions
 void Object::update_configuration(){
   //---------------------------
 
@@ -75,37 +134,6 @@ void Object::update_configuration(){
 
   //---------------------------
 }
-void Object::runtime_subset_object(Subset* subset){
-  //---------------------------
-
-  if(subset->visibility){
-    //Subset axis
-    Glyph* axis = &subset->axis;
-    glyphManager->draw_glyph(axis);
-
-    //Normal
-    Glyph* normal = &subset->normal;
-    glyphManager->draw_glyph(normal);
-  }
-
-  //---------------------------
-}
-
-void Object::runtime_subset_object(){
-  Scene* sceneManager = node_engine->get_sceneManager();
-  //---------------------------
-
-  if(sceneManager->get_is_list_empty() == false){
-    Subset* subset_selected = sceneManager->get_subset_selected();
-
-    //Keypoint
-    Glyph* keypoint = &subset_selected->keypoint;
-    glyphManager->draw_glyph(keypoint);
-  }
-
-  //---------------------------
-}
-
 void Object::update_dynamic(Cloud* cloud){
   //---------------------------
 
@@ -164,6 +192,7 @@ void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 }
 
+//Reset functions
 void Object::reset_scene_object(){
   //---------------------------
 
@@ -206,14 +235,32 @@ void Object::reset_object(Glyph* glyph){
   //---------------------------
 }
 
-void Object::set_object_visibility(string name){
+//Misc functions
+void Object::init_object(){
+  //---------------------------
+
+  glyphManager->create_glyph_scene(markObject->get_selection_frame());
+  glyphManager->create_glyph_scene(gridObject->get_grid());
+  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
+  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
+  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
+  glyphManager->create_glyph_scene(trajObject->get_glyph());
+  glyphManager->create_glyph_scene(aabbObject->get_aabb());
+  glyphManager->create_glyph_scene(carObject->get_glyph());
+
+  //---------------------------
+}
+void Object::set_object_visibility(Cloud* cloud, string name, bool val){
   //---------------------------
 
   if(name == "normal"){
 
   }else if(name == "keypoint"){
-    //Glyph* keypoint = &subset->keypoint;
-    //for(int i=0; i<keypoint)
+    for(int i=0; i<cloud->nb_subset; i++){
+      Subset* subset = *next(cloud->subset.begin(), i);
+      Glyph* keypoint = &subset->keypoint;
+      keypoint->visibility = val;
+    }
   }
 
   //---------------------------

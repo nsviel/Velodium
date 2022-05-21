@@ -4,6 +4,7 @@
 class Operation_node;
 class Scene;
 class Attribut;
+class Configuration;
 
 #include "../../common.h"
 
@@ -16,6 +17,8 @@ public:
   ~Filter();
 
 public:
+  void update_configuration();
+
   void filter_maxAngle(Cloud* cloud, float sampleAngle);
   void filter_sphereCleaning();
   void filter_subset_cylinder(Subset* subset);
@@ -28,6 +31,7 @@ public:
   inline float* get_cyl_z_min(){return &cyl_z_min;}
 
 private:
+  Configuration* configManager;
   Scene* sceneManager;
   Attribut* attribManager;
 
