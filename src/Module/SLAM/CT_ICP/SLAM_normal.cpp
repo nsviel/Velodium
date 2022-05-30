@@ -142,15 +142,11 @@ void SLAM_normal::compute_normals_reorientToOrigin(Frame* frame){
   //Reoriente to origin
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3f origine = Eigen::Vector3f::Zero();
     Eigen::Vector3f& point = frame->xyz[i];
     Eigen::Vector3f& normal = frame->Nptp[i];
 
-    float dist_XYZ = fct_distance(point, origine);
-    float dist_N = fct_distance(point + normal, origine);
-
-    if(dist_N > dist_XYZ){
-      normal = -1.0 * normal;
+    if (normal.dot(frame->trans_b - point) < 0) {
+        normal = -1.0 * normal;
     }
   }
 

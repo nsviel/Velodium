@@ -48,10 +48,6 @@ void Object::runtime_subset_object(Subset* subset){
     //Subset axis
     Glyph* axis = &subset->axis;
     glyphManager->draw_glyph(axis);
-
-    //Normal
-    Glyph* normal = &subset->normal;
-    glyphManager->draw_glyph(normal);
   }
 
   //---------------------------
@@ -62,7 +58,6 @@ void Object::runtime_object_selected(Subset* subset){
   //Subset glyphs
   Glyph* keypoint = &subset->keypoint;
   Glyph* normal = &subset->normal;
-
 
   //Draw subset glyphs
   if(keypoint->visibility){

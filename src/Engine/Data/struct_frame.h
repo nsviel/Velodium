@@ -15,6 +15,8 @@ struct Frame{ //SLAM stuff
   std::vector<float> a2D;
   std::vector<float> ts_n;
 
+  Eigen::Vector3f root;
+
   //Begin pose
   Eigen::Matrix3f rotat_b;
   Eigen::Vector3f trans_b;
@@ -64,6 +66,7 @@ struct Frame{ //SLAM stuff
     this->rotat_e = Eigen::Matrix3f::Identity();
     this->trans_b = Eigen::Vector3f::Zero();
     this->trans_e = Eigen::Vector3f::Zero();
+    this->root = Eigen::Vector3f::Zero();
 
     this->time_save_image = 0;
     this->time_save_frame = 0;

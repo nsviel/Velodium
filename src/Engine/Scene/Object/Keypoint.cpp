@@ -64,7 +64,7 @@ void Keypoint::update_keypoint_normal(Subset* subset){
   rgb_n.clear();
 
   //Construct normal
-  float lgt = 0.01 * normal->draw_size;
+  float lgt = 0.05 * normal->draw_size;
   for(int i=0; i<xyz_k.size(); i++){
     vec3& xyz = xyz_k[i];
     vec3& nxyz = Nxyz_k[i];
