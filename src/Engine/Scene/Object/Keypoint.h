@@ -1,20 +1,21 @@
-#ifndef OBJECT_MATCHING_H
-#define OBJECT_MATCHING_H
+#ifndef OBJECT_KEYPOINT_H
+#define OBJECT_KEYPOINT_H
 
 #include "../../../common.h"
 #include "../../Data/struct_glyph.h"
 
 
-class Matching
+class Keypoint
 {
 public:
   //Constructor / Destructor
-  Matching();
-  ~Matching();
+  Keypoint();
+  ~Keypoint();
 
 public:
-  void create_keypoint_subset(Subset* subset);
-  void update_keypoint_subset(Subset* subset);
+  void create_keypoint(Subset* subset);
+  void update_keypoint_location(Subset* subset);
+  void update_keypoint_normal(Subset* subset);
 
   inline void set_visibility(bool value){this->visibility = value;}
   inline bool* get_visibility(){return &visibility;}

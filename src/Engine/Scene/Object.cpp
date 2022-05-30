@@ -9,7 +9,7 @@
 #include "Object/OOBB.h"
 #include "Object/Mark.h"
 #include "Object/Normal.h"
-#include "Object/Matching.h"
+#include "Object/Keypoint.h"
 #include "Object/Trajectory.h"
 #include "Object/Car.h"
 
@@ -32,7 +32,7 @@ Object::Object(Engine_node* node){
   this->markObject = new Mark();
   this->trajObject = new Trajectory();
   this->carObject = new Car();
-  this->matchObject = new Matching();
+  this->keyObject = new Keypoint();
 
   //---------------------------
   this->init_object();
@@ -59,11 +59,14 @@ void Object::runtime_subset_object(Subset* subset){
 void Object::runtime_object_selected(Subset* subset){
   //---------------------------
 
-  //Keypoint
+  //Subset glyphs
   Glyph* keypoint = &subset->keypoint;
+  Glyph* normal = &subset->normal;
 
+  //Draw subset glyphs
   if(keypoint->visibility){
     glyphManager->draw_glyph(keypoint);
+    glyphManager->draw_glyph(normal);
   }
 
   //---------------------------
@@ -172,13 +175,14 @@ void Object::update_glyph_subset(Subset* subset){
   axisObject->update_axis_subset(subset);
   glyphManager->update_glyph_location(&subset->axis);
 
+  //Subset keypoint
+  keyObject->update_keypoint_location(subset);
+  keyObject->update_keypoint_normal(subset);
+  this->update_object(&subset->keypoint);
+
   //Subset normal
   normObject->update_normal_subset(subset);
   this->update_object(&subset->normal);
-
-  //Subset keypoint
-  matchObject->update_keypoint_subset(subset);
-  this->update_object(&subset->keypoint);
 
   //---------------------------
 }
@@ -277,7 +281,7 @@ void Object::create_glyph_subset(Subset* subset){
   glyphManager->insert_into_gpu(&subset->normal);
 
   //Keypoint stuff
-  matchObject->create_keypoint_subset(subset);
+  keyObject->create_keypoint(subset);
   glyphManager->insert_into_gpu(&subset->keypoint);
 
   //---------------------------

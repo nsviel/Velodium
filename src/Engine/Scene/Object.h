@@ -13,7 +13,7 @@ class AABB;
 class Normal;
 class OOBB;
 class Mark;
-class Matching;
+class Keypoint;
 class Car;
 class Trajectory;
 
@@ -58,7 +58,7 @@ public:
   inline Mark* get_object_mark(){return markObject;}
   inline Trajectory* get_object_trajectory(){return trajObject;}
   inline Car* get_object_car(){return carObject;}
-  inline Matching* get_object_match(){return matchObject;}
+  inline Keypoint* get_object_keypoint(){return keyObject;}
 
 private:
   Engine_node* node_engine;
@@ -68,7 +68,7 @@ private:
   Axis* axisObject;
   AABB* aabbObject;
   Normal* normObject;
-  Matching* matchObject;
+  Keypoint* keyObject;
   OOBB* oobbObject;
   Trajectory* trajObject;
   Mark* markObject;

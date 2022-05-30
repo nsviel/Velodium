@@ -6,6 +6,7 @@ Normal::Normal(){
   //---------------------------
 
   this->width = 1;
+  this->visibility = true;
   this->color = vec4(0.11f, 0.35f, 0.69f, 1.0f);
 
   //---------------------------
@@ -22,34 +23,43 @@ void Normal::create_normal_subset(Subset* subset){
   normal.draw_size = width;
   normal.draw_type = "line";
   normal.color_unique = color;
-  normal.visibility = false;
+  normal.visibility = visibility;
 
   //---------------------------
   subset->normal = normal;
 }
 void Normal::update_normal_subset(Subset* subset){
   Glyph* normal = &subset->normal;
-  vector<vec3>& XYZ_n = normal->location;
-  vector<vec4>& RGB_n = normal->color;
-
-  vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
   //---------------------------
 
-  //Parameter
+  //Get vector values
+  vector<vec3>& xyz_n = normal->location;
+  vector<vec4>& rgb_n = normal->color;
+  vector<vec3>& xyz_s = subset->xyz;
+  vector<vec3>& Nxyz_s = subset->N;
+
+  //Check vector length
+  if(xyz_s.size() == 0 || Nxyz_s.size() == 0 || Nxyz_s.size() != xyz_s.size()){
+    return;
+  }
+
+  //Clear old normal values
+  xyz_n.clear();
+  rgb_n.clear();
+
+  //Construct normal
   float lgt = 0.01 * normal->draw_size;
-  XYZ_n.clear();
-  RGB_n.clear();
+  for(int i=0; i<xyz_s.size(); i++){
+    vec3& xyz = xyz_s[i];
+    vec3& nxyz = xyz_s[i];
 
-  //Construct glyph
-  if(XYZ.size() != 0 && N.size() != 0 && N.size() == XYZ.size()){
-    for(int i=0; i<XYZ.size(); i++){
-      XYZ_n.push_back(vec3(XYZ[i].x, XYZ[i].y, XYZ[i].z));
-      XYZ_n.push_back(vec3(XYZ[i].x + N[i].x * lgt, XYZ[i].y + N[i].y * lgt, XYZ[i].z + N[i].z * lgt));
+    vec3 vec_n = vec3(xyz.x + nxyz.x * lgt, xyz.y + nxyz.y * lgt, xyz.z + nxyz.z * lgt);
 
-      RGB_n.push_back(normal->color_unique);
-      RGB_n.push_back(normal->color_unique);
-    }
+    xyz_n.push_back(xyz);
+    xyz_n.push_back(vec_n);
+
+    rgb_n.push_back(normal->color_unique);
+    rgb_n.push_back(normal->color_unique);
   }
 
   //---------------------------

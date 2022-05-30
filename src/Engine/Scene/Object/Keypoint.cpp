@@ -1,0 +1,82 @@
+#include "Keypoint.h"
+
+#include "Normal.h"
+
+
+//Constructor / destructor
+Keypoint::Keypoint(){
+  //---------------------------
+
+  this->color = vec4(0.0f, 0.7f, 0.9f, 1.0f);
+  this->visibility = true;
+
+  //---------------------------
+}
+Keypoint::~Keypoint(){}
+
+void Keypoint::create_keypoint(Subset* subset){
+  Glyph keypoint;
+  //---------------------------
+
+  //Create glyph
+  keypoint.name = "keypoint";
+  keypoint.draw_size = 5;
+  keypoint.draw_type = "point";
+  keypoint.color_unique = color;
+  keypoint.visibility = visibility;
+
+  //---------------------------
+  subset->keypoint = keypoint;
+}
+void Keypoint::update_keypoint_location(Subset* subset){
+  Glyph* keypoint = &subset->keypoint;
+  //---------------------------
+
+  vector<vec3>& XYZ_key = keypoint->location;
+  vector<vec4>& RGB_key = keypoint->color;
+
+  //Construct glyph
+  RGB_key.clear();
+  for(int i=0; i<XYZ_key.size(); i++){
+    RGB_key.push_back(color);
+  }
+
+  //---------------------------
+}
+void Keypoint::update_keypoint_normal(Subset* subset){
+  Glyph* normal = &subset->normal;
+  Glyph* keypoint = &subset->keypoint;
+  //---------------------------
+
+  //Get vector values
+  vector<vec3>& xyz_k = keypoint->location;
+  vector<vec3>& Nxyz_k = keypoint->normal;
+  vector<vec3>& xyz_n = normal->location;
+  vector<vec4>& rgb_n = normal->color;
+
+  //Check vector length
+  if(xyz_k.size() == 0 || Nxyz_k.size() == 0 || Nxyz_k.size() != xyz_k.size()){
+    return;
+  }
+
+  //Clear old normal values
+  xyz_n.clear();
+  rgb_n.clear();
+
+  //Construct normal
+  float lgt = 0.01 * normal->draw_size;
+  for(int i=0; i<xyz_k.size(); i++){
+    vec3& xyz = xyz_k[i];
+    vec3& nxyz = Nxyz_k[i];
+
+    vec3 n_vec = vec3(xyz.x + nxyz.x * lgt, xyz.y + nxyz.y * lgt, xyz.z + nxyz.z * lgt);
+
+    xyz_n.push_back(xyz);
+    xyz_n.push_back(n_vec);
+
+    rgb_n.push_back(normal->color_unique);
+    rgb_n.push_back(normal->color_unique);
+  }
+
+  //---------------------------
+}

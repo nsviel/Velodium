@@ -34,13 +34,13 @@ void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
     this->compute_normal(kNN, i);
   }
 
-  //Reoriente all normal
-  this->compute_normals_reorientToOrigin(frame);
-
   //Store data
   frame->Nptp = Nxyz;
   frame->NN = NN;
   frame->a2D = a2D;
+
+  //Reoriente all normal
+  this->compute_normals_reorientToOrigin(frame);
 
   //---------------------------
 }
@@ -134,25 +134,23 @@ void SLAM_normal::compute_normal(vector<Eigen::Vector3f>& kNN, int i){
 void SLAM_normal::compute_normals_reorientToOrigin(Frame* frame){
   //---------------------------
 
-  if(Nxyz.size() != frame->xyz.size()){
+  //Check vector size
+  if(frame->Nptp.size() != frame->xyz.size()){
     cout<<"[SLAM] Normal size problem ("<<Nxyz.size()<<"|"<<frame->xyz.size()<<")"<<endl;
   }
 
+  //Reoriente to origin
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    //Make something
-    if(Nxyz[i].dot(frame->trans_b - frame->xyz_raw[i]) < 0){
-      Nxyz[i] = -1.0 * Nxyz[i];
-    }
-
-    //Reoriente to origin
     Eigen::Vector3f origine = Eigen::Vector3f::Zero();
-    float dist_XYZ = fct_distance(frame->xyz[i], origine);
-    float dist_N = fct_distance(frame->xyz[i] + Nxyz[i], origine);
+    Eigen::Vector3f& point = frame->xyz[i];
+    Eigen::Vector3f& normal = frame->Nptp[i];
+
+    float dist_XYZ = fct_distance(point, origine);
+    float dist_N = fct_distance(point + normal, origine);
+
     if(dist_N > dist_XYZ){
-      for(int j=0; j<3; j++){
-        Nxyz[i](j) = -Nxyz[i](j);
-      }
+      normal = -1.0 * normal;
     }
   }
 

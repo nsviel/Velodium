@@ -53,12 +53,14 @@ namespace{
     glm::vec3 glm_vec = glm::vec3(eig_vec(0), eig_vec(1), eig_vec(2));
     return glm_vec;
   }
-  std::vector<glm::vec3> eigen_to_glm_vectorvec3_d(std::vector<Eigen::Vector3f> eig_vec){
-    vector<glm::vec3> glm_vec;
+  std::vector<glm::vec3> eigen_to_glm_vectorVec3(std::vector<Eigen::Vector3f> eig_vec, int nb_thread){
+    vector<glm::vec3> glm_vec(eig_vec.size());
     //---------------------------
 
+    #pragma omp parallel for num_threads(nb_thread)
     for(int i=0; i<eig_vec.size(); i++){
-      glm_vec.push_back(glm::vec3(eig_vec[i](0), eig_vec[i](1), eig_vec[i](2)));
+      Eigen::Vector3f& element = eig_vec[i];
+      glm_vec[i] = glm::vec3(element(0), element(1), element(2));
     }
 
     //---------------------------

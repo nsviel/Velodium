@@ -17,7 +17,12 @@ public:
   void create_normal_subset(Subset* subset);
   void update_normal_subset(Subset* subset);
 
+  inline Glyph* get_glyph(){return normal;}
+  inline bool* get_visibility(){return &visibility;}
+
 private:
+  Glyph* normal;
+  bool visibility;
   vec4 color;
   int width;
 };

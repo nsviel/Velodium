@@ -96,7 +96,7 @@ void Slam::compute_slam(Cloud* cloud){
     mapManager->add_pointsToLocalMap(frame_m0);
     mapManager->end_clearTooFarVoxels(frame_m0->trans_e);
 
-    this->compute_updateLocation_subset(subset);
+    this->update_subset_location(subset);
 
     //--------------
     auto t2 = high_resolution_clock::now();
@@ -131,7 +131,8 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   mapManager->add_pointsToLocalMap(frame);
   mapManager->end_clearTooFarVoxels(frame->trans_e);
 
-  this->compute_updateLocation_subset(subset);
+  this->update_subset_location(subset);
+  this->update_subset_glyph(subset);
 
   //---------------------------
   auto t2 = high_resolution_clock::now();
@@ -313,49 +314,6 @@ void Slam::compute_assessment(Cloud* cloud, int subset_ID){
 
   //---------------------------
 }
-void Slam::compute_updateLocation_subset(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
-  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
-  Eigen::Vector3f trans_b = frame->trans_b;
-  Eigen::Vector3f trans_e = frame->trans_e;
-
-  //Update frame root
-  Eigen::Matrix3f R = quat_b.toRotationMatrix();
-  Eigen::Vector3f t = trans_b;
-  Eigen::Vector3f root = R * glm_to_eigen_vec3_d(subset->root) + t;
-  subset->root = eigen_to_glm_vec3_d(root);
-  frame->is_slamed = true;
-
-  //Update subset position
-  #pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<subset->xyz.size(); i++){
-    //Compute paramaters
-    float ts_n = subset->ts_n[i];
-    Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-    //Apply transformation
-    Eigen::Vector3f point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
-    point = R * point + t;
-    subset->xyz[i] = vec3(point(0), point(1), point(2));
-  }
-
-  //Update keypoint position
-  vector<vec3> keypoint(frame->xyz.size());
-  #pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3f point = frame->xyz[i];
-    keypoint[i] = vec3(point(0), point(1), point(2));
-  }
-  subset->keypoint.location = keypoint;
-
-  //---------------------------
-  objectManager->update_glyph_subset(subset);
-  sceneManager->update_subset_location(subset);
-}
 void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
   voxelMap* map = mapManager->get_localmap();
   //---------------------------
@@ -403,6 +361,55 @@ void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, 
   }
 
   //---------------------------
+}
+
+void Slam::update_subset_location(Subset* subset){
+  Frame* frame = &subset->frame;
+  //---------------------------
+
+  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+  Eigen::Vector3f trans_b = frame->trans_b;
+  Eigen::Vector3f trans_e = frame->trans_e;
+
+  //Update frame root
+  Eigen::Matrix3f R = quat_b.toRotationMatrix();
+  Eigen::Vector3f t = trans_b;
+  Eigen::Vector3f root = R * glm_to_eigen_vec3_d(subset->root) + t;
+  subset->root = eigen_to_glm_vec3_d(root);
+  frame->is_slamed = true;
+
+  //Update subset position
+  #pragma omp parallel for num_threads(nb_thread)
+  for(int i=0; i<subset->xyz.size(); i++){
+    //Compute paramaters
+    float ts_n = subset->ts_n[i];
+    Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+    //Apply transformation
+    Eigen::Vector3f point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
+    point = R * point + t;
+    subset->xyz[i] = vec3(point(0), point(1), point(2));
+  }
+
+  //---------------------------
+  sceneManager->update_subset_location(subset);
+}
+void Slam::update_subset_glyph(Subset* subset){
+  Frame* frame = &subset->frame;
+  //---------------------------
+
+  //Update keypoint location
+  subset->keypoint.location = eigen_to_glm_vectorVec3(frame->xyz, nb_thread);
+
+  //Update keypoint normal
+  if(frame->Nptp.size() == frame->xyz.size()){
+    subset->keypoint.normal = eigen_to_glm_vectorVec3(frame->Nptp, nb_thread);
+  }
+
+  //---------------------------
+  objectManager->update_glyph_subset(subset);
 }
 
 //Support functions

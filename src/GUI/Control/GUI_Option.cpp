@@ -16,7 +16,7 @@
 #include "../../Engine/Scene/Object/Normal.h"
 #include "../../Engine/Scene/Object/Car.h"
 #include "../../Engine/Scene/Object/Trajectory.h"
-#include "../../Engine/Scene/Object/Matching.h"
+#include "../../Engine/Scene/Object/Keypoint.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
@@ -102,8 +102,8 @@ void GUI_option::option_glyphs(){
   ImGui::NextColumn();
 
   //Display ICP line correspondences
-  Matching* matchObject = objectManager->get_object_match();
-  bool* keypoint_ON = matchObject->get_visibility();
+  Keypoint* keyObject = objectManager->get_object_keypoint();
+  bool* keypoint_ON = keyObject->get_visibility();
   if(ImGui::Checkbox("Keypoint", keypoint_ON)){
     if(sceneManager->get_is_list_empty() == false){
       objectManager->set_object_visibility(cloud, "keypoint", *keypoint_ON);
