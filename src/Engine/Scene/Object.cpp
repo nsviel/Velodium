@@ -63,6 +63,7 @@ void Object::runtime_object_selected(Subset* subset){
   Glyph* keypoint = &subset->keypoint;
   Glyph* normal = &subset->normal;
 
+
   //Draw subset glyphs
   if(keypoint->visibility){
     glyphManager->draw_glyph(keypoint);
@@ -193,6 +194,12 @@ void Object::update_glyph_cloud(Cloud* cloud){
   aabbObject->update_aabb(cloud);
   this->update_object(aabbObject->get_aabb());
 
+  //Update cloud subset glyphs
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    this->update_glyph_subset(subset);
+  }
+
   //---------------------------
 }
 
@@ -254,16 +261,29 @@ void Object::init_object(){
 
   //---------------------------
 }
-void Object::set_object_visibility(Cloud* cloud, string name, bool val){
+void Object::set_object_visibility(string name, bool val){
+  Scene* sceneManager = node_engine->get_sceneManager();
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  if(name == "normal"){
+  for (int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
 
-  }else if(name == "keypoint"){
-    for(int i=0; i<cloud->nb_subset; i++){
-      Subset* subset = *next(cloud->subset.begin(), i);
-      Glyph* keypoint = &subset->keypoint;
-      keypoint->visibility = val;
+    //Set normal glyph visibility
+    if(name == "normal"){
+      for(int i=0; i<cloud->nb_subset; i++){
+        Subset* subset = *next(cloud->subset.begin(), i);
+        Glyph* normal = &subset->normal;
+        normal->visibility = val;
+      }
+    }
+    //Set keypoint glyph visibility
+    else if(name == "keypoint"){
+      for(int i=0; i<cloud->nb_subset; i++){
+        Subset* subset = *next(cloud->subset.begin(), i);
+        Glyph* keypoint = &subset->keypoint;
+        keypoint->visibility = val;
+      }
     }
   }
 

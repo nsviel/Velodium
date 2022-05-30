@@ -64,7 +64,8 @@ void Offline::select_bySubsetID(Cloud* cloud, int ID_subset){
   }
 
   //Update glyphs
-  objectManager->update_glyph_cloud(cloud);
+  Subset* subset = sceneManager->get_subset(cloud, ID_subset);
+  objectManager->update_glyph_subset(subset);
 
   //---------------------------
 }

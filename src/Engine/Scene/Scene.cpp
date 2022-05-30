@@ -171,7 +171,7 @@ void Scene::remove_subset_all(Cloud* cloud){
 //Adding functions
 void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   //---------------------------
-
+;
   //Initialize parameters
   subset->visibility = true;
   Subset* subset_buffer = new Subset(*subset);
@@ -186,6 +186,8 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   cloud->nb_subset = cloud->subset.size();
   cloud->ID_selected = subset->ID;
   cloud->subset_selected = subset;
+
+  objectManager->update_glyph_subset(subset);
 
   //---------------------------
 }
@@ -277,7 +279,7 @@ void Scene::reset_cloud_all(){
 
 //Updating - cloud
 void Scene::update_cloud_glyphs(Cloud* cloud){
-  if(cloud == nullptr)return;
+  if(cloud == nullptr) return;
   //---------------------------
 
   this->update_cloud_MinMax(cloud);

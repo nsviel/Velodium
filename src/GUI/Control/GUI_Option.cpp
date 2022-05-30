@@ -93,10 +93,11 @@ void GUI_option::option_glyphs(){
   ImGui::NextColumn();
 
   //Display normals
-  static bool normal_ON = false;
-  if(ImGui::Checkbox("Normal", &normal_ON)){
+  Normal* normObject = objectManager->get_object_normal();
+  bool* norm_visib = normObject->get_visibility();
+  if(ImGui::Checkbox("Normal", norm_visib)){
     if(sceneManager->get_is_list_empty() == false){
-      objectManager->set_object_visibility(cloud, "normal", normal_ON);
+      objectManager->set_object_visibility("normal", *norm_visib);
     }
   }
   ImGui::NextColumn();
@@ -106,7 +107,7 @@ void GUI_option::option_glyphs(){
   bool* keypoint_ON = keyObject->get_visibility();
   if(ImGui::Checkbox("Keypoint", keypoint_ON)){
     if(sceneManager->get_is_list_empty() == false){
-      objectManager->set_object_visibility(cloud, "keypoint", *keypoint_ON);
+      objectManager->set_object_visibility("keypoint", *keypoint_ON);
     }
   }
   ImGui::NextColumn();
@@ -306,22 +307,33 @@ void GUI_option::option_parameters(){
     ImGui::NextColumn();
 
     //Normals size
+    Normal* normObject = objectManager->get_object_normal();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Normal size ");
     ImGui::NextColumn();
     static int cpt_nor = 1;
     ImGui::PushButtonRepeat(true);
     if(ImGui::ArrowButton("##left_n", ImGuiDir_Left)){
+      //Change normal size value
       cpt_nor--;
       if(cpt_nor <= 1){
         cpt_nor = 1;
       }
-      //objectManager->set_size_normal(cpt_nor);
+
+      //Apply new normal size value
+      int* size = normObject->get_size();
+      *size = cpt_nor;
+      objectManager->update_glyph_cloud(cloud);
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if(ImGui::ArrowButton("##right_n", ImGuiDir_Right)){
+      //Change normal size value
       cpt_nor++;
-      //objectManager->set_size_normal(cpt_nor);
+
+      //Apply new normal size value
+      int* size = normObject->get_size();
+      *size = cpt_nor;
+      objectManager->update_glyph_cloud(cloud);
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();

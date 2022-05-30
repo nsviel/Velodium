@@ -216,7 +216,7 @@ void Transforms::make_Transformation(Subset* subset, vec3 COM, mat4 transfMat){
 
   this->make_Transformation_point(ROOT, COM, transfMat);
   this->make_Transformation_atomic(XYZ, COM, transfMat);
-  this->make_Transformation_normal(N, transfMat);
+  //this->make_Transformation_normal(N, transfMat);
 
   //---------------------------
   this->compute_transformMatrix(subset, COM, transfMat);
