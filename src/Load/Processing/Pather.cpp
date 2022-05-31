@@ -191,16 +191,18 @@ void Pather::loading_treatment(){
 void Pather::saving(){
   //---------------------------
 
-  if(save_mode == "cloud"){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    this->saving_cloud(cloud);
-  }
-  else if(save_mode == "frame"){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    this->saving_cloud_frame(cloud);
-  }
-  else if(save_mode == "saved_frame"){
-    this->saving_saved_frames();
+  if(sceneManager->get_is_list_empty() == false){
+    if(save_mode == "cloud"){
+      Cloud* cloud = sceneManager->get_cloud_selected();
+      this->saving_cloud(cloud);
+    }
+    else if(save_mode == "frame"){
+      Cloud* cloud = sceneManager->get_cloud_selected();
+      this->saving_cloud_frame(cloud);
+    }
+    else if(save_mode == "saved_frame"){
+      this->saving_saved_frames();
+    }
   }
 
   //---------------------------

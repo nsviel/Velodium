@@ -21,16 +21,21 @@ public:
   void window_loading();
   void window_saving();
 
-  //Sub functions
-  void loading_action();
+  //Sub load functions
+  void loading_specific();
   void loading_dataFormat();
-  void loading_fileSelection();
+  void loading_custom_file();
   void loading_retrieve_info(string file_path);
   void loading_file_ptx();
   void loading_file_pcap();
+  void loading_action();
+  void loading_end(bool* open);
 
-  void saving_action();
+  //Sub save functions
   void saving_configuration();
+  void saving_action();
+  void saving_dataFormat();
+  void saving_end(bool* open);
 
 private:
   Scene* sceneManager;
@@ -41,6 +46,9 @@ private:
   string file_format;
   bool file_selected;
   int item_width;
+  int save_mode, load_mode;
+  int subset_mode, cloud_mode;
+  int frame_b, frame_e;
 };
 
 #endif

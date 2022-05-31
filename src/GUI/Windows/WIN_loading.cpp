@@ -28,6 +28,12 @@ WIN_loading::WIN_loading(Engine_node* node_engine){
   this->item_width = 150;
   this->file_selected = false;
   this->file_path = "path/to/file";
+  this->save_mode = 0;
+  this->load_mode = 0;
+  this->subset_mode = 0;
+  this->cloud_mode = 0;
+  this->frame_b = 0;
+  this->frame_e = 100;
 
   //---------------------------
 }
@@ -40,21 +46,12 @@ void WIN_loading::window_loading(){
     ImGui::Begin("Loader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
 
-    this->loading_action();
-    this->loading_fileSelection();
+    this->loading_specific();
+    this->loading_custom_file();
     this->loading_dataFormat();
 
     //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Load")){
-      pathManager->loading();
-      *open = false;
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Close")){
-      *open = false;
-    }
-    ImGui::End();
+    this->loading_end(open);
   }
 }
 void WIN_loading::window_saving(){
@@ -64,32 +61,28 @@ void WIN_loading::window_saving(){
     static bool all = false;
     //---------------------------
 
-    this->saving_action();
     this->saving_configuration();
+    this->saving_dataFormat();
 
     //---------------------------
-    ImGui::End();
+    this->saving_end(open);
   }
 }
 
-//Sub functions
-void WIN_loading::loading_action(){
+//Sub load functions
+void WIN_loading::loading_specific(){
   //---------------------------
 
-  //Usual cloud loader
-  if (ImGui::Button("Open cloud", ImVec2(item_width, 0))){
-    pathManager->loading();
-  }
-
-  //Load a set of PLY binary frames
-  if (ImGui::Button("Open frames", ImVec2(item_width, 0))){
-    pathManager->loading_frames();
-  }
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Load options");
+  ImGui::RadioButton("Cloud", &load_mode, 0);
+  ImGui::SameLine();
+  ImGui::RadioButton("Subset", &load_mode, 1);
 
   //---------------------------
   ImGui::Separator();
 }
-void WIN_loading::loading_fileSelection(){
+void WIN_loading::loading_custom_file(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Custom file");
   //---------------------------
 
   //Get info for a specified file
@@ -143,14 +136,6 @@ void WIN_loading::loading_fileSelection(){
   //---------------------------
   ImGui::Separator();
 }
-void WIN_loading::loading_retrieve_info(string file_path){
-  file_PCAP* pcapManager = loaderManager->get_pcapManager();
-  //---------------------------
-
-  this->file_format = file_path.substr(file_path.find_last_of(".") + 1);
-
-  //---------------------------
-}
 void WIN_loading::loading_dataFormat(){
   if(ImGui::TreeNode("Data format")){
     file_PTX* ptxManager = loaderManager->get_ptxManager();
@@ -183,29 +168,68 @@ void WIN_loading::loading_dataFormat(){
 
     //Intensity data format
     if(data_intensity){
-      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scaling");
-      static int Idata = 2;
-      static bool osef = false;
-      if(ImGui::RadioButton("[0;1]", &Idata, 0)){
+      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scale");
+      static int I_mode = 2;
+      if(ImGui::RadioButton("[0;1]", &I_mode, 0)){
         ptxManager->set_IdataFormat(0);
         ptsManager->set_IdataFormat(0);
       }
       ImGui::SameLine();
-      if(ImGui::RadioButton("[0;255]", &Idata, 1)){
+      if(ImGui::RadioButton("[0;255]", &I_mode, 1)){
         ptxManager->set_IdataFormat(1);
         ptsManager->set_IdataFormat(1);
       }
       ImGui::SameLine();
-      if(ImGui::RadioButton("[-2048;2048]", &Idata, 2)){
+      if(ImGui::RadioButton("[-2048;2048]", &I_mode, 2)){
         ptxManager->set_IdataFormat(2);
         ptsManager->set_IdataFormat(2);
       }
-      ImGui::Separator();
+    }
+
+    //Intensity data format
+    if(data_color){
+      ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Color scale");
+      static int rgb_mode = 1;
+      if(ImGui::RadioButton("[0;1]", &rgb_mode, 0)){
+
+      }
+      ImGui::SameLine();
+      if(ImGui::RadioButton("[0;255]", &rgb_mode, 1)){
+
+      }
     }
 
     //---------------------------
     ImGui::TreePop();
   }
+}
+void WIN_loading::loading_end(bool* open){
+  ImGui::Separator();
+  //---------------------------
+
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Load")){
+    this->loading_action();
+    *open = false;
+  }
+  ImGui::SameLine();
+  if(ImGui::Button("Close")){
+    *open = false;
+  }
+  ImGui::PopStyleColor(1);
+
+  //---------------------------
+  ImGui::End();
+}
+
+//sub sub laod functions
+void WIN_loading::loading_retrieve_info(string file_path){
+  file_PCAP* pcapManager = loaderManager->get_pcapManager();
+  //---------------------------
+
+  this->file_format = file_path.substr(file_path.find_last_of(".") + 1);
+
+  //---------------------------
 }
 void WIN_loading::loading_file_ptx(){
   file_PTX* ptxManager = loaderManager->get_ptxManager();
@@ -268,62 +292,148 @@ void WIN_loading::loading_file_pcap(){
 
   //---------------------------
 }
-
-void WIN_loading::saving_action(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+void WIN_loading::loading_action(){
   //---------------------------
 
-  //Save subset
-  if(ImGui::Button("Save subset as", ImVec2(item_width, 0))){
-    if(sceneManager->get_is_list_empty() == false){
-      Subset* subset = cloud->subset_selected;
-      pathManager->saving_subset(subset);
-    }
+  //Load cloud
+  if(load_mode == 0){
+    pathManager->loading();
   }
 
-  //Save a subset range
-  static int frame_b = 0;
-  static int frame_e = 100;
-  int subset_max;
-  if(sceneManager->get_is_list_empty()){
-    subset_max = 0;
-  }else{
-    subset_max = cloud->nb_subset - 1;
-  }
-  if(ImGui::Button("Save frames range", ImVec2(item_width, 0))){
-    pathManager->saving_subset_range(frame_b, frame_e);
-  }
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width - 10);
-  ImGui::DragIntRange2("##008", &frame_b, &frame_e, 0, 0, subset_max, "%d", "%d");
-
-  //Save cloud
-  if(ImGui::Button("Save cloud as", ImVec2(item_width, 0))){
-    if(sceneManager->get_is_list_empty() == false){
-      pathManager->saving_cloud(cloud);
-    }
-  }
-
-  //Save all present clouds
-  if(ImGui::Button("Save all clouds", ImVec2(item_width, 0))){
-    pathManager->saving_cloud_all();
+  //Load subset
+  if(load_mode == 1){
+    pathManager->loading_frames();
   }
 
   //---------------------------
 }
+
+//Sub save functions
 void WIN_loading::saving_configuration(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Save options");
   //---------------------------
 
-  ImGui::Text("Intensity scale");
-  static int I_opt = 0;
-  if(ImGui::RadioButton("[0;1]", &I_opt, 0)){
+  //Saving mode (Cloud / Subset)
+  ImGui::RadioButton("Cloud", &save_mode, 0);
+  ImGui::SameLine();
+  ImGui::RadioButton("Subset", &save_mode, 1);
 
-  }ImGui::SameLine();
-  if(ImGui::RadioButton("[0;255]", &I_opt, 1)){
+  //Cloud mode (Selected / All)
+  if(save_mode == 0){
+    ImGui::RadioButton("Selected", &cloud_mode, 0);
+    ImGui::SameLine();
+    ImGui::RadioButton("All", &cloud_mode, 1);
+  }
 
-  }ImGui::SameLine();
-  if(ImGui::RadioButton("[-2048;2048]", &I_opt, 2)){
+  //Subset mode (Selected / Range)
+  if(save_mode == 1){
+    ImGui::RadioButton("Selected", &subset_mode, 0);
+    ImGui::SameLine();
+    ImGui::RadioButton("Range", &subset_mode, 1);
+  }
 
+  //Setup subset range
+  if(save_mode == 1 && subset_mode == 1){
+    //Retrieve max number of cloud subset
+    int subset_max;
+    if(sceneManager->get_is_list_empty()){
+      subset_max = 0;
+    }else{
+      Cloud* cloud = sceneManager->get_cloud_selected();
+      subset_max = cloud->nb_subset - 1;
+    }
+
+    //Drag range
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width - 10);
+    ImGui::DragIntRange2("##008", &frame_b, &frame_e, 0, 0, subset_max, "%d", "%d");
   }
 
   //---------------------------
+  ImGui::Separator();
+}
+void WIN_loading::saving_dataFormat(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Save configuration");
+  //---------------------------
+
+  //File format
+  static int file_format = 0;
+  ImGui::RadioButton("pts", &file_format, 0);
+  ImGui::SameLine();
+  ImGui::RadioButton("ptx", &file_format, 1);
+  ImGui::SameLine();
+  ImGui::RadioButton("ply", &file_format, 2);
+
+  //Data to  retrieve
+  static bool with_intensity = true;
+  static bool with_color = true;
+  static bool with_normal = true;
+  static bool with_timestamp = false;
+  ImGui::Checkbox("Is", &with_intensity);
+  ImGui::SameLine();
+
+  //Intensity scale
+  if(with_intensity){
+    static int I_opt = 0;
+    if(ImGui::RadioButton("[0;1]", &I_opt, 0)){
+
+    }ImGui::SameLine();
+    if(ImGui::RadioButton("[0;255]", &I_opt, 1)){
+
+    }ImGui::SameLine();
+    if(ImGui::RadioButton("[-2048;2048]", &I_opt, 2)){
+
+    }
+  }
+
+  ImGui::Checkbox("RGB", &with_color);
+  ImGui::SameLine();
+  ImGui::Checkbox("Nxyz", &with_normal);
+  ImGui::SameLine();
+  ImGui::Checkbox("ts", &with_timestamp);
+
+  //---------------------------
+}
+void WIN_loading::saving_action(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //---------------------------
+
+  //Save selected cloud
+  if(save_mode == 0 && cloud_mode == 0 && !sceneManager->get_is_list_empty()){
+    pathManager->saving_cloud(cloud);
+  }
+
+  //Save all cloud
+  if(save_mode == 0 && cloud_mode == 1 && !sceneManager->get_is_list_empty()){
+    pathManager->saving_cloud_all();
+  }
+
+  //Save selected subset
+  if(save_mode == 1 && subset_mode == 0 && !sceneManager->get_is_list_empty()){
+    Subset* subset = cloud->subset_selected;
+    pathManager->saving_subset(subset);
+  }
+
+  //Save subset range
+  if(save_mode == 1 && subset_mode == 1 && !sceneManager->get_is_list_empty()){
+    pathManager->saving_subset_range(frame_b, frame_e);
+  }
+
+  //---------------------------
+}
+void WIN_loading::saving_end(bool* open){
+  ImGui::Separator();
+  //---------------------------
+
+  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+  if(ImGui::Button("Save")){
+    this->saving_action();
+  }
+  ImGui::SameLine();
+  if(ImGui::Button("Close")){
+    *open = false;
+  }
+  ImGui::PopStyleColor(1);
+
+  //---------------------------
+  ImGui::End();
 }
