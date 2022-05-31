@@ -21,6 +21,7 @@
 
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "../../../../../extern/https/httplib.h"
+//https://github.com/yhirose/cpp-httplib
 
 //Constructor / Destructor
 HTTPS::HTTPS(Network* netManager){
