@@ -8,7 +8,7 @@ class Network;
 class MQTT;
 class SFTP;
 class SSH;
-class HTTP_server;
+class HTTPS;
 
 
 class GUI_Network
@@ -37,7 +37,7 @@ private:
   MQTT* mqttManager;
   SFTP* sftpManager;
   SSH* sshManager;
-  HTTP_server* httpManager;
+  HTTPS* httpsManager;
 
   int item_width;
 };

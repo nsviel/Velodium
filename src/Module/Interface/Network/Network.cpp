@@ -3,7 +3,7 @@
 #include "MQTT/MQTT.h"
 #include "SFTP/SFTP.h"
 #include "SFTP/SSH.h"
-#include "HTTP/HTTP_server.h"
+#include "HTTP/HTTPS.h"
 
 #include "../Interface_node.h"
 
@@ -26,7 +26,7 @@ Network::Network(Interface_node* node){
   this->mqttManager = new MQTT(this);
   this->sshManager = new SSH();
   this->sftpManager = new SFTP(this);
-  this->httpManager = new HTTP_server(this);
+  this->httpsManager = new HTTPS(this);
 
   this->is_connected = false;
   this->is_image_watcher = false;
@@ -44,7 +44,7 @@ Network::~Network(){}
 void Network::update_configuration(){
   //---------------------------
 
-  httpManager->update_configuration();
+  httpsManager->update_configuration();
   mqttManager->update_configuration();
 
   //---------------------------

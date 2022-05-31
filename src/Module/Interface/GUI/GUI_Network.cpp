@@ -6,7 +6,7 @@
 #include "../Network/MQTT/MQTT.h"
 #include "../Network/SFTP/SFTP.h"
 #include "../Network/SFTP/SSH.h"
-#include "../Network/HTTP/HTTP_server.h"
+#include "../Network/HTTP/HTTPS.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
@@ -28,7 +28,7 @@ GUI_Network::GUI_Network(GUI_module* gui_module){
   this->mqttManager = netManager->get_mqttManager();
   this->sftpManager = netManager->get_sftpManager();
   this->sshManager = netManager->get_sshManager();
-  this->httpManager = netManager->get_httpManager();
+  this->httpsManager = netManager->get_httpsManager();
 
   this->item_width = 100;
 
@@ -124,7 +124,7 @@ void GUI_Network::http_connection(){
 
   ImGui::Text("Daemon activated ");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", httpManager->get_is_daemon() ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", httpsManager->get_is_daemon() ? "ON" : "OFF");
   ImGui::Separator();
 
   //---------------------------

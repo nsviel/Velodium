@@ -8,7 +8,7 @@
 #include "../Local/Saving.h"
 #include "../Network/GPS.h"
 #include "../Network/Network.h"
-#include "../Network/HTTP/HTTP_server.h"
+#include "../Network/HTTP/HTTPS.h"
 #include "../Local/Prediction.h"
 
 #include "../../Module_node.h"
@@ -29,7 +29,7 @@ GUI_Interface::GUI_Interface(GUI_module* gui_module){
   this->saveManager = node_interface->get_saveManager();
   this->predManager = node_interface->get_predManager();
   this->gpsManager = node_interface->get_gpsManager();
-  this->httpManager = netManager->get_httpManager();
+  this->httpsManager = netManager->get_httpsManager();
 
   this->item_width = 100;
 
@@ -155,7 +155,7 @@ void GUI_Interface::state_watcher(){
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_gps ? "ON" : "OFF");
 
   //HTTP server daemon
-  bool with_daemon = httpManager->get_is_daemon();
+  bool with_daemon = httpsManager->get_is_daemon();
   ImGui::Text("Daemon - HTTP");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");

@@ -1,5 +1,5 @@
-#ifndef HTTP_BOOST_H
-#define HTTP_BOOST_H
+#ifndef PROTOCOL_HTTPS_H
+#define PROTOCOL_HTTPS_H
 
 #include "../../../../common.h"
 
@@ -10,11 +10,11 @@ class Saving;
 class Configuration;
 
 
-class HTTP_server
+class HTTPS
 {
 public:
-  HTTP_server(Network* netManager);
-  ~HTTP_server();
+  HTTPS(Network* netManager);
+  ~HTTPS();
 
 public:
   void update_configuration();

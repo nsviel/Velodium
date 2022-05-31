@@ -1,4 +1,4 @@
-#include "HTTP_server.h"
+#include "HTTPS.h"
 //http://localhost:8888/
 
 #include "../Network.h"
@@ -19,8 +19,11 @@
 #define PATH_IMAGE "picture.png"
 
 
+#define CPPHTTPLIB_OPENSSL_SUPPORT
+#include "../../../../../extern/https/httplib.h"
+
 //Constructor / Destructor
-HTTP_server::HTTP_server(Network* netManager){
+HTTPS::HTTPS(Network* netManager){
   //---------------------------
 
   Interface_node* node_interface = netManager->get_node_interface();
@@ -34,9 +37,9 @@ HTTP_server::HTTP_server(Network* netManager){
   //---------------------------
   this->update_configuration();
 }
-HTTP_server::~HTTP_server(){}
+HTTPS::~HTTPS(){}
 
-void HTTP_server::update_configuration(){
+void HTTPS::update_configuration(){
   //---------------------------
 
   this->path_image = saveManager->get_path_image() + "image";
@@ -48,7 +51,7 @@ void HTTP_server::update_configuration(){
 }
 
 // ON / OFF http daemon
-void HTTP_server::start_deamon(){
+void HTTPS::start_deamon(){
   if(with_http_demon){
     //---------------------------
 
@@ -65,7 +68,7 @@ void HTTP_server::start_deamon(){
     //---------------------------
   }
 }
-void HTTP_server::stop_deamon(){
+void HTTPS::stop_deamon(){
   //---------------------------
 
   MHD_stop_daemon(daemon);
@@ -74,7 +77,7 @@ void HTTP_server::stop_deamon(){
 }
 
 //Daemon functions
-int HTTP_server::http_answer(void *cls, struct MHD_Connection *connection, const char *url,
+int HTTPS::http_answer(void *cls, struct MHD_Connection *connection, const char *url,
   const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **history){
   //---------------------------
 
@@ -94,7 +97,7 @@ int HTTP_server::http_answer(void *cls, struct MHD_Connection *connection, const
 
   //---------------------------
 }
-int HTTP_server::http_get_image(void *cls, struct MHD_Connection *connection){
+int HTTPS::http_get_image(void *cls, struct MHD_Connection *connection){
   //---------------------------
 
   //Get file path
@@ -135,7 +138,7 @@ static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char 
   return MHD_YES;
 }
 
-int HTTP_server::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size){
+int HTTPS::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size){
   //---------------------------
 
   struct MHD_PostProcessor* pp = MHD_create_post_processor (connection, 512, iterate_post, NULL);
@@ -158,7 +161,7 @@ int HTTP_server::http_post_geolocalization(void* cls, struct MHD_Connection *con
 }
 
 //Subfunctions
-int HTTP_server::print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value){
+int HTTPS::print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value){
   //---------------------------
 
   printf ("%s: %s\n", key, value);
@@ -166,7 +169,7 @@ int HTTP_server::print_out_key (void *cls, enum MHD_ValueKind kind, const char *
   //---------------------------
   return MHD_YES;
 }
-void HTTP_server::print_info(struct MHD_Connection *connection, const char *url, const char *method, const char *version){
+void HTTPS::print_info(struct MHD_Connection *connection, const char *url, const char *method, const char *version){
   //---------------------------
 
   cout<<"---------------------"<<endl;

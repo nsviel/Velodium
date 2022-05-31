@@ -15,6 +15,7 @@ set(ALL_LIBS
   ${OpenMP_CXX_FLAGS}
   ${FREETYPE_LIBRARIES}
 
+  -lssl -lcrypto # SSL stuff
   OpenMP::OpenMP_CXX
   Eigen3::Eigen #Eigen library
   glfw # Opengl glfw
