@@ -24,12 +24,12 @@
       "capture_port" : 2370,
       "lidar_model" : "velodyne_vlp64",
       "nb_save_frame" : 20,
-      "nb_save_image" : 20,
+      "nb_save_image" : 1,
       "with_gps" : false,
       "with_prediction" : false,
       "with_remove_lastSubset" : false,
       "with_save_frame" : false,
-      "with_save_image" : false
+      "with_save_image" : true
    },
    "module" : {
       "player_mode" : "offline",

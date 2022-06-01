@@ -174,11 +174,11 @@ void Configuration::preconf_default(Json::Value& root){
   interface["capture_port"] = 2370;
   interface["with_prediction"] = false;
   interface["with_gps"] = false;
-  interface["with_save_image"] = false;
+  interface["with_save_image"] = true;
   interface["with_save_frame"] = false;
   interface["with_remove_lastSubset"] = false;
   interface["nb_save_frame"] = 20;
-  interface["nb_save_image"] = 20;
+  interface["nb_save_image"] = 1;
   root["interface"] = interface;
 
   //---------------------------

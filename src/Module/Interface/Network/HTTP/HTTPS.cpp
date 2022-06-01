@@ -17,11 +17,8 @@
 #include <unistd.h>   /* For open(), creat() */
 
 #define PATH_IMAGE "picture.png"
+bool FIRST_GET=true;
 
-
-#define CPPHTTPLIB_OPENSSL_SUPPORT
-#include "../../../../../extern/https/httplib.h"
-//https://github.com/yhirose/cpp-httplib
 
 //Constructor / Destructor
 HTTPS::HTTPS(Network* netManager){
@@ -46,6 +43,7 @@ void HTTPS::update_configuration(){
   this->path_image = saveManager->get_path_image() + "image";
   this->with_http_demon = configManager->parse_json_b("network", "with_http_demon");
   this->server_port = configManager->parse_json_i("network", "http_port");
+  this->is_first_get = true;
 
   //---------------------------
   this->start_deamon();
@@ -60,7 +58,7 @@ void HTTPS::start_deamon(){
     this->daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
 
     if(daemon == NULL){
-      cout<<"[ERROR] Problem with HTTP server"<<endl;
+      cout<<"[error] Problem with HTTP server"<<endl;
       this->is_deamon = false;
     }else{
       this->is_deamon = true;
@@ -78,25 +76,20 @@ void HTTPS::stop_deamon(){
 }
 
 //Daemon functions
-int HTTPS::http_answer(void *cls, struct MHD_Connection *connection, const char *url,
-  const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **history){
+int HTTPS::http_answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **history){
   //---------------------------
 
   //Check input method
+  int ret;
   if(strcmp(method, "GET") == 0){
-    int ret = http_get_image(cls, connection);
-    return ret;
+    ret = http_get_image(cls, connection);
   }
   if(strcmp(method, "POST") == 0){
-    say(*upload_data_size);
-    //int ret = http_post_geolocalization(cls, connection, upload_data, *upload_data_size);
-    //return ret;
-  }
-  else{
-    return MHD_NO;
+    ret = http_post_geolocalization(cls, connection, upload_data, upload_data_size, history);
   }
 
   //---------------------------
+  return ret;
 }
 int HTTPS::http_get_image(void *cls, struct MHD_Connection *connection){
   //---------------------------
@@ -135,33 +128,50 @@ int HTTPS::http_get_image(void *cls, struct MHD_Connection *connection){
   //---------------------------
   return ret;
 }
-static int iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,const char *filename, const char *content_type,const char *transfer_encoding, const char *data,uint64_t off, size_t size){
+int HTTPS::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size, void **con_cls){
+  struct connection_info_struct *con_info = new connection_info_struct();
+  int ret;
+  //---------------------------
+
+  if(FIRST_GET){
+    FIRST_GET = false;
+    return MHD_YES;
+  }
+
+  if(*upload_data_size != 0){
+    *upload_data_size = 0;
+
+    //Retrieve data
+    string data(upload_data);
+    say(data); //----> ici, les données trasmises !
+
+    //Return a response to the client
+    const char* page = "[ok] Data received\n";
+    ret = send_page(connection, page, 200);
+  }
+  else{
+    const char* page = "[error] No data received by the HTTP server\n";
+    ret = send_page(connection, page, 200);
+  }
+
+  //---------------------------
+  FIRST_GET = true;
   return MHD_YES;
 }
 
-int HTTPS::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size){
-  //---------------------------
-
-  struct MHD_PostProcessor* pp = MHD_create_post_processor (connection, 512, iterate_post, NULL);
-  say(*upload_data_size);
-
-  if (*upload_data_size != 0){sayHello();
-    MHD_post_process (pp, upload_data, *upload_data_size);
-
-    string geo_string(upload_data);
-    say(geo_string);
-
-    *upload_data_size = 0;
-    return MHD_YES;
-  }
-  else{
-    return MHD_NO;
-  }
-
-  //---------------------------
-}
-
 //Subfunctions
+int HTTPS::send_page (struct MHD_Connection *connection, const char* page, int status_code){
+  //---------------------------
+
+  struct MHD_Response* response = MHD_create_response_from_buffer (strlen (page), (void*) page, MHD_RESPMEM_MUST_COPY);
+  if (!response) return MHD_NO;
+  MHD_add_response_header(response, "Content-Type", "text/plain");
+  int ret = MHD_queue_response (connection, status_code, response);
+  MHD_destroy_response (response);
+
+  //---------------------------
+  return ret;
+}
 int HTTPS::print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value){
   //---------------------------
 
