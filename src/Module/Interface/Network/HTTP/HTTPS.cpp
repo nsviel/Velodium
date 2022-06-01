@@ -1,5 +1,7 @@
 #include "HTTPS.h"
 //http://localhost:8888/
+//Documentation: https://www.gnu.org/software/libmicrohttpd/manual/libmicrohttpd.html#toc-Introduction
+//Tutorial: https://www.gnu.org/software/libmicrohttpd/tutorial.html
 
 #include "../Network.h"
 #include "../../Interface_node.h"
@@ -133,11 +135,13 @@ int HTTPS::http_post_geolocalization(void* cls, struct MHD_Connection *connectio
   int ret;
   //---------------------------
 
+  //I dont know why but a first call is received empty (?)
   if(FIRST_GET){
     FIRST_GET = false;
     return MHD_YES;
   }
 
+  //Process received data
   if(*upload_data_size != 0){
     *upload_data_size = 0;
 
