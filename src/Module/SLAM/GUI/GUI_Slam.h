@@ -25,17 +25,15 @@ public:
 public:
   void design_SLAM();
 
-  void compute();
-  void statistics();
-
+  void parameter_offline();
   void parameter_slam();
-  void parameter_configuration();
-  void parameter_general();
+  void parameter_lidar();
   void parameter_optimization();
   void parameter_localMap();
   void parameter_normal();
   void parameter_robustesse();
 
+  void statistics();
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 
   inline Slam* get_slamManager(){return slamManager;}

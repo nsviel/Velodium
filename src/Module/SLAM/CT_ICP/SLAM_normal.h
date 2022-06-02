@@ -18,27 +18,24 @@ public:
 
 public:
   //Main function
-  void compute_frameNormal(Frame* frame, voxelMap* map);
+  void update_configuration();
+  void compute_normal(Frame* frame, voxelMap* map);
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
-  inline float* get_size_voxelMap(){return &size_voxelMap;}
-  inline int* get_max_number_neighbors(){return &max_number_neighbors;}
-  inline int* get_voxel_searchSize(){return &voxel_searchSize;}
+  inline float* get_knn_voxel_size(){return &knn_voxel_size;}
+  inline int* get_knn_max_nn(){return &knn_max_nn;}
+  inline int* get_knn_voxel_search(){return &knn_voxel_search;}
 
 private:
   //Sub functions
   vector<Eigen::Vector3f> compute_kNN_search(Eigen::Vector3f &point, voxelMap* map);
-  void compute_normal(vector<Eigen::Vector3f>& kNN, int i);
-  void compute_normals_reorientToOrigin(Frame* frame);
+  void compute_knn_normal(Frame* frame, vector<Eigen::Vector3f>& kNN, int i);
+  void compute_normal_reorientToOrigin(Frame* frame, int i);
 
 private:
-  vector<Eigen::Vector3f> Nxyz;
-  vector<Eigen::Vector3f> NN;
-  vector<float> a2D;
-
-  float size_voxelMap;
-  int max_number_neighbors;
-  int voxel_searchSize;
+  float knn_voxel_size;
+  int knn_max_nn;
+  int knn_voxel_search;
   int nb_thread;
   mutex Mutex;
 };

@@ -9,38 +9,37 @@
 SLAM_normal::SLAM_normal(){
   //---------------------------
 
-  this->max_number_neighbors = 20;
-  this->size_voxelMap = 1;
-  this->voxel_searchSize = 1;
-  this->nb_thread = 8;
-
   //---------------------------
+  this->update_configuration();
 }
 SLAM_normal::~SLAM_normal(){}
 
 //Main function
-void SLAM_normal::compute_frameNormal(Frame* frame, voxelMap* map){
+void SLAM_normal::update_configuration(){
+  //---------------------------
+
+  this->knn_max_nn = 20;
+  this->knn_voxel_size = 1;
+  this->knn_voxel_search = 1;
+  this->nb_thread = 8;
+
+  //---------------------------
+}
+void SLAM_normal::compute_normal(Frame* frame, voxelMap* map){
   //---------------------------
 
   //Reset variable conteners
-  Nxyz.clear(); Nxyz.resize(frame->xyz.size());
-  NN.clear(); NN.resize(frame->xyz.size());
-  a2D.clear(); a2D.resize(frame->xyz.size());
+  frame->Nptp.clear(); frame->Nptp.resize(frame->xyz.size());
+  frame->NN.clear(); frame->NN.resize(frame->xyz.size());
+  frame->a2D.clear(); frame->a2D.resize(frame->xyz.size());
 
   //Compute all point normal
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
     vector<Eigen::Vector3f> kNN = compute_kNN_search(frame->xyz[i], map);
-    this->compute_normal(kNN, i);
+    this->compute_knn_normal(frame, kNN, i);
+    this->compute_normal_reorientToOrigin(frame, i);
   }
-
-  //Store data
-  frame->Nptp = Nxyz;
-  frame->NN = NN;
-  frame->a2D = a2D;
-
-  //Reoriente all normal
-  this->compute_normals_reorientToOrigin(frame);
 
   //---------------------------
 }
@@ -50,16 +49,15 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
   priority_queue_iNN priority_queue;
   //---------------------------
 
-  int vx = static_cast<int>(point[0] / size_voxelMap);
-  int vy = static_cast<int>(point[1] / size_voxelMap);
-  int vz = static_cast<int>(point[2] / size_voxelMap);
+  int vx = static_cast<int>(point[0] / knn_voxel_size);
+  int vy = static_cast<int>(point[1] / knn_voxel_size);
+  int vz = static_cast<int>(point[2] / knn_voxel_size);
 
   //Search inside all surrounding voxels
   int cpt = 0;
-  for (int vi = vx - voxel_searchSize; vi <= vx + voxel_searchSize; vi++){
-    for (int vj = vy - voxel_searchSize; vj <= vy + voxel_searchSize; vj++){
-      for (int vk = vz - voxel_searchSize; vk <= vz + voxel_searchSize; vk++){
-
+  for (int vi = vx - knn_voxel_search; vi <= vx + knn_voxel_search; vi++){
+    for (int vj = vy - knn_voxel_search; vj <= vy + knn_voxel_search; vj++){
+      for (int vk = vz - knn_voxel_search; vk <= vz + knn_voxel_search; vk++){
         //Search for pre-existing voxel in local map
         int key = (vi*200 + vj)*100 + vk;
         it_voxelMap it = map->find(key);
@@ -69,28 +67,25 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
           vector<Eigen::Vector3f>& voxel_ijk = it.value();
 
           //We store all NN voxel point
-          for(int i=0; i < voxel_ijk.size(); i++){
-            float dist = (voxel_ijk[i] - point).norm();
+          for(int i=0; i<voxel_ijk.size(); i++){
+            Eigen::Vector3f& nn = voxel_ijk[i];
+            float dist = (nn - point).norm();
 
             //If the voxel is full
-            if(priority_queue.size() == max_number_neighbors){
-              if(dist < std::get<0>(priority_queue.top())){
+            if(priority_queue.size() == knn_max_nn){
+              //Raplace farest point
+              float dist_last = std::get<0>(priority_queue.top());
+              if(dist < dist_last){
                 priority_queue.pop();
-                priority_queue.emplace(dist, voxel_ijk[i]);
-
-                //If we have made lot of emplace, break loop
-                //Could be source of errors (!)
-                cpt++;
-                if(cpt > 30){
-                  break;
-                }
+                priority_queue.emplace(dist, nn);
               }
-            }else{
-              priority_queue.emplace(dist, voxel_ijk[i]);
+            }
+            //Else add point
+            else{
+              priority_queue.emplace(dist, nn);
             }
           }
         }
-
       }
     }
   }
@@ -106,19 +101,23 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
   //---------------------------
   return kNN;
 }
-void SLAM_normal::compute_normal(vector<Eigen::Vector3f>& kNN, int i){
+void SLAM_normal::compute_knn_normal(Frame* frame, vector<Eigen::Vector3f>& kNN, int i){
   // Computes normal and planarity coefficient
   //---------------------------
 
   if(kNN.size() != 0){
     //NN point
-    this->NN[i] = kNN[0];
+    frame->NN[i] = kNN[0];
 
     //Compute normales
     Eigen::Matrix3f covMat = fct_covarianceMat(kNN);
     Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> es(covMat);
     Eigen::Vector3f normal = es.eigenvectors().col(0).normalized();
-    this->Nxyz[i] = normal;
+    if(isnan(normal(0))){
+      frame->Nptp[i] = Eigen::Vector3f::Zero();
+    }else{
+      frame->Nptp[i] = normal;
+    }
 
     // Compute planarity coefficient / weight from the eigen values
     //Be careful, the eigenvalues are not correct with the iterative way to compute the covariance matrix
@@ -126,28 +125,22 @@ void SLAM_normal::compute_normal(vector<Eigen::Vector3f>& kNN, int i){
     float sigma_2 = sqrt(std::abs(es.eigenvalues()[1]));
     float sigma_3 = sqrt(std::abs(es.eigenvalues()[0]));
     float a2D = (sigma_2 - sigma_3) / sigma_1;
-    this->a2D[i] = a2D;
+    if(isnan(a2D)){
+      frame->a2D[i] = -1;
+    }else{
+      frame->a2D[i] = a2D;
+    }
   }
 
   //---------------------------
 }
-void SLAM_normal::compute_normals_reorientToOrigin(Frame* frame){
+void SLAM_normal::compute_normal_reorientToOrigin(Frame* frame, int i){
+  Eigen::Vector3f& point = frame->xyz[i];
+  Eigen::Vector3f& normal = frame->Nptp[i];
   //---------------------------
 
-  //Check vector size
-  if(frame->Nptp.size() != frame->xyz.size()){
-    cout<<"[SLAM] Normal size problem ("<<Nxyz.size()<<"|"<<frame->xyz.size()<<")"<<endl;
-  }
-
-  //Reoriente to origin
-  #pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3f& point = frame->xyz[i];
-    Eigen::Vector3f& normal = frame->Nptp[i];
-
-    if (normal.dot(frame->trans_b - point) < 0) {
-        normal = -1.0 * normal;
-    }
+  if(normal.dot(frame->trans_b - point) < 0){
+    normal = -1.0 * normal;
   }
 
   //---------------------------

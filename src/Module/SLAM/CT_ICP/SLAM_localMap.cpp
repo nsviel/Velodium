@@ -21,15 +21,15 @@ SLAM_localMap::~SLAM_localMap(){}
 void SLAM_localMap::update_configuration(){
   //---------------------------
 
-  this->voxel_size_localMap = 1;
-  this->voxel_size_slamMap = 0.5;
+  this->map_voxel_size = 1;
+  this->slamMap_voxel_size = 0.5;
 
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
   this->max_voxel_distance = 150.0f;
   this->map_max_voxelNbPoints = 20;
   this->min_voxel_distance = 0.05;
-  this->grid_voxel_size = 1;
+  this->grid_sampling_voxel_size = 1;
   this->max_total_point = 20000;
 
   this->slamMap_voxelized = false;
@@ -58,9 +58,9 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
   for (int i=0; i<subset->xyz.size(); i++){
     vec3& xyz = subset->xyz[i];
 
-    int kx = static_cast<int>(xyz.x / grid_voxel_size);
-    int ky = static_cast<int>(xyz.y / grid_voxel_size);
-    int kz = static_cast<int>(xyz.z / grid_voxel_size);
+    int kx = static_cast<int>(xyz.x / grid_sampling_voxel_size);
+    int ky = static_cast<int>(xyz.y / grid_sampling_voxel_size);
+    int kz = static_cast<int>(xyz.z / grid_sampling_voxel_size);
     int key = (kx*200 + ky)*100 + kz;
 
     point << xyz.x, xyz.y, xyz.z, subset->ts_n[i];
@@ -102,9 +102,9 @@ void SLAM_localMap::add_pointsToSlamMap(Subset* subset){
     for (int i=0; i<subset->xyz.size(); i++){
       vec3& xyz = subset->xyz[i];
 
-      int kx = static_cast<int>(xyz.x / voxel_size_slamMap);
-      int ky = static_cast<int>(xyz.y / voxel_size_slamMap);
-      int kz = static_cast<int>(xyz.z / voxel_size_slamMap);
+      int kx = static_cast<int>(xyz.x / slamMap_voxel_size);
+      int ky = static_cast<int>(xyz.y / slamMap_voxel_size);
+      int kz = static_cast<int>(xyz.z / slamMap_voxel_size);
       int key = (kx*200 + ky)*100 + kz;
 
       //if the voxel already exists
@@ -140,9 +140,9 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
     float dist = fct_distance_origin(point);
 
     if(dist > min_root_distance && dist < max_root_distance){
-      int kx = static_cast<int>(point(0) / voxel_size_localMap);
-      int ky = static_cast<int>(point(1) / voxel_size_localMap);
-      int kz = static_cast<int>(point(2) / voxel_size_localMap);
+      int kx = static_cast<int>(point(0) / map_voxel_size);
+      int ky = static_cast<int>(point(1) / map_voxel_size);
+      int kz = static_cast<int>(point(2) / map_voxel_size);
       int key = (kx*200 + ky)*100 + kz;
 
       //if the voxel already exists

@@ -117,7 +117,7 @@ void GUI_Obstacle::parameter_online(){
 
   //SLAM parameters
   GUI_Slam* gui_slam = gui_module->get_gui_slam();
-  gui_slam->parameter_configuration();
+  gui_slam->parameter_lidar();
 
   //With MQTT warning
   bool* with_warning = obstacleManager->get_with_warning();

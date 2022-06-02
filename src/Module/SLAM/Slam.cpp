@@ -35,7 +35,7 @@ Slam::Slam(Engine_node* node){
 
   this->normalManager = new SLAM_normal();
   //this->ceresManager = new SLAM_optim_ceres(normalManager);
-  this->gnManager = new SLAM_optim_gn(normalManager);
+  this->gnManager = new SLAM_optim_gn(this);
   this->assessManager = new SLAM_assessment(this);
   this->mapManager = new SLAM_localMap();
   this->paramManager = new SLAM_parameter(this);
@@ -427,16 +427,6 @@ bool Slam::check_conditions(Cloud* cloud, int subset_ID){
   //---------------------------
   return true;
 }
-void Slam::reset_slam(){
-  //---------------------------
-
-  //Reset SLAM objects
-  objectManager->reset_scene_object();
-  mapManager->reset_map();
-  this->map_frame_ID = 0;
-
-  //---------------------------
-}
 void Slam::reset_visibility(Cloud* cloud, int subset_ID){
   //---------------------------
 
@@ -450,6 +440,16 @@ void Slam::reset_visibility(Cloud* cloud, int subset_ID){
       subset->visibility = false;
     }
   }
+
+  //---------------------------
+}
+void Slam::reset_slam(){
+  //---------------------------
+
+  //Reset SLAM objects
+  objectManager->reset_scene_object();
+  mapManager->reset_map();
+  this->map_frame_ID = 0;
 
   //---------------------------
 }

@@ -66,7 +66,7 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap* map){
     this->frame_update(frame);
 
     //Compute frame normal
-    normalManager->compute_frameNormal(frame, map);
+    normalManager->compute_normal(frame, map);
 
     //Parameter block
     ceres::Problem* ceres_problem = new ceres::Problem();
@@ -130,7 +130,7 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
     this->frame_update(frame);
 
     //Compute frame normal
-    normalManager->compute_frameNormal(frame, map);
+    normalManager->compute_normal(frame, map);
 
     //Parameter block
     ceres::Problem* ceres_problem = new ceres::Problem();

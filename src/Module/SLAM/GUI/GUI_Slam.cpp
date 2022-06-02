@@ -55,7 +55,6 @@ void GUI_Slam::design_SLAM(){
 
     // SLAM parameters
     if(ImGui::BeginTabItem("Parameter##123")){
-      this->compute();
       this->parameter_slam();
       ImGui::EndTabItem();
     }
@@ -70,8 +69,8 @@ void GUI_Slam::design_SLAM(){
 void GUI_Slam::parameter_slam(){
   //---------------------------
 
-  this->parameter_configuration();
-  this->parameter_general();
+  this->parameter_lidar();
+  this->parameter_offline();
   this->parameter_optimization();
   this->parameter_localMap();
   this->parameter_normal();
@@ -80,7 +79,7 @@ void GUI_Slam::parameter_slam(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Slam::parameter_configuration(){
+void GUI_Slam::parameter_lidar(){
   //---------------------------
 
   //Configuration model
@@ -92,46 +91,25 @@ void GUI_Slam::parameter_configuration(){
 
   //---------------------------
 }
-void GUI_Slam::parameter_general(){
-  if(ImGui::TreeNode("General")){
+void GUI_Slam::parameter_offline(){
+  if(ImGui::TreeNode("Offline")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
-    //Display infos in terminal
-    bool* slam_verbose = slamManager->get_verbose();
-    ImGui::Checkbox("Verbose", slam_verbose);
+    //Compute algorithm
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
+    if(ImGui::Button("Compute", ImVec2(item_width,0))){
+      if(cloud != nullptr){
+        sceneManager->reset_cloud(cloud);
+        slamManager->compute_slam_offline(cloud);
 
-    //Make a voxelized slam map
-    bool* slamMap_voxelized = mapManager->get_slamMap_voxelized();
-    ImGui::Checkbox("Visual voxelized map", slamMap_voxelized);
-
-    //Width of the SLAM map voxel
-    if(*slamMap_voxelized){
-      float* slamMap_width = mapManager->get_voxel_size_slamMap();
-      ImGui::SetNextItemWidth(item_width);
-      ImGui::InputFloat("Voxel size voxelized map", slamMap_width, 0.1f, 1.0f, "%.3f");
+        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_cloud_glyphs(cloud);
+      }
     }
+    ImGui::PopStyleColor(1);
 
-    //Number of threads
-    static int nb_thread = 8;
-    ImGui::SetNextItemWidth(item_width);
-    if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
-      SLAM_normal* normalManager = slamManager->get_slam_normal();
-      slamManager->set_nb_thread(nb_thread);
-    }
-    if(ImGui::IsItemHovered()){
-      ImGui::SetTooltip("Number of threads for optimization and normal computation");
-    }
-
-    //Subsampling voxel width
-    float* grid_voxel_size = mapManager->get_grid_voxel_size();
-    ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
-    if(ImGui::IsItemHovered()){
-      ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
-    }
-
-    //Number of frame computed
+    //Number of frame to compute
     if(cloud != nullptr){
       static int frame_max = cloud->nb_subset;
       ImGui::SetNextItemWidth(item_width);
@@ -147,12 +125,24 @@ void GUI_Slam::parameter_general(){
 
     //---------------------------
     ImGui::TreePop();
+    ImGui::Separator();
   }
 }
 void GUI_Slam::parameter_optimization(){
   if(ImGui::TreeNode("Optimization")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
+
+    //Number of threads
+    static int nb_thread = 8;
+    ImGui::SetNextItemWidth(item_width);
+    if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
+      SLAM_normal* normalManager = slamManager->get_slam_normal();
+      slamManager->set_nb_thread(nb_thread);
+    }
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Number of threads for optimization and normal computation");
+    }
 
     //Number of optimization iterations
     static int iter_max = 5;
@@ -209,8 +199,16 @@ void GUI_Slam::parameter_localMap(){
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Voxel");
 
+    //Subsampling voxel width
+    float* grid_voxel_size = mapManager->get_grid_voxel_size();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
+    }
+
     //Width of the local map voxel
-    float* localMap_width = mapManager->get_voxel_size_localMap();
+    float* localMap_width = mapManager->get_map_voxel_size();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputFloat("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -250,7 +248,7 @@ void GUI_Slam::parameter_normal(){
     //---------------------------
 
     //Number k nearest neighbors
-    int* max_number_neighbors = normalManager->get_max_number_neighbors();
+    int* max_number_neighbors = normalManager->get_knn_max_nn();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Max number kNN", max_number_neighbors, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -258,11 +256,19 @@ void GUI_Slam::parameter_normal(){
     }
 
     //Number of voxel to search kNN
-    int* voxel_searchSize = normalManager->get_voxel_searchSize();
+    int* voxel_searchSize = normalManager->get_knn_voxel_search();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Voxel search number", voxel_searchSize, 1, 10);
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Number of voxel to search kNN in each dimension and in two directions");
+    }
+
+    //kNN voxel size
+    float* knn_voxel_size = normalManager->get_knn_voxel_size();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputFloat("kNN voxel size", knn_voxel_size, 0.1f, 1.0f, "%.3f");
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("The voxel size for the kNN search");
     }
 
     //---------------------------
@@ -414,26 +420,6 @@ void GUI_Slam::statistics(){
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
 
   //---------------------------
-}
-void GUI_Slam::compute(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  //---------------------------
-
-  //Compute algorithm
-  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Compute", ImVec2(item_width,0))){
-    if(cloud != nullptr){
-      sceneManager->reset_cloud(cloud);
-      slamManager->compute_slam_offline(cloud);
-
-      sceneManager->update_cloud_location(cloud);
-      sceneManager->update_cloud_glyphs(cloud);
-    }
-  }
-  ImGui::PopStyleColor(1);
-
-  //---------------------------
-  ImGui::Separator();
 }
 vec3 GUI_Slam::compute_anglesFromTransformationMatrix(const mat4& mat){
   vec3 angles;
