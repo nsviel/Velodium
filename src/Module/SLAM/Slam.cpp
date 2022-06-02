@@ -45,6 +45,7 @@ Slam::Slam(Engine_node* node){
 }
 Slam::~Slam(){}
 
+//Main functions
 void Slam::update_configuration(){
   //---------------------------
 
@@ -65,10 +66,8 @@ void Slam::update_configuration(){
 
   //---------------------------
 }
-
-//Main functions
-void Slam::compute_slam(Cloud* cloud){
-  mapManager->reset();
+void Slam::compute_slam_offline(Cloud* cloud){
+  mapManager->reset_map();
   if(cloud == nullptr) return;
   if(ID_all) ID_max = sceneManager->get_subset(cloud, cloud->nb_subset-1)->ID;
   //---------------------------
@@ -83,11 +82,11 @@ void Slam::compute_slam(Cloud* cloud){
 
     frame_m0->ID = i;
 
-    this->init_frameTimestamp(subset);
-    this->init_frameChain(frame_m0, frame_m1, frame_m2);
-    this->init_distortion(frame_m0);
+    this->init_frame_ts(subset);
+    this->init_frame_chain(frame_m0, frame_m1, frame_m2);
+    this->compute_distortion(frame_m0);
 
-    mapManager->compute_gridSampling(subset);
+    mapManager->compute_grid_sampling(subset);
 
     this->compute_optimization(frame_m0, frame_m1);
     this->compute_assessment(cloud, i);
@@ -112,25 +111,26 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
-
-  //SLAM algorithm
-  if(check_conditions(cloud, subset_ID) == false) return;
   auto t1 = high_resolution_clock::now();
   //---------------------------
 
-  this->init_frameID(cloud, subset_ID);
-  this->init_frameTimestamp(subset);
-  this->init_frameChain(frame, frame_m1, frame_m2);
-  this->init_distortion(frame);
+  //Check SLAM conditions
+  if(check_conditions(cloud, subset_ID) == false) return;
 
-  mapManager->compute_gridSampling(subset);
+  //Initialization
+  this->init_frame_ID(cloud, subset_ID);
+  this->init_frame_ts(subset);
+  this->init_frame_chain(frame, frame_m1, frame_m2);
 
+  //Main computing part
+  mapManager->compute_grid_sampling(subset);
+  this->compute_distortion(frame);
   this->compute_optimization(frame, frame_m1);
   this->compute_assessment(cloud, subset_ID);
 
+  //End functions
   mapManager->add_pointsToLocalMap(frame);
   mapManager->end_clearTooFarVoxels(frame->trans_e);
-
   this->update_subset_location(subset);
   this->update_subset_glyph(subset);
 
@@ -142,57 +142,26 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
 }
 
 //SLAM sub-functions
-bool Slam::check_conditions(Cloud* cloud, int subset_ID){
-  //Check for computing conditions
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+void Slam::init_frame_ID(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
 
-  //Data error
-  if(subset->xyz.size() == 0){
-    console.AddLog("error" ,"SLAM - no data points");
-    return false;
-  }
-  if(subset_ID >= 2 && cloud->subset.size() < 2){
-    console.AddLog("error" ,"SLAM - no enough subsets");
-    return false;
-  }
-  if(subset->has_timestamp == false){
-    console.AddLog("error" ,"SLAM - no subset timestamp");
-    return false;
-  }
-
-  //No ponctual SLAM condition
-  if(frame->is_slamed == true) return false;
-  if(map_frame_ID == 0){
-    this->map_frame_begin_ID = subset_ID;
-  }
-  if(subset_ID < map_frame_begin_ID) return false;
-  if(cloud->ID != ID_cloud && ID_cloud != -1){
-    this->reset_slam();
-  }
-
-  //---------------------------
-  return true;
-}
-void Slam::init_frameID(Cloud* cloud, int subset_ID){
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  //---------------------------
-
+  //Assign the last local map ID
   frame->ID = map_frame_ID;
-  this->ID_cloud = cloud->ID;
   this->map_frame_ID++;
 
+  //Assign the current cloud to the selected one
+  this->ID_cloud = cloud->ID;
+
   //---------------------------
 }
-void Slam::init_frameTimestamp(Subset* subset){
+void Slam::init_frame_ts(Subset* subset){
   Frame* frame = &subset->frame;
+  vector<float>& ts = subset->ts;
   //---------------------------
 
-  //Timestamp
-  vector<float>& ts = subset->ts;
-  if(ts.size() != 0 && frame->ID > 1){
-
+  //If there is timestamp data, normalize it
+  if(ts.size() != 0){// && frame->ID > 1){
     //Retrieve min & max
     double min = ts[0];
     double max = ts[0];
@@ -200,8 +169,6 @@ void Slam::init_frameTimestamp(Subset* subset){
       if(ts[i] > max) max = ts[i];
       if(ts[i] < min) min = ts[i];
     }
-    subset->ts_b = min;
-    subset->ts_e = max;
 
     //Normalization
     subset->ts_n.clear();
@@ -209,38 +176,26 @@ void Slam::init_frameTimestamp(Subset* subset){
       double ts_n = (ts[i] - min) / (max - min);
       subset->ts_n.push_back(ts_n);
     }
-
-  }else{
+  }
+  //If there is no timestamp data, create synthetic one
+  else{
     subset->ts_n = fct_ones(subset->xyz.size());
-    subset->ts_b = 1.0f;
-    subset->ts_e = 1.0f;
   }
 
   //---------------------------
 }
-void Slam::init_frameChain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
+void Slam::init_frame_chain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
   //---------------------------
 
-  //i == 0 is the reference frame
+  //For the first 2 reference frames
   if(frame_m0->ID < 2){
     frame_m0->rotat_b = Eigen::Matrix3f::Identity();
     frame_m0->rotat_e = Eigen::Matrix3f::Identity();
     frame_m0->trans_b = Eigen::Vector3f::Zero();
     frame_m0->trans_e = Eigen::Vector3f::Zero();
   }
-  //Second frame
-  else if(frame_m0->ID == 2){
-    // Different for the second frame due to the bootstrapped elasticity
-    Eigen::Matrix3f rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
-    Eigen::Vector3f trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
-
-    frame_m0->rotat_b = frame_m1->rotat_e;
-    frame_m0->trans_b = frame_m1->trans_e;
-    frame_m0->rotat_e = rotat_next_e;
-    frame_m0->trans_e = trans_next_e;
-  }
   //Other frame
-  else if(frame_m0->ID > 2){
+  else if(frame_m0->ID >= 2){
     // When continuous: use the previous begin_pose as reference
     Eigen::Matrix3f rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
     Eigen::Vector3f trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
@@ -255,10 +210,37 @@ void Slam::init_frameChain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
 
   //---------------------------
 }
-void Slam::init_distortion(Frame* frame){
+
+void Slam::compute_distortion(Frame* frame){
   //---------------------------
 
-  if(frame->ID > 1){
+  /*
+  if(frame->ID >= 2){
+    Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
+    Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
+    Eigen::Vector3f trans_b = frame->trans_b;
+    Eigen::Vector3f trans_e = frame->trans_e;
+
+    //Update frame root
+    Eigen::Matrix3f R = quat_b.toRotationMatrix();
+    Eigen::Vector3f t = trans_b;
+
+    //Update subset position
+    #pragma omp parallel for num_threads(nb_thread)
+    for(int i=0; i<frame->xyz.size(); i++){
+      //Compute paramaters
+      float ts_n = frame->ts_n[i];
+      Eigen::Vector3f& point = frame->xyz_raw[i];
+      Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+      Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+      //Apply transformation
+      frame->xyz[i] = R * point + t;
+    }
+  }
+  */
+
+  if(frame->ID >= 2){
     Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
     Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
     Eigen::Vector3f trans_b = frame->trans_b;
@@ -268,23 +250,23 @@ void Slam::init_distortion(Frame* frame){
     Eigen::Quaternionf quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
     Eigen::Vector3f trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
 
-    for (int i=0; i < frame->xyz.size(); i++) {
+    for(int i=0; i<frame->xyz.size(); i++){
+      Eigen::Vector3f point_raw = frame->xyz_raw[i];
+      Eigen::Vector3f& point = frame->xyz[i];
       float ts_n = frame->ts_n[i];
-      Eigen::Vector3f& point = frame->xyz_raw[i];
 
       Eigen::Quaternionf quat_n = quat_b.slerp(ts_n, quat_e).normalized();
       Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
-      point = quat_e_inv * (quat_n * point + t) + trans_e_inv;
+      point = quat_e_inv * (quat_n * point_raw + t) + trans_e_inv;
     }
   }
 
   //---------------------------
 }
-
 void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
-  voxelMap* map = mapManager->get_localmap();
+  voxelMap* map = mapManager->get_map_local();
   //---------------------------
 
   if(frame->ID >= 1){
@@ -315,7 +297,7 @@ void Slam::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
 }
 void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
-  voxelMap* map = mapManager->get_localmap();
+  voxelMap* map = mapManager->get_map_local();
   //---------------------------
 
   //Fill stats
@@ -412,13 +394,45 @@ void Slam::update_subset_glyph(Subset* subset){
   objectManager->update_glyph_subset(subset);
 }
 
-//Support functions
+bool Slam::check_conditions(Cloud* cloud, int subset_ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  //---------------------------
+
+  //Data error
+  if(subset->xyz.size() == 0){
+    console.AddLog("error" ,"SLAM - No data points");
+    return false;
+  }
+  if(subset_ID >= 2 && cloud->subset.size() < 2){
+    console.AddLog("error" ,"SLAM - No enough subsets");
+    return false;
+  }
+  if(subset->has_timestamp == false){
+    console.AddLog("error" ,"SLAM - No subset timestamp");
+    return false;
+  }
+
+  //No ponctual SLAM condition
+  if(frame->is_slamed == true) return false;
+  if(map_frame_ID == 0){
+    this->map_frame_begin_ID = subset_ID;
+  }
+  if(subset_ID < map_frame_begin_ID) return false;
+  //---> Check if the current selected cloud is the same than before
+  if(cloud->ID != ID_cloud && ID_cloud != -1){
+    this->reset_slam();
+  }
+
+  //---------------------------
+  return true;
+}
 void Slam::reset_slam(){
   //---------------------------
 
   //Reset SLAM objects
   objectManager->reset_scene_object();
-  mapManager->reset();
+  mapManager->reset_map();
   this->map_frame_ID = 0;
 
   //---------------------------

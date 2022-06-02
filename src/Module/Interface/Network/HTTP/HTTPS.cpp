@@ -19,7 +19,7 @@
 #include <unistd.h>   /* For open(), creat() */
 
 #define PATH_IMAGE "picture.png"
-bool FIRST_GET=true;
+int cpt=0;
 
 
 //Constructor / Destructor
@@ -132,35 +132,44 @@ int HTTPS::http_get_image(void *cls, struct MHD_Connection *connection){
 }
 int HTTPS::http_post_geolocalization(void* cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size, void **con_cls){
   struct connection_info_struct *con_info = new connection_info_struct();
-  int ret;
+  static bool is_received = false;
   //---------------------------
 
-  //I dont know why but a first call is received empty (?)
-  if(FIRST_GET){
-    FIRST_GET = false;
+  //I dont know why but a 1 & 3 call is received empty (?)
+  if(cpt == 0){
+    cpt++;
     return MHD_YES;
   }
 
   //Process received data
-  if(*upload_data_size != 0){
+  if(cpt == 1 && *upload_data_size != 0){
     *upload_data_size = 0;
 
     //Retrieve data
     string data(upload_data);
-    say(data); //----> ici, les données trasmises !
+    say(data); //----> ici, les données transmises !
 
-    //Return a response to the client
+    cpt++; is_received = true;
+    return MHD_YES;
+  }else if(cpt == 1){
+    cpt++; is_received = false;
+    return MHD_YES;
+  }
+
+  //Send post response
+  int ret;
+  if(cpt == 2 && is_received == true){
     const char* page = "[ok] Data received\n";
     ret = send_page(connection, page, 200);
-  }
-  else{
+    cpt = 0; is_received = false;
+  }else if(cpt == 2 && is_received == false){
     const char* page = "[error] No data received by the HTTP server\n";
     ret = send_page(connection, page, 200);
+    cpt = 0; is_received = false;
   }
 
   //---------------------------
-  FIRST_GET = true;
-  return MHD_YES;
+  return ret;
 }
 
 //Subfunctions

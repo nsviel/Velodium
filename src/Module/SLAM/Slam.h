@@ -28,7 +28,7 @@ public:
 
 public:
   void update_configuration();
-  void compute_slam(Cloud* cloud);
+  void compute_slam_offline(Cloud* cloud);
   void compute_slam_online(Cloud* cloud, int ID);
   void reset_slam();
 
@@ -49,11 +49,11 @@ public:
   inline void set_ID_all(bool value){ID_all = value;}
 
 private:
-  void init_frameID(Cloud* cloud, int ID);
-  void init_frameTimestamp(Subset* subset);
-  void init_frameChain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
-  void init_distortion(Frame* frame);
+  void init_frame_ID(Cloud* cloud, int ID);
+  void init_frame_ts(Subset* subset);
+  void init_frame_chain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
 
+  void compute_distortion(Frame* frame);
   void compute_optimization(Frame* frame, Frame* frame_m1);
   void compute_assessment(Cloud* cloud, int ID);
   void compute_updateLocation_keypoint(Subset* subset);

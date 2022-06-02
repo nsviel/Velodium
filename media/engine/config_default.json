@@ -29,7 +29,7 @@
       "with_prediction" : false,
       "with_remove_lastSubset" : false,
       "with_save_frame" : false,
-      "with_save_image" : true
+      "with_save_image" : false
    },
    "module" : {
       "player_mode" : "offline",

@@ -424,7 +424,7 @@ void GUI_Slam::compute(){
   if(ImGui::Button("Compute", ImVec2(item_width,0))){
     if(cloud != nullptr){
       sceneManager->reset_cloud(cloud);
-      slamManager->compute_slam(cloud);
+      slamManager->compute_slam_offline(cloud);
 
       sceneManager->update_cloud_location(cloud);
       sceneManager->update_cloud_glyphs(cloud);

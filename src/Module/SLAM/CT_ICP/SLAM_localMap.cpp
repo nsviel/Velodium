@@ -9,8 +9,17 @@
 SLAM_localMap::SLAM_localMap(){
   //---------------------------
 
-  this->map = new voxelMap();
+  this->map_local = new voxelMap();
   this->map_cloud = new slamMap();
+
+  //---------------------------
+  this->update_configuration();
+}
+SLAM_localMap::~SLAM_localMap(){}
+
+//Main function
+void SLAM_localMap::update_configuration(){
+  //---------------------------
 
   this->voxel_size_localMap = 1;
   this->voxel_size_slamMap = 0.5;
@@ -27,22 +36,19 @@ SLAM_localMap::SLAM_localMap(){
 
   //---------------------------
 }
-SLAM_localMap::~SLAM_localMap(){}
-
-//Main function
-void SLAM_localMap::reset(){
+void SLAM_localMap::reset_map(){
   //---------------------------
 
-  delete map;
+  delete map_local;
   delete map_cloud;
 
-  this->map = new voxelMap();
+  this->map_local = new voxelMap();
   this->map_cloud = new slamMap();
 
   //---------------------------
 }
 
-void SLAM_localMap::compute_gridSampling(Subset* subset){
+void SLAM_localMap::compute_grid_sampling(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -68,8 +74,8 @@ void SLAM_localMap::compute_gridSampling(Subset* subset){
 
   //Take one point inside each voxel
   gridMap::iterator it;
-  for(auto it = grid.begin(); it != grid.end(); it++) {
-    if (it->second.size() > 0) {
+  for(auto it = grid.begin(); it != grid.end(); it++){
+    if(it->second.size() > 0){
       //Take one random point
       int rdm = rand() % it->second.size();
 
@@ -140,9 +146,9 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
       int key = (kx*200 + ky)*100 + kz;
 
       //if the voxel already exists
-      if(map->find(key) != map->end()){
+      if(map_local->find(key) != map_local->end()){
         //Get corresponding voxel
-        vector<Eigen::Vector3f>& voxel_xyz = map->find(key).value();
+        vector<Eigen::Vector3f>& voxel_xyz = map_local->find(key).value();
 
         //If the voxel is not full
         if (voxel_xyz.size() < map_max_voxelNbPoints){
@@ -168,7 +174,7 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
       else{
         vector<Eigen::Vector3f> vec;
         vec.push_back(point);
-        map->insert({key, vec});
+        map_local->insert({key, vec});
       }
     }
   }
@@ -192,7 +198,7 @@ void SLAM_localMap::end_clearTooFarVoxels(Eigen::Vector3f &current_location){
   vector<int> voxels_to_erase;
   //---------------------------
 
-  for(auto it = map->begin(); it != map->end(); ++it){
+  for(auto it = map_local->begin(); it != map_local->end(); ++it){
     Eigen::Vector3f voxel_point = it->second[0];
     float dist = fct_distance(voxel_point, current_location);
 
@@ -203,7 +209,7 @@ void SLAM_localMap::end_clearTooFarVoxels(Eigen::Vector3f &current_location){
   }
 
   for(int i=0; i<voxels_to_erase.size(); i++){
-    map->erase(voxels_to_erase[i]);
+    map_local->erase(voxels_to_erase[i]);
   }
 
   //---------------------------

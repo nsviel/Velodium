@@ -12,12 +12,13 @@ public:
   ~SLAM_localMap();
 
 public:
-  void compute_gridSampling(Subset* subset);
+  void update_configuration();
+  void compute_grid_sampling(Subset* subset);
   void add_pointsToSlamMap(Subset* subset);
   void add_pointsToLocalMap(Frame* frame);
   void end_clearTooFarVoxels(Eigen::Vector3f &current_location);
   void end_slamVoxelization(Cloud* cloud, int frame_max);
-  void reset();
+  void reset_map();
 
   inline float* get_voxel_size_localMap(){return &voxel_size_localMap;}
   inline float* get_voxel_size_slamMap(){return &voxel_size_slamMap;}
@@ -28,10 +29,10 @@ public:
   inline float* get_grid_voxel_size(){return &grid_voxel_size;}
   inline int* get_map_max_voxelNbPoints(){return &map_max_voxelNbPoints;}
   inline bool* get_slamMap_voxelized(){return &slamMap_voxelized;}
-  inline voxelMap* get_localmap(){return map;}
+  inline voxelMap* get_map_local(){return map_local;}
 
 private:
-  voxelMap* map;
+  voxelMap* map_local;
   slamMap* map_cloud;
 
   float voxel_size_localMap;

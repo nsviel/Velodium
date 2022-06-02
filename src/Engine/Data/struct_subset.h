@@ -40,8 +40,6 @@ struct Subset{ //Cloud subset / part
 
   std::vector<float> ts;
   std::vector<float> ts_n;
-  float ts_b;
-  float ts_e;
   float angle;
 
   //Various attributs
