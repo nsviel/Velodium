@@ -124,7 +124,7 @@ void GUI_Network::http_connection(){
 
   ImGui::Text("Daemon activated ");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", httpsManager->get_is_daemon() ? "ON" : "OFF");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", httpsManager->get_is_https_deamon() ? "ON" : "OFF");
   ImGui::Separator();
 
   //---------------------------

@@ -1,9 +1,10 @@
 #ifndef OBJECT_NORMAL_H
 #define OBJECT_NORMAL_H
 
-#include "../../../common.h"
 #include "../../Data/struct_glyph.h"
 #include "../../Data/struct_subset.h"
+
+#include "../../../common.h"
 
 
 class Normal

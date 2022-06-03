@@ -5,6 +5,7 @@
 
 class GUI_module;
 class Scene;
+class Object;
 class Slam;
 
 class SLAM_optim_ceres;
@@ -28,6 +29,7 @@ public:
   void parameter_offline();
   void parameter_slam();
   void parameter_lidar();
+  void parameter_glyph();
   void parameter_optimization();
   void parameter_localMap();
   void parameter_normal();
@@ -40,6 +42,7 @@ public:
 
 private:
   Scene* sceneManager;
+  Object* objectManager;
   Slam* slamManager;
 
   SLAM_optim_ceres* ceresManager;

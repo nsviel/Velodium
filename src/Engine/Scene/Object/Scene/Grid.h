@@ -1,8 +1,9 @@
 #ifndef OBJECT_GRID_H
 #define OBJECT_GRID_H
 
-#include "../../../common.h"
-#include "../../Data/struct_glyph.h"
+#include "../../../Data/struct_glyph.h"
+
+#include "../../../../common.h"
 
 
 class Grid

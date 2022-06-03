@@ -3,16 +3,10 @@
 
 #include "../../../../common.h"
 
-#include <microhttpd.h>
-
+class Configuration;
 class Network;
 class Saving;
-class Configuration;
-struct connection_info_struct{
-  int connectiontype;
-  char *answerstring;
-  struct MHD_PostProcessor *postprocessor;
-};
+class Daemon;
 
 
 class HTTPS
@@ -23,34 +17,19 @@ public:
 
 public:
   void update_configuration();
+  void start_server();
+  void stop_server();
 
-  // ON / OFF http daemon
-  void start_deamon();
-  void stop_deamon();
-
-  //Daemon functions
-  static int http_answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls);
-  static int http_post_geolocalization(void *cls, struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size, void **con_cls);
-  static int http_get_image(void *cls, struct MHD_Connection *connection);
-
-  //Subfunctions
-  static int send_page (struct MHD_Connection *connection, const char* page, int status_code);
-  static int print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
-  static void print_info(struct MHD_Connection *connection, const char *url, const char *method, const char *version);
-
-  //Accesseur
-  inline bool get_is_daemon(){return is_deamon;}
+  inline bool get_is_https_deamon(){return is_https_deamon;}
 
 private:
-  Saving* saveManager;
   Configuration* configManager;
+  Daemon* daemonManager;
+  Saving* saveManager;
 
-  struct MHD_Daemon* daemon;
-
-  string path_image;
   bool with_http_demon;
-  bool is_deamon;
-  bool is_first_get;
+  bool is_https_deamon;
+  string path_image;
   int server_port;
 };
 

@@ -1,9 +1,10 @@
 #ifndef OBJECT_CAR_H
 #define OBJECT_CAR_H
 
-#include "../../../common.h"
-#include "../../Data/struct_glyph.h"
-#include "../../Data/struct_frame.h"
+#include "../../../Data/struct_glyph.h"
+#include "../../../Data/struct_frame.h"
+
+#include "../../../../common.h"
 
 class Transforms;
 

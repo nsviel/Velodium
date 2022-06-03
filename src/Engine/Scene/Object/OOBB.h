@@ -1,8 +1,9 @@
 #ifndef OBJECT_OOBB_H
 #define OBJECT_OOBB_H
 
-#include "../../../common.h"
 #include "../../Data/struct_glyph.h"
+
+#include "../../../common.h"
 
 
 class OOBB

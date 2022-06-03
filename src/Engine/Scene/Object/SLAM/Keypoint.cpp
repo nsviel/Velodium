@@ -1,6 +1,6 @@
 #include "Keypoint.h"
 
-#include "Normal.h"
+#include "../Normal.h"
 
 
 //Constructor / destructor

@@ -10,13 +10,10 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
-#include "../../Engine/Scene/Object/AABB.h"
-#include "../../Engine/Scene/Object/Grid.h"
-#include "../../Engine/Scene/Object/Axis.h"
+#include "../../Engine/Scene/Object/Scene/AABB.h"
+#include "../../Engine/Scene/Object/Scene/Grid.h"
+#include "../../Engine/Scene/Object/Scene/Axis.h"
 #include "../../Engine/Scene/Object/Normal.h"
-#include "../../Engine/Scene/Object/Car.h"
-#include "../../Engine/Scene/Object/Trajectory.h"
-#include "../../Engine/Scene/Object/Keypoint.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
@@ -102,16 +99,6 @@ void GUI_option::option_glyphs(){
   }
   ImGui::NextColumn();
 
-  //Display ICP line correspondences
-  Keypoint* keyObject = objectManager->get_object_keypoint();
-  bool* keypoint_ON = keyObject->get_visibility();
-  if(ImGui::Checkbox("Keypoint", keypoint_ON)){
-    if(sceneManager->get_is_list_empty() == false){
-      objectManager->set_object_visibility("keypoint", *keypoint_ON);
-    }
-  }
-  ImGui::NextColumn();
-
   //Display Axis
   Axis* axisObject = objectManager->get_object_axis();
   Glyph* axis_scene = axisObject->get_axis_scene();
@@ -119,16 +106,6 @@ void GUI_option::option_glyphs(){
   if(ImGui::Checkbox("Axis", &axis_scene_ON)){
     bool* axis_subset_visibility = axisObject->get_axis_subset_visibility();
     *axis_subset_visibility = axis_scene_ON;
-  }
-  ImGui::NextColumn();
-
-  //Dynamic (trajectiry & car)
-  Car* carObject = objectManager->get_object_car();
-  bool* car_visu = carObject->get_visibility();
-  if(ImGui::Checkbox("Dynamic", car_visu)){
-    Trajectory* trajObject = objectManager->get_object_trajectory();
-    bool* traj_visu = trajObject->get_visibility();
-    *traj_visu = *car_visu;
   }
   ImGui::NextColumn();
 

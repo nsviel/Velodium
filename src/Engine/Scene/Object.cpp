@@ -3,15 +3,17 @@
 #include "Glyphs.h"
 #include "Configuration.h"
 
-#include "Object/Grid.h"
-#include "Object/Axis.h"
-#include "Object/AABB.h"
+#include "Object/Scene/Grid.h"
+#include "Object/Scene/Axis.h"
+#include "Object/Scene/AABB.h"
+#include "Object/Scene/Mark.h"
+
+#include "Object/SLAM/Keypoint.h"
+#include "Object/SLAM/Trajectory.h"
+#include "Object/SLAM/Car.h"
+
 #include "Object/OOBB.h"
-#include "Object/Mark.h"
 #include "Object/Normal.h"
-#include "Object/Keypoint.h"
-#include "Object/Trajectory.h"
-#include "Object/Car.h"
 
 #include "../Engine_node.h"
 #include "../Scene/Scene.h"

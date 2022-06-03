@@ -15,6 +15,10 @@
 #include "../../../Engine/Engine.h"
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Object.h"
+#include "../../../Engine/Scene/Object/SLAM/Car.h"
+#include "../../../Engine/Scene/Object/SLAM/Trajectory.h"
+#include "../../../Engine/Scene/Object/SLAM/Keypoint.h"
 #include "../../../Specific/fct_transtypage.h"
 
 
@@ -33,6 +37,7 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   this->mapManager = slamManager->get_slam_map();
   this->paramManager = slamManager->get_slam_param();
   this->sceneManager = node_engine->get_sceneManager();
+  this->objectManager = node_engine->get_objectManager();
 
   this->item_width = 100;
 
@@ -70,6 +75,7 @@ void GUI_Slam::parameter_slam(){
   //---------------------------
 
   this->parameter_lidar();
+  this->parameter_glyph();
   this->parameter_offline();
   this->parameter_optimization();
   this->parameter_localMap();
@@ -90,6 +96,37 @@ void GUI_Slam::parameter_lidar(){
   }
 
   //---------------------------
+  ImGui::Separator();
+}
+void GUI_Slam::parameter_glyph(){
+  ImGui::Columns(2);
+  //---------------------------
+
+  //Display ICP line correspondences
+  Keypoint* keyObject = objectManager->get_object_keypoint();
+  bool* keypoint_ON = keyObject->get_visibility();
+  if(ImGui::Checkbox("Keypoint", keypoint_ON)){
+    if(sceneManager->get_is_list_empty() == false){
+      objectManager->set_object_visibility("keypoint", *keypoint_ON);
+    }
+  }
+  ImGui::NextColumn();
+
+  //Car
+  Car* carObject = objectManager->get_object_car();
+  bool* car_visu = carObject->get_visibility();
+  ImGui::Checkbox("Car", car_visu);
+  ImGui::NextColumn();
+
+  //Trajectory
+  Trajectory* trajObject = objectManager->get_object_trajectory();
+  bool* traj_visu = trajObject->get_visibility();
+  ImGui::Checkbox("Trajectory", traj_visu);
+  ImGui::NextColumn();
+
+  //---------------------------
+  ImGui::Columns(1);
+  ImGui::Separator();
 }
 void GUI_Slam::parameter_offline(){
   if(ImGui::TreeNode("Offline")){
@@ -232,7 +269,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Number of point per voxel
-    int* nb_points_per_voxel = mapManager->get_map_max_voxelNbPoints();
+    int* nb_points_per_voxel = mapManager->get_map_voxel_capacity();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -264,9 +301,9 @@ void GUI_Slam::parameter_normal(){
     }
 
     //kNN voxel size
-    float* knn_voxel_size = normalManager->get_knn_voxel_size();
+    float* knn_voxel_capacity = normalManager->get_knn_voxel_capacity();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("kNN voxel size", knn_voxel_size, 0.1f, 1.0f, "%.3f");
+    ImGui::InputFloat("kNN voxel size", knn_voxel_capacity, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the kNN search");
     }

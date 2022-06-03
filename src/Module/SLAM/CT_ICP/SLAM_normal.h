@@ -22,7 +22,7 @@ public:
   void compute_normal(Frame* frame, voxelMap* map);
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
-  inline float* get_knn_voxel_size(){return &knn_voxel_size;}
+  inline float* get_knn_voxel_capacity(){return &knn_voxel_capacity;}
   inline int* get_knn_max_nn(){return &knn_max_nn;}
   inline int* get_knn_voxel_search(){return &knn_voxel_search;}
 
@@ -33,7 +33,7 @@ private:
   void compute_normal_reorientToOrigin(Frame* frame, int i);
 
 private:
-  float knn_voxel_size;
+  float knn_voxel_capacity;
   int knn_max_nn;
   int knn_voxel_search;
   int nb_thread;

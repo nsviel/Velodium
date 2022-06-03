@@ -13,7 +13,6 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
-#include "../../Engine/Scene/Object/Trajectory.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Transformation/Transforms.h"
 
@@ -161,7 +160,7 @@ void Slam::init_frame_ts(Subset* subset){
   //---------------------------
 
   //If there is timestamp data, normalize it
-  if(ts.size() != 0){// && frame->ID > 1){
+  if(ts.size() != 0){
     //Retrieve min & max
     double min = ts[0];
     double max = ts[0];

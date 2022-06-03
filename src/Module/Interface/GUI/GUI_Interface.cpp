@@ -155,7 +155,7 @@ void GUI_Interface::state_watcher(){
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_gps ? "ON" : "OFF");
 
   //HTTP server daemon
-  bool with_daemon = httpsManager->get_is_daemon();
+  bool with_daemon = httpsManager->get_is_https_deamon();
   ImGui::Text("Daemon - HTTP");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");

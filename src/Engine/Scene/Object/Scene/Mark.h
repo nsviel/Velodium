@@ -1,8 +1,9 @@
 #ifndef OBJECT_MARK_H
 #define OBJECT_MARK_H
 
-#include "../../../common.h"
-#include "../../Data/struct_glyph.h"
+#include "../../../Data/struct_glyph.h"
+
+#include "../../../../common.h"
 
 
 class Mark

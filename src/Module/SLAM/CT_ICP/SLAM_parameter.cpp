@@ -93,7 +93,7 @@ void SLAM_parameter::make_config_0(){
   *nb_rlt_previous_pose = 4;
 
   //Normal
-  float* size_voxelMap = normalManager->get_knn_voxel_size();
+  float* size_voxelMap = normalManager->get_knn_voxel_capacity();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -116,7 +116,7 @@ void SLAM_parameter::make_config_0(){
   float* max_voxel_distance = mapManager->get_max_voxel_distance();
   float* min_voxel_distance = mapManager->get_min_voxel_distance();
   float* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_max_voxelNbPoints = mapManager->get_map_max_voxelNbPoints();
+  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
 
   *map_voxel_size = 1.0f;
   *slamMap_voxel_size = 0.5;
@@ -125,7 +125,7 @@ void SLAM_parameter::make_config_0(){
   *max_voxel_distance = 150.0f;
   *min_voxel_distance = 0.05f;
   *grid_voxel_size = 1.0f;
-  *map_max_voxelNbPoints = 20;
+  *map_voxel_capacity = 20;
 
   //Specific functions
   this->set_nb_thread(8);
@@ -162,7 +162,7 @@ void SLAM_parameter::make_config_1(){
   *nb_rlt_previous_pose = 4;
 
   //Normal
-  float* size_voxelMap = normalManager->get_knn_voxel_size();
+  float* size_voxelMap = normalManager->get_knn_voxel_capacity();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -185,7 +185,7 @@ void SLAM_parameter::make_config_1(){
   float* max_voxel_distance = mapManager->get_max_voxel_distance();
   float* min_voxel_distance = mapManager->get_min_voxel_distance();
   float* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_max_voxelNbPoints = mapManager->get_map_max_voxelNbPoints();
+  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
 
   *map_voxel_size = 0.5f;
   *slamMap_voxel_size = 0.5f;
@@ -194,7 +194,7 @@ void SLAM_parameter::make_config_1(){
   *max_voxel_distance = 150.0f;
   *min_voxel_distance = 0.05f;
   *grid_voxel_size = 0.06f;
-  *map_max_voxelNbPoints = 20;
+  *map_voxel_capacity = 20;
 
   //Specific functions
   this->set_nb_thread(8);
@@ -231,7 +231,7 @@ void SLAM_parameter::make_config_2(){
   *nb_rlt_previous_pose = 4;
 
   //Normal
-  float* size_voxelMap = normalManager->get_knn_voxel_size();
+  float* size_voxelMap = normalManager->get_knn_voxel_capacity();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -254,7 +254,7 @@ void SLAM_parameter::make_config_2(){
   float* max_voxel_distance = mapManager->get_max_voxel_distance();
   float* min_voxel_distance = mapManager->get_min_voxel_distance();
   float* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_max_voxelNbPoints = mapManager->get_map_max_voxelNbPoints();
+  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
 
   *map_voxel_size = 1.0f;
   *slamMap_voxel_size = 0.5;
@@ -263,7 +263,7 @@ void SLAM_parameter::make_config_2(){
   *max_voxel_distance = 150.0f;
   *min_voxel_distance = 0.05f;
   *grid_voxel_size = 1.0f;
-  *map_max_voxelNbPoints = 20;
+  *map_voxel_capacity = 20;
 
   //Specific functions
   this->set_nb_thread(8);

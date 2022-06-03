@@ -1,9 +1,10 @@
 #ifndef OBJECT_TRAJECTORY_H
 #define OBJECT_TRAJECTORY_H
 
-#include "../../../common.h"
-#include "../../Data/struct_glyph.h"
-#include "../../Data/struct_frame.h"
+#include "../../../Data/struct_glyph.h"
+#include "../../../Data/struct_frame.h"
+
+#include "../../../../common.h"
 
 
 class Trajectory

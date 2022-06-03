@@ -19,7 +19,7 @@ void SLAM_normal::update_configuration(){
   //---------------------------
 
   this->knn_max_nn = 20;
-  this->knn_voxel_size = 1;
+  this->knn_voxel_capacity = 1;
   this->knn_voxel_search = 1;
   this->nb_thread = 8;
 
@@ -49,9 +49,9 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
   priority_queue_iNN priority_queue;
   //---------------------------
 
-  int vx = static_cast<int>(point[0] / knn_voxel_size);
-  int vy = static_cast<int>(point[1] / knn_voxel_size);
-  int vz = static_cast<int>(point[2] / knn_voxel_size);
+  int vx = static_cast<int>(point[0] / knn_voxel_capacity);
+  int vy = static_cast<int>(point[1] / knn_voxel_capacity);
+  int vz = static_cast<int>(point[2] / knn_voxel_capacity);
 
   //Search inside all surrounding voxels
   int cpt = 0;

@@ -1,8 +1,9 @@
 #ifndef OBJECT_KEYPOINT_H
 #define OBJECT_KEYPOINT_H
 
-#include "../../../common.h"
-#include "../../Data/struct_glyph.h"
+#include "../../../Data/struct_glyph.h"
+
+#include "../../../../common.h"
 
 
 class Keypoint

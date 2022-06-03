@@ -27,7 +27,7 @@ void SLAM_localMap::update_configuration(){
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
   this->max_voxel_distance = 150.0f;
-  this->map_max_voxelNbPoints = 20;
+  this->map_voxel_capacity = 20;
   this->min_voxel_distance = 0.05;
   this->grid_sampling_voxel_size = 1;
   this->max_total_point = 20000;
@@ -113,7 +113,7 @@ void SLAM_localMap::add_pointsToSlamMap(Subset* subset){
         vector<vec3>& voxel_xyz = map_cloud->find(key).value();
 
         //If the voxel is not full
-        if (voxel_xyz.size() < map_max_voxelNbPoints){
+        if (voxel_xyz.size() < map_voxel_capacity){
           voxel_xyz.push_back(xyz);
           subset->xyz_voxel.push_back(xyz);
         }
@@ -136,8 +136,8 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
   //---------------------------
 
   for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3f point = frame->xyz[i];
-    float dist = fct_distance_origin(point);
+    Eigen::Vector3f& point = frame->xyz[i];
+    float dist = fct_distance(point, frame->trans_b);
 
     if(dist > min_root_distance && dist < max_root_distance){
       int kx = static_cast<int>(point(0) / map_voxel_size);
@@ -145,14 +145,15 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
       int kz = static_cast<int>(point(2) / map_voxel_size);
       int key = (kx*200 + ky)*100 + kz;
 
+      it_voxelMap it = map_local->find(key);
+
       //if the voxel already exists
-      if(map_local->find(key) != map_local->end()){
+      if(it != map_local->end()){
         //Get corresponding voxel
-        vector<Eigen::Vector3f>& voxel_xyz = map_local->find(key).value();
+        vector<Eigen::Vector3f>& voxel_xyz = it.value();
 
         //If the voxel is not full
-        if (voxel_xyz.size() < map_max_voxelNbPoints){
-
+        if(voxel_xyz.size() < map_voxel_capacity){
           //Check if minimal distance with voxel points is respected
           float dist_min = 10000;
           for(int j=0; j<voxel_xyz.size(); j++){
@@ -167,7 +168,6 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
           if (dist_min > min_voxel_distance) {
             voxel_xyz.push_back(point);
           }
-
         }
       }
       //else create it

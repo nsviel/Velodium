@@ -27,7 +27,7 @@ public:
   inline float* get_max_voxel_distance(){return &max_voxel_distance;}
   inline float* get_min_voxel_distance(){return &min_voxel_distance;}
   inline float* get_grid_voxel_size(){return &grid_sampling_voxel_size;}
-  inline int* get_map_max_voxelNbPoints(){return &map_max_voxelNbPoints;}
+  inline int* get_map_voxel_capacity(){return &map_voxel_capacity;}
   inline bool* get_slamMap_voxelized(){return &slamMap_voxelized;}
   inline voxelMap* get_map_local(){return map_local;}
 
@@ -44,7 +44,7 @@ private:
   float min_voxel_distance;
   float grid_sampling_voxel_size;
   int max_total_point;
-  int map_max_voxelNbPoints;
+  int map_voxel_capacity;
   bool slamMap_voxelized;
 };
 
