@@ -39,11 +39,14 @@ void SLAM_localMap::update_configuration(){
 void SLAM_localMap::reset_map(){
   //---------------------------
 
-  delete map_local;
+  /*delete map_local;
   delete map_cloud;
 
   this->map_local = new voxelMap();
-  this->map_cloud = new slamMap();
+  this->map_cloud = new slamMap();*/
+
+  this->map_local->clear();
+  this->map_cloud->clear();
 
   //---------------------------
 }

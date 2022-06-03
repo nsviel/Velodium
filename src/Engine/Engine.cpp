@@ -33,19 +33,16 @@ Engine::~Engine(){}
 void Engine::loop_scene(){
   //---------------------------
 
-  //Draw glyph stuff
-  if(is_visualization){
-    objectManager->runtime_glyph_scene();
+  //Runtime cloud
+  this->runtime_draw_cloud();
 
-    //Draw clouds
-    this->runtime_draw_cloud();
-    this->runtime_draw_glyph();
+  //Runtime glyph
+  this->runtime_draw_glyph();
 
-    //Runtime functions
-    node_gui->runtime();
-  }
+  //Runtime gui
+  node_gui->runtime();
 
-  //Runtime
+  //Runtime other
   node_engine->runtime();
 
   //---------------------------
@@ -91,7 +88,10 @@ void Engine::runtime_draw_glyph(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  //For all cloud
+  //Draw glyph scene
+  objectManager->runtime_glyph_scene();
+
+  //Draw glyph subset
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
 

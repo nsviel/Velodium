@@ -37,12 +37,13 @@ void Localmap::update_localmap(voxelMap* map){
   gly_xyz.clear();
   gly_rgb.clear();
 
-  for(voxelMap_it it = map->begin(); it != map->end(); ++it){
-    for(int i=0; i<it->second.size(); i++){
-      gly_xyz.push_back(vec3(it->second[i](0), it->second[i](1), it->second[i](2)));
+  /*for(voxelMap_it it = map->begin(); it != map->end(); ++it){
+    vector<Eigen::Vector3f>& voxel_xyz = it.value();
+    for(int i=0; i<voxel_xyz.size(); i++){
+      gly_xyz.push_back(vec3(voxel_xyz[i](0), voxel_xyz[i](1), voxel_xyz[i](2)));
       gly_rgb.push_back(color);
     }
-  }
+  }*/
 
   //---------------------------
 }
