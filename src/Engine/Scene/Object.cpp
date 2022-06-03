@@ -39,7 +39,7 @@ Object::Object(Engine_node* node){
   this->mapObject = new Localmap();
 
   //---------------------------
-  this->init_object();
+  this->create_glyph_scene();
   this->update_configuration();
 }
 Object::~Object(){}
@@ -243,21 +243,6 @@ void Object::reset_object(Glyph* glyph){
 }
 
 //Misc functions
-void Object::init_object(){
-  //---------------------------
-
-  glyphManager->create_glyph_scene(markObject->get_selection_frame());
-  glyphManager->create_glyph_scene(gridObject->get_grid());
-  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
-  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
-  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
-  glyphManager->create_glyph_scene(trajObject->get_glyph());
-  glyphManager->create_glyph_scene(aabbObject->get_aabb());
-  glyphManager->create_glyph_scene(carObject->get_glyph());
-  glyphManager->create_glyph_scene(mapObject->get_glyph());
-
-  //---------------------------
-}
 void Object::set_object_visibility(string name, bool val){
   Scene* sceneManager = node_engine->get_sceneManager();
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -283,6 +268,21 @@ void Object::set_object_visibility(string name, bool val){
       }
     }
   }
+
+  //---------------------------
+}
+void Object::create_glyph_scene(){
+  //---------------------------
+
+  glyphManager->create_glyph_scene(markObject->get_selection_frame());
+  glyphManager->create_glyph_scene(gridObject->get_grid());
+  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
+  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
+  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
+  glyphManager->create_glyph_scene(trajObject->get_glyph());
+  glyphManager->create_glyph_scene(aabbObject->get_aabb());
+  glyphManager->create_glyph_scene(carObject->get_glyph());
+  glyphManager->create_glyph_scene(mapObject->get_glyph());
 
   //---------------------------
 }

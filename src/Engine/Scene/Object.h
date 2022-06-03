@@ -47,8 +47,8 @@ public:
   void reset_object(Glyph* glyph);
 
   //Misc functions
-  void init_object();
   void set_object_visibility(string name, bool val);
+  void create_glyph_scene();
   void create_glyph_subset(Subset* subset);
   Glyph* create_glyph_ostacle();
 

@@ -126,7 +126,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   mapManager->compute_grid_sampling(subset);
   this->compute_distortion(frame);
   this->compute_optimization(frame, frame_m1);
-  bool ok = this->compute_assessment(cloud, subset_ID);say(ok);
+  bool ok = this->compute_assessment(cloud, subset_ID);
   if(ok == false) return;
 
   //End functions
@@ -394,7 +394,7 @@ void Slam::update_subset_glyph(Subset* subset){
   //Update local map
   Localmap* mapObject = objectManager->get_object_localmap();
   mapObject->update_localmap(mapManager->get_map_local());
-  //objectManager->update_object(mapObject->get_glyph());
+  objectManager->update_object(mapObject->get_glyph());
 
   //---------------------------
   objectManager->update_glyph_subset(subset);

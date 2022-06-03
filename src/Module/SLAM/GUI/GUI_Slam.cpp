@@ -19,6 +19,7 @@
 #include "../../../Engine/Scene/Object/SLAM/Car.h"
 #include "../../../Engine/Scene/Object/SLAM/Trajectory.h"
 #include "../../../Engine/Scene/Object/SLAM/Keypoint.h"
+#include "../../../Engine/Scene/Object/SLAM/Localmap.h"
 #include "../../../Specific/fct_transtypage.h"
 
 
@@ -122,6 +123,12 @@ void GUI_Slam::parameter_glyph(){
   Trajectory* trajObject = objectManager->get_object_trajectory();
   bool* traj_visu = trajObject->get_visibility();
   ImGui::Checkbox("Trajectory", traj_visu);
+  ImGui::NextColumn();
+
+  //Trajectory
+  Localmap* mapObject = objectManager->get_object_localmap();
+  bool* map_visu = mapObject->get_visibility();
+  ImGui::Checkbox("Local map", map_visu);
   ImGui::NextColumn();
 
   //---------------------------

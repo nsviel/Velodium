@@ -25,25 +25,30 @@ void Localmap::create_localmap(){
   localmap->draw_type = "point";
   localmap->color_unique = color;
   localmap->visibility = visibility;
+  localmap->permanent = true;
 
   //---------------------------
 }
 void Localmap::update_localmap(voxelMap* map){
-  //---------------------------
+  if(visibility){
+    //---------------------------
 
-  vector<vec3>& gly_xyz = localmap->location;
-  vector<vec4>& gly_rgb = localmap->color;
+    vector<vec3>& gly_xyz = localmap->location;
+    vector<vec4>& gly_rgb = localmap->color;
 
-  gly_xyz.clear();
-  gly_rgb.clear();
+    gly_xyz.clear();
+    gly_rgb.clear();
 
-  /*for(voxelMap_it it = map->begin(); it != map->end(); ++it){
-    vector<Eigen::Vector3f>& voxel_xyz = it.value();
-    for(int i=0; i<voxel_xyz.size(); i++){
-      gly_xyz.push_back(vec3(voxel_xyz[i](0), voxel_xyz[i](1), voxel_xyz[i](2)));
-      gly_rgb.push_back(color);
+    for(voxelMap_it it = map->begin(); it != map->end(); it++){
+      vector<Eigen::Vector3f>& voxel_xyz = it.value();
+      for(int i=0; i<voxel_xyz.size(); i++){
+        Eigen::Vector3f& point = voxel_xyz[i];
+        vec3 xyz = vec3(point(0), point(1), point(2));
+        gly_xyz.push_back(xyz);
+        gly_rgb.push_back(color);
+      }
     }
-  }*/
 
-  //---------------------------
+    //---------------------------
+  }
 }
