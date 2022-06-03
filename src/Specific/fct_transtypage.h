@@ -49,7 +49,7 @@ namespace{
     //---------------------------
     return mat_glm;
   }
-  glm::vec3 eigen_to_glm_vec3_d(Eigen::Vector3f eig_vec){
+  glm::vec3 eigen_to_glm_vec3(Eigen::Vector3f eig_vec){
     glm::vec3 glm_vec = glm::vec3(eig_vec(0), eig_vec(1), eig_vec(2));
     return glm_vec;
   }
@@ -84,17 +84,6 @@ namespace{
     return cloud;
   }
   Eigen::Vector3f glm_to_eigen_vec3(const glm::vec3& vec_glm){
-    Eigen::Vector3f vec_eig = Eigen::Vector3f::Zero();
-    //---------------------------
-
-    for(int i=0; i<3; i++){
-      vec_eig(i) = vec_glm[i];
-    }
-
-    //---------------------------
-    return vec_eig;
-  }
-  Eigen::Vector3f glm_to_eigen_vec3_d(const glm::vec3& vec_glm){
     Eigen::Vector3f vec_eig = Eigen::Vector3f::Zero();
     //---------------------------
 

@@ -356,10 +356,8 @@ void Slam::update_subset_location(Subset* subset){
   Eigen::Vector3f trans_e = frame->trans_e;
 
   //Update frame root
-  Eigen::Matrix3f R = quat_b.toRotationMatrix();
-  Eigen::Vector3f t = trans_b;
-  Eigen::Vector3f root = R * glm_to_eigen_vec3_d(subset->root) + t;
-  subset->root = eigen_to_glm_vec3_d(root);
+  subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
+  subset->root = eigen_to_glm_vec3(trans_b);
   frame->is_slamed = true;
 
   //Update subset position

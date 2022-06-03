@@ -30,15 +30,15 @@ void Localmap::create_localmap(){
   //---------------------------
 }
 void Localmap::update_localmap(voxelMap* map){
+  //---------------------------
+
+  vector<vec3>& gly_xyz = localmap->location;
+  vector<vec4>& gly_rgb = localmap->color;
+
+  gly_xyz.clear();
+  gly_rgb.clear();
+
   if(visibility){
-    //---------------------------
-
-    vector<vec3>& gly_xyz = localmap->location;
-    vector<vec4>& gly_rgb = localmap->color;
-
-    gly_xyz.clear();
-    gly_rgb.clear();
-
     for(voxelMap_it it = map->begin(); it != map->end(); it++){
       vector<Eigen::Vector3f>& voxel_xyz = it.value();
       for(int i=0; i<voxel_xyz.size(); i++){
@@ -48,7 +48,7 @@ void Localmap::update_localmap(voxelMap* map){
         gly_rgb.push_back(color);
       }
     }
-
-    //---------------------------
   }
+
+  //---------------------------
 }
