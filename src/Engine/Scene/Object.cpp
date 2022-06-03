@@ -11,6 +11,7 @@
 #include "Object/SLAM/Keypoint.h"
 #include "Object/SLAM/Trajectory.h"
 #include "Object/SLAM/Car.h"
+#include "Object/SLAM/Localmap.h"
 
 #include "Object/OOBB.h"
 #include "Object/Normal.h"
@@ -35,6 +36,7 @@ Object::Object(Engine_node* node){
   this->trajObject = new Trajectory();
   this->carObject = new Car();
   this->keyObject = new Keypoint();
+  this->mapObject = new Localmap();
 
   //---------------------------
   this->init_object();
@@ -43,32 +45,6 @@ Object::Object(Engine_node* node){
 Object::~Object(){}
 
 //Runtime functions
-void Object::runtime_subset_object(Subset* subset){
-  //---------------------------
-
-  if(subset->visibility){
-    //Subset axis
-    Glyph* axis = &subset->axis;
-    glyphManager->draw_glyph(axis);
-  }
-
-  //---------------------------
-}
-void Object::runtime_object_selected(Subset* subset){
-  //---------------------------
-
-  //Subset glyphs
-  Glyph* keypoint = &subset->keypoint;
-  Glyph* normal = &subset->normal;
-
-  //Draw subset glyphs
-  if(keypoint->visibility){
-    glyphManager->draw_glyph(keypoint);
-    glyphManager->draw_glyph(normal);
-  }
-
-  //---------------------------
-}
 void Object::runtime_glyph_scene(){
   list<Glyph*>* list_glyph = glyphManager->get_list_glyph();
   //---------------------------
@@ -80,38 +56,61 @@ void Object::runtime_glyph_scene(){
 
   //---------------------------
 }
-void Object::runtime_glyph_pred(Cloud* cloud, int subset_ID){
-  Scene* sceneManager = node_engine->get_sceneManager();
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID - 2);
+void Object::runtime_glyph_subset_all(Cloud* cloud){
+  //---------------------------
+
+  for(int j=0; j<cloud->subset.size(); j++){
+    Subset* subset = *next(cloud->subset.begin(), j);
+
+    //If the subset is visible
+    if(subset->visibility){
+      //Subset axis
+      Glyph* axis = &subset->axis;
+      glyphManager->draw_glyph(axis);
+    }
+  }
+
+  //---------------------------
+}
+void Object::runtime_glyph_subset_selected(Subset* subset){
+  //---------------------------
+
+  //If the subset is visible
+  if(subset->visibility){
+    //Subset glyphs
+    Glyph* keypoint = &subset->keypoint;
+    Glyph* normal = &subset->normal;
+
+    //Draw subset glyphs
+    if(keypoint->visibility){
+      glyphManager->draw_glyph(keypoint);
+      glyphManager->draw_glyph(normal);
+    }
+  }
+
+  //---------------------------
+}
+void Object::runtime_glyph_pred(Subset* subset){
   //---------------------------
 
   //Check for conditions
-  Subset* subset_first = sceneManager->get_subset(cloud, 0);
-  if(cloud == nullptr || subset == nullptr) return;
-  if(subset_ID != cloud->subset_selected->ID) return;
-  if(subset_ID < subset_first->ID + 2) return;
+  if(subset == nullptr) return;
 
   //OOBB - prediction
   vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
   for(int i=0; i<oobb_pr.size(); i++){
-    glBindVertexArray(oobb_pr[i].VAO);
-    glLineWidth(oobb_pr[i].draw_width);
-    glDrawArrays(GL_LINES, 0, oobb_pr[i].location.size());
+    Glyph* oobb = &oobb_pr[i];
+    glyphManager->draw_glyph(oobb);
   }
 
   //OOBB - ground thruth
   vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;
   for(int i=0; i<oobb_gt.size(); i++){
-    glBindVertexArray(oobb_gt[i].VAO);
-    glLineWidth(oobb_gt[i].draw_width);
-    glDrawArrays(GL_LINES, 0, oobb_gt[i].location.size());
+    Glyph* oobb = &oobb_gt[i];
+    glyphManager->draw_glyph(oobb);
   }
 
   //---------------------------
-  glLineWidth(1);
-  glBindVertexArray(0);
-  glDisableVertexAttribArray(0);
-  glDisableVertexAttribArray(1);
 }
 
 //Update functions
@@ -255,6 +254,7 @@ void Object::init_object(){
   glyphManager->create_glyph_scene(trajObject->get_glyph());
   glyphManager->create_glyph_scene(aabbObject->get_aabb());
   glyphManager->create_glyph_scene(carObject->get_glyph());
+  glyphManager->create_glyph_scene(mapObject->get_glyph());
 
   //---------------------------
 }

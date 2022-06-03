@@ -16,6 +16,7 @@ class Mark;
 class Keypoint;
 class Car;
 class Trajectory;
+class Localmap;
 
 
 class Object
@@ -28,9 +29,9 @@ public:
 public:
   //Runtime functions
   void runtime_glyph_scene();
-  void runtime_glyph_pred(Cloud* cloud, int subset_ID);
-  void runtime_subset_object(Subset* subset);
-  void runtime_object_selected(Subset* subset);
+  void runtime_glyph_subset_all(Cloud* cloud);
+  void runtime_glyph_subset_selected(Subset* subset);
+  void runtime_glyph_pred(Subset* subset);
 
   //Update functions
   void update_configuration();
@@ -71,6 +72,7 @@ private:
   Keypoint* keyObject;
   OOBB* oobbObject;
   Trajectory* trajObject;
+  Localmap* mapObject;
   Mark* markObject;
   Car* carObject;
 };

@@ -91,25 +91,21 @@ void Engine::runtime_draw_glyph(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  //Selected subset
-  if(sceneManager->get_is_list_empty() == false){
-    Subset* subset_selected = sceneManager->get_subset_selected();
-    objectManager->runtime_object_selected(subset_selected);
-  }
-
   //For all cloud
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
     if(cloud->visibility){
-      for(int j=0; j<cloud->subset.size(); j++){
-        Subset* subset = *next(cloud->subset.begin(), j);
+      //All subset
+      objectManager->runtime_glyph_subset_all(cloud);
 
-        if(subset->visibility){
-          objectManager->runtime_subset_object(subset);
-          objectManager->runtime_glyph_pred(cloud, subset->ID);
-        }
-      }
+      //Selected susbet
+      Subset* subset_sele = sceneManager->get_subset_byID(cloud, cloud->ID_selected);
+      objectManager->runtime_glyph_subset_selected(subset_sele);
+
+      //OOBB
+      Subset* subset_pred = sceneManager->get_subset_byID(cloud, cloud->ID_selected - 2);
+      objectManager->runtime_glyph_pred(subset_pred);
     }
 
   }
