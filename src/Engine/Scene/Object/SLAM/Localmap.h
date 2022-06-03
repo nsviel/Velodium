@@ -2,6 +2,7 @@
 #define OBJECT_LOCALMAP_H
 
 #include "../../../Data/struct_glyph.h"
+#include "../../../Data/struct_voxelMap.h"
 
 #include "../../../../common.h"
 
@@ -15,7 +16,7 @@ public:
 
 public:
   void create_localmap();
-  void update_localmap();
+  void update_localmap(voxelMap* map);
 
   inline void set_visibility(bool value){this->visibility = value;}
   inline bool* get_visibility(){return &visibility;}

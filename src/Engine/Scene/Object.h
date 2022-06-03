@@ -60,6 +60,7 @@ public:
   inline Trajectory* get_object_trajectory(){return trajObject;}
   inline Car* get_object_car(){return carObject;}
   inline Keypoint* get_object_keypoint(){return keyObject;}
+  inline Localmap* get_object_localmap(){return mapObject;}
 
 private:
   Engine_node* node_engine;

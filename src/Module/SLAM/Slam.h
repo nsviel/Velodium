@@ -55,7 +55,7 @@ private:
 
   void compute_distortion(Frame* frame);
   void compute_optimization(Frame* frame, Frame* frame_m1);
-  void compute_assessment(Cloud* cloud, int ID);
+  bool compute_assessment(Cloud* cloud, int ID);
   void compute_updateLocation_keypoint(Subset* subset);
   void compute_statistics(float duration, Frame* frame, Frame* frame_m1, Subset* subset);
 

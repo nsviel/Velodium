@@ -16,5 +16,5 @@ typedef tsl::robin_map<int, std::vector<Eigen::Vector3f>> voxelMap;
 typedef tsl::robin_map<int, std::vector<Eigen::Vector4f>> gridMap;
 typedef tsl::robin_map<int, std::vector<glm::vec3>> slamMap;
 
-typedef tsl::robin_map<int, std::vector<Eigen::Vector3f>>::iterator it_voxelMap;
+typedef tsl::robin_map<int, std::vector<Eigen::Vector3f>>::iterator voxelMap_it;
 #endif

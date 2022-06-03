@@ -13,6 +13,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
+#include "../../Engine/Scene/Object/SLAM/Localmap.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Transformation/Transforms.h"
 
@@ -125,7 +126,8 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   mapManager->compute_grid_sampling(subset);
   this->compute_distortion(frame);
   this->compute_optimization(frame, frame_m1);
-  this->compute_assessment(cloud, subset_ID);
+  bool ok = this->compute_assessment(cloud, subset_ID);
+  if(ok == false) return;
 
   //End functions
   mapManager->add_pointsToLocalMap(frame);
@@ -137,7 +139,6 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   auto t2 = high_resolution_clock::now();
   float duration = duration_cast<milliseconds>(t2 - t1).count();
   this->compute_statistics(duration, frame, frame_m1, subset);
-  objectManager->update_glyph_subset(subset);
 }
 
 //SLAM sub-functions
@@ -278,7 +279,7 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
 
   //---------------------------
 }
-void Slam::compute_assessment(Cloud* cloud, int subset_ID){
+bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
 
   //Compute assessment
@@ -294,6 +295,7 @@ void Slam::compute_assessment(Cloud* cloud, int subset_ID){
   }
 
   //---------------------------
+  return success;
 }
 void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
   voxelMap* map = mapManager->get_map_local();
@@ -388,6 +390,11 @@ void Slam::update_subset_glyph(Subset* subset){
   if(frame->Nptp.size() == frame->xyz.size()){
     subset->keypoint.normal = eigen_to_glm_vectorVec3(frame->Nptp, nb_thread);
   }
+
+  //Update local map
+  Localmap* mapObject = objectManager->get_object_localmap();
+  mapObject->update_localmap(mapManager->get_map_local());
+  objectManager->update_object(mapObject->get_glyph());
 
   //---------------------------
   objectManager->update_glyph_subset(subset);

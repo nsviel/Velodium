@@ -145,7 +145,7 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
       int kz = static_cast<int>(point(2) / map_voxel_size);
       int key = (kx*200 + ky)*100 + kz;
 
-      it_voxelMap it = map_local->find(key);
+      voxelMap_it it = map_local->find(key);
 
       //if the voxel already exists
       if(it != map_local->end()){

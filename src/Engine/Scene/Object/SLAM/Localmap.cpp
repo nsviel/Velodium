@@ -28,16 +28,20 @@ void Localmap::create_localmap(){
 
   //---------------------------
 }
-void Localmap::update_localmap(){
+void Localmap::update_localmap(voxelMap* map){
   //---------------------------
 
-  vector<vec3>& XYZ_key = localmap->location;
-  vector<vec4>& RGB_key = localmap->color;
+  vector<vec3>& gly_xyz = localmap->location;
+  vector<vec4>& gly_rgb = localmap->color;
 
-  //Construct glyph
-  RGB_key.clear();
-  for(int i=0; i<XYZ_key.size(); i++){
-    RGB_key.push_back(color);
+  gly_xyz.clear();
+  gly_rgb.clear();
+
+  for(voxelMap_it it = map->begin(); it != map->end(); ++it){
+    for(int i=0; i<it->second.size(); i++){
+      gly_xyz.push_back(vec3(it->second[i](0), it->second[i](1), it->second[i](2)));
+      gly_rgb.push_back(color);
+    }
   }
 
   //---------------------------

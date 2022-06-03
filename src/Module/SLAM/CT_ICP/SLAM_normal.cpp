@@ -60,7 +60,7 @@ vector<Eigen::Vector3f> SLAM_normal::compute_kNN_search(Eigen::Vector3f& point, 
       for (int vk = vz - knn_voxel_search; vk <= vz + knn_voxel_search; vk++){
         //Search for pre-existing voxel in local map
         int key = (vi*200 + vj)*100 + vk;
-        it_voxelMap it = map->find(key);
+        voxelMap_it it = map->find(key);
 
         //If we found a voxel with at least one point
         if(it != map->end()){
