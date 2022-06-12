@@ -200,9 +200,9 @@ void GUI_Slam::parameter_optimization(){
     }
 
     //Maximum point to plane distance for optimization
-    float* PTP_distance_max = gnManager->get_PTP_distance_max();
+    double* PTP_distance_max = gnManager->get_PTP_distance_max();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max PTP distance", PTP_distance_max, 0.01f, 4.0f, "%.3f");
+    ImGui::InputDouble("Max PTP distance", PTP_distance_max, 0.01f, 4.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Maximum point to plane distance for optimization");
     }
@@ -226,17 +226,17 @@ void GUI_Slam::parameter_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
 
     //Subset point minimum distance
-    float* min_root_distance = mapManager->get_min_root_distance();
+    double* min_root_distance = mapManager->get_min_root_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Suppresses points to close to the center of the sensor");
     }
 
     //Subset point maximum distance
-    float* max_root_distance = mapManager->get_max_root_distance();
+    double* max_root_distance = mapManager->get_max_root_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Suppresses points to far from the center of the sensor");
     }
@@ -244,33 +244,33 @@ void GUI_Slam::parameter_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Voxel");
 
     //Subsampling voxel width
-    float* grid_voxel_size = mapManager->get_grid_voxel_size();
+    double* grid_voxel_size = mapManager->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
     }
 
     //Width of the local map voxel
-    float* localMap_width = mapManager->get_map_voxel_size();
+    double* localMap_width = mapManager->get_map_voxel_size();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The size of a voxel for the selection of `keypoints` by grid sampling");
     }
 
     //Mnimun distance between points inside a voxel
-    float* min_voxel_distance = mapManager->get_min_voxel_distance();
+    double* min_voxel_distance = mapManager->get_min_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Min point dist voxel ", min_voxel_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Min point dist voxel ", min_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Mnimun distance between points inside a voxel");
     }
 
     //Distance threshold to supress the voxels on run
-    float* max_voxel_distance = mapManager->get_max_voxel_distance();
+    double* max_voxel_distance = mapManager->get_max_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max dist from position", max_voxel_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Max dist from position", max_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Distance threshold to supress the voxels on run");
     }
@@ -308,9 +308,9 @@ void GUI_Slam::parameter_normal(){
     }
 
     //kNN voxel size
-    float* knn_voxel_capacity = normalManager->get_knn_voxel_capacity();
+    double* knn_voxel_capacity = normalManager->get_knn_voxel_capacity();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("kNN voxel size", knn_voxel_capacity, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("kNN voxel size", knn_voxel_capacity, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the kNN search");
     }
@@ -324,49 +324,49 @@ void GUI_Slam::parameter_robustesse(){
     //---------------------------
 
     //Minimal optimization score
-    float* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
+    double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Minimal threshold", thres_optimMinNorm, 0.001f, 1.0f, "%.3f");
+    ImGui::InputDouble("Minimal threshold", thres_optimMinNorm, 0.001f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Minimal optimization score to obtain to validate ICP");
     }
 
     //Maximal X and Y axis rotation angle
-    float* thres_diff_angle = assessManager->get_thres_diff_angle();
+    double* thres_diff_angle = assessManager->get_thres_diff_angle();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max X and Y axis diff angle", thres_diff_angle, 0.001f, 3.0f, "%.1f");
+    ImGui::InputDouble("Max X and Y axis diff angle", thres_diff_angle, 0.001f, 3.0f, "%.1f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Maximal X and Y axis rotation angle");
     }
 
     //Maximum displacement in a frame
-    float* thres_ego_trans = assessManager->get_thres_ego_trans();
+    double* thres_ego_trans = assessManager->get_thres_ego_trans();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max ego translation", thres_ego_trans, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Max ego translation", thres_ego_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The motion of the sensor between two frames which is considered erroneous");
     }
 
     //Maximum rotation in a frame
-    float* thres_ego_rotat = assessManager->get_thres_ego_rotat();
+    double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max ego rotation", thres_ego_rotat, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Max ego rotation", thres_ego_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The motion of the sensor between two frames which is considered erroneous");
     }
 
     //Maximum displacement between two poses
-    float* thres_pose_trans = assessManager->get_thres_pose_trans();
+    double* thres_pose_trans = assessManager->get_thres_pose_trans();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max pose translation", thres_pose_trans, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Max pose translation", thres_pose_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Threshold on distance changes (in m) for early termination of the ICP");
     }
 
     //Maximum rotation between two poses
-    float* thres_pose_rotat = assessManager->get_thres_pose_rotat();
+    double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputFloat("Max pose rotation", thres_pose_rotat, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Max pose rotation", thres_pose_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Threshold on orientation changes (in degrees) for early termination of the ICP");
     }

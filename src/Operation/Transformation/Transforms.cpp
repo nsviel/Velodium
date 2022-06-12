@@ -612,6 +612,23 @@ vec3 Transforms::compute_anglesFromTransformationMatrix(const Eigen::Matrix3f& m
   //---------------------------
   return angles;
 }
+vec3 Transforms::compute_anglesFromTransformationMatrix(const Eigen::Matrix3d& mat){
+  vec3 angles;
+  //---------------------------
+
+  float ax = atan2(mat(2,1), mat(2,2));
+  float ay = atan2(-mat(2,0), sqrt( pow(mat(2,1), 2) + pow(mat(2,2), 2) ) );
+  float az = atan2(mat(1,0), mat(0,0));
+
+  ax = (ax * 180) / M_PI;
+  ay = (ay * 180) / M_PI;
+  az = (az * 180) / M_PI;
+
+  angles = vec3(ax, ay, az);
+
+  //---------------------------
+  return angles;
+}
 vec3 Transforms::compute_translFromTransformationMatrix(const mat4& mat){
   vec3 translation;
   //---------------------------

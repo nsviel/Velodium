@@ -7,7 +7,7 @@
 Keypoint::Keypoint(){
   //---------------------------
 
-  this->color = vec4(0.0f, 0.7f, 0.9f, 1.0f);
+  this->color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
   this->visibility = true;
 
   //---------------------------

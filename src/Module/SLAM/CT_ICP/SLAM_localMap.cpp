@@ -57,17 +57,20 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
 
   //Subsample the scan with voxels
   gridMap grid;
-  Eigen::Vector4f point;
-  for (int i=0; i<subset->xyz.size(); i++){
+  Eigen::Vector4d point;
+  for(int i=0; i<subset->xyz.size(); i++){
     vec3& xyz = subset->xyz[i];
+    double dist = fct_distance_origin(xyz);
 
-    int kx = static_cast<int>(xyz.x / grid_sampling_voxel_size);
-    int ky = static_cast<int>(xyz.y / grid_sampling_voxel_size);
-    int kz = static_cast<int>(xyz.z / grid_sampling_voxel_size);
-    int key = (kx*200 + ky)*100 + kz;
+    if(dist > min_root_distance && dist < max_root_distance){
+      int kx = static_cast<int>(xyz.x / grid_sampling_voxel_size);
+      int ky = static_cast<int>(xyz.y / grid_sampling_voxel_size);
+      int kz = static_cast<int>(xyz.z / grid_sampling_voxel_size);
+      int key = (kx*200 + ky)*100 + kz;
 
-    point << xyz.x, xyz.y, xyz.z, subset->ts_n[i];
-    grid[key].push_back(point);
+      point << xyz.x, xyz.y, xyz.z, subset->ts_n[i];
+      grid[key].push_back(point);
+    }
   }
 
   //Clear vectors
@@ -82,8 +85,8 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
       //Take one random point
       int rdm = rand() % it->second.size();
 
-      Eigen::Vector4f point = it->second[rdm];
-      Eigen::Vector3f xyz(point(0), point(1), point(2));
+      Eigen::Vector4d point = it->second[rdm];
+      Eigen::Vector3d xyz(point(0), point(1), point(2));
 
       frame->xyz.push_back(xyz);
       frame->ts_n.push_back(point(3));
@@ -139,46 +142,43 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
   //---------------------------
 
   for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3f& point = frame->xyz[i];
-    float dist = fct_distance(point, frame->trans_b);
+    Eigen::Vector3d& point = frame->xyz[i];
 
-    if(dist > min_root_distance && dist < max_root_distance){
-      int kx = static_cast<int>(point(0) / map_voxel_size);
-      int ky = static_cast<int>(point(1) / map_voxel_size);
-      int kz = static_cast<int>(point(2) / map_voxel_size);
-      int key = (kx*200 + ky)*100 + kz;
+    int kx = static_cast<int>(point(0) / map_voxel_size);
+    int ky = static_cast<int>(point(1) / map_voxel_size);
+    int kz = static_cast<int>(point(2) / map_voxel_size);
+    int key = (kx*200 + ky)*100 + kz;
 
-      voxelMap_it it = map_local->find(key);
+    voxelMap_it it = map_local->find(key);
 
-      //if the voxel already exists
-      if(it != map_local->end()){
-        //Get corresponding voxel
-        vector<Eigen::Vector3f>& voxel_xyz = it.value();
+    //if the voxel already exists
+    if(it != map_local->end()){
+      //Get corresponding voxel
+      vector<Eigen::Vector3d>& voxel_xyz = it.value();
 
-        //If the voxel is not full
-        if(voxel_xyz.size() < map_voxel_capacity){
-          //Check if minimal distance with voxel points is respected
-          float dist_min = 10000;
-          for(int j=0; j<voxel_xyz.size(); j++){
-            Eigen::Vector3f& voxel_point = voxel_xyz[j];
-            float dist = fct_distance(point, voxel_point);
-            if (dist < dist_min) {
-              dist_min = dist;
-            }
-          }
-
-          //If all conditions are fullfiled, add the point to local map
-          if (dist_min > min_voxel_distance) {
-            voxel_xyz.push_back(point);
+      //If the voxel is not full
+      if(voxel_xyz.size() < map_voxel_capacity){
+        //Check if minimal distance with voxel points is respected
+        double dist_min = 10000;
+        for(int j=0; j<voxel_xyz.size(); j++){
+          Eigen::Vector3d& voxel_point = voxel_xyz[j];
+          double dist = fct_distance(point, voxel_point);
+          if (dist < dist_min) {
+            dist_min = dist;
           }
         }
+
+        //If all conditions are fullfiled, add the point to local map
+        if (dist_min > min_voxel_distance) {
+          voxel_xyz.push_back(point);
+        }
       }
-      //else create it
-      else{
-        vector<Eigen::Vector3f> vec;
-        vec.push_back(point);
-        map_local->insert({key, vec});
-      }
+    }
+    //else create it
+    else{
+      vector<Eigen::Vector3d> vec;
+      vec.push_back(point);
+      map_local->insert({key, vec});
     }
   }
 
@@ -197,13 +197,13 @@ void SLAM_localMap::end_slamVoxelization(Cloud* cloud, int frame_max){
 
   //---------------------------
 }
-void SLAM_localMap::end_clearTooFarVoxels(Eigen::Vector3f &current_location){
+void SLAM_localMap::end_clearTooFarVoxels(Eigen::Vector3d &current_location){
   vector<int> voxels_to_erase;
   //---------------------------
 
   for(auto it = map_local->begin(); it != map_local->end(); ++it){
-    Eigen::Vector3f voxel_point = it->second[0];
-    float dist = fct_distance(voxel_point, current_location);
+    Eigen::Vector3d voxel_point = it->second[0];
+    double dist = fct_distance(voxel_point, current_location);
 
     if(dist > max_voxel_distance){
       voxels_to_erase.push_back(it->first);

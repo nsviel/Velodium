@@ -127,7 +127,7 @@ void Followup::camera_position(Subset* subset, vec3 E){
   }
   //Forced relative camera position
   else{
-    Eigen::Vector3f trans_b = frame->trans_b;
+    Eigen::Vector3d trans_b = frame->trans_b;
     vec3 camPos = cameraManager->get_camPos();
 
     float x = camPos.x + trans_b(0) - camera_moved_trans.x;

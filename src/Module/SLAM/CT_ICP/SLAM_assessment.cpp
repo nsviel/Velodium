@@ -200,10 +200,10 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
 //Mettre des assessment sur la rotation max selon X et Y
 
 //Subfunctions
-float SLAM_assessment::AngularDistance(Eigen::Matrix3f &rota, Eigen::Matrix3f &rotb){
+double SLAM_assessment::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &rotb){
   //---------------------------
 
-  float norm = ((rota * rotb.transpose()).trace() - 1) / 2;
+  double norm = ((rota * rotb.transpose()).trace() - 1) / 2;
   norm = std::acos(norm) * 180 / M_PI;
   if(isnan(norm)){
     norm = 0;

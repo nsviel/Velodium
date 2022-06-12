@@ -21,8 +21,8 @@ public:
   void update_configuration();
   void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
-  inline float* get_PTP_distance_max(){return &PTP_distance_max;}
-  inline float get_opti_score(){return X.norm();}
+  inline double* get_PTP_distance_max(){return &PTP_distance_max;}
+  inline double get_opti_score(){return X.norm();}
   inline int* get_iter_max(){return &iter_max;}
   inline void set_iter_max(int value){iter_max = value;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
@@ -36,16 +36,16 @@ private:
   void update_frame(Frame* frame, Eigen::VectorXf& X);
   void update_keypoints(Frame* frame);
 
-  Eigen::Matrix3f compute_rotationMatrix(float Rx, float Ry, float Rz);
+  Eigen::Matrix3d compute_rotationMatrix(double Rx, double Ry, double Rz);
 
 private:
   SLAM_normal* normalManager;
 
   vector<Eigen::VectorXf> vec_u;
-  Eigen::VectorXf X;
-  float lambda_location;
-  float lambda_displace;
-  float PTP_distance_max;
+  Eigen::VectorXf X, X_old;
+  double lambda_location;
+  double lambda_displace;
+  double PTP_distance_max;
   int iter_max;
   int nb_thread;
   mutex Mutex;

@@ -189,18 +189,18 @@ void Slam::init_frame_chain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
 
   //For the first 2 reference frames
   if(frame_m0->ID < 2){
-    frame_m0->rotat_b = Eigen::Matrix3f::Identity();
-    frame_m0->rotat_e = Eigen::Matrix3f::Identity();
-    frame_m0->trans_b = Eigen::Vector3f::Zero();
-    frame_m0->trans_e = Eigen::Vector3f::Zero();
+    frame_m0->rotat_b = Eigen::Matrix3d::Identity();
+    frame_m0->rotat_e = Eigen::Matrix3d::Identity();
+    frame_m0->trans_b = Eigen::Vector3d::Zero();
+    frame_m0->trans_e = Eigen::Vector3d::Zero();
   }
   //Other frame
   else if(frame_m0->ID >= 2){
     // When continuous: use the previous begin_pose as reference
-    Eigen::Matrix3f rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
-    Eigen::Vector3f trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
-    Eigen::Matrix3f rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
-    Eigen::Vector3f trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
+    Eigen::Matrix3d rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
+    Eigen::Vector3d trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
+    Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
+    Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 
     frame_m0->rotat_b = rotat_next_b;
     frame_m0->trans_b = trans_next_b;
@@ -216,23 +216,23 @@ void Slam::compute_distortion(Frame* frame){
 
   /*
   if(frame->ID >= 2){
-    Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
-    Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
-    Eigen::Vector3f trans_b = frame->trans_b;
-    Eigen::Vector3f trans_e = frame->trans_e;
+    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Vector3d trans_e = frame->trans_e;
 
     //Update frame root
-    Eigen::Matrix3f R = quat_b.toRotationMatrix();
-    Eigen::Vector3f t = trans_b;
+    Eigen::Matrix3d R = quat_b.toRotationMatrix();
+    Eigen::Vector3d t = trans_b;
 
     //Update subset position
     #pragma omp parallel for num_threads(nb_thread)
     for(int i=0; i<frame->xyz.size(); i++){
       //Compute paramaters
       float ts_n = frame->ts_n[i];
-      Eigen::Vector3f& point = frame->xyz_raw[i];
-      Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-      Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+      Eigen::Vector3d& point = frame->xyz_raw[i];
+      Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       //Apply transformation
       frame->xyz[i] = R * point + t;
@@ -241,22 +241,22 @@ void Slam::compute_distortion(Frame* frame){
   */
 
   if(frame->ID >= 2){
-    Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
-    Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
-    Eigen::Vector3f trans_b = frame->trans_b;
-    Eigen::Vector3f trans_e = frame->trans_e;
+    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Vector3d trans_e = frame->trans_e;
 
     // Distorts the frame (put all raw_points in the coordinate frame of the pose at the end of the acquisition)
-    Eigen::Quaternionf quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
-    Eigen::Vector3f trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
+    Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
+    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
 
     for(int i=0; i<frame->xyz.size(); i++){
-      Eigen::Vector3f point_raw = frame->xyz_raw[i];
-      Eigen::Vector3f& point = frame->xyz[i];
+      Eigen::Vector3d point_raw = frame->xyz_raw[i];
+      Eigen::Vector3d& point = frame->xyz[i];
       float ts_n = frame->ts_n[i];
 
-      Eigen::Quaternionf quat_n = quat_b.slerp(ts_n, quat_e).normalized();
-      Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
       point = quat_e_inv * (quat_n * point_raw + t) + trans_e_inv;
@@ -350,10 +350,10 @@ void Slam::update_subset_location(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  Eigen::Quaternionf quat_b = Eigen::Quaternionf(frame->rotat_b);
-  Eigen::Quaternionf quat_e = Eigen::Quaternionf(frame->rotat_e);
-  Eigen::Vector3f trans_b = frame->trans_b;
-  Eigen::Vector3f trans_e = frame->trans_e;
+  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+  Eigen::Vector3d trans_b = frame->trans_b;
+  Eigen::Vector3d trans_e = frame->trans_e;
 
   //Update frame root
   subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
@@ -365,11 +365,11 @@ void Slam::update_subset_location(Subset* subset){
   for(int i=0; i<subset->xyz.size(); i++){
     //Compute paramaters
     float ts_n = subset->ts_n[i];
-    Eigen::Matrix3f R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-    Eigen::Vector3f t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     //Apply transformation
-    Eigen::Vector3f point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
+    Eigen::Vector3d point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
     point = R * point + t;
     subset->xyz[i] = vec3(point(0), point(1), point(2));
   }

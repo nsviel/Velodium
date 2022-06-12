@@ -36,7 +36,33 @@ namespace{
     //---------------------------
     return mat_glm;
   }
+  glm::mat4 eigen_to_glm_mat4(Eigen::Matrix4d mat_eig){
+    glm::mat4 mat_glm;
+    //---------------------------
+
+    for(int i=0; i<mat_eig.rows(); i++){
+      for(int j=0; j<mat_eig.cols(); j++){
+        mat_glm[i][j] = mat_eig(i,j);
+      }
+    }
+
+    //---------------------------
+    return mat_glm;
+  }
   glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3f mat_eig){
+    glm::mat4 mat_glm;
+    //---------------------------
+
+    for(int i=0; i<mat_eig.rows(); i++){
+      for(int j=0; j<mat_eig.cols(); j++){
+        mat_glm[i][j] = mat_eig(i,j);
+      }
+    }
+
+    //---------------------------
+    return mat_glm;
+  }
+  glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3d mat_eig){
     glm::mat4 mat_glm;
     //---------------------------
 
@@ -53,6 +79,10 @@ namespace{
     glm::vec3 glm_vec = glm::vec3(eig_vec(0), eig_vec(1), eig_vec(2));
     return glm_vec;
   }
+  glm::vec3 eigen_to_glm_vec3(Eigen::Vector3d eig_vec){
+    glm::vec3 glm_vec = glm::vec3(eig_vec(0), eig_vec(1), eig_vec(2));
+    return glm_vec;
+  }
   std::vector<glm::vec3> eigen_to_glm_vectorVec3(std::vector<Eigen::Vector3f> eig_vec, int nb_thread){
     vector<glm::vec3> glm_vec(eig_vec.size());
     //---------------------------
@@ -60,6 +90,19 @@ namespace{
     #pragma omp parallel for num_threads(nb_thread)
     for(int i=0; i<eig_vec.size(); i++){
       Eigen::Vector3f& element = eig_vec[i];
+      glm_vec[i] = glm::vec3(element(0), element(1), element(2));
+    }
+
+    //---------------------------
+    return glm_vec;
+  }
+  std::vector<glm::vec3> eigen_to_glm_vectorVec3(std::vector<Eigen::Vector3d> eig_vec, int nb_thread){
+    vector<glm::vec3> glm_vec(eig_vec.size());
+    //---------------------------
+
+    #pragma omp parallel for num_threads(nb_thread)
+    for(int i=0; i<eig_vec.size(); i++){
+      Eigen::Vector3d& element = eig_vec[i];
       glm_vec[i] = glm::vec3(element(0), element(1), element(2));
     }
 

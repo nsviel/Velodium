@@ -74,11 +74,11 @@ void SLAM_parameter::make_config_0(){
   *solver_ceres = false;
 
   //Assessment
-  float* thres_ego_trans = assessManager->get_thres_ego_trans();
-  float* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  float* thres_pose_trans = assessManager->get_thres_pose_trans();
-  float* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  float* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
+  double* thres_ego_trans = assessManager->get_thres_ego_trans();
+  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
+  double* thres_pose_trans = assessManager->get_thres_pose_trans();
+  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
+  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
   int* nb_residual_min = assessManager->get_nb_residual_min();
   int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
@@ -93,7 +93,7 @@ void SLAM_parameter::make_config_0(){
   *nb_rlt_previous_pose = 4;
 
   //Normal
-  float* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -102,20 +102,20 @@ void SLAM_parameter::make_config_0(){
   *voxel_searchSize = 1;
 
   //Optim gn
-  float*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_PTP_distance_max();
   int* iter_max = gnManager->get_iter_max();
 
   *PTP_distance_max = 0.5f;
   *iter_max = 5;
 
   //Local map
-  float* map_voxel_size = mapManager->get_map_voxel_size();
-  float* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
-  float* min_root_distance = mapManager->get_min_root_distance();
-  float* max_root_distance = mapManager->get_max_root_distance();
-  float* max_voxel_distance = mapManager->get_max_voxel_distance();
-  float* min_voxel_distance = mapManager->get_min_voxel_distance();
-  float* grid_voxel_size = mapManager->get_grid_voxel_size();
+  double* map_voxel_size = mapManager->get_map_voxel_size();
+  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
+  double* min_root_distance = mapManager->get_min_root_distance();
+  double* max_root_distance = mapManager->get_max_root_distance();
+  double* max_voxel_distance = mapManager->get_max_voxel_distance();
+  double* min_voxel_distance = mapManager->get_min_voxel_distance();
+  double* grid_voxel_size = mapManager->get_grid_voxel_size();
   int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
 
   *map_voxel_size = 1.0f;
@@ -143,11 +143,11 @@ void SLAM_parameter::make_config_1(){
   *solver_ceres = false;
 
   //Assessment
-  float* thres_ego_trans = assessManager->get_thres_ego_trans();
-  float* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  float* thres_pose_trans = assessManager->get_thres_pose_trans();
-  float* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  float* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
+  double* thres_ego_trans = assessManager->get_thres_ego_trans();
+  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
+  double* thres_pose_trans = assessManager->get_thres_pose_trans();
+  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
+  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
   int* nb_residual_min = assessManager->get_nb_residual_min();
   int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
@@ -162,7 +162,7 @@ void SLAM_parameter::make_config_1(){
   *nb_rlt_previous_pose = 4;
 
   //Normal
-  float* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -171,20 +171,20 @@ void SLAM_parameter::make_config_1(){
   *voxel_searchSize = 1;
 
   //Optim gn
-  float*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_PTP_distance_max();
   int* iter_max = gnManager->get_iter_max();
 
   *PTP_distance_max = 0.7f;
   *iter_max = 5;
 
   //Local map
-  float* map_voxel_size = mapManager->get_map_voxel_size();
-  float* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
-  float* min_root_distance = mapManager->get_min_root_distance();
-  float* max_root_distance = mapManager->get_max_root_distance();
-  float* max_voxel_distance = mapManager->get_max_voxel_distance();
-  float* min_voxel_distance = mapManager->get_min_voxel_distance();
-  float* grid_voxel_size = mapManager->get_grid_voxel_size();
+  double* map_voxel_size = mapManager->get_map_voxel_size();
+  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
+  double* min_root_distance = mapManager->get_min_root_distance();
+  double* max_root_distance = mapManager->get_max_root_distance();
+  double* max_voxel_distance = mapManager->get_max_voxel_distance();
+  double* min_voxel_distance = mapManager->get_min_voxel_distance();
+  double* grid_voxel_size = mapManager->get_grid_voxel_size();
   int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
 
   *map_voxel_size = 0.5f;
@@ -212,11 +212,11 @@ void SLAM_parameter::make_config_2(){
   *solver_ceres = false;
 
   //Assessment
-  float* thres_ego_trans = assessManager->get_thres_ego_trans();
-  float* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  float* thres_pose_trans = assessManager->get_thres_pose_trans();
-  float* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  float* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
+  double* thres_ego_trans = assessManager->get_thres_ego_trans();
+  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
+  double* thres_pose_trans = assessManager->get_thres_pose_trans();
+  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
+  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
   int* nb_residual_min = assessManager->get_nb_residual_min();
   int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
@@ -231,7 +231,7 @@ void SLAM_parameter::make_config_2(){
   *nb_rlt_previous_pose = 4;
 
   //Normal
-  float* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -240,20 +240,20 @@ void SLAM_parameter::make_config_2(){
   *voxel_searchSize = 1;
 
   //Optim gn
-  float*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_PTP_distance_max();
   int* iter_max = gnManager->get_iter_max();
 
   *PTP_distance_max = 0.5f;
   *iter_max = 5;
 
   //Local map
-  float* map_voxel_size = mapManager->get_map_voxel_size();
-  float* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
-  float* min_root_distance = mapManager->get_min_root_distance();
-  float* max_root_distance = mapManager->get_max_root_distance();
-  float* max_voxel_distance = mapManager->get_max_voxel_distance();
-  float* min_voxel_distance = mapManager->get_min_voxel_distance();
-  float* grid_voxel_size = mapManager->get_grid_voxel_size();
+  double* map_voxel_size = mapManager->get_map_voxel_size();
+  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
+  double* min_root_distance = mapManager->get_min_root_distance();
+  double* max_root_distance = mapManager->get_max_root_distance();
+  double* max_voxel_distance = mapManager->get_max_voxel_distance();
+  double* min_voxel_distance = mapManager->get_min_voxel_distance();
+  double* grid_voxel_size = mapManager->get_grid_voxel_size();
   int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
 
   *map_voxel_size = 1.0f;

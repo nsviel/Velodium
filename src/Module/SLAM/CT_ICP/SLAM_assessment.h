@@ -21,15 +21,15 @@ public:
   bool compute_assessment_rlt(Cloud* cloud, int i);
   bool compute_assessment_rsd(Frame* frame);
 
-  float AngularDistance(Eigen::Matrix3f& rota, Eigen::Matrix3f& rotb);
+  double AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
   void compute_stat_mean(Cloud* cloud, int ID);
 
-  inline float* get_thres_ego_trans(){return &thres_ego_trans;}
-  inline float* get_thres_ego_rotat(){return &thres_ego_rotat;}
-  inline float* get_thres_pose_trans(){return &thres_pose_trans;}
-  inline float* get_thres_pose_rotat(){return &thres_pose_rotat;}
-  inline float* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
-  inline float* get_thres_diff_angle(){return &thres_diff_angle;}
+  inline double* get_thres_ego_trans(){return &thres_ego_trans;}
+  inline double* get_thres_ego_rotat(){return &thres_ego_rotat;}
+  inline double* get_thres_pose_trans(){return &thres_pose_trans;}
+  inline double* get_thres_pose_rotat(){return &thres_pose_rotat;}
+  inline double* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
+  inline double* get_thres_diff_angle(){return &thres_diff_angle;}
   inline int* get_nb_residual_min(){return &nb_residual_min;}
   inline int* get_nb_rlt_previous_mean(){return &nb_rlt_previous_mean;}
   inline int* get_nb_rlt_previous_pose(){return &nb_rlt_previous_pose;}
@@ -38,18 +38,18 @@ private:
   Scene* sceneManager;
   SLAM_optim_gn* gnManager;
 
-  float thres_ego_trans;
-  float thres_ego_rotat;
-  float thres_pose_trans;
-  float thres_pose_rotat;
-  float thres_optimMinNorm;
-  float thres_diff_angle;
+  double thres_ego_trans;
+  double thres_ego_rotat;
+  double thres_pose_trans;
+  double thres_pose_rotat;
+  double thres_optimMinNorm;
+  double thres_diff_angle;
 
-  float sum_ego_trans;
-  float sum_ego_rotat;
-  float sum_diff_trans;
-  float sum_diff_rotat;
-  float sum_opti_score;
+  double sum_ego_trans;
+  double sum_ego_rotat;
+  double sum_diff_trans;
+  double sum_diff_rotat;
+  double sum_opti_score;
 
   int nb_rlt_previous_mean;
   int nb_rlt_previous_pose;

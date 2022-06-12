@@ -54,6 +54,19 @@ namespace{
     //---------------------------
     return dist;
   }
+  double fct_distance(Eigen::Vector3d pt1, Eigen::Vector3d pt2){
+    //Euclidean distance
+    //---------------------------
+
+    double X = pt1(0) - pt2(0);
+    double Y = pt1(1) - pt2(1);
+    double Z = pt1(2) - pt2(2);
+
+    double dist = sqrt(pow(X, 2) + pow(Y, 2) + pow(Z, 2));
+
+    //---------------------------
+    return dist;
+  }
   glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
     glm::vec3 centroid = glm::vec3(0, 0, 0);
     //---------------------------
@@ -73,6 +86,24 @@ namespace{
   }
   Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ){
     Eigen::Vector3f centroid = Eigen::Vector3f::Zero();
+    int size = XYZ.size();
+    //---------------------------
+
+    for(int i=0; i<size; i++){
+      for(int j=0; j<3; j++){
+        centroid(j) += XYZ[i](j);
+      }
+    }
+
+    for(int i=0; i<3; i++){
+      centroid(i) /= size;
+    }
+
+    //---------------------------
+    return centroid;
+  }
+  Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d>& XYZ){
+    Eigen::Vector3d centroid = Eigen::Vector3d::Zero();
     int size = XYZ.size();
     //---------------------------
 
@@ -140,6 +171,29 @@ namespace{
       for (int j=0; j<3; j++){
         for (int k=j; k<3; k++){
           Eigen::Vector3f point = vec[i];
+          covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
+        }
+      }
+    }
+    covMat(1, 0) = covMat(0, 1);
+    covMat(2, 0) = covMat(0, 2);
+    covMat(2, 1) = covMat(1, 2);
+
+    //---------------------------
+    return covMat;
+  }
+  Eigen::Matrix3d fct_covarianceMat(std::vector<Eigen::Vector3d>& vec){
+    //---------------------------
+
+    // Centroide
+    Eigen::Vector3d centroid = fct_centroid(vec);
+
+    //Covariance matrix
+    Eigen::Matrix3d covMat = Eigen::Matrix3d::Zero();
+    for(int i=0; i<vec.size(); i++){
+      for (int j=0; j<3; j++){
+        for (int k=j; k<3; k++){
+          Eigen::Vector3d point = vec[i];
           covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
         }
       }
