@@ -39,12 +39,6 @@ void SLAM_localMap::update_configuration(){
 void SLAM_localMap::reset_map(){
   //---------------------------
 
-  /*delete map_local;
-  delete map_cloud;
-
-  this->map_local = new voxelMap();
-  this->map_cloud = new slamMap();*/
-
   this->map_local->clear();
   this->map_cloud->clear();
 
@@ -66,7 +60,7 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
       int kx = static_cast<int>(xyz.x / grid_sampling_voxel_size);
       int ky = static_cast<int>(xyz.y / grid_sampling_voxel_size);
       int kz = static_cast<int>(xyz.z / grid_sampling_voxel_size);
-      int key = (kx*200 + ky)*100 + kz;
+      int key = retrieve_map_signature(kx, ky, kz);
 
       point << xyz.x, xyz.y, xyz.z, subset->ts_n[i];
       grid[key].push_back(point);
@@ -111,7 +105,7 @@ void SLAM_localMap::add_pointsToSlamMap(Subset* subset){
       int kx = static_cast<int>(xyz.x / slamMap_voxel_size);
       int ky = static_cast<int>(xyz.y / slamMap_voxel_size);
       int kz = static_cast<int>(xyz.z / slamMap_voxel_size);
-      int key = (kx*200 + ky)*100 + kz;
+      int key = retrieve_map_signature(kx, ky, kz);
 
       //if the voxel already exists
       if(map_cloud->find(key) != map_cloud->end()){
@@ -147,7 +141,7 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
     int kx = static_cast<int>(point(0) / map_voxel_size);
     int ky = static_cast<int>(point(1) / map_voxel_size);
     int kz = static_cast<int>(point(2) / map_voxel_size);
-    int key = (kx*200 + ky)*100 + kz;
+    int key = retrieve_map_signature(kx, ky, kz);
 
     voxelMap_it it = map_local->find(key);
 

@@ -48,6 +48,7 @@ public:
 
   //Misc functions
   void set_object_visibility(string name, bool val);
+  void set_slam_object(bool value);
   void create_glyph_scene();
   void create_glyph_subset(Subset* subset);
   Glyph* create_glyph_ostacle();

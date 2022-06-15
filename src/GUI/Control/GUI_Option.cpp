@@ -109,6 +109,13 @@ void GUI_option::option_glyphs(){
   }
   ImGui::NextColumn();
 
+  //SLAM things
+  static bool slam_visibility = true;
+  if(ImGui::Checkbox("SLAM", &slam_visibility)){
+    objectManager->set_slam_object(slam_visibility);
+  }
+  ImGui::NextColumn();
+
   ImGui::Columns(1);
 
   //Display Axis circle

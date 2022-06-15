@@ -23,7 +23,7 @@ SLAM_assessment::SLAM_assessment(Slam* slam){
 
   this->thres_ego_trans = 2.0f;
   this->thres_ego_rotat = 15.0f;
-  this->thres_pose_trans = 3.0f;
+  this->thres_pose_trans = 5.0f;
   this->thres_pose_rotat = 15.0f;
   this->thres_optimMinNorm = 0.3f;
   this->thres_diff_angle = 3.0f; // A ajouter aux configuration SLAM_parameter et gui

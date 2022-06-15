@@ -27,7 +27,6 @@ void SLAM_optim_gn::update_configuration(){
   this->PTP_distance_max = 0.5f;
   this->lambda_location = 0.001;
   this->lambda_displace =  0.001;
-  X_old= Eigen::VectorXf(0);
 
   //---------------------------
 }
@@ -36,17 +35,17 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
   // X [3-5]: trans_b
   // X [6-8]: rotat_e
   // X [9-11]: trans_e
-  this->X = X_old;
   //---------------------------
 
   for (int iter=0; iter < iter_max; iter++){
     //Initialization
-    Eigen::MatrixXf J = Eigen::MatrixXf::Zero(12, 12);
-    Eigen::VectorXf b = Eigen::VectorXf::Zero(12);
+    Eigen::MatrixXd J = Eigen::MatrixXd::Zero(12, 12);
+    Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
     //Derive residuals
     normalManager->compute_normal(frame_m0, map);
-    this->compute_residual(frame_m0, J, b);
+    this->compute_residual_parameter(frame_m0);
+    this->compute_residual_apply(frame_m0, J, b);
     this->compute_constraint(frame_m0, frame_m1, J, b);
 
     //Solve
@@ -56,20 +55,11 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
     this->update_frame(frame_m0, X);
     this->update_keypoints(frame_m0);
   }
-  X_old = X;
 
   //---------------------------
 }
 
 //Subfunctions
-void SLAM_optim_gn::compute_residual(Frame* frame, Eigen::MatrixXf& J, Eigen::VectorXf& b){
-  //---------------------------
-
-  this->compute_residual_parameter(frame);
-  this->compute_residual_apply(frame, J, b);
-
-  //---------------------------
-}
 void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
   vec_u.clear(); vec_u.resize(frame->xyz.size());
   frame->nb_residual = 0;
@@ -82,6 +72,11 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
     Eigen::Vector3d point_raw = frame->xyz_raw[i];
     Eigen::Vector3d normal = frame->Nptp[i];
     Eigen::Vector3d iNN = frame->NN[i];
+    double a2D = frame->a2D[i];
+
+    //Check for NaN
+    if(isnan(a2D)) continue;
+    if(isnan(normal(0))) continue;
 
     //Compute point-to-plane distance
     double PTP_distance = 0;
@@ -89,8 +84,7 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
       PTP_distance += normal[j] * (point[j] - iNN[j]);
     }
 
-    double a2D = frame->a2D[i];
-    if(abs(PTP_distance) < PTP_distance_max && a2D != -1){
+    if(abs(PTP_distance) < PTP_distance_max){
       //Compute normal of the iNN point
       Eigen::Vector3d iNN_N = a2D * a2D * normal;
 
@@ -123,7 +117,7 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
       double nez = ts_n * iNN_N[2];
 
       //Store results
-      Eigen::VectorXf u(13);
+      Eigen::VectorXd u = Eigen::VectorXd::Zero(13);
       u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez, residual;
       vec_u[i] = u;
     }
@@ -131,15 +125,15 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
 
   //---------------------------
 }
-void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXf& J, Eigen::VectorXf& b){
+void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b){
   //---------------------------
 
   //Apply parameters & residuals
   for(int i=0; i<frame->xyz.size(); i++){
     if(vec_u[i].size() != 0){
-      for (int j = 0; j < 12; j++) {
+      for(int j=0; j<12; j++) {
         //Jacobian
-        for (int k = 0; k < 12; k++) {
+        for(int k=0; k<12; k++) {
           J(j, k) = J(j, k) + vec_u[i][j] * vec_u[i][k];
         }
 
@@ -160,32 +154,30 @@ void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXf& J, Eig
 
   //---------------------------
 }
-void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::MatrixXf& J, Eigen::VectorXf& b){
+void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b){
   //---------------------------
 
   //Add constraints in trajectory
-  if(frame_m0->ID > 1){
-    Eigen::Vector3d trans_b_m0 = frame_m0->trans_b;
-    Eigen::Vector3d trans_e_m0 = frame_m0->trans_e;
-    Eigen::Vector3d trans_b_m1 = frame_m1->trans_b;
-    Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
+  Eigen::Vector3d trans_b_m0 = frame_m0->trans_b;
+  Eigen::Vector3d trans_e_m0 = frame_m0->trans_e;
+  Eigen::Vector3d trans_b_m1 = frame_m1->trans_b;
+  Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
-    Eigen::Vector3d diff_traj = trans_b_m0 - trans_e_m1;
-    J(3, 3) = J(3, 3) + lambda_location;
-    J(4, 4) = J(4, 4) + lambda_location;
-    J(5, 5) = J(5, 5) + lambda_location;
-    b(3) = b(3) - lambda_location * diff_traj(0);
-    b(4) = b(4) - lambda_location * diff_traj(1);
-    b(5) = b(5) - lambda_location * diff_traj(2);
+  Eigen::Vector3d diff_traj = trans_b_m0 - trans_e_m1;
+  J(3, 3) += lambda_location;
+  J(4, 4) += lambda_location;
+  J(5, 5) += lambda_location;
+  b(3) -= lambda_location * diff_traj(0);
+  b(4) -= lambda_location * diff_traj(1);
+  b(5) -= lambda_location * diff_traj(2);
 
-    Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
-    J(9, 9)   = J(9, 9)   + lambda_displace;
-    J(10, 10) = J(10, 10) + lambda_displace;
-    J(11, 11) = J(11, 11) + lambda_displace;
-    b(9)  = b(9)  - lambda_displace * diff_ego(0);
-    b(10) = b(10) - lambda_displace * diff_ego(1);
-    b(11) = b(11) - lambda_displace * diff_ego(2);
-  }
+  Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
+  J(9, 9)   += lambda_displace;
+  J(10, 10) += lambda_displace;
+  J(11, 11) += lambda_displace;
+  b(9)  -= lambda_displace * diff_ego(0);
+  b(10) -= lambda_displace * diff_ego(1);
+  b(11) -= lambda_displace * diff_ego(2);
 
   //---------------------------
 }
@@ -208,7 +200,7 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(double rx, double ry, doub
 }
 
 //Update functions
-void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXf& X){
+void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
 
   //Retrieve parameters
@@ -238,15 +230,14 @@ void SLAM_optim_gn::update_keypoints(Frame* frame){
 
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3d point_raw = frame->xyz_raw[i];
-    Eigen::Vector3d& point = frame->xyz[i];
     double ts_n = frame->ts_n[i];
 
     Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
-    point = R * point_raw + t;
+    frame->xyz[i] = R * frame->xyz_raw[i] + t;
   }
+
 
   //---------------------------
 }

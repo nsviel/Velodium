@@ -23,6 +23,7 @@ public:
   void make_config(string conf);
 
   //Subfunctions
+  void make_config_default();
   void make_config_0();
   void make_config_1();
   void make_config_2();

@@ -1,5 +1,7 @@
 #include "Normal.h"
 
+#include "../../../Specific/fct_maths.h"
+
 
 //Constructor / destructor
 Normal::Normal(){
@@ -53,6 +55,8 @@ void Normal::update_normal_subset(Subset* subset){
   for(int i=0; i<xyz_s.size(); i++){
     vec3& xyz = xyz_s[i];
     vec3& nxyz = Nxyz_s[i];
+
+    if(fct_is_nan(nxyz)) continue;
 
     vec3 vec_n = vec3(xyz.x + nxyz.x * lgt, xyz.y + nxyz.y * lgt, xyz.z + nxyz.z * lgt);
 

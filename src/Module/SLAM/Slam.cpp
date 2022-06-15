@@ -53,6 +53,7 @@ void Slam::update_configuration(){
   this->solver_GN = true;
   this->verbose = false;
   this->ID_all = true;
+  this->with_distorsion = false;
 
   this->ID_max = 0;
   this->ID_cloud = -1; //To ensure that the current processing cloud is the same than before
@@ -195,15 +196,14 @@ void Slam::init_frame_chain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
     frame_m0->trans_e = Eigen::Vector3d::Zero();
   }
   //Other frame
-  else if(frame_m0->ID >= 2){
-    // When continuous: use the previous begin_pose as reference
+  else{
     Eigen::Matrix3d rotat_next_b = frame_m1->rotat_b * frame_m2->rotat_b.inverse() * frame_m1->rotat_b;
     Eigen::Vector3d trans_next_b = frame_m1->trans_b + frame_m1->rotat_b * frame_m2->rotat_b.inverse() * (frame_m1->trans_b - frame_m2->trans_b);
     Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
     Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 
-    frame_m0->rotat_b = rotat_next_b;
-    frame_m0->trans_b = trans_next_b;
+    frame_m0->rotat_b = frame_m1->rotat_e;
+    frame_m0->trans_b = frame_m1->trans_e;
     frame_m0->rotat_e = rotat_next_e;
     frame_m0->trans_e = trans_next_e;
   }
@@ -214,33 +214,7 @@ void Slam::init_frame_chain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
 void Slam::compute_distortion(Frame* frame){
   //---------------------------
 
-  /*
-  if(frame->ID >= 2){
-    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-    Eigen::Vector3d trans_b = frame->trans_b;
-    Eigen::Vector3d trans_e = frame->trans_e;
-
-    //Update frame root
-    Eigen::Matrix3d R = quat_b.toRotationMatrix();
-    Eigen::Vector3d t = trans_b;
-
-    //Update subset position
-    #pragma omp parallel for num_threads(nb_thread)
-    for(int i=0; i<frame->xyz.size(); i++){
-      //Compute paramaters
-      float ts_n = frame->ts_n[i];
-      Eigen::Vector3d& point = frame->xyz_raw[i];
-      Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-      //Apply transformation
-      frame->xyz[i] = R * point + t;
-    }
-  }
-  */
-
-  if(frame->ID >= 2){
+  if(with_distorsion && frame->ID >= 2){
     Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
     Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
     Eigen::Vector3d trans_b = frame->trans_b;
@@ -269,7 +243,7 @@ void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
   voxelMap* map = mapManager->get_map_local();
   //---------------------------
 
-  if(frame->ID >= 1){
+  if(frame->ID > 0){
     if(solver_GN){
       gnManager->optim_GN(frame, frame_m1, map);
     }else if(solver_ceres){

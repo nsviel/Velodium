@@ -17,4 +17,17 @@ typedef tsl::robin_map<int, std::vector<Eigen::Vector4d>> gridMap;
 typedef tsl::robin_map<int, std::vector<glm::vec3>> slamMap;
 
 typedef tsl::robin_map<int, std::vector<Eigen::Vector3d>>::iterator voxelMap_it;
+
+namespace{
+  int retrieve_map_signature(int kx, int ky, int kz){
+    //---------------------------
+
+    int key = (kx*2000 + ky)*1000 + kz;
+
+    //---------------------------
+    return key;
+  }
+}
+
+
 #endif

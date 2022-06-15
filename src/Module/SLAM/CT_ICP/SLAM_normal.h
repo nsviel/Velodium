@@ -30,7 +30,7 @@ private:
   //Sub functions
   vector<Eigen::Vector3d> compute_kNN_search(Eigen::Vector3d &point, voxelMap* map);
   void compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN, int i);
-  void compute_normal_reorientToOrigin(Frame* frame, int i);
+  void compute_normal_direction(Frame* frame, int i);
 
 private:
   double knn_voxel_capacity;

@@ -181,8 +181,7 @@ void GUI_Slam::parameter_optimization(){
     static int nb_thread = 8;
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
-      SLAM_normal* normalManager = slamManager->get_slam_normal();
-      slamManager->set_nb_thread(nb_thread);
+      paramManager->set_nb_thread(nb_thread);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Number of threads for optimization and normal computation");

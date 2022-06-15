@@ -114,7 +114,7 @@ namespace{
     }
 
     for(int i=0; i<3; i++){
-      centroid(i) /= size;
+      centroid(i) /= (double) size;
     }
 
     //---------------------------
@@ -191,9 +191,10 @@ namespace{
     //Covariance matrix
     Eigen::Matrix3d covMat = Eigen::Matrix3d::Zero();
     for(int i=0; i<vec.size(); i++){
-      for (int j=0; j<3; j++){
-        for (int k=j; k<3; k++){
-          Eigen::Vector3d point = vec[i];
+      Eigen::Vector3d point = vec[i];
+
+      for (int j=0; j<3; ++j){
+        for (int k=j; k<3; ++k){
           covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
         }
       }
@@ -216,6 +217,26 @@ namespace{
 
     //---------------------------
     return vec;
+  }
+  bool fct_is_nan(glm::vec3 vec){
+    //---------------------------
+
+    if(isnan(vec[0]) || isnan(vec[1]) || isnan(vec[2])){
+      return true;
+    }
+
+    //---------------------------
+    return false;
+  }
+  bool fct_is_nan(Eigen::Vector3d vec){
+    //---------------------------
+
+    if(isnan(vec(0)) || isnan(vec(1)) || isnan(vec(2))){
+      return true;
+    }
+
+    //---------------------------
+    return false;
   }
 
   //Minimum / Maximum

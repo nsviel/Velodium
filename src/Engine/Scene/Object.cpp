@@ -80,9 +80,10 @@ void Object::runtime_glyph_subset_selected(Subset* subset){
     //Subset glyphs
     Glyph* keypoint = &subset->keypoint;
     Glyph* normal = &subset->normal;
+    bool* visibility = keyObject->get_visibility();
 
     //Draw subset glyphs
-    if(keypoint->visibility){
+    if(keypoint->visibility && *visibility){
       glyphManager->draw_glyph(keypoint);
       glyphManager->draw_glyph(normal);
     }
@@ -268,6 +269,16 @@ void Object::set_object_visibility(string name, bool val){
       }
     }
   }
+
+  //---------------------------
+}
+void Object::set_slam_object(bool value){
+  //---------------------------
+
+  trajObject->set_visibility(value);
+  carObject->set_visibility(value);
+  keyObject->set_visibility(value);
+  mapObject->set_visibility(value);
 
   //---------------------------
 }

@@ -28,12 +28,11 @@ public:
   inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
-  void compute_residual(Frame* frame, Eigen::MatrixXf& J, Eigen::VectorXf& b);
   void compute_residual_parameter(Frame* frame);
-  void compute_residual_apply(Frame* frame, Eigen::MatrixXf& J, Eigen::VectorXf& b);
-  void compute_constraint(Frame* frame, Frame* frame_m1, Eigen::MatrixXf& J, Eigen::VectorXf& b);
+  void compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b);
+  void compute_constraint(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b);
 
-  void update_frame(Frame* frame, Eigen::VectorXf& X);
+  void update_frame(Frame* frame, Eigen::VectorXd& X);
   void update_keypoints(Frame* frame);
 
   Eigen::Matrix3d compute_rotationMatrix(double Rx, double Ry, double Rz);
@@ -41,8 +40,8 @@ private:
 private:
   SLAM_normal* normalManager;
 
-  vector<Eigen::VectorXf> vec_u;
-  Eigen::VectorXf X, X_old;
+  vector<Eigen::VectorXd> vec_u;
+  Eigen::VectorXd X;
   double lambda_location;
   double lambda_displace;
   double PTP_distance_max;

@@ -81,6 +81,7 @@ private:
   bool ID_all;
   bool solver_GN, solver_ceres;
   bool verbose;
+  bool with_distorsion;
   int map_size_old;
   int map_frame_ID;
   int map_frame_begin_ID;
