@@ -20,11 +20,11 @@ sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3
 #cd pcl && mkdir build && cd build && cmake .. && make -j4 && sudo make install 
 
 #Install ceres 2.0
-#sudo apt-get install -y libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev
+#sudo apt-get install -y libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev libmetis-dev
 #git clone https://ceres-solver.googlesource.com/ceres-solver
 #tar zxf ceres-solver-2.0.0.tar.gz
-#cd ceres-solver && mkdir build && cd build && cmake .. && make -j4
-#sudo make install
+#
+#cd ceres-solver && mkdir build && cd build && cmake .. && make -j4 && sudo make install
 #cd ../.. && rm -r ceres-solver 
 
 #Install Eclyspe Paho for MQTT 

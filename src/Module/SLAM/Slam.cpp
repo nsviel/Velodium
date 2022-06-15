@@ -53,7 +53,7 @@ void Slam::update_configuration(){
   this->solver_GN = true;
   this->verbose = false;
   this->ID_all = true;
-  this->with_distorsion = false;
+  this->with_distorsion = true;
 
   this->ID_max = 0;
   this->ID_cloud = -1; //To ensure that the current processing cloud is the same than before
@@ -161,6 +161,9 @@ void Slam::init_frame_ts(Subset* subset){
   vector<float>& ts = subset->ts;
   //---------------------------
 
+  //Clear vector
+  subset->ts_n.clear();
+
   //If there is timestamp data, normalize it
   if(ts.size() != 0){
     //Retrieve min & max
@@ -172,7 +175,6 @@ void Slam::init_frame_ts(Subset* subset){
     }
 
     //Normalization
-    subset->ts_n.clear();
     for(int i=0; i<ts.size(); i++){
       double ts_n = (ts[i] - min) / (max - min);
       subset->ts_n.push_back(ts_n);
@@ -180,7 +182,10 @@ void Slam::init_frame_ts(Subset* subset){
   }
   //If there is no timestamp data, create synthetic one
   else{
-    subset->ts_n = fct_ones(subset->xyz.size());
+    for(int i=0; i<subset->xyz.size(); i++){
+      double ts_n = i / subset->xyz.size();
+      subset->ts_n.push_back(ts_n);
+    }
   }
 
   //---------------------------
@@ -220,20 +225,18 @@ void Slam::compute_distortion(Frame* frame){
     Eigen::Vector3d trans_b = frame->trans_b;
     Eigen::Vector3d trans_e = frame->trans_e;
 
-    // Distorts the frame (put all raw_points in the coordinate frame of the pose at the end of the acquisition)
-    Eigen::Quaterniond quat_e_inv = quat_e.inverse(); // Rotation of the inverse pose
-    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e); // Translation of the inverse pose
+    //Distorts the frame
+    Eigen::Quaterniond quat_e_inv = quat_e.inverse();
+    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e);
 
     for(int i=0; i<frame->xyz.size(); i++){
-      Eigen::Vector3d point_raw = frame->xyz_raw[i];
-      Eigen::Vector3d& point = frame->xyz[i];
       float ts_n = frame->ts_n[i];
 
-      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+      Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
       Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
-      point = quat_e_inv * (quat_n * point_raw + t) + trans_e_inv;
+      frame->xyz[i] = (R * frame->xyz_raw[i] + t) + (t + trans_e_inv);
     }
   }
 

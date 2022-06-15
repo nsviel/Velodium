@@ -49,6 +49,11 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
+  //Clear vectors
+  frame->xyz.clear();
+  frame->xyz_raw.clear();
+  frame->ts_n.clear();
+
   //Subsample the scan with voxels
   gridMap grid;
   Eigen::Vector4d point;
@@ -67,15 +72,10 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
     }
   }
 
-  //Clear vectors
-  frame->xyz.clear();
-  frame->xyz_raw.clear();
-  frame->ts_n.clear();
-
   //Take one point inside each voxel
   gridMap::iterator it;
   for(auto it = grid.begin(); it != grid.end(); it++){
-    if(it->second.size() > 0){
+    if(it->second.size() != 0){
       //Take one random point
       int rdm = rand() % it->second.size();
 
@@ -90,7 +90,13 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
       }
     }
   }
+
   frame->xyz_raw = frame->xyz;
+
+//TODO: vérifier que le centroid des keypoints est bien centrés.
+  say("---");
+  sayVec3(fct_centroid(subset->xyz));
+  sayVec3(fct_centroid(frame->xyz));
 
   //---------------------------
 }
@@ -121,10 +127,8 @@ void SLAM_localMap::add_pointsToSlamMap(Subset* subset){
       //else create it
       else{
         vector<vec3> vec;
-
         vec.push_back(xyz);
         subset->xyz_voxel.push_back(xyz);
-
         map_cloud->insert({key, vec});
       }
     }
@@ -170,9 +174,9 @@ void SLAM_localMap::add_pointsToLocalMap(Frame* frame){
     }
     //else create it
     else{
-      vector<Eigen::Vector3d> vec;
-      vec.push_back(point);
-      map_local->insert({key, vec});
+      vector<Eigen::Vector3d> voxel;
+      voxel.push_back(point);
+      map_local->insert({key, voxel});
     }
   }
 
