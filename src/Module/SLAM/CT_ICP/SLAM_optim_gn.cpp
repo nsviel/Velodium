@@ -52,7 +52,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
     X = J.ldlt().solve(b);
 
     //Update
-    this->update_frame(frame_m0, X);
+    this->update_parameter(frame_m0, X);
     this->update_keypoints(frame_m0);
   }
 
@@ -167,7 +167,7 @@ void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::
   Eigen::Vector3d trans_b_m1 = frame_m1->trans_b;
   Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
-  Eigen::Vector3d diff_traj = trans_b_m0 - trans_e_m1;
+  Eigen::Vector3d diff_traj = (trans_b_m0 - trans_e_m1);
   J(3, 3) += lambda_location;
   J(4, 4) += lambda_location;
   J(5, 5) += lambda_location;
@@ -175,7 +175,7 @@ void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::
   b(4) -= lambda_location * diff_traj(1);
   b(5) -= lambda_location * diff_traj(2);
 
-  Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
+  Eigen::Vector3d diff_ego = (trans_e_m0 - trans_b_m0) - (trans_e_m1 - trans_b_m1);
   J(9, 9)   += lambda_displace;
   J(10, 10) += lambda_displace;
   J(11, 11) += lambda_displace;
@@ -204,7 +204,7 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(double rx, double ry, doub
 }
 
 //Update functions
-void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
+void SLAM_optim_gn::update_parameter(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
 
   //Retrieve parameters

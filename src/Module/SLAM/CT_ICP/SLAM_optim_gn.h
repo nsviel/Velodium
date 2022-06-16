@@ -32,7 +32,7 @@ private:
   void compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b);
   void compute_constraint(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b);
 
-  void update_frame(Frame* frame, Eigen::VectorXd& X);
+  void update_parameter(Frame* frame, Eigen::VectorXd& X);
   void update_keypoints(Frame* frame);
 
   Eigen::Matrix3d compute_rotationMatrix(double Rx, double Ry, double Rz);
