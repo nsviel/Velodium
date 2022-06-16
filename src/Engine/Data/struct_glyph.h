@@ -34,6 +34,7 @@ struct Glyph{
   std::vector<glm::vec3> location_init;
   std::vector<glm::vec3> normal;
   std::vector<glm::vec4> color;
+  std::vector<float> timestamp;
 
   //---------------------------
 };

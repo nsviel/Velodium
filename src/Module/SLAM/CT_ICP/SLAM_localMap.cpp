@@ -93,11 +93,6 @@ void SLAM_localMap::compute_grid_sampling(Subset* subset){
 
   frame->xyz_raw = frame->xyz;
 
-//TODO: vérifier que le centroid des keypoints est bien centrés.
-  say("---");
-  sayVec3(fct_centroid(subset->xyz));
-  sayVec3(fct_centroid(frame->xyz));
-
   //---------------------------
 }
 void SLAM_localMap::add_pointsToSlamMap(Subset* subset){

@@ -110,6 +110,8 @@ void SLAM_normal::compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN,
     frame->Nptp[i] = Eigen::Vector3d::Zero();
     frame->Nptp[i](0) = NAN;
     frame->a2D[i] = NAN;
+    frame->NN[i] = Eigen::Vector3d::Zero();
+    frame->NN[i](0) = NAN;
     return;
   }
 

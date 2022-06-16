@@ -34,11 +34,13 @@ void Keypoint::update_keypoint_location(Subset* subset){
 
   vector<vec3>& XYZ_key = keypoint->location;
   vector<vec4>& RGB_key = keypoint->color;
+  vector<float>& ts_key = keypoint->timestamp;
 
   //Construct glyph
   RGB_key.clear();
-  for(int i=0; i<XYZ_key.size(); i++){
-    RGB_key.push_back(color);
+  for(int i=0; i<ts_key.size(); i++){
+    vec4 rgb = vec4(ts_key[i], 1 - ts_key[i], color[2], 1);
+    RGB_key.push_back(rgb);
   }
 
   //---------------------------

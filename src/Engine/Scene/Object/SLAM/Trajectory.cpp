@@ -1,5 +1,7 @@
 #include "Trajectory.h"
 
+#include "../../../../Specific/fct_transtypage.h"
+
 
 //Constructor / destructor
 Trajectory::Trajectory(){
@@ -46,8 +48,8 @@ void Trajectory::update(Cloud*cloud){
     Frame* frame = &subset->frame;
 
     if(subset->visibility && frame->is_slamed){
-      vec3 trans_abs = frame->trans_abs;
-      vec3 trans_rlt = frame->trans_rlt;
+      vec3 trans_abs = eigen_to_glm_vec3(frame->trans_b);
+      vec3 trans_rlt = frame->trans_b_rlt;
       vec4 color = trajectory->color_unique;
 
       //Add begin point

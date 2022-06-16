@@ -36,6 +36,7 @@ public:
   void parameter_robustesse();
 
   void statistics();
+  void display_stat(string title, vec3 abs, vec3 rlt);
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 
   inline Slam* get_slamManager(){return slamManager;}

@@ -72,10 +72,12 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
     Eigen::Vector3d point_raw = frame->xyz_raw[i];
     Eigen::Vector3d normal = frame->Nptp[i];
     Eigen::Vector3d iNN = frame->NN[i];
+    double ts_n = frame->ts_n[i];
     double a2D = frame->a2D[i];
 
     //Check for NaN
     if(isnan(a2D)) continue;
+    if(isnan(iNN(0))) continue;
     if(isnan(normal(0))) continue;
 
     //Compute point-to-plane distance
@@ -96,7 +98,6 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
       frame->nb_residual++;
 
       //Compute parameters
-      double ts_n = frame->ts_n[i];
       Eigen::Vector3d origin_b = frame->rotat_b * point_raw;
       Eigen::Vector3d origin_e = frame->rotat_e * point_raw;
 
@@ -131,9 +132,9 @@ void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eig
   //Apply parameters & residuals
   for(int i=0; i<frame->xyz.size(); i++){
     if(vec_u[i].size() != 0){
-      for(int j=0; j<12; j++) {
+      for(int j=0; j<12; j++){
         //Jacobian
-        for(int k=0; k<12; k++) {
+        for(int k=0; k<12; k++){
           J(j, k) = J(j, k) + vec_u[i][j] * vec_u[i][k];
         }
 
@@ -145,10 +146,13 @@ void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eig
 
   // Normalize equation
   #pragma omp parallel for num_threads(nb_thread)
-  for (int i=0; i < 12; i++) {
-    for (int j=0; j < 12; j++) {
+  for (int i=0; i < 12; i++){
+    //Jacobian
+    for (int j=0; j < 12; j++){
         J(i, j) /= frame->nb_residual;
     }
+
+    //b vector
     b(i) /= frame->nb_residual;
   }
 
@@ -186,11 +190,11 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(double rx, double ry, doub
   //---------------------------
 
   R(0, 0) = cos(rz) * cos(ry);
-  R(0, 1) = -sin(rz) * cos(rx) + cos(rz) * sin(ry) * sin(rx);
-  R(0, 2) = sin(rz) * sin(rx) + cos(rz) * sin(ry) * cos(rx);
+  R(0, 1) = cos(rz) * sin(ry) * sin(rx) - sin(rz) * cos(rx);
+  R(0, 2) = cos(rz) * sin(ry) * cos(rx) + sin(rz) * sin(rx);
   R(1, 0) = sin(rz) * cos(ry);
-  R(1, 1) = cos(rz) * cos(rx) + sin(rz) * sin(ry) * sin(rx);
-  R(1, 2) = -cos(rz) * sin(rx) + sin(rz) * sin(ry) * cos(rx);
+  R(1, 1) = sin(rz) * sin(ry) * sin(rx) + cos(rz) * cos(rx);
+  R(1, 2) = sin(rz) * sin(ry) * cos(rx) - cos(rz) * sin(rx);
   R(2, 0) = -sin(ry);
   R(2, 1) = cos(ry) * sin(rx);
   R(2, 2) = cos(ry) * cos(rx);

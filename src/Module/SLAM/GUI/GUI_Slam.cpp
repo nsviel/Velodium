@@ -396,14 +396,21 @@ void GUI_Slam::statistics(){
 
   bool is_slamed = false;
   float time = 0;
-  vec3 trans_abs = vec3(0, 0, 0);
-  vec3 rotat_abs = vec3(0, 0, 0);
-  vec3 trans_rlt = vec3(0, 0, 0);
-  vec3 rotat_rlt = vec3(0, 0, 0);
+
   int map_size_abs = 0;
   int map_size_rlt = 0;
   int nb_residual = 0;
   int nb_keypoint = 0;
+
+  vec3 trans_b = vec3(0, 0, 0);
+  vec3 rotat_b = vec3(0, 0, 0);
+  vec3 trans_e = vec3(0, 0, 0);
+  vec3 rotat_e = vec3(0, 0, 0);
+
+  vec3 trans_b_rlt = vec3(0, 0, 0);
+  vec3 rotat_b_rlt = vec3(0, 0, 0);
+  vec3 trans_e_rlt = vec3(0, 0, 0);
+  vec3 rotat_e_rlt = vec3(0, 0, 0);
 
   if(sceneManager->get_is_list_empty() == false){
     Cloud* cloud = sceneManager->get_cloud_selected();
@@ -412,14 +419,21 @@ void GUI_Slam::statistics(){
 
     is_slamed = frame->is_slamed;
     time = frame->time_slam;
-    trans_abs = frame->trans_abs;
-    rotat_abs = frame->rotat_abs;
-    trans_rlt = frame->trans_rlt;
-    rotat_rlt = frame->rotat_rlt;
+
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
     nb_residual = frame->nb_residual;
     nb_keypoint = subset->keypoint.location.size();
+
+    trans_b_rlt = frame->trans_b_rlt;
+    rotat_b_rlt = frame->rotat_b_rlt;
+    trans_e_rlt = frame->trans_e_rlt;
+    rotat_e_rlt = frame->rotat_e_rlt;
+
+    trans_b = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
+    rotat_b = frame->angle_b;
+    trans_e = vec3(frame->trans_e(0), frame->trans_e(1), frame->trans_e(2));
+    rotat_e = frame->angle_e;
   }
 
   //SLAM applied
@@ -429,23 +443,6 @@ void GUI_Slam::statistics(){
   ImGui::Text("Computation time:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);
-
-  //SLAM results - absolut transformation parameter
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Transformation");
-  ImGui::Text("T abs [m]:");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_abs.x, trans_abs.y, trans_abs.z);
-  ImGui::Text("R abs [°]:");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_abs.x, rotat_abs.y, rotat_abs.z);
-
-  //SLAM results - relative transformation parameter
-  ImGui::Text("T rlt [m]:");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", trans_rlt.x, trans_rlt.y, trans_rlt.z);
-  ImGui::Text("R rlt [°]:");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f %.3f %.3f", rotat_rlt.x, rotat_rlt.y, rotat_rlt.z);
 
   //Local map data
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Local map");
@@ -461,6 +458,47 @@ void GUI_Slam::statistics(){
   ImGui::Text("Nb voxel rlt: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
+
+  //SLAM results - Ego transformation parameters
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Transformation");
+  display_stat("T_b [m]:", trans_b, trans_b_rlt);
+  display_stat("R_b [°]:", rotat_b, rotat_b_rlt);
+
+  display_stat("T_e [m]:", trans_e, trans_e_rlt);
+  display_stat("R_e [°]:", rotat_e, rotat_e_rlt);
+
+  //---------------------------
+}
+void GUI_Slam::display_stat(string title, vec3 abs, vec3 rlt){
+  //---------------------------
+
+  ImGui::Text("%s", title.c_str());
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.3f (", abs.x);
+  ImGui::SameLine();
+  if(rlt.x >= 0){
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "+%.3f", rlt.x);
+  }else{
+    ImGui::TextColored(ImVec4(1.0f,0.5f,0.0f,1.0f), "-%.3f", rlt.x);
+  }
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), ") %.3f (", abs.y);
+  ImGui::SameLine();
+  if(rlt.y >= 0){
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "+%.3f", rlt.y);
+  }else{
+    ImGui::TextColored(ImVec4(1.0f,0.5f,0.0f,1.0f), "-%.3f", rlt.y);
+  }
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), ") %.3f (", abs.z);
+  ImGui::SameLine();
+  if(rlt.z >= 0){
+    ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "+%.3f", rlt.z);
+  }else{
+    ImGui::TextColored(ImVec4(1.0f,0.5f,0.0f,1.0f), "-%.3f", rlt.z);
+  }
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), ")");
 
   //---------------------------
 }

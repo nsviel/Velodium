@@ -2,6 +2,7 @@
 
 #include "../../../../Load/Format/file_OBJ.h"
 #include "../../../../Operation/Transformation/Transforms.h"
+#include "../../../../Specific/fct_transtypage.h"
 
 
 //Constructor / destructor
@@ -49,7 +50,7 @@ void Car::update(Cloud* cloud){
 
   car->visibility = visibility;
 
-  vec3 trans_abs = frame->trans_abs;
+  vec3 trans_abs = eigen_to_glm_vec3(frame->trans_b);
   if(trans_abs != vec3(0, 0, 0)){
     trans_abs.z -= lidar_height;
     car->location = car->location_init;

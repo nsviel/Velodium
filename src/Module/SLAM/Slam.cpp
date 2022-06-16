@@ -276,6 +276,7 @@ bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
 }
 void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
   voxelMap* map = mapManager->get_map_local();
+  Transforms transformManager;
   //---------------------------
 
   //Fill stats
@@ -284,34 +285,32 @@ void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, 
   frame_m0->map_size_rlt = map->size() - map_size_old;
   this->map_size_old = map->size();
 
-  //Transformation parameters
-  vec3 trans_abs = vec3(frame_m0->trans_b(0), frame_m0->trans_b(1), frame_m0->trans_b(2));
-  vec3 trans_rlt;
-  if(frame_m0->ID == 0){
-    trans_rlt = vec3(0, 0, 0);
-  }else if(frame_m1 != nullptr){
-    trans_rlt.x = frame_m0->trans_b(0) - frame_m1->trans_b(0);
-    trans_rlt.y = frame_m0->trans_b(1) - frame_m1->trans_b(1);
-    trans_rlt.z = frame_m0->trans_b(2) - frame_m1->trans_b(2);
+  //Relative parameters
+  vec3 trans_b_rlt, trans_e_rlt;
+  if(frame_m1 != nullptr && frame_m0->ID != 0){
+    for(int i=0; i<3; i++){
+      trans_b_rlt[i] = frame_m0->trans_b(i) - frame_m1->trans_e(i);
+      trans_e_rlt[i] = frame_m0->trans_e(i) - frame_m0->trans_b(i);
+    }
   }
 
-  Transforms transformManager;
-  vec3 rotat_abs = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+  vec3 rotat_b_rlt, rotat_e_rlt;
+  if(frame_m1 != nullptr && frame_m0->ID != 0){
+    vec3 a1_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    vec3 a2_b = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_e);
+    rotat_b_rlt = a1_b - a2_b;
 
-  vec3 rotat_rlt;
-  if(frame_m0->ID == 0){
-    rotat_rlt = vec3(0, 0, 0);
-  }
-  else if(frame_m1 != nullptr){
-    vec3 f0_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-    vec3 f1_rotat = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
-    rotat_rlt = f0_rotat - f1_rotat;
+    vec3 a1_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
+    vec3 a2_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    rotat_e_rlt = a1_e - a2_e;
   }
 
-  frame_m0->trans_abs = trans_abs;
-  frame_m0->rotat_abs = rotat_abs;
-  frame_m0->trans_rlt = trans_rlt;
-  frame_m0->rotat_rlt = rotat_rlt;
+  frame_m0->trans_b_rlt = trans_b_rlt;
+  frame_m0->rotat_b_rlt = rotat_b_rlt;
+  frame_m0->trans_e_rlt = trans_e_rlt;
+  frame_m0->rotat_e_rlt = rotat_e_rlt;
+  frame_m0->angle_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+  frame_m0->angle_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
 
   //Terminal result
   if(verbose){
@@ -358,10 +357,9 @@ void Slam::update_subset_glyph(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  //Update keypoint location
+  //Update keypoint
   subset->keypoint.location = eigen_to_glm_vectorVec3(frame->xyz, nb_thread);
-
-  //Update keypoint normal
+  subset->keypoint.timestamp = frame->ts_n;
   if(frame->Nptp.size() == frame->xyz.size()){
     subset->keypoint.normal = eigen_to_glm_vectorVec3(frame->Nptp, nb_thread);
   }

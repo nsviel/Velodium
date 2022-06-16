@@ -8,6 +8,7 @@
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Configuration.h"
 #include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
@@ -87,8 +88,8 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
 
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, ID_subset);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID_subset-1);
-  vec3 pos_m0 = frame_m0->trans_abs;
-  vec3 pos_m1 = frame_m1->trans_abs;
+  vec3 pos_m0 = eigen_to_glm_vec3(frame_m0->trans_b);
+  vec3 pos_m1 = eigen_to_glm_vec3(frame_m1->trans_b);
   float pos_dist = fct_distance(pos_m0, pos_m1);
 
   //If the displacment is enough
@@ -96,7 +97,7 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
     //Sum all pose values
     for(int i=0; i<camera_nb_pose; i++){
       Frame* frame = sceneManager->get_frame_byID(cloud, ID_subset-i);
-      vec3& pos = frame->trans_abs;
+      vec3 pos = eigen_to_glm_vec3(frame->trans_b);
 
       for(int j=0; j<3; j++){
         E[j] += pos[j];
@@ -117,7 +118,8 @@ void Followup::camera_position(Subset* subset, vec3 E){
   //---------------------------
 
   //Camera pose
-  vec3 C = frame->trans_abs - camera_distFromPos * (E / fct_distance_origin(E));
+  vec3 trans_b = eigen_to_glm_vec3(frame->trans_b);
+  vec3 C = trans_b - camera_distFromPos * (E / fct_distance_origin(E));
 
   //Forced absolute camera position
   if(with_camera_absolute){
@@ -150,7 +152,8 @@ void Followup::camera_orientation(Subset* subset, vec3 E){
   float angle_smooth = atan(E.y, E.x) - atan(0.0f, 1.0f);
 
   //Hard angle
-  E = frame->trans_abs - E;
+  vec3 trans_b = eigen_to_glm_vec3(frame->trans_b);
+  E = trans_b - E;
   subset->angle = atan(E.y, E.x) - atan(0.0f, 1.0f);
 
   if(with_camera_absolute){

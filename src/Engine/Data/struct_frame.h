@@ -42,10 +42,12 @@ struct Frame{ //SLAM stuff
   int nb_residual;
   int map_size_abs;
   int map_size_rlt;
-  glm::vec3 trans_abs;
-  glm::vec3 rotat_abs;
-  glm::vec3 trans_rlt;
-  glm::vec3 rotat_rlt;
+  glm::vec3 trans_b_rlt;
+  glm::vec3 rotat_b_rlt;
+  glm::vec3 trans_e_rlt;
+  glm::vec3 rotat_e_rlt;
+  glm::vec3 angle_b;
+  glm::vec3 angle_e;
 
   //Reset all variables
   void reset(){
@@ -77,10 +79,10 @@ struct Frame{ //SLAM stuff
     this->is_slamed = false;
     this->nb_residual = 0;
 
-    this->trans_abs = glm::vec3(0, 0, 0);
-    this->rotat_abs = glm::vec3(0, 0, 0);
-    this->trans_rlt = glm::vec3(0, 0, 0);
-    this->rotat_rlt = glm::vec3(0, 0, 0);
+    this->trans_b_rlt = glm::vec3(0, 0, 0);
+    this->rotat_b_rlt = glm::vec3(0, 0, 0);
+    this->trans_e_rlt = glm::vec3(0, 0, 0);
+    this->rotat_e_rlt = glm::vec3(0, 0, 0);
   }
 };
 
