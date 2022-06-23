@@ -93,7 +93,7 @@ void SLAM_parameter::make_config_default(){
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_dist_residual_max();
   int* iter_max = gnManager->get_iter_max();
 
   //Local map
@@ -164,7 +164,7 @@ void SLAM_parameter::make_config_0(){
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_dist_residual_max();
   int* iter_max = gnManager->get_iter_max();
 
   //Local map
@@ -235,7 +235,7 @@ void SLAM_parameter::make_config_1(){
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_dist_residual_max();
   int* iter_max = gnManager->get_iter_max();
 
   //Local map
@@ -308,7 +308,7 @@ void SLAM_parameter::make_config_2(){
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_PTP_distance_max();
+  double*PTP_distance_max = gnManager->get_dist_residual_max();
   int* iter_max = gnManager->get_iter_max();
 
   //Local map

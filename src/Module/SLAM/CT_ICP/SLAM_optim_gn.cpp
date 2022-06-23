@@ -24,7 +24,7 @@ void SLAM_optim_gn::update_configuration(){
 
   this->iter_max = 5;
   this->nb_thread = 8;
-  this->PTP_distance_max = 0.5f;
+  this->dist_residual_max = 0.5f;
   this->lambda_location = 0.001;
   this->lambda_displace =  0.001;
 
@@ -44,8 +44,8 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
 
     //Derive residuals
     normalManager->compute_normal(frame_m0, map);
-    this->compute_residual_parameter(frame_m0);
-    this->compute_residual_apply(frame_m0, J, b);
+    this->compute_derivative(frame_m0);
+    this->compute_matrices(frame_m0, J, b);
     this->compute_constraint(frame_m0, frame_m1, J, b);
 
     //Solve
@@ -60,7 +60,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
 }
 
 //Subfunctions
-void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
+void SLAM_optim_gn::compute_derivative(Frame* frame){
   vec_u.clear(); vec_u.resize(frame->xyz.size());
   frame->nb_residual = 0;
   //---------------------------
@@ -81,11 +81,11 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
     if(isnan(normal(0))) continue;
 
     //Compute point-to-plane distance
-    double PTP_distance = 0;
+    double dist_residual = 0;
     for(int j=0; j<3; j++){
-      PTP_distance += normal[j] * (point[j] - iNN[j]);
+      dist_residual += normal[j] * (point[j] - iNN[j]);
     }
-    if(abs(PTP_distance) > PTP_distance_max) continue;
+    if(abs(dist_residual) > dist_residual_max) continue;
 
     //Compute residual
     Eigen::Vector3d iNN_N = a2D * a2D * normal;
@@ -123,7 +123,7 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
 
   //---------------------------
 }
-void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b){
+void SLAM_optim_gn::compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b){
   //---------------------------
 
   //Apply parameters & residuals

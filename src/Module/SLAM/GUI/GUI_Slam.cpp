@@ -199,7 +199,7 @@ void GUI_Slam::parameter_optimization(){
     }
 
     //Maximum point to plane distance for optimization
-    double* PTP_distance_max = gnManager->get_PTP_distance_max();
+    double* PTP_distance_max = gnManager->get_dist_residual_max();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max PTP distance", PTP_distance_max, 0.01f, 4.0f, "%.3f");
     if(ImGui::IsItemHovered()){

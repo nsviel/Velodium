@@ -21,15 +21,15 @@ public:
   void update_configuration();
   void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
-  inline double* get_PTP_distance_max(){return &PTP_distance_max;}
+  inline double* get_dist_residual_max(){return &PTP_distance_max;}
   inline double get_opti_score(){return X.norm();}
   inline int* get_iter_max(){return &iter_max;}
   inline void set_iter_max(int value){iter_max = value;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
-  void compute_residual_parameter(Frame* frame);
-  void compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b);
+  void compute_derivative(Frame* frame);
+  void compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b);
   void compute_constraint(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b);
 
   void update_parameter(Frame* frame, Eigen::VectorXd& X);
