@@ -81,8 +81,8 @@ void SLAM_optim_ceres::optim_test(Frame* frame, Frame* frame_m1, voxelMap* map){
     vector_residual.clear();
     for(int i=0; i<frame->xyz.size(); i++){
       Eigen::Vector3d point = frame->xyz[i];
-      Eigen::Vector3d normal = frame->Nptp[i];
-      Eigen::Vector3d iNN = frame->NN[i];
+      Eigen::Vector3d normal = frame->N_nn[i];
+      Eigen::Vector3d iNN = frame->nn[i];
       double ts_n = frame->ts_n[i];
 
       CTPTPF* cost_functor = new CTPTPF(iNN, point, normal, ts_n);
@@ -154,8 +154,8 @@ void SLAM_optim_ceres::optim_test_secured(Frame* frame, Frame* frame_m1, voxelMa
     vector_residual.clear();
     for(int i=0; i<frame->xyz.size(); i++){
       Eigen::Vector3d point = frame->xyz[i];
-      Eigen::Vector3d normal = frame->Nptp[i];
-      Eigen::Vector3d iNN = frame->NN[i];
+      Eigen::Vector3d normal = frame->N_nn[i];
+      Eigen::Vector3d iNN = frame->nn[i];
       double a2D = frame->a2D[i];
       double ts_n = frame->ts_n[i];
 
@@ -297,8 +297,8 @@ void SLAM_optim_ceres::ceres_computePointResidual(Frame* frame){
   //#pragma omp parallel for num_threads(nb_threads)
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
-    Eigen::Vector3d normal = frame->Nptp[i];
-    Eigen::Vector3d iNN = frame->NN[i];
+    Eigen::Vector3d normal = frame->N_nn[i];
+    Eigen::Vector3d iNN = frame->nn[i];
     double a2D = frame->a2D[i];
     double ts_n = frame->ts_n[i];
 

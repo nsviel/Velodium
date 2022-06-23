@@ -241,6 +241,18 @@ namespace{
     return mat;
   }
 
+  //Specific
+  vector<float> vec_double_to_float(vector<double> vec){
+    vector<float> vec_out;
+    //---------------------------
+
+    for(int i=0; i<vec.size(); i++){
+      vec_out.push_back(vec[i]);
+    }
+
+    //---------------------------
+    return vec_out;
+  }
 }
 
 #endif

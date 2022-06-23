@@ -10,10 +10,10 @@ struct Frame{ //SLAM stuff
 
   std::vector<Eigen::Vector3d> xyz;
   std::vector<Eigen::Vector3d> xyz_raw;
-  std::vector<Eigen::Vector3d> Nptp;
-  std::vector<Eigen::Vector3d> NN; // Nearest Neighbor
-  std::vector<float> a2D;
-  std::vector<float> ts_n;
+  std::vector<Eigen::Vector3d> N_nn;
+  std::vector<Eigen::Vector3d> nn; // Nearest Neighbor
+  std::vector<double> a2D;
+  std::vector<double> ts_n;
 
   Eigen::Vector3d root;
 
@@ -53,8 +53,8 @@ struct Frame{ //SLAM stuff
   void reset(){
     xyz.clear();
     xyz_raw.clear();
-    Nptp.clear();
-    NN.clear();
+    N_nn.clear();
+    nn.clear();
     a2D.clear();
     ts_n.clear();
 

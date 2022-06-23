@@ -359,9 +359,9 @@ void Slam::update_subset_glyph(Subset* subset){
 
   //Update keypoint
   subset->keypoint.location = eigen_to_glm_vectorVec3(frame->xyz, nb_thread);
-  subset->keypoint.timestamp = frame->ts_n;
-  if(frame->Nptp.size() == frame->xyz.size()){
-    subset->keypoint.normal = eigen_to_glm_vectorVec3(frame->Nptp, nb_thread);
+  subset->keypoint.timestamp = vec_double_to_float(frame->ts_n);
+  if(frame->N_nn.size() == frame->xyz.size()){
+    subset->keypoint.normal = eigen_to_glm_vectorVec3(frame->N_nn, nb_thread);
   }
 
   //Update local map

@@ -29,8 +29,8 @@ void SLAM_normal::compute_normal(Frame* frame, voxelMap* map){
   //---------------------------
 
   //Reset variable conteners
-  frame->Nptp.clear(); frame->Nptp.resize(frame->xyz.size());
-  frame->NN.clear(); frame->NN.resize(frame->xyz.size());
+  frame->N_nn.clear(); frame->N_nn.resize(frame->xyz.size());
+  frame->nn.clear(); frame->nn.resize(frame->xyz.size());
   frame->a2D.clear(); frame->a2D.resize(frame->xyz.size());
 
   //Compute all point normal
@@ -108,26 +108,26 @@ void SLAM_normal::compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN,
 
   //If no neighbor points
   if(kNN.size() == 0){
-    frame->Nptp[i] = Eigen::Vector3d::Zero();
-    frame->Nptp[i](0) = NAN;
+    frame->N_nn[i] = Eigen::Vector3d::Zero();
+    frame->N_nn[i](0) = NAN;
     frame->a2D[i] = NAN;
-    frame->NN[i] = Eigen::Vector3d::Zero();
-    frame->NN[i](0) = NAN;
+    frame->nn[i] = Eigen::Vector3d::Zero();
+    frame->nn[i](0) = NAN;
     return;
   }
 
   //NN point
-  frame->NN[i] = kNN[0];
+  frame->nn[i] = kNN[0];
 
   //Compute normales
   Eigen::Matrix3d covMat = fct_covarianceMat(kNN);
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> es(covMat);
   Eigen::Vector3d normal = es.eigenvectors().col(0).normalized();
   if(fct_is_nan(normal) == false){
-    frame->Nptp[i] = normal;
+    frame->N_nn[i] = normal;
   }else{
-    frame->Nptp[i] = Eigen::Vector3d::Zero();
-    frame->Nptp[i](0) = NAN;
+    frame->N_nn[i] = Eigen::Vector3d::Zero();
+    frame->N_nn[i](0) = NAN;
   }
 
   // Compute planarity coefficient / weight from the eigen values
@@ -145,7 +145,7 @@ void SLAM_normal::compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN,
 }
 void SLAM_normal::compute_normal_direction(Frame* frame, int i){
   Eigen::Vector3d& point = frame->xyz[i];
-  Eigen::Vector3d& normal = frame->Nptp[i];
+  Eigen::Vector3d& normal = frame->N_nn[i];
   //---------------------------
 
   //Check for NaN

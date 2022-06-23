@@ -70,8 +70,8 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];
     Eigen::Vector3d point_raw = frame->xyz_raw[i];
-    Eigen::Vector3d normal = frame->Nptp[i];
-    Eigen::Vector3d iNN = frame->NN[i];
+    Eigen::Vector3d normal = frame->N_nn[i];
+    Eigen::Vector3d iNN = frame->nn[i];
     double ts_n = frame->ts_n[i];
     double a2D = frame->a2D[i];
 
@@ -85,43 +85,40 @@ void SLAM_optim_gn::compute_residual_parameter(Frame* frame){
     for(int j=0; j<3; j++){
       PTP_distance += normal[j] * (point[j] - iNN[j]);
     }
+    if(abs(PTP_distance) > PTP_distance_max) continue;
 
-    if(abs(PTP_distance) < PTP_distance_max){
-      //Compute normal of the iNN point
-      Eigen::Vector3d iNN_N = a2D * a2D * normal;
-
-      //Compute residual
-      double residual = 0;
-      for(int j=0; j<3; j++){
-        residual += (point[j] - iNN[j]) * iNN_N[j];
-      }
-      frame->nb_residual++;
-
-      //Compute parameters
-      Eigen::Vector3d origin_b = frame->rotat_b * point_raw;
-      Eigen::Vector3d origin_e = frame->rotat_e * point_raw;
-
-      double cbx = (1 - ts_n) * (origin_b[1] * iNN_N[2] - origin_b[2] * iNN_N[1]);
-      double cby = (1 - ts_n) * (origin_b[2] * iNN_N[0] - origin_b[0] * iNN_N[2]);
-      double cbz = (1 - ts_n) * (origin_b[0] * iNN_N[1] - origin_b[1] * iNN_N[0]);
-
-      double nbx = (1 - ts_n) * iNN_N[0];
-      double nby = (1 - ts_n) * iNN_N[1];
-      double nbz = (1 - ts_n) * iNN_N[2];
-
-      double cex = ts_n * (origin_e[1] * iNN_N[2] - origin_e[2] * iNN_N[1]);
-      double cey = ts_n * (origin_e[2] * iNN_N[0] - origin_e[0] * iNN_N[2]);
-      double cez = ts_n * (origin_e[0] * iNN_N[1] - origin_e[1] * iNN_N[0]);
-
-      double nex = ts_n * iNN_N[0];
-      double ney = ts_n * iNN_N[1];
-      double nez = ts_n * iNN_N[2];
-
-      //Store results
-      Eigen::VectorXd u = Eigen::VectorXd::Zero(13);
-      u << cbx, cby, cbz, nbx, nby, nbz, cex, cey, cez, nex, ney, nez, residual;
-      vec_u[i] = u;
+    //Compute residual
+    Eigen::Vector3d iNN_N = a2D * a2D * normal;
+    double residual = 0;
+    for(int j=0; j<3; j++){
+      residual += (point[j] - iNN[j]) * iNN_N[j];
     }
+    frame->nb_residual++;
+
+    //Compute parameters
+    Eigen::Vector3d origin_b = frame->rotat_b * point_raw;
+    Eigen::Vector3d origin_e = frame->rotat_e * point_raw;
+
+    double cx_b = (1 - ts_n) * (origin_b[1] * iNN_N[2] - origin_b[2] * iNN_N[1]);
+    double cy_b = (1 - ts_n) * (origin_b[2] * iNN_N[0] - origin_b[0] * iNN_N[2]);
+    double cz_b = (1 - ts_n) * (origin_b[0] * iNN_N[1] - origin_b[1] * iNN_N[0]);
+
+    double nx_b = (1 - ts_n) * iNN_N[0];
+    double ny_b = (1 - ts_n) * iNN_N[1];
+    double nz_b = (1 - ts_n) * iNN_N[2];
+
+    double cx_e = ts_n * (origin_e[1] * iNN_N[2] - origin_e[2] * iNN_N[1]);
+    double cy_e = ts_n * (origin_e[2] * iNN_N[0] - origin_e[0] * iNN_N[2]);
+    double cz_e = ts_n * (origin_e[0] * iNN_N[1] - origin_e[1] * iNN_N[0]);
+
+    double nx_e = ts_n * iNN_N[0];
+    double ny_e = ts_n * iNN_N[1];
+    double nz_e = ts_n * iNN_N[2];
+
+    //Store results
+    Eigen::VectorXd u = Eigen::VectorXd::Zero(13);
+    u << cx_b, cy_b, cz_b, nx_b, ny_b, nz_b, cx_e, cy_e, cz_e, nx_e, ny_e, nz_e, residual;
+    vec_u[i] = u;
   }
 
   //---------------------------
@@ -132,27 +129,23 @@ void SLAM_optim_gn::compute_residual_apply(Frame* frame, Eigen::MatrixXd& J, Eig
   //Apply parameters & residuals
   for(int i=0; i<frame->xyz.size(); i++){
     if(vec_u[i].size() != 0){
+
       for(int j=0; j<12; j++){
-        //Jacobian
         for(int k=0; k<12; k++){
           J(j, k) = J(j, k) + vec_u[i][j] * vec_u[i][k];
         }
-
-        //b vector
         b(j) = b(j) - vec_u[i][j] * vec_u[i][12];
       }
+
     }
   }
 
   // Normalize equation
   #pragma omp parallel for num_threads(nb_thread)
   for (int i=0; i < 12; i++){
-    //Jacobian
     for (int j=0; j < 12; j++){
-        J(i, j) /= frame->nb_residual;
+      J(i, j) /= frame->nb_residual;
     }
-
-    //b vector
     b(i) /= frame->nb_residual;
   }
 
