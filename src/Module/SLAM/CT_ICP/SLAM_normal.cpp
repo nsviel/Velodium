@@ -102,8 +102,7 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point){
 
   vector<Eigen::Vector3d> kNN(size);
   for(int i=0; i<size; i++){
-    Eigen::Vector3d iNN = std::get<1>(priority_queue.top());
-    kNN[size - 1 - i] = iNN;
+    kNN[size - 1 - i] = std::get<1>(priority_queue.top());
     priority_queue.pop();
   }
 
