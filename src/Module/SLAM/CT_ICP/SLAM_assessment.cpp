@@ -118,7 +118,6 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   Transforms transformManager;
   bool success = true;
-  float lambda = 3;
   //---------------------------
 
   //Compute relative stats for current frame
@@ -139,47 +138,47 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
     this->compute_stat_mean(cloud, subset_ID);
 
     //Test 1: check ego distance
-    if(frame_m0->ego_trans > sum_ego_trans * lambda){
+    if(frame_m0->ego_trans > sum_ego_trans + 1){
       cout<<"[error] Ego relative translation too important ";
       cout<<"["<<frame_m0->ego_trans<<"/"<<sum_ego_trans<<"]"<<endl;
       success = false;
     }
 
     //Test 2: Ego angular distance
-    if(frame_m0->ego_rotat > sum_ego_rotat * lambda && sum_ego_rotat != 0){
+    if(frame_m0->ego_rotat > sum_ego_rotat + 1 && sum_ego_rotat != 0){
       cout<<"[error] Ego relative rotation too important ";
       cout<<"["<<frame_m0->ego_rotat<<"/"<<sum_ego_rotat<<"]"<<endl;
       success = false;
     }
 
     //Test 3: check relative distance between two poses
-    if(frame_m0->diff_trans > sum_diff_trans * lambda){
+    if(frame_m0->diff_trans > sum_diff_trans + 1){
       cout<<"[error] Pose relative translation too important ";
       cout<<"["<<frame_m0->diff_trans<<"/"<<sum_diff_trans<<"]"<<endl;
       success = false;
     }
 
     //Test 4: check relative rotation between two poses
-    if(frame_m0->diff_rotat > sum_diff_rotat * lambda && frame_m0->diff_rotat != 0 && sum_diff_rotat != 0){
+    if(frame_m0->diff_rotat > sum_diff_rotat + 1 && frame_m0->diff_rotat != 0 && sum_diff_rotat != 0){
       cout<<"[error] Pose relative rotation too important ";
       cout<<"["<<frame_m0->diff_rotat<<"/"<<sum_diff_rotat<<"]"<<endl;
       success = false;
     }
 
     //Test 5: check if ICP has converged
-    if(frame_m0->opti_score > sum_opti_score * lambda){
+    if(frame_m0->opti_score > sum_opti_score + 1){
       cout<<"[error] Optimization relative score too important ";
       cout<<"["<<frame_m0->opti_score<<"/"<<sum_opti_score<<"]"<<endl;
       success = false;
     }
 
     //Test 6: restriction on X & Y rotation axis
-    if(diff_angle.x > thres_diff_angle * lambda){
+    if(diff_angle.x > thres_diff_angle){
       cout<<"[error] Relative X axis rotation angle too high ";
       cout<<"["<<diff_angle.x<<"/"<<thres_diff_angle<<"]"<<endl;
       success = false;
     }
-    if(diff_angle.y > thres_diff_angle * lambda){
+    if(diff_angle.y > thres_diff_angle){
       cout<<"[error] Relative Y axis rotation angle too high ";
       cout<<"["<<diff_angle.y<<"/"<<thres_diff_angle<<"]"<<endl;
       success = false;

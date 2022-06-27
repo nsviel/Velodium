@@ -1,8 +1,6 @@
 # Velodium
 **Open Source 3D Point Cloud Processing Software & Data Orchestrator**
 
-![Screenshot](media/screenshot.png)
-
 ## Summary
 
 LiDAR (Light Detection and Ranging) sensors give huge amount of data, which generally need a variety of post-processing actions. These data are 3D point cloud containing the spatial coordinates and additionnal information like color or intensity of a numerous set of measures. Generally, the main use of these point clouds is the construction of a numerical 3D model of a real scene. 
