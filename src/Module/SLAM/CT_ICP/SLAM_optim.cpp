@@ -4,11 +4,17 @@
 
 #include "../Slam.h"
 
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Scene.h"
+
 
 //Constructor / Destructor
 SLAM_optim::SLAM_optim(Slam* slam){
   //---------------------------
 
+  Engine_node* node_engine = slam->get_node_engine();
+
+  this->sceneManager = node_engine->get_sceneManager();
   this->gnManager = new SLAM_optim_gn(slam);
 
   //---------------------------
@@ -51,7 +57,9 @@ void SLAM_optim::compute_distortion(Frame* frame){
 
   //---------------------------
 }
-void SLAM_optim::compute_optimization(Frame* frame, Frame* frame_m1){
+void SLAM_optim::compute_optimization(Cloud* cloud, int subset_ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   //---------------------------
 
   if(frame->ID > 0){

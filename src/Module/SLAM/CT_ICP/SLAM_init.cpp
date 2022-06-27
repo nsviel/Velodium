@@ -24,14 +24,11 @@ SLAM_init::~SLAM_init(){}
 //Main functions
 void SLAM_init::compute_initialization(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
-  Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
   //---------------------------
 
   this->init_frame_ID(cloud, subset_ID);
   this->init_frame_ts(subset);
-  this->init_frame_chain(frame, frame_m1, frame_m2);
+  this->init_frame_chain(cloud, subset_ID);
 
   //---------------------------
 }
@@ -85,7 +82,10 @@ void SLAM_init::init_frame_ts(Subset* subset){
 
   //---------------------------
 }
-void SLAM_init::init_frame_chain(Frame* frame_m0, Frame* frame_m1, Frame* frame_m2){
+void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
+  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
   //---------------------------
 
   //For the first 2 reference frames

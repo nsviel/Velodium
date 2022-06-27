@@ -73,12 +73,8 @@ void Slam::compute_slam_offline(Cloud* cloud){
 
     initManager->compute_initialization(cloud, i);
     mapManager->compute_grid_sampling(subset);
-
-    optimManager->compute_optimization(frame_m0, frame_m1);
+    optimManager->compute_optimization(cloud, i);
     this->compute_assessment(cloud, i);
-
-    mapManager->update_map(frame_m0);
-    this->update_subset_location(subset);
 
     //--------------
     auto t2 = high_resolution_clock::now();
@@ -90,8 +86,6 @@ void Slam::compute_slam_offline(Cloud* cloud){
 }
 void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   auto t1 = high_resolution_clock::now();
   //---------------------------
 
@@ -101,14 +95,8 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   //Main functions
   initManager->compute_initialization(cloud, subset_ID);
   mapManager->compute_grid_sampling(subset);
-  optimManager->compute_optimization(frame, frame_m1);
-  bool success = this->compute_assessment(cloud, subset_ID);
-  if(!success) return;
-
-  //End functions
-  mapManager->update_map(frame);
-  this->update_subset_location(subset);
-  this->update_subset_glyph(subset);
+  optimManager->compute_optimization(cloud, subset_ID);
+  this->compute_assessment(cloud, subset_ID);
 
   //---------------------------
   auto t2 = high_resolution_clock::now();
@@ -118,6 +106,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
 
 //SLAM sub-functions
 bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
 
@@ -125,7 +114,16 @@ bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
   bool success = assessManager->compute_assessment(cloud, subset_ID);
 
   //If unsuccess, reinitialize transformations
-  if(success == false){
+  if(success){
+    mapManager->update_map(frame);
+    this->update_subset_location(subset);
+    this->update_subset_glyph(subset);
+  }else{
+    /*initManager->init_frame_chain(cloud, subset_ID);
+    mapManager->update_map(frame);
+    this->update_subset_location(subset);
+    this->update_subset_glyph(subset);*/
+
     frame->reset();
     this->reset_slam_hard();
     this->reset_visibility(cloud, subset_ID);
@@ -169,17 +167,33 @@ void Slam::update_subset_glyph(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  //Update keypoint
-  subset->keypoint.location = eigen_to_glm_vectorVec3(frame->nn, nb_thread);
+  /*//Update keypoint
+  if(frame->xyz.size() == frame->nn.size()){
+    vector<vec3> xyz;
+    vector<vec3> Nxy;
+    vector<float> ts;
+
+    for(int i=0; i<frame->xyz.size(); i++){
+      if(isnan(frame->nn[i](0)) == false){
+        xyz.push_back(vec3(frame->nn[i](0), frame->nn[i](1), frame->nn[i](2)));
+        Nxy.push_back(vec3(frame->N_nn[i](0), frame->N_nn[i](1), frame->N_nn[i](2)));
+        ts.push_back(frame->ts_n[i]);
+      }
+    }
+
+
+  }*/
+
+  subset->keypoint.location = eigen_to_glm_vectorVec3(frame->xyz, 4);
   subset->keypoint.timestamp = vec_double_to_float(frame->ts_n);
-  if(frame->N_nn.size() == frame->xyz.size()){
-    subset->keypoint.normal = eigen_to_glm_vectorVec3(frame->N_nn, nb_thread);
-  }
+
+  say(subset->keypoint.location.size());
+  say(fct_mean(subset->keypoint.timestamp));
+  //subset->keypoint.normal = Nxy;
 
   //Update local map
   Localmap* mapObject = objectManager->get_object_localmap();
-  slamap* slam_map = mapManager->get_slam_map();
-  mapObject->update_localmap(slam_map);
+  mapObject->update_localmap(mapManager->get_slam_map());
   objectManager->update_object(mapObject->get_glyph());
 
   //---------------------------

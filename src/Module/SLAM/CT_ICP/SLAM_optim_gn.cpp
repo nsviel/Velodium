@@ -71,27 +71,27 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     Eigen::Vector3d point = frame->xyz[i];
     Eigen::Vector3d point_raw = frame->xyz_raw[i];
     Eigen::Vector3d normal = frame->N_nn[i];
-    Eigen::Vector3d iNN = frame->nn[i];
+    Eigen::Vector3d nn = frame->nn[i];
     double ts_n = frame->ts_n[i];
     double a2D = frame->a2D[i];
 
     //Check for NaN
     if(isnan(a2D)) continue;
-    if(isnan(iNN(0))) continue;
+    if(isnan(nn(0))) continue;
     if(isnan(normal(0))) continue;
 
     //Compute point-to-plane distance
     double dist_residual = 0;
     for(int j=0; j<3; j++){
-      dist_residual += normal[j] * (point[j] - iNN[j]);
+      dist_residual +=  (point[j] - nn[j]) * normal[j];
     }
     if(abs(dist_residual) > dist_residual_max) continue;
 
     //Compute residual
-    Eigen::Vector3d iNN_N = a2D * a2D * normal;
+    Eigen::Vector3d N_nn = a2D * a2D * normal;
     double residual = 0;
     for(int j=0; j<3; j++){
-      residual += (point[j] - iNN[j]) * iNN_N[j];
+      residual += (point[j] - nn[j]) * N_nn[j];
     }
     frame->nb_residual++;
 
@@ -99,21 +99,21 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     Eigen::Vector3d origin_b = frame->rotat_b * point_raw;
     Eigen::Vector3d origin_e = frame->rotat_e * point_raw;
 
-    double cx_b = (1 - ts_n) * (origin_b[1] * iNN_N[2] - origin_b[2] * iNN_N[1]);
-    double cy_b = (1 - ts_n) * (origin_b[2] * iNN_N[0] - origin_b[0] * iNN_N[2]);
-    double cz_b = (1 - ts_n) * (origin_b[0] * iNN_N[1] - origin_b[1] * iNN_N[0]);
+    double cx_b = (1 - ts_n) * (origin_b[1] * N_nn[2] - origin_b[2] * N_nn[1]);
+    double cy_b = (1 - ts_n) * (origin_b[2] * N_nn[0] - origin_b[0] * N_nn[2]);
+    double cz_b = (1 - ts_n) * (origin_b[0] * N_nn[1] - origin_b[1] * N_nn[0]);
 
-    double nx_b = (1 - ts_n) * iNN_N[0];
-    double ny_b = (1 - ts_n) * iNN_N[1];
-    double nz_b = (1 - ts_n) * iNN_N[2];
+    double nx_b = (1 - ts_n) * N_nn[0];
+    double ny_b = (1 - ts_n) * N_nn[1];
+    double nz_b = (1 - ts_n) * N_nn[2];
 
-    double cx_e = ts_n * (origin_e[1] * iNN_N[2] - origin_e[2] * iNN_N[1]);
-    double cy_e = ts_n * (origin_e[2] * iNN_N[0] - origin_e[0] * iNN_N[2]);
-    double cz_e = ts_n * (origin_e[0] * iNN_N[1] - origin_e[1] * iNN_N[0]);
+    double cx_e = ts_n * (origin_e[1] * N_nn[2] - origin_e[2] * N_nn[1]);
+    double cy_e = ts_n * (origin_e[2] * N_nn[0] - origin_e[0] * N_nn[2]);
+    double cz_e = ts_n * (origin_e[0] * N_nn[1] - origin_e[1] * N_nn[0]);
 
-    double nx_e = ts_n * iNN_N[0];
-    double ny_e = ts_n * iNN_N[1];
-    double nz_e = ts_n * iNN_N[2];
+    double nx_e = ts_n * N_nn[0];
+    double ny_e = ts_n * N_nn[1];
+    double nz_e = ts_n * N_nn[2];
 
     //Store results
     Eigen::VectorXd u = Eigen::VectorXd::Zero(13);
@@ -132,9 +132,9 @@ void SLAM_optim_gn::compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::Ve
 
       for(int j=0; j<12; j++){
         for(int k=0; k<12; k++){
-          J(j, k) = J(j, k) + vec_u[i][j] * vec_u[i][k];
+          J(j, k) += vec_u[i][j] * vec_u[i][k];
         }
-        b(j) = b(j) - vec_u[i][j] * vec_u[i][12];
+        b(j) -= vec_u[i][j] * vec_u[i][12];
       }
 
     }
@@ -142,8 +142,8 @@ void SLAM_optim_gn::compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::Ve
 
   // Normalize equation
   #pragma omp parallel for num_threads(nb_thread)
-  for (int i=0; i < 12; i++){
-    for (int j=0; j < 12; j++){
+  for(int i=0; i<12; i++){
+    for(int j=0; j<12; j++){
       J(i, j) /= frame->nb_residual;
     }
     b(i) /= frame->nb_residual;
@@ -235,12 +235,13 @@ void SLAM_optim_gn::update_keypoints(Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     double ts_n = frame->ts_n[i];
 
-    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
+    q.normalize();
+    Eigen::Matrix3d R = q.toRotationMatrix();
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     frame->xyz[i] = R * frame->xyz_raw[i] + t;
   }
-
 
   //---------------------------
 }

@@ -22,7 +22,7 @@ public:
   //Subfunctions
   void init_frame_ID(Cloud* cloud, int ID);
   void init_frame_ts(Subset* subset);
-  void init_frame_chain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
+  void init_frame_chain(Cloud* cloud, int subset_ID);
 
 private:
   SLAM_map* mapManager;
