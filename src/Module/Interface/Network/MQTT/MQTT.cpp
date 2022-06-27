@@ -1,20 +1,13 @@
 //Sample at https://github.com/eclipse/paho.mqtt.cpp/blob/master/src/samples/async_publish.cpp
 #include "MQTT.h"
 
-#include "MQTT_callback.h"
+#include "PAHO.h"
 
 #include "../Network.h"
 #include "../../Interface_node.h"
 
 #include "../../../../Engine/Engine_node.h"
 #include "../../../../Engine/Scene/Configuration.h"
-
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <thread>
-#include <cstring>
-#include <map>
 
 
 //Constructor / Destructor
@@ -26,153 +19,35 @@ MQTT::MQTT(Network* net){
   Engine_node* node_engine = node_interface->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
-  this->client = nullptr;
-  this->is_connected = false;
+  this->mqtt_sncf = new PAHO();
+  this->mqtt_local = new PAHO();
 
   //---------------------------
   this->update_configuration();
 }
 MQTT::~MQTT(){}
 
+//Connection functions
 void MQTT::update_configuration(){
   //---------------------------
 
-  //Connection
-  this->client_message = "Hello world!";
-  this->client_ID = configManager->parse_json_s("network", "mqtt_client_ID");
-  this->broker_topic = configManager->parse_json_s("network", "mqtt_broker_topic");
+  //SNCF broker
+  string sncf_topic = configManager->parse_json_s("network", "mqtt_sncf_topic");
+  string sncf_client = configManager->parse_json_s("network", "mqtt_sncf_client");
+  string sncf_dest = configManager->parse_json_s("network", "mqtt_sncf_dest");
+  string sncf_ip = netManager->get_ip_from_dest(sncf_dest);
+  int sncf_port = configManager->parse_json_i("network", "mqtt_sncf_port");
 
-  this->selected_dest = configManager->parse_json_s("network", "mqtt_dest");
-  this->selected_ip = netManager->get_ip_from_dest(selected_dest);
-  this->selected_port = configManager->parse_json_i("network", "mqtt_port");
-  this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
+  mqtt_sncf->configure(sncf_topic, sncf_client, sncf_ip, sncf_port);
 
-  //Parameters
-  this->qos = 1;
-  this->persist_dir	= "./persist";
-  this->timeout = std::chrono::seconds(2);
+  //Local broker
+  string local_topic = configManager->parse_json_s("network", "mqtt_local_topic");
+  string local_client = configManager->parse_json_s("network", "mqtt_local_client");
+  string local_dest = configManager->parse_json_s("network", "mqtt_local_dest");
+  string local_ip = netManager->get_ip_from_dest(sncf_dest);
+  int local_port = configManager->parse_json_i("network", "mqtt_local_port");
 
-  //---------------------------
-}
-
-//Connection functions
-void MQTT::mqtt_connection(){
-  this->mqtt_check_deconnection();
-  //---------------------------
-
-  if(is_connected == false){
-    //Initialize connection parameters
-    this->client = new mqtt::async_client(selected_address, client_ID, persist_dir);
-
-    try {
-      callback cb;
-      // /client->set_callback(cb);
-      auto connect_option = mqtt::connect_options_builder()
-        .automatic_reconnect(false)
-        .clean_session()
-        .finalize();
-
-      //Serveur connection
-      mqtt::token_ptr token = client->connect(connect_option);
-      token->wait_for(std::chrono::seconds(2));
-
-      //Display success
-      if(client->is_connected()){
-        string log = "Connection MQTT broker '" + selected_address + "'";
-        console.AddLog("ok", log);
-        this->is_connected = true;
-      }else{
-        string log = "Connection MQTT broker '" + selected_address + "' failed";
-        console.AddLog("error", log);
-        this->is_connected = false;
-        delete client;
-      }
-    }
-    catch (const mqtt::exception& exc) {
-      string log = "Connection MQTT broker '" + selected_address + "' failed";
-      console.AddLog("error", log);
-      this->is_connected = false;
-      delete client;
-    }
-  }
-
-  //---------------------------
-}
-void MQTT::mqtt_disconnect(){
-  this->mqtt_check_deconnection();
-  //---------------------------
-
-  if(is_connected){
-    callback cb;
-    client->set_callback(cb);
-
-    // Disconnect
-    client->disconnect()->wait();
-    delete client;
-    client = nullptr;
-
-    this->is_connected = false;
-    cout << "Disconnecting... [OK]" << endl;
-  }
-
-  //---------------------------
-}
-
-//Subfunctions
-void MQTT::mqtt_test_localhost(){
-  string old_ip = selected_ip;
-  this->selected_ip = "127.0.0.1";
-  //---------------------------
-
-  //Connect to localhost
-  this->mqtt_connection();
-
-  // Send message
-  this->mqtt_send_message(client_message);
-
-  // Disconnect
-  this->mqtt_disconnect();
-
-  //---------------------------
-  this->selected_ip = old_ip;
-}
-void MQTT::mqtt_send_message(string message){
-  if(is_connected){
-    //---------------------------
-
-    //Callback
-    callback cb;
-    client->set_callback(cb);
-
-    // First use a message pointer.
-    mqtt::message_ptr pubmsg = mqtt::make_message(broker_topic, message);
-    pubmsg->set_qos(qos);
-    client->publish(pubmsg)->wait_for(timeout);
-
-    //Result
-    cout << "Sending message [OK]" << endl;
-
-    //---------------------------
-  }
-}
-void MQTT::mqtt_build_address(){
-  //---------------------------
-
-  this->selected_address = "tcp://" + selected_ip + ":" + to_string(selected_port);
-  this->mqtt_disconnect();
-
-  //---------------------------
-}
-void MQTT::mqtt_check_deconnection(){
-  //---------------------------
-
-  if(client != nullptr && is_connected == true){
-    if(client->is_connected() == false){
-      is_connected = false;
-      delete client;
-      client = nullptr;
-    }
-  }
+  mqtt_local->configure(local_topic, local_client, local_ip, local_port);
 
   //---------------------------
 }

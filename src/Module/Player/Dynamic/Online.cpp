@@ -70,6 +70,11 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   cloud->subset_selected = subset;
   //---------------------------
 
+  //Make cleaning on the current subset
+  if(with_cylinder_cleaning){
+    filterManager->filter_subset_cylinder(subset);
+  }
+
   //Make slam on the current subset
   if(with_slam){
     slamManager->compute_slam_online(cloud, ID_subset);
@@ -77,11 +82,6 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //If camera follow up option activated
   followManager->camera_followUp(cloud, ID_subset);
-
-  //Make cleaning on the current subset
-  if(with_cylinder_cleaning){
-    filterManager->filter_subset_cylinder(subset);
-  }
 
   //Colorization
   colorManager->make_colorization(cloud, ID_subset);

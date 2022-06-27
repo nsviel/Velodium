@@ -21,7 +21,7 @@ public:
   void update_configuration();
   void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
 
-  inline double* get_dist_residual_max(){return &PTP_distance_max;}
+  inline double* get_dist_residual_max(){return &dist_residual_max;}
   inline double get_opti_score(){return X.norm();}
   inline int* get_iter_max(){return &iter_max;}
   inline void set_iter_max(int value){iter_max = value;}
@@ -44,7 +44,7 @@ private:
   Eigen::VectorXd X;
   double lambda_location;
   double lambda_displace;
-  double PTP_distance_max;
+  double dist_residual_max;
   int iter_max;
   int nb_thread;
   mutex Mutex;

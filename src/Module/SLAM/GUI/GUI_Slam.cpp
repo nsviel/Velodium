@@ -158,8 +158,7 @@ void GUI_Slam::parameter_offline(){
       static int frame_max = cloud->nb_subset;
       ImGui::SetNextItemWidth(item_width);
       if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_subset)){
-        slamManager->set_ID_all(false);
-        slamManager->set_ID_max(frame_max);
+        slamManager->set_offline_ID_max(frame_max);
       }
     }else{
       static int frame_max = 0;

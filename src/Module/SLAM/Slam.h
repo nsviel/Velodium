@@ -12,7 +12,7 @@ class Scene;
 class Object;
 class Configuration;
 
-//class SLAM_optim_ceres;
+class SLAM_init;
 class SLAM_optim_gn;
 class SLAM_assessment;
 class SLAM_localMap;
@@ -34,7 +34,6 @@ public:
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return normalManager;}
-  //inline SLAM_optim_ceres* get_slam_ceres(){return ceresManager;}
   inline SLAM_optim_gn* get_slam_gn(){return gnManager;}
   inline SLAM_assessment* get_slam_assess(){return assessManager;}
   inline SLAM_localMap* get_slam_map(){return mapManager;}
@@ -45,14 +44,9 @@ public:
   inline bool* get_solver_gn(){return &solver_GN;}
   inline bool* get_solver_ceres(){return &solver_ceres;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
-  inline void set_ID_max(int value){ID_max = value;}
-  inline void set_ID_all(bool value){ID_all = value;}
+  inline void set_offline_ID_max(int value){offline_ID_max = value;}
 
 private:
-  void init_frame_ID(Cloud* cloud, int ID);
-  void init_frame_ts(Subset* subset);
-  void init_frame_chain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
-
   void compute_distortion(Frame* frame);
   void compute_optimization(Frame* frame, Frame* frame_m1);
   bool compute_assessment(Cloud* cloud, int ID);
@@ -72,21 +66,20 @@ private:
   Configuration* configManager;
 
   //SLAM_optim_ceres* ceresManager;
+  SLAM_init* initManager;
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
   SLAM_assessment* assessManager;
   SLAM_localMap* mapManager;
   SLAM_parameter* paramManager;
 
-  bool ID_all;
-  bool solver_GN, solver_ceres;
+  bool solver_GN;
+  bool solver_ceres;
   bool verbose;
   bool with_distorsion;
   int map_size_old;
-  int map_frame_ID;
   int map_frame_begin_ID;
-  int ID_cloud;
-  int ID_max;
+  int offline_ID_max;
   int nb_thread;
 };
 

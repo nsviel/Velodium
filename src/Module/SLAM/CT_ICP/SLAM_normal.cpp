@@ -92,6 +92,7 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, 
 
   //Retrieve the kNN of the query point
   int size = priority_queue.size();
+
   vector<Eigen::Vector3d> kNN(size);
   for(int i=0; i<size; i++){
     Eigen::Vector3d iNN = std::get<1>(priority_queue.top());
@@ -107,7 +108,7 @@ void SLAM_normal::compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN,
   //---------------------------
 
   //If no neighbor points
-  if(kNN.size() == 0){
+  if(kNN.size() == 0 || kNN.size() < 10){
     frame->N_nn[i] = Eigen::Vector3d::Zero();
     frame->N_nn[i](0) = NAN;
     frame->a2D[i] = NAN;

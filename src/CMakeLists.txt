@@ -29,7 +29,6 @@ set(ALL_LIBS
   boost_iostreams #necessary for gnuplot
   lz4 #Necessary for FLANN
   freeimage #Screenchot lib
-
   -fopenmp  #Multithreading
 )
 

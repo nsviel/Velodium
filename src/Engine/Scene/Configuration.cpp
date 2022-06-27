@@ -136,20 +136,30 @@ void Configuration::preconf_default(Json::Value& root){
   Json::Value network;
   network["with_http_demon"] = true;
   network["http_port"] = 8888;
-  network["mqtt_port"] = 1883;
-  network["mqtt_dest"] = "localhost";
-  network["mqtt_client_ID"] = "ai_module";
-  network["mqtt_broker_topic"] = "ai_obstacle";
+
+  network["mqtt_sncf_port"] = 1883;
+  network["mqtt_sncf_dest"] = "mqtt_sncf_broker";
+  network["mqtt_sncf_client"] = "ai_module";
+  network["mqtt_sncf_topic"] = "obstacle";
+
+  network["mqtt_local_port"] = 1883;
+  network["mqtt_local_dest"] = "localhost";
+  network["mqtt_local_client"] = "velodium";
+  network["mqtt_local_topic"] = "lidar";
+
   root["network"] = network;
 
   //Wallet
   Json::Value wallet;
   wallet["localhost"] = "127.0.0.1";
+  wallet["mqtt_sncf_broker"] = "127.0.0.1";
+
   wallet["mine_ordi_nathan"] = "10.201.20.106";
   wallet["mine_ordi_louis"] = "10.201.20.110";
   wallet["mine_server"] = "10.201.224.13";
   wallet["portable_nathan_home"] = "192.168.1.27";
   wallet["portable_nathan_mine"] = "192.168.153.147";
+
   root["wallet"] = wallet;
 
   //Glyph
@@ -170,6 +180,7 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Interface
   Json::Value interface;
+  interface["path_screenshot"] = "../../Hubium/data/";
   interface["lidar_model"] = "velodyne_vlp64";
   interface["capture_port"] = 2370;
   interface["with_prediction"] = false;
@@ -396,7 +407,7 @@ string Configuration::parse_json_s(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asString();
     }else{
-      cout<<"Config problem: the value "<<value<<" in field "<<field<<" does not exists !"<<endl;
+      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
     }
 
     ifs_default.close();
@@ -441,7 +452,7 @@ map<string, string> Configuration::parse_json_dict(string field){
         dict.insert ( std::pair<string, string>(field_itr, result) );
       }
     }else{
-      cout<<"Config problem: the field "<<field<<" does not exists !"<<endl;
+      cout<<"Config problem: the field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
     }
 
     ifs_default.close();
@@ -477,7 +488,7 @@ float Configuration::parse_json_f(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asFloat();
     }else{
-      cout<<"Config problem: the value "<<value<<" in field "<<field<<" does not exists !"<<endl;
+      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
     }
 
     ifs_default.close();
@@ -513,7 +524,7 @@ int Configuration::parse_json_i(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asInt();
     }else{
-      cout<<"Config problem: the value "<<value<<" in field "<<field<<" does not exists !"<<endl;
+      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
     }
 
     ifs_default.close();
@@ -549,7 +560,7 @@ bool Configuration::parse_json_b(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asBool();
     }else{
-      cout<<"Config problem: the value "<<value<<" in field "<<field<<" does not exists !"<<endl;
+      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
     }
 
     ifs_default.close();

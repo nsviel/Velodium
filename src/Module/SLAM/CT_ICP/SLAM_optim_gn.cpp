@@ -199,6 +199,12 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(double rx, double ry, doub
 //Update functions
 void SLAM_optim_gn::update_parameter(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
+/*
+  X(0) = 0;
+  X(1) = 0;
+  X(6) = 0;
+  X(7) = 0;
+*/
 
   //Retrieve parameters
   Eigen::Matrix3d rotat_b = compute_rotationMatrix(X(0), X(1), X(2));

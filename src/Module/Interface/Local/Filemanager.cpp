@@ -30,7 +30,7 @@ void Filemanager::update_configuration(){
   //---------------------------
 
   this->path_data_dir = configManager->parse_json_s("parameter", "path_data");
-  this->is_clean_dir = true;
+  this->is_clean_dir = false;
 
   //---------------------------
 }

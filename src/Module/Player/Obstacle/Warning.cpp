@@ -1,6 +1,7 @@
 #include "Warning.h"
 
 #include "../../Interface/Network/MQTT/MQTT.h"
+#include "../../Interface/Network/MQTT/PAHO.h"
 
 
 //Constructor / Destructor
@@ -14,11 +15,12 @@ Warning::Warning(MQTT* mqtt){
 Warning::~Warning(){}
 
 void Warning::send_warning(Subset* subset){
+  PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
   //---------------------------
 
   string warning = build_jsonFile(subset);
-  mqttManager->mqtt_connection();
-  mqttManager->mqtt_send_message(warning);
+  mqtt_sncf->paho_connection();
+  mqtt_sncf->paho_publish(warning);
 
   //---------------------------
 }
