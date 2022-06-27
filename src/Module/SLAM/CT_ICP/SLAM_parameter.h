@@ -5,6 +5,7 @@
 
 class Slam;
 class SLAM_normal;
+class SLAM_optim;
 class SLAM_optim_gn;
 class SLAM_assessment;
 class SLAM_map;
@@ -37,6 +38,7 @@ public:
 private:
   Slam* slamManager;
   SLAM_normal* normalManager;
+  SLAM_optim* optimManager;
   SLAM_optim_gn* gnManager;
   SLAM_assessment* assessManager;
   SLAM_map* mapManager;

@@ -1,6 +1,8 @@
 #include "SLAM_assessment.h"
 
+#include "SLAM_optim.h"
 #include "SLAM_optim_gn.h"
+#include "SLAM_map.h"
 
 #include "../Slam.h"
 
@@ -15,9 +17,11 @@ SLAM_assessment::SLAM_assessment(Slam* slam){
   //---------------------------
 
   Engine_node* node_engine = slam->get_node_engine();
+  SLAM_optim* optimManager = slam->get_slam_optim();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->gnManager = slam->get_slam_gn();
+  this->gnManager = optimManager->get_optim_gn();
+  this->mapManager = slam->get_slam_map();
 
   this->nb_residual_min = 100;
 
@@ -197,8 +201,49 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   //---------------------------
   return true;
 }
+void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float duration){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  slamap* slam_map = mapManager->get_slam_map();
+  Transforms transformManager;
+  //---------------------------
 
-//Mettre des assessment sur la rotation max selon X et Y
+  //Fill stats
+  frame_m0->time_slam = duration;
+  frame_m0->map_size_abs = slam_map->map.size();
+  frame_m0->map_size_rlt = slam_map->map.size() - slam_map->size;
+  slam_map->size = slam_map->map.size();
+
+  //Relative parameters
+  vec3 trans_b_rlt, trans_e_rlt;
+  if(frame_m1 != nullptr && frame_m0->ID != 0){
+    for(int i=0; i<3; i++){
+      trans_b_rlt[i] = frame_m0->trans_b(i) - frame_m1->trans_e(i);
+      trans_e_rlt[i] = frame_m0->trans_e(i) - frame_m0->trans_b(i);
+    }
+  }
+
+  vec3 rotat_b_rlt, rotat_e_rlt;
+  if(frame_m1 != nullptr && frame_m0->ID != 0){
+    vec3 a1_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    vec3 a2_b = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_e);
+    rotat_b_rlt = a1_b - a2_b;
+
+    vec3 a1_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
+    vec3 a2_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    rotat_e_rlt = a1_e - a2_e;
+  }
+
+  frame_m0->trans_b_rlt = trans_b_rlt;
+  frame_m0->rotat_b_rlt = rotat_b_rlt;
+  frame_m0->trans_e_rlt = trans_e_rlt;
+  frame_m0->rotat_e_rlt = rotat_e_rlt;
+  frame_m0->angle_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+  frame_m0->angle_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
+
+  //---------------------------
+}
 
 //Subfunctions
 double SLAM_assessment::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &rotb){

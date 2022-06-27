@@ -4,7 +4,7 @@
 //map_frame_ID = frame ID / the relative slam ID
 
 #include "CT_ICP/SLAM_init.h"
-#include "CT_ICP/SLAM_optim_gn.h"
+#include "CT_ICP/SLAM_optim.h"
 #include "CT_ICP/SLAM_assessment.h"
 #include "CT_ICP/SLAM_map.h"
 #include "CT_ICP/SLAM_parameter.h"
@@ -16,7 +16,6 @@
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/SLAM/Localmap.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Operation/Transformation/Transforms.h"
 
 #include <chrono>
 
@@ -36,7 +35,7 @@ Slam::Slam(Engine_node* node){
 
   this->mapManager = new SLAM_map();
   this->normalManager = new SLAM_normal(this);
-  this->gnManager = new SLAM_optim_gn(this);
+  this->optimManager = new SLAM_optim(this);
   this->assessManager = new SLAM_assessment(this);
   this->paramManager = new SLAM_parameter(this);
   this->initManager = new SLAM_init(this);
@@ -50,9 +49,6 @@ Slam::~Slam(){}
 void Slam::update_configuration(){
   //---------------------------
 
-  this->solver_ceres = false;
-  this->solver_GN = true;
-  this->with_distorsion = true;
   this->offline_ID_max = 0;
   this->nb_thread = 8;
 
@@ -78,7 +74,7 @@ void Slam::compute_slam_offline(Cloud* cloud){
     initManager->compute_initialization(cloud, i);
     mapManager->compute_grid_sampling(subset);
 
-    this->compute_optimization(frame_m0, frame_m1);
+    optimManager->compute_optimization(frame_m0, frame_m1);
     this->compute_assessment(cloud, i);
 
     mapManager->update_map(frame_m0);
@@ -87,7 +83,7 @@ void Slam::compute_slam_offline(Cloud* cloud){
     //--------------
     auto t2 = high_resolution_clock::now();
     float duration = duration_cast<milliseconds>(t2 - t1).count();
-    this->compute_statistics(duration, frame_m0, frame_m1, subset);
+    assessManager->compute_statistics(cloud, i, duration);
   }
 
   //---------------------------
@@ -102,13 +98,10 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   //Check SLAM conditions
   if(check_conditions(cloud, subset_ID) == false) return;
 
-  //Initialization
+  //Main functions
   initManager->compute_initialization(cloud, subset_ID);
   mapManager->compute_grid_sampling(subset);
-
-  //Main functions
-  this->compute_distortion(frame);
-  this->compute_optimization(frame, frame_m1);
+  optimManager->compute_optimization(frame, frame_m1);
   bool success = this->compute_assessment(cloud, subset_ID);
   if(!success) return;
 
@@ -120,49 +113,10 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   //---------------------------
   auto t2 = high_resolution_clock::now();
   float duration = duration_cast<milliseconds>(t2 - t1).count();
-  this->compute_statistics(duration, frame, frame_m1, subset);
+  assessManager->compute_statistics(cloud, subset_ID, duration);
 }
 
 //SLAM sub-functions
-void Slam::compute_distortion(Frame* frame){
-  //---------------------------
-
-  if(with_distorsion && frame->ID >= 2){
-    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-    Eigen::Vector3d trans_b = frame->trans_b;
-    Eigen::Vector3d trans_e = frame->trans_e;
-
-    //Distorts the frame
-    Eigen::Quaterniond quat_e_inv = quat_e.inverse();
-    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e);
-
-    for(int i=0; i<frame->xyz.size(); i++){
-      float ts_n = frame->ts_n[i];
-
-      Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-      // Distort Raw Keypoints
-      frame->xyz[i] = (R * frame->xyz_raw[i] + t) + (t + trans_e_inv);
-    }
-  }
-
-  //---------------------------
-}
-void Slam::compute_optimization(Frame* frame, Frame* frame_m1){
-  //---------------------------
-
-  if(frame->ID > 0){
-    if(solver_GN){
-      gnManager->optim_GN(frame, frame_m1);
-    }else if(solver_ceres){
-      //ceresManager->optim_test(frame, frame_m1, map);
-    }
-  }
-
-  //---------------------------
-}
 bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
@@ -180,47 +134,6 @@ bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
   return success;
 }
-void Slam::compute_statistics(float duration, Frame* frame_m0, Frame* frame_m1, Subset* subset){
-  slamap* slam_map = mapManager->get_slam_map();
-  Transforms transformManager;
-  //---------------------------
-
-  //Fill stats
-  frame_m0->time_slam = duration;
-  frame_m0->map_size_abs = slam_map->map.size();
-  frame_m0->map_size_rlt = slam_map->map.size() - slam_map->size;
-  slam_map->size = slam_map->map.size();
-
-  //Relative parameters
-  vec3 trans_b_rlt, trans_e_rlt;
-  if(frame_m1 != nullptr && frame_m0->ID != 0){
-    for(int i=0; i<3; i++){
-      trans_b_rlt[i] = frame_m0->trans_b(i) - frame_m1->trans_e(i);
-      trans_e_rlt[i] = frame_m0->trans_e(i) - frame_m0->trans_b(i);
-    }
-  }
-
-  vec3 rotat_b_rlt, rotat_e_rlt;
-  if(frame_m1 != nullptr && frame_m0->ID != 0){
-    vec3 a1_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-    vec3 a2_b = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_e);
-    rotat_b_rlt = a1_b - a2_b;
-
-    vec3 a1_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
-    vec3 a2_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-    rotat_e_rlt = a1_e - a2_e;
-  }
-
-  frame_m0->trans_b_rlt = trans_b_rlt;
-  frame_m0->rotat_b_rlt = rotat_b_rlt;
-  frame_m0->trans_e_rlt = trans_e_rlt;
-  frame_m0->rotat_e_rlt = rotat_e_rlt;
-  frame_m0->angle_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-  frame_m0->angle_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
-
-  //---------------------------
-}
-
 void Slam::update_subset_location(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
@@ -272,7 +185,6 @@ void Slam::update_subset_glyph(Subset* subset){
   //---------------------------
   objectManager->update_glyph_subset(subset);
 }
-
 bool Slam::check_conditions(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);

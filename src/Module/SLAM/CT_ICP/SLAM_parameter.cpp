@@ -1,10 +1,12 @@
 #include "SLAM_parameter.h"
 
-#include "../Slam.h"
 #include "SLAM_normal.h"
+#include "SLAM_optim.h"
 #include "SLAM_optim_gn.h"
 #include "SLAM_assessment.h"
 #include "SLAM_map.h"
+
+#include "../Slam.h"
 
 
 //Constructor / Destructor
@@ -13,7 +15,8 @@ SLAM_parameter::SLAM_parameter(Slam* slam){
 
   this->slamManager = slam;
   this->normalManager = slam->get_slam_normal();
-  this->gnManager = slam->get_slam_gn();
+  this->optimManager = slam->get_slam_optim();
+  this->gnManager = optimManager->get_optim_gn();
   this->assessManager = slam->get_assessManager();
   this->mapManager = slam->get_slam_map();
 
@@ -76,8 +79,8 @@ void SLAM_parameter::make_config_default(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = slamManager->get_solver_gn();
-  bool* solver_ceres = slamManager->get_solver_ceres();
+  bool* solver_gn = optimManager->get_solver_gn();
+  bool* solver_ceres = optimManager->get_solver_ceres();
   double* thres_ego_trans = assessManager->get_thres_ego_trans();
   double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
   double* thres_pose_trans = assessManager->get_thres_pose_trans();
@@ -145,8 +148,8 @@ void SLAM_parameter::make_config_0(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = slamManager->get_solver_gn();
-  bool* solver_ceres = slamManager->get_solver_ceres();
+  bool* solver_gn = optimManager->get_solver_gn();
+  bool* solver_ceres = optimManager->get_solver_ceres();
   double* thres_ego_trans = assessManager->get_thres_ego_trans();
   double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
   double* thres_pose_trans = assessManager->get_thres_pose_trans();
@@ -214,8 +217,8 @@ void SLAM_parameter::make_config_1(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = slamManager->get_solver_gn();
-  bool* solver_ceres = slamManager->get_solver_ceres();
+  bool* solver_gn = optimManager->get_solver_gn();
+  bool* solver_ceres = optimManager->get_solver_ceres();
   double* thres_ego_trans = assessManager->get_thres_ego_trans();
   double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
   double* thres_pose_trans = assessManager->get_thres_pose_trans();
@@ -285,8 +288,8 @@ void SLAM_parameter::make_config_2(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = slamManager->get_solver_gn();
-  bool* solver_ceres = slamManager->get_solver_ceres();
+  bool* solver_gn = optimManager->get_solver_gn();
+  bool* solver_ceres = optimManager->get_solver_ceres();
   double* thres_ego_trans = assessManager->get_thres_ego_trans();
   double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
   double* thres_pose_trans = assessManager->get_thres_pose_trans();

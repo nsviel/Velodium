@@ -6,6 +6,7 @@
 class Slam;
 class Scene;
 class SLAM_optim_gn;
+class SLAM_map;
 
 
 class SLAM_assessment
@@ -20,6 +21,7 @@ public:
   bool compute_assessment_abs(Frame* frame, Frame* frame_m1);
   bool compute_assessment_rlt(Cloud* cloud, int i);
   bool compute_assessment_rsd(Frame* frame);
+  void compute_statistics(Cloud* cloud, int subset_ID, float duration);
 
   double AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
   void compute_stat_mean(Cloud* cloud, int ID);
@@ -37,6 +39,7 @@ public:
 private:
   Scene* sceneManager;
   SLAM_optim_gn* gnManager;
+  SLAM_map* mapManager;
 
   double thres_ego_trans;
   double thres_ego_rotat;

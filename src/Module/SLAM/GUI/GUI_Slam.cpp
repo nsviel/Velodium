@@ -1,6 +1,7 @@
 #include "GUI_Slam.h"
 
 #include "../Slam.h"
+#include "../CT_ICP/SLAM_optim.h"
 #include "../CT_ICP/SLAM_optim_ceres.h"
 #include "../CT_ICP/SLAM_optim_gn.h"
 #include "../CT_ICP/SLAM_normal.h"
@@ -31,8 +32,9 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   Engine_node* node_engine = node_gui->get_node_engine();
 
   this->slamManager = node_module->get_slamManager();
-  //this->ceresManager = slamManager->get_slam_ceres();
-  this->gnManager = slamManager->get_slam_gn();
+  SLAM_optim* optimManager = slamManager->get_slam_optim();
+
+  this->gnManager = optimManager->get_optim_gn();
   this->normalManager = slamManager->get_slam_normal();
   this->assessManager = slamManager->get_slam_assess();
   this->mapManager = slamManager->get_slam_map();
