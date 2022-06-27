@@ -4,6 +4,7 @@
 #include "../../../common.h"
 
 class Slam;
+class SLAM_map;
 class Scene;
 
 
@@ -16,7 +17,6 @@ public:
 
 public:
   //Main functions
-  void update_configuration();
   void compute_initialization(Cloud* cloud, int subset_ID);
 
   //Subfunctions
@@ -24,15 +24,9 @@ public:
   void init_frame_ts(Subset* subset);
   void init_frame_chain(Frame* frame, Frame* frame_m1, Frame* frame_m2);
 
-  inline int get_frame_ID(){return map_frame_ID;}
-  inline int get_ID_cloud(){return ID_cloud;}
-  inline void set_frame_ID(int value){this->map_frame_ID = value;}
-
 private:
+  SLAM_map* mapManager;
   Scene* sceneManager;
-
-  int map_frame_ID;
-  int ID_cloud;
 };
 
 #endif

@@ -29,7 +29,7 @@ void Localmap::create_localmap(){
 
   //---------------------------
 }
-void Localmap::update_localmap(voxelMap* map){
+void Localmap::update_localmap(slamap* slam_map){
   //---------------------------
 
   vector<vec3>& gly_xyz = localmap->location;
@@ -39,7 +39,7 @@ void Localmap::update_localmap(voxelMap* map){
   gly_rgb.clear();
 
   if(visibility){
-    for(voxelMap_it it = map->begin(); it != map->end(); it++){
+    for(voxelMap_it it = slam_map->map.begin(); it != slam_map->map.end(); it++){
       vector<Eigen::Vector3d>& voxel_xyz = it.value();
       for(int i=0; i<voxel_xyz.size(); i++){
         Eigen::Vector3d& point = voxel_xyz[i];

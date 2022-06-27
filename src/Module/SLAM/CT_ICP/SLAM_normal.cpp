@@ -1,13 +1,19 @@
 #include "SLAM_normal.h"
 
+#include "SLAM_map.h"
+
+#include "../Slam.h"
+
 #include "../../../Specific/fct_maths.h"
 
 #include <Eigen/Eigenvalues>
 
 
 //Constructor / Destructor
-SLAM_normal::SLAM_normal(){
+SLAM_normal::SLAM_normal(Slam* slam){
   //---------------------------
+
+  this->mapManager = slam->get_slam_map();
 
   //---------------------------
   this->update_configuration();
@@ -18,14 +24,14 @@ SLAM_normal::~SLAM_normal(){}
 void SLAM_normal::update_configuration(){
   //---------------------------
 
-  this->knn_max_nn = 20;
-  this->knn_voxel_capacity = 1;
+  this->knn_voxel_width = 1.0f;
   this->knn_voxel_search = 1;
+  this->knn_max_nn = 20;
   this->nb_thread = 8;
 
   //---------------------------
 }
-void SLAM_normal::compute_normal(Frame* frame, voxelMap* map){
+void SLAM_normal::compute_normal(Frame* frame){
   //---------------------------
 
   //Reset variable conteners
@@ -36,7 +42,7 @@ void SLAM_normal::compute_normal(Frame* frame, voxelMap* map){
   //Compute all point normal
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
-    vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i], map);
+    vector<Eigen::Vector3d> kNN = compute_kNN_search(frame->xyz[i]);
     this->compute_knn_normal(frame, kNN, i);
     this->compute_normal_direction(frame, i);
   }
@@ -45,25 +51,26 @@ void SLAM_normal::compute_normal(Frame* frame, voxelMap* map){
 }
 
 //Sub function
-vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point, voxelMap* map){
+vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point){
+  slamap* slam_map = mapManager->get_slam_map();
   priority_queue_iNN priority_queue;
   int cpt = 0;
   //---------------------------
 
-  int vx = static_cast<int>(point[0] / knn_voxel_capacity);
-  int vy = static_cast<int>(point[1] / knn_voxel_capacity);
-  int vz = static_cast<int>(point[2] / knn_voxel_capacity);
+  int vx = static_cast<int>(point[0] / knn_voxel_width);
+  int vy = static_cast<int>(point[1] / knn_voxel_width);
+  int vz = static_cast<int>(point[2] / knn_voxel_width);
 
   //Search inside all surrounding voxels
   for (int vi = vx - knn_voxel_search; vi <= vx + knn_voxel_search; vi++){
     for (int vj = vy - knn_voxel_search; vj <= vy + knn_voxel_search; vj++){
       for (int vk = vz - knn_voxel_search; vk <= vz + knn_voxel_search; vk++){
         //Search for pre-existing voxel in local map
-        int key = retrieve_map_signature(vi, vj, vk);
-        voxelMap_it it = map->find(key);
+        int key = slam_map->get_signature(vi, vj, vk);
+        voxelMap_it it = slam_map->map.find(key);
 
         //If we found a voxel with at least one point
-        if(it != map->end()){
+        if(it != slam_map->map.end()){
           vector<Eigen::Vector3d>& voxel_ijk = it.value();
 
           //We store all NN voxel point

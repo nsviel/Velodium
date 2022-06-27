@@ -13,21 +13,29 @@ struct Comparator {bool operator()(const iNN &left, const iNN &right) const {ret
 using priority_queue_iNN = std::priority_queue<iNN, std::vector<iNN>, Comparator>;
 
 typedef tsl::robin_map<int, std::vector<Eigen::Vector3d>> voxelMap;
+typedef tsl::robin_map<int, std::vector<Eigen::Vector3d>>::iterator voxelMap_it;
 typedef tsl::robin_map<int, std::vector<Eigen::Vector4d>> gridMap;
 typedef tsl::robin_map<int, std::vector<glm::vec3>> slamMap;
 
-typedef tsl::robin_map<int, std::vector<Eigen::Vector3d>>::iterator voxelMap_it;
+struct slamap{
+  //---------------------------
 
-namespace{
-  int retrieve_map_signature(int kx, int ky, int kz){
-    //---------------------------
+  voxelMap map;
 
+  double voxel_width;
+  int voxel_capacity;
+  int linked_cloud_ID;
+  int linked_subset_ID;
+  int current_frame_ID;
+  int size;
+
+  int get_signature(int kx, int ky, int kz){
     int key = (kx*2000 + ky)*1000 + kz;
-
-    //---------------------------
     return key;
   }
-}
+
+  //---------------------------
+};
 
 
 #endif

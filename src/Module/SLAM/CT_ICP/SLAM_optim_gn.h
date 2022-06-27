@@ -19,7 +19,7 @@ public:
 
 public:
   void update_configuration();
-  void optim_GN(Frame* frame, Frame* frame_m1, voxelMap* map);
+  void optim_GN(Frame* frame, Frame* frame_m1);
 
   inline double* get_dist_residual_max(){return &dist_residual_max;}
   inline double get_opti_score(){return X.norm();}

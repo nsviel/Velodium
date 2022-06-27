@@ -15,7 +15,7 @@ class Configuration;
 class SLAM_init;
 class SLAM_optim_gn;
 class SLAM_assessment;
-class SLAM_localMap;
+class SLAM_map;
 class SLAM_parameter;
 
 
@@ -30,17 +30,16 @@ public:
   void update_configuration();
   void compute_slam_offline(Cloud* cloud);
   void compute_slam_online(Cloud* cloud, int ID);
-  void reset_slam();
+  void reset_slam_hard();
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return normalManager;}
   inline SLAM_optim_gn* get_slam_gn(){return gnManager;}
   inline SLAM_assessment* get_slam_assess(){return assessManager;}
-  inline SLAM_localMap* get_slam_map(){return mapManager;}
+  inline SLAM_map* get_slam_map(){return mapManager;}
   inline SLAM_parameter* get_slam_param(){return paramManager;}
   inline SLAM_assessment* get_assessManager(){return assessManager;}
 
-  inline bool* get_verbose(){return &verbose;}
   inline bool* get_solver_gn(){return &solver_GN;}
   inline bool* get_solver_ceres(){return &solver_ceres;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
@@ -70,15 +69,12 @@ private:
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
   SLAM_assessment* assessManager;
-  SLAM_localMap* mapManager;
+  SLAM_map* mapManager;
   SLAM_parameter* paramManager;
 
   bool solver_GN;
   bool solver_ceres;
-  bool verbose;
   bool with_distorsion;
-  int map_size_old;
-  int map_frame_begin_ID;
   int offline_ID_max;
   int nb_thread;
 };

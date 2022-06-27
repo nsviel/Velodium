@@ -27,7 +27,7 @@ Module_node::~Module_node(){}
 void Module_node::reset(){
   //---------------------------
 
-  slamManager->reset_slam();
+  slamManager->reset_slam_hard();
   node_player->reset();
 
   //---------------------------

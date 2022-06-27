@@ -16,7 +16,7 @@ public:
 
 public:
   void create_localmap();
-  void update_localmap(voxelMap* map);
+  void update_localmap(slamap* slam_map);
 
   inline void set_visibility(bool value){this->visibility = value; this->localmap->visibility = value;}
   inline bool* get_visibility(){return &visibility;}

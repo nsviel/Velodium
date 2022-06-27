@@ -30,7 +30,7 @@ void SLAM_optim_gn::update_configuration(){
 
   //---------------------------
 }
-void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
+void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1){
   // X [0-2]: rotat_b
   // X [3-5]: trans_b
   // X [6-8]: rotat_e
@@ -43,7 +43,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1, voxelMap* map){
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
     //Derive residuals
-    normalManager->compute_normal(frame_m0, map);
+    normalManager->compute_normal(frame_m0);
     this->compute_derivative(frame_m0);
     this->compute_matrices(frame_m0, J, b);
     this->compute_constraint(frame_m0, frame_m1, J, b);

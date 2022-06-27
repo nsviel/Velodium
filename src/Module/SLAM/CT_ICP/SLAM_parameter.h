@@ -7,7 +7,7 @@ class Slam;
 class SLAM_normal;
 class SLAM_optim_gn;
 class SLAM_assessment;
-class SLAM_localMap;
+class SLAM_map;
 
 
 class SLAM_parameter
@@ -39,7 +39,7 @@ private:
   SLAM_normal* normalManager;
   SLAM_optim_gn* gnManager;
   SLAM_assessment* assessManager;
-  SLAM_localMap* mapManager;
+  SLAM_map* mapManager;
 
   int predefined_conf;
 };

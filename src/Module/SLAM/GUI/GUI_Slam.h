@@ -12,7 +12,7 @@ class SLAM_optim_ceres;
 class SLAM_optim_gn;
 class SLAM_normal;
 class SLAM_assessment;
-class SLAM_localMap;
+class SLAM_map;
 class SLAM_parameter;
 
 
@@ -50,7 +50,7 @@ private:
   SLAM_optim_gn* gnManager;
   SLAM_normal* normalManager;
   SLAM_assessment* assessManager;
-  SLAM_localMap* mapManager;
+  SLAM_map* mapManager;
   SLAM_parameter* paramManager;
 
   int item_width;

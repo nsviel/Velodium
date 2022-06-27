@@ -4,7 +4,7 @@
 #include "SLAM_normal.h"
 #include "SLAM_optim_gn.h"
 #include "SLAM_assessment.h"
-#include "SLAM_localMap.h"
+#include "SLAM_map.h"
 
 
 //Constructor / Destructor
@@ -88,7 +88,7 @@ void SLAM_parameter::make_config_default(){
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_width();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -98,7 +98,6 @@ void SLAM_parameter::make_config_default(){
 
   //Local map
   double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
   double* min_root_distance = mapManager->get_min_root_distance();
   double* max_root_distance = mapManager->get_max_root_distance();
   double* max_voxel_distance = mapManager->get_max_voxel_distance();
@@ -129,7 +128,6 @@ void SLAM_parameter::make_config_default(){
 
   //Local map
   *map_voxel_size = 1.0f;
-  *slamMap_voxel_size = 0.5;
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
@@ -159,7 +157,7 @@ void SLAM_parameter::make_config_0(){
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_width();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -169,7 +167,6 @@ void SLAM_parameter::make_config_0(){
 
   //Local map
   double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
   double* min_root_distance = mapManager->get_min_root_distance();
   double* max_root_distance = mapManager->get_max_root_distance();
   double* max_voxel_distance = mapManager->get_max_voxel_distance();
@@ -200,7 +197,6 @@ void SLAM_parameter::make_config_0(){
 
   //Local map
   *map_voxel_size = 1.0f;
-  *slamMap_voxel_size = 0.5;
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
@@ -230,7 +226,7 @@ void SLAM_parameter::make_config_1(){
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_width();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -240,7 +236,6 @@ void SLAM_parameter::make_config_1(){
 
   //Local map
   double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
   double* min_root_distance = mapManager->get_min_root_distance();
   double* max_root_distance = mapManager->get_max_root_distance();
   double* max_voxel_distance = mapManager->get_max_voxel_distance();
@@ -273,7 +268,6 @@ void SLAM_parameter::make_config_1(){
 
   //Local map
   *map_voxel_size = 0.5f;
-  *slamMap_voxel_size = 0.5f;
   *min_root_distance = 0.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
@@ -303,7 +297,7 @@ void SLAM_parameter::make_config_2(){
   int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_capacity();
+  double* size_voxelMap = normalManager->get_knn_voxel_width();
   int* max_number_neighbors = normalManager->get_knn_max_nn();
   int* voxel_searchSize = normalManager->get_knn_voxel_search();
 
@@ -313,7 +307,6 @@ void SLAM_parameter::make_config_2(){
 
   //Local map
   double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* slamMap_voxel_size = mapManager->get_slamMap_voxel_size();
   double* min_root_distance = mapManager->get_min_root_distance();
   double* max_root_distance = mapManager->get_max_root_distance();
   double* max_voxel_distance = mapManager->get_max_voxel_distance();
@@ -346,7 +339,6 @@ void SLAM_parameter::make_config_2(){
 
   //Local map
   *map_voxel_size = 1.0f;
-  *slamMap_voxel_size = 0.5;
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;

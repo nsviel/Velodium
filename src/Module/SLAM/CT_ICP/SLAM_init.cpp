@@ -1,5 +1,7 @@
 #include "SLAM_init.h"
 
+#include "SLAM_map.h"
+
 #include "../Slam.h"
 
 #include "../../../Engine/Engine_node.h"
@@ -13,21 +15,13 @@ SLAM_init::SLAM_init(Slam* slam){
   Engine_node* node_engine = slam->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
+  this->mapManager = slam->get_slam_map();
 
   //---------------------------
-  this->update_configuration();
 }
 SLAM_init::~SLAM_init(){}
 
 //Main functions
-void SLAM_init::update_configuration(){
-  //---------------------------
-
-  this->ID_cloud = -1; //To ensure that the current processing cloud is the same than before
-  this->map_frame_ID = 0;
-
-  //---------------------------
-}
 void SLAM_init::compute_initialization(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
@@ -45,14 +39,15 @@ void SLAM_init::compute_initialization(Cloud* cloud, int subset_ID){
 //Subfunctions
 void SLAM_init::init_frame_ID(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  slamap* slam_map = mapManager->get_slam_map();
   //---------------------------
 
   //Assign the last local map ID
-  frame->ID = map_frame_ID;
-  this->map_frame_ID++;
+  frame->ID = slam_map->current_frame_ID;
+  slam_map->current_frame_ID++;
 
   //Assign the current cloud to the selected one
-  this->ID_cloud = cloud->ID;
+  slam_map->linked_cloud_ID = cloud->ID;
 
   //---------------------------
 }

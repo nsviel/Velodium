@@ -5,7 +5,7 @@
 #include "../CT_ICP/SLAM_optim_gn.h"
 #include "../CT_ICP/SLAM_normal.h"
 #include "../CT_ICP/SLAM_assessment.h"
-#include "../CT_ICP/SLAM_localMap.h"
+#include "../CT_ICP/SLAM_map.h"
 #include "../CT_ICP/SLAM_parameter.h"
 
 #include "../../Module_node.h"
@@ -306,7 +306,7 @@ void GUI_Slam::parameter_normal(){
     }
 
     //kNN voxel size
-    double* knn_voxel_capacity = normalManager->get_knn_voxel_capacity();
+    double* knn_voxel_capacity = normalManager->get_knn_voxel_width();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("kNN voxel size", knn_voxel_capacity, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
