@@ -167,7 +167,7 @@ void Slam::update_subset_glyph(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
-  /*//Update keypoint
+  //Update keypoint
   if(frame->xyz.size() == frame->nn.size()){
     vector<vec3> xyz;
     vector<vec3> Nxy;
@@ -181,15 +181,10 @@ void Slam::update_subset_glyph(Subset* subset){
       }
     }
 
-
-  }*/
-
-  subset->keypoint.location = eigen_to_glm_vectorVec3(frame->xyz, 4);
-  subset->keypoint.timestamp = vec_double_to_float(frame->ts_n);
-
-  say(subset->keypoint.location.size());
-  say(fct_mean(subset->keypoint.timestamp));
-  //subset->keypoint.normal = Nxy;
+    subset->keypoint.location = xyz;
+    subset->keypoint.normal = Nxy;
+    subset->keypoint.timestamp = ts;
+  }
 
   //Update local map
   Localmap* mapObject = objectManager->get_object_localmap();

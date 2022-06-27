@@ -76,6 +76,8 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
   Eigen::Vector4d point;
   for(int i=0; i<subset->xyz.size(); i++){
     vec3& xyz = subset->xyz[i];
+    double& ts_n = subset->ts_n[i];
+
     double dist = fct_distance_origin(xyz);
 
     if(dist > min_root_distance && dist < max_root_distance){
@@ -84,7 +86,7 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
       int kz = static_cast<int>(xyz.z / grid_voxel_width);
       int key = slam_map->get_signature(kx, ky, kz);
 
-      point << xyz.x, xyz.y, xyz.z, subset->ts_n[i];
+      point << xyz.x, xyz.y, xyz.z, ts_n;
       grid[key].push_back(point);
     }
   }
@@ -96,7 +98,7 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
       //Take one random point
       int rdm = rand() % it->second.size();
 
-      Eigen::Vector4d point = it->second[rdm];
+      Eigen::Vector4d point = it->second[0];
       Eigen::Vector3d xyz(point(0), point(1), point(2));
 
       frame->xyz.push_back(xyz);

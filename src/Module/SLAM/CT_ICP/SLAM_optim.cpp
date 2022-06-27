@@ -25,7 +25,7 @@ SLAM_optim::~SLAM_optim(){}
 void SLAM_optim::update_configuration(){
   //---------------------------
 
-  this->with_distorsion = true;
+  this->with_distorsion = false;
   this->solver_ceres = false;
   this->solver_GN = true;
 
@@ -51,7 +51,7 @@ void SLAM_optim::compute_distortion(Frame* frame){
       Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
-      frame->xyz[i] = (R * frame->xyz_raw[i] + t) + (t + trans_e_inv);
+      frame->xyz[i] = quat_e_inv * (R * frame->xyz_raw[i] + t) + trans_e_inv;
     }
   }
 

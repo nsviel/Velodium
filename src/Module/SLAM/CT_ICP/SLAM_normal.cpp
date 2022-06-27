@@ -24,9 +24,9 @@ SLAM_normal::~SLAM_normal(){}
 void SLAM_normal::update_configuration(){
   //---------------------------
 
-  this->knn_voxel_width = 1.0f;
-  this->knn_voxel_search = 1;
-  this->knn_max_nn = 20;
+  this->knn_voxel_width = 2.0f;
+  this->knn_voxel_search = 2;
+  this->knn_max_nn = 50;
   this->nb_thread = 8;
 
   //---------------------------

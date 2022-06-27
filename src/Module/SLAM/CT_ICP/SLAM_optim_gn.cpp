@@ -109,7 +109,7 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
 
     double cx_e = ts_n * (origin_e[1] * N_nn[2] - origin_e[2] * N_nn[1]);
     double cy_e = ts_n * (origin_e[2] * N_nn[0] - origin_e[0] * N_nn[2]);
-    double cz_e = ts_n * (origin_e[0] * N_nn[1] - origin_e[1] * N_nn[0]);
+    double cz_e = ts_n * (origin_e[0] * N_nn[1] - origin_e[1] * N_nn[0]) * 0.5;
 
     double nx_e = ts_n * N_nn[0];
     double ny_e = ts_n * N_nn[1];
@@ -168,7 +168,7 @@ void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::
   b(4) -= lambda_location * diff_traj(1);
   b(5) -= lambda_location * diff_traj(2);
 
-  Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
+  Eigen::Vector3d diff_ego = (trans_e_m0 - trans_b_m0) + (trans_e_m1 - trans_b_m1);
   J(9, 9)   += lambda_displace;
   J(10, 10) += lambda_displace;
   J(11, 11) += lambda_displace;
