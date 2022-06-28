@@ -33,7 +33,7 @@ Slam::Slam(Engine_node* node){
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
 
-  this->mapManager = new SLAM_map();
+  this->mapManager = new SLAM_map(this);
   this->normalManager = new SLAM_normal(this);
   this->optimManager = new SLAM_optim(this);
   this->assessManager = new SLAM_assessment(this);
@@ -115,7 +115,7 @@ bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
 
   //If unsuccess, reinitialize transformations
   if(success){
-    mapManager->update_map(frame);
+    mapManager->update_map(cloud, subset_ID);
     this->update_subset_location(subset);
     this->update_subset_glyph(subset);
   }else{
@@ -125,7 +125,7 @@ bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
     this->update_subset_glyph(subset);*/
 
     frame->reset();
-    this->reset_slam_hard();
+    mapManager->reset_map_smooth();
     this->reset_visibility(cloud, subset_ID);
   }
 

@@ -3,21 +3,25 @@
 
 #include "../../../common.h"
 
+class Slam;
+class Scene;
+
 
 class SLAM_map
 {
 public:
   //Constructor / Destructor
-  SLAM_map();
+  SLAM_map(Slam* slam);
   ~SLAM_map();
 
 public:
   void update_configuration();
-  void update_map(Frame* frame);
+  void update_map(Cloud* cloud, int subset_ID);
   void reset_map_hard();
   void reset_map_smooth();
 
   void compute_grid_sampling(Subset* subset);
+  void update_map_parameter(Frame* frame);
   void add_pointsToLocalMap(Frame* frame);
   void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
 
@@ -31,6 +35,7 @@ public:
   inline int* get_map_voxel_capacity(){return &slam_map->voxel_capacity;}
 
 private:
+  Scene* sceneManager;
   slamap* slam_map;
 
   double min_root_distance;

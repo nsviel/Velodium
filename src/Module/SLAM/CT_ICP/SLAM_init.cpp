@@ -86,6 +86,7 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
+  slamap* slam_map = mapManager->get_slam_map();
   //---------------------------
 
   //For the first 2 reference frames
@@ -94,6 +95,7 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
     frame_m0->rotat_e = Eigen::Matrix3d::Identity();
     frame_m0->trans_b = Eigen::Vector3d::Zero();
     frame_m0->trans_e = Eigen::Vector3d::Zero();
+
   }
   //Other frame
   else{

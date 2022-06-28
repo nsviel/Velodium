@@ -1,13 +1,21 @@
 #include "SLAM_map.h"
 
+#include "../Slam.h"
+
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Data/struct_voxelMap.h"
 #include "../../../Specific/fct_maths.h"
 #include "../../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
-SLAM_map::SLAM_map(){
+SLAM_map::SLAM_map(Slam* slam){
   //---------------------------
+
+  Engine_node* node_engine = slam->get_node_engine();
+
+  this->sceneManager = node_engine->get_sceneManager();
 
   this->slam_map = new slamap();
 
@@ -26,6 +34,11 @@ void SLAM_map::update_configuration(){
   slam_map->linked_subset_ID = -1;
   slam_map->current_frame_ID = 0;
 
+  slam_map->rotat_b = Eigen::Matrix3d::Identity();
+  slam_map->rotat_e = Eigen::Matrix3d::Identity();
+  slam_map->trans_b = Eigen::Vector3d::Zero();
+  slam_map->trans_e = Eigen::Vector3d::Zero();
+
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
   this->max_voxel_distance = 150.0f;
@@ -35,8 +48,14 @@ void SLAM_map::update_configuration(){
 
   //---------------------------
 }
-void SLAM_map::update_map(Frame* frame){
+void SLAM_map::update_map(Cloud* cloud, int subset_ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m = sceneManager->get_frame_byID(cloud, subset_ID - 5);
   //---------------------------
+
+  if(subset_ID > 5){
+    this->update_map_parameter(frame_m);
+  }
 
   this->add_pointsToLocalMap(frame);
   this->end_clearTooFarVoxels(frame->trans_e);
@@ -51,12 +70,19 @@ void SLAM_map::reset_map_hard(){
   slam_map->linked_subset_ID = -1;
   slam_map->current_frame_ID = 0;
 
+  slam_map->rotat_b = Eigen::Matrix3d::Identity();
+  slam_map->rotat_e = Eigen::Matrix3d::Identity();
+  slam_map->trans_b = Eigen::Vector3d::Zero();
+  slam_map->trans_e = Eigen::Vector3d::Zero();
+
   //---------------------------
 }
 void SLAM_map::reset_map_smooth(){
   //---------------------------
 
   slam_map->map.clear();
+  slam_map->current_frame_ID = 0;
+  slam_map->linked_subset_ID = -1;
   slam_map->current_frame_ID = 0;
 
   //---------------------------
@@ -111,6 +137,16 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
   }
 
   frame->xyz_raw = frame->xyz;
+
+  //---------------------------
+}
+void SLAM_map::update_map_parameter(Frame* frame){
+  //---------------------------
+
+  slam_map->rotat_b = frame->rotat_b;
+  slam_map->trans_b = frame->trans_b;
+  slam_map->rotat_e = frame->rotat_e;
+  slam_map->trans_e = frame->trans_e;
 
   //---------------------------
 }
