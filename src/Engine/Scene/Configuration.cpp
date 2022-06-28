@@ -180,7 +180,8 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Interface
   Json::Value interface;
-  interface["path_screenshot"] = "../../Hubium/data/";
+  interface["path_save_frame"] = "../../Hubium/data/";
+  interface["path_save_image"] = "../../Hubium/data/";
   interface["lidar_model"] = "velodyne_vlp64";
   interface["capture_port"] = 2370;
   interface["with_prediction"] = false;

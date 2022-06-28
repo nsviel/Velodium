@@ -6,6 +6,7 @@
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Specific/fct_maths.h"
 
 
 //Constructor / Destructor
@@ -18,6 +19,7 @@ SLAM_optim::SLAM_optim(Slam* slam){
   this->gnManager = new SLAM_optim_gn(slam);
 
   //---------------------------
+  this->update_configuration();
 }
 SLAM_optim::~SLAM_optim(){}
 
@@ -28,6 +30,24 @@ void SLAM_optim::update_configuration(){
   this->with_distorsion = true;
   this->solver_ceres = false;
   this->solver_GN = true;
+
+  //---------------------------
+}
+void SLAM_optim::compute_optimization(Cloud* cloud, int subset_ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  //---------------------------
+
+  if(frame->ID > 0){
+    this->compute_distortion(frame);
+    this->compute_transformation(frame);
+
+    if(solver_GN){
+      gnManager->optim_GN(frame, frame_m1);
+    }else if(solver_ceres){
+      //ceresManager->optim_test(frame, frame_m1, map);
+    }
+  }
 
   //---------------------------
 }
@@ -47,29 +67,35 @@ void SLAM_optim::compute_distortion(Frame* frame){
     for(int i=0; i<frame->xyz.size(); i++){
       float ts_n = frame->ts_n[i];
 
-      Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
+      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
       Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
-      frame->xyz[i] = (R * frame->xyz_raw[i] + t) + (t + trans_e_inv);
+      frame->xyz_raw[i] = quat_e_inv * (quat_n * frame->xyz_raw[i] + t) + trans_e_inv;
     }
   }
 
   //---------------------------
 }
-void SLAM_optim::compute_optimization(Cloud* cloud, int subset_ID){
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+void SLAM_optim::compute_transformation(Frame* frame){
   //---------------------------
 
-  if(frame->ID > 0){
-    this->compute_distortion(frame);
+  //Update keypoints
+  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+  Eigen::Vector3d trans_b = frame->trans_b;
+  Eigen::Vector3d trans_e = frame->trans_e;
 
-    if(solver_GN){
-      gnManager->optim_GN(frame, frame_m1);
-    }else if(solver_ceres){
-      //ceresManager->optim_test(frame, frame_m1, map);
-    }
+  #pragma omp parallel for num_threads(5)
+  for(int i=0; i<frame->xyz.size(); i++){
+    double ts_n = frame->ts_n[i];
+
+    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
+    q.normalize();
+    Eigen::Matrix3d R = q.toRotationMatrix();
+    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+    frame->xyz[i] = R * frame->xyz_raw[i] + t;
   }
 
   //---------------------------

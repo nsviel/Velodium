@@ -18,6 +18,7 @@ public:
 public:
   void update_configuration();
   void compute_distortion(Frame* frame);
+  void compute_transformation(Frame* frame);
   void compute_optimization(Cloud* cloud, int subset_ID);
 
   inline SLAM_optim_gn* get_optim_gn(){return gnManager;}

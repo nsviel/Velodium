@@ -10,12 +10,16 @@
 #include "../../Interface/GUI/GUI_Interface.h"
 #include "../../Interface/GUI/GUI_Lidar.h"
 #include "../../Interface/LiDAR/Capture.h"
+#include "../../Interface/Interface.h"
+#include "../../Interface/Interface_node.h"
 #include "../../Module_GUI.h"
 #include "../../Module_node.h"
 #include "../../SLAM/GUI/GUI_Slam.h"
 
 #include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
+#include "../../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Color/Color.h"
 
@@ -26,12 +30,18 @@ GUI_State::GUI_State(GUI_module* gui_module){
 
   Operation_node* node_ope = gui_module->get_node_ope();
   Module_node* node_module = gui_module->get_node_module();
+  Engine_node* node_engine = gui_module->get_node_engine();
+  Interface_node* node_interface = node_module->get_node_interface();
 
   this->node_engine = gui_module->get_node_engine();
   this->gui_interface = gui_module->get_gui_interface();
   this->node_player = node_module->get_node_player();
   this->configManager = node_engine->get_configManager();
   this->colorManager = node_ope->get_colorManager();
+  this->sceneManager = node_engine->get_sceneManager();
+  this->onlineManager = node_player->get_onlineManager();
+  this->interfaceManager = node_interface->get_interfaceManager();
+  this->renderManager = node_engine->get_renderManager();
 
   this->item_width = 100;
 
@@ -46,6 +56,40 @@ void GUI_State::design_state(){
   this->state_configuration();
   gui_interface->state_watcher();
   this->state_online();
+
+  //---------------------------
+}
+void GUI_State::design_time(){
+  Subset* subset = sceneManager->get_subset_selected();
+  Frame* frame = &subset->frame;
+  //---------------------------
+
+  float time_operation = onlineManager->get_time_operation();
+  ImGui::Text("Operation");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_operation);
+
+  bool with_slam = *onlineManager->get_with_slam();
+  if(with_slam){
+    ImGui::Text("SLAM");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)frame->time_slam);
+  }
+
+  bool with_save_frame = *interfaceManager->get_with_save_frame();
+  if(with_save_frame){
+    ImGui::Text("Save frame");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)frame->time_save_frame);
+  }
+
+  bool with_save_image = *interfaceManager->get_with_save_frame();
+  if(with_save_image){
+    float time_screenshot = renderManager->get_time_screenshot();
+    ImGui::Text("Save image");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_screenshot);
+  }
 
   //---------------------------
 }
@@ -77,7 +121,6 @@ void GUI_State::state_online(){
   //---------------------------
 
   //Specific module
-  Online* onlineManager = node_player->get_onlineManager();
   Followup* followManager = node_player->get_followManager();
 
   bool with_slam = *onlineManager->get_with_slam();
