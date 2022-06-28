@@ -22,13 +22,23 @@ struct slamap{
 
   voxelMap map;
 
+  //Parameter
   double voxel_width;
   int voxel_capacity;
+  int size;
+
+  //IDs
   int linked_cloud_ID;
   int linked_subset_ID;
   int current_frame_ID;
-  int size;
 
+  //Pose
+  Eigen::Matrix3d rotat_b;
+  Eigen::Vector3d trans_b;
+  Eigen::Matrix3d rotat_e;
+  Eigen::Vector3d trans_e;
+
+  //Function
   int get_signature(int kx, int ky, int kz){
     int key = (kx*2000 + ky)*1000 + kz;
     return key;
