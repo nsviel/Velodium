@@ -70,17 +70,25 @@ void GUI_State::design_time(){
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_operation);
 
   bool with_slam = *onlineManager->get_with_slam();
+  int time_slam = 0;
+  if(sceneManager->get_is_list_empty() == false){
+    time_slam = (int)frame->time_slam;
+  }
   if(with_slam){
     ImGui::Text("SLAM");
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)frame->time_slam);
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", time_slam);
   }
 
   bool with_save_frame = *interfaceManager->get_with_save_frame();
+  int time_save_frame = 0;
+  if(sceneManager->get_is_list_empty() == false){
+    time_save_frame = (int)frame->time_save_frame;
+  }
   if(with_save_frame){
     ImGui::Text("Save frame");
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)frame->time_save_frame);
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", time_save_frame);
   }
 
   bool with_save_image = *interfaceManager->get_with_save_frame();
