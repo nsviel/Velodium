@@ -5,9 +5,9 @@
 
 #include "Velodyne.h"
 
-#include "UDP/UDP_frame.h"
-#include "UDP/UDP_server.h"
-#include "UDP/UDP_parser_VLP16.h"
+#include "../../Network/UDP/UDP_frame.h"
+#include "../../Network/UDP/UDP_server.h"
+#include "../../Network/UDP/UDP_parser_VLP16.h"
 
 #include "../../../../Engine/Engine_node.h"
 #include "../../../../Load/Load_node.h"
@@ -68,11 +68,12 @@ void Velodyne::lidar_start_watcher(int capture_port){
 
   //Start udp packets watcher
   thread_capture = std::thread([&]() {
-    udpServManager->server_binding(capture_port);
+    int port = capture_port;
+    udpServManager->capture_init(port, 1206);
 
     while (is_capturing){
       //Get packet in decimal format
-      vector<int> packet_dec = udpServManager->read_UDP_packets(capture_port);
+      vector<int> packet_dec = udpServManager->capture_packet();
 
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
@@ -95,7 +96,7 @@ void Velodyne::lidar_start_watcher(int capture_port){
       }
     }
 
-    udpServManager->server_unbinding();
+    udpServManager->capture_stop();
   });
   thread_capture.detach();
 

@@ -6,13 +6,13 @@
 *  if data size equal 1206, this is a laser fire data, else about 512, it is a position packet or GPS packet
 */
 
-#include "UDP_parser_VLP16.h"
+#include "UDP_parser_Scala.h"
 
-#include "../../../../../Specific/fct_maths.h"
+#include "../../../../Specific/fct_maths.h"
 
 
 //Constructor / Destructor
-UDP_parser_VLP16::UDP_parser_VLP16(){
+UDP_parser_Scala::UDP_parser_Scala(){
   //---------------------------
 
   this->nb_laser = 16;
@@ -21,10 +21,10 @@ UDP_parser_VLP16::UDP_parser_VLP16(){
 
   //---------------------------
 }
-UDP_parser_VLP16::~UDP_parser_VLP16(){}
+UDP_parser_Scala::~UDP_parser_Scala(){}
 
 //Main function
-udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
+udpPacket* UDP_parser_Scala::parse_UDP_packet(vector<int> packet_dec){
   udpPacket* packet_udp = new udpPacket();
   //---------------------------
 
@@ -49,7 +49,7 @@ udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
 }
 
 //Subfunctions
-void UDP_parser_VLP16::parse_packet(vector<int> packet){
+void UDP_parser_Scala::parse_packet(vector<int> packet){
   blocks.clear();
   //---------------------------
 
@@ -69,7 +69,7 @@ void UDP_parser_VLP16::parse_packet(vector<int> packet){
 
   //---------------------------
 }
-void UDP_parser_VLP16::parse_blocks(){
+void UDP_parser_Scala::parse_blocks(){
   packet_A.clear();
   packet_R.clear();
   packet_I.clear();
@@ -109,7 +109,7 @@ void UDP_parser_VLP16::parse_blocks(){
 
   //---------------------------
 }
-void UDP_parser_VLP16::parse_azimuth(){
+void UDP_parser_Scala::parse_azimuth(){
   //---------------------------
 
   //Get the actual azimuth for each data point
@@ -152,7 +152,7 @@ void UDP_parser_VLP16::parse_azimuth(){
   //---------------------------
   packet_A = azimuth_points;
 }
-void UDP_parser_VLP16::parse_coordinates(){
+void UDP_parser_Scala::parse_coordinates(){
   packet_xyz.clear();
   //---------------------------
 
@@ -208,7 +208,7 @@ void UDP_parser_VLP16::parse_coordinates(){
 
   //---------------------------
 }
-void UDP_parser_VLP16::parse_timestamp(){
+void UDP_parser_Scala::parse_timestamp(){
   packet_t.clear();
   //---------------------------
 
@@ -224,7 +224,7 @@ void UDP_parser_VLP16::parse_timestamp(){
 
   //---------------------------
 }
-void UDP_parser_VLP16::final_check(udpPacket* cloud){
+void UDP_parser_Scala::final_check(udpPacket* cloud){
   //---------------------------
 
   //Supress points when no distance are measured
@@ -286,7 +286,7 @@ void UDP_parser_VLP16::final_check(udpPacket* cloud){
 }
 
 //Subsubfunctions
-vector<float> UDP_parser_VLP16::calc_timing_offsets(){
+vector<float> UDP_parser_Scala::calc_timing_offsets(){
     vector<float> timing_offsets;
     //-----------------------
 
@@ -308,7 +308,7 @@ vector<float> UDP_parser_VLP16::calc_timing_offsets(){
     //-----------------------
     return timing_offsets;
 }
-void UDP_parser_VLP16::make_supressElements(vector<vec3>& vec, vector<int> idx){
+void UDP_parser_Scala::make_supressElements(vector<vec3>& vec, vector<int> idx){
   if(idx.size() == 0)return;
   //---------------------------
 
@@ -333,7 +333,7 @@ void UDP_parser_VLP16::make_supressElements(vector<vec3>& vec, vector<int> idx){
   //---------------------------
   vec = vec_b;
 }
-void UDP_parser_VLP16::make_supressElements(vector<float>& vec, vector<int> idx){
+void UDP_parser_Scala::make_supressElements(vector<float>& vec, vector<int> idx){
   if(idx.size() == 0)return;
   //---------------------------
 

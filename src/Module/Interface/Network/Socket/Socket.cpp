@@ -1,4 +1,4 @@
-#include "UDP_server.h"
+#include "Socket.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,29 +12,20 @@
 
 
 //Constructor / Destructor
-UDP_server::UDP_server(){
+Socket::Socket(){
   //---------------------------
 
-  this->packet_size = 1206;
   this->is_binded = false;
 
   //---------------------------
 }
-UDP_server::~UDP_server(){}
+Socket::~Socket(){}
 
-//Main function
-vector<int> UDP_server::read_UDP_packets(int port){
-  //---------------------------
-
-  this->server_read_data(port);
-
-  //---------------------------
-  return packet_dec;
-}
-
-//Subfunctions
-void UDP_server::server_binding(int port){
+//Socket function
+void Socket::socket_binding(int port_sock, int packet_size_){
   if(is_binded == false){
+    this->port = port_sock;
+    this->packet_size = packet_size_;
     //---------------------------
 
     // Creating socket file descriptor
@@ -57,32 +48,31 @@ void UDP_server::server_binding(int port){
     if(binding == 0){
       this->is_binded = true;
     }else{
-      cout << "bind failed" << endl;
+      cout << "[error] Socket binding failed for port [" << port << "]" << endl;
       this->is_binded = false;
     }
 
     //---------------------------
   }
 }
-void UDP_server::server_unbinding(){
+void Socket::socket_recv_data(){
   //---------------------------
-
-  close(sock);
-  this->is_binded = false;
 
   //---------------------------
 }
-void UDP_server::server_read_data(int port){
+void Socket::socket_send_data(){
+  //---------------------------
+
+  //Parameter
   char buffer[packet_size] = {0};
   sockaddr_in addr;
   addr.sin_family    = AF_INET; // IPv4
   addr.sin_addr.s_addr = INADDR_ANY;
   addr.sin_port = htons(port);
   unsigned int length = sizeof(addr);
-  //---------------------------
 
-  //The thread blocks here until a packet is received (MSG_WAITALL)
-  int udp_size = recvfrom(sock, buffer, packet_size, MSG_DONTWAIT, reinterpret_cast<sockaddr*>(&addr), &length);
+  //Thread blocking: MSG_DONTWAIT / MSG_WAITALL
+  int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&addr), &length);
 
   //Once packet received, process it
   packet_dec.clear();
@@ -95,5 +85,33 @@ void UDP_server::server_read_data(int port){
     }
   }
 
+  //Check for connection test number
+  this->code = compute_recv_code(packet_dec);
+
   //---------------------------
+}
+void Socket::socket_disconnect(){
+  //---------------------------
+
+  if(is_binded){
+    close(sock);
+    this->is_binded = false;
+  }
+
+  //---------------------------
+}
+
+//Subfunctions
+int Socket::compute_recv_code(vector<int> packet_dec){
+  int code = 0;
+  //---------------------------
+
+  if(packet_dec.size() == 3){
+    if(packet_dec[0] == 50 && packet_dec[1] == 48 && packet_dec[2] == 48){
+      code = 200;
+    }
+  }
+
+  //---------------------------
+  return code;
 }
