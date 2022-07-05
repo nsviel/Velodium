@@ -43,21 +43,24 @@ void Trajectory::update(Cloud*cloud){
   trajectory->visibility = visibility;
 
   //Compute new trajectory values
-  for(int j=0; j<cloud->subset.size(); j++){
-    Subset* subset = *next(cloud->subset.begin(), j);
-    Frame* frame = &subset->frame;
+  for(int j=1; j<cloud->subset.size(); j++){
+    Subset* subset_m0 = *next(cloud->subset.begin(), j);
+    Frame* frame_m0 = &subset_m0->frame;
 
-    if(subset->visibility && frame->is_slamed){
-      vec3 trans_abs = eigen_to_glm_vec3(frame->trans_b);
-      vec3 trans_rlt = frame->trans_b_rlt;
+    Subset* subset_m1 = *next(cloud->subset.begin(), j-1);
+    Frame* frame_m1 = &subset_m1->frame;
+
+    if(subset_m0->visibility && frame_m0->is_slamed){
+      vec3 trans_m0 = eigen_to_glm_vec3(frame_m0->trans_b);
+      vec3 trans_m1 = eigen_to_glm_vec3(frame_m1->trans_b);
       vec4 color = trajectory->color_unique;
 
       //Add begin point
-      trajectory->location.push_back(trans_abs - trans_rlt);
+      trajectory->location.push_back(trans_m0);
       trajectory->color.push_back(color);
 
       //Add end pose
-      trajectory->location.push_back(trans_abs);
+      trajectory->location.push_back(trans_m1);
       trajectory->color.push_back(color);
     }
 

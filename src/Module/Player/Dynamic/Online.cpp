@@ -26,6 +26,7 @@
 #include "../../../Specific/fct_maths.h"
 #include "../../../Specific/fct_transtypage.h"
 #include "../../../Specific/fct_system.h"
+#include "../../../Specific/fct_chrono.h"
 
 
 //Constructor / Destructor
@@ -46,6 +47,7 @@ Online::Online(Player_node* node){
   this->followManager = node->get_followManager();
   this->interfaceManager = node_interface->get_interfaceManager();
   this->objectManager = node_engine->get_objectManager();
+  this->renderManager = node_engine->get_renderManager();
 
   //---------------------------
   this->update_configuration();
@@ -56,6 +58,7 @@ Online::~Online(){}
 void Online::update_configuration(){
   //---------------------------
 
+  this->time_operation = 0;
   this->visibility_range = 15;
   this->with_subset_specific_color = false;
   this->with_slam = configManager->parse_json_b("module", "with_slam");
@@ -66,10 +69,16 @@ void Online::update_configuration(){
 void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //This function is called each time a new subset arrives
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-  if(subset == nullptr) return;
-  cloud->subset_selected = subset;
+  auto t1 = start_chrono();
   //---------------------------
 
+<<<<<<< HEAD
+=======
+  //Some init operation
+  if(subset == nullptr) return;
+  cloud->subset_selected = subset;
+
+>>>>>>> tmp
   //Make slam on the current subset
   if(with_slam){
     slamManager->compute_slam_online(cloud, ID_subset);
@@ -86,9 +95,6 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Colorization
   colorManager->make_colorization(cloud, ID_subset);
 
-  //Provide info about computation
-  this->compute_displayStats(subset);
-
   //Control subset visibilities
   this->compute_visibility(cloud, ID_subset);
 
@@ -99,6 +105,8 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   objectManager->update_dynamic(cloud);
 
   //---------------------------
+  this->time_operation = stop_chrono(t1);
+  this->compute_displayStats(subset);
 }
 
 //Subfunctions
@@ -125,13 +133,8 @@ void Online::compute_displayStats(Subset* subset){
   //---------------------------
 
   //Consol result
-  string stats = subset->name + ": ";
-  if(with_slam && frame->is_slamed){
-    stats += "[SLAM- " + to_string((int)frame->time_slam) + " ms] ";
-  }
-  if(*interfaceManager->get_with_save_frame()){
-    stats += "[Frame- " + to_string((int)frame->time_save_frame) + " ms] ";
-  }
+  string stats = subset->name + ": ope in ";
+  stats += to_string((int)time_operation) + " ms";
   console.AddLog("#", stats);
 
   //---------------------------

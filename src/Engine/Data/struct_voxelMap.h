@@ -38,7 +38,11 @@ struct slamap{
   Eigen::Matrix3d rotat_e;
   Eigen::Vector3d trans_e;
 
+<<<<<<< HEAD
   //Fonctions
+=======
+  //Function
+>>>>>>> tmp
   int get_signature(int kx, int ky, int kz){
     int key = (kx*2000 + ky)*1000 + kz;
     return key;

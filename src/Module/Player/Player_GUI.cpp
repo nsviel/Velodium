@@ -46,6 +46,12 @@ void GUI_Player::design_player(){
       ImGui::EndTabItem();
     }
 
+    // Operation time
+    if(ImGui::BeginTabItem("Time")){
+      gui_state->design_time();
+      ImGui::EndTabItem();
+    }
+
     ImGui::EndTabBar();
   }
 

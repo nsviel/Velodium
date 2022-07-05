@@ -1,18 +1,18 @@
-#ifndef UDP_PARSER_SCALA_H
-#define UDP_PARSER_SCALA_H
+#ifndef UDP_PARSER_VLP16_H
+#define UDP_PARSER_VLP16_H
 
 // Server side implementation of UDP client-server model
 
-#include "../../../../../Engine/Data/struct_UDPpacket.h"
-#include "../../../../../common.h"
+#include "../../../../Engine/Data/struct_UDPpacket.h"
+#include "../../../../common.h"
 
 
-class UDP_parser_Scala
+class UDP_parser_VLP16
 {
 public:
   //Constructor / Destructor
-  UDP_parser_Scala();
-  ~UDP_parser_Scala();
+  UDP_parser_VLP16();
+  ~UDP_parser_VLP16();
 
 public:
   //Main functions

@@ -17,6 +17,7 @@ class Configuration;
 class Followup;
 class Interface;
 class Object;
+class Renderer;
 
 
 class Online
@@ -38,6 +39,7 @@ public:
   inline bool* get_with_slam(){return &with_slam;}
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
   inline int* get_visibility_range(){return &visibility_range;}
+  inline float get_time_operation(){return time_operation;}
 
 private:
   Scene* sceneManager;
@@ -49,7 +51,9 @@ private:
   Followup* followManager;
   Interface* interfaceManager;
   Object* objectManager;
+  Renderer* renderManager;
 
+  float time_operation;
   int visibility_range;
   bool with_subset_specific_color;
   bool with_slam;

@@ -11,17 +11,12 @@
 
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_chrono.h"
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/SLAM/Localmap.h"
 #include "../../Engine/Scene/Configuration.h"
-
-#include <chrono>
-
-using std::chrono::high_resolution_clock;
-using std::chrono::milliseconds;
-using std::chrono::duration_cast;
 
 
 //Constructor / Destructor
@@ -86,7 +81,7 @@ void Slam::compute_slam_offline(Cloud* cloud){
 }
 void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
-  auto t1 = high_resolution_clock::now();
+  auto t1 = start_chrono();
   //---------------------------
 
   //Check SLAM conditions
@@ -99,8 +94,7 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   this->compute_assessment(cloud, subset_ID);
 
   //---------------------------
-  auto t2 = high_resolution_clock::now();
-  float duration = duration_cast<milliseconds>(t2 - t1).count();
+  float duration = stop_chrono(t1);
   assessManager->compute_statistics(cloud, subset_ID, duration);
 }
 
@@ -182,8 +176,13 @@ void Slam::update_subset_glyph(Subset* subset){
     }
 
     subset->keypoint.location = xyz;
+<<<<<<< HEAD
     subset->keypoint.normal = Nxy;
     subset->keypoint.timestamp = ts;
+=======
+    subset->keypoint.timestamp = ts;
+    subset->keypoint.normal = Nxy;
+>>>>>>> tmp
   }
 
   //Update local map

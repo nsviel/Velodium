@@ -36,5 +36,5 @@ RUN mkdir \
 VOLUME /data
 
 # Run application
-CMD ["./executable", "ai"]
+CMD ["./executable"]
 

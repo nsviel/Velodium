@@ -39,9 +39,8 @@ void Saving::update_configuration(){
   //---------------------------
 
   this->path_dir = fileManager->get_path_data_dir();
-  this->path_frame = path_dir + "frame/";
-
-  this->path_image = configManager->parse_json_s("interface", "path_screenshot");
+  this->path_frame = configManager->parse_json_s("interface", "path_save_frame");
+  this->path_image = configManager->parse_json_s("interface", "path_save_image");
   this->save_frame_max = configManager->parse_json_i("interface", "nb_save_frame");
   this->save_image_max = configManager->parse_json_i("interface", "nb_save_image");
   this->save_image_ID = 0;

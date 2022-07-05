@@ -290,7 +290,6 @@ void Renderer::render_screenshot_online(){
     //---------------------------
     auto t2 = std::chrono::high_resolution_clock::now();
     this->time_screenshot = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-    cout<<"Time screenshot: "<<time_screenshot<<" ms"<<endl;
   }
 }
 
