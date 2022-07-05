@@ -72,13 +72,10 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   auto t1 = start_chrono();
   //---------------------------
 
-<<<<<<< HEAD
-=======
   //Some init operation
   if(subset == nullptr) return;
   cloud->subset_selected = subset;
 
->>>>>>> tmp
   //Make slam on the current subset
   if(with_slam){
     slamManager->compute_slam_online(cloud, ID_subset);

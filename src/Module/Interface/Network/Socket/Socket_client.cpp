@@ -1,4 +1,4 @@
-#include "Socket.h"
+#include "Socket_client.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,17 +12,17 @@
 
 
 //Constructor / Destructor
-Socket::Socket(){
+Socket_client::Socket_client(){
   //---------------------------
 
   this->is_binded = false;
 
   //---------------------------
 }
-Socket::~Socket(){}
+Socket_client::~Socket_client(){}
 
 //Socket function
-void Socket::socket_binding(int port_sock, int packet_size_){
+void Socket_client::socket_binding(int port_sock, int packet_size_){
   if(is_binded == false){
     this->port = port_sock;
     this->packet_size = packet_size_;
@@ -55,12 +55,12 @@ void Socket::socket_binding(int port_sock, int packet_size_){
     //---------------------------
   }
 }
-void Socket::socket_recv_data(){
+void Socket_client::socket_send_data(){
   //---------------------------
 
   //---------------------------
 }
-void Socket::socket_send_data(){
+void Socket_client::socket_recv_data(){
   //---------------------------
 
   //Parameter
@@ -90,7 +90,7 @@ void Socket::socket_send_data(){
 
   //---------------------------
 }
-void Socket::socket_disconnect(){
+void Socket_client::socket_disconnect(){
   //---------------------------
 
   if(is_binded){
@@ -102,7 +102,7 @@ void Socket::socket_disconnect(){
 }
 
 //Subfunctions
-int Socket::compute_recv_code(vector<int> packet_dec){
+int Socket_client::compute_recv_code(vector<int> packet_dec){
   int code = 0;
   //---------------------------
 

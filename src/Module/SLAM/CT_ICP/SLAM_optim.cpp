@@ -71,11 +71,7 @@ void SLAM_optim::compute_distortion(Frame* frame){
       Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
-<<<<<<< HEAD
-      frame->xyz[i] = quat_e_inv * (R * frame->xyz_raw[i] + t) + trans_e_inv;
-=======
       frame->xyz_raw[i] = quat_e_inv * (quat_n * frame->xyz_raw[i] + t) + trans_e_inv;
->>>>>>> tmp
     }
   }
 

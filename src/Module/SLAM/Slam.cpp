@@ -176,13 +176,8 @@ void Slam::update_subset_glyph(Subset* subset){
     }
 
     subset->keypoint.location = xyz;
-<<<<<<< HEAD
-    subset->keypoint.normal = Nxy;
-    subset->keypoint.timestamp = ts;
-=======
     subset->keypoint.timestamp = ts;
     subset->keypoint.normal = Nxy;
->>>>>>> tmp
   }
 
   //Update local map

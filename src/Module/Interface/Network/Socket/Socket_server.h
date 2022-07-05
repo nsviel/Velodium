@@ -1,16 +1,16 @@
-#ifndef SOCKET_H
-#define SOCKET_H
+#ifndef SOCKET_SERVER_H
+#define SOCKET_SERVER_H
 
 // Server side implementation of UDP client-server model
 
 #include "../../../../common.h"
 
-class Socket
+class Socket_server
 {
 public:
   //Constructor / Destructor
-  Socket();
-  ~Socket();
+  Socket_server();
+  ~Socket_server();
 
 public:
   //Socket functions
@@ -24,6 +24,7 @@ public:
 
   inline vector<int> get_data_dec(){return packet_dec;}
   inline bool get_is_binded(){return is_binded;}
+  inline int get_status_code(){return code;}
   inline void set_port(int value){this->port = value;}
 
 private:

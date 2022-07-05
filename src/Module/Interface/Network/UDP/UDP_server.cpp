@@ -1,6 +1,7 @@
 #include "UDP_server.h"
 
-#include "../Socket/Socket.h"
+#include "../Socket/Socket_server.h"
+#include "../Socket/Socket_client.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,14 +18,14 @@
 UDP_server::UDP_server(){
   //---------------------------
 
-  this->sock_server = new Socket();
-  this->sock_client = new Socket();
+  this->sock_server = new Socket_server();
+  this->sock_client = new Socket_client();
 
   //---------------------------
 }
 UDP_server::~UDP_server(){}
 
-//Socket function
+//Main function
 void UDP_server::capture_init(int port, int packet_size){
   bool is_binded = sock_server->get_is_binded();
   //---------------------------
