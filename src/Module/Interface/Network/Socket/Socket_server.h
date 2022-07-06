@@ -5,6 +5,9 @@
 
 #include "../../../../common.h"
 
+class Socket_client;
+
+
 class Socket_server
 {
 public:
@@ -14,13 +17,10 @@ public:
 
 public:
   //Socket functions
-  void socket_binding(int port, int packet_size);
+  void socket_binding(int port, int packet_size, int port_client, string ip);
   void socket_recv_data();
-  void socket_send_data();
+  void socket_response(vector<int> packet_dec);
   void socket_disconnect();
-
-  //Subfunctions
-  int compute_recv_code(vector<int> packet_dec);
 
   inline vector<int> get_data_dec(){return packet_dec;}
   inline bool get_is_binded(){return is_binded;}
@@ -28,6 +28,8 @@ public:
   inline void set_port(int value){this->port = value;}
 
 private:
+  Socket_client* socket_client;
+
   vector<int> packet_dec;
   bool is_binded;
   int packet_size;

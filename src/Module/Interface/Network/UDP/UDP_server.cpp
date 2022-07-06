@@ -30,12 +30,11 @@ void UDP_server::capture_init(int port, int packet_size){
   bool is_binded = sock_server->get_is_binded();
   //---------------------------
 
-  if(sock_server->get_is_binded()){
-    capture_stop();
-  }
+  //Stop previsou connection
+  this->capture_stop();
 
-  sock_server->socket_binding(port, packet_size);
-  sock_client->socket_binding(port, 256);
+  //Made new connection
+  sock_server->socket_binding(port, packet_size, 2372, "127.0.0.1");
 
   //---------------------------
 }

@@ -14,9 +14,8 @@ public:
 
 public:
   //Socket functions
-  void socket_binding(int port, int packet_size);
-  void socket_recv_data();
-  void socket_send_data();
+  void socket_binding(int port, string ip);
+  void socket_send_data(string data);
   void socket_disconnect();
 
   //Subfunctions
@@ -25,13 +24,13 @@ public:
   inline vector<int> get_data_dec(){return packet_dec;}
   inline bool get_is_binded(){return is_binded;}
   inline int get_status_code(){return code;}
-  inline void set_port(int value){this->port = value;}
 
 private:
   vector<int> packet_dec;
   bool is_binded;
-  int packet_size;
-  int port;
+  string ip_dest;
+  int port_src;
+  int port_dest;
   int sock;
   int code;
 };

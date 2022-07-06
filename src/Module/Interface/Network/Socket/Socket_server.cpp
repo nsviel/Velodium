@@ -1,5 +1,7 @@
 #include "Socket_server.h"
 
+#include "Socket_client.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -15,6 +17,7 @@
 Socket_server::Socket_server(){
   //---------------------------
 
+  this->socket_client = new Socket_client();
   this->is_binded = false;
 
   //---------------------------
@@ -22,11 +25,14 @@ Socket_server::Socket_server(){
 Socket_server::~Socket_server(){}
 
 //Socket function
-void Socket_server::socket_binding(int port_sock, int packet_size_){
+void Socket_server::socket_binding(int port_server, int packet_size_, int port_client, string ip_client){
   if(is_binded == false){
-    this->port = port_sock;
+    this->port = port_server;
     this->packet_size = packet_size_;
     //---------------------------
+
+    //Bind socket client for server response
+    socket_client->socket_binding(port_client, ip_client);
 
     // Creating socket file descriptor
     this->sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -55,11 +61,6 @@ void Socket_server::socket_binding(int port_sock, int packet_size_){
     //---------------------------
   }
 }
-void Socket_server::socket_send_data(){
-  //---------------------------
-
-  //---------------------------
-}
 void Socket_server::socket_recv_data(){
   //---------------------------
 
@@ -85,8 +86,26 @@ void Socket_server::socket_recv_data(){
     }
   }
 
-  //Check for connection test number
-  this->code = compute_recv_code(packet_dec);
+  //If requested send a server response
+  socket_response(packet_dec);
+
+  //---------------------------
+}
+void Socket_server::socket_response(vector<int> packet_dec){
+  int code = 0;
+  //---------------------------
+
+  //Compute code
+  if(packet_dec.size() == 3){
+    if(packet_dec[0] == 50 && packet_dec[1] == 48 && packet_dec[2] == 48){
+      code = 200;
+    }
+  }
+
+  //Send response
+  if(code == 200){
+    socket_client->socket_send_data("ok");
+  }
 
   //---------------------------
 }
@@ -99,19 +118,4 @@ void Socket_server::socket_disconnect(){
   }
 
   //---------------------------
-}
-
-//Subfunctions
-int Socket_server::compute_recv_code(vector<int> packet_dec){
-  int code = 0;
-  //---------------------------
-
-  if(packet_dec.size() == 3){
-    if(packet_dec[0] == 50 && packet_dec[1] == 48 && packet_dec[2] == 48){
-      code = 200;
-    }
-  }
-
-  //---------------------------
-  return code;
 }

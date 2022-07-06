@@ -16,16 +16,17 @@ Socket_client::Socket_client(){
   //---------------------------
 
   this->is_binded = false;
+  this->port_src = 9999;
 
   //---------------------------
 }
 Socket_client::~Socket_client(){}
 
 //Socket function
-void Socket_client::socket_binding(int port_sock, int packet_size_){
+void Socket_client::socket_binding(int port, string ip){
   if(is_binded == false){
-    this->port = port_sock;
-    this->packet_size = packet_size_;
+    this->port_dest = port;
+    this->ip_dest = ip;
     //---------------------------
 
     // Creating socket file descriptor
@@ -37,9 +38,8 @@ void Socket_client::socket_binding(int port_sock, int packet_size_){
 
     // Filling server information
     sockaddr_in addr;
-    addr.sin_family    = AF_INET; // IPv4
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(port);
+  	addr.sin_port = htons(port_src);
+  	addr.sin_family = AF_INET;
 
     // Bind the socket with the server address
     int binding = bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
@@ -48,45 +48,29 @@ void Socket_client::socket_binding(int port_sock, int packet_size_){
     if(binding == 0){
       this->is_binded = true;
     }else{
-      cout << "[error] Socket binding failed for port [" << port << "]" << endl;
+      cout << "[error] Client socket binding failed for port [" << port_dest << "]" << endl;
       this->is_binded = false;
     }
 
     //---------------------------
   }
 }
-void Socket_client::socket_send_data(){
-  //---------------------------
-
-  //---------------------------
-}
-void Socket_client::socket_recv_data(){
+void Socket_client::socket_send_data(string data){
   //---------------------------
 
   //Parameter
-  char buffer[packet_size] = {0};
-  sockaddr_in addr;
-  addr.sin_family    = AF_INET; // IPv4
-  addr.sin_addr.s_addr = INADDR_ANY;
-  addr.sin_port = htons(port);
-  unsigned int length = sizeof(addr);
+  sockaddr_in dst = { 0 };
+	inet_pton(AF_INET, ip_dest.c_str(), &dst.sin_addr.s_addr);
+	dst.sin_family = AF_INET;
+	dst.sin_port = htons(port_dest);
 
-  //Thread blocking: MSG_DONTWAIT / MSG_WAITALL
-  int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&addr), &length);
+  //Send data
+  int ret = sendto(sock, data.data(), static_cast<int>(data.length()), 0, reinterpret_cast<const sockaddr*>(&dst), sizeof(dst));
 
-  //Once packet received, process it
-  packet_dec.clear();
-  if(udp_size != 0 && udp_size != 512){
-    for(int i=0; i<udp_size; i++){
-      bitset<8> octet(buffer[i]);
-
-      int octet_32 = octet.to_ulong();
-      packet_dec.push_back(octet_32);
-    }
+  //Check final success
+  if (ret < 0){
+    cout << "[error] Client socket data sending failed for port [" << port_dest << "]" << endl;
   }
-
-  //Check for connection test number
-  this->code = compute_recv_code(packet_dec);
 
   //---------------------------
 }
