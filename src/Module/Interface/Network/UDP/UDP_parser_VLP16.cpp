@@ -30,7 +30,7 @@ udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
 
   //Packet timestamp
   packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
-
+  
   //Chekc if data is laser or position information
   if(packet_dec.size() != 1206){
     return packet_udp;

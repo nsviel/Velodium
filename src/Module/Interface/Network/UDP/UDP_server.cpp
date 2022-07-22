@@ -34,7 +34,7 @@ void UDP_server::capture_init(int port, int packet_size){
   this->capture_stop();
 
   //Made new connection
-  sock_server->socket_binding(port, packet_size, 2372, "127.0.0.1");
+  sock_server->socket_binding(port, packet_size, 344, "127.0.0.1");
 
   //---------------------------
 }

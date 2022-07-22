@@ -23,6 +23,8 @@ public:
   static int http_post_cbor(struct MHD_Connection* connection, const char* upload_data, size_t* upload_data_size);
   static int http_post_geo(struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size);
   static int http_get_image(void *cls, struct MHD_Connection *connection);
+  static int http_get_no_slam(void* cls, struct MHD_Connection* connection);
+  static int http_get_with_slam(void* cls, struct MHD_Connection* connection);
 
   //Subfunctions
   static int send_page (struct MHD_Connection *connection, const char* page, int status_code);

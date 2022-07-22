@@ -101,7 +101,7 @@ void Socket_server::socket_response(vector<int> packet_dec){
       code = 200;
     }
   }
-
+  
   //Send response
   if(code == 200){
     socket_client->socket_send_data("ok");

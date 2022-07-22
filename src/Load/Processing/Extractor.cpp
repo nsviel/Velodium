@@ -31,6 +31,11 @@ Cloud* Extractor::extractData(vector<dataFile*> data){
   Cloud* cloud = new Cloud();
   //---------------------------
 
+  if(data.size() == 0){
+    cout<<"[error] Data size equal zero"<<endl;
+    exit(0);
+  }
+
   //Init cloud parameters
   this->init_randomColor();
   this->init_cloudParameters(cloud, data);
@@ -258,7 +263,7 @@ void Extractor::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
     cloud->name = "";
     cloud->format = "";
   }
-
+sayHello();
   cloud->dataFormat = "";
   cloud->visibility = true;
   cloud->nb_point = nb_point;
@@ -269,13 +274,13 @@ void Extractor::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;
   cloud->saveas = get_absolutePath_build() + "../media/data/";
-
+sayHello();
   //ID
   int* ID_cloud = sceneManager->get_new_ID_cloud();
   cloud->ID = *ID_cloud;
   cloud->oID = sceneManager->get_new_oID_cloud();
   *ID_cloud += 1;
-
+sayHello();
   //---------------------------
 }
 void Extractor::init_subsetParameters(Subset* subset, string name, int ID){

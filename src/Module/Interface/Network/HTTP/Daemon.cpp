@@ -66,6 +66,12 @@ int Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char
     if(strcmp(url, "/image") == 0){
       ret = http_get_image(cls, connection);
     }
+    if(strcmp(url, "/no_slam") == 0){
+      ret = http_get_no_slam(cls, connection);
+    }
+    if(strcmp(url, "/with_slam") == 0){
+      ret = http_get_with_slam(cls, connection);
+    }
   }
   if(strcmp(method, "POST") == 0){
     if(strcmp(url, "/cbor") == 0){
@@ -116,6 +122,24 @@ int Daemon::http_get_image(void* cls, struct MHD_Connection* connection){
   //---------------------------
   return ret;
 }
+int Daemon::http_get_no_slam(void* cls, struct MHD_Connection* connection){
+  //---------------------------
+
+  say("no slam http command");
+
+  //---------------------------
+  return MHD_YES;
+}
+int Daemon::http_get_with_slam(void* cls, struct MHD_Connection* connection){
+  //---------------------------
+
+  say("with slam http command");
+
+  //---------------------------
+  return MHD_YES;
+}
+
+http_get_with_slam
 int Daemon::http_post_cbor(struct MHD_Connection* connection, const char* upload_data, size_t* upload_data_size){
   static bool is_received = false;
   //---------------------------
