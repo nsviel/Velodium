@@ -58,7 +58,7 @@ bool Loader::load_cloud(string filePath){
 
   //---------------------------
   string log = "Loaded "+ filePath;
-  console.AddLog("success", log);
+  console.AddLog("ok", log);
   return true;
 }
 bool Loader::load_cloud_byFrame(vector<string> path_vec){
@@ -76,7 +76,7 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
 
   //---------------------------
   string log = "Loaded " + to_string(data_vec.size()) + " frames";
-  console.AddLog("success", log);
+  console.AddLog("ok", log);
   return true;
 }
 bool Loader::load_cloud_silent(string filePath){

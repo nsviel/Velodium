@@ -120,7 +120,7 @@ struct ConsoleApp{
 
     ImGui::PopStyleVar();
     ImGui::EndChild();
-    
+
     // Command-line
     //ImGui::Separator();
     bool reclaim_focus = false;

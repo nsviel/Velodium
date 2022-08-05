@@ -5,11 +5,13 @@
 
 #include <microhttpd.h>
 
+class Command;
+
 
 class Daemon
 {
 public:
-  Daemon();
+  Daemon(Command* command);
   ~Daemon();
 
 public:
@@ -20,16 +22,15 @@ public:
 
   //Daemon functions
   static int http_answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls);
-  static int http_post_cbor(struct MHD_Connection* connection, const char* upload_data, size_t* upload_data_size);
-  static int http_post_geo(struct MHD_Connection *connection, const char *upload_data, size_t *upload_data_size);
-  static int http_get_image(void *cls, struct MHD_Connection *connection);
-  static int http_get_no_slam(void* cls, struct MHD_Connection* connection);
-  static int http_get_with_slam(void* cls, struct MHD_Connection* connection);
+  static int http_send_ok(void* cls, struct MHD_Connection* connection);
+  static int http_send_error(void* cls, struct MHD_Connection* connection);
+  static int http_send_image(void *cls, struct MHD_Connection *connection);
 
-  //Subfunctions
-  static int send_page (struct MHD_Connection *connection, const char* page, int status_code);
-  static int print_out_key (void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
-  static void print_info(struct MHD_Connection *connection, const char *url, const char *method, const char *version);
+  //Get request functions
+  static void http_get_slam_on();
+  static void http_get_slam_off();
+  static void http_get_view_top();
+  static void http_get_view_oblique();
 
   //Accesseur
   inline void set_path_image(string value){this->path_image = value;}
@@ -38,10 +39,14 @@ public:
 private:
   struct MHD_Daemon* daemon;
 
+  Command* commandManager;
+
   string path_image;
   bool is_deamon;
   bool is_first_get;
   int server_port;
+
+  static bool slam;
 };
 
 #endif

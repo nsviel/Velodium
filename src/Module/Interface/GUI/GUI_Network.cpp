@@ -125,9 +125,12 @@ void GUI_Network::mqtt_parameter(){
 void GUI_Network::http_connection(){
   //---------------------------
 
-  ImGui::Text("Daemon activated ");
+  ImGui::Text("Daemon activated: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", httpsManager->get_is_https_deamon() ? "ON" : "OFF");
+  ImGui::Text("Port: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", httpsManager->get_server_port());
   ImGui::Separator();
 
   //---------------------------

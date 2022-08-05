@@ -7,6 +7,7 @@ class Configuration;
 class Network;
 class Saving;
 class Daemon;
+class Command;
 
 
 class HTTPS
@@ -21,10 +22,12 @@ public:
   void stop_server();
 
   inline bool get_is_https_deamon(){return is_https_deamon;}
+  inline int get_server_port(){return server_port;}
 
 private:
   Configuration* configManager;
   Daemon* daemonManager;
+  Command* commandManager;
   Saving* saveManager;
 
   bool with_http_demon;

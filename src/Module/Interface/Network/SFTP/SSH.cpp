@@ -33,7 +33,7 @@ void SSH::ssh_connection(){
     if(server_connected && user_connected){
       ssh_connected = true;
       string log = "Connected to " + selected_ip + " with SSH";
-      console.AddLog("success", log);
+      console.AddLog("ok", log);
     }
     else{
       string log = "Problem connection SSH";

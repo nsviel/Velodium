@@ -86,7 +86,7 @@ void CoreGLengine::init(){
   this->init_rendering();
 
   //---------------------------
-  console.AddLog("success" ,"Program initialized...");
+  console.AddLog("ok" ,"Program initialized...");
 }
 void CoreGLengine::init_OGL(){
   //---------------------------

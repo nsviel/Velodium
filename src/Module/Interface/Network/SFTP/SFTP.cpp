@@ -42,7 +42,7 @@ void SFTP::sftp_new_session(){
     //Connection established
     this->sftp_connected = true;
     string log = "Connected with SFTP";
-    console.AddLog("success", log);
+    console.AddLog("ok", log);
   }
 
   //---------------------------
@@ -103,7 +103,7 @@ void SFTP::sftp_send_file(string path_src, string path_trg, string file_name){
 
     //Display success
     string log = "File " + path_src + " sended to " + path_file;
-    console.AddLog("success", log);
+    console.AddLog("ok", log);
 
     //---------------------------
   }else{

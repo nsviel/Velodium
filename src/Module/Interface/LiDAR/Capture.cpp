@@ -188,7 +188,7 @@ void Capture::capture_vlp16(){
   ID_capture++;
 
   //---------------------------
-  console.AddLog("success", "Watcher - Vlp16 capture");
+  console.AddLog("ok", "Watcher - Vlp16 capture");
 }
 void Capture::capture_scala(){
   //---------------------------
@@ -204,7 +204,7 @@ void Capture::capture_scala(){
   ID_capture++;
 
   //---------------------------
-  console.AddLog("success", "Watcher - Scala capture");
+  console.AddLog("ok", "Watcher - Scala capture");
 }
 
 //Subfunctions
