@@ -145,7 +145,7 @@ vec2 Dimension::get_cursorPos_gl(){
   //---------------------------
   return pos;
 }
-vec2 Dimension::get_cursorPos(){
+vec2 Dimension::get_mouse_pose(){
   double xpos, ypos;
   vec2 pos = vec2(0, 0);
   //---------------------------
@@ -156,7 +156,7 @@ vec2 Dimension::get_cursorPos(){
   //---------------------------
   return pos;
 }
-void Dimension::set_cursorPos(vec2 pos){
+void Dimension::set_mouse_pose(vec2 pos){
   //---------------------------
 
   glfwSetCursorPos(window, pos.x, pos.y);

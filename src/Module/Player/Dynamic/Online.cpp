@@ -8,6 +8,7 @@
 #include "../../SLAM/Slam.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Interface.h"
+#include "../../Interface/Network/HTTP/Command.h"
 
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Color/Color.h"
@@ -48,6 +49,7 @@ Online::Online(Player_node* node){
   this->interfaceManager = node_interface->get_interfaceManager();
   this->objectManager = node_engine->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
+  this->commandManager = new Command();
 
   //---------------------------
   this->update_configuration();
@@ -71,6 +73,9 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   auto t1 = start_chrono();
   //---------------------------
+
+  //Check for new HTTP command
+  this->compute_http_command();
 
   //Some init operation
   if(subset == nullptr) return;
@@ -133,6 +138,25 @@ void Online::compute_displayStats(Subset* subset){
   string stats = subset->name + ": ope in ";
   stats += to_string((int)time_operation) + " ms";
   console.AddLog("#", stats);
+
+  //---------------------------
+}
+void Online::compute_http_command(){
+  //---------------------------
+
+  vector<vector<string>> option = commandManager->parse_http_config();
+
+  for(int i=0; i<option.size(); i++){
+    string opt = option[i][0];
+    string val = option[i][1];
+
+    if(opt == "slam"){
+      this->with_slam = string_to_bool(val);
+    }
+    else if(opt == "view"){
+      followManager->camera_mode(val);
+    }
+  }
 
   //---------------------------
 }

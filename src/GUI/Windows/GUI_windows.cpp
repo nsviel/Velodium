@@ -3,7 +3,8 @@
 #include "Window_table.h"
 #include "WIN_loading.h"
 #include "WIN_cloud.h"
-#include "WIN_opengl.h"
+#include "WIN_camera.h"
+#include "WIN_shader.h"
 #include "WIN_operation.h"
 #include "WIN_attribut.h"
 
@@ -24,7 +25,8 @@ GUI_windows::GUI_windows(GUI_node* node_gui){
   Operation_node* node_ope = node_gui->get_node_ope();
   Engine_node* node_engine = node_gui->get_node_engine();
 
-  this->win_opengl = new WIN_opengl(node_engine);
+  this->win_camera = new WIN_camera(node_engine);
+  this->win_shader = new WIN_shader(node_engine);
   this->win_operation = new WIN_operation(node_ope);
   this->win_attribut = new WIN_attribut(node_gui);
   this->win_cloud = new WIN_cloud(node_ope);
@@ -60,8 +62,8 @@ void GUI_windows::window_init(){
 void GUI_windows::window_Draw(){
   //---------------------------
 
-  win_opengl->window_camera();
-  win_opengl->window_shader();
+  win_camera->window_camera();
+  win_shader->window_shader();
 
   win_loading->window_loading();
   win_loading->window_saving();

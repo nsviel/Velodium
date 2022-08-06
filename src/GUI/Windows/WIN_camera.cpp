@@ -1,13 +1,10 @@
-#include "WIN_opengl.h"
+#include "WIN_camera.h"
 
 #include "IconsFontAwesome5.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
-#include "../../Engine/OpenGL/Shader/Shader.h"
-#include "../../Engine/OpenGL/Shader/ShaderObject.h"
-#include "../../Engine/OpenGL/Shader/PP_edl.h"
 
 #include <fstream>
 
@@ -16,22 +13,20 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_opengl::WIN_opengl(Engine_node* node_engine){
+WIN_camera::WIN_camera(Engine_node* node_engine){
   //---------------------------
 
   this->configManager = node_engine->get_configManager();
   this->cameraManager = node_engine->get_cameraManager();
-  this->shaderManager = node_engine->get_shaderManager();
-  this->edlManager = shaderManager->get_edlManager();
 
   this->item_width = 150;
 
   //---------------------------
 }
-WIN_opengl::~WIN_opengl(){}
+WIN_camera::~WIN_camera(){}
 
 //Main function
-void WIN_opengl::window_camera(){
+void WIN_camera::window_camera(){
   bool* open = &window_tab.show_camera;
   if(*open){
     ImGui::Begin(ICON_FA_CAMERA " Camera", open,ImGuiWindowFlags_AlwaysAutoResize);
@@ -48,44 +43,9 @@ void WIN_opengl::window_camera(){
     ImGui::End();
   }
 }
-void WIN_opengl::window_shader(){
-  bool* open = &window_tab.show_shader;
-  if(*open){
-    ImGui::Begin("Shader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
-    //---------------------------
-
-    ImGui::SetNextItemWidth(item_width);
-    bool* with_edl = edlManager->get_with_edl();
-    if(ImGui::Checkbox("EDL shader", with_edl)){
-      ShaderObject* shader_screen = shaderManager->get_shader_screen();
-      edlManager->setup_edl(shader_screen->get_program_ID());
-    }
-
-    ImGui::SetNextItemWidth(item_width);
-    float* edl_radius = edlManager->get_edl_radius();
-    if(ImGui::SliderFloat("EDL radius", edl_radius, 1.0f, 3.0f)){
-      ShaderObject* shader_screen = shaderManager->get_shader_screen();
-      edlManager->setup_edl(shader_screen->get_program_ID());
-    }
-
-    ImGui::SetNextItemWidth(item_width);
-    float* edl_strength = edlManager->get_edl_strength();
-    if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 5000.0f)){
-      ShaderObject* shader_screen = shaderManager->get_shader_screen();
-      edlManager->setup_edl(shader_screen->get_program_ID());
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      *open = false;
-    }
-    ImGui::End();
-  }
-}
 
 //Sub functions
-void WIN_opengl::cam_parameter(){
+void WIN_camera::cam_parameter(){
   //---------------------------
 
   //Zoom - Field Of View
@@ -100,29 +60,38 @@ void WIN_opengl::cam_parameter(){
   ImGui::Separator();
 
   //Camera mode
-  static int projView;
+  ImGui::Columns(2);
+
+  static int projection = 0;
+  ImGui::Text("Projection");
+  if(ImGui::RadioButton("Perspective", &projection, 0)){
+    cameraManager->input_set_projection(projection);
+  }
+  if(ImGui::RadioButton("Orthographic", &projection, 1)){
+    cameraManager->input_set_projection(projection);
+  }
+
+  ImGui::NextColumn();
+
+  static int view = 1;
   ImGui::Text("View");
-  if(ImGui::RadioButton("Perspective", &projView, 0)){
-    cameraManager->input_projView(projView);
+  if(ImGui::RadioButton("Top", &view, 0)){
+    cameraManager->input_set_view(view);
   }
-  if(ImGui::RadioButton("Orthographic", &projView, 1)){
-    cameraManager->input_projView(projView);
+  if(ImGui::RadioButton("Oblique", &view, 1)){
+    cameraManager->input_set_view(view);
   }
-  if(ImGui::RadioButton("Top-View", &projView, 2)){
-    cameraManager->input_projView(projView);
-  }
-  if(ImGui::RadioButton("Side-View", &projView, 3)){
-    cameraManager->input_projView(projView);
-  }
+
+  ImGui::Columns(1);
 
   //---------------------------
   ImGui::Separator();
 }
-void WIN_opengl::cam_info(){
+void WIN_camera::cam_info(){
   //---------------------------
 
   //Camera projection matrix
-  glm::mat4 cam_pos = cameraManager->compute_worldPose();
+  glm::mat4 cam_pos = cameraManager->compute_cam_world_pose();
   ImGui::Text("Model-View matrix");
   ImGui::SameLine();
   if(ImGui::Button("Print")){
@@ -156,7 +125,7 @@ void WIN_opengl::cam_info(){
 
   //---------------------------
 }
-void WIN_opengl::cam_definedPosition(){
+void WIN_camera::cam_definedPosition(){
   //---------------------------
 
   //Insert pre-defined pose

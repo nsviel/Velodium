@@ -87,7 +87,7 @@ void GUI_control::control_mouse(){
   if(ImGui::IsMouseClicked(1) && !io.WantCaptureMouse){
 
     //Save cursor position
-    cursorPos = dimManager->get_cursorPos();
+    cursorPos = dimManager->get_mouse_pose();
 
     //Hide cursor
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -97,14 +97,14 @@ void GUI_control::control_mouse(){
     glfwSetCursorPos(window, glMiddle.x, glMiddle.y);
 
     //Enable camera movement
-    view->cameraMovON = true;
+    view->cam_move = true;
   }
   if(ImGui::IsMouseReleased(1) && cameraManager->is_cameraMovON()){
     //Restaure cursor position
-    dimManager->set_cursorPos(cursorPos);
+    dimManager->set_mouse_pose(cursorPos);
 
     //Disable camera movement
-    view->cameraMovON = false;
+    view->cam_move = false;
   }
   if(io.MouseDown[1] && !io.WantCaptureMouse){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -126,7 +126,7 @@ void GUI_control::control_mouse_wheel(){
 
   //Wheel + right clicked - Camera zoom
   if(io.MouseWheel && io.MouseDownDuration[1] >= 0.0f && !io.WantCaptureMouse){
-    cameraManager->compute_positionalZoom(io.MouseWheel);
+    cameraManager->compute_zoom_position(io.MouseWheel);
   }
 
   //Wheel click - Change cloud rotation axis
@@ -372,7 +372,7 @@ void GUI_control::control_keyboard_camMove(){
   Viewport_obj* view = cameraManager->get_current_viewport();
   //----------------------------
 
-  if(view->cameraMovON){
+  if(view->cam_move){
     float delta = 0.00016;
     float camSpeed = view->speed_move * delta;
     float fastSpeed = view->speed_move * delta * 4;

@@ -20,6 +20,7 @@ public:
   //Main function
   void update_configuration();
   void camera_followUp(Cloud* cloud, int i);
+  void camera_mode(string mode);
 
   //Subfunctions
   void camera_displacment(Cloud* cloud, int ID_subset);

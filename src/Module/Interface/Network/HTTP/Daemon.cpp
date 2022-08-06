@@ -1,7 +1,5 @@
 #include "Daemon.h"
 
-#include "Command.h"
-
 #include <iostream>
 #include <sys/types.h>
 #include <sys/select.h>
@@ -13,8 +11,7 @@
 
 
 //Constructor / Destructor
-Daemon::Daemon(Command* command){
-  this->commandManager = command;
+Daemon::Daemon(){
   //---------------------------
 
   //---------------------------
@@ -156,8 +153,7 @@ void Daemon::http_get_slam_on(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt");
-  file >>
+  file.open("../media/engine/http_conf.txt", std::ios_base::app);
   file << "slam true\n";
   file.close();
 
@@ -167,7 +163,7 @@ void Daemon::http_get_slam_off(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt");
+  file.open ("../media/engine/http_conf.txt", std::ios_base::app);
   file << "slam false\n";
   file.close();
 
@@ -177,7 +173,7 @@ void Daemon::http_get_view_top(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt");
+  file.open ("../media/engine/http_conf.txt", std::ios_base::app);
   file << "view top\n";
   file.close();
 
@@ -187,7 +183,7 @@ void Daemon::http_get_view_oblique(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt");
+  file.open ("../media/engine/http_conf.txt", std::ios_base::app);
   file << "view oblique\n";
   file.close();
 

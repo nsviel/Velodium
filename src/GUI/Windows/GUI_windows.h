@@ -6,7 +6,8 @@
 class GUI_node;
 class WIN_cloud;
 class WIN_loading;
-class WIN_opengl;
+class WIN_camera;
+class WIN_shader;
 class WIN_operation;
 class WIN_attribut;
 
@@ -24,7 +25,8 @@ public:
   void window_Draw();
 
 private:
-  WIN_opengl* win_opengl;
+  WIN_camera* win_camera;
+  WIN_shader* win_shader;
   WIN_loading* win_loading;
   WIN_cloud* win_cloud;
   WIN_operation* win_operation;

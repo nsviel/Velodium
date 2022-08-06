@@ -5,13 +5,11 @@
 
 #include <microhttpd.h>
 
-class Command;
-
 
 class Daemon
 {
 public:
-  Daemon(Command* command);
+  Daemon();
   ~Daemon();
 
 public:
@@ -38,8 +36,6 @@ public:
 
 private:
   struct MHD_Daemon* daemon;
-
-  Command* commandManager;
 
   string path_image;
   bool is_deamon;

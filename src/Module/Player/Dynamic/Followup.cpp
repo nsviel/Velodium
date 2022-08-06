@@ -53,9 +53,21 @@ void Followup::camera_followUp(Cloud* cloud, int ID_subset){
 
   //Ortho top view option
   if(with_camera_top){
-    cameraManager->input_projView(2);
+    cameraManager->input_set_projection(2);
   }else{
-    cameraManager->input_projView(0);
+    cameraManager->input_set_projection(0);
+  }
+
+  //---------------------------
+}
+void Followup::camera_mode(string mode){
+  //---------------------------
+
+  if(mode == "top"){
+    cameraManager->input_set_view(0);
+  }
+  else if(mode == "oblique"){
+    cameraManager->input_set_view(1);
   }
 
   //---------------------------

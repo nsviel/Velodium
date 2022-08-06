@@ -319,7 +319,7 @@ vec3 Selection::mouse_clickedPoint(){
   //---------------------------
 
   //Get viewport mouse location
-  vec2 curPos = dimManager->get_cursorPos();
+  vec2 curPos = dimManager->get_mouse_pose();
   vec3 mouse_pos = vec3(curPos.x, gl_Y - curPos.y + gui_Y, 0.0f);
   vec3 point = vec3(-1, -1, -1);
 
@@ -446,7 +446,7 @@ void Selection::mouse_cloudPicking(){
   sceneManager->update_cloud_location(cloud);
 }
 vec3 Selection::mouse_cameraPt(){
-  vec2 cursorPos = dimManager->get_cursorPos();
+  vec2 cursorPos = dimManager->get_mouse_pose();
   //---------------------------
 
   //Get ray direction

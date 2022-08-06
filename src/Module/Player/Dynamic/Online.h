@@ -18,6 +18,7 @@ class Followup;
 class Interface;
 class Object;
 class Renderer;
+class Command;
 
 
 class Online
@@ -35,6 +36,7 @@ public:
   //Other functions
   void compute_displayStats(Subset* subset);
   void compute_visibility(Cloud* cloud, int& ID_subset);
+  void compute_http_command();
 
   inline bool* get_with_slam(){return &with_slam;}
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
@@ -52,6 +54,7 @@ private:
   Interface* interfaceManager;
   Object* objectManager;
   Renderer* renderManager;
+  Command* commandManager;
 
   float time_operation;
   int visibility_range;

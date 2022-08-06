@@ -6,7 +6,6 @@ struct Window_tab{
   bool show_loading;
   bool show_asciiData;
   bool show_selection;
-  bool show_openOptions;
   bool show_camera;
   bool show_transformation;
   bool show_filter;

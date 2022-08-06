@@ -1,26 +1,23 @@
-#ifndef WIN_OPENGL_H
-#define WIN_OPENGL_H
+#ifndef WIN_CAMERA_H
+#define WIN_CAMERA_H
 
 #include "../../common.h"
 
 class Engine_node;
 class Camera;
 class Configuration;
-class Shader;
-class PP_edl;
 
 
-class WIN_opengl
+class WIN_camera
 {
 public:
   //Constructor / Destructor
-  WIN_opengl(Engine_node* node_engine);
-  ~WIN_opengl();
+  WIN_camera(Engine_node* node_engine);
+  ~WIN_camera();
 
 public:
   //Main function
   void window_camera();
-  void window_shader();
 
   //Sub functions
   void cam_parameter();
@@ -30,8 +27,6 @@ public:
 private:
   Configuration* configManager;
   Camera* cameraManager;
-  Shader* shaderManager;
-  PP_edl* edlManager;
 
   int item_width;
 };

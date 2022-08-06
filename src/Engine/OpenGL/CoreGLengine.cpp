@@ -205,7 +205,7 @@ void CoreGLengine::loop_pass_1(){
 
   //Set active shader
   shaderManager->use("scene");
-  mat4 mvp = cameraManager->compute_mvpMatrix();
+  mat4 mvp = cameraManager->compute_cam_mvp();
   ShaderObject* shader_scene = shaderManager->get_shader_scene();
   shader_scene->setMat4("MVP", mvp);
 
@@ -226,7 +226,7 @@ void CoreGLengine::loop_drawScene(){
   //---------------------------
 
   cameraManager->viewport_update(0);
-  cameraManager->input_cameraMouseCommands();
+  cameraManager->input_cam_mouse();
   engineManager->loop_scene();
 
   //---------------------------

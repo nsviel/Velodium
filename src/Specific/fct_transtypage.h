@@ -253,6 +253,14 @@ namespace{
     //---------------------------
     return vec_out;
   }
+  bool string_to_bool(std::string const& s){
+    if(s == "true"){
+      return true;
+    }
+    if(s == "false"){
+      return false;
+    }
+  }
 }
 
 #endif

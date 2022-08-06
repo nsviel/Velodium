@@ -2,6 +2,7 @@
 #define STRUCT_VIEWPORT_H
 
 #include <glm/glm.hpp>
+#include <string>
 
 
 struct Viewport_obj{
@@ -11,28 +12,24 @@ struct Viewport_obj{
   glm::vec3 cam_F; // Front
   glm::vec3 cam_R; // Right
   glm::vec3 cam_U; // Up
-  glm::vec3 cam_P; // Position
+  glm::vec3 cam_P; // Pose
 
   float angle_azimuth;
-  float angle_elevati;
-  float angle_elevati_old;
+  float angle_elevation;
 
   float fov;
   float speed_mouse;
   float speed_move;
-  float zoom_topView;
+  float zoom;
   float clip_near;
   float clip_far;
 
-  bool proj_persp;
-  bool proj_ortho;
+  std::string projection;
+  std::string view;
 
-  bool topView;
-  bool sideView;
-
-  bool cameraMovON;
-  bool desiredPose;
-  glm::mat4 dviewMat;
+  bool cam_move;
+  bool cam_pose;
+  glm::mat4 cam_pose_mat;
 };
 
 #endif

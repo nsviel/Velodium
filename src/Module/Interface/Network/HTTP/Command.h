@@ -3,25 +3,17 @@
 
 #include "../../../../common.h"
 
-class Network;
-class Player_node;
-
 
 class Command
 {
 public:
-  Command(Network* netManager);
+  Command();
   ~Command();
 
 public:
-  //Get request functions
-  static void http_get_slam_on();
-  static void http_get_slam_off();
-  static void http_get_view_top();
-  static void http_get_view_oblique();
+  vector<vector<string>> parse_http_config();
 
 private:
-  Player_node* node_player;
 };
 
 #endif

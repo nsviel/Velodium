@@ -1,56 +1,48 @@
 #include "Command.h"
 
-#include "../Network.h"
-#include "../../Interface_node.h"
-#include "../../../Module_node.h"
-#include "../../../Player/Player_node.h"
-#include "../../../Player/Dynamic/Followup.h"
-#include "../../../Player/Dynamic/Online.h"
+#include <fstream>
 
 
 //Constructor / Destructor
-Command::Command(Network* netManager){
+Command::Command(){
   //---------------------------
 
-  Interface_node* node_interface = netManager->get_node_interface();
-  Module_node* node_module = node_interface->get_node_module();
-
-  this->node_player = node_module->get_node_player();
-  Online* onlineManager = node_player->get_onlineManager();
-  Followup* followManager = node_player->get_followManager();
 
   //---------------------------
 }
 Command::~Command(){}
 
 // GET request handlers
-void Command::http_get_slam_on(){
+vector<vector<string>> Command::parse_http_config(){
+  string path = "../media/engine/http_conf.txt";
   //---------------------------
 
+  //Read file
+  string line;
+  vector<vector<string>> opt_vec;
+  std::ifstream file_conf(path);
+  int cpt = 0;
+  while(std::getline(file_conf, line)){
+    if(line.empty()){
+      break;
+    }
 
+    std::istringstream iss(line);
+    string opt, val;
+    iss >> opt >> val;
 
-  say("slam on");
+    vector<string> option;
+    option.push_back(opt);
+    option.push_back(val);
+    opt_vec.push_back(option);
+  }
+
+  //Empty file
+  ofstream file;
+  file.open(path);
+  file << "";
+  file.close();
 
   //---------------------------
-}
-void Command::http_get_slam_off(){
-  //---------------------------
-
-  say("slam off");
-
-  //---------------------------
-}
-void Command::http_get_view_top(){
-  //---------------------------
-
-  say("view top");
-
-  //---------------------------
-}
-void Command::http_get_view_oblique(){
-  //---------------------------
-
-  say("view oblique");
-
-  //---------------------------
+  return opt_vec;
 }

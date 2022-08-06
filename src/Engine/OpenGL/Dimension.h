@@ -36,8 +36,8 @@ public:
   //Subfunctions
   vec2 get_gl_middle();
   vec2 get_cursorPos_gl();
-  vec2 get_cursorPos();
-  void set_cursorPos(vec2 pos);
+  vec2 get_mouse_pose();
+  void set_mouse_pose(vec2 pos);
 
   inline GLFWwindow* get_window(){return window;}
   inline vec2* get_gui_ltp_dim(){return &gui_ltp_dim;}

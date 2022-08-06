@@ -1,7 +1,6 @@
 #include "HTTPS.h"
 
 #include "Daemon.h"
-#include "Command.h"
 
 #include "../Network.h"
 
@@ -21,8 +20,7 @@ HTTPS::HTTPS(Network* netManager){
 
   this->configManager = node_engine->get_configManager();
   this->saveManager = node_interface->get_saveManager();
-  this->commandManager = new Command(netManager);
-  this->daemonManager = new Daemon(commandManager);
+  this->daemonManager = new Daemon();
 
   //---------------------------
   this->update_configuration();

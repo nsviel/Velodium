@@ -7,7 +7,6 @@ class Configuration;
 class Network;
 class Saving;
 class Daemon;
-class Command;
 
 
 class HTTPS
@@ -27,7 +26,6 @@ public:
 private:
   Configuration* configManager;
   Daemon* daemonManager;
-  Command* commandManager;
   Saving* saveManager;
 
   bool with_http_demon;

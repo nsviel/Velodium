@@ -78,7 +78,7 @@ vec3 CoordTransform::ScreenToWorld(vec2 cursorPos){
   return X;
 }
 vec3 CoordTransform::CursorToGround(){
-  vec2 cursorPos = dimManager->get_cursorPos();
+  vec2 cursorPos = dimManager->get_mouse_pose();
   vec2 glDim = dimManager->get_gl_dim();
   float gui_X = ImGui::GetWindowSize().x;
   float gui_Y = ImGui::GetWindowSize().y;
