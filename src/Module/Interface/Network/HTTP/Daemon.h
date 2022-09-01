@@ -19,7 +19,7 @@ public:
   void stop_deamon();
 
   //Daemon functions
-  static int http_answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls);
+  static enum MHD_Result http_answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls);
   static int http_send_ok(void* cls, struct MHD_Connection* connection);
   static int http_send_error(void* cls, struct MHD_Connection* connection);
   static int http_send_image(void *cls, struct MHD_Connection *connection);

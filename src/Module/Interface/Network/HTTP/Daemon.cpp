@@ -32,7 +32,8 @@ void Daemon::start_deamon(){
   //---------------------------
 
   const char* page = path_image.c_str();
-  this->daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
+  //this->daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
+  this->daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, &http_answer, (void*)page, MHD_OPTION_END);
 
   if(daemon == NULL){
     console.AddLog("error", "Problem with HTTP server");
@@ -54,11 +55,12 @@ void Daemon::stop_deamon(){
 }
 
 //Daemon functions
-int Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
+enum MHD_Result Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
   //---------------------------
 
   //Check input method
   int ret;
+  MHD_Result response;
   if(strcmp(method, "GET") == 0){
     if(strcmp(url, "/test_http_conn") == 0){
       ret = http_send_ok(cls, connection);
@@ -85,7 +87,7 @@ int Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char
   }
 
   //---------------------------
-  return ret;
+  return response;
 }
 int Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
   //---------------------------

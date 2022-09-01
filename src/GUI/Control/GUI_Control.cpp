@@ -374,35 +374,43 @@ void GUI_control::control_keyboard_camMove(){
 
   if(view->cam_move){
     float delta = 0.00016;
-    float camSpeed = view->speed_move * delta;
-    float fastSpeed = view->speed_move * delta * 4;
+    float cam_speed = view->speed_move * delta;
+    float cam_speed_fast = view->speed_move * delta * 5;
 
     for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
       if(io.MouseDown[1] && !io.WantCaptureMouse){
 
         //Shift speed up
         if(io.KeysDown[340]){
-          camSpeed = fastSpeed;
+          cam_speed = cam_speed_fast;
         }
 
         //Z key or Up key
         if(io.KeysDown[87] || io.KeysDown[265]){
-          view->cam_P += view->cam_F * camSpeed;
+          if(view->view == "top"){
+            view->cam_P += view->cam_U * cam_speed;
+          }else{
+            view->cam_P += view->cam_F * cam_speed;
+          }
         }
 
         //S key or Down key
         if(io.KeysDown[83] || io.KeysDown[264]){
-          view->cam_P -= view->cam_F * camSpeed;
+          if(view->view == "top"){
+            view->cam_P -= view->cam_U * cam_speed;
+          }else{
+            view->cam_P -= view->cam_F * cam_speed;
+          }
         }
 
         //Q key or Right key
         if(io.KeysDown[65] || io.KeysDown[263]){
-          view->cam_P -= view->cam_R * camSpeed;
+          view->cam_P -= view->cam_R * cam_speed;
         }
 
         //D key or Left key
         if(io.KeysDown[68] || io.KeysDown[262]){
-          view->cam_P += view->cam_R * camSpeed;
+          view->cam_P += view->cam_R * cam_speed;
         }
       }
     }

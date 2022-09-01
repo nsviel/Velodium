@@ -1,17 +1,20 @@
 #!/bin/sh
+GREEN='\033[92m'
+NC='\033[0m' # No Color
 
-#-----------------
-#INSTALLATION BASH
-#-----------------
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Installation ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
+sudo apt update -y
+mkdir build
+cd build
+#----------------------
 
-echo "---- [\e[92mInstallation\e[0m] ----"
-sudo apt update
-
-#Install dependancies -> Essential
-echo "[\e[92mok\e[0m] Install package dependencies"
-sudo apt update 
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Dependencies ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
+sudo apt update -y
 sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev robin-map-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev libmicrohttpd12 libgnutls28-dev libmicrohttpd-dev
-
 
 #Install pcl library - V1.2 is requiered
 #sudo apt install libvtk7-dev=7.1.1+dfsg2-2ubuntu1
@@ -27,39 +30,51 @@ sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3
 #cd ceres-solver && mkdir build && cd build && cmake .. && make -j4 && sudo make install
 #cd ../.. && rm -r ceres-solver 
 
-#Install Eclyspe Paho for MQTT 
-echo "[\e[92mok\e[0m] Install Eclyspe Paho version C"
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Eclyspe Paho v. C ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
 git clone https://github.com/eclipse/paho.mqtt.c
 cd paho.mqtt.c && cmake . -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
 sudo make install
 sudo ldconfig
-cd .. && rm -r paho.mqtt.c
+cd .. && sudo rm -rf paho.mqtt.c
 
-echo "[\e[92m#\e[0m] Install Eclyspe Paho version C++"
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Eclyspe Paho v. C++ ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
 git clone https://github.com/eclipse/paho.mqtt.cpp
 cd paho.mqtt.cpp && cmake -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
 sudo cmake --build build/ --target install
 sudo ldconfig
-cd .. && rm -r paho.mqtt.cpp
+cd .. && sudo rm -rf paho.mqtt.cpp
 
-#Install robin-map
-echo "[\e[92m#\e[0m] Install robin-map"
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Robin-map ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
 git clone https://github.com/Tessil/robin-map.git
 cd robin-map && mkdir build && cd build
 cmake .. && make -j5 && sudo make install
-cd ../.. && rm -r robin-map
+cd ../.. && sudo rm -rf robin-map
 
-#Install libhttpserver
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Libhttpserver ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
+sudo apt install libmicrohttpd-dev
 git clone https://github.com/etr/libhttpserver
-cd libhttpserver && ./bootstrap
+cd libhttpserver && ./bootstrap && make -f Makefile.cvs
 mkdir build && cd build && ../configure
 make -j4 && sudo make install
+cd ../.. && sudo rm -rf libhttpserver
 
-
-#Last parametrization
-echo "[\e[92m#\e[0m] Linux parametrization"
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Parametrization ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
+echo MESA_GL_VERSION_OVERRIDE=3.3
 export MESA_GL_VERSION_OVERRIDE=3.3
 
-#End
-echo "---- [\e[92mInstallation finished\e[0m] ----"
+#----------------------
+cd ..
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} End   \o/ ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
 

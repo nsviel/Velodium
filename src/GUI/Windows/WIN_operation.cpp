@@ -254,10 +254,10 @@ void WIN_operation::window_selection(){
 }
 void WIN_operation::window_transformation(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  Subset* subset = cloud->subset_selected;
-
+  
   if(window_tab.show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &window_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
+    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     //Z scanner
