@@ -33,7 +33,7 @@ void Daemon::start_deamon(){
 
   const char* page = path_image.c_str();
   //this->daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
-  this->daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, &http_answer, (void*)page, MHD_OPTION_END);
+  this->daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, server_port, NULL, NULL, http_answer, (void*)page, MHD_OPTION_END);
 
   if(daemon == NULL){
     console.AddLog("error", "Problem with HTTP server");
@@ -55,41 +55,41 @@ void Daemon::stop_deamon(){
 }
 
 //Daemon functions
-enum MHD_Result Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
+enum MHD_Result Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, long unsigned int* upload_data_size, void* *history){
   //---------------------------
 
   //Check input method
   int ret;
-  MHD_Result response;
+  enum MHD_Result response;
   if(strcmp(method, "GET") == 0){
     if(strcmp(url, "/test_http_conn") == 0){
-      ret = http_send_ok(cls, connection);
+      response = http_send_ok(cls, connection);
     }
     else if(strcmp(url, "/image") == 0){
-      ret = http_send_image(cls, connection);
+      response = http_send_image(cls, connection);
     }
     else if(strcmp(url, "/slam_on") == 0){
       http_get_slam_on();
-      ret = http_send_ok(cls, connection);
+      response = http_send_ok(cls, connection);
     }
     else if(strcmp(url, "/slam_off") == 0){
       http_get_slam_off();
-      ret = http_send_ok(cls, connection);
+      response = http_send_ok(cls, connection);
     }
     else if(strcmp(url, "/view_top") == 0){
       http_get_view_top();
-      ret = http_send_ok(cls, connection);
+      response = http_send_ok(cls, connection);
     }
     else if(strcmp(url, "/view_oblique") == 0){
       http_get_view_oblique();
-      ret = http_send_ok(cls, connection);
+      response = http_send_ok(cls, connection);
     }
   }
 
   //---------------------------
   return response;
 }
-int Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
+enum MHD_Result Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   const char* errorstr = "<html><body>ok</body></html>";
@@ -105,7 +105,7 @@ int Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
 
   //---------------------------
 }
-int Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
+enum MHD_Result Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   const char* errorstr = "<html><body>An internal server error has occurred!</body></html>";
@@ -121,7 +121,7 @@ int Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
 
   //---------------------------
 }
-int Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
+enum MHD_Result Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   //Get file path
@@ -143,7 +143,7 @@ int Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
   struct MHD_Response* response = MHD_create_response_from_fd64(sbuf.st_size, fd);
   if (NULL == response){if (0 != close (fd))abort ();return MHD_NO;}
   MHD_add_response_header(response, "Content-Type", "image/bmp");
-  int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+  enum MHD_Result ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
   MHD_destroy_response(response);
 
   //---------------------------

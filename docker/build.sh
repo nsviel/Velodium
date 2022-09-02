@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd ..
-docker build -t velodium .
+sudo docker build -t velodium .
