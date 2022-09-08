@@ -1,12 +1,10 @@
 #!/bin/sh
 
-./build.sh
-
 xhost +
-docker run \
+sudo docker run \
+    --gpus all \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix" \
-    --device="/dev/dri:/dev/dri" \
     --env="DISPLAY=$DISPLAY" \
-    --publish="1883" \ #Localhost mqtt
+    --publish="2370" \
+    --publish="8888" \
     velodium
-

@@ -31,5 +31,5 @@ EXPOSE 2370
 EXPOSE 8888
 
 # Run application
-CMD ["./executable"]
+CMD ["./build/executable"]
 

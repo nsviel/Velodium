@@ -1,5 +1,7 @@
+archive
 build/*
 media/data/*
+media/engine/config/*
 docker/*
 Dockerfile
 .dockerignore

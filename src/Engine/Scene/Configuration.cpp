@@ -10,11 +10,11 @@
 Configuration::Configuration(){
   //---------------------------
 
-  this->path_default = get_absolutePath_build() + "../media/engine/config_default.json";
-  this->path_ai = get_absolutePath_build() + "../media/engine/config_ai.json";
-  this->path_capture = get_absolutePath_build() + "../media/engine/config_capture.json";
-  this->path_wp4_car = get_absolutePath_build() + "../media/engine/config_wp4_car.json";
-  this->path_wp5_train = get_absolutePath_build() + "../media/engine/config_wp5_train.json";
+  this->path_default = get_absolutePath_build() + "../media/engine/config/config_default.json";
+  this->path_ai = get_absolutePath_build() + "../media/engine/config/config_ai.json";
+  this->path_capture = get_absolutePath_build() + "../media/engine/config/config_capture.json";
+  this->path_wp4_car = get_absolutePath_build() + "../media/engine/config/config_wp4_car.json";
+  this->path_wp5_train = get_absolutePath_build() + "../media/engine/config/config_wp5_train.json";
   this->path_config = path_default;
   this->config = 0;
 

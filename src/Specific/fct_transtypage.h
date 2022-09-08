@@ -254,12 +254,11 @@ namespace{
     return vec_out;
   }
   bool string_to_bool(std::string const& s){
+    bool sucess = false;
     if(s == "true"){
-      return true;
+      sucess = true;
     }
-    if(s == "false"){
-      return false;
-    }
+    return sucess;
   }
 }
 

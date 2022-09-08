@@ -27,7 +27,14 @@ namespace{
   void create_new_dir(std::string path){
     //---------------------------
 
-    std::filesystem::create_directory(path);
+    int last = path.find_last_of("/");
+    std::string dir = path.substr(0, last);
+    last = dir.find_last_of("/");
+    dir = dir.substr(0, last);
+
+    if(std::filesystem::exists(dir) == true && std::filesystem::exists(path) == false){
+      std::filesystem::create_directory(path);
+    }
 
     //---------------------------
   }
