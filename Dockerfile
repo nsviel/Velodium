@@ -1,8 +1,5 @@
 FROM ubuntu:22.04
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV TZ Europe/Paris
-
 # Install dependancy packages
 RUN mkdir app \
     && apt update \
