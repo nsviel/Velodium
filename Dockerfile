@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-# Install dependancy packages
+# Install dependancy packages 
 RUN mkdir app \
     && apt update \
     && apt install -y --no-install-recommends git libtool sudo xterm build-essential mesa-utils cmake gnuplot ca-certificates \
@@ -19,14 +19,13 @@ RUN /app/velodium/install.sh
 
 # Copy & build application
 COPY . /app/velodium
-WORKDIR /app/velodium
-RUN cd build && cmake .. && make -j4 && cd ..
-
+WORKDIR /app/velodium/build
+RUN cmake .. && make -j4
 
 # Open port
 EXPOSE 2370
 EXPOSE 8888
 
 # Run application
-CMD ["./build/executable"]
+CMD ["./executable"]
 

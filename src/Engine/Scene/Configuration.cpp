@@ -33,9 +33,23 @@ void Configuration::make_configuration(){
   //if not, create them
   if(is_default == false){
     this->create_jsonfile(path_default);
+
+    bool is_default = is_file_exist(path_default.c_str());
+    if(is_default){
+      cout<<"[\033[1;32mOK\033[0m] Default configuration (\033[1;32m"+  path_default +"\033[0m) file created"<<endl;
+    }else{
+      cout<<"[\033[1;31merror\033[0m] Default configuration file creation (\033[1;31m"+  path_default +"\033[0m) problem"<<endl;
+    }
   }
-  if(is_config == false){
+  if(is_config == false && path_config != path_default){
     this->create_jsonfile(path_config);
+
+    bool is_config = is_file_exist(path_config.c_str());
+    if(is_default){
+      cout<<"[\033[1;32mOK\033[0m] Specific configuration file (\033[1;32m"+  path_config +"\033[0m) created"<<endl;
+    }else{
+      cout<<"[\033[1;31merror\033[0m] Specific configuration file creation (\033[1;31m"+  path_config +"\033[0m) problem"<<endl;
+    }
   }
 
   //---------------------------
@@ -408,7 +422,11 @@ string Configuration::parse_json_s(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asString();
     }else{
-      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      if(is_file_exist(path_config.c_str()) == false){
+        cout<<"Config problem: the file \e[32m"<<path_config<<"\e[0m does not exists !"<<endl;
+      }else{
+        cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      }
     }
 
     ifs_default.close();
@@ -453,7 +471,11 @@ map<string, string> Configuration::parse_json_dict(string field){
         dict.insert ( std::pair<string, string>(field_itr, result) );
       }
     }else{
-      cout<<"Config problem: the field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      if(is_file_exist(path_config.c_str()) == false){
+        cout<<"Config problem: the file \e[32m"<<path_config<<"\e[0m does not exists !"<<endl;
+      }else{
+        cout<<"Config problem: the field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      }
     }
 
     ifs_default.close();
@@ -489,7 +511,11 @@ float Configuration::parse_json_f(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asFloat();
     }else{
-      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      if(is_file_exist(path_config.c_str()) == false){
+        cout<<"Config problem: the file \e[32m"<<path_config<<"\e[0m does not exists !"<<endl;
+      }else{
+        cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      }
     }
 
     ifs_default.close();
@@ -525,7 +551,11 @@ int Configuration::parse_json_i(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asInt();
     }else{
-      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      if(is_file_exist(path_config.c_str()) == false){
+        cout<<"Config problem: the file \e[32m"<<path_config<<"\e[0m does not exists !"<<endl;
+      }else{
+        cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      }
     }
 
     ifs_default.close();
@@ -561,7 +591,11 @@ bool Configuration::parse_json_b(string field, string value){
     if(json_field.isMember(value)){
       result = json_field[value].asBool();
     }else{
-      cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      if(is_file_exist(path_config.c_str()) == false){
+        cout<<"Config problem: the file \e[32m"<<path_config<<"\e[0m does not exists !"<<endl;
+      }else{
+        cout<<"Config problem: the value \e[32m"<<value<<"\e[0m in field \e[32m"<<field<<"\e[0m does not exists !"<<endl;
+      }
     }
 
     ifs_default.close();
