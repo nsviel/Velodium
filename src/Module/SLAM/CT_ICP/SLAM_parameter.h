@@ -37,11 +37,11 @@ public:
 
 private:
   Slam* slamManager;
-  SLAM_normal* normalManager;
-  SLAM_optim* optimManager;
-  SLAM_optim_gn* gnManager;
-  SLAM_assessment* assessManager;
-  SLAM_map* mapManager;
+  SLAM_normal* slam_normal;
+  SLAM_optim* slam_optim;
+  SLAM_optim_gn* slam_optim_gn;
+  SLAM_assessment* slam_assess;
+  SLAM_map* slam_map;
 
   int predefined_conf;
 };

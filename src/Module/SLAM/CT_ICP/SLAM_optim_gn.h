@@ -38,7 +38,7 @@ private:
   Eigen::Matrix3d compute_rotationMatrix(double Rx, double Ry, double Rz);
 
 private:
-  SLAM_normal* normalManager;
+  SLAM_normal* slam_normal;
 
   vector<Eigen::VectorXd> vec_u;
   Eigen::VectorXd X;

@@ -14,11 +14,11 @@ SLAM_parameter::SLAM_parameter(Slam* slam){
   //---------------------------
 
   this->slamManager = slam;
-  this->normalManager = slam->get_slam_normal();
-  this->optimManager = slam->get_slam_optim();
-  this->gnManager = optimManager->get_optim_gn();
-  this->assessManager = slam->get_assessManager();
-  this->mapManager = slam->get_slam_map();
+  this->slam_normal = slam->get_slam_normal();
+  this->slam_optim = slam->get_slam_optim();
+  this->slam_optim_gn = slam_optim->get_optim_gn();
+  this->slam_assess = slam->get_slam_assess();
+  this->slam_map = slam->get_slam_map();
 
   this->predefined_conf = 0;
 
@@ -79,34 +79,34 @@ void SLAM_parameter::make_config_default(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = optimManager->get_solver_gn();
-  bool* solver_ceres = optimManager->get_solver_ceres();
-  double* thres_ego_trans = assessManager->get_thres_ego_trans();
-  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  double* thres_pose_trans = assessManager->get_thres_pose_trans();
-  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
-  int* nb_residual_min = assessManager->get_nb_residual_min();
-  int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
-  int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
+  double* thres_ego_trans = slam_assess->get_thres_ego_trans();
+  double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
+  double* thres_pose_trans = slam_assess->get_thres_pose_trans();
+  double* thres_pose_rotat = slam_assess->get_thres_pose_rotat();
+  double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
+  int* nb_residual_min = slam_assess->get_nb_residual_min();
+  int* nb_rlt_previous_mean = slam_assess->get_nb_rlt_previous_mean();
+  int* nb_rlt_previous_pose = slam_assess->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_width();
-  int* max_number_neighbors = normalManager->get_knn_max_nn();
-  int* voxel_searchSize = normalManager->get_knn_voxel_search();
+  double* size_voxelMap = slam_normal->get_knn_voxel_width();
+  int* max_number_neighbors = slam_normal->get_knn_max_nn();
+  int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_dist_residual_max();
-  int* iter_max = gnManager->get_iter_max();
+  double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
+  int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* min_root_distance = mapManager->get_min_root_distance();
-  double* max_root_distance = mapManager->get_max_root_distance();
-  double* max_voxel_distance = mapManager->get_max_voxel_distance();
-  double* min_voxel_distance = mapManager->get_min_voxel_distance();
-  double* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
+  double* map_voxel_size = slam_map->get_map_voxel_size();
+  double* min_root_distance = slam_map->get_min_root_distance();
+  double* max_root_distance = slam_map->get_max_root_distance();
+  double* max_voxel_distance = slam_map->get_max_voxel_distance();
+  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* grid_voxel_size = slam_map->get_grid_voxel_size();
+  int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
   //Slam
   *solver_gn = true;
@@ -148,34 +148,34 @@ void SLAM_parameter::make_config_0(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = optimManager->get_solver_gn();
-  bool* solver_ceres = optimManager->get_solver_ceres();
-  double* thres_ego_trans = assessManager->get_thres_ego_trans();
-  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  double* thres_pose_trans = assessManager->get_thres_pose_trans();
-  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
-  int* nb_residual_min = assessManager->get_nb_residual_min();
-  int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
-  int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
+  double* thres_ego_trans = slam_assess->get_thres_ego_trans();
+  double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
+  double* thres_pose_trans = slam_assess->get_thres_pose_trans();
+  double* thres_pose_rotat = slam_assess->get_thres_pose_rotat();
+  double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
+  int* nb_residual_min = slam_assess->get_nb_residual_min();
+  int* nb_rlt_previous_mean = slam_assess->get_nb_rlt_previous_mean();
+  int* nb_rlt_previous_pose = slam_assess->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_width();
-  int* max_number_neighbors = normalManager->get_knn_max_nn();
-  int* voxel_searchSize = normalManager->get_knn_voxel_search();
+  double* size_voxelMap = slam_normal->get_knn_voxel_width();
+  int* max_number_neighbors = slam_normal->get_knn_max_nn();
+  int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_dist_residual_max();
-  int* iter_max = gnManager->get_iter_max();
+  double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
+  int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* min_root_distance = mapManager->get_min_root_distance();
-  double* max_root_distance = mapManager->get_max_root_distance();
-  double* max_voxel_distance = mapManager->get_max_voxel_distance();
-  double* min_voxel_distance = mapManager->get_min_voxel_distance();
-  double* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
+  double* map_voxel_size = slam_map->get_map_voxel_size();
+  double* min_root_distance = slam_map->get_min_root_distance();
+  double* max_root_distance = slam_map->get_max_root_distance();
+  double* max_voxel_distance = slam_map->get_max_voxel_distance();
+  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* grid_voxel_size = slam_map->get_grid_voxel_size();
+  int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
   //Slam
   *solver_gn = true;
@@ -217,34 +217,34 @@ void SLAM_parameter::make_config_1(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = optimManager->get_solver_gn();
-  bool* solver_ceres = optimManager->get_solver_ceres();
-  double* thres_ego_trans = assessManager->get_thres_ego_trans();
-  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  double* thres_pose_trans = assessManager->get_thres_pose_trans();
-  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
-  int* nb_residual_min = assessManager->get_nb_residual_min();
-  int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
-  int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
+  double* thres_ego_trans = slam_assess->get_thres_ego_trans();
+  double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
+  double* thres_pose_trans = slam_assess->get_thres_pose_trans();
+  double* thres_pose_rotat = slam_assess->get_thres_pose_rotat();
+  double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
+  int* nb_residual_min = slam_assess->get_nb_residual_min();
+  int* nb_rlt_previous_mean = slam_assess->get_nb_rlt_previous_mean();
+  int* nb_rlt_previous_pose = slam_assess->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_width();
-  int* max_number_neighbors = normalManager->get_knn_max_nn();
-  int* voxel_searchSize = normalManager->get_knn_voxel_search();
+  double* size_voxelMap = slam_normal->get_knn_voxel_width();
+  int* max_number_neighbors = slam_normal->get_knn_max_nn();
+  int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_dist_residual_max();
-  int* iter_max = gnManager->get_iter_max();
+  double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
+  int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* min_root_distance = mapManager->get_min_root_distance();
-  double* max_root_distance = mapManager->get_max_root_distance();
-  double* max_voxel_distance = mapManager->get_max_voxel_distance();
-  double* min_voxel_distance = mapManager->get_min_voxel_distance();
-  double* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
+  double* map_voxel_size = slam_map->get_map_voxel_size();
+  double* min_root_distance = slam_map->get_min_root_distance();
+  double* max_root_distance = slam_map->get_max_root_distance();
+  double* max_voxel_distance = slam_map->get_max_voxel_distance();
+  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* grid_voxel_size = slam_map->get_grid_voxel_size();
+  int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
   //Slam
   *solver_gn = true;
@@ -288,34 +288,34 @@ void SLAM_parameter::make_config_2(){
   //---------------------------
 
   //Slam
-  bool* solver_gn = optimManager->get_solver_gn();
-  bool* solver_ceres = optimManager->get_solver_ceres();
-  double* thres_ego_trans = assessManager->get_thres_ego_trans();
-  double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
-  double* thres_pose_trans = assessManager->get_thres_pose_trans();
-  double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
-  double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
-  int* nb_residual_min = assessManager->get_nb_residual_min();
-  int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
-  int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
+  double* thres_ego_trans = slam_assess->get_thres_ego_trans();
+  double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
+  double* thres_pose_trans = slam_assess->get_thres_pose_trans();
+  double* thres_pose_rotat = slam_assess->get_thres_pose_rotat();
+  double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
+  int* nb_residual_min = slam_assess->get_nb_residual_min();
+  int* nb_rlt_previous_mean = slam_assess->get_nb_rlt_previous_mean();
+  int* nb_rlt_previous_pose = slam_assess->get_nb_rlt_previous_pose();
 
   //Normal
-  double* size_voxelMap = normalManager->get_knn_voxel_width();
-  int* max_number_neighbors = normalManager->get_knn_max_nn();
-  int* voxel_searchSize = normalManager->get_knn_voxel_search();
+  double* size_voxelMap = slam_normal->get_knn_voxel_width();
+  int* max_number_neighbors = slam_normal->get_knn_max_nn();
+  int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = gnManager->get_dist_residual_max();
-  int* iter_max = gnManager->get_iter_max();
+  double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
+  int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = mapManager->get_map_voxel_size();
-  double* min_root_distance = mapManager->get_min_root_distance();
-  double* max_root_distance = mapManager->get_max_root_distance();
-  double* max_voxel_distance = mapManager->get_max_voxel_distance();
-  double* min_voxel_distance = mapManager->get_min_voxel_distance();
-  double* grid_voxel_size = mapManager->get_grid_voxel_size();
-  int* map_voxel_capacity = mapManager->get_map_voxel_capacity();
+  double* map_voxel_size = slam_map->get_map_voxel_size();
+  double* min_root_distance = slam_map->get_min_root_distance();
+  double* max_root_distance = slam_map->get_max_root_distance();
+  double* max_voxel_distance = slam_map->get_max_voxel_distance();
+  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* grid_voxel_size = slam_map->get_grid_voxel_size();
+  int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
   //Slam
   *solver_gn = true;
@@ -385,8 +385,8 @@ void SLAM_parameter::set_nb_thread(int value){
   //---------------------------
 
   slamManager->set_nb_thread(value);
-  normalManager->set_nb_thread(value);
-  gnManager->set_nb_thread(value);
+  slam_normal->set_nb_thread(value);
+  slam_optim_gn->set_nb_thread(value);
 
   //---------------------------
 }

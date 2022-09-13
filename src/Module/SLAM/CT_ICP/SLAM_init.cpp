@@ -15,7 +15,7 @@ SLAM_init::SLAM_init(Slam* slam){
   Engine_node* node_engine = slam->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->mapManager = slam->get_slam_map();
+  this->slam_map = slam->get_slam_map();
 
   //---------------------------
 }
@@ -36,15 +36,15 @@ void SLAM_init::compute_initialization(Cloud* cloud, int subset_ID){
 //Subfunctions
 void SLAM_init::init_frame_ID(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  slamap* slam_map = mapManager->get_slam_map();
+  slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
   //Assign the last local map ID
-  frame->ID = slam_map->current_frame_ID;
-  slam_map->current_frame_ID++;
+  frame->ID = local_map->current_frame_ID;
+  local_map->current_frame_ID++;
 
   //Assign the current cloud to the selected one
-  slam_map->linked_cloud_ID = cloud->ID;
+  local_map->linked_cloud_ID = cloud->ID;
 
   //---------------------------
 }
@@ -74,6 +74,7 @@ void SLAM_init::init_frame_ts(Subset* subset){
   }
   //If there is no timestamp data, create synthetic one
   else{
+    cout<<"[error] no timestamp for SLAM"<<endl;
     for(int i=0; i<subset->xyz.size(); i++){
       double ts_n = i / subset->xyz.size();
       subset->ts_n.push_back(ts_n);
@@ -86,7 +87,7 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
-  slamap* slam_map = mapManager->get_slam_map();
+  slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
   //For the first 2 reference frames
@@ -95,7 +96,6 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
     frame_m0->rotat_e = Eigen::Matrix3d::Identity();
     frame_m0->trans_b = Eigen::Vector3d::Zero();
     frame_m0->trans_e = Eigen::Vector3d::Zero();
-
   }
   //Other frame
   else{

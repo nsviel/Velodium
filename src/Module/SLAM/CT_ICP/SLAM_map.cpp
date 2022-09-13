@@ -17,7 +17,7 @@ SLAM_map::SLAM_map(Slam* slam){
 
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->slam_map = new slamap();
+  this->local_map = new slamap();
 
   //---------------------------
   this->update_configuration();
@@ -28,16 +28,16 @@ SLAM_map::~SLAM_map(){}
 void SLAM_map::update_configuration(){
   //---------------------------
 
-  slam_map->voxel_width = 1.0f;
-  slam_map->voxel_capacity = 20;
-  slam_map->linked_cloud_ID = -1;
-  slam_map->linked_subset_ID = -1;
-  slam_map->current_frame_ID = 0;
+  local_map->voxel_width = 1.0f;
+  local_map->voxel_capacity = 20;
+  local_map->linked_cloud_ID = -1;
+  local_map->linked_subset_ID = -1;
+  local_map->current_frame_ID = 0;
 
-  slam_map->rotat_b = Eigen::Matrix3d::Identity();
-  slam_map->rotat_e = Eigen::Matrix3d::Identity();
-  slam_map->trans_b = Eigen::Vector3d::Zero();
-  slam_map->trans_e = Eigen::Vector3d::Zero();
+  local_map->rotat_b = Eigen::Matrix3d::Identity();
+  local_map->rotat_e = Eigen::Matrix3d::Identity();
+  local_map->trans_b = Eigen::Vector3d::Zero();
+  local_map->trans_e = Eigen::Vector3d::Zero();
 
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
@@ -65,25 +65,25 @@ void SLAM_map::update_map(Cloud* cloud, int subset_ID){
 void SLAM_map::reset_map_hard(){
   //---------------------------
 
-  slam_map->map.clear();
-  slam_map->linked_cloud_ID = -1;
-  slam_map->linked_subset_ID = -1;
-  slam_map->current_frame_ID = 0;
+  local_map->map.clear();
+  local_map->linked_cloud_ID = -1;
+  local_map->linked_subset_ID = -1;
+  local_map->current_frame_ID = 0;
 
-  slam_map->rotat_b = Eigen::Matrix3d::Identity();
-  slam_map->rotat_e = Eigen::Matrix3d::Identity();
-  slam_map->trans_b = Eigen::Vector3d::Zero();
-  slam_map->trans_e = Eigen::Vector3d::Zero();
+  local_map->rotat_b = Eigen::Matrix3d::Identity();
+  local_map->rotat_e = Eigen::Matrix3d::Identity();
+  local_map->trans_b = Eigen::Vector3d::Zero();
+  local_map->trans_e = Eigen::Vector3d::Zero();
 
   //---------------------------
 }
 void SLAM_map::reset_map_smooth(){
   //---------------------------
 
-  slam_map->map.clear();
-  slam_map->current_frame_ID = 0;
-  slam_map->linked_subset_ID = -1;
-  slam_map->current_frame_ID = 0;
+  local_map->map.clear();
+  local_map->current_frame_ID = 0;
+  local_map->linked_subset_ID = -1;
+  local_map->current_frame_ID = 0;
 
   //---------------------------
 }
@@ -110,7 +110,7 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
       int kx = static_cast<int>(xyz.x / grid_voxel_width);
       int ky = static_cast<int>(xyz.y / grid_voxel_width);
       int kz = static_cast<int>(xyz.z / grid_voxel_width);
-      int key = slam_map->get_signature(kx, ky, kz);
+      int key = local_map->get_signature(kx, ky, kz);
 
       point << xyz.x, xyz.y, xyz.z, ts_n;
       grid[key].push_back(point);
@@ -143,10 +143,10 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
 void SLAM_map::update_map_parameter(Frame* frame){
   //---------------------------
 
-  slam_map->rotat_b = frame->rotat_b;
-  slam_map->trans_b = frame->trans_b;
-  slam_map->rotat_e = frame->rotat_e;
-  slam_map->trans_e = frame->trans_e;
+  local_map->rotat_b = frame->rotat_b;
+  local_map->trans_b = frame->trans_b;
+  local_map->rotat_e = frame->rotat_e;
+  local_map->trans_e = frame->trans_e;
 
   //---------------------------
 }
@@ -156,19 +156,19 @@ void SLAM_map::add_pointsToLocalMap(Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d& point = frame->xyz[i];
 
-    int kx = static_cast<int>(point(0) / slam_map->voxel_width);
-    int ky = static_cast<int>(point(1) / slam_map->voxel_width);
-    int kz = static_cast<int>(point(2) / slam_map->voxel_width);
-    int key = slam_map->get_signature(kx, ky, kz);
-    voxelMap_it it = slam_map->map.find(key);
+    int kx = static_cast<int>(point(0) / local_map->voxel_width);
+    int ky = static_cast<int>(point(1) / local_map->voxel_width);
+    int kz = static_cast<int>(point(2) / local_map->voxel_width);
+    int key = local_map->get_signature(kx, ky, kz);
+    voxelMap_it it = local_map->map.find(key);
 
     //if the voxel already exists
-    if(it != slam_map->map.end()){
+    if(it != local_map->map.end()){
       //Get corresponding voxel
       vector<Eigen::Vector3d>& voxel_xyz = it.value();
 
       //If the voxel is not full
-      if(voxel_xyz.size() < slam_map->voxel_capacity){
+      if(voxel_xyz.size() < local_map->voxel_capacity){
         //Check if minimal distance with voxel points is respected
         double dist_min = 10000;
         for(int j=0; j<voxel_xyz.size(); j++){
@@ -189,7 +189,7 @@ void SLAM_map::add_pointsToLocalMap(Frame* frame){
     else{
       vector<Eigen::Vector3d> voxel;
       voxel.push_back(point);
-      slam_map->map.insert({key, voxel});
+      local_map->map.insert({key, voxel});
     }
   }
 
@@ -199,7 +199,7 @@ void SLAM_map::end_clearTooFarVoxels(Eigen::Vector3d &current_location){
   vector<int> voxels_to_erase;
   //---------------------------
 
-  for(auto it = slam_map->map.begin(); it != slam_map->map.end(); ++it){
+  for(auto it = local_map->map.begin(); it != local_map->map.end(); ++it){
     Eigen::Vector3d voxel_point = it->second[0];
     double dist = fct_distance(voxel_point, current_location);
 
@@ -210,7 +210,7 @@ void SLAM_map::end_clearTooFarVoxels(Eigen::Vector3d &current_location){
   }
 
   for(int i=0; i<voxels_to_erase.size(); i++){
-    slam_map->map.erase(voxels_to_erase[i]);
+    local_map->map.erase(voxels_to_erase[i]);
   }
 
   //---------------------------

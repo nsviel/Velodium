@@ -13,7 +13,7 @@
 SLAM_normal::SLAM_normal(Slam* slam){
   //---------------------------
 
-  this->mapManager = slam->get_slam_map();
+  this->slam_map = slam->get_slam_map();
 
   //---------------------------
   this->update_configuration();
@@ -52,7 +52,7 @@ void SLAM_normal::compute_normal(Frame* frame){
 
 //Sub function
 vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point){
-  slamap* slam_map = mapManager->get_slam_map();
+  slamap* local_map = slam_map->get_local_map();
   priority_queue_iNN priority_queue;
   int cpt = 0;
   //---------------------------
@@ -66,11 +66,11 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point){
     for (int vj = vy - knn_voxel_search; vj <= vy + knn_voxel_search; vj++){
       for (int vk = vz - knn_voxel_search; vk <= vz + knn_voxel_search; vk++){
         //Search for pre-existing voxel in local map
-        int key = slam_map->get_signature(vi, vj, vk);
-        voxelMap_it it = slam_map->map.find(key);
+        int key = local_map->get_signature(vi, vj, vk);
+        voxelMap_it it = local_map->map.find(key);
 
         //If we found a voxel with at least one point
-        if(it != slam_map->map.end()){
+        if(it != local_map->map.end()){
           vector<Eigen::Vector3d>& voxel_ijk = it.value();
 
           //We store all NN voxel point

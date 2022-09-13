@@ -1,5 +1,5 @@
-#ifndef SLAM_map_H
-#define SLAM_map_H
+#ifndef SLAM_MAP_H
+#define SLAM_MAP_H
 
 #include "../../../common.h"
 
@@ -25,18 +25,18 @@ public:
   void add_pointsToLocalMap(Frame* frame);
   void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
 
-  inline slamap* get_slam_map(){return slam_map;}
+  inline slamap* get_local_map(){return local_map;}
   inline double* get_min_root_distance(){return &min_root_distance;}
   inline double* get_max_root_distance(){return &max_root_distance;}
   inline double* get_max_voxel_distance(){return &max_voxel_distance;}
   inline double* get_min_voxel_distance(){return &min_voxel_distance;}
   inline double* get_grid_voxel_size(){return &grid_voxel_width;}
-  inline double* get_map_voxel_size(){return &slam_map->voxel_width;}
-  inline int* get_map_voxel_capacity(){return &slam_map->voxel_capacity;}
+  inline double* get_map_voxel_size(){return &local_map->voxel_width;}
+  inline int* get_map_voxel_capacity(){return &local_map->voxel_capacity;}
 
 private:
   Scene* sceneManager;
-  slamap* slam_map;
+  slamap* local_map;
 
   double min_root_distance;
   double max_root_distance;

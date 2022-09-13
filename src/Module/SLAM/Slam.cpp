@@ -28,12 +28,12 @@ Slam::Slam(Engine_node* node){
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
 
-  this->mapManager = new SLAM_map(this);
-  this->normalManager = new SLAM_normal(this);
-  this->optimManager = new SLAM_optim(this);
-  this->assessManager = new SLAM_assessment(this);
-  this->paramManager = new SLAM_parameter(this);
-  this->initManager = new SLAM_init(this);
+  this->slam_map = new SLAM_map(this);
+  this->slam_normal = new SLAM_normal(this);
+  this->slam_optim = new SLAM_optim(this);
+  this->slam_assess = new SLAM_assessment(this);
+  this->slam_param = new SLAM_parameter(this);
+  this->slam_init = new SLAM_init(this);
 
   //---------------------------
   this->update_configuration();
@@ -48,12 +48,12 @@ void Slam::update_configuration(){
   this->nb_thread = 8;
 
   string lidar_model = configManager->parse_json_s("interface", "lidar_model");
-  paramManager->make_config(lidar_model);
+  slam_param->make_config(lidar_model);
 
   //---------------------------
 }
 void Slam::compute_slam_offline(Cloud* cloud){
-  mapManager->reset_map_hard();
+  slam_map->reset_map_hard();
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -66,15 +66,15 @@ void Slam::compute_slam_offline(Cloud* cloud){
 
     frame_m0->ID = i;
 
-    initManager->compute_initialization(cloud, i);
-    mapManager->compute_grid_sampling(subset);
-    optimManager->compute_optimization(cloud, i);
+    slam_init->compute_initialization(cloud, i);
+    slam_map->compute_grid_sampling(subset);
+    slam_optim->compute_optimization(cloud, i);
     this->compute_assessment(cloud, i);
 
     //--------------
     auto t2 = high_resolution_clock::now();
     float duration = duration_cast<milliseconds>(t2 - t1).count();
-    assessManager->compute_statistics(cloud, i, duration);
+    slam_assess->compute_statistics(cloud, i, duration);
   }
 
   //---------------------------
@@ -88,14 +88,14 @@ void Slam::compute_slam_online(Cloud* cloud, int subset_ID){
   if(check_conditions(cloud, subset_ID) == false) return;
 
   //Main functions
-  initManager->compute_initialization(cloud, subset_ID);
-  mapManager->compute_grid_sampling(subset);
-  optimManager->compute_optimization(cloud, subset_ID);
+  slam_init->compute_initialization(cloud, subset_ID);
+  slam_map->compute_grid_sampling(subset);
+  slam_optim->compute_optimization(cloud, subset_ID);
   this->compute_assessment(cloud, subset_ID);
 
   //---------------------------
   float duration = stop_chrono(t1);
-  assessManager->compute_statistics(cloud, subset_ID, duration);
+  slam_assess->compute_statistics(cloud, subset_ID, duration);
 }
 
 //SLAM sub-functions
@@ -105,21 +105,21 @@ bool Slam::compute_assessment(Cloud* cloud, int subset_ID){
   //---------------------------
 
   //Compute assessment
-  bool success = assessManager->compute_assessment(cloud, subset_ID);
+  bool success = slam_assess->compute_assessment(cloud, subset_ID);
 
   //If unsuccess, reinitialize transformations
   if(success){
-    mapManager->update_map(cloud, subset_ID);
+    slam_map->update_map(cloud, subset_ID);
     this->update_subset_location(subset);
     this->update_subset_glyph(subset);
   }else{
-    /*initManager->init_frame_chain(cloud, subset_ID);
-    mapManager->update_map(frame);
+    /*slam_init->init_frame_chain(cloud, subset_ID);
+    slam_map->update_map(frame);
     this->update_subset_location(subset);
     this->update_subset_glyph(subset);*/
 
     frame->reset();
-    mapManager->reset_map_smooth();
+    slam_map->reset_map_smooth();
     this->reset_visibility(cloud, subset_ID);
   }
 
@@ -182,7 +182,7 @@ void Slam::update_subset_glyph(Subset* subset){
 
   //Update local map
   Localmap* mapObject = objectManager->get_object_localmap();
-  mapObject->update_localmap(mapManager->get_slam_map());
+  mapObject->update_localmap(slam_map->get_local_map());
   objectManager->update_object(mapObject->get_glyph());
 
   //---------------------------
@@ -191,7 +191,7 @@ void Slam::update_subset_glyph(Subset* subset){
 bool Slam::check_conditions(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  slamap* slam_map = mapManager->get_slam_map();
+  slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
   //Data error
@@ -210,12 +210,12 @@ bool Slam::check_conditions(Cloud* cloud, int subset_ID){
 
   //No ponctual SLAM condition
   if(frame->is_slamed == true) return false;
-  if(slam_map->current_frame_ID == 0){
-    slam_map->linked_subset_ID = subset_ID;
+  if(local_map->current_frame_ID == 0){
+    local_map->linked_subset_ID = subset_ID;
   }
-  if(subset_ID < slam_map->linked_subset_ID) return false;
+  if(subset_ID < local_map->linked_subset_ID) return false;
   //---> Check if the current selected cloud is the same than before
-  if(cloud->ID != slam_map->linked_cloud_ID && slam_map->linked_cloud_ID != -1){
+  if(cloud->ID != local_map->linked_cloud_ID && local_map->linked_cloud_ID != -1){
     this->reset_slam_hard();
   }
 
@@ -242,7 +242,7 @@ void Slam::reset_slam_hard(){
   //---------------------------
 
   objectManager->reset_scene_object();
-  mapManager->reset_map_hard();
+  slam_map->reset_map_hard();
 
   //---------------------------
 }

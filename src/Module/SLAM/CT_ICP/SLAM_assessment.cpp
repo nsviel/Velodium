@@ -17,11 +17,11 @@ SLAM_assessment::SLAM_assessment(Slam* slam){
   //---------------------------
 
   Engine_node* node_engine = slam->get_node_engine();
-  SLAM_optim* optimManager = slam->get_slam_optim();
+  SLAM_optim* slam_optim = slam->get_slam_optim();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->gnManager = optimManager->get_optim_gn();
-  this->mapManager = slam->get_slam_map();
+  this->slam_optim_gn = slam_optim->get_optim_gn();
+  this->slam_map = slam->get_slam_map();
 
   this->nb_residual_min = 100;
 
@@ -102,7 +102,7 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
     }
 
     //Test 4: check if ICP has converged
-    frame_m0->opti_score = gnManager->get_opti_score();
+    frame_m0->opti_score = slam_optim_gn->get_opti_score();
     if(frame_m0->opti_score > thres_optimMinNorm){
       cout<<"[error] Optimization score too important ";
       cout<<"["<<frame_m0->opti_score<<"/"<<thres_optimMinNorm<<"]"<<endl;
@@ -127,7 +127,7 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
     frame_m0->ego_rotat = AngularDistance(frame_m0->rotat_b, frame_m0->rotat_e);
     frame_m0->diff_trans = (frame_m0->trans_b - frame_m1->trans_b).norm() + (frame_m0->trans_e - frame_m1->trans_e).norm();
     frame_m0->diff_rotat = AngularDistance(frame_m1->rotat_b, frame_m0->rotat_b) + AngularDistance(frame_m1->rotat_e, frame_m0->rotat_e);
-    frame_m0->opti_score = gnManager->get_opti_score();
+    frame_m0->opti_score = slam_optim_gn->get_opti_score();
     vec3 angles_m0 = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
     vec3 angles_m1 = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
     diff_angle = angles_m1 - angles_m0;
@@ -204,15 +204,15 @@ void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float dura
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
-  slamap* slam_map = mapManager->get_slam_map();
+  slamap* local_map = slam_map->get_local_map();
   Transforms transformManager;
   //---------------------------
 
   //Fill stats
   frame_m0->time_slam = duration;
-  frame_m0->map_size_abs = slam_map->map.size();
-  frame_m0->map_size_rlt = slam_map->map.size() - slam_map->size;
-  slam_map->size = slam_map->map.size();
+  frame_m0->map_size_abs = local_map->map.size();
+  frame_m0->map_size_rlt = local_map->map.size() - local_map->size;
+  local_map->size = local_map->map.size();
 
   //Relative parameters
   vec3 trans_b_rlt, trans_e_rlt;

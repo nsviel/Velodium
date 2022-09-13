@@ -35,7 +35,7 @@ private:
   void compute_normal_direction(Frame* frame, int i);
 
 private:
-  SLAM_map* mapManager;
+  SLAM_map* slam_map;
 
   double knn_voxel_width;
   int knn_voxel_search;

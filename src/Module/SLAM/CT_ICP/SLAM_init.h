@@ -25,7 +25,7 @@ public:
   void init_frame_chain(Cloud* cloud, int subset_ID);
 
 private:
-  SLAM_map* mapManager;
+  SLAM_map* slam_map;
   Scene* sceneManager;
 };
 

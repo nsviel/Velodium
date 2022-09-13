@@ -11,7 +11,7 @@
 SLAM_optim_gn::SLAM_optim_gn(Slam* slam){
   //---------------------------
 
-  this->normalManager = slam->get_slam_normal();
+  this->slam_normal = slam->get_slam_normal();
 
   //---------------------------
   this->update_configuration();
@@ -43,7 +43,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1){
     Eigen::VectorXd b = Eigen::VectorXd::Zero(12);
 
     //Derive residuals
-    normalManager->compute_normal(frame_m0);
+    slam_normal->compute_normal(frame_m0);
     this->compute_derivative(frame_m0);
     this->compute_matrices(frame_m0, J, b);
     this->compute_constraint(frame_m0, frame_m1, J, b);

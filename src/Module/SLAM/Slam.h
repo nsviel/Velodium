@@ -33,12 +33,11 @@ public:
   void reset_slam_hard();
 
   inline Engine_node* get_node_engine(){return node_engine;}
-  inline SLAM_normal* get_slam_normal(){return normalManager;}
-  inline SLAM_optim* get_slam_optim(){return optimManager;}
-  inline SLAM_assessment* get_slam_assess(){return assessManager;}
-  inline SLAM_map* get_slam_map(){return mapManager;}
-  inline SLAM_parameter* get_slam_param(){return paramManager;}
-  inline SLAM_assessment* get_assessManager(){return assessManager;}
+  inline SLAM_normal* get_slam_normal(){return slam_normal;}
+  inline SLAM_optim* get_slam_optim(){return slam_optim;}
+  inline SLAM_assessment* get_slam_assess(){return slam_assess;}
+  inline SLAM_map* get_slam_map(){return slam_map;}
+  inline SLAM_parameter* get_slam_param(){return slam_param;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
   inline void set_offline_ID_max(int value){offline_ID_max = value;}
@@ -57,12 +56,12 @@ private:
   Configuration* configManager;
 
   //SLAM_optim_ceres* ceresManager;
-  SLAM_init* initManager;
-  SLAM_optim* optimManager;
-  SLAM_normal* normalManager;
-  SLAM_assessment* assessManager;
-  SLAM_map* mapManager;
-  SLAM_parameter* paramManager;
+  SLAM_init* slam_init;
+  SLAM_optim* slam_optim;
+  SLAM_normal* slam_normal;
+  SLAM_assessment* slam_assess;
+  SLAM_map* slam_map;
+  SLAM_parameter* slam_param;
 
   int offline_ID_max;
   int nb_thread;

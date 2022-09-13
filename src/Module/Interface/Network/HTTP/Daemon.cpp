@@ -54,11 +54,11 @@ void Daemon::stop_deamon(){
 }
 
 //Daemon functions
-int Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
+enum MHD_Result Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
   //---------------------------
 
   //Check input method
-  int ret;
+  enum MHD_Result ret;
   //MHD_Result response;
   if(strcmp(method, "GET") == 0){
     if(strcmp(url, "/test_http_conn") == 0){
@@ -88,13 +88,13 @@ int Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char
   //---------------------------
   return ret;
 }
-int Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
+enum MHD_Result Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   const char* errorstr = "<html><body>ok</body></html>";
   struct MHD_Response* response = MHD_create_response_from_buffer (strlen (errorstr), (void* ) errorstr, MHD_RESPMEM_PERSISTENT);
   if(response){
-    int ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
+    enum MHD_Result ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
     MHD_destroy_response (response);
     return MHD_YES;
   }
@@ -104,13 +104,13 @@ int Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
 
   //---------------------------
 }
-int Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
+enum MHD_Result Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   const char* errorstr = "<html><body>An internal server error has occurred!</body></html>";
   struct MHD_Response* response = MHD_create_response_from_buffer (strlen (errorstr), (void* ) errorstr, MHD_RESPMEM_PERSISTENT);
   if(response){
-    int ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
+    enum MHD_Result ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
     MHD_destroy_response (response);
     return MHD_YES;
   }
@@ -120,7 +120,7 @@ int Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
 
   //---------------------------
 }
-int Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
+enum MHD_Result Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   //Get file path
@@ -142,7 +142,7 @@ int Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
   struct MHD_Response* response = MHD_create_response_from_fd64(sbuf.st_size, fd);
   if (NULL == response){if (0 != close (fd))abort ();return MHD_NO;}
   MHD_add_response_header(response, "Content-Type", "image/bmp");
-  int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+  enum MHD_Result ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
   MHD_destroy_response(response);
 
   //---------------------------

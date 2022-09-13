@@ -38,8 +38,8 @@ public:
 
 private:
   Scene* sceneManager;
-  SLAM_optim_gn* gnManager;
-  SLAM_map* mapManager;
+  SLAM_optim_gn* slam_optim_gn;
+  SLAM_map* slam_map;
 
   double thres_ego_trans;
   double thres_ego_rotat;
