@@ -7,7 +7,7 @@
 #include "../Network/MQTT/PAHO.h"
 #include "../Network/SFTP/SFTP.h"
 #include "../Network/SFTP/SSH.h"
-#include "../Network/HTTP/HTTPS.h"
+#include "../Network/HTTP/HTTP.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"

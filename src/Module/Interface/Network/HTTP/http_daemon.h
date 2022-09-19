@@ -6,11 +6,11 @@
 #include <microhttpd.h>
 
 
-class Daemon
+class http_daemon
 {
 public:
-  Daemon();
-  ~Daemon();
+  http_daemon();
+  ~http_daemon();
 
 public:
   //Main daemon functions

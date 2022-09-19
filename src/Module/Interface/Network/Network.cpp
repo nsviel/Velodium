@@ -3,7 +3,7 @@
 #include "MQTT/MQTT.h"
 #include "SFTP/SFTP.h"
 #include "SFTP/SSH.h"
-#include "HTTP/HTTPS.h"
+#include "HTTP/HTTP.h"
 
 #include "../Interface_node.h"
 
@@ -22,11 +22,11 @@ Network::Network(Interface_node* node){
 
   this->configManager = node_engine->get_configManager();
   this->create_wallet();
-  
+
   this->mqttManager = new MQTT(this);
   this->sshManager = new SSH();
   this->sftpManager = new SFTP(this);
-  this->httpsManager = new HTTPS(this);
+  this->httpsManager = new HTTP(this);
 
   this->is_connected = false;
   this->is_image_watcher = false;

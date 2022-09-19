@@ -1,20 +1,20 @@
-#include "Command.h"
+#include "http_command.h"
 
 #include <fstream>
 
 
 //Constructor / Destructor
-Command::Command(){
+http_command::http_command(){
   //---------------------------
 
 
   //---------------------------
 }
-Command::~Command(){}
+http_command::~http_command(){}
 
 // GET request handlers
-vector<vector<string>> Command::parse_http_config(){
-  string path = "../media/engine/http_conf.txt";
+vector<vector<string>> http_command::parse_http_config(){
+  string path = "../media/engine/config/http_conf.txt";
   //---------------------------
 
   //Read file

@@ -1,6 +1,5 @@
-#include "HTTPS.h"
-
-#include "Daemon.h"
+#include "HTTP.h"
+#include "http_daemon.h"
 
 #include "../Network.h"
 
@@ -12,7 +11,7 @@
 
 
 //Constructor / Destructor
-HTTPS::HTTPS(Network* netManager){
+HTTP::HTTP(Network* netManager){
   //---------------------------
 
   Interface_node* node_interface = netManager->get_node_interface();
@@ -20,15 +19,15 @@ HTTPS::HTTPS(Network* netManager){
 
   this->configManager = node_engine->get_configManager();
   this->saveManager = node_interface->get_saveManager();
-  this->daemonManager = new Daemon();
+  this->daemonManager = new http_daemon();
 
   //---------------------------
   this->update_configuration();
   this->start_server();
 }
-HTTPS::~HTTPS(){}
+HTTP::~HTTP(){}
 
-void HTTPS::update_configuration(){
+void HTTP::update_configuration(){
   //---------------------------
 
   this->path_image = saveManager->get_path_image() + "image";
@@ -37,7 +36,7 @@ void HTTPS::update_configuration(){
 
   //---------------------------
 }
-void HTTPS::start_server(){
+void HTTP::start_server(){
   //---------------------------
 
   if(with_http_demon){
@@ -50,7 +49,7 @@ void HTTPS::start_server(){
 
   //---------------------------
 }
-void HTTPS::stop_server(){
+void HTTP::stop_server(){
   //---------------------------
 
   if(with_http_demon){

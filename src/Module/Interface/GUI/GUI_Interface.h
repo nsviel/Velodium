@@ -7,7 +7,7 @@ class GUI_module;
 class GUI_Lidar;
 class GUI_Network;
 
-class HTTPS;
+class HTTP;
 class Interface;
 class Saving;
 class Prediction;
@@ -36,7 +36,7 @@ private:
   GUI_Lidar* gui_lidarManager;
   GUI_Network* gui_netManager;
 
-  HTTPS* httpsManager;
+  HTTP* httpsManager;
   Interface* interfaceManager;
   Saving* saveManager;
   Prediction* predManager;

@@ -8,7 +8,7 @@
 #include "../../SLAM/Slam.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Interface.h"
-#include "../../Interface/Network/HTTP/Command.h"
+#include "../../Interface/Network/HTTP/http_command.h"
 
 #include "../../../Operation/Operation_node.h"
 #include "../../../Operation/Color/Color.h"
@@ -49,7 +49,7 @@ Online::Online(Player_node* node){
   this->interfaceManager = node_interface->get_interfaceManager();
   this->objectManager = node_engine->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
-  this->commandManager = new Command();
+  this->commandManager = new http_command();
 
   //---------------------------
   this->update_configuration();
@@ -149,6 +149,8 @@ void Online::compute_http_command(){
   for(int i=0; i<option.size(); i++){
     string opt = option[i][0];
     string val = option[i][1];
+    say(opt);
+    say(val);
 
     if(opt == "slam"){
       this->with_slam = string_to_bool(val);

@@ -1,4 +1,4 @@
-#include "Daemon.h"
+#include "http_daemon.h"
 
 #include <iostream>
 #include <sys/types.h>
@@ -11,15 +11,15 @@
 
 
 //Constructor / Destructor
-Daemon::Daemon(){
+http_daemon::http_daemon(){
   //---------------------------
 
   //---------------------------
 }
-Daemon::~Daemon(){}
+http_daemon::~http_daemon(){}
 
 // ON / OFF http daemon
-void Daemon::set_configuration(int port){
+void http_daemon::set_configuration(int port){
   //---------------------------
 
   this->server_port = port;
@@ -28,7 +28,7 @@ void Daemon::set_configuration(int port){
 
   //---------------------------
 }
-void Daemon::start_deamon(){
+void http_daemon::start_deamon(){
   //---------------------------
 
   const char* page = path_image.c_str();
@@ -45,7 +45,7 @@ void Daemon::start_deamon(){
 
   //---------------------------
 }
-void Daemon::stop_deamon(){
+void http_daemon::stop_deamon(){
   //---------------------------
 
   MHD_stop_daemon(daemon);
@@ -53,8 +53,8 @@ void Daemon::stop_deamon(){
   //---------------------------
 }
 
-//Daemon functions
-enum MHD_Result Daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
+//http_daemon functions
+enum MHD_Result http_daemon::http_answer(void* cls, struct MHD_Connection* connection, const char* url, const char* method, const char* version, const char* upload_data, size_t* upload_data_size, void* *history){
   //---------------------------
 
   //Check input method
@@ -88,7 +88,7 @@ enum MHD_Result Daemon::http_answer(void* cls, struct MHD_Connection* connection
   //---------------------------
   return ret;
 }
-enum MHD_Result Daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
+enum MHD_Result http_daemon::http_send_ok(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   const char* errorstr = "<html><body>ok</body></html>";
@@ -104,7 +104,7 @@ enum MHD_Result Daemon::http_send_ok(void* cls, struct MHD_Connection* connectio
 
   //---------------------------
 }
-enum MHD_Result Daemon::http_send_error(void* cls, struct MHD_Connection* connection){
+enum MHD_Result http_daemon::http_send_error(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   const char* errorstr = "<html><body>An internal server error has occurred!</body></html>";
@@ -120,7 +120,7 @@ enum MHD_Result Daemon::http_send_error(void* cls, struct MHD_Connection* connec
 
   //---------------------------
 }
-enum MHD_Result Daemon::http_send_image(void* cls, struct MHD_Connection* connection){
+enum MHD_Result http_daemon::http_send_image(void* cls, struct MHD_Connection* connection){
   //---------------------------
 
   //Get file path
@@ -150,41 +150,41 @@ enum MHD_Result Daemon::http_send_image(void* cls, struct MHD_Connection* connec
 }
 
 // GET request handlers
-void Daemon::http_get_slam_on(){
+void http_daemon::http_get_slam_on(){
   //---------------------------
 
   ofstream file;
-  file.open("../media/engine/http_conf.txt", std::ios_base::app);
+  file.open("../media/engine/config/http_conf.txt", std::ios_base::app);
   file << "slam true\n";
   file.close();
 
   //---------------------------
 }
-void Daemon::http_get_slam_off(){
+void http_daemon::http_get_slam_off(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt", std::ios_base::app);
+  file.open ("../media/engine/config/http_conf.txt", std::ios_base::app);
   file << "slam false\n";
   file.close();
 
   //---------------------------
 }
-void Daemon::http_get_view_top(){
+void http_daemon::http_get_view_top(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt", std::ios_base::app);
+  file.open ("../media/engine/config/http_conf.txt", std::ios_base::app);
   file << "view top\n";
   file.close();
 
   //---------------------------
 }
-void Daemon::http_get_view_oblique(){
+void http_daemon::http_get_view_oblique(){
   //---------------------------
 
   ofstream file;
-  file.open ("../media/engine/http_conf.txt", std::ios_base::app);
+  file.open ("../media/engine/config/http_conf.txt", std::ios_base::app);
   file << "view oblique\n";
   file.close();
 

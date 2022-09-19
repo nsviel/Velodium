@@ -8,7 +8,7 @@
 
 class Interface_node;
 class Configuration;
-class HTTPS;
+class HTTP;
 class MQTT;
 class SFTP;
 class SSH;
@@ -37,7 +37,7 @@ public:
   inline MQTT* get_mqttManager(){return mqttManager;}
   inline SFTP* get_sftpManager(){return sftpManager;}
   inline SSH* get_sshManager(){return sshManager;}
-  inline HTTPS* get_httpsManager(){return httpsManager;}
+  inline HTTP* get_httpsManager(){return httpsManager;}
   inline Wallet* get_wallet(){return wallet;}
   inline Interface_node* get_node_interface(){return node_interface;}
 
@@ -53,7 +53,7 @@ private:
   MQTT* mqttManager;
   SFTP* sftpManager;
   SSH* sshManager;
-  HTTPS* httpsManager;
+  HTTP* httpsManager;
   Wallet* wallet;
 
   string name_file;

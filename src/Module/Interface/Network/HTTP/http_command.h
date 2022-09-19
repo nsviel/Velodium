@@ -1,14 +1,14 @@
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef HTTP_COMMAND_H
+#define HTTP_COMMAND_H
 
 #include "../../../../common.h"
 
 
-class Command
+class http_command
 {
 public:
-  Command();
-  ~Command();
+  http_command();
+  ~http_command();
 
 public:
   vector<vector<string>> parse_http_config();

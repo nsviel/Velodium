@@ -18,7 +18,7 @@ class Followup;
 class Interface;
 class Object;
 class Renderer;
-class Command;
+class http_command;
 
 
 class Online
@@ -54,7 +54,7 @@ private:
   Interface* interfaceManager;
   Object* objectManager;
   Renderer* renderManager;
-  Command* commandManager;
+  http_command* commandManager;
 
   float time_operation;
   int visibility_range;

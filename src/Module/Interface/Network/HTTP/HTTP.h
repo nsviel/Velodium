@@ -6,14 +6,14 @@
 class Configuration;
 class Network;
 class Saving;
-class Daemon;
+class http_daemon;
 
 
-class HTTPS
+class HTTP
 {
 public:
-  HTTPS(Network* netManager);
-  ~HTTPS();
+  HTTP(Network* netManager);
+  ~HTTP();
 
 public:
   void update_configuration();
@@ -25,7 +25,7 @@ public:
 
 private:
   Configuration* configManager;
-  Daemon* daemonManager;
+  http_daemon* daemonManager;
   Saving* saveManager;
 
   bool with_http_demon;
