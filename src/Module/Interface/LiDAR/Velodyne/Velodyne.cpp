@@ -69,14 +69,15 @@ void Velodyne::lidar_start_watcher(int capture_port){
   //Start udp packets watcher
   thread_capture = std::thread([&]() {
     int port = capture_port;
+    int size_max = 1248;
     port = 2370;
-    udpServManager->capture_init(port, 1206);
+    udpServManager->capture_init(port, size_max);
 
 
     while (is_capturing){
       //Get packet in decimal format
       vector<int> packet_dec = udpServManager->capture_packet();
-      
+
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
         udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);

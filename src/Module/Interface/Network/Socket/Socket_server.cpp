@@ -1,7 +1,5 @@
 #include "Socket_server.h"
 
-#include "Socket_client.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -17,7 +15,6 @@
 Socket_server::Socket_server(){
   //---------------------------
 
-  this->socket_client = new Socket_client();
   this->is_binded = false;
 
   //---------------------------
@@ -25,14 +22,11 @@ Socket_server::Socket_server(){
 Socket_server::~Socket_server(){}
 
 //Socket function
-void Socket_server::socket_binding(int port_server, int packet_size_, int port_client, string ip_client){
+void Socket_server::socket_binding(int port_server, int packet_size_max){
   if(is_binded == false){
     this->port = port_server;
-    this->packet_size = packet_size_;
+    this->packet_size = packet_size_max;
     //---------------------------
-
-    //Bind socket client for server response
-    socket_client->socket_binding(port_client, ip_client);
 
     // Creating socket file descriptor
     this->sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -43,9 +37,9 @@ void Socket_server::socket_binding(int port_server, int packet_size_, int port_c
 
     // Filling server information
     sockaddr_in addr;
-    addr.sin_family    = AF_INET; // IPv4
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(port);
+    addr.sin_family       = AF_INET; // IPv4
+    addr.sin_addr.s_addr  = INADDR_ANY;
+    addr.sin_port         = htons(port);
 
     // Bind the socket with the server address
     int binding = bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
@@ -74,7 +68,7 @@ void Socket_server::socket_recv_data(){
 
   //Thread blocking: MSG_DONTWAIT / MSG_WAITALL
   int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&addr), &length);
-say(udp_size);
+
   //Once packet received, process it
   packet_dec.clear();
   if(udp_size != 0 && udp_size != 512){
@@ -84,27 +78,6 @@ say(udp_size);
       int octet_32 = octet.to_ulong();
       packet_dec.push_back(octet_32);
     }
-  }
-
-  //If requested send a server response
-  socket_response(packet_dec);
-
-  //---------------------------
-}
-void Socket_server::socket_response(vector<int> packet_dec){
-  int code = 0;
-  //---------------------------
-
-  //Compute code
-  if(packet_dec.size() == 3){
-    if(packet_dec[0] == 50 && packet_dec[1] == 48 && packet_dec[2] == 48){
-      code = 200;
-    }
-  }
-
-  //Send response
-  if(code == 200){
-    socket_client->socket_send_data("ok");
   }
 
   //---------------------------

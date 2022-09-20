@@ -28,13 +28,19 @@ udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
   udpPacket* packet_udp = new udpPacket();
   //---------------------------
 
-  //Packet timestamp
-  packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
-  
-  //Chekc if data is laser or position information
+  //Check if data is laser or position information
+  if(packet_dec.size() == 1248){
+    vector<int> new_packet(1206);
+    copy(packet_dec.begin() + 42, packet_dec.end(), new_packet.begin());
+    packet_dec = new_packet;
+  }
+  //Check if data is laser or position information
   if(packet_dec.size() != 1206){
     return packet_udp;
   }
+
+  //Packet timestamp
+  packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
 
   //Parse packet data
   this->parse_packet(packet_dec);
@@ -84,7 +90,7 @@ void UDP_parser_VLP16::parse_blocks(){
 
     // 0xffee is upper block
     if(block_flag != 65518){
-      cout << "Problem of block flag" << endl;
+      cout << "[error] Problem block flag "<< block_flag<<" instead of "<<65518 << endl;
     }
 
     //Get block azimuth

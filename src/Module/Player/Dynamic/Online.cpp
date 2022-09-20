@@ -149,8 +149,6 @@ void Online::compute_http_command(){
   for(int i=0; i<option.size(); i++){
     string opt = option[i][0];
     string val = option[i][1];
-    say(opt);
-    say(val);
 
     if(opt == "slam"){
       this->with_slam = string_to_bool(val);
