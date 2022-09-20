@@ -74,7 +74,7 @@ void Socket_server::socket_recv_data(){
 
   //Thread blocking: MSG_DONTWAIT / MSG_WAITALL
   int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&addr), &length);
-
+say(udp_size);
   //Once packet received, process it
   packet_dec.clear();
   if(udp_size != 0 && udp_size != 512){
@@ -101,7 +101,7 @@ void Socket_server::socket_response(vector<int> packet_dec){
       code = 200;
     }
   }
-  
+
   //Send response
   if(code == 200){
     socket_client->socket_send_data("ok");
