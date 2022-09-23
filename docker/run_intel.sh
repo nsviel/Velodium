@@ -10,6 +10,3 @@ sudo docker run \
     --publish=8888:8888 \
     velodium
 xhost - >/dev/null
-
-
-

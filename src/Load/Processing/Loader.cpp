@@ -9,6 +9,7 @@
 #include "../Format/file_CSV.h"
 #include "../Format/file_OBJ.h"
 #include "../Format/file_XYZ.h"
+#include "../Format/file_CBOR.h"
 
 #include "../Load_node.h"
 
@@ -34,6 +35,7 @@ Loader::Loader(Load_node* node_load){
   this->objManager = new file_OBJ();
   this->xyzManager = new file_XYZ();
   this->pcapManager = new file_PCAP();
+  this->cborManager = new file_CBOR();
 
   //---------------------------
 }
@@ -267,6 +269,9 @@ vector<dataFile*> Loader::load_retrieve_data(string filePath){
   }
   else if(format == "csv"){
     data_vec = csvManager->Loader(filePath);
+  }
+  else if(format == "cbor"){
+    data_vec = cborManager->Loader(filePath);
   }
   else{
     console.AddLog("error", "File format not recognized");

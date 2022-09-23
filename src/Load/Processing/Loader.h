@@ -15,6 +15,7 @@ class file_CSV;
 class file_OBJ;
 class file_XYZ;
 class file_PCAP;
+class file_CBOR;
 
 
 class Loader
@@ -55,7 +56,8 @@ private:
   file_CSV* csvManager;
   file_OBJ* objManager;
   file_XYZ* xyzManager;
-  file_PCAP *pcapManager;
+  file_PCAP* pcapManager;
+  file_CBOR* cborManager;
 };
 
 #endif
