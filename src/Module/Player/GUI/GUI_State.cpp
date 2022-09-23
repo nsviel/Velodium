@@ -30,7 +30,6 @@ GUI_State::GUI_State(GUI_module* gui_module){
 
   Operation_node* node_ope = gui_module->get_node_ope();
   Module_node* node_module = gui_module->get_node_module();
-  Engine_node* node_engine = gui_module->get_node_engine();
   Interface_node* node_interface = node_module->get_node_interface();
 
   this->node_engine = gui_module->get_node_engine();
@@ -109,18 +108,10 @@ void GUI_State::state_configuration(){
 
   //Choose configuration
   int config_selected = *configManager->get_config();
-  if(ImGui::Combo("##007", &config_selected, "Default\0Capture\0AI module\0WP4 car\0WP5 train\0")){
+  if(ImGui::Combo("##007", &config_selected, "Default\0Capture\0AI\0Server\0")){
     configManager->make_preconfig(config_selected);
     node_engine->update();
   }
-
-  /*//Start scenario
-  ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-  if(ImGui::Button("Start##1", ImVec2(item_width, 0))){
-    //Start watcher here
-    //create maybe a new class which manage watchers
-  }
-  ImGui::PopStyleColor(1);*/
 
   //---------------------------
   ImGui::Separator();

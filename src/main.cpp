@@ -1,9 +1,12 @@
+//---------------------------------------------
+// Possible ARG command:
+// - ai
+// - capture
+// - car
+// - train
+//---------------------------------------------
 #include "Engine/OpenGL/CoreGLengine.h"
 
-/**
- * \file main.cpp
- * \brief Start the software
- */
 
 int main(int argc, char* argv[])
 {

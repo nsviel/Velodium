@@ -24,9 +24,8 @@ public:
   //Pred-defined configurations
   void preconf_default(Json::Value& root);
   void preconf_capture(Json::Value& root);
-  void preconf_ai_module(Json::Value& root);
-  void preconf_wp4_car(Json::Value& root);
-  void preconf_wp5_train(Json::Value& root);
+  void preconf_ai(Json::Value& root);
+  void preconf_server(Json::Value& root);
 
   //json stuff
   void create_jsonfile(string path_file);
@@ -44,11 +43,10 @@ public:
 
 private:
   string path_config;
-  string path_default;
-  string path_capture;
-  string path_wp4_car;
-  string path_wp5_train;
-  string path_ai;
+  string path_config_default;
+  string path_config_capture;
+  string path_config_ai;
+  string path_config_server;
 
   int config;
 };

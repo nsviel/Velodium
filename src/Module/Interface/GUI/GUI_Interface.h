@@ -11,7 +11,6 @@ class HTTP;
 class Interface;
 class Saving;
 class Prediction;
-class GPS;
 
 
 class GUI_Interface
@@ -40,7 +39,6 @@ private:
   Interface* interfaceManager;
   Saving* saveManager;
   Prediction* predManager;
-  GPS* gpsManager;
 
   int item_width;
 };

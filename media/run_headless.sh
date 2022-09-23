@@ -1,3 +1,3 @@
 #!/bin/sh
 
-xvfb-run -a ./executable
+xvfb-run -a ./executable server

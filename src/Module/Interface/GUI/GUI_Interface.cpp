@@ -6,7 +6,6 @@
 #include "../Interface_node.h"
 #include "../Interface.h"
 #include "../Local/Saving.h"
-#include "../Network/GPS.h"
 #include "../Network/Network.h"
 #include "../Network/HTTP/HTTP.h"
 #include "../Local/Prediction.h"
@@ -28,7 +27,6 @@ GUI_Interface::GUI_Interface(GUI_module* gui_module){
   this->interfaceManager = node_interface->get_interfaceManager();
   this->saveManager = node_interface->get_saveManager();
   this->predManager = node_interface->get_predManager();
-  this->gpsManager = node_interface->get_gpsManager();
   this->httpsManager = netManager->get_httpsManager();
 
   this->item_width = 100;
@@ -147,13 +145,7 @@ void GUI_Interface::state_watcher(){
   ImGui::Text("Runtime - AI");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
-
-  //Runtime GPS
-  bool with_gps = *gpsManager->get_with_gps();
-  ImGui::Text("Runtime - GPS");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_gps ? "ON" : "OFF");
-
+  
   //HTTP server daemon
   bool with_daemon = httpsManager->get_is_https_deamon();
   ImGui::Text("Daemon - HTTP");

@@ -9,10 +9,7 @@
       "speed_zoom" : 0.10000000149011612
    },
    "glyph" : {
-      "aabb_visibility" : true,
-      "grid_visibility" : true,
-      "normal_visibility" : false,
-      "trajectory_visibility" : false
+      "aabb_visibility" : false
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -21,19 +18,13 @@
       "topPanel_height" : 18
    },
    "interface" : {
-      "capture_port" : 2370,
-      "lidar_model" : "velodyne_vlp64",
-      "nb_save_frame" : 20,
-      "nb_save_image" : 1,
-      "path_save_frame" : "../../Hubium/data/frame/",
-      "path_save_image" : "../../Hubium/data/image/",
-      "with_prediction" : false,
-      "with_remove_lastSubset" : false,
-      "with_save_frame" : false,
-      "with_save_image" : false
+      "lidar_model" : "velodyne_vlp16",
+      "with_prediction" : true,
+      "with_remove_lastSubset" : true,
+      "with_save_frame" : true,
+      "with_save_image" : true
    },
    "module" : {
-      "player_mode" : "offline",
       "with_camera_follow" : true,
       "with_cylinder_cleaning" : true,
       "with_slam" : true
@@ -51,21 +42,10 @@
       "with_http_demon" : true
    },
    "parameter" : {
-      "check_directories" : true,
-      "clean_directories" : true,
-      "cloud_movement" : true,
-      "cloud_rotation" : 5,
-      "cloud_translation" : 0.01,
-      "color_intensity_max" : 255,
-      "color_intensity_min" : 0,
-      "color_mode" : 0,
+      "color_mode" : 2,
       "filter_cylinder_rmax" : 30,
-      "filter_cylinder_rmin" : 5,
-      "open_mode" : "cloud",
-      "path_data" : "../media/data/",
-      "path_media" : "../media/",
-      "point_size" : 2,
-      "save_mode" : "cloud"
+      "filter_cylinder_rmin" : 0.5,
+      "path_data" : "../../data/"
    },
    "wallet" : {
       "localhost" : "127.0.0.1",

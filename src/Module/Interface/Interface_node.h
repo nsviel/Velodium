@@ -3,7 +3,6 @@
 
 #include "../../common.h"
 
-class GPS;
 class Saving;
 class Prediction;
 class Module_node;
@@ -30,7 +29,6 @@ public:
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Module_node* get_node_module(){return node_module;}
-  inline GPS* get_gpsManager(){return gpsManager;}
   inline Saving* get_saveManager(){return saveManager;}
   inline Prediction* get_predManager(){return predManager;}
   inline Network* get_netManager(){return netManager;}
@@ -41,7 +39,6 @@ public:
 private:
   Engine_node* node_engine;
   Module_node* node_module;
-  GPS* gpsManager;
   Saving* saveManager;
   Prediction* predManager;
   Network* netManager;

@@ -50,23 +50,16 @@ void CoreGLengine::arg(int argc, char* argv[]){
 
   //Command line processing
   if(argc > 1){
-    string command_1 = argv[1];
+    string arg_1 = argv[1];
 
-    if(command_1 == "ai"){
+    if(arg_1 == "capture"){
       configManager->make_preconfig(1);
-      node_engine->update();
     }
-    else if(command_1 == "capture"){
-      configManager->make_preconfig(1);
-      node_engine->update();
-    }
-    else if(command_1 == "car"){
+    else if(arg_1 == "ai"){
       configManager->make_preconfig(2);
-      node_engine->update();
     }
-    else if(command_1 == "train"){
+    else if(arg_1 == "server"){
       configManager->make_preconfig(3);
-      node_engine->update();
     }
   }
   //Else make default configuration

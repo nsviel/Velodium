@@ -1,7 +1,6 @@
 #include "Interface_node.h"
 
 #include "Interface.h"
-#include "Network/GPS.h"
 #include "Local/Saving.h"
 #include "Local/Prediction.h"
 #include "Network/Network.h"
@@ -26,7 +25,6 @@ Interface_node::Interface_node(Module_node* node){
   this->saveManager = new Saving(this);
   this->predManager = new Prediction(this);
   this->captureManager = new Capture(this);
-  this->gpsManager = new GPS(this);
   this->netManager = new Network(this);
   this->interfaceManager = new Interface(this);
 
@@ -59,7 +57,6 @@ void Interface_node::runtime(){
   //---------------------------
 
   captureManager->runtime_capturing();
-  gpsManager->runtime_gps();
   predManager->runtime_prediction();
 
   //---------------------------

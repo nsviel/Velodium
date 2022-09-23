@@ -10,7 +10,6 @@ class Prediction;
 class Saving;
 class Capture;
 class Scene;
-class GPS;
 
 
 class Interface
@@ -35,7 +34,6 @@ private:
   Prediction* predManager;
   Saving* saveManager;
   Scene* sceneManager;
-  GPS* gpsManager;
 
   int nb_subset_max;
   bool with_justOneFrame;

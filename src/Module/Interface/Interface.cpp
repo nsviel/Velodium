@@ -2,7 +2,6 @@
 
 #include "Interface_node.h"
 #include "Local/Saving.h"
-#include "Network/GPS.h"
 #include "Local/Prediction.h"
 #include "LiDAR/Capture.h"
 
@@ -20,7 +19,6 @@ Interface::Interface(Interface_node* node){
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->captureManager = node->get_captureManager();
-  this->gpsManager = node->get_gpsManager();
   this->predManager = node->get_predManager();
   this->saveManager = node->get_saveManager();
   this->captureManager = node->get_captureManager();

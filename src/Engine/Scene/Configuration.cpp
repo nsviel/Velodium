@@ -10,12 +10,11 @@
 Configuration::Configuration(){
   //---------------------------
 
-  this->path_default = get_absolutePath_build() + "../media/engine/config/config_default.json";
-  this->path_ai = get_absolutePath_build() + "../media/engine/config/config_ai.json";
-  this->path_capture = get_absolutePath_build() + "../media/engine/config/config_capture.json";
-  this->path_wp4_car = get_absolutePath_build() + "../media/engine/config/config_wp4_car.json";
-  this->path_wp5_train = get_absolutePath_build() + "../media/engine/config/config_wp5_train.json";
-  this->path_config = path_default;
+  this->path_config_default = get_absolutePath_build() + "../media/engine/config/config_default.json";
+  this->path_config_capture = get_absolutePath_build() + "../media/engine/config/config_capture.json";
+  this->path_config_ai = get_absolutePath_build() + "../media/engine/config/config_ai.json";
+  this->path_config_server = get_absolutePath_build() + "../media/engine/config/config_server.json";
+  this->path_config = path_config_default;
   this->config = 0;
 
   //---------------------------
@@ -27,25 +26,25 @@ void Configuration::make_configuration(){
   //---------------------------
 
   //Check if config file exists
-  bool is_default = is_file_exist(path_default.c_str());
+  bool is_default = is_file_exist(path_config_default.c_str());
   bool is_config = is_file_exist(path_config.c_str());
 
   //if not, create them
   if(is_default == false){
-    this->create_jsonfile(path_default);
+    this->create_jsonfile(path_config_default);
 
-    bool is_default = is_file_exist(path_default.c_str());
+    bool is_default = is_file_exist(path_config_default.c_str());
     if(is_default){
-      cout<<"[\033[1;32mOK\033[0m] Default configuration (\033[1;32m"+  path_default +"\033[0m) file created"<<endl;
+      cout<<"[\033[1;32mOK\033[0m] Default configuration file (\033[1;32m"+  path_config_default +"\033[0m) created"<<endl;
     }else{
-      cout<<"[\033[1;31merror\033[0m] Default configuration file creation (\033[1;31m"+  path_default +"\033[0m) problem"<<endl;
+      cout<<"[\033[1;31merror\033[0m] Default configuration file creation (\033[1;31m"+  path_config_default +"\033[0m) problem"<<endl;
     }
   }
-  if(is_config == false && path_config != path_default){
+  if(is_config == false && path_config != path_config_default){
     this->create_jsonfile(path_config);
 
-    bool is_config = is_file_exist(path_config.c_str());
-    if(is_default){
+    is_config = is_file_exist(path_config.c_str());
+    if(is_config){
       cout<<"[\033[1;32mOK\033[0m] Specific configuration file (\033[1;32m"+  path_config +"\033[0m) created"<<endl;
     }else{
       cout<<"[\033[1;31merror\033[0m] Specific configuration file creation (\033[1;31m"+  path_config +"\033[0m) problem"<<endl;
@@ -58,33 +57,27 @@ void Configuration::make_preconfig(int config){
   //---------------------------
 
   switch(config){
-    case 0:{ //Default
-      this->path_config = path_default;
+    case 0:{ // Default
+      this->path_config = path_config_default;
       this->config = 0;
       this->make_configuration();
       break;
     }
-    case 1:{ //capture
-      this->path_config = path_capture;
+    case 1:{ // Capture
+      this->path_config = path_config_capture;
       this->config = 1;
       this->make_configuration();
       break;
     }
-    case 2:{ //AI module
-      this->path_config = path_ai;
+    case 2:{ // AI
+      this->path_config = path_config_ai;
       this->config = 2;
       this->make_configuration();
       break;
     }
-    case 3:{ //WP4 auto
-      this->path_config = path_wp4_car;
+    case 3:{ // Server
+      this->path_config = path_config_server;
       this->config = 3;
-      this->make_configuration();
-      break;
-    }
-    case 4:{ //WP5 train
-      this->path_config = path_wp5_train;
-      this->config = 4;
       this->make_configuration();
       break;
     }
@@ -199,7 +192,6 @@ void Configuration::preconf_default(Json::Value& root){
   interface["lidar_model"] = "velodyne_vlp64";
   interface["capture_port"] = 2370;
   interface["with_prediction"] = false;
-  interface["with_gps"] = false;
   interface["with_save_image"] = false;
   interface["with_save_frame"] = false;
   interface["with_remove_lastSubset"] = false;
@@ -234,7 +226,6 @@ void Configuration::preconf_capture(Json::Value& root){
   interface["lidar_model"] = "velodyne_vlp16";
   interface["capture_port"] = 2369;
   interface["with_prediction"] = true;
-  interface["with_gps"] = false;
   interface["with_save_image"] = false;
   interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
@@ -243,7 +234,7 @@ void Configuration::preconf_capture(Json::Value& root){
 
   //---------------------------
 }
-void Configuration::preconf_ai_module(Json::Value& root){
+void Configuration::preconf_ai(Json::Value& root){
   //---------------------------
 
   //Parameters
@@ -268,7 +259,6 @@ void Configuration::preconf_ai_module(Json::Value& root){
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp64";
   interface["with_prediction"] = true;
-  interface["with_gps"] = false;
   interface["with_save_image"] = false;
   interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
@@ -277,69 +267,38 @@ void Configuration::preconf_ai_module(Json::Value& root){
 
   //---------------------------
 }
-void Configuration::preconf_wp4_car(Json::Value& root){
+void Configuration::preconf_server(Json::Value& root){
   //---------------------------
 
   //Parameters
   Json::Value param;
   param["path_data"] = "../../data/";
+  param["filter_cylinder_rmin"] = 0.5;
+  param["filter_cylinder_rmax"] = 30;
+  param["color_mode"] = 2; //Heatmap
   root["parameter"] = param;
 
   //Glyph
   Json::Value glyph;
   glyph["aabb_visibility"] = false;
-  glyph["trajectory_visibility"] = true;
   root["glyph"] = glyph;
 
   //Module
   Json::Value module;
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = false;
-  root["module"] = module;
-
-  //Interface
-  Json::Value interface;
-  interface["lidar_model"] = "scala";
-  interface["with_prediction"] = true;
-  interface["with_gps"] = false;
-  interface["with_save_image"] = true;
-  interface["with_save_frame"] = true;
-  interface["with_remove_lastSubset"] = true;
-  interface["nb_save_image"] = 1;
-  root["interface"] = interface;
-
-  //---------------------------
-}
-void Configuration::preconf_wp5_train(Json::Value& root){
-  //---------------------------
-
-  //Parameters
-  Json::Value param;
-  param["path_data"] = "../../data/";
-  root["parameter"] = param;
-
-  //Glyph
-  Json::Value glyph;
-  glyph["aabb_visibility"] = false;
-  root["glyph"] = glyph;
-
-  //Module
-  Json::Value module;
-  module["with_slam"] = true;
-  module["with_camera_follow"] = false;
-  module["with_cylinder_cleaning"] = false;
+  module["with_cylinder_cleaning"] = true;
   root["module"] = module;
 
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp16";
   interface["with_prediction"] = true;
-  interface["with_gps"] = true;
-  interface["with_save_image"] = false;
+  interface["with_save_image"] = true;
   interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = true;
   root["interface"] = interface;
+
 
   //---------------------------
 }
@@ -355,16 +314,14 @@ void Configuration::create_jsonfile(string path_file){
   if (reader.parse(ifs, root) == false){
     this->preconf_default(root);
 
-    if(path_file == path_default){
+    if(path_file == path_config_default){
       this->preconf_default(root);
-    }else if(path_file == path_ai){
-      this->preconf_ai_module(root);
-    }else if(path_file == path_capture){
+    }else if(path_file == path_config_ai){
+      this->preconf_ai(root);
+    }else if(path_file == path_config_capture){
       this->preconf_capture(root);
-    }else if(path_file == path_wp4_car){
-      this->preconf_wp4_car(root);
-    }else if(path_file == path_wp5_train){
-      this->preconf_wp5_train(root);
+    }else if(path_file == path_config_server){
+      this->preconf_server(root);
     }
 
     //Write all above stuff
@@ -411,7 +368,7 @@ string Configuration::parse_json_s(string field, string value){
   if(root.isMember(field) && json_field.isMember(value)){
     result = json_field[value].asString();
   }else{
-    std::ifstream ifs_default(path_default);
+    std::ifstream ifs_default(path_config_default);
     Json::Reader reader;
     Json::Value root;
     reader.parse(ifs_default, root);
@@ -456,7 +413,7 @@ map<string, string> Configuration::parse_json_dict(string field){
       dict.insert ( std::pair<string, string>(field_itr, result) );
     }
   }else{
-    std::ifstream ifs_default(path_default);
+    std::ifstream ifs_default(path_config_default);
     Json::Reader reader;
     Json::Value root;
     reader.parse(ifs_default, root);
@@ -500,7 +457,7 @@ float Configuration::parse_json_f(string field, string value){
   if(root.isMember(field) && json_field.isMember(value)){
     result = json_field[value].asFloat();
   }else{
-    std::ifstream ifs_default(path_default);
+    std::ifstream ifs_default(path_config_default);
     Json::Reader reader;
     Json::Value root;
     reader.parse(ifs_default, root);
@@ -540,7 +497,7 @@ int Configuration::parse_json_i(string field, string value){
   if(root.isMember(field) && json_field.isMember(value)){
     result = json_field[value].asInt();
   }else{
-    std::ifstream ifs_default(path_default);
+    std::ifstream ifs_default(path_config_default);
     Json::Reader reader;
     Json::Value root;
     reader.parse(ifs_default, root);
@@ -580,7 +537,7 @@ bool Configuration::parse_json_b(string field, string value){
   if(root.isMember(field) && json_field.isMember(value)){
     result = json_field[value].asBool();
   }else{
-    std::ifstream ifs_default(path_default);
+    std::ifstream ifs_default(path_config_default);
     Json::Reader reader;
     Json::Value root;
     reader.parse(ifs_default, root);
