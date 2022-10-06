@@ -2,8 +2,6 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Object.h"
-#include "../../Engine/Scene/Object/SLAM/Localmap.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_maths.h"
@@ -13,6 +11,7 @@
 #include "src/SLAM_assessment.h"
 #include "src/SLAM_map.h"
 #include "src/SLAM_parameter.h"
+#include "src/SLAM_transform.h"
 #include "optim/SLAM_normal.h"
 #include "optim/SLAM_optim.h"
 
@@ -24,12 +23,12 @@ SLAM::SLAM(Engine_node* node){
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
 
   this->slam_map = new SLAM_map(this);
   this->slam_normal = new SLAM_normal(this);
   this->slam_optim = new SLAM_optim(this);
   this->slam_assess = new SLAM_assessment(this);
+  this->slam_transf = new SLAM_transform(this);
   this->slam_param = new SLAM_parameter(this);
   this->slam_init = new SLAM_init(this);
 
@@ -55,7 +54,7 @@ bool SLAM::compute_slam(Cloud* cloud, int subset_ID){
   //---------------------------
 
   slam_init->compute_initialization(cloud, subset_ID);
-  slam_map->compute_grid_sampling(subset);
+  slam_transf->compute_preprocessing(cloud, subset_ID);
   slam_optim->compute_optimization(cloud, subset_ID);
   bool success = slam_assess->compute_assessment(cloud, subset_ID);
 
@@ -67,7 +66,7 @@ bool SLAM::compute_slam(Cloud* cloud, int subset_ID){
 void SLAM::reset_slam(){
   //---------------------------
 
-  objectManager->reset_scene_object();
+  slam_transf->reset_glyph();
   slam_map->reset_map_hard();
 
   //---------------------------
@@ -82,8 +81,8 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
   //Apply transformation
   if(success){
     slam_map->update_map(cloud, subset_ID);
-    this->update_subset_location(subset);
-    this->update_subset_glyph(subset);
+    slam_transf->transform_subset(subset);
+    slam_transf->transform_glyph(subset);
   //Else reset slam map
   }else{
     frame->reset();
@@ -137,68 +136,6 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
 
   //---------------------------
   return true;
-}
-void SLAM::update_subset_location(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
-
-  //Update frame root
-  subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
-  subset->root = eigen_to_glm_vec3(trans_b);
-  frame->is_slamed = true;
-
-  //Update subset position
-  #pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<subset->xyz.size(); i++){
-    //Compute paramaters
-    float ts_n = subset->ts_n[i];
-    Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-    //Apply transformation
-    Eigen::Vector3d point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
-    point = R * point + t;
-    subset->xyz[i] = vec3(point(0), point(1), point(2));
-  }
-
-  //---------------------------
-  sceneManager->update_subset_location(subset);
-}
-void SLAM::update_subset_glyph(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  //Update keypoint
-  if(frame->xyz.size() == frame->nn.size()){
-    vector<vec3> xyz;
-    vector<vec3> Nxy;
-    vector<float> ts;
-
-    for(int i=0; i<frame->xyz.size(); i++){
-      if(isnan(frame->nn[i](0)) == false){
-        xyz.push_back(vec3(frame->nn[i](0), frame->nn[i](1), frame->nn[i](2)));
-        Nxy.push_back(vec3(frame->N_nn[i](0), frame->N_nn[i](1), frame->N_nn[i](2)));
-        ts.push_back(frame->ts_n[i]);
-      }
-    }
-
-    subset->keypoint.location = xyz;
-    subset->keypoint.timestamp = ts;
-    subset->keypoint.normal = Nxy;
-  }
-
-  //Update local map
-  Localmap* mapObject = objectManager->get_object_localmap();
-  mapObject->update_localmap(slam_map->get_local_map());
-  objectManager->update_object(mapObject->get_glyph());
-
-  //---------------------------
-  objectManager->update_glyph_subset(subset);
 }
 void SLAM::reset_visibility(Cloud* cloud, int subset_ID){
   //---------------------------

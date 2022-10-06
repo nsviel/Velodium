@@ -14,6 +14,7 @@ class SLAM_normal;
 class SLAM_assessment;
 class SLAM_map;
 class SLAM_parameter;
+class SLAM_transform;
 
 
 class GUI_Slam
@@ -52,6 +53,7 @@ private:
   SLAM_assessment* slam_assess;
   SLAM_map* slam_map;
   SLAM_parameter* slam_param;
+  SLAM_transform* slam_transf;
 
   int item_width;
 };

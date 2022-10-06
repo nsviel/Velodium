@@ -8,6 +8,7 @@
 #include "../src/SLAM_assessment.h"
 #include "../src/SLAM_map.h"
 #include "../src/SLAM_parameter.h"
+#include "../src/SLAM_transform.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
@@ -36,11 +37,13 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
+
   this->slam_optim_gn = optimManager->get_optim_gn();
   this->slam_normal = slamManager->get_slam_normal();
   this->slam_assess = slamManager->get_slam_assess();
   this->slam_map = slamManager->get_slam_map();
   this->slam_param = slamManager->get_slam_param();
+  this->slam_transf = slamManager->get_slam_transf();
 
   this->item_width = 100;
 
@@ -226,7 +229,7 @@ void GUI_Slam::parameter_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
 
     //Subset point minimum distance
-    double* min_root_distance = slam_map->get_min_root_distance();
+    double* min_root_distance = slam_transf->get_min_root_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -234,7 +237,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Subset point maximum distance
-    double* max_root_distance = slam_map->get_max_root_distance();
+    double* max_root_distance = slam_transf->get_max_root_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -244,7 +247,7 @@ void GUI_Slam::parameter_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Voxel");
 
     //Subsampling voxel width
-    double* grid_voxel_size = slam_map->get_grid_voxel_size();
+    double* grid_voxel_size = slam_transf->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){

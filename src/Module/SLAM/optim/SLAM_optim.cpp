@@ -39,8 +39,7 @@ void SLAM_optim::compute_optimization(Cloud* cloud, int subset_ID){
   //---------------------------
 
   if(frame->ID > 0){
-    this->compute_distortion(frame);
-    this->compute_transformation(frame);
+
 
     if(solver_GN){
       slam_optim_gn->optim_GN(frame, frame_m1);

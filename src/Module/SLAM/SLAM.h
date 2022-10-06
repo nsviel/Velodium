@@ -15,6 +15,7 @@ class SLAM_assessment;
 class SLAM_map;
 class SLAM_parameter;
 class SLAM_normal;
+class SLAM_transform;
 
 
 class SLAM
@@ -35,20 +36,20 @@ public:
   inline SLAM_assessment* get_slam_assess(){return slam_assess;}
   inline SLAM_map* get_slam_map(){return slam_map;}
   inline SLAM_parameter* get_slam_param(){return slam_param;}
+  inline SLAM_transform* get_slam_transf(){return slam_transf;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
   bool check_condition(Cloud* cloud, int subset_ID);
   void compute_finalization(Cloud* cloud, int subset_ID, bool success, float t_begin);
-  void update_subset_location(Subset* subset);
-  void update_subset_glyph(Subset* subset);
+  void compute_transform_subset(Subset* subset);
+  void compute_transform_glyph(Subset* subset);
   void reset_visibility(Cloud* cloud, int subset_ID);
 
 private:
   Engine_node* node_engine;
   Scene* sceneManager;
-  Object* objectManager;
   Configuration* configManager;
 
   //SLAM_optim_ceres* ceresManager;
@@ -58,6 +59,7 @@ private:
   SLAM_assessment* slam_assess;
   SLAM_map* slam_map;
   SLAM_parameter* slam_param;
+  SLAM_transform* slam_transf;
 
   string lidar_model;
   int nb_thread;

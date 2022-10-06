@@ -33,69 +33,13 @@ void SLAM_map::update_configuration(){
   local_map->linked_subset_ID = -1;
   local_map->current_frame_ID = 0;
 
-  this->min_root_distance = 5.0f;
-  this->max_root_distance = 100.0f;
   this->max_voxel_distance = 150.0f;
   this->min_voxel_distance = 0.05;
-  this->grid_voxel_width = 1;
-  this->max_total_point = 20000;
 
   local_map->rotat_b = Eigen::Matrix3d::Identity();
   local_map->rotat_e = Eigen::Matrix3d::Identity();
   local_map->trans_b = Eigen::Vector3d::Zero();
   local_map->trans_e = Eigen::Vector3d::Zero();
-
-  //---------------------------
-}
-void SLAM_map::compute_grid_sampling(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  //Clear vectors
-  frame->xyz.clear();
-  frame->xyz_raw.clear();
-  frame->ts_n.clear();
-
-  //Subsample the scan with voxels
-  gridMap grid;
-  Eigen::Vector4d point;
-  for(int i=0; i<subset->xyz.size(); i++){
-    vec3& xyz = subset->xyz[i];
-    double& ts_n = subset->ts_n[i];
-
-    double dist = fct_distance_origin(xyz);
-
-    if(dist > min_root_distance && dist < max_root_distance){
-      int kx = static_cast<int>(xyz.x / grid_voxel_width);
-      int ky = static_cast<int>(xyz.y / grid_voxel_width);
-      int kz = static_cast<int>(xyz.z / grid_voxel_width);
-      int key = local_map->get_signature(kx, ky, kz);
-
-      point << xyz.x, xyz.y, xyz.z, ts_n;
-      grid[key].push_back(point);
-    }
-  }
-
-  //Take one point inside each voxel
-  gridMap::iterator it;
-  for(auto it = grid.begin(); it != grid.end(); it++){
-    if(it->second.size() != 0){
-      //Take one random point
-      int rdm = rand() % it->second.size();
-
-      Eigen::Vector4d point = it->second[0];
-      Eigen::Vector3d xyz(point(0), point(1), point(2));
-
-      frame->xyz.push_back(xyz);
-      frame->ts_n.push_back(point(3));
-
-      if(frame->xyz.size() > max_total_point){
-        break;
-      }
-    }
-  }
-
-  frame->xyz_raw = frame->xyz;
 
   //---------------------------
 }
