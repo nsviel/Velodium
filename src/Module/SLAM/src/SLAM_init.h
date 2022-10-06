@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Slam;
+class SLAM;
 class SLAM_map;
 class Scene;
 
@@ -12,7 +12,7 @@ class SLAM_init
 {
 public:
   //Constructor / Destructor
-  SLAM_init(Slam* slam);
+  SLAM_init(SLAM* slam);
   ~SLAM_init();
 
 public:

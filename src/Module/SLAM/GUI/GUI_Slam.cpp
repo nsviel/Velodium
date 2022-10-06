@@ -1,13 +1,13 @@
 #include "GUI_Slam.h"
 
-#include "../Slam.h"
-#include "../CT_ICP/SLAM_optim.h"
-#include "../CT_ICP/SLAM_optim_ceres.h"
-#include "../CT_ICP/SLAM_optim_gn.h"
-#include "../CT_ICP/SLAM_normal.h"
-#include "../CT_ICP/SLAM_assessment.h"
-#include "../CT_ICP/SLAM_map.h"
-#include "../CT_ICP/SLAM_parameter.h"
+#include "../SLAM.h"
+#include "../optim/SLAM_optim.h"
+#include "../optim/SLAM_optim_ceres.h"
+#include "../optim/SLAM_optim_gn.h"
+#include "../src/SLAM_normal.h"
+#include "../src/SLAM_assessment.h"
+#include "../src/SLAM_map.h"
+#include "../src/SLAM_parameter.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
@@ -147,7 +147,7 @@ void GUI_Slam::parameter_offline(){
     if(ImGui::Button("Compute", ImVec2(item_width,0))){
       if(cloud != nullptr){
         sceneManager->reset_cloud(cloud);
-        slamManager->compute_slam_offline(cloud);
+        //slamManager->compute_slam_offline(cloud);
 
         sceneManager->update_cloud_location(cloud);
         sceneManager->update_cloud_glyphs(cloud);

@@ -1,16 +1,16 @@
 #include "SLAM_parameter.h"
 
 #include "SLAM_normal.h"
-#include "SLAM_optim.h"
-#include "SLAM_optim_gn.h"
 #include "SLAM_assessment.h"
 #include "SLAM_map.h"
+#include "../optim/SLAM_optim.h"
+#include "../optim/SLAM_optim_gn.h"
 
-#include "../Slam.h"
+#include "../SLAM.h"
 
 
 //Constructor / Destructor
-SLAM_parameter::SLAM_parameter(Slam* slam){
+SLAM_parameter::SLAM_parameter(SLAM* slam){
   //---------------------------
 
   this->slamManager = slam;

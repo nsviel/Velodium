@@ -6,7 +6,7 @@
 class Player_node;
 class Module_node;
 
-class Slam;
+class SLAM;
 class Color;
 class Camera;
 class Engine;
@@ -46,7 +46,7 @@ public:
 private:
   Scene* sceneManager;
   Color* colorManager;
-  Slam* slamManager;
+  SLAM* slamManager;
   Filter* filterManager;
   Dimension* dimManager;
   Configuration* configManager;

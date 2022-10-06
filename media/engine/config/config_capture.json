@@ -9,7 +9,10 @@
       "speed_zoom" : 0.10000000149011612
    },
    "glyph" : {
-      "aabb_visibility" : false
+      "aabb_visibility" : true,
+      "grid_visibility" : true,
+      "normal_visibility" : false,
+      "trajectory_visibility" : false
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -18,17 +21,20 @@
       "topPanel_height" : 18
    },
    "interface" : {
+      "capture_port" : 2369,
       "lidar_model" : "velodyne_vlp16",
+      "nb_save_frame" : 200000,
       "with_capture" : true,
       "with_prediction" : true,
-      "with_remove_lastSubset" : true,
+      "with_remove_lastSubset" : false,
       "with_save_frame" : true,
-      "with_save_image" : true
+      "with_save_image" : false
    },
    "module" : {
-      "with_camera_follow" : true,
-      "with_cylinder_cleaning" : true,
-      "with_slam" : true
+      "player_mode" : "online",
+      "with_camera_follow" : false,
+      "with_cylinder_cleaning" : false,
+      "with_slam" : false
    },
    "network" : {
       "http_port" : 8888,
@@ -43,10 +49,11 @@
       "with_http_demon" : true
    },
    "parameter" : {
-      "color_mode" : 2,
-      "filter_cylinder_rmax" : 30,
-      "filter_cylinder_rmin" : 0.5,
-      "path_data" : "../../data/"
+      "color_intensity_max" : 100,
+      "color_intensity_min" : 0,
+      "color_mode" : 1,
+      "open_mode" : "frame",
+      "save_mode" : "saved_frame"
    },
    "wallet" : {
       "localhost" : "127.0.0.1",

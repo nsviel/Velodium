@@ -1,20 +1,19 @@
 #ifndef SLAM_OPTIM_GN_H
 #define SLAM_OPTIM_GN_H
 
-#include "SLAM_normal.h"
-
-#include "../Cost_function/Cost_function.h"
-
 #include "../../../common.h"
 
-class Slam;
+#include  <mutex>
+
+class SLAM;
+class SLAM_normal;
 
 
 class SLAM_optim_gn
 {
 public:
   //Constructor / Destructor
-  SLAM_optim_gn(Slam* slam);
+  SLAM_optim_gn(SLAM* slam);
   ~SLAM_optim_gn();
 
 public:

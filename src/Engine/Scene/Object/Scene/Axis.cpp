@@ -110,7 +110,7 @@ void Axis::create_axis_subset(Subset* subset){
 void Axis::update_axis_subset(Subset* subset){
   Glyph* axis_subset = &subset->axis;
   vector<vec3>& XYZ = axis_subset->location;
-  vec3 root = subset->root;
+  vec3 subset_root = subset->root;
   //---------------------------
 
   axis_subset->visibility = axis_subset_visibility;
@@ -121,19 +121,21 @@ void Axis::update_axis_subset(Subset* subset){
   vec4 Rx = vec4(0.1,0,0,1) * R;
   vec4 Ry = vec4(0,0.1,0,1) * R;
   vec4 Rz = vec4(0,0,0.1,1) * R;
-
-  //Construct glyph
+  
   //X Axis
-  XYZ.push_back(vec3(root.x,root.y,root.z));
-  XYZ.push_back(vec3(root.x + Rx.x, root.y + Rx.y, root.z + Rx.z));
+  vec3 subsey_x = vec3(subset_root.x + Rx.x, subset_root.y + Rx.y, subset_root.z + Rx.z);
+  XYZ.push_back(subset_root);
+  XYZ.push_back(subsey_x);
 
   //Y Axis
-  XYZ.push_back(vec3(root.x,root.y,root.z));
-  XYZ.push_back(vec3(root.x + Ry.x, root.y + Ry.y, root.z + Ry.z));
+  vec3 subsey_y = vec3(subset_root.x + Ry.x, subset_root.y + Ry.y, subset_root.z + Ry.z);
+  XYZ.push_back(subset_root);
+  XYZ.push_back(subsey_y);
 
   //Z Axis
-  XYZ.push_back(vec3(root.x,root.y,root.z));
-  XYZ.push_back(vec3(root.x + Rz.x, root.y + Rz.y, root.z + Rz.z));
+  vec3 subsey_z = vec3(subset_root.x + Rz.x, subset_root.y + Rz.y, subset_root.z + Rz.z);
+  XYZ.push_back(subset_root);
+  XYZ.push_back(subsey_z);
 
   //---------------------------
 }

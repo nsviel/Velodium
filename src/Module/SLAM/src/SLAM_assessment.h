@@ -3,9 +3,8 @@
 
 #include "../../../common.h"
 
-class Slam;
+class SLAM;
 class Scene;
-class SLAM_optim_gn;
 class SLAM_map;
 
 
@@ -13,7 +12,7 @@ class SLAM_assessment
 {
 public:
   //Constructor / Destructor
-  SLAM_assessment(Slam* slam);
+  SLAM_assessment(SLAM* slam);
   ~SLAM_assessment();
 
 public:
@@ -38,7 +37,6 @@ public:
 
 private:
   Scene* sceneManager;
-  SLAM_optim_gn* slam_optim_gn;
   SLAM_map* slam_map;
 
   double thres_ego_trans;

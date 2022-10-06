@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Slam;
+class SLAM;
 class SLAM_normal;
 class SLAM_optim;
 class SLAM_optim_gn;
@@ -15,7 +15,7 @@ class SLAM_parameter
 {
 public:
   //Constructor / Destructor
-  SLAM_parameter(Slam* slam);
+  SLAM_parameter(SLAM* slam);
   ~SLAM_parameter();
 
 public:
@@ -36,7 +36,7 @@ public:
   inline int* get_predefined_conf(){return &predefined_conf;}
 
 private:
-  Slam* slamManager;
+  SLAM* slamManager;
   SLAM_normal* slam_normal;
   SLAM_optim* slam_optim;
   SLAM_optim_gn* slam_optim_gn;

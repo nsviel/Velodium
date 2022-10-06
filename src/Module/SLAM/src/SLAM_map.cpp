@@ -1,6 +1,6 @@
 #include "SLAM_map.h"
 
-#include "../Slam.h"
+#include "../SLAM.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-SLAM_map::SLAM_map(Slam* slam){
+SLAM_map::SLAM_map(SLAM* slam){
   //---------------------------
 
   Engine_node* node_engine = slam->get_node_engine();

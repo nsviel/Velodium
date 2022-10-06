@@ -1,6 +1,7 @@
 #include "SLAM_optim_gn.h"
 
-#include "../Slam.h"
+#include "../src/SLAM_normal.h"
+#include "../SLAM.h"
 
 #include "../../../Specific/fct_terminal.h"
 #include "../../../Specific/fct_transtypage.h"
@@ -8,7 +9,7 @@
 
 
 //Constructor / Destructor
-SLAM_optim_gn::SLAM_optim_gn(Slam* slam){
+SLAM_optim_gn::SLAM_optim_gn(SLAM* slam){
   //---------------------------
 
   this->slam_normal = slam->get_slam_normal();
@@ -219,6 +220,8 @@ void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
 
   frame->rotat_e *= rotat_e;
   frame->trans_e += trans_e;
+
+  frame->opti_score = X.norm();
 
   //---------------------------
 }

@@ -45,6 +45,7 @@ void Capture::update_configuration(){
 
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
   this->capture_port = configManager->parse_json_i("interface", "capture_port");
+  bool with_capture = configManager->parse_json_i("interface", "with_capture");
   this->cloud_capture = nullptr;
   this->ID_capture = 0;
   this->is_capturing = false;
@@ -53,6 +54,10 @@ void Capture::update_configuration(){
   this->capture_nb_point = 0;
   this->capture_nb_point_raw = 0;
   this->is_first_run = true;
+
+  if(with_capture){
+    this->start_new_capture(lidar_model);
+  }
 
   //---------------------------
 }

@@ -11,8 +11,8 @@
 #include "../../Module/Module_node.h"
 #include "../../Module/Player/Player_node.h"
 #include "../../Module/Player/Obstacle/Obstacle.h"
-#include "../../Module/SLAM/Slam.h"
-#include "../../Module/SLAM/CT_ICP/SLAM_parameter.h"
+#include "../../Module/SLAM/SLAM.h"
+#include "../../Module/SLAM/src/SLAM_parameter.h"
 
 
 //Constructor / Destructor
@@ -23,7 +23,7 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
   Module_node* node_module = node_gui->get_node_module();
   Player_node* node_player = node_module->get_node_player();
   Load_node* node_load = node_engine->get_node_load();
-  Slam* slamManager = node_module->get_slamManager();
+  SLAM* slamManager = node_module->get_slamManager();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();

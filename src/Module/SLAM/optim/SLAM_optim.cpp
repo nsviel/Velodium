@@ -2,7 +2,7 @@
 
 #include "SLAM_optim_gn.h"
 
-#include "../Slam.h"
+#include "../SLAM.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-SLAM_optim::SLAM_optim(Slam* slam){
+SLAM_optim::SLAM_optim(SLAM* slam){
   //---------------------------
 
   Engine_node* node_engine = slam->get_node_engine();

@@ -2,14 +2,14 @@
 
 #include "SLAM_map.h"
 
-#include "../Slam.h"
+#include "../SLAM.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 
 
 //Constructor / Destructor
-SLAM_init::SLAM_init(Slam* slam){
+SLAM_init::SLAM_init(SLAM* slam){
   //---------------------------
 
   Engine_node* node_engine = slam->get_node_engine();

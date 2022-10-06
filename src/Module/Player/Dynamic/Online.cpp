@@ -5,7 +5,7 @@
 #include "../Player_node.h"
 
 #include "../../Module_node.h"
-#include "../../SLAM/Slam.h"
+#include "../../SLAM/SLAM.h"
 #include "../../Interface/Interface_node.h"
 #include "../../Interface/Interface.h"
 #include "../../Interface/Network/HTTP/http_command.h"
@@ -83,7 +83,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //Make slam on the current subset
   if(with_slam){
-    slamManager->compute_slam_online(cloud, ID_subset);
+    slamManager->compute_slam(cloud, ID_subset);
   }
 
   //Make cleaning on the current subset

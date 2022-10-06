@@ -7,7 +7,7 @@
 #include <mutex>
 #include <shared_mutex>
 
-class Slam;
+class SLAM;
 class SLAM_map;
 
 
@@ -15,7 +15,7 @@ class SLAM_normal
 {
 public:
   //Constructor / Destructor
-  SLAM_normal(Slam* slam);
+  SLAM_normal(SLAM* slam);
   ~SLAM_normal();
 
 public:

@@ -1,9 +1,6 @@
 #ifndef SLAM_H
 #define SLAM_H
 
-#include "CT_ICP/SLAM_normal.h"
-#include "Cost_function/Cost_function.h"
-
 #include "../../Engine/Data/struct_voxelMap.h"
 #include "../../common.h"
 
@@ -17,20 +14,20 @@ class SLAM_optim;
 class SLAM_assessment;
 class SLAM_map;
 class SLAM_parameter;
+class SLAM_normal;
 
 
-class Slam
+class SLAM
 {
 public:
   //Constructor / Destructor
-  Slam(Engine_node* node);
-  ~Slam();
+  SLAM(Engine_node* node);
+  ~SLAM();
 
 public:
   void update_configuration();
-  void compute_slam_offline(Cloud* cloud);
-  void compute_slam_online(Cloud* cloud, int ID);
-  void reset_slam_hard();
+  bool compute_slam(Cloud* cloud, int subset_ID);
+  void reset_slam();
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return slam_normal;}
@@ -43,10 +40,10 @@ public:
   inline void set_offline_ID_max(int value){offline_ID_max = value;}
 
 private:
-  bool compute_assessment(Cloud* cloud, int ID);
+  bool check_condition(Cloud* cloud, int subset_ID);
+  void compute_finalization(Cloud* cloud, int subset_ID, bool success, float t_begin);
   void update_subset_location(Subset* subset);
   void update_subset_glyph(Subset* subset);
-  bool check_conditions(Cloud* cloud, int subset_ID);
   void reset_visibility(Cloud* cloud, int subset_ID);
 
 private:
@@ -63,6 +60,7 @@ private:
   SLAM_map* slam_map;
   SLAM_parameter* slam_param;
 
+  string lidar_model;
   int offline_ID_max;
   int nb_thread;
 };

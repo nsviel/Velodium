@@ -27,6 +27,7 @@
       "nb_save_image" : 1,
       "path_save_frame" : "../../Hubium/data/frame/",
       "path_save_image" : "../../Hubium/data/image/",
+      "with_capture" : false,
       "with_prediction" : false,
       "with_remove_lastSubset" : false,
       "with_save_frame" : false,

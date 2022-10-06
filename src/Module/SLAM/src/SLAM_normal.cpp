@@ -2,7 +2,7 @@
 
 #include "SLAM_map.h"
 
-#include "../Slam.h"
+#include "../SLAM.h"
 
 #include "../../../Specific/fct_maths.h"
 
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-SLAM_normal::SLAM_normal(Slam* slam){
+SLAM_normal::SLAM_normal(SLAM* slam){
   //---------------------------
 
   this->slam_map = slam->get_slam_map();

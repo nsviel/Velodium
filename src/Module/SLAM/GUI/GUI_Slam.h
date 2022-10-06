@@ -6,7 +6,7 @@
 class GUI_module;
 class Scene;
 class Object;
-class Slam;
+class SLAM;
 
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
@@ -39,12 +39,12 @@ public:
   void display_stat(string title, vec3 abs, vec3 rlt);
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 
-  inline Slam* get_slamManager(){return slamManager;}
+  inline SLAM* get_slamManager(){return slamManager;}
 
 private:
   Scene* sceneManager;
   Object* objectManager;
-  Slam* slamManager;
+  SLAM* slamManager;
 
   SLAM_optim_ceres* ceresManager;
   SLAM_optim_gn* gnManager;

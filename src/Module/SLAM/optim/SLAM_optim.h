@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Scene;
-class Slam;
+class SLAM;
 class SLAM_optim_gn;
 
 
@@ -12,7 +12,7 @@ class SLAM_optim
 {
 public:
   //Constructor / Destructor
-  SLAM_optim(Slam* slam);
+  SLAM_optim(SLAM* slam);
   ~SLAM_optim();
 
 public:
