@@ -19,8 +19,6 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
   this->sceneManager = node_engine->get_sceneManager();
   this->slam_map = slam->get_slam_map();
 
-  this->nb_residual_min = 100;
-
   this->thres_ego_trans = 2.0f;
   this->thres_ego_rotat = 15.0f;
   this->thres_pose_trans = 5.0f;
@@ -30,6 +28,7 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
 
   this->nb_rlt_previous_mean = 10;
   this->nb_rlt_previous_pose = 5;
+  this->nb_residual_min = 100;
 
   //---------------------------
 }
@@ -52,14 +51,15 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID){
 
   //Check for any error
   if(!success_abs || !success_rlt || !success_rsd){
-    string log = "SLAM computation failed";
-    console.AddLog("error", log);
+    console.AddLog("error", "[SLAM] Computation failed");
     return false;
   }
 
   //---------------------------
   return true;
 }
+
+//Specific function
 bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   bool success = true;
   //---------------------------

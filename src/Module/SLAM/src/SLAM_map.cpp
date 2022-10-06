@@ -16,7 +16,6 @@ SLAM_map::SLAM_map(SLAM* slam){
   Engine_node* node_engine = slam->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
-
   this->local_map = new slamap();
 
   //---------------------------
@@ -34,11 +33,6 @@ void SLAM_map::update_configuration(){
   local_map->linked_subset_ID = -1;
   local_map->current_frame_ID = 0;
 
-  local_map->rotat_b = Eigen::Matrix3d::Identity();
-  local_map->rotat_e = Eigen::Matrix3d::Identity();
-  local_map->trans_b = Eigen::Vector3d::Zero();
-  local_map->trans_e = Eigen::Vector3d::Zero();
-
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
   this->max_voxel_distance = 150.0f;
@@ -46,30 +40,6 @@ void SLAM_map::update_configuration(){
   this->grid_voxel_width = 1;
   this->max_total_point = 20000;
 
-  //---------------------------
-}
-void SLAM_map::update_map(Cloud* cloud, int subset_ID){
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m = sceneManager->get_frame_byID(cloud, subset_ID - 5);
-  //---------------------------
-
-  if(subset_ID > 5){
-    this->update_map_parameter(frame_m);
-  }
-
-  this->add_pointsToLocalMap(frame);
-  this->end_clearTooFarVoxels(frame->trans_e);
-
-  //---------------------------
-}
-void SLAM_map::reset_map_hard(){
-  //---------------------------
-
-  local_map->map.clear();
-  local_map->linked_cloud_ID = -1;
-  local_map->linked_subset_ID = -1;
-  local_map->current_frame_ID = 0;
-
   local_map->rotat_b = Eigen::Matrix3d::Identity();
   local_map->rotat_e = Eigen::Matrix3d::Identity();
   local_map->trans_b = Eigen::Vector3d::Zero();
@@ -77,17 +47,6 @@ void SLAM_map::reset_map_hard(){
 
   //---------------------------
 }
-void SLAM_map::reset_map_smooth(){
-  //---------------------------
-
-  local_map->map.clear();
-  local_map->current_frame_ID = 0;
-  local_map->linked_subset_ID = -1;
-  local_map->current_frame_ID = 0;
-
-  //---------------------------
-}
-
 void SLAM_map::compute_grid_sampling(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
@@ -140,6 +99,20 @@ void SLAM_map::compute_grid_sampling(Subset* subset){
 
   //---------------------------
 }
+void SLAM_map::update_map(Cloud* cloud, int subset_ID){
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame_m = sceneManager->get_frame_byID(cloud, subset_ID - 5);
+  //---------------------------
+
+  if(subset_ID > 5){
+    this->update_map_parameter(frame_m);
+  }
+
+  this->add_pointsToLocalMap(frame);
+  this->end_clearTooFarVoxels(frame->trans_e);
+
+  //---------------------------
+}
 void SLAM_map::update_map_parameter(Frame* frame){
   //---------------------------
 
@@ -150,6 +123,33 @@ void SLAM_map::update_map_parameter(Frame* frame){
 
   //---------------------------
 }
+void SLAM_map::reset_map_smooth(){
+  //---------------------------
+
+  local_map->map.clear();
+  local_map->current_frame_ID = 0;
+  local_map->linked_subset_ID = -1;
+  local_map->current_frame_ID = 0;
+
+  //---------------------------
+}
+void SLAM_map::reset_map_hard(){
+  //---------------------------
+
+  local_map->map.clear();
+  local_map->linked_cloud_ID = -1;
+  local_map->linked_subset_ID = -1;
+  local_map->current_frame_ID = 0;
+
+  local_map->rotat_b = Eigen::Matrix3d::Identity();
+  local_map->rotat_e = Eigen::Matrix3d::Identity();
+  local_map->trans_b = Eigen::Vector3d::Zero();
+  local_map->trans_e = Eigen::Vector3d::Zero();
+
+  //---------------------------
+}
+
+//sub-function
 void SLAM_map::add_pointsToLocalMap(Frame* frame){
   //---------------------------
 

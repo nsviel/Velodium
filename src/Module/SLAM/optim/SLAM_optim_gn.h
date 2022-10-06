@@ -17,6 +17,7 @@ public:
   ~SLAM_optim_gn();
 
 public:
+  //Main function
   void update_configuration();
   void optim_GN(Frame* frame, Frame* frame_m1);
 
@@ -27,15 +28,16 @@ public:
   inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
+  //Sub-function
   void compute_derivative(Frame* frame);
   void compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::VectorXd& b);
   void compute_constraint(Frame* frame, Frame* frame_m1, Eigen::MatrixXd& J, Eigen::VectorXd& b);
-
-  void update_frame(Frame* frame, Eigen::VectorXd& X);
-  void update_keypoints(Frame* frame);
-
   Eigen::Matrix3d compute_rotationMatrix(double Rx, double Ry, double Rz);
 
+  //Update function
+  void update_frame(Frame* frame, Eigen::VectorXd& X);
+  void update_keypoints(Frame* frame);
+  
 private:
   SLAM_normal* slam_normal;
 

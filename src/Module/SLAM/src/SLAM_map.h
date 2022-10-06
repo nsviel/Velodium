@@ -15,13 +15,15 @@ public:
   ~SLAM_map();
 
 public:
+  //Main function
   void update_configuration();
-  void update_map(Cloud* cloud, int subset_ID);
-  void reset_map_hard();
-  void reset_map_smooth();
-
   void compute_grid_sampling(Subset* subset);
+  void update_map(Cloud* cloud, int subset_ID);
   void update_map_parameter(Frame* frame);
+  void reset_map_smooth();
+  void reset_map_hard();
+
+  //Sub-function
   void add_pointsToLocalMap(Frame* frame);
   void end_clearTooFarVoxels(Eigen::Vector3d &current_location);
 

@@ -23,11 +23,10 @@ SLAM_init::~SLAM_init(){}
 
 //Main functions
 void SLAM_init::compute_initialization(Cloud* cloud, int subset_ID){
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   //---------------------------
 
   this->init_frame_ID(cloud, subset_ID);
-  this->init_frame_ts(subset);
+  this->init_frame_ts(cloud, subset_ID);
   this->init_frame_chain(cloud, subset_ID);
 
   //---------------------------
@@ -48,7 +47,8 @@ void SLAM_init::init_frame_ID(Cloud* cloud, int subset_ID){
 
   //---------------------------
 }
-void SLAM_init::init_frame_ts(Subset* subset){
+void SLAM_init::init_frame_ts(Cloud* cloud, int subset_ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = &subset->frame;
   vector<float>& ts = subset->ts;
   //---------------------------
@@ -74,7 +74,7 @@ void SLAM_init::init_frame_ts(Subset* subset){
   }
   //If there is no timestamp data, create synthetic one
   else{
-    cout<<"[error] no timestamp for SLAM"<<endl;
+    console.AddLog("error" ,"[SLAM] No subset timestamp");
     for(int i=0; i<subset->xyz.size(); i++){
       double ts_n = i / subset->xyz.size();
       subset->ts_n.push_back(ts_n);
@@ -104,8 +104,10 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
     Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
     Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 
-    frame_m0->rotat_b = frame_m1->rotat_e;
-    frame_m0->trans_b = frame_m1->trans_e;
+    //frame_m0->rotat_b = frame_m1->rotat_e;
+    //frame_m0->trans_b = frame_m1->trans_e;
+    frame_m0->rotat_b = rotat_next_b;
+    frame_m0->trans_b = trans_next_b;
     frame_m0->rotat_e = rotat_next_e;
     frame_m0->trans_e = trans_next_e;
   }

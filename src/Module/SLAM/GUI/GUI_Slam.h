@@ -46,12 +46,12 @@ private:
   Object* objectManager;
   SLAM* slamManager;
 
-  SLAM_optim_ceres* ceresManager;
-  SLAM_optim_gn* gnManager;
-  SLAM_normal* normalManager;
-  SLAM_assessment* assessManager;
-  SLAM_map* mapManager;
-  SLAM_parameter* paramManager;
+  SLAM_optim_ceres* slam_optim_ceres;
+  SLAM_optim_gn* slam_optim_gn;
+  SLAM_normal* slam_normal;
+  SLAM_assessment* slam_assess;
+  SLAM_map* slam_map;
+  SLAM_parameter* slam_param;
 
   int item_width;
 };

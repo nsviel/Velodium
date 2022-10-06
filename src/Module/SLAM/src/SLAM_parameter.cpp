@@ -1,10 +1,11 @@
 #include "SLAM_parameter.h"
 
-#include "SLAM_normal.h"
 #include "SLAM_assessment.h"
 #include "SLAM_map.h"
+
 #include "../optim/SLAM_optim.h"
 #include "../optim/SLAM_optim_gn.h"
+#include "../optim/SLAM_normal.h"
 
 #include "../SLAM.h"
 
@@ -26,7 +27,7 @@ SLAM_parameter::SLAM_parameter(SLAM* slam){
 }
 SLAM_parameter::~SLAM_parameter(){}
 
-//Configuration functions
+//Configuration function
 void SLAM_parameter::make_config(int conf){
   //---------------------------
 
@@ -74,6 +75,8 @@ void SLAM_parameter::make_config(string conf){
 
   //---------------------------
 }
+
+//Specific function
 void SLAM_parameter::make_config_default(){
   //velodyne_vlp64
   //---------------------------
@@ -305,7 +308,7 @@ void SLAM_parameter::make_config_2(){
   int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
   //Optim gn
-  double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
+  double* PTP_distance_max = slam_optim_gn->get_dist_residual_max();
   int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
@@ -355,7 +358,7 @@ void SLAM_parameter::make_config_2(){
   //---------------------------
 }
 
-//Setting functions
+//Setting function
 void SLAM_parameter::set_predefined_conf(int conf){
   //---------------------------
 

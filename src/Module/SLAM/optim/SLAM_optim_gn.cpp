@@ -1,6 +1,7 @@
 #include "SLAM_optim_gn.h"
 
-#include "../src/SLAM_normal.h"
+#include "SLAM_normal.h"
+
 #include "../SLAM.h"
 
 #include "../../../Specific/fct_terminal.h"
@@ -19,7 +20,7 @@ SLAM_optim_gn::SLAM_optim_gn(SLAM* slam){
 }
 SLAM_optim_gn::~SLAM_optim_gn(){}
 
-//Main functions
+//Main function
 void SLAM_optim_gn::update_configuration(){
   //---------------------------
 
@@ -60,7 +61,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1){
   //---------------------------
 }
 
-//Subfunctions
+//Sub-function
 void SLAM_optim_gn::compute_derivative(Frame* frame){
   vec_u.clear(); vec_u.resize(frame->xyz.size());
   frame->nb_residual = 0;
@@ -197,7 +198,7 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(double rx, double ry, doub
   return R;
 }
 
-//Update functions
+//Update function
 void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
 /*

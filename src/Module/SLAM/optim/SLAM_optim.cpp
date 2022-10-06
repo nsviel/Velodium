@@ -23,7 +23,7 @@ SLAM_optim::SLAM_optim(SLAM* slam){
 }
 SLAM_optim::~SLAM_optim(){}
 
-//Main functions
+//Main function
 void SLAM_optim::update_configuration(){
   //---------------------------
 
@@ -51,6 +51,8 @@ void SLAM_optim::compute_optimization(Cloud* cloud, int subset_ID){
 
   //---------------------------
 }
+
+//Specific function
 void SLAM_optim::compute_distortion(Frame* frame){
   //---------------------------
 

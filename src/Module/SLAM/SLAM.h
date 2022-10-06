@@ -37,7 +37,6 @@ public:
   inline SLAM_parameter* get_slam_param(){return slam_param;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
-  inline void set_offline_ID_max(int value){offline_ID_max = value;}
 
 private:
   bool check_condition(Cloud* cloud, int subset_ID);
@@ -61,7 +60,6 @@ private:
   SLAM_parameter* slam_param;
 
   string lidar_model;
-  int offline_ID_max;
   int nb_thread;
 };
 

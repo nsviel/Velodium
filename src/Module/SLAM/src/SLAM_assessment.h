@@ -16,12 +16,16 @@ public:
   ~SLAM_assessment();
 
 public:
+  //Main function
   bool compute_assessment(Cloud* cloud, int ID);
+
+  //Specific function
   bool compute_assessment_abs(Frame* frame, Frame* frame_m1);
   bool compute_assessment_rlt(Cloud* cloud, int i);
   bool compute_assessment_rsd(Frame* frame);
   void compute_statistics(Cloud* cloud, int subset_ID, float duration);
 
+  //Sub-function
   double AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
   void compute_stat_mean(Cloud* cloud, int ID);
 

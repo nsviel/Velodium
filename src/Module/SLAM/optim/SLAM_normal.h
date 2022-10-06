@@ -29,7 +29,7 @@ public:
   inline int* get_knn_voxel_search(){return &knn_voxel_search;}
 
 private:
-  //Sub functions
+  //Sub-function
   vector<Eigen::Vector3d> compute_kNN_search(Eigen::Vector3d &point);
   void compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN, int i);
   void compute_normal_direction(Frame* frame, int i);

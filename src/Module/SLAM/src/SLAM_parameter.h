@@ -19,17 +19,17 @@ public:
   ~SLAM_parameter();
 
 public:
-  //Main function
+  //Configuration function
   void make_config(int conf);
   void make_config(string conf);
 
-  //Subfunctions
+  //Specific function
   void make_config_default();
   void make_config_0();
   void make_config_1();
   void make_config_2();
 
-  //Setters
+  //Setting function
   void set_predefined_conf(int conf);
   void set_nb_thread(int value);
 

@@ -13,7 +13,7 @@
 #include "src/SLAM_assessment.h"
 #include "src/SLAM_map.h"
 #include "src/SLAM_parameter.h"
-#include "src/SLAM_normal.h"
+#include "optim/SLAM_normal.h"
 #include "optim/SLAM_optim.h"
 
 
@@ -42,7 +42,6 @@ SLAM::~SLAM(){}
 void SLAM::update_configuration(){
   //---------------------------
 
-  this->offline_ID_max = 0;
   this->nb_thread = 8;
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
   slam_param->make_config(lidar_model);
@@ -87,11 +86,6 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
     this->update_subset_glyph(subset);
   //Else reset slam map
   }else{
-    /*slam_init->init_frame_chain(cloud, subset_ID);
-    slam_map->update_map(frame);
-    this->update_subset_location(subset);
-    this->update_subset_glyph(subset);*/
-
     frame->reset();
     slam_map->reset_map_smooth();
     this->reset_visibility(cloud, subset_ID);

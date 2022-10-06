@@ -1,7 +1,6 @@
 #include "SLAM_normal.h"
 
-#include "SLAM_map.h"
-
+#include "../src/SLAM_map.h"
 #include "../SLAM.h"
 
 #include "../../../Specific/fct_maths.h"
@@ -50,7 +49,7 @@ void SLAM_normal::compute_normal(Frame* frame){
   //---------------------------
 }
 
-//Sub function
+//Sub-function
 vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point){
   slamap* local_map = slam_map->get_local_map();
   priority_queue_iNN priority_queue;

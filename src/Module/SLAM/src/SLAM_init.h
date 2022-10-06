@@ -20,8 +20,8 @@ public:
   void compute_initialization(Cloud* cloud, int subset_ID);
 
   //Subfunctions
-  void init_frame_ID(Cloud* cloud, int ID);
-  void init_frame_ts(Subset* subset);
+  void init_frame_ID(Cloud* cloud, int subset_ID);
+  void init_frame_ts(Cloud* cloud, int subset_ID);
   void init_frame_chain(Cloud* cloud, int subset_ID);
 
 private:

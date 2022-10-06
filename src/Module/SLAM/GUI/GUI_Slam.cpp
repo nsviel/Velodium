@@ -4,7 +4,7 @@
 #include "../optim/SLAM_optim.h"
 #include "../optim/SLAM_optim_ceres.h"
 #include "../optim/SLAM_optim_gn.h"
-#include "../src/SLAM_normal.h"
+#include "../optim/SLAM_normal.h"
 #include "../src/SLAM_assessment.h"
 #include "../src/SLAM_map.h"
 #include "../src/SLAM_parameter.h"
@@ -34,13 +34,13 @@ GUI_Slam::GUI_Slam(GUI_module* node_gui){
   this->slamManager = node_module->get_slamManager();
   SLAM_optim* optimManager = slamManager->get_slam_optim();
 
-  this->gnManager = optimManager->get_optim_gn();
-  this->normalManager = slamManager->get_slam_normal();
-  this->assessManager = slamManager->get_slam_assess();
-  this->mapManager = slamManager->get_slam_map();
-  this->paramManager = slamManager->get_slam_param();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
+  this->slam_optim_gn = optimManager->get_optim_gn();
+  this->slam_normal = slamManager->get_slam_normal();
+  this->slam_assess = slamManager->get_slam_assess();
+  this->slam_map = slamManager->get_slam_map();
+  this->slam_param = slamManager->get_slam_param();
 
   this->item_width = 100;
 
@@ -92,10 +92,10 @@ void GUI_Slam::parameter_lidar(){
   //---------------------------
 
   //Configuration model
-  int slam_conf = *paramManager->get_predefined_conf();
+  int slam_conf = *slam_param->get_predefined_conf();
   ImGui::SetNextItemWidth(item_width);
   if(ImGui::Combo("LiDAR", &slam_conf, "vlp_64\0vlp_16\0hdl_32\0")){
-    paramManager->set_predefined_conf(slam_conf);
+    slam_param->set_predefined_conf(slam_conf);
   }
 
   //---------------------------
@@ -160,7 +160,7 @@ void GUI_Slam::parameter_offline(){
       static int frame_max = cloud->nb_subset;
       ImGui::SetNextItemWidth(item_width);
       if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_subset)){
-        slamManager->set_offline_ID_max(frame_max);
+        //slamManager->set_offline_ID_max(frame_max);
       }
     }else{
       static int frame_max = 0;
@@ -182,7 +182,7 @@ void GUI_Slam::parameter_optimization(){
     static int nb_thread = 8;
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number thread", &nb_thread, 0, 20)){
-      paramManager->set_nb_thread(nb_thread);
+      slam_param->set_nb_thread(nb_thread);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Number of threads for optimization and normal computation");
@@ -192,15 +192,15 @@ void GUI_Slam::parameter_optimization(){
     static int iter_max = 5;
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::SliderInt("Number iter", &iter_max, 1, 20)){
-      //ceresManager->set_iter_max(iter_max);
-      gnManager->set_iter_max(iter_max);
+      //slam_optim_ceres->set_iter_max(iter_max);
+      slam_optim_gn->set_iter_max(iter_max);
     }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Number of iteration for the optimization algorithm");
     }
 
     //Maximum point to plane distance for optimization
-    double* PTP_distance_max = gnManager->get_dist_residual_max();
+    double* PTP_distance_max = slam_optim_gn->get_dist_residual_max();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max PTP distance", PTP_distance_max, 0.01f, 4.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -208,7 +208,7 @@ void GUI_Slam::parameter_optimization(){
     }
 
     //Minimal requiered number of residual
-    int* nb_residual_min = assessManager->get_nb_residual_min();
+    int* nb_residual_min = slam_assess->get_nb_residual_min();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Minimal number residual", nb_residual_min, 10, 500);
     if(ImGui::IsItemHovered()){
@@ -226,7 +226,7 @@ void GUI_Slam::parameter_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
 
     //Subset point minimum distance
-    double* min_root_distance = mapManager->get_min_root_distance();
+    double* min_root_distance = slam_map->get_min_root_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -234,7 +234,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Subset point maximum distance
-    double* max_root_distance = mapManager->get_max_root_distance();
+    double* max_root_distance = slam_map->get_max_root_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -244,7 +244,7 @@ void GUI_Slam::parameter_localMap(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Voxel");
 
     //Subsampling voxel width
-    double* grid_voxel_size = mapManager->get_grid_voxel_size();
+    double* grid_voxel_size = slam_map->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -252,7 +252,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Width of the local map voxel
-    double* localMap_width = mapManager->get_map_voxel_size();
+    double* localMap_width = slam_map->get_map_voxel_size();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -260,7 +260,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Mnimun distance between points inside a voxel
-    double* min_voxel_distance = mapManager->get_min_voxel_distance();
+    double* min_voxel_distance = slam_map->get_min_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Min point dist voxel ", min_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -268,7 +268,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Distance threshold to supress the voxels on run
-    double* max_voxel_distance = mapManager->get_max_voxel_distance();
+    double* max_voxel_distance = slam_map->get_max_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max dist from position", max_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -276,7 +276,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Number of point per voxel
-    int* nb_points_per_voxel = mapManager->get_map_voxel_capacity();
+    int* nb_points_per_voxel = slam_map->get_map_voxel_capacity();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -292,7 +292,7 @@ void GUI_Slam::parameter_normal(){
     //---------------------------
 
     //Number k nearest neighbors
-    int* max_number_neighbors = normalManager->get_knn_max_nn();
+    int* max_number_neighbors = slam_normal->get_knn_max_nn();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Max number kNN", max_number_neighbors, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -300,7 +300,7 @@ void GUI_Slam::parameter_normal(){
     }
 
     //Number of voxel to search kNN
-    int* voxel_searchSize = normalManager->get_knn_voxel_search();
+    int* voxel_searchSize = slam_normal->get_knn_voxel_search();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Voxel search number", voxel_searchSize, 1, 10);
     if(ImGui::IsItemHovered()){
@@ -308,7 +308,7 @@ void GUI_Slam::parameter_normal(){
     }
 
     //kNN voxel size
-    double* knn_voxel_capacity = normalManager->get_knn_voxel_width();
+    double* knn_voxel_capacity = slam_normal->get_knn_voxel_width();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("kNN voxel size", knn_voxel_capacity, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -324,7 +324,7 @@ void GUI_Slam::parameter_robustesse(){
     //---------------------------
 
     //Minimal optimization score
-    double* thres_optimMinNorm = assessManager->get_thres_optimMinNorm();
+    double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Minimal threshold", thres_optimMinNorm, 0.001f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -332,7 +332,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Maximal X and Y axis rotation angle
-    double* thres_diff_angle = assessManager->get_thres_diff_angle();
+    double* thres_diff_angle = slam_assess->get_thres_diff_angle();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max X and Y axis diff angle", thres_diff_angle, 0.001f, 3.0f, "%.1f");
     if(ImGui::IsItemHovered()){
@@ -340,7 +340,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Maximum displacement in a frame
-    double* thres_ego_trans = assessManager->get_thres_ego_trans();
+    double* thres_ego_trans = slam_assess->get_thres_ego_trans();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max ego translation", thres_ego_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -348,7 +348,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Maximum rotation in a frame
-    double* thres_ego_rotat = assessManager->get_thres_ego_rotat();
+    double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max ego rotation", thres_ego_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -356,7 +356,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Maximum displacement between two poses
-    double* thres_pose_trans = assessManager->get_thres_pose_trans();
+    double* thres_pose_trans = slam_assess->get_thres_pose_trans();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max pose translation", thres_pose_trans, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -364,7 +364,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Maximum rotation between two poses
-    double* thres_pose_rotat = assessManager->get_thres_pose_rotat();
+    double* thres_pose_rotat = slam_assess->get_thres_pose_rotat();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Max pose rotation", thres_pose_rotat, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -372,7 +372,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Number of previous pose taking into account
-    int* nb_rlt_previous_pose = assessManager->get_nb_rlt_previous_pose();
+    int* nb_rlt_previous_pose = slam_assess->get_nb_rlt_previous_pose();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("X previous rlt pose", nb_rlt_previous_pose, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -380,7 +380,7 @@ void GUI_Slam::parameter_robustesse(){
     }
 
     //Number of time threashold from mean previous pose
-    int* nb_rlt_previous_mean = assessManager->get_nb_rlt_previous_mean();
+    int* nb_rlt_previous_mean = slam_assess->get_nb_rlt_previous_mean();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("X time thres previous rlt pose", nb_rlt_previous_mean, 1, 100);
     if(ImGui::IsItemHovered()){
