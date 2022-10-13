@@ -21,9 +21,10 @@ public:
 
 public:
   //General
-  void compute_cloudAttributs_all();
-  void compute_cloudAttributs_list(list<Cloud*>* list);
-  void compute_cloudAttributs(Subset* subset);
+  void compute_attribut_all();
+  void compute_attribut_list(list<Cloud*>* list);
+  void compute_attribut_cloud(Cloud* cloud);
+  void compute_attribut_subset(Subset* subset);
   void compute_distToScanner(Subset* subset);
   void compute_Distances(Subset* subset);
   void compute_cosIt(Subset* subset);
@@ -36,7 +37,7 @@ public:
   void make_supressPoints(vector<vec3>& XYZ, vector<int>& idx);
   void cloudsData();
   vector<float> get_z_vector(vector<vec3>& xyz);
-  
+
   //Normal
   void compute_normals(Subset* subset);
   void compute_normals_Hough(Subset* subset);

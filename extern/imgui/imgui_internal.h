@@ -1393,7 +1393,7 @@ struct ImGuiMetricsConfig
     bool        ShowWindowsRects;
     bool        ShowWindowsBeginOrder;
     bool        ShowTablesRects;
-    bool        ShowDrawCmdMesh;
+    bool        ShowDrawCmdcloud;
     bool        ShowDrawCmdBoundingBoxes;
     int         ShowWindowsRectsType;
     int         ShowTablesRectsType;
@@ -1404,7 +1404,7 @@ struct ImGuiMetricsConfig
         ShowWindowsRects = false;
         ShowWindowsBeginOrder = false;
         ShowTablesRects = false;
-        ShowDrawCmdMesh = true;
+        ShowDrawCmdcloud = true;
         ShowDrawCmdBoundingBoxes = true;
         ShowWindowsRectsType = -1;
         ShowTablesRectsType = -1;
@@ -2742,7 +2742,7 @@ namespace ImGui
     IMGUI_API void          DebugHookIdInfo(ImGuiID id, ImGuiDataType data_type, const void* data_id, const void* data_id_end);
     IMGUI_API void          DebugNodeColumns(ImGuiOldColumns* columns);
     IMGUI_API void          DebugNodeDrawList(ImGuiWindow* window, const ImDrawList* draw_list, const char* label);
-    IMGUI_API void          DebugNodeDrawCmdShowMeshAndBoundingBox(ImDrawList* out_draw_list, const ImDrawList* draw_list, const ImDrawCmd* draw_cmd, bool show_mesh, bool show_aabb);
+    IMGUI_API void          DebugNodeDrawCmdShowcloudAndBoundingBox(ImDrawList* out_draw_list, const ImDrawList* draw_list, const ImDrawCmd* draw_cmd, bool show_cloud, bool show_aabb);
     IMGUI_API void          DebugNodeFont(ImFont* font);
     IMGUI_API void          DebugNodeStorage(ImGuiStorage* storage, const char* label);
     IMGUI_API void          DebugNodeTabBar(ImGuiTabBar* tab_bar, const char* label);

@@ -133,7 +133,7 @@ void Pather::loading_sampledCloud(string path){
 
   //Load the "base" part
   loaderManager->load_cloud_part(path, lmin, lmax);
-  Cloud* cloud_base = sceneManager->get_selectedcloud();
+  Cloud* cloud_base = sceneManager->get_cloud_selected();
   Cloud* cloud_toAdd;
 
   //load and merge all other parts
@@ -147,7 +147,7 @@ void Pather::loading_sampledCloud(string path){
 
     //Load nth part
     loaderManager->load_cloud_part(path, lmin, lmax);
-    cloud_toAdd = sceneManager->get_selectedcloud();
+    cloud_toAdd = sceneManager->get_cloud_selected();
 
     //Merge the nth part with the base
     extractionManager->merging_addCloud(cloud_base, cloud_toAdd);

@@ -4317,7 +4317,7 @@ static void AddDrawListToDrawData(ImVector<ImDrawList*>* out_list, ImDrawList* d
     // If this assert triggers because you are drawing lots of stuff manually:
     // - First, make sure you are coarse clipping yourself and not trying to draw many things outside visible bounds.
     //   Be mindful that the ImDrawList API doesn't filter vertices. Use the Metrics/Debugger window to inspect draw list contents.
-    // - If you want large meshes with more than 64K vertices, you can either:
+    // - If you want large cloudes with more than 64K vertices, you can either:
     //   (A) Handle the ImDrawCmd::VtxOffset value in your renderer backend, and set 'io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset'.
     //       Most example backends already support this from 1.71. Pre-1.71 backends won't.
     //       Some graphics API such as GL ES 1/2 don't have a way to offset the starting vertex so it is not supported for them.
@@ -11176,7 +11176,7 @@ static void ImeSetInputScreenPosFn_DefaultImpl(int, int) {}
 // - ShowMetricsWindow()
 // - DebugNodeColumns() [Internal]
 // - DebugNodeDrawList() [Internal]
-// - DebugNodeDrawCmdShowMeshAndBoundingBox() [Internal]
+// - DebugNodeDrawCmdShowcloudAndBoundingBox() [Internal]
 // - DebugNodeStorage() [Internal]
 // - DebugNodeTabBar() [Internal]
 // - DebugNodeViewport() [Internal]
@@ -11414,7 +11414,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         drawlist_count += g.Viewports[viewport_i]->DrawDataBuilder.GetDrawListCount();
     if (TreeNode("DrawLists", "DrawLists (%d)", drawlist_count))
     {
-        Checkbox("Show ImDrawCmd mesh when hovering", &cfg->ShowDrawCmdMesh);
+        Checkbox("Show ImDrawCmd cloud when hovering", &cfg->ShowDrawCmdcloud);
         Checkbox("Show ImDrawCmd bounding boxes when hovering", &cfg->ShowDrawCmdBoundingBoxes);
         for (int viewport_i = 0; viewport_i < g.Viewports.Size; viewport_i++)
         {
@@ -11706,8 +11706,8 @@ void ImGui::DebugNodeDrawList(ImGuiWindow* window, const ImDrawList* draw_list, 
             pcmd->ElemCount / 3, (void*)(intptr_t)pcmd->TextureId,
             pcmd->ClipRect.x, pcmd->ClipRect.y, pcmd->ClipRect.z, pcmd->ClipRect.w);
         bool pcmd_node_open = TreeNode((void*)(pcmd - draw_list->CmdBuffer.begin()), "%s", buf);
-        if (IsItemHovered() && (cfg->ShowDrawCmdMesh || cfg->ShowDrawCmdBoundingBoxes) && fg_draw_list)
-            DebugNodeDrawCmdShowMeshAndBoundingBox(fg_draw_list, draw_list, pcmd, cfg->ShowDrawCmdMesh, cfg->ShowDrawCmdBoundingBoxes);
+        if (IsItemHovered() && (cfg->ShowDrawCmdcloud || cfg->ShowDrawCmdBoundingBoxes) && fg_draw_list)
+            DebugNodeDrawCmdShowcloudAndBoundingBox(fg_draw_list, draw_list, pcmd, cfg->ShowDrawCmdcloud, cfg->ShowDrawCmdBoundingBoxes);
         if (!pcmd_node_open)
             continue;
 
@@ -11725,10 +11725,10 @@ void ImGui::DebugNodeDrawList(ImGuiWindow* window, const ImDrawList* draw_list, 
         }
 
         // Display vertex information summary. Hover to get all triangles drawn in wire-frame
-        ImFormatString(buf, IM_ARRAYSIZE(buf), "Mesh: ElemCount: %d, VtxOffset: +%d, IdxOffset: +%d, Area: ~%0.f px", pcmd->ElemCount, pcmd->VtxOffset, pcmd->IdxOffset, total_area);
+        ImFormatString(buf, IM_ARRAYSIZE(buf), "cloud: ElemCount: %d, VtxOffset: +%d, IdxOffset: +%d, Area: ~%0.f px", pcmd->ElemCount, pcmd->VtxOffset, pcmd->IdxOffset, total_area);
         Selectable(buf);
         if (IsItemHovered() && fg_draw_list)
-            DebugNodeDrawCmdShowMeshAndBoundingBox(fg_draw_list, draw_list, pcmd, true, false);
+            DebugNodeDrawCmdShowcloudAndBoundingBox(fg_draw_list, draw_list, pcmd, true, false);
 
         // Display individual triangles/vertices. Hover on to get the corresponding triangle highlighted.
         ImGuiListClipper clipper;
@@ -11760,10 +11760,10 @@ void ImGui::DebugNodeDrawList(ImGuiWindow* window, const ImDrawList* draw_list, 
     TreePop();
 }
 
-// [DEBUG] Display mesh/aabb of a ImDrawCmd
-void ImGui::DebugNodeDrawCmdShowMeshAndBoundingBox(ImDrawList* out_draw_list, const ImDrawList* draw_list, const ImDrawCmd* draw_cmd, bool show_mesh, bool show_aabb)
+// [DEBUG] Display cloud/aabb of a ImDrawCmd
+void ImGui::DebugNodeDrawCmdShowcloudAndBoundingBox(ImDrawList* out_draw_list, const ImDrawList* draw_list, const ImDrawCmd* draw_cmd, bool show_cloud, bool show_aabb)
 {
-    IM_ASSERT(show_mesh || show_aabb);
+    IM_ASSERT(show_cloud || show_aabb);
 
     // Draw wire-frame version of all triangles
     ImRect clip_rect = draw_cmd->ClipRect;
@@ -11778,8 +11778,8 @@ void ImGui::DebugNodeDrawCmdShowMeshAndBoundingBox(ImDrawList* out_draw_list, co
         ImVec2 triangle[3];
         for (int n = 0; n < 3; n++, idx_n++)
             vtxs_rect.Add((triangle[n] = vtx_buffer[idx_buffer ? idx_buffer[idx_n] : idx_n].pos));
-        if (show_mesh)
-            out_draw_list->AddPolyline(triangle, 3, IM_COL32(255, 255, 0, 255), ImDrawFlags_Closed, 1.0f); // In yellow: mesh triangles
+        if (show_cloud)
+            out_draw_list->AddPolyline(triangle, 3, IM_COL32(255, 255, 0, 255), ImDrawFlags_Closed, 1.0f); // In yellow: cloud triangles
     }
     // Draw bounding boxes
     if (show_aabb)
@@ -12226,7 +12226,7 @@ void ImGui::ShowMetricsWindow(bool*) {}
 void ImGui::ShowFontAtlas(ImFontAtlas*) {}
 void ImGui::DebugNodeColumns(ImGuiOldColumns*) {}
 void ImGui::DebugNodeDrawList(ImGuiWindow*, const ImDrawList*, const char*) {}
-void ImGui::DebugNodeDrawCmdShowMeshAndBoundingBox(ImDrawList*, const ImDrawList*, const ImDrawCmd*, bool, bool) {}
+void ImGui::DebugNodeDrawCmdShowcloudAndBoundingBox(ImDrawList*, const ImDrawList*, const ImDrawCmd*, bool, bool) {}
 void ImGui::DebugNodeFont(ImFont*) {}
 void ImGui::DebugNodeStorage(ImGuiStorage*, const char*) {}
 void ImGui::DebugNodeTabBar(ImGuiTabBar*, const char*) {}

@@ -51,7 +51,7 @@ void WIN_attribut::window_normal(){
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
-      attribManager->compute_cloudAttributs_all();
+      attribManager->compute_attribut_all();
     }
 
     //Standard normal computation
@@ -229,8 +229,8 @@ void WIN_attribut::window_intensity(){
       }
     }
 
-    //Normalize the intensity values
-    if(ImGui::Button("Normalize Intensity to [0,1]", ImVec2(200,0))){
+    //fct_normalize the intensity values
+    if(ImGui::Button("fct_normalize Intensity to [0,1]", ImVec2(200,0))){
       vector<float>& Is = subset->I;
       Is = fct_normalize(Is);
       sceneManager->update_subset_IntensityToColor(subset);

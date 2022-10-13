@@ -55,7 +55,7 @@ Subset* Velodyne::get_subset_capture(){
   udp_capture.name = "";
 
   //Convert the udp packet into subset
-  Subset* subset = extractManager->extractData(udp_capture);
+  Subset* subset = extractManager->extract_data(udp_capture);
 
   //---------------------------
   return subset;

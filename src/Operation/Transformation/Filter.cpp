@@ -41,7 +41,7 @@ void Filter::update_configuration(){
 //Functions
 void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
   Subset* subset = cloud->subset_selected;
-  attribManager->compute_cloudAttributs(subset);
+  attribManager->compute_attribut_subset(subset);
   vector<float>& It = subset->It;
   int size_before = subset->nb_point;
   tic();

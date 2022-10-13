@@ -142,7 +142,7 @@ void SLAM_optim_gn::compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::Ve
     }
   }
 
-  // Normalize equation
+  // fct_normalize equation
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<12; i++){
     for(int j=0; j<12; j++){

@@ -22,6 +22,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
 
+  this->with_distorsion = false;
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
   this->grid_voxel_width = 1;
@@ -39,7 +40,7 @@ void SLAM_transform::compute_preprocessing(Cloud* cloud, int subset_ID){
 
   this->grid_sample_subset(subset);
   this->distort_frame(frame);
-  this->transform_frame(frame);
+  //this->transform_frame(frame);
 
   //---------------------------
 }
@@ -58,9 +59,8 @@ void SLAM_transform::grid_sample_subset(Subset* subset){
   gridMap grid;
   Eigen::Vector4d point;
   for(int i=0; i<subset->xyz.size(); i++){
-    vec3& xyz = subset->xyz[i];
-    double& ts_n = subset->ts_n[i];
-
+    vec3 xyz = subset->xyz[i];
+    double ts_n = subset->ts_n[i];
     double dist = fct_distance_origin(xyz);
 
     if(dist > min_root_distance && dist < max_root_distance){
@@ -81,7 +81,7 @@ void SLAM_transform::grid_sample_subset(Subset* subset){
       //Take one random point
       int rdm = rand() % it->second.size();
 
-      Eigen::Vector4d point = it->second[0];
+      Eigen::Vector4d point = it->second[rdm];
       Eigen::Vector3d xyz(point(0), point(1), point(2));
 
       frame->xyz.push_back(xyz);
@@ -100,7 +100,7 @@ void SLAM_transform::grid_sample_subset(Subset* subset){
 void SLAM_transform::distort_frame(Frame* frame){
   //---------------------------
 
-  if(with_distorsion && frame->ID >= 2){
+  if(with_distorsion && frame->ID > 1){
     Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
     Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
     Eigen::Vector3d trans_b = frame->trans_b;
@@ -154,6 +154,7 @@ void SLAM_transform::transform_subset(Subset* subset){
   Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
   Eigen::Vector3d trans_b = frame->trans_b;
   Eigen::Vector3d trans_e = frame->trans_e;
+  say(frame->rotat_b);
 
   //Update frame root
   subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());

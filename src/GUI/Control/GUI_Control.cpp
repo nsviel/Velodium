@@ -18,8 +18,8 @@
 
 #include "../../Operation/Operation_node.h"
 #include "../../Operation/Transformation/Attribut.h"
-#include "../../Operation/Functions/Selection.h"
-#include "../../Operation/Functions/Extraction.h"
+#include "../../Operation/Function/Selection.h"
+#include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Color/Heatmap.h"
 
 #include "imgui/imgui.h"

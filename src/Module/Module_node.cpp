@@ -3,6 +3,8 @@
 #include "SLAM/SLAM.h"
 #include "Interface/Interface_node.h"
 #include "Player/Player_node.h"
+#include "Radiometry/Radiometry.h"
+#include "Registration/Registration.h"
 
 #include "../Engine/Engine_node.h"
 #include "../Engine/Scene/Configuration.h"
@@ -16,6 +18,8 @@ Module_node::Module_node(Engine_node* engine){
 
   this->node_ope = node_engine->get_node_ope();
 
+  this->radioManager = new Radiometry(node_engine);
+  this->regisManager = new Registration(node_engine);
   this->slamManager = new SLAM(node_engine);
   this->node_interface = new Interface_node(this);
   this->node_player = new Player_node(this);

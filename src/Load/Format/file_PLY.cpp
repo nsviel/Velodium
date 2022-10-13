@@ -11,21 +11,22 @@ file_PLY::file_PLY(){}
 file_PLY::~file_PLY(){}
 
 //Main loader functions
-dataFile* file_PLY::Loader(string pathFile){
+dataFile* file_PLY::Loader(string path_file){
   data_out = new dataFile();
-  data_out->name = "";
-  data_out->path = pathFile;
+  string nameFormat = path_file.substr(path_file.find_last_of("/\\") + 1);
+  data_out->name = nameFormat.substr(0, nameFormat.find_last_of("."));
+  data_out->path = path_file;
   //---------------------------
 
   //Get format type
-  std::ifstream file(pathFile);
+  std::ifstream file(path_file);
   this->Loader_header(file);
 
   //Open data
   if (format == "ascii"){
 
     //Open file
-    std::ifstream file(pathFile);
+    std::ifstream file(path_file);
 
     //Read header
     this->Loader_header(file);
@@ -38,7 +39,7 @@ dataFile* file_PLY::Loader(string pathFile){
   }
   else if (format == "binary_little_endian"){
     //Open file
-    std::ifstream file(pathFile, ios::binary);
+    std::ifstream file(path_file, ios::binary);
 
     //Read header
     this->Loader_header(file);
@@ -200,7 +201,7 @@ void file_PLY::Loader_data_binary(std::ifstream& file){
 
   //---------------------------
 }
-void file_PLY::reorder_byTimestamp(){
+void file_PLY::reorder_by_timestamp(){
   vector<vec3> pos;
   vector<float> ts;
   vector<float> Is;
@@ -231,12 +232,12 @@ void file_PLY::reorder_byTimestamp(){
 }
 
 //Main exporter functions
-bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
+bool file_PLY::Exporter_cloud(string path_file, string ply_format, Cloud* cloud){
   //---------------------------
 
   //Check for file format ending
-  if(pathFile.substr(pathFile.find_last_of(".") + 1) != "ply"){
-    pathFile.append(".ply");
+  if(path_file.substr(path_file.find_last_of(".") + 1) != "ply"){
+    path_file.append(".ply");
   }
 
   if (ply_format == "ascii"){
@@ -244,7 +245,7 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
       Subset* subset = *next(cloud->subset.begin(), i);
 
       //Open file
-      std::ofstream file(pathFile);
+      std::ofstream file(path_file);
 
       //Save header
       this->Exporter_header(file, ply_format, subset);
@@ -261,11 +262,11 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
       format = "binary_little_endian";
 
       //Locak file
-      int fd = open(pathFile.c_str(), O_RDWR | O_CREAT, 0666);
+      int fd = open(path_file.c_str(), O_RDWR | O_CREAT, 0666);
       flock(fd, LOCK_EX | LOCK_NB);
 
       //Open file
-      std::ofstream file(pathFile, ios::binary);
+      std::ofstream file(path_file, ios::binary);
 
       //Save header
       this->Exporter_header(file, ply_format, subset);
@@ -284,9 +285,9 @@ bool file_PLY::Exporter_cloud(string pathFile, string ply_format, Cloud* cloud){
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset){
-  string filePath = dirPath + subset->name + ".tmp";
-  string filePath_end = dirPath + subset->name + ".ply";
+bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subset){
+  string filePath = path_dir + subset->name + ".tmp";
+  string filePath_end = path_dir + subset->name + ".ply";
   //---------------------------
 
   //Check for file format ending
@@ -333,8 +334,8 @@ bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_subset(string dirPath, string ply_format, Subset* subset, string fileName){
-  string filePath = dirPath + fileName + ".ply";
+bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subset, string fileName){
+  string filePath = path_dir + fileName + ".ply";
   //---------------------------
 
   //Check for file format ending

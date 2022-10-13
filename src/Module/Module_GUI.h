@@ -28,8 +28,8 @@ public:
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Operation_node* get_node_ope(){return node_ope;}
   inline Module_node* get_node_module(){return node_module;}
-
   inline GUI_node* get_node_gui(){return node_gui;}
+  
   inline GUI_Slam* get_gui_slam(){return gui_slam;}
   inline GUI_Player* get_gui_player(){return gui_player;}
   inline GUI_Interface* get_gui_interface(){return gui_interface;}

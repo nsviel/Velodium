@@ -17,17 +17,17 @@ public:
 
 public:
   //Main functions
-  dataFile* Loader(string pathFile);
-  bool Exporter_cloud(string pathFile, string format, Cloud* cloud);
-  bool Exporter_subset(string dirPath, string format, Subset* subset);
-  bool Exporter_subset(string dirPath, string format, Subset* subset, string fileName);
+  dataFile* Loader(string path_file);
+  bool Exporter_cloud(string path_file, string format, Cloud* cloud);
+  bool Exporter_subset(string path_dir, string format, Subset* subset);
+  bool Exporter_subset(string path_dir, string format, Subset* subset, string fileName);
 
 private:
   //Loader subfunctions
   void Loader_header(std::ifstream& file);
   void Loader_data_ascii(std::ifstream& file);
   void Loader_data_binary(std::ifstream& file);
-  void reorder_byTimestamp();
+  void reorder_by_timestamp();
 
   //Exporter subfunctions
   void Exporter_header(std::ofstream& file, string format, Subset* subset);

@@ -263,6 +263,20 @@ namespace{
     //---------------------------
     return max;
   }
+  glm::vec2 fct_max_vec2(std::vector<glm::vec2> XY){
+  glm::vec2 max = XY[0];
+  int size = XY.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<2; j++){
+      if(XY[i][j] >= max[j]) max[j] = XY[i][j];
+    }
+  }
+
+  //---------------------------
+  return max;
+}
   template<typename Type> const Type fct_min(std::vector<Type>& vec){
     Type min = vec[0];
     int size = vec.size();
@@ -286,6 +300,20 @@ namespace{
 
     //---------------------------
   }
+  glm::vec2 fct_min_vec2(std::vector<glm::vec2> XY){
+  glm::vec2 min = XY[0];
+  int size = XY.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<2; j++){
+      if(XY[i][j] <= min[j]) min[j] = XY[i][j];
+    }
+  }
+
+  //---------------------------
+  return min;
+}
   glm::vec3 fct_min_vec3(std::vector<glm::vec3> XYZ){
     glm::vec3 min = XYZ[0];
     int size = XYZ.size();

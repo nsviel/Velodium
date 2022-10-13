@@ -14,7 +14,7 @@ printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Dependencies ${NC}\n"
 printf "${GREEN}--------------${NC}\n"
 sudo apt update -y
-sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev libmicrohttpd12 libgnutls28-dev
+sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev libmicrohttpd12 libgnutls28-dev libarmadillo-dev
 
 #Install pcl library - V1.2 is requiered
 #sudo apt install libvtk7-dev=7.1.1+dfsg2-2ubuntu1

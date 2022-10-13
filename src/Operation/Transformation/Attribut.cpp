@@ -27,30 +27,30 @@ Attribut::Attribut(Operation_node* node_ope){
 Attribut::~Attribut(){}
 
 //General
-void Attribut::compute_cloudAttributs_all(){
+void Attribut::compute_attribut_all(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
-    this->compute_cloudAttributs(subset);
+    this->compute_attribut_subset(subset);
   }
 
   //---------------------------
 }
-void Attribut::compute_cloudAttributs_list(list<Cloud*>* list){
+void Attribut::compute_attribut_list(list<Cloud*>* list){
   //---------------------------
 
   for(int i=0;i<list->size();i++){
     Cloud* cloud = *next(list->begin(),i);
     Subset* subset = cloud->subset_selected;
-    this->compute_cloudAttributs(subset);
+    this->compute_attribut_subset(subset);
   }
 
   //---------------------------
 }
-void Attribut::compute_cloudAttributs(Subset* subset){
+void Attribut::compute_attribut_subset(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
@@ -81,6 +81,14 @@ void Attribut::compute_cloudAttributs(Subset* subset){
   if(cosIt.size() != XYZ.size()){
     cout<<"cosit data problem - XYZ: "<<XYZ.size()<<" - cosIt: "<<cosIt.size()<<endl;
   }
+}
+void Attribut::compute_attribut_cloud(Cloud* cloud){
+  //---------------------------
+
+  Subset* subset = cloud->subset_selected;
+  this->compute_attribut_subset(subset);
+
+  //---------------------------
 }
 void Attribut::compute_distToScanner(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;

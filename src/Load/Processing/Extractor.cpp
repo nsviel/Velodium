@@ -27,7 +27,7 @@ Extractor::Extractor(Load_node* node_load){
 Extractor::~Extractor(){}
 
 //Main function
-Cloud* Extractor::extractData(vector<dataFile*> data){
+Cloud* Extractor::extract_data(vector<dataFile*> data){
   Cloud* cloud = new Cloud();
   //---------------------------
 
@@ -37,23 +37,23 @@ Cloud* Extractor::extractData(vector<dataFile*> data){
   }
 
   //Init cloud parameters
-  this->init_randomColor();
-  this->init_cloudParameters(cloud, data);
+  this->init_random_color();
+  this->init_cloud_parameter(cloud, data);
 
   for(int i=0; i<data.size(); i++){
     Subset* subset = new Subset();
 
     this->check_data(data[i]);
-    this->init_subsetParameters(subset, data[i]->name, cloud->ID_subset);
-    this->init_frameParameters(subset);
+    this->init_subset_parameter(subset, data[i]->name, cloud->ID_subset);
+    this->init_frame_parameter(subset);
     cloud->ID_subset++;
 
     //Subset data
-    this->extract_Location(subset, data[i]->location);
-    this->extract_Intensity(subset, data[i]->intensity);
-    this->extract_Color(subset, data[i]->color);
-    this->extract_Normal(subset, data[i]->normal);
-    this->extract_Timestamp(subset, data[i]->timestamp);
+    this->extract_location(subset, data[i]->location);
+    this->extract_intensity(subset, data[i]->intensity);
+    this->extract_color(subset, data[i]->color);
+    this->extract_normal(subset, data[i]->normal);
+    this->extract_timestamp(subset, data[i]->timestamp);
 
     if(i == 0){
       subset->visibility = true;
@@ -76,21 +76,21 @@ Cloud* Extractor::extractData(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractor::extractData(udpPacket& data){
+Subset* Extractor::extract_data(udpPacket& data){
   Subset* subset = new Subset();
   //---------------------------
 
-  this->init_randomColor();
+  this->init_random_color();
   this->check_data(data);
 
-  this->init_subsetParameters(subset, data.name, 0);
-  this->init_frameParameters(subset);
+  this->init_subset_parameter(subset, data.name, 0);
+  this->init_frame_parameter(subset);
 
   //Subset data
-  this->extract_Location(subset, data.xyz);
-  this->extract_Intensity(subset, data.I);
-  this->extract_Timestamp(subset, data.t);
-  this->extract_Color(subset, data.rgb);
+  this->extract_location(subset, data.xyz);
+  this->extract_intensity(subset, data.I);
+  this->extract_timestamp(subset, data.t);
+  this->extract_color(subset, data.rgb);
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
@@ -98,22 +98,22 @@ Subset* Extractor::extractData(udpPacket& data){
   //---------------------------
   return subset;
 }
-void Extractor::extractData_frame(Cloud* cloud, dataFile* data){
+void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
-  this->init_randomColor();
+  this->init_random_color();
   this->check_data(data);
 
-  this->init_subsetParameters(subset, data->name, cloud->ID_subset);
-  this->init_frameParameters(subset);
+  this->init_subset_parameter(subset, data->name, cloud->ID_subset);
+  this->init_frame_parameter(subset);
 
   //Subset data
-  this->extract_Location(subset, data->location);
-  this->extract_Intensity(subset, data->intensity);
-  this->extract_Color(subset, data->color);
-  this->extract_Normal(subset, data->normal);
-  this->extract_Timestamp(subset, data->timestamp);
+  this->extract_location(subset, data->location);
+  this->extract_intensity(subset, data->intensity);
+  this->extract_color(subset, data->color);
+  this->extract_normal(subset, data->normal);
+  this->extract_timestamp(subset, data->timestamp);
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
@@ -126,11 +126,11 @@ void Extractor::extractData_frame(Cloud* cloud, dataFile* data){
 
   //---------------------------
 }
-void Extractor::extractData_oneFrame(Cloud* cloud, dataFile* data){
+void Extractor::extract_data_oneFrame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
-  this->init_randomColor();
+  this->init_random_color();
   this->check_data(data);
 
   uint VAO;
@@ -142,11 +142,11 @@ void Extractor::extractData_oneFrame(Cloud* cloud, dataFile* data){
   subset->visibility = true;
 
   //Subset data
-  this->extract_Location(subset, data->location);
-  this->extract_Intensity(subset, data->intensity);
-  this->extract_Color(subset, data->color);
-  this->extract_Normal(subset, data->normal);
-  this->extract_Timestamp(subset, data->timestamp);
+  this->extract_location(subset, data->location);
+  this->extract_intensity(subset, data->intensity);
+  this->extract_color(subset, data->color);
+  this->extract_normal(subset, data->normal);
+  this->extract_timestamp(subset, data->timestamp);
 
   if(cloud->subset.size() == 0){
     cloud->subset.push_back(subset);
@@ -242,7 +242,7 @@ void Extractor::check_data(udpPacket& data){
 
   //---------------------------
 }
-void Extractor::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
+void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
   //---------------------------
 
   //Calculate number of point
@@ -283,7 +283,7 @@ void Extractor::init_cloudParameters(Cloud* cloud, vector<dataFile*> data){
 
   //---------------------------
 }
-void Extractor::init_subsetParameters(Subset* subset, string name, int ID){
+void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   //---------------------------
 
   //Subset VAO
@@ -291,16 +291,16 @@ void Extractor::init_subsetParameters(Subset* subset, string name, int ID){
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
   subset->VAO = VAO;
-
+say(name);
   //Other stuff
   subset->ID = ID;
-  subset->name = "frame_" + to_string(ID);
+  subset->name = name;
   subset->root = vec3(0.0);
   subset->angle = -1000;
 
   //---------------------------
 }
-void Extractor::init_frameParameters(Subset* subset){
+void Extractor::init_frame_parameter(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -308,7 +308,7 @@ void Extractor::init_frameParameters(Subset* subset){
 
   //---------------------------
 }
-void Extractor::init_randomColor(){
+void Extractor::init_random_color(){
   //---------------------------
 
   //---> Compute a random color for each cloud
@@ -325,7 +325,7 @@ void Extractor::init_randomColor(){
   //---------------------------
 }
 
-void Extractor::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
+void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------
 
@@ -347,7 +347,7 @@ void Extractor::extract_Location(Subset* subset, vector<vec3>& locationOBJ){
 
   //---------------------------
 }
-void Extractor::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
+void Extractor::extract_intensity(Subset* subset, vector<float>& intensityOBJ){
   //---------------------------
 
   if(is_intensity){
@@ -356,7 +356,7 @@ void Extractor::extract_Intensity(Subset* subset, vector<float>& intensityOBJ){
 
   //---------------------------
 }
-void Extractor::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
+void Extractor::extract_timestamp(Subset* subset, vector<float>& timestampOBJ){
   //---------------------------
 
   if(is_timestamp){
@@ -372,7 +372,7 @@ void Extractor::extract_Timestamp(Subset* subset, vector<float>& timestampOBJ){
 
   //---------------------------
 }
-void Extractor::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
+void Extractor::extract_normal(Subset* subset, vector<vec3>& normalOBJ){
   uint normalVBO;
   //---------------------------
 
@@ -382,7 +382,7 @@ void Extractor::extract_Normal(Subset* subset, vector<vec3>& normalOBJ){
 
   //---------------------------
 }
-void Extractor::extract_Color(Subset* subset, vector<vec4>& colorOBJ){
+void Extractor::extract_color(Subset* subset, vector<vec4>& colorOBJ){
   uint colorVBO;
   //---------------------------
 

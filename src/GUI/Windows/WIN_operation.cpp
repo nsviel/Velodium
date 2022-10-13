@@ -7,8 +7,8 @@
 #include "../../Operation/Transformation/Filter.h"
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Optimization/Fitting.h"
-#include "../../Operation/Functions/Extraction.h"
-#include "../../Operation/Functions/Selection.h"
+#include "../../Operation/Function/Extraction.h"
+#include "../../Operation/Function/Selection.h"
 #include "../../Specific/fct_transtypage.h"
 
 #include "Window_table.h"

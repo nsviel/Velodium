@@ -21,25 +21,25 @@ public:
 
 public:
   //Main function
-  Cloud* extractData(vector<dataFile*> data);
-  Subset* extractData(udpPacket& data);
-  void extractData_frame(Cloud* cloud, dataFile* data);
-  void extractData_oneFrame(Cloud* cloud, dataFile* data);
+  Cloud* extract_data(vector<dataFile*> data);
+  Subset* extract_data(udpPacket& data);
+  void extract_data_frame(Cloud* cloud, dataFile* data);
+  void extract_data_oneFrame(Cloud* cloud, dataFile* data);
 
 private:
   //Subfunctions
   void check_data(dataFile* data);
   void check_data(udpPacket& data);
-  void init_cloudParameters(Cloud* cloud, vector<dataFile*> data);
-  void init_subsetParameters(Subset* subset, string path, int ID);
-  void init_frameParameters(Subset* subset);
-  void init_randomColor();
+  void init_cloud_parameter(Cloud* cloud, vector<dataFile*> data);
+  void init_subset_parameter(Subset* subset, string path, int ID);
+  void init_frame_parameter(Subset* subset);
+  void init_random_color();
 
-  void extract_Location(Subset* subset, vector<vec3>& locationOBJ);
-  void extract_Color(Subset* subset, vector<vec4>& colorOBJ);
-  void extract_Normal(Subset* subset, vector<vec3>& normalOBJ);
-  void extract_Intensity(Subset* subset, vector<float>& intensityOBJ);
-  void extract_Timestamp(Subset* subset, vector<float>& timestampOBJ);
+  void extract_location(Subset* subset, vector<vec3>& locationOBJ);
+  void extract_color(Subset* subset, vector<vec4>& colorOBJ);
+  void extract_normal(Subset* subset, vector<vec3>& normalOBJ);
+  void extract_intensity(Subset* subset, vector<float>& intensityOBJ);
+  void extract_timestamp(Subset* subset, vector<float>& timestampOBJ);
 
 private:
   Scene* sceneManager;

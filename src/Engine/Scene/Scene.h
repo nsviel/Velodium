@@ -75,6 +75,7 @@ public:
   int get_subset_oID(Cloud* cloud, Subset* subset);
   bool get_is_list_empty();
 
+  inline int get_nb_cloud(){return list_cloud->size();}
   inline list<Cloud*>* get_list_cloud(){return list_cloud;}
   inline int* get_new_ID_cloud(){return &ID_cloud;}
   inline int get_new_oID_cloud(){return list_cloud->size();}

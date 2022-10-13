@@ -8,6 +8,8 @@ class Operation_node;
 class SLAM;
 class Interface_node;
 class Player_node;
+class Radiometry;
+class Registration;
 
 
 class Module_node
@@ -28,12 +30,16 @@ public:
   inline Player_node* get_node_player(){return node_player;}
   inline Interface_node* get_node_interface(){return node_interface;}
   inline SLAM* get_slamManager(){return slamManager;}
+  inline Radiometry* get_radioManager(){return radioManager;}
+  inline Registration* get_regisManager(){return regisManager;}
 
 private:
   Engine_node* node_engine;
   Operation_node* node_ope;
 
   SLAM* slamManager;
+  Registration* regisManager;
+  Radiometry* radioManager;
   Interface_node* node_interface;
   Player_node* node_player;
 };

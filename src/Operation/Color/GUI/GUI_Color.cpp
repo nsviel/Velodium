@@ -135,7 +135,7 @@ void GUI_Color::heatmap_select_colormap(){
 
   //Colormap normalization
   bool* normalizeON = heatmapManager->get_is_normalization();
-  ImGui::Checkbox("Normalized", normalizeON);
+  ImGui::Checkbox("fct_normalized", normalizeON);
 
   //---------------------------
 }

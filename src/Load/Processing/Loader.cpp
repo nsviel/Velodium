@@ -77,8 +77,7 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  string log = "Loaded " + to_string(data_vec.size()) + " frames";
-  console.AddLog("ok", log);
+  console.AddLog("ok", "Loaded " + to_string(data_vec.size()) + " frames");
   return true;
 }
 bool Loader::load_cloud_silent(string filePath){
@@ -95,7 +94,7 @@ bool Loader::load_cloud_silent(string filePath){
   vector<dataFile*> data_vec = load_retrieve_data(filePath);
 
   //Extract data and put in the engine
-  cloud = extractManager->extractData(data_vec);
+  cloud = extractManager->extract_data(data_vec);
 
   //---------------------------
   return true;
@@ -208,7 +207,7 @@ bool Loader::load_cloud_oneFrame(){
   data->path = filePath;
   vector<dataFile*> data_vec;
   data_vec.push_back(data);
-  cloud = extractManager->extractData(data_vec);
+  cloud = extractManager->extract_data(data_vec);
 
   //---------------------------
   return true;
@@ -285,7 +284,7 @@ void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
   //---------------------------
 
   //Extract data and put in the engine
-  cloud = extractManager->extractData(data_vec);
+  cloud = extractManager->extract_data(data_vec);
   list_cloud->push_back(cloud);
 
   //Update list cloud

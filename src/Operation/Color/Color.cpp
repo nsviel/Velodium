@@ -109,7 +109,7 @@ void Color::color_intensity(Subset* subset){
   //---------------------------
 
   if(Is.size() != 0){
-    //Normalize intensity wrt range
+    //fct_normalize intensity wrt range
     vector<float> In;
     for(int i=0; i<Is.size(); i++){
       if(Is[i] < range_intensity.x || Is[i] > range_intensity.y){

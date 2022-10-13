@@ -104,10 +104,10 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
     Eigen::Matrix3d rotat_next_e = frame_m1->rotat_e * frame_m2->rotat_e.inverse() * frame_m1->rotat_e;
     Eigen::Vector3d trans_next_e = frame_m1->trans_e + frame_m1->rotat_e * frame_m2->rotat_e.inverse() * (frame_m1->trans_e - frame_m2->trans_e);
 
-    //frame_m0->rotat_b = frame_m1->rotat_e;
-    //frame_m0->trans_b = frame_m1->trans_e;
-    frame_m0->rotat_b = rotat_next_b;
-    frame_m0->trans_b = trans_next_b;
+    frame_m0->rotat_b = frame_m1->rotat_e;
+    frame_m0->trans_b = frame_m1->trans_e;
+    //frame_m0->rotat_b = rotat_next_b;
+    //frame_m0->trans_b = trans_next_b;
     frame_m0->rotat_e = rotat_next_e;
     frame_m0->trans_e = trans_next_e;
   }

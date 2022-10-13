@@ -121,7 +121,7 @@ void Axis::update_axis_subset(Subset* subset){
   vec4 Rx = vec4(0.1,0,0,1) * R;
   vec4 Ry = vec4(0,0.1,0,1) * R;
   vec4 Rz = vec4(0,0,0.1,1) * R;
-  
+
   //X Axis
   vec3 subsey_x = vec3(subset_root.x + Rx.x, subset_root.y + Rx.y, subset_root.z + Rx.z);
   XYZ.push_back(subset_root);

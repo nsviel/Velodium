@@ -27,7 +27,6 @@ SLAM_optim::~SLAM_optim(){}
 void SLAM_optim::update_configuration(){
   //---------------------------
 
-  this->with_distorsion = false;
   this->solver_ceres = false;
   this->solver_GN = true;
 
@@ -39,64 +38,7 @@ void SLAM_optim::compute_optimization(Cloud* cloud, int subset_ID){
   //---------------------------
 
   if(frame->ID > 0){
-
-
-    if(solver_GN){
-      slam_optim_gn->optim_GN(frame, frame_m1);
-    }else if(solver_ceres){
-      //ceresManager->optim_test(frame, frame_m1, map);
-    }
-  }
-
-  //---------------------------
-}
-
-//Specific function
-void SLAM_optim::compute_distortion(Frame* frame){
-  //---------------------------
-
-  if(with_distorsion && frame->ID >= 2){
-    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-    Eigen::Vector3d trans_b = frame->trans_b;
-    Eigen::Vector3d trans_e = frame->trans_e;
-
-    //Distorts the frame
-    Eigen::Quaterniond quat_e_inv = quat_e.inverse();
-    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e);
-
-    for(int i=0; i<frame->xyz.size(); i++){
-      float ts_n = frame->ts_n[i];
-
-      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
-      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-      // Distort Raw Keypoints
-      frame->xyz_raw[i] = quat_e_inv * (quat_n * frame->xyz_raw[i] + t) + trans_e_inv;
-    }
-  }
-
-  //---------------------------
-}
-void SLAM_optim::compute_transformation(Frame* frame){
-  //---------------------------
-
-  //Update keypoints
-  Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-  Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-  Eigen::Vector3d trans_b = frame->trans_b;
-  Eigen::Vector3d trans_e = frame->trans_e;
-
-  #pragma omp parallel for num_threads(5)
-  for(int i=0; i<frame->xyz.size(); i++){
-    double ts_n = frame->ts_n[i];
-
-    Eigen::Quaterniond q = quat_b.slerp(ts_n, quat_e);
-    q.normalize();
-    Eigen::Matrix3d R = q.toRotationMatrix();
-    Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-    frame->xyz[i] = R * frame->xyz_raw[i] + t;
+    slam_optim_gn->optim_GN(frame, frame_m1);
   }
 
   //---------------------------

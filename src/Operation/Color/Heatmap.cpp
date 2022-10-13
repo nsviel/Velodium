@@ -119,7 +119,7 @@ void Heatmap::mode_height(Subset* subset){
     range_height.x = range_height.y - 1;
   }
 
-  //Normalize resulting color vector
+  //fct_normalize resulting color vector
   vector<float> z_vec_norm = fct_normalize(z_vec, range_height);
   vector<float>& color_vec = z_vec_norm;
 

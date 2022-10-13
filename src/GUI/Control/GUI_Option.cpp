@@ -163,9 +163,9 @@ void GUI_option::option_heatmap(){
     ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
     ImGui::SameLine();
 
-    //Normalize heatmap
+    //fct_normalize heatmap
     bool* normalizeON = heatmapManager->get_is_normalization();
-    ImGui::Checkbox("Normalized", normalizeON);
+    ImGui::Checkbox("fct_normalized", normalizeON);
 
     //---------------------------
     ImGui::Separator();
