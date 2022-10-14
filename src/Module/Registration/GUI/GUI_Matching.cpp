@@ -30,8 +30,8 @@ GUI_matching::GUI_matching(GUI_module* module_gui){
   this->glyphManager = node_engine->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   this->icpManager = regisManager->get_icpManager();
-  this->keyManager = icpManager->get_keyManager();
-  this->radioManager = node_module->get_RadioManager();
+  //this->keyManager = icpManager->get_keyManager();
+  this->radioManager = node_module->get_radioManager();
 
   //---------------------------
 }
@@ -77,21 +77,21 @@ void GUI_matching::match_matching(){
       icpManager->step_matching(cloud_P, cloud_Q);
       icpManager->step_rejection(cloud_P, cloud_Q);
 
-      glyphManager->obj_matching(cloud_P, cloud_Q);
+      //glyphManager->obj_matching(cloud_P, cloud_Q);
     }else if(nbCloud == 1 && *meth_matching == 1){
-      keyManager->algo_keypoints_one(cloud_P);
+      //keyManager->algo_keypoints_one(cloud_P);
     }
   }
   ImGui::PopStyleColor(1);
 
   //Correspondance displaying
-  bool* matchingON = glyphManager->get_matchVisibility();
+  /*bool* matchingON = glyphManager->get_matchVisibility();
   ImGui::Checkbox("Display", matchingON);
   ImGui::SameLine();
   static bool matchingRDM = false;
   if(ImGui::Checkbox("Rdm color", &matchingRDM)){
     glyphManager->set_matching_rdm_color(matchingRDM);
-  }
+  }*/
 
   //---------------------------
   ImGui::Separator();
@@ -158,7 +158,7 @@ void GUI_matching::match_methods(){
   }
 
   //SIFT parameters
-  if(ImGui::CollapsingHeader("SIFT##008")){
+  /*if(ImGui::CollapsingHeader("SIFT##008")){
     float* SIFT_minScale = keyManager->get_SIFT_minScale();
     ImGui::PushItemWidth(100);
     ImGui::DragFloat("min scale", SIFT_minScale, 0.001, 0.001f, 10.0f, "%.5f");
@@ -185,14 +185,14 @@ void GUI_matching::match_methods(){
     ImGui::DragFloat("Threshold", HARRIS_thres, 0.000001, 0.0000001f, 10.0f, "%.7f");
 
     ImGui::Separator();
-  }
+  }*/
 
   //---------------------------
 }
 
 //Subfunctions
 void GUI_matching::keypoint_options(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Options");
+  /*ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Options");
   int* dataMeth = keyManager->get_dataMethod();
   int* downMeth = keyManager->get_downMethod();
   int* normMeth = keyManager->get_normalMethod();
@@ -233,10 +233,10 @@ void GUI_matching::keypoint_options(){
   ImGui::SameLine();
   ImGui::RadioButton("FPFH", desMeth, 2);
 
-  //--------------------------
+  //--------------------------*/
 }
 void GUI_matching::keypoint_parameters(){
-  int* downMeth = keyManager->get_downMethod();
+  /*int* downMeth = keyManager->get_downMethod();
   int* keyMeth = keyManager->get_keypMethod();
   int* desMeth = keyManager->get_descMethod();
   //--------------------------
@@ -271,10 +271,10 @@ void GUI_matching::keypoint_parameters(){
     ImGui::DragFloat("Descriptor: radius", descRadius, 0.001, 0.001, 10.0f, "%.3f");
   }
 
-  //--------------------------
+  //--------------------------*/
 }
 void GUI_matching::keypoint_rejection(){
-  //--------------------------
+  /*//--------------------------
 
   //SIFT min distance between two keypoints
   int* keyMeth = keyManager->get_keypMethod();
@@ -305,5 +305,5 @@ void GUI_matching::keypoint_rejection(){
     ImGui::DragInt("Iteration max", ransacIterMax, 100, 1, 100000, "%d");
   }
 
-  //--------------------------
+  //--------------------------*/
 }

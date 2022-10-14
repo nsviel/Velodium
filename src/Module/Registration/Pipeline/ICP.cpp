@@ -1,12 +1,12 @@
 #include "ICP.h"
 #include "ICP_Matching.h"
 #include "ICP_Rejection.h"
-#include "Keypoint.h"
 
-#include "../Algo_PCL.h"
+#include "../Correspondence/Keypoint.h"
 
 #include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Engine/Scene/Glyphs.h"
+#include "../../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
@@ -18,8 +18,8 @@ ICP::ICP(Glyphs* glyph){
   this->matchManager = new ICP_Matching();
   this->optManager = new ICP_Optimization();
   this->rejectManager = new ICP_Rejection();
-  this->keyManager = new Keypoint(glyphManager);
-  this->pclManager = new Algo_PCL();
+  //this->keyManager = new Keypoint(glyphManager);
+  //this->pclManager = new Algo_PCL();
 
   //---------------------------
   this->init();
@@ -116,7 +116,7 @@ void ICP::algo(Cloud* cloud_P, Cloud* cloud_Q){
 
 //Step functions
 void ICP::step_matching(Cloud* cloud_P, Cloud* cloud_Q){
-  //---------------------------
+  /*//---------------------------
 
   switch(m_match){
     case 0:{// Adaptative (XYZI/XYZ)
@@ -132,7 +132,7 @@ void ICP::step_matching(Cloud* cloud_P, Cloud* cloud_Q){
     }
     case 1:{// Keypoints
       if(makeCorrespondences || cloud_P->registration.keypoints.size() == 0){
-        keyManager->algo_keypoints(cloud_P, cloud_Q);
+        //keyManager->algo_keypoints(cloud_P, cloud_Q);
         makeCorrespondences = false;
       }
       break;
@@ -165,10 +165,10 @@ void ICP::step_matching(Cloud* cloud_P, Cloud* cloud_Q){
     }
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP::step_rejection(Cloud* cloud_P, Cloud* cloud_Q){
-  vector<float>& wi = cloud_P->registration.keypoint_weight;
+  /*vector<float>& wi = cloud_P->registration.keypoint_weight;
   bool weighting_ICCP = false;
   wi.clear();
   //---------------------------
@@ -192,10 +192,10 @@ void ICP::step_rejection(Cloud* cloud_P, Cloud* cloud_Q){
     rejectManager->weighting_ICCP(cloud_P, cloud_Q);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP::step_optimization(Cloud* cloud_P, Cloud* cloud_Q){
-  Xt = vec3(0,0,0);
+  /*Xt = vec3(0,0,0);
   Xr = vec3(0,0,0);
   //--------------------------
 
@@ -235,10 +235,10 @@ void ICP::step_optimization(Cloud* cloud_P, Cloud* cloud_Q){
     }
   }
 
-  //--------------------------
+  //--------------------------*/
 }
 void ICP::step_transformation(Cloud* cloud_P, Cloud* cloud_Q){
-  //---------------------------
+  /*//---------------------------
 
   //Add weight to dofs
   for(int i=0; i<3; i++){
@@ -255,12 +255,12 @@ void ICP::step_transformation(Cloud* cloud_P, Cloud* cloud_Q){
   transformManager->make_translation(cloud_P, Xt);
   transformManager->make_rotation(cloud_P, com, Xr);
 
-  //---------------------------
+  //---------------------------*/
 }
 
 //Subfunctions
 float ICP::compute_SSE(Cloud* cloud_P, Cloud* cloud_Q){
-  vector<vec3>& key_P = cloud_P->registration.keypoints;
+  /*vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
   //---------------------------
 
@@ -277,10 +277,10 @@ float ICP::compute_SSE(Cloud* cloud_P, Cloud* cloud_Q){
   }
 
   //---------------------------
-  return SSE;
+  return SSE;*/
 }
 float ICP::compute_SSE_groundTruth(Cloud* cloud){
-  vector<vec3>& XYZ = cloud->location.OBJ;
+  /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   //---------------------------
 
@@ -300,10 +300,10 @@ float ICP::compute_SSE_groundTruth(Cloud* cloud){
   }
 
   //---------------------------
-  return SSE;
+  return SSE;*/
 }
 float ICP::compute_MSE_groundTruth(Cloud* cloud){
-  vector<vec3>& XYZ = cloud->location.OBJ;
+  /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   float MSE;
   //---------------------------
@@ -327,10 +327,10 @@ float ICP::compute_MSE_groundTruth(Cloud* cloud){
   MSE = MSE / XYZ.size();
 
   //---------------------------
-  return MSE;
+  return MSE;*/
 }
 float ICP::compute_RMSE_groundTruth(Cloud* cloud){
-  vector<vec3>& XYZ = cloud->location.OBJ;
+  /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   float RMSE;
   //---------------------------
@@ -353,10 +353,10 @@ float ICP::compute_RMSE_groundTruth(Cloud* cloud){
   RMSE = sqrt(RMSE);
 
   //---------------------------
-  return RMSE;
+  return RMSE;*/
 }
 float ICP::compute_MAE_groundTruth(Cloud* cloud){
-  vector<vec3>& XYZ = cloud->location.OBJ;
+  /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   float MAE;
   //---------------------------
@@ -378,10 +378,10 @@ float ICP::compute_MAE_groundTruth(Cloud* cloud){
   MAE = MAE / XYZ.size();
 
   //---------------------------
-  return MAE;
+  return MAE;*/
 }
 void ICP::compute_prepareData(Cloud* cloud_P, Cloud* cloud_Q){
-  //Prepare source data combining location and intensity for registration based intensity
+  /*//Prepare source data combining location and intensity for registration based intensity
   //---------------------------
 
   //Source cloud
@@ -416,7 +416,7 @@ void ICP::compute_prepareData(Cloud* cloud_P, Cloud* cloud_Q){
     }
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP::compute_adaptativeGain(){
   //---------------------------

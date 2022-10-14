@@ -19,6 +19,7 @@ class Ref_Operation;
 class Linearization;
 class Attribut;
 class BundleByClass;
+class Plot_radio;
 
 
 class Radiometry
@@ -55,36 +56,6 @@ public:
   void remove_References();
   void wrt_results();
 
-  //Plotting functions
-  void plot_3Dmap();
-  void plot_2Dmap();
-  void plot_IbyR();
-  void plot_IbyR_all();
-  void plot_IbyR_Spectralon();
-  void plot_IbyR_Sphere();
-  void plot_IbyR_both();
-  void plot_IbyCosIt(bool normalised);
-  void plot_IbyCosIt_Sphere(bool normalised);
-  void plot_IbyCosIt_all_Sphere();
-  void plot_IbyIt_Spectralon(bool normalised);
-  void plot_IbyCosIt_all();
-  void plot_IbyIt_all_Sphere();
-  void plot_IbyIt_allAngle_Spectralon(bool normalised);
-  void plot_IbyIt_allPercentage_Spectralon_05m();
-  void plot_IbyIt_allPercentage_Spectralon_10m();
-  void plot_IbyIt_allPercentage_Spectralon_20m();
-  void plot_IbyIt_allPercentage_Spectralon_30m();
-  void plot_IbyIt_allPercentage_Spectralon_40m();
-  void plot_IbyIt_Sphere(bool normalised);
-  void plot_IbyIt_cloud(Cloud* cloud);
-  void plot_IbyR_cloud(Cloud* cloud);
-  void plot_IbyR_data(Cloud* cloud);
-  void plot_nDbycosIt();
-  void plot_JbycosIt();
-  void plot_SpectralonAllMeans();
-  void plot_ParameterSpace();
-  void plot_IbyItbyR();
-
   //Setters / Getters
   inline int* get_algoCorrection(){ return &algoSelected;}
   inline Surfacic_global_piecewise* get_Surfacic_global_piecewise(){return radio_surf_glob;}
@@ -94,16 +65,17 @@ public:
   inline Separation_global* get_Separation_global(){return radio_sepa_glob;}
   inline Linearization* get_linManager(){return linManager;}
   inline Reference* get_refManager(){return refManager;}
+  inline Plot_radio* get_plot_radio(){return radioplotManager;}
 
 private:
   //Classes
   Scene* sceneManager;
   Attribut* attribManager;
   Plotting* plotManager;
-  BundleByClass* bundler;
   Reference* refManager;
   Ref_Operation* refopeManager;
   Linearization* linManager;
+  Plot_radio* radioplotManager;
 
   RadarEquation* radio_radar;
   Surfacic_simplified* radio_surf_simpl;

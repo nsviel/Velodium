@@ -1,5 +1,6 @@
 #include "Radiometry.h"
 
+#include "Plot_radio.h"
 #include "Target/Reference.h"
 #include "Target/Ref_Operation.h"
 
@@ -14,8 +15,8 @@
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
+#include "../../Operation/Operation_node.h"
 #include "../../Operation/Function/Plotting.h"
-#include "../../Operation/Function/BundleByClass.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Specific/fct_maths.h"
 
@@ -31,8 +32,8 @@ Radiometry::Radiometry(Engine_node* node){
   this->refManager = new Reference(node);
   this->refopeManager = new Ref_Operation(refManager);
   this->plotManager = new Plotting();
-  this->bundler = new BundleByClass();
   this->linManager = new Linearization(sceneManager, refopeManager);
+  this->radioplotManager = new Plot_radio(node);
 
   this->radio_radar = new RadarEquation();
   this->radio_surf_simpl = new Surfacic_simplified(refManager);
@@ -202,7 +203,7 @@ void Radiometry::correction_allClouds_WtRefs(){
 
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    if(cloud->Name.find("Sphere") == std::string::npos && cloud->Name.find("Spectralon") == std::string::npos){
+    if(cloud->name.find("Sphere") == std::string::npos && cloud->name.find("Spectralon") == std::string::npos){
       this->correction_oneCloud(cloud);
     }
   }
@@ -251,7 +252,7 @@ bool Radiometry::compute_RadioCorrection(Cloud* cloud){
   if(Ic.size() !=0 && Im.size() != 0){
     //Result
     console.AddLog("%s corrected -> Iraw: mean = %.2f, CV = %.2f | Icor: mean = %.2f, CV = %.2f",
-    cloud->Name.c_str(), fct_mean(Is), fct_cv(Is), fct_mean(Ic), fct_cv(Ic));
+    cloud->name.c_str(), fct_mean(Is), fct_cv(Is), fct_mean(Ic), fct_cv(Ic));
 
     //Parameters
     cloud->intensity.heatmap = false;
@@ -325,13 +326,26 @@ void Radiometry::set_referenceON(bool value){
 
   for(int i=0; i<list->size(); i++){
     Cloud* cloud = *next(list->begin(),i);
-    sceneManager->set_cloudVisibility(cloud, value);
+    cloud->visibility = value;
   }
 
   //---------------------------
   cout<<"Reference targets visibility: "<<value<<endl;
 }
+void Radiometry::wrt_results(){
+  ofstream corrResults;
+  //---------------------------
 
+  corrResults.open ("../../../../ICorrection.txt");
+  corrResults << "std(Is)"<<" "<<"std(Ic)"<<" "<<setprecision(3)<<"CV(Is)"<<" "<<"CV(Ic)"<<"\n";
+  corrResults << "--------------------------------"<<"\n";
+  for(int i=0; i<Is_std.size(); i++){
+    corrResults << Is_std[i]<<" "<<Ic_std[i]<<" "<<Is_CV[i]<<" "<<Ic_CV[i]<<"\n";
+  }
+
+  //---------------------------
+  corrResults.close();
+}
 void Radiometry::remove_References(){
   if(refManager->is_listsCompiled() == false){
     refManager->compute_list(sceneManager->get_list_cloud());
@@ -341,7 +355,7 @@ void Radiometry::remove_References(){
 
   for(int i=0; i<list->size(); i++){
     Cloud* cloud = *next(list->begin(),i);
-    sceneManager->removeCloud(cloud);
+    sceneManager->remove_cloud(cloud);
   }
 
   //---------------------------

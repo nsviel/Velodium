@@ -1,7 +1,6 @@
 #include "Plotting.h"
 
-#include "../Color/color.h"
-
+#include "../../Specific/color.h"
 #include "../../Specific/fct_maths.h"
 
 

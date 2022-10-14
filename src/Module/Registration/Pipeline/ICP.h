@@ -7,9 +7,9 @@
 class Transforms;
 class ICP_Matching;
 class ICP_Rejection;
-class Keypoint;
+//class Keypoint;
 class Glyphs;
-class Algo_PCL;
+//class Algo_PCL;
 
 
 class ICP
@@ -53,7 +53,7 @@ public:
   inline float get_time_optimization(){return time_opti;}
   inline int get_nbParameters(){return nP;}
   inline int get_nbDimensions(){return nD;}
-  inline Keypoint* get_keyManager(){return keyManager;}
+  //inline Keypoint* get_keyManager(){return keyManager;}
   inline int* get_matchingMethod(){return &m_match;}
   inline int* get_optimCOM(){return &m_com;}
   inline int* get_optimizationMethod(){return &m_optim;}
@@ -79,8 +79,8 @@ private:
   ICP_Rejection* rejectManager;
   Transforms* transformManager;
   Glyphs* glyphManager;
-  Keypoint* keyManager;
-  Algo_PCL* pclManager;
+  //Keypoint* keyManager;
+  //Algo_PCL* pclManager;
 
   //Parameters
   vec3 Xt, Xr, Xt_w, Xr_w;

@@ -683,7 +683,7 @@ Frame* Scene::get_frame_byID(Cloud* cloud, int ID){
   //---------------------------
   return nullptr;
 }
-bool Scene::get_is_list_empty()){
+bool Scene::get_is_list_empty(){
   return list_cloud->empty();
 }
 int Scene::get_subset_oID(Cloud* cloud, Subset* subset){

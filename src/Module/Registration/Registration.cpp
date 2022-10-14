@@ -17,7 +17,7 @@ Registration::Registration(Engine_node* node){
 
   this->sceneManager = node->get_sceneManager();
   this->glyphManager = node->get_glyphManager();
-  this->attribManager = new Attribut(sceneManager);
+  //this->attribManager = new Attribut(sceneManager);
   this->icpManager = new ICP(glyphManager);
   this->plotManager = new Plotting();
 
@@ -48,7 +48,7 @@ void Registration::make_Iteration(){
     //ICP algorithm
     tic();
     icpManager->algo(cloud_P, cloud_Q);
-    sceneManager->update_CloudPosition(cloud_P);
+    sceneManager->update_cloud_location(cloud_P);
     duration = toc();
 
     //ICP results
@@ -60,7 +60,7 @@ void Registration::make_Iteration(){
   }
 
   //------------------------------
-  glyphManager->obj_matching(cloud_P, cloud_Q);
+  //glyphManager->obj_matching(cloud_P, cloud_Q);
 }
 
 //Subfunctions
@@ -98,7 +98,7 @@ void Registration::print_ICP(){
   //------------------------------
 }
 void Registration::colorization(Cloud* cloud_P, Cloud* cloud_Q){
-  //---------------------------
+  /*//---------------------------
 
   switch(colorMeth){
     case 0:{ //None
@@ -122,11 +122,11 @@ void Registration::colorization(Cloud* cloud_P, Cloud* cloud_Q){
       break;
     }
     case 3:{ //Transparent
-      sceneManager->set_cloudVisibility(cloud_P, false);
-      sceneManager->set_cloudVisibility(cloud_Q, false);
+      cloud_P->visibility = false;
+      cloud_Q->visibility = false;
       break;
     }
   }
 
-  //---------------------------
+  //---------------------------*/
 }

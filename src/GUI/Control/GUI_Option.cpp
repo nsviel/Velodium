@@ -13,7 +13,7 @@
 #include "../../Engine/Scene/Object/Scene/AABB.h"
 #include "../../Engine/Scene/Object/Scene/Grid.h"
 #include "../../Engine/Scene/Object/Scene/Axis.h"
-#include "../../Engine/Scene/Object/Normal.h"
+#include "../../Engine/Scene/Object/Cloud/Normal.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 

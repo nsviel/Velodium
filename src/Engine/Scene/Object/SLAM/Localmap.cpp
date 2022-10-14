@@ -1,6 +1,6 @@
 #include "Localmap.h"
 
-#include "../Normal.h"
+#include "../Cloud/Normal.h"
 
 
 //Constructor / destructor

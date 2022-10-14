@@ -4,6 +4,7 @@
 #include "../Registration.h"
 
 #include "../../Module_GUI.h"
+#include "../../Module_node.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -12,7 +13,7 @@
 
 
 //Constructor / Destructor
-GUI_registration::GUI_registration(GUI_module* node_gui){
+GUI_registration::GUI_registration(GUI_module* module_gui){
   //---------------------------
 
   Engine_node* node_engine = module_gui->get_node_engine();
@@ -201,11 +202,6 @@ void GUI_registration::regist_Registration(){
     if(sceneManager->get_nb_cloud() > 1){
       switch (regis_algo){
         case 0: regisManager->make_Iteration(); break;
-        case 1: regisManager->make_algoPCL(0); break;
-        case 2: regisManager->make_algoPCL(1); break;
-        case 3: regisManager->make_algoPCL(2); break;
-        case 4: regisManager->make_algoPCL(3); break;
-        case 5: regisManager->make_algoPCL(4); break;
       }
     }
   }

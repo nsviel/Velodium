@@ -20,7 +20,7 @@
 #include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/SLAM/Car.h"
 #include "../../../Engine/Scene/Object/SLAM/Trajectory.h"
-#include "../../../Engine/Scene/Object/SLAM/Keypoint.h"
+#include "../../../Engine/Scene/Object/SLAM/Slam_keypoint.h"
 #include "../../../Engine/Scene/Object/SLAM/Localmap.h"
 #include "../../../Specific/fct_transtypage.h"
 
@@ -109,7 +109,7 @@ void GUI_Slam::parameter_glyph(){
   //---------------------------
 
   //Display ICP line correspondences
-  Keypoint* keyObject = objectManager->get_object_keypoint();
+  Slam_keypoint* keyObject = objectManager->get_object_keypoint();
   bool* keypoint_ON = keyObject->get_visibility();
   if(ImGui::Checkbox("Keypoint", keypoint_ON)){
     if(sceneManager->get_is_list_empty() == false){

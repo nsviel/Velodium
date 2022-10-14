@@ -13,7 +13,7 @@ ICP_Rejection::~ICP_Rejection(){}
 
 //ICCP implementation
 void ICP_Rejection::weighting_ICCP(Cloud* cloud_P, Cloud* cloud_Q){
-  vector<vec3>& key_P = cloud_P->registration.keypoints;
+  /*vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
   vector<float>& key_I = cloud_P->registration.keypoint_intensity;
   vector<float>& trg_I = cloud_Q->registration.keypoint_intensity;
@@ -40,12 +40,12 @@ void ICP_Rejection::weighting_ICCP(Cloud* cloud_P, Cloud* cloud_Q){
   //---------------------------
   cout<<": Supression of "<<idx.size()<<" points"<<endl;
   this->make_supressPoints(key_P, idx);
-  this->make_supressPoints(trg_Q, idx);
+  this->make_supressPoints(trg_Q, idx);*/
 }
 
 //Rejection methods
 void ICP_Rejection::rejection_distance(Cloud* cloud_P, Cloud* cloud_Q, float threshold){
-  vector<vec3>& XYZ_icp = cloud_P->registration.keypoints;
+  /*vector<vec3>& XYZ_icp = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_trg = cloud_Q->registration.trgpoints;
   vector<int> idx;
   cout<<"-> rejection distance: "<<XYZ_icp.size()<<flush;
@@ -60,15 +60,15 @@ void ICP_Rejection::rejection_distance(Cloud* cloud_P, Cloud* cloud_Q, float thr
   //---------------------------
   this->make_supressPoints(XYZ_icp, idx);
   this->make_supressPoints(XYZ_trg, idx);
-  cout<<"->"<<XYZ_icp.size()<<endl;
+  cout<<"->"<<XYZ_icp.size()<<endl;*/
 }
 void ICP_Rejection::rejection_color(Cloud* cloud_P, Cloud* cloud_Q){
-  vector<vec4>& RGB_icp = cloud_P->color.OBJ;
+  /*vector<vec4>& RGB_icp = cloud_P->color.OBJ;
   vector<vec4>& RGB_trg = cloud_Q->color.OBJ;
   Uplet tuple;
   //---------------------------
 
-  /*for(int i=idx.size()-1; i>=0; i--){
+  for(int i=idx.size()-1; i>=0; i--){
     tuple = idx[i];
     float diff = 0;
     for(int j=0; j<3; j++) diff += RGB_icp[i][j] - RGB_trg[tuple.idx2][j];
@@ -78,14 +78,14 @@ void ICP_Rejection::rejection_color(Cloud* cloud_P, Cloud* cloud_Q){
   //---------------------------
 }
 void ICP_Rejection::rejection_normal(Cloud* cloud_P, Cloud* cloud_Q){
-  vector<vec3>& n1 = cloud_P->normal.OBJ;
+  /*vector<vec3>& n1 = cloud_P->normal.OBJ;
   vector<vec3>& n2 = cloud_Q->normal.OBJ;
   vector<vec3>& XYZ_icp = cloud_P->location.OBJ;
   vector<vec3>& XYZ_trg = cloud_Q->location.OBJ;
   Uplet tuple;
   //---------------------------
 
-  /*for(int i=idx.size()-1; i>=idx.size()-3; i--){
+  for(int i=idx.size()-1; i>=idx.size()-3; i--){
     tuple = idx[i];
     float angle = 0;
     for(int j=0; j<3; j++)

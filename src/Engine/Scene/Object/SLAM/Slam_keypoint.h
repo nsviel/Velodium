@@ -6,12 +6,12 @@
 #include "../../../../common.h"
 
 
-class Keypoint
+class Slam_keypoint
 {
 public:
   //Constructor / Destructor
-  Keypoint();
-  ~Keypoint();
+  Slam_keypoint();
+  ~Slam_keypoint();
 
 public:
   void create_keypoint(Subset* subset);

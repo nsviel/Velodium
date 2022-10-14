@@ -1,6 +1,7 @@
 #include "GUI_Radiometry.h"
 
 #include "../Radiometry.h"
+#include "../Plot_radio.h"
 #include "../Target/Reference.h"
 #include "../Approach/Linearization.h"
 #include "../Approach/Surfacic_local.h"
@@ -42,6 +43,7 @@ GUI_radiometry::GUI_radiometry(GUI_module* gui_module){
   this->radioManager = node_module->get_radioManager();
   this->refManager = radioManager->get_refManager();
   this->linManager = radioManager->get_linManager();
+  this->radioplotManager = radioManager->get_plot_radio();
 
   this->corr_data = 0;
   this->corr_num = 1;
@@ -118,7 +120,7 @@ void GUI_radiometry::correction(){
   ImGui::SameLine();
   if(ImGui::Button("Reverse##correction", ImVec2(100,0))){
     if(!sceneManager->get_is_list_empty()){
-      sceneManager->update_Resetcloud(cloud);
+      sceneManager->reset_cloud(cloud);
     }
   }
 
@@ -184,31 +186,31 @@ void GUI_radiometry::plotting(){
 
     if(ImGui::Button("I(R)", ImVec2(150,0))){
       if(!sceneManager->get_is_list_empty()){
-        radioManager->plot_IbyR_data(cloud);
+        radioplotManager->plot_IbyR_data(cloud);
       }
     }
 
     if(ImGui::Button("I(It)", ImVec2(150,0))){
       if(!sceneManager->get_is_list_empty()){
-        radioManager->plot_IbyIt_cloud(cloud);
+        radioplotManager->plot_IbyIt_cloud(cloud);
       }
     }
 
     if(ImGui::Button("I(R) all", ImVec2(150,0))){
       if(!sceneManager->get_is_list_empty()){
-        radioManager->plot_IbyR();
+        radioplotManager->plot_IbyR();
       }
     }
 
     if(ImGui::Button("I(It) all", ImVec2(150,0))){
       if(!sceneManager->get_is_list_empty()){
-        radioManager->plot_IbyCosIt_all();
+        radioplotManager->plot_IbyCosIt_all();
       }
     }
 
     if(ImGui::Button("I(It,R)", ImVec2(150,0))){
       if(!sceneManager->get_is_list_empty()){
-        radioManager->plot_IbyItbyR();
+        radioplotManager->plot_IbyItbyR();
       }
     }
 
@@ -224,9 +226,9 @@ void GUI_radiometry::plotting(){
 
       for(int i=0; i<list->size(); i++){
         Cloud* cloud = *next(list->begin(),i);
-        attribManager.compute_attribut_subset(cloud);
+        attribManager.compute_attribut_cloud(cloud);
 
-        if(cloud->Name.find("10p") != std::string::npos){
+        if(cloud->name.find("10p") != std::string::npos){
           //Bundle by classes
           bundler->compute_bundleByClass(cloud, 2);
           vector<float> Ib = bundler->get_Ib();
@@ -241,7 +243,7 @@ void GUI_radiometry::plotting(){
             It_10.push_back(Ib_It[j]);
           }
         }
-        if(cloud->Name.find("25p") != std::string::npos){
+        if(cloud->name.find("25p") != std::string::npos){
           //Bundle by classes
           bundler->compute_bundleByClass(cloud, 2);
           vector<float> Ib = bundler->get_Ib();
@@ -256,7 +258,7 @@ void GUI_radiometry::plotting(){
             It_25.push_back(Ib_It[j]);
           }
         }
-        if(cloud->Name.find("50p") != std::string::npos){
+        if(cloud->name.find("50p") != std::string::npos){
           //Bundle by classes
           bundler->compute_bundleByClass(cloud, 2);
           vector<float> Ib = bundler->get_Ib();
@@ -271,7 +273,7 @@ void GUI_radiometry::plotting(){
             It_50.push_back(Ib_It[j]);
           }
         }
-        if(cloud->Name.find("99p") != std::string::npos){
+        if(cloud->name.find("99p") != std::string::npos){
           //Bundle by classes
           bundler->compute_bundleByClass(cloud, 2);
           vector<float> Ib = bundler->get_Ib();
@@ -474,7 +476,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_calibrationTargets = refManager->get_path_calibrationTargets();
     if(ImGui::Button("...##0")){
-      pathManager->selectDirectory(path_calibrationTargets);
+      pathManager->selectDirectory(*path_calibrationTargets);
     }
 
     //Sphere
@@ -482,26 +484,26 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_sphereTarget_add80d = refManager->get_path_sphereTarget_add80d();
     if(ImGui::Button("...##sphere")){
-      pathManager->selectDirectory(path_sphereTarget_add80d);
+      pathManager->selectDirectory(*path_sphereTarget_add80d);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R)##sphere", ImVec2(60,0))){
       refManager->load_References_path(*path_sphereTarget_add80d);
-      radioManager->plot_IbyR();
+      radioplotManager->plot_IbyR();
       refManager->clear();
     }
     ImGui::SameLine();
     if(ImGui::Button("I(alpha)##sphere", ImVec2(60,0))){
       refManager->load_References_path(*path_sphereTarget_add80d);
       Cloud* cloud = refManager->get_specificSphere("10.0m");
-      say(cloud->Name);
-      radioManager->plot_IbyIt_cloud(cloud);
+      say(cloud->name);
+      radioplotManager->plot_IbyIt_cloud(cloud);
       refManager->clear();
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R,alpha)##sphere", ImVec2(60,0))){
       refManager->load_References_path(*path_sphereTarget_add80d);
-      radioManager->plot_ParameterSpace();
+      radioplotManager->plot_ParameterSpace();
       refManager->clear();
     }
 
@@ -510,12 +512,12 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_spectralonTarget_dist = refManager->get_path_spectralonTarget_dist();
     if(ImGui::Button("...##spectralon1")){
-      pathManager->selectDirectory(path_spectralonTarget_dist);
+      pathManager->selectDirectory(*path_spectralonTarget_dist);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R)##spectralon", ImVec2(60,0))){
       refManager->load_References_path(*path_spectralonTarget_dist);
-      radioManager->plot_IbyR();
+      radioplotManager->plot_IbyR();
       refManager->clear();
     }
 
@@ -524,12 +526,12 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_spectralonTarget_angle = refManager->get_path_spectralonTarget_angle();
     if(ImGui::Button("...##spectralon2")){
-      pathManager->selectDirectory(path_spectralonTarget_angle);
+      pathManager->selectDirectory(*path_spectralonTarget_angle);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(alpha)##spectralon", ImVec2(60,0))){
       refManager->load_References_path(*path_spectralonTarget_angle);
-      radioManager->plot_IbyCosIt_all();
+      radioplotManager->plot_IbyCosIt_all();
       refManager->clear();
     }
 
@@ -557,16 +559,16 @@ void GUI_radiometry::options(){
 
     //Correction application
     if(ImGui::Button("Intensity", ImVec2(150,0))){
-      bool* ptr = gui_winManager->get_show_intensity();
-      *ptr = !*ptr;
+      //bool* ptr = gui_winManager->get_show_intensity();
+      //*ptr = !*ptr;
     }
     if(ImGui::Button("Normal", ImVec2(150,0))){
-      bool* ptr = gui_winManager->get_show_normal();
-      *ptr = !*ptr;
+      //bool* ptr = gui_winManager->get_show_normal();
+      //*ptr = !*ptr;
     }
     if(ImGui::Button("Transformation", ImVec2(150,0))){
-      bool* ptr = gui_winManager->get_show_transformation();
-      *ptr = !*ptr;
+      //bool* ptr = gui_winManager->get_show_transformation();
+      //*ptr = !*ptr;
     }
 
     //Reference options
@@ -586,7 +588,7 @@ void GUI_radiometry::options(){
   }
 }
 void GUI_radiometry::Approaches(){
-  if(ImGui::CollapsingHeader("Approach")){
+  /*if(ImGui::CollapsingHeader("Approach")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
@@ -721,25 +723,25 @@ void GUI_radiometry::Approaches(){
       }
       if(ImGui::Button("Bundle by classes##1", ImVec2(150,0))){
         if(!sceneManager->get_is_list_empty()){
-          attribManager.compute_attribut_subset(cloud);
+          attribManager.compute_attribut_cloud(cloud);
           surf_simplManager->plot_bundleByClass(cloud);
         }
       }
       if(ImGui::Button("Linear regression", ImVec2(150,0))){
         if(!sceneManager->get_is_list_empty()){
-          attribManager.compute_attribut_subset(cloud);
+          attribManager.compute_attribut_cloud(cloud);
           surf_simplManager->plot_linearRegression(cloud);
         }
       }
       if(ImGui::Button("Quadratic regression", ImVec2(150,0))){
         if(!sceneManager->get_is_list_empty()){
-          attribManager.compute_attribut_subset(cloud);
+          attribManager.compute_attribut_cloud(cloud);
           surf_simplManager->plot_quadraticRegression(cloud);
         }
       }
       if(ImGui::Button("Corrected intensity##1", ImVec2(150,0))){
         if(!sceneManager->get_is_list_empty()){
-          attribManager.compute_attribut_subset(cloud);
+          attribManager.compute_attribut_cloud(cloud);
           surf_simplManager->plot_intensityCorrection(cloud);
         }
       }
@@ -807,5 +809,5 @@ void GUI_radiometry::Approaches(){
 
     //---------------------------
     ImGui::Separator();
-  }
+  }*/
 }

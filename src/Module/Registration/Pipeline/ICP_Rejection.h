@@ -1,6 +1,7 @@
 #ifndef ICP_REJECTION_H
 #define ICP_REJECTION_H
 
+#include "../../../Engine/Data/struct_generic.h"
 #include "../../../common.h"
 
 

@@ -3,20 +3,11 @@
 
 #include "../../common.h"
 
-class RadarEquation;
-class Surfacic_simplified;
-class Surfacic_global_piecewise;
-class Surfacic_local;
-class Surfacic_segmented;
-class Separation_global;
-class Separation_local;
-
 class Engine_node;
 class Scene;
 class Plotting;
 class Reference;
 class Ref_Operation;
-class Linearization;
 class Attribut;
 class BundleByClass;
 
@@ -31,7 +22,7 @@ public:
 public:
   void compute_IRmeans(list<Cloud*>* list);
   void compute_IsItconcat(list<Cloud*>* list);
-  
+
   void plot_3Dmap();
   void plot_2Dmap();
   void plot_IbyR();
@@ -62,24 +53,13 @@ public:
   void plot_IbyItbyR();
 
 private:
-  //Classes
   Scene* sceneManager;
   Attribut* attribManager;
   Plotting* plotManager;
   BundleByClass* bundler;
   Reference* refManager;
   Ref_Operation* refopeManager;
-  Linearization* linManager;
 
-  RadarEquation* radio_radar;
-  Surfacic_simplified* radio_surf_simpl;
-  Surfacic_global_piecewise* radio_surf_glob;
-  Surfacic_local* radio_surf_local;
-  Surfacic_segmented* radio_surf_seg;
-  Separation_global* radio_sepa_glob;
-  Separation_local* radio_sepa_local;
-
-  //Attributs
   vector<vector<float>> I_saved, R_saved;
   vector<string> N_saved;
   vector<float> Is_std, Ic_std;

@@ -37,7 +37,7 @@ void ICP_Optimization::init(int XYZsize){
   //---------------------------
 }
 void ICP_Optimization::algo_Newton(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
-  vector<vec3>& XYZ_P_obj = cloud_P->registration.keypoints;
+  /*vector<vec3>& XYZ_P_obj = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q_obj = cloud_Q->registration.trgpoints;
   vector<float>& key_w = cloud_P_m->registration.keypoint_weight;
   //---------------------------
@@ -57,10 +57,10 @@ void ICP_Optimization::algo_Newton(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
   //Paramater
   this->compute_param(X);
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Optimization::algo_Newton_separated(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
-  int size = cloud_P->registration.keypoints.size();
+  /*int size = cloud_P->registration.keypoints.size();
   if(size == 0) return;
   //---------------------------
 
@@ -68,10 +68,10 @@ void ICP_Optimization::algo_Newton_separated(Cloud* cloud_P, Cloud* cloud_Q, vec
   this->algo_Xt(cloud_P, cloud_Q);
   this->algo_Xr(cloud_P, cloud_Q, COM);
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Optimization::algo_Xt(Cloud* cloud_P, Cloud* cloud_Q){
-  vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
+  /*vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q = cloud_Q->registration.trgpoints;
   vector<float>& KEY_W = cloud_P->registration.keypoint_weight;
   if(nP_t == 0) return;
@@ -90,10 +90,10 @@ void ICP_Optimization::algo_Xt(Cloud* cloud_P, Cloud* cloud_Q){
   //Paramater
   this->compute_param_Pt(Xt);
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Optimization::algo_Xr(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
-  vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
+  /*vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q = cloud_Q->registration.trgpoints;
   vector<float>& KEY_W = cloud_P->registration.keypoint_weight;
   if(nP_r == 0) return;
@@ -111,10 +111,10 @@ void ICP_Optimization::algo_Xr(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
   Vector3f Xr = - Jinv * E;
 
   //---------------------------
-  this->compute_param_Pr(Xr);
+  this->compute_param_Pr(Xr);*/
 }
 void ICP_Optimization::algo_Xr_separated(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
-  vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
+  /*vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q = cloud_Q->registration.trgpoints;
   vector<float>& KEY_W = cloud_P->registration.keypoint_weight;
   if(nP_r == 0) return;
@@ -148,7 +148,7 @@ void ICP_Optimization::algo_Xr_separated(Cloud* cloud_P, Cloud* cloud_Q, vec3 CO
   Xr(2) = Xr_z(0);
 
   //---------------------------
-  this->compute_param_Pr(Xr);
+  this->compute_param_Pr(Xr);*/
 }
 
 //Sub-functions

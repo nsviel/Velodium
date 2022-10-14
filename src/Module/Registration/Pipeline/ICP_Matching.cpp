@@ -9,7 +9,7 @@ ICP_Matching::~ICP_Matching(){}
 
 //Simple matchibg
 void ICP_Matching::algo_directMatching(Subset* subset_P, Subset* subset_Q){
-  vector<vec3>& XYZ_P = subset_P->xyz;
+  /*vector<vec3>& XYZ_P = subset_P->xyz;
   vector<vec3>& XYZ_Q = subset_Q->xyz;
   vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
@@ -22,10 +22,10 @@ void ICP_Matching::algo_directMatching(Subset* subset_P, Subset* subset_Q){
   key_P = XYZ_P;
   trg_Q = XYZ_Q;
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Matching::algo_userSelection(Subset* subset_P, Subset* subset_Q){
-  //Convert list<int> into vector<Uplet>
+  /*//Convert list<int> into vector<Uplet>
   list<int>& idx_1 = cloud_P->attribut.list_idxPoints;
   list<int>& idx_2 = cloud_Q->attribut.list_idxPoints;
   Uplet tuple;
@@ -40,12 +40,12 @@ void ICP_Matching::algo_userSelection(Subset* subset_P, Subset* subset_Q){
     idx.push_back(tuple);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 
 //Geometric matching
 void ICP_Matching::algo_NN_BruteForce(Subset* subset_P, Subset* subset_Q){
-  vector<vec3>& XYZ_P = subset_P->xyz;
+  /*vector<vec3>& XYZ_P = subset_P->xyz;
   vector<vec3>& XYZ_Q = subset_Q->xyz;
   vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
@@ -68,10 +68,10 @@ void ICP_Matching::algo_NN_BruteForce(Subset* subset_P, Subset* subset_Q){
     trg_Q.push_back(XYZ_Q[id]);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Matching::algo_NN_BruteForce_ICCP(Subset* subset_P, Subset* subset_Q){
-  vector<vec3>& XYZ_P = subset_P->xyz;
+  /*vector<vec3>& XYZ_P = subset_P->xyz;
   vector<vec3>& XYZ_Q = subset_Q->xyz;
   vector<float>& Is_P = cloud_P->intensity.OBJ;
   vector<float>& Is_Q = cloud_Q->intensity.OBJ;
@@ -113,12 +113,12 @@ void ICP_Matching::algo_NN_BruteForce_ICCP(Subset* subset_P, Subset* subset_Q){
 
   //---------------------------
   cout<<"there are "<< key_P.size() <<" keypoints"<<endl;
-  cout<<"there are "<< trg_Q.size() <<" targets"<<endl;
+  cout<<"there are "<< trg_Q.size() <<" targets"<<endl;*/
 }
 void ICP_Matching::algo_NN_KdTreeFLANN(Subset* subset_P, Subset* subset_Q){
-  vector<vec3>& XYZ_Q = subset_Q->xyz;
-  vector<vec3>& key_P = cloud_P->registration.keypoints;
-  vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
+  /*vector<vec3>& XYZ_Q = subset_Q->xyz;
+  vector<vec3>& key_P = subset_P->registration.keypoints;
+  vector<vec3>& trg_Q = subset_Q->registration.trgpoints;
   //----------------------------
 
   //Create FLANN matrices input
@@ -145,13 +145,13 @@ void ICP_Matching::algo_NN_KdTreeFLANN(Subset* subset_P, Subset* subset_Q){
     trg_Q.push_back(XYZ_Q[idx]);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 
 //Photometric matching
 void ICP_Matching::algo_NI_KdTreeFLANN(Subset* subset_P, Subset* subset_Q){
-  vector<float>& I_P = cloud_P->intensity.OBJ;
-  vector<float>& I_Q = cloud_Q->intensity.OBJ;
+  /*vector<float>& I_P = subset_P->I;
+  vector<float>& I_Q = subset_Q->I;
   vector<vec3>& XYZ_Q = subset_Q->xyz;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
   int nb_iter = 10;
@@ -181,11 +181,11 @@ void ICP_Matching::algo_NI_KdTreeFLANN(Subset* subset_P, Subset* subset_Q){
     trg_Q.push_back(vec4(XYZ_Q[idx], 1.0f));
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Matching::algo_NI_BruteForce(Subset* subset_P, Subset* subset_Q){
-  vector<float>& Is_icp = cloud_P->intensity.OBJ;
-  vector<float>& Is_trg = cloud_Q->intensity.OBJ;
+  vector<float>& Is_icp = subset_P->I;
+  vector<float>& Is_trg = subset_Q->I;
   if(Is_icp.size() == 0){cout<<"No intensity data"<<endl;}
   if(Is_trg.size() == 0){cout<<"No intensity data"<<endl;}
   this->idx.clear();
@@ -210,7 +210,7 @@ void ICP_Matching::algo_NI_BruteForce(Subset* subset_P, Subset* subset_Q){
 
 //Photometric + geometric matching
 void ICP_Matching::algo_NI_NN(Subset* subset_P, Subset* subset_Q){
-  vector<vec3>& XYZ_P = subset_P->xyz;
+  /*vector<vec3>& XYZ_P = subset_P->xyz;
   vector<vec3>& XYZ_Q = subset_Q->xyz;
   vector<float>& Is_icp = cloud_P->intensity.OBJ;
   vector<float>& Is_trg = cloud_Q->intensity.OBJ;
@@ -237,10 +237,10 @@ void ICP_Matching::algo_NI_NN(Subset* subset_P, Subset* subset_Q){
     idx.push_back(tuple);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Matching::algo_NI_NN_KdTreeFLANN(Subset* subset_P, Subset* subset_Q){
-  vector<vec4>& XYZI_P = cloud_P->registration.XYZI;
+  /*vector<vec4>& XYZI_P = cloud_P->registration.XYZI;
   vector<vec4>& XYZI_Q = cloud_Q->registration.XYZI;
   vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
@@ -279,7 +279,7 @@ void ICP_Matching::algo_NI_NN_KdTreeFLANN(Subset* subset_P, Subset* subset_Q){
     trg_I.push_back(XYZI_Q[idx][3]);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void ICP_Matching::algo_NI_NN_KdTreeNanoFLANN(Subset* subset_P, Subset* subset_Q){
   /*/  vector<vec3>& XYZ_P = subset_P->xyz;

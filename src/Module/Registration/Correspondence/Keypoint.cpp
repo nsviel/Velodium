@@ -108,7 +108,7 @@ void Keypoint::algo_keypoints(Cloud* cloud_P, Cloud* cloud_Q){
   }
 
   //DownSampling
-  switch(downMet){
+  /*switch(downMet){
     case 0:{ //None
       cloud_P->pcl.Nxyz = glm_to_pcl_Nxyz(cloud_P);
       cloud_Q->pcl.Nxyz = glm_to_pcl_Nxyz(cloud_Q);
@@ -214,10 +214,10 @@ void Keypoint::algo_keypoints(Cloud* cloud_P, Cloud* cloud_Q){
   }
 
   //---------------------------
-  this->compute_matching(cloud_P, cloud_Q);
+  this->compute_matching(cloud_P, cloud_Q);*/
 }
 void Keypoint::algo_keypoints_one(Cloud* cloud){
-  cloud->pcl.Nxyz = glm_to_pcl_Nxyz(cloud);
+  /*cloud->pcl.Nxyz = glm_to_pcl_Nxyz(cloud);
   //---------------------------
 
   //Data
@@ -295,7 +295,7 @@ void Keypoint::algo_keypoints_one(Cloud* cloud){
     }
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void Keypoint::algo_normals(Cloud* cloud){
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = cloud->pcl.XYZRGB;
@@ -473,7 +473,7 @@ void Keypoint::keypoint_SIFT(Cloud* cloud){
   //---------------------------
   float duration = toc();
   int size = keypoints->size();
-  console.AddLog("SIFT %s: Found %i keypoints in %.2fms", cloud->Name.c_str(), size, duration);
+  console.AddLog("SIFT %s: Found %i keypoints in %.2fms", cloud->name.c_str(), size, duration);
 }
 void Keypoint::keypoint_HARRIS3D(Cloud* cloud){
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
@@ -502,7 +502,7 @@ void Keypoint::keypoint_HARRIS3D(Cloud* cloud){
   cloud->pcl.keypoints = keypoints_xyzrgb;
   int size = keypoints->size();
   int size_tot = cloud->size();
-  console.AddLog("HARRIS %s: Found %i keypoints out of %i total points.", cloud->Name.c_str(), size, size_tot);
+  console.AddLog("HARRIS %s: Found %i keypoints out of %i total points.", cloud->name.c_str(), size, size_tot);
 }
 void Keypoint::keypoint_HARRIS6D(Cloud* cloud){
   /*XYZRGBtype& cloud = cloud->pcl.XYZRGB;
@@ -531,7 +531,7 @@ void Keypoint::keypoint_HARRIS6D(Cloud* cloud){
 
   //-----------------------
   cloud->pcl.keypoints = keypoints_xyzrgb;
-  cout << "HARRIS " << cloud->Name <<": Found " << keypoints->size () << " keypoints ";
+  cout << "HARRIS " << cloud->name <<": Found " << keypoints->size () << " keypoints ";
   cout << "out of " << cloud->size () << " total points." << endl;*/
 }
 void Keypoint::keypoint_SUSAN(Cloud* cloud){
@@ -561,7 +561,7 @@ void Keypoint::keypoint_SUSAN(Cloud* cloud){
   cloud->pcl.keypoints = keypoints_xyzrgb;
   int size = keypoints->size();
   int size_tot = cloud->size();
-  console.AddLog("SUSAN %s: Found %i keypoints out of %i total points.", cloud->Name.c_str(), size, size_tot);
+  console.AddLog("SUSAN %s: Found %i keypoints out of %i total points.", cloud->name.c_str(), size, size_tot);
 }
 
 //Descriptors
@@ -627,7 +627,7 @@ void Keypoint::descriptor_SHOT(Cloud* cloud, SHOTtype& descriptors){
   descriptors = desc_2;
   float duration = toc();
   int size = desc_2->size();
-  console.AddLog("-> SHOT %s: vectorize %i in %.2fms", cloud->Name.c_str(), size, duration);
+  console.AddLog("-> SHOT %s: vectorize %i in %.2fms", cloud->name.c_str(), size, duration);
 }
 void Keypoint::descriptor_3DSC(Cloud* cloud, SCtype& descriptors){
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ> ());

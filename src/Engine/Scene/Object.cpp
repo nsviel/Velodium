@@ -8,13 +8,13 @@
 #include "Object/Scene/AABB.h"
 #include "Object/Scene/Mark.h"
 
-#include "Object/SLAM/Keypoint.h"
+#include "Object/SLAM/Slam_keypoint.h"
 #include "Object/SLAM/Trajectory.h"
 #include "Object/SLAM/Car.h"
 #include "Object/SLAM/Localmap.h"
 
-#include "Object/OOBB.h"
-#include "Object/Normal.h"
+#include "Object/Cloud/OOBB.h"
+#include "Object/Cloud/Normal.h"
 
 #include "../Engine_node.h"
 #include "../Scene/Scene.h"
@@ -35,7 +35,7 @@ Object::Object(Engine_node* node){
   this->markObject = new Mark();
   this->trajObject = new Trajectory();
   this->carObject = new Car();
-  this->keyObject = new Keypoint();
+  this->keyObject = new Slam_keypoint();
   this->mapObject = new Localmap();
 
   //---------------------------

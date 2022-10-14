@@ -3,9 +3,9 @@
 
 #include "Color/Color.h"
 #include "Color/Heatmap.h"
-#include "Functions/Selection.h"
-#include "Functions/CoordTransform.h"
-#include "Functions/Extraction.h"
+#include "Function/Selection.h"
+#include "Function/CoordTransform.h"
+#include "Function/Extraction.h"
 #include "Transformation/Filter.h"
 #include "Transformation/Attribut.h"
 #include "Optimization/Fitting.h"

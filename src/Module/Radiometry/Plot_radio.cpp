@@ -3,12 +3,6 @@
 #include "Target/Reference.h"
 #include "Target/Ref_Operation.h"
 
-#include "Approach/Linearization.h"
-#include "Approach/RadarEquation.h"
-#include "Approach/Surfacic_simplified.h"
-#include "Approach/Surfacic_global_piecewise.h"
-#include "Approach/Separation_global.h"
-
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Operation/Operation_node.h"
@@ -31,17 +25,7 @@ Plot_radio::Plot_radio(Engine_node* node){
   this->refopeManager = new Ref_Operation(refManager);
   this->plotManager = new Plotting();
   this->bundler = new BundleByClass();
-  this->linManager = new Linearization(sceneManager, refopeManager);
 
-  this->radio_radar = new RadarEquation();
-  this->radio_surf_simpl = new Surfacic_simplified(refManager);
-  this->radio_surf_glob = new Surfacic_global_piecewise(refopeManager);
-  this->radio_surf_local = new Surfacic_local(refopeManager);
-  this->radio_surf_seg = new Surfacic_segmented(refopeManager);
-  this->radio_sepa_glob = new Separation_global(refManager);
-  this->radio_sepa_local = new Separation_local(refopeManager);
-
-  //Attributs
   this->algoSelected = 0;
   plotManager->set_ticSize(15); //Default: 10
 
@@ -49,7 +33,7 @@ Plot_radio::Plot_radio(Engine_node* node){
 }
 Plot_radio::~Plot_radio(){}
 
-void Radiometry::compute_IRmeans(list<Cloud*>* list){
+void Plot_radio::compute_IRmeans(list<Cloud*>* list){
   attribManager->compute_attribut_all();
   Is_mean.clear(); R_mean.clear(); It_mean.clear(); std_mean.clear();
   //---------------------------
@@ -69,12 +53,12 @@ void Radiometry::compute_IRmeans(list<Cloud*>* list){
   }
 
   //---------------------------
-  if(sceneManager->get_cloud_selected()->Name.find("Sphere") != std::string::npos){
+  if(sceneManager->get_cloud_selected()->name.find("Sphere") != std::string::npos){
     I_saved.push_back(Is_mean);
     R_saved.push_back(R_mean);
   }
 }
-void Radiometry::compute_IsItconcat(list<Cloud*>* list){
+void Plot_radio::compute_IsItconcat(list<Cloud*>* list){
   attribManager->compute_attribut_all();
   Is_conc.clear(); It_conc.clear();
   //---------------------------
@@ -1110,6 +1094,7 @@ void Plot_radio::plot_IbyIt_allPercentage_Spectralon_10m(){
     console.AddLog("ok", log_50);
     console.AddLog("ok", log_25);
     console.AddLog("ok", log_10);
+  }
 }
 void Plot_radio::plot_IbyIt_allPercentage_Spectralon_20m(){
   vector<vector<float>> Is_multi, It_multi, std_multi;
@@ -1459,20 +1444,6 @@ void Plot_radio::plot_JbycosIt(){
     string log = to_string(Xd[i]) + " " + to_string(Yd[i]) + " " + to_string(err[i]);
     console.AddLog("ok", log);
   }
-}
-void Plot_radio::wrt_results(){
-  ofstream corrResults;
-  //---------------------------
-
-  corrResults.open ("../../../../ICorrection.txt");
-  corrResults << "std(Is)"<<" "<<"std(Ic)"<<" "<<setprecision(3)<<"CV(Is)"<<" "<<"CV(Ic)"<<"\n";
-  corrResults << "--------------------------------"<<"\n";
-  for(int i=0; i<Is_std.size(); i++){
-    corrResults << Is_std[i]<<" "<<Ic_std[i]<<" "<<Is_CV[i]<<" "<<Ic_CV[i]<<"\n";
-  }
-
-  //---------------------------
-  corrResults.close();
 }
 void Plot_radio::plot_ParameterSpace(){
   vector<vec3> PS_Sphere;

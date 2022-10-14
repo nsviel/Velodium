@@ -1,10 +1,8 @@
-#include "Keypoint.h"
-
-#include "../Normal.h"
+#include "Slam_keypoint.h"
 
 
 //Constructor / destructor
-Keypoint::Keypoint(){
+Slam_keypoint::Slam_keypoint(){
   //---------------------------
 
   this->color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
@@ -12,9 +10,9 @@ Keypoint::Keypoint(){
 
   //---------------------------
 }
-Keypoint::~Keypoint(){}
+Slam_keypoint::~Slam_keypoint(){}
 
-void Keypoint::create_keypoint(Subset* subset){
+void Slam_keypoint::create_keypoint(Subset* subset){
   Glyph keypoint;
   //---------------------------
 
@@ -28,7 +26,7 @@ void Keypoint::create_keypoint(Subset* subset){
   //---------------------------
   subset->keypoint = keypoint;
 }
-void Keypoint::update_keypoint_location(Subset* subset){
+void Slam_keypoint::update_keypoint_location(Subset* subset){
   Glyph* keypoint = &subset->keypoint;
   //---------------------------
 
@@ -45,7 +43,7 @@ void Keypoint::update_keypoint_location(Subset* subset){
 
   //---------------------------
 }
-void Keypoint::update_keypoint_normal(Subset* subset){
+void Slam_keypoint::update_keypoint_normal(Subset* subset){
   Glyph* normal = &subset->normal;
   Glyph* keypoint = &subset->keypoint;
   //---------------------------

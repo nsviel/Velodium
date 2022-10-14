@@ -267,13 +267,13 @@ bool Reference::compute_list(list<Cloud*>* list){
   for(int i=0; i<list->size() ;i++){
     Cloud* cloud = *next(list->begin(),i);
 
-    if(cloud->Name.find("Sphere") != std::string::npos){
+    if(cloud->name.find("Sphere") != std::string::npos){
       attribManager->compute_attribut_cloud(cloud);
       list_Sphere->push_back(cloud);
       list_Reference->push_back(cloud);
       ref_Sphere = true;
     }
-    if(cloud->Name.find("Spectralon") != std::string::npos){
+    if(cloud->name.find("Spectralon") != std::string::npos){
       attribManager->compute_attribut_cloud(cloud);
       list_Spectralon->push_back(cloud);
       list_Reference->push_back(cloud);
@@ -317,152 +317,152 @@ bool Reference::extract_listSpectralon(){
     Cloud* cloud = *next(list_Spectralon->begin(),i);
 
     //xp
-    if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("10p") != std::string::npos){
       list_10p_xm_xd->push_back(cloud);
     }
-    if(cloud->Name.find("25p") != std::string::npos){
+    if(cloud->name.find("25p") != std::string::npos){
       list_25p_xm_xd->push_back(cloud);
     }
-    if(cloud->Name.find("50p") != std::string::npos){
+    if(cloud->name.find("50p") != std::string::npos){
       list_50p_xm_xd->push_back(cloud);
     }
-    if(cloud->Name.find("99p") != std::string::npos){
+    if(cloud->name.find("99p") != std::string::npos){
       list_99p_xm_xd->push_back(cloud);
     }
 
     //Angles
     //xd by p 05m + xd xm
-    if(cloud->Name.find("d") != std::string::npos &&
-      cloud->Name.find("_5m") != std::string::npos){
-      if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("d") != std::string::npos &&
+      cloud->name.find("_5m") != std::string::npos){
+      if(cloud->name.find("10p") != std::string::npos){
         list_10p_05m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("25p") != std::string::npos){
+      if(cloud->name.find("25p") != std::string::npos){
         list_25p_05m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("50p") != std::string::npos){
+      if(cloud->name.find("50p") != std::string::npos){
         list_50p_05m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("99p") != std::string::npos){
+      if(cloud->name.find("99p") != std::string::npos){
         list_99p_05m_xd->push_back(cloud);
       }
     }
     //xd by p 10m + xd xm
-    if(cloud->Name.find("0d") != std::string::npos &&
-      cloud->Name.find("10m") != std::string::npos){
-      if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos &&
+      cloud->name.find("10m") != std::string::npos){
+      if(cloud->name.find("10p") != std::string::npos){
         list_10p_10m_xd->push_back(cloud);
 
       }
-      if(cloud->Name.find("25p") != std::string::npos){
+      if(cloud->name.find("25p") != std::string::npos){
         list_25p_10m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("50p") != std::string::npos){
+      if(cloud->name.find("50p") != std::string::npos){
         list_50p_10m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("99p") != std::string::npos){
+      if(cloud->name.find("99p") != std::string::npos){
         list_99p_10m_xd->push_back(cloud);
       }
     }
 
     //xd by p 20m + xd xm
-    if(cloud->Name.find("0d") != std::string::npos &&
-      cloud->Name.find("20m") != std::string::npos){
-      if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos &&
+      cloud->name.find("20m") != std::string::npos){
+      if(cloud->name.find("10p") != std::string::npos){
         list_10p_20m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("25p") != std::string::npos){
+      if(cloud->name.find("25p") != std::string::npos){
         list_25p_20m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("50p") != std::string::npos){
+      if(cloud->name.find("50p") != std::string::npos){
         list_50p_20m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("99p") != std::string::npos){
+      if(cloud->name.find("99p") != std::string::npos){
         list_99p_20m_xd->push_back(cloud);
       }
     }
     //xd by p 30m + xd xm
-    if(cloud->Name.find("0d") != std::string::npos &&
-      cloud->Name.find("30m") != std::string::npos){
-      if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos &&
+      cloud->name.find("30m") != std::string::npos){
+      if(cloud->name.find("10p") != std::string::npos){
         list_10p_30m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("25p") != std::string::npos){
+      if(cloud->name.find("25p") != std::string::npos){
         list_25p_30m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("50p") != std::string::npos){
+      if(cloud->name.find("50p") != std::string::npos){
         list_50p_30m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("99p") != std::string::npos){
+      if(cloud->name.find("99p") != std::string::npos){
         list_99p_30m_xd->push_back(cloud);
       }
     }
     //xd by p 40m + xd xm
-    if(cloud->Name.find("0d") != std::string::npos &&
-      cloud->Name.find("40m") != std::string::npos){
-      if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos &&
+      cloud->name.find("40m") != std::string::npos){
+      if(cloud->name.find("10p") != std::string::npos){
         list_10p_40m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("25p") != std::string::npos){
+      if(cloud->name.find("25p") != std::string::npos){
         list_25p_40m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("50p") != std::string::npos){
+      if(cloud->name.find("50p") != std::string::npos){
         list_50p_40m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("99p") != std::string::npos){
+      if(cloud->name.find("99p") != std::string::npos){
         list_99p_40m_xd->push_back(cloud);
       }
     }
 
-    if(cloud->Name.find("0d") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos){
       //List Spectralon angle by distance
-      if(cloud->Name.find("10m") != std::string::npos){
+      if(cloud->name.find("10m") != std::string::npos){
         list_xp_10m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("20m") != std::string::npos){
+      if(cloud->name.find("20m") != std::string::npos){
         list_xp_20m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("30m") != std::string::npos){
+      if(cloud->name.find("30m") != std::string::npos){
         list_xp_30m_xd->push_back(cloud);
       }
-      if(cloud->Name.find("40m") != std::string::npos){
+      if(cloud->name.find("40m") != std::string::npos){
         list_xp_40m_xd->push_back(cloud);
       }
     }
 
     //all m by p
-    if(cloud->Name.find("d") == std::string::npos){
-      if(cloud->Name.find("10p") != std::string::npos){
+    if(cloud->name.find("d") == std::string::npos){
+      if(cloud->name.find("10p") != std::string::npos){
         list_10p_xm->push_back(cloud);
       }
-      if(cloud->Name.find("25p") != std::string::npos){
+      if(cloud->name.find("25p") != std::string::npos){
         list_25p_xm->push_back(cloud);
       }
-      if(cloud->Name.find("50p") != std::string::npos){
+      if(cloud->name.find("50p") != std::string::npos){
         list_50p_xm->push_back(cloud);
       }
-      if(cloud->Name.find("99p") != std::string::npos){
+      if(cloud->name.find("99p") != std::string::npos){
         list_99p_xm->push_back(cloud);
       }
     }
 
     //all d 99p 10m
-    if(cloud->Name.find("0d") != std::string::npos &&
-      cloud->Name.find("10m") != std::string::npos &&
-      cloud->Name.find("99p") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos &&
+      cloud->name.find("10m") != std::string::npos &&
+      cloud->name.find("99p") != std::string::npos){
       list_Ref_angle->push_back(cloud);
     }
     //all d
-    if(cloud->Name.find("0d") != std::string::npos){
+    if(cloud->name.find("0d") != std::string::npos){
       list_Spec_angle->push_back(cloud);
     }
     //all d
-    if(cloud->Name.find("0d") == std::string::npos){
+    if(cloud->name.find("0d") == std::string::npos){
       list_Spec_dist->push_back(cloud);
     }
     //99p xm
-    if(cloud->Name.find("0d") == std::string::npos &&
-      cloud->Name.find("99p") != std::string::npos){
+    if(cloud->name.find("0d") == std::string::npos &&
+      cloud->name.find("99p") != std::string::npos){
       list_Ref_dist->push_back(cloud);
     }
   }
@@ -477,14 +477,14 @@ bool Reference::is_cloudReference(Cloud* cloud){
 
   for(int i=0; i<list_Sphere->size() ;i++){
     Cloud* cloud_list = *next(list_Sphere->begin(),i);
-    if(cloud->Name == cloud_list->Name){
+    if(cloud->name == cloud_list->Name){
       return true;
     }
   }
 
   for(int i=0; i<list_Spectralon->size() ;i++){
     Cloud* cloud_list = *next(list_Spectralon->begin(),i);
-    if(cloud->Name == cloud_list->Name){
+    if(cloud->name == cloud_list->Name){
       return true;
     }
   }
@@ -500,15 +500,15 @@ Cloud* Reference::get_specificSpectralon(string p, string m, bool degree){
   for(int i=0;i<list_Spectralon->size();i++){
     Cloud* cloud = *next(list_Spectralon->begin(),i);
 
-    if(cloud->Name.find(p) == std::string::npos &&
-      cloud->Name.find(m) == std::string::npos){
+    if(cloud->name.find(p) == std::string::npos &&
+      cloud->name.find(m) == std::string::npos){
 
       if(degree){
-        if(cloud->Name.find("0d") != std::string::npos){
+        if(cloud->name.find("0d") != std::string::npos){
           cloud_out = cloud;
         }
       }else{
-        if(cloud->Name.find("0d") == std::string::npos){
+        if(cloud->name.find("0d") == std::string::npos){
           cloud_out = cloud;
         }
       }
@@ -525,7 +525,7 @@ Cloud* Reference::get_specificSphere(string m){
   for(int i=0;i<list_Sphere->size();i++){
     Cloud* cloud = *next(list_Sphere->begin(),i);
 
-    if(cloud->Name.find(m) != std::string::npos){
+    if(cloud->name.find(m) != std::string::npos){
       cloud_out = cloud;
     }
   }

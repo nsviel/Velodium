@@ -13,7 +13,7 @@ class AABB;
 class Normal;
 class OOBB;
 class Mark;
-class Keypoint;
+class Slam_keypoint;
 class Car;
 class Trajectory;
 class Localmap;
@@ -60,7 +60,7 @@ public:
   inline Mark* get_object_mark(){return markObject;}
   inline Trajectory* get_object_trajectory(){return trajObject;}
   inline Car* get_object_car(){return carObject;}
-  inline Keypoint* get_object_keypoint(){return keyObject;}
+  inline Slam_keypoint* get_object_keypoint(){return keyObject;}
   inline Localmap* get_object_localmap(){return mapObject;}
 
 private:
@@ -71,7 +71,7 @@ private:
   Axis* axisObject;
   AABB* aabbObject;
   Normal* normObject;
-  Keypoint* keyObject;
+  Slam_keypoint* keyObject;
   OOBB* oobbObject;
   Trajectory* trajObject;
   Localmap* mapObject;

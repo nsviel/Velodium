@@ -13,6 +13,7 @@ class Heatmap;
 class Reference;
 class Linearization;
 class GUI_module;
+class Plot_radio;
 
 
 class GUI_radiometry
@@ -43,6 +44,7 @@ private:
   Heatmap* heatmapManager;
   Reference* refManager;
   Pather* pathManager;
+  Plot_radio* radioplotManager;
 
   int corr_num;
   int corr_data;
