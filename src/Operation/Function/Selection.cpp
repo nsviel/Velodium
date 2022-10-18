@@ -2,7 +2,7 @@
 
 #include "CoordTransform.h"
 
-#include "../Operation_node.h"
+#include "../Node_operation.h"
 #include "../Transformation/Transforms.h"
 #include "../Transformation/Attribut.h"
 
@@ -18,7 +18,7 @@
 
 
 //Constructor / Destructor
-Selection::Selection(Operation_node* node_ope){
+Selection::Selection(Node_operation* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();

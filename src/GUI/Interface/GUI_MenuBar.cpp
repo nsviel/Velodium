@@ -20,7 +20,7 @@
 #include "../../Engine/OpenGL/CoreGLengine.h"
 #include "../../Engine/OpenGL/Textures.h"
 
-#include "../../Operation/Operation_node.h"
+#include "../../Operation/Node_operation.h"
 #include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Transformation/Transforms.h"
 
@@ -41,7 +41,7 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   Engine_node* node_engine = node_gui->get_node_engine();
   Module_node* node_module = node_gui->get_node_module();
   GUI_module* gui_module = node_gui->get_gui_module();
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Node_operation* node_ope = node_gui->get_node_ope();
   GUI_Player* gui_player = gui_module->get_gui_player();
   Load_node* node_load = node_engine->get_node_load();
 

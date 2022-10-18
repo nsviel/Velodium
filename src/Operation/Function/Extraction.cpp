@@ -1,6 +1,6 @@
 #include "Extraction.h"
 
-#include "../Operation_node.h"
+#include "../Node_operation.h"
 #include "../Transformation/Attribut.h"
 
 #include "../../Engine/Engine_node.h"
@@ -10,7 +10,7 @@
 
 
 //Constructor / destructor
-Extraction::Extraction(Operation_node* node_ope){
+Extraction::Extraction(Node_operation* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();

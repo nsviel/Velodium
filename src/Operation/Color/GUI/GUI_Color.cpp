@@ -4,7 +4,7 @@
 #include "../Colormap.h"
 #include "../Heatmap.h"
 
-#include "../../Operation_node.h"
+#include "../../Node_operation.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
@@ -19,7 +19,7 @@ GUI_Color::GUI_Color(GUI_node* node_gui){
   //---------------------------
 
   Engine_node* node_engine = node_gui->get_node_engine();
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Node_operation* node_ope = node_gui->get_node_ope();
 
   this->colorManager = node_ope->get_colorManager();
   this->heatmapManager = node_ope->get_heatmapManager();

@@ -1,7 +1,7 @@
 #ifndef FITTING_H
 #define FITTING_H
 
-class Operation_node;
+class Node_operation;
 class Scene;
 class Glyphs;
 
@@ -11,7 +11,7 @@ class Glyphs;
 class Fitting
 {
 public:
-  Fitting(Operation_node* node_ope);
+  Fitting(Node_operation* node_ope);
   ~Fitting();
 
 public:

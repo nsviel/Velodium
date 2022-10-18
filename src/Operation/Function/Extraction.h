@@ -4,7 +4,7 @@
 #include "../../Engine/Data/struct_generic.h"
 #include "../../common.h"
 
-class Operation_node;
+class Node_operation;
 class Scene;
 class Loader;
 class Attribut;
@@ -14,7 +14,7 @@ class Extraction
 {
 public:
   //Constructor / Destructor
-  Extraction(Operation_node* node_ope);
+  Extraction(Node_operation* node_ope);
   ~Extraction();
 
 public:

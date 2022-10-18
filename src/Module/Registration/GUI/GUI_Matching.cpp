@@ -1,35 +1,34 @@
 #include "GUI_Matching.h"
 
-#include "../Registration.h"
-#include "../Pipeline/ICP.h"
-#include "../Correspondence/Keypoint.h"
+#include "../src/Registration.h"
+#include "../src/Pipeline/ICP.h"
+#include "../src/Correspondence/Keypoint.h"
 
-#include "../../Module_GUI.h"
-#include "../../Module_node.h"
-#include "../../Radiometry/Radiometry.h"
-#include "../../Radiometry/Approach/Linearization.h"
+#include "../../Module_registration.h"
+#include "../../Radiometry/src/Radiometry.h"
+#include "../../Radiometry/src/Approach/Linearization.h"
 
 #include "../../../GUI/Windows/GUI_windows.h"
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
-#include "../../../Operation/Operation_node.h"
+#include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
 
 
 //Constructor / Destructor
-GUI_matching::GUI_matching(GUI_module* module_gui){
+GUI_matching::GUI_matching(Module_registration* module){
   //---------------------------
 
-  Engine_node* node_engine = module_gui->get_node_engine();
-  Module_node* node_module = module_gui->get_node_module();
-  Operation_node* node_ope = module_gui->get_node_ope();
-  Registration* regisManager = node_module->get_regisManager();
+  Engine_node* node_engine = module->get_node_engine();
+  Module_node* node_module = module->get_node_module();
+  Node_operation* node_ope = module->get_node_ope();
+  Registration* regisManager = module->get_regisManager();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
-  this->icpManager = regisManager->get_icpManager();
+  //this->icpManager = regisManager->get_icpManager();
   //this->keyManager = icpManager->get_keyManager();
   this->radioManager = node_module->get_radioManager();
 

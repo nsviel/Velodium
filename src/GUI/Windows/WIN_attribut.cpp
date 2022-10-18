@@ -10,7 +10,7 @@
 #include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Color/Color.h"
 #include "../../Operation/Color/GUI/GUI_Color.h"
-#include "../../Operation/Operation_node.h"
+#include "../../Operation/Node_operation.h"
 #include "../../Operation/Operation_GUI.h"
 #include "../../Specific/fct_maths.h"
 
@@ -22,7 +22,7 @@ extern struct Window_tab window_tab;
 WIN_attribut::WIN_attribut(GUI_node* node_gui){
   //---------------------------
 
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Node_operation* node_ope = node_gui->get_node_ope();
   Engine_node* node_engine = node_gui->get_node_engine();
   GUI_operation* gui_operation = node_gui->get_gui_operation();
 

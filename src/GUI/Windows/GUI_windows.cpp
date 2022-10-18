@@ -11,7 +11,7 @@
 #include "../GUI_node.h"
 
 #include "../../Engine/Engine_node.h"
-#include "../../Operation/Operation_node.h"
+#include "../../Operation/Node_operation.h"
 
 #include "imgui/imgui.h"
 
@@ -22,7 +22,7 @@ Window_tab window_tab;
 GUI_windows::GUI_windows(GUI_node* node_gui){
   //---------------------------
 
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Node_operation* node_ope = node_gui->get_node_ope();
   Engine_node* node_engine = node_gui->get_node_engine();
 
   this->win_camera = new WIN_camera(node_engine);

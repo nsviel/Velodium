@@ -6,7 +6,7 @@
 class Scene;
 class Glyphs;
 class Filter;
-class Operation_node;
+class Node_operation;
 class Transforms;
 class Fitting;
 class Extraction;
@@ -17,7 +17,7 @@ class WIN_operation
 {
 public:
   //Constructor / Destructor
-  WIN_operation(Operation_node* node_ope);
+  WIN_operation(Node_operation* node_ope);
   ~WIN_operation();
 
 public:

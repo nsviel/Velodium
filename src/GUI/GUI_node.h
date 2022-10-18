@@ -4,7 +4,7 @@
 #include "../common.h"
 
 class Engine_node;
-class Operation_node;
+class Node_operation;
 class Module_node;
 
 class GUI;
@@ -36,7 +36,7 @@ public:
   void exit();
 
   inline Engine_node* get_node_engine(){return node_engine;}
-  inline Operation_node* get_node_ope(){return node_ope;}
+  inline Node_operation* get_node_ope(){return node_ope;}
   inline Module_node* get_node_module(){return node_module;}
 
   inline GUI* get_guiManager(){return guiManager;}
@@ -53,7 +53,7 @@ public:
 
 private:
   Engine_node* node_engine;
-  Operation_node* node_ope;
+  Node_operation* node_ope;
   Module_node* node_module;
 
   GUI* guiManager;

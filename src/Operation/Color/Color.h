@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Operation_node;
+class Node_operation;
 class Scene;
 class Heatmap;
 class Configuration;
@@ -13,7 +13,7 @@ class Color
 {
 public:
   //Constructor / Destructor
-  Color(Operation_node* node_ope);
+  Color(Node_operation* node_ope);
   ~Color();
 
 public:

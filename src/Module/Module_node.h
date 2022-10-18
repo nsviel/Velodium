@@ -4,12 +4,12 @@
 #include "../common.h"
 
 class Engine_node;
-class Operation_node;
-class SLAM;
-class Interface_node;
-class Player_node;
-class Radiometry;
-class Registration;
+class Node_operation;
+
+class Module_radiometry;
+class Module_registration;
+class Module_obstacle;
+class Module_slam;
 
 
 class Module_node
@@ -26,22 +26,21 @@ public:
   void runtime();
 
   inline Engine_node* get_node_engine(){return node_engine;}
-  inline Operation_node* get_node_ope(){return node_ope;}
-  inline Player_node* get_node_player(){return node_player;}
-  inline Interface_node* get_node_interface(){return node_interface;}
-  inline SLAM* get_slamManager(){return slamManager;}
-  inline Radiometry* get_radioManager(){return radioManager;}
-  inline Registration* get_regisManager(){return regisManager;}
+  inline Node_operation* get_node_ope(){return node_ope;}
+
+  inline Module_radiometry* get_module_radio(){return module_radio;}
+  inline Module_registration* get_module_regist(){return module_regist;}
+  inline Module_obstacle* get_module_obstacle(){return module_obstacle;}
+  inline Module_slam* get_module_slam(){return module_slam;}
 
 private:
   Engine_node* node_engine;
-  Operation_node* node_ope;
+  Node_operation* node_ope;
 
-  SLAM* slamManager;
-  Registration* regisManager;
-  Radiometry* radioManager;
-  Interface_node* node_interface;
-  Player_node* node_player;
+  Module_registration* module_regist;
+  Module_radiometry* module_radio;
+  Module_obstacle* module_obstacle;
+  Module_slam* module_slam;
 };
 
 #endif

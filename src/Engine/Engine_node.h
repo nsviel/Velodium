@@ -3,7 +3,7 @@
 
 #include "../common.h"
 
-class Operation_node;
+class Node_operation;
 class Load_node;
 class Module_node;
 class GUI_node;
@@ -18,6 +18,7 @@ class Dimension;
 class Engine;
 class CoreGLengine;
 class Object;
+class Followup;
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -38,7 +39,7 @@ public:
   void exit();
 
   inline Module_node* get_node_module(){return node_module;}
-  inline Operation_node* get_node_ope(){return node_ope;}
+  inline Node_operation* get_node_ope(){return node_ope;}
   inline GUI_node* get_node_gui(){return node_gui;}
   inline Load_node* get_node_load(){return node_load;}
 
@@ -53,13 +54,15 @@ public:
   inline Engine* get_engineManager(){return engineManager;}
   inline CoreGLengine* get_glManager(){return glManager;}
   inline Object* get_objectManager(){return objectManager;}
+  inline Followup* get_followManager(){return followManager;}
 
 private:
-  Operation_node* node_ope;
+  Node_operation* node_ope;
   Load_node* node_load;
   Module_node* node_module;
   GUI_node* node_gui;
 
+  Followup* followManager;
   CoreGLengine* glManager;
   Configuration* configManager;
   Scene* sceneManager;

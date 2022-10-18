@@ -49,8 +49,9 @@ void GUI_fileManager::fileManager(){
   ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(255, 255, 255, 255));
   ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 255));
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 255, 255, 255));
-  if (ImGui::BeginTable("table_advanced", 3, flags, ImVec2(0, 0), 0)){
-    ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 135);
+  if (ImGui::BeginTable("table_advanced", 4, flags, ImVec2(0, 0), 0)){
+    ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 115);
+    ImGui::TableSetupColumn("Visualization", ImGuiTableColumnFlags_WidthFixed, 20);
     ImGui::TableSetupColumn("Info", ImGuiTableColumnFlags_WidthFixed, 20);
     ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 20);
 
@@ -63,23 +64,26 @@ void GUI_fileManager::fileManager(){
 
       ImGui::Selectable(cloud->name.c_str(), true, flags_selec);
 
-
-      //First column
+      //Cloud name
       ImGui::TableSetColumnIndex(0);
       this->cloudManager(cloud);
 
-      //Second column
+      //Icon: info
       ImGui::TableSetColumnIndex(1);
       if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
         sceneManager->selection_setCloud(cloud);
         window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
       }
 
-      //Third column
+      //Icon: delete
       ImGui::TableSetColumnIndex(2);
       if(ImGui::SmallButton(ICON_FA_TRASH)){
         sceneManager->remove_cloud(cloud);
       }
+
+      //Icon: visualization
+      ImGui::TableSetColumnIndex(3);
+      ImGui::Checkbox("", &cloud->visibility);
 
       //----------
       ImGui::PopItemWidth();

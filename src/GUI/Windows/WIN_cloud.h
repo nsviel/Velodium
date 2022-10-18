@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Operation_node;
+class Node_operation;
 class Scene;
 class Color;
 class Attribut;
@@ -13,7 +13,7 @@ class WIN_cloud
 {
 public:
   //Constructor / Destructor
-  WIN_cloud(Operation_node* node_ope);
+  WIN_cloud(Node_operation* node_ope);
   ~WIN_cloud();
 
 public:

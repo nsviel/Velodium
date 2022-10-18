@@ -5,14 +5,14 @@
 
 class Camera;
 class Dimension;
-class Operation_node;
+class Node_operation;
 
 
 class CoordTransform
 {
 public:
   //Constructor / Destructor
-  CoordTransform(Operation_node* node);
+  CoordTransform(Node_operation* node);
   ~CoordTransform();
 
 public:

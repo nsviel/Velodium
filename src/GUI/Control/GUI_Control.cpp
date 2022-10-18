@@ -16,7 +16,7 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 
-#include "../../Operation/Operation_node.h"
+#include "../../Operation/Node_operation.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Function/Selection.h"
 #include "../../Operation/Function/Extraction.h"
@@ -32,7 +32,7 @@ GUI_control::GUI_control(GUI_node* node){
   this->node_gui = node;
   //---------------------------
 
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Node_operation* node_ope = node_gui->get_node_ope();
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
   Load_node* node_load = node_engine->get_node_load();

@@ -1,7 +1,7 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-class Operation_node;
+class Node_operation;
 class Scene;
 class Attribut;
 class Configuration;
@@ -13,7 +13,7 @@ class Filter
 {
 public:
   //Constructor / Destructor
-  Filter(Operation_node* node_ope);
+  Filter(Node_operation* node_ope);
   ~Filter();
 
 public:

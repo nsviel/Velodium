@@ -17,7 +17,7 @@
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 
-#include "../../Operation/Operation_node.h"
+#include "../../Operation/Node_operation.h"
 #include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Color/Color.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -30,7 +30,7 @@ GUI_option::GUI_option(GUI_node* node_gui){
   //---------------------------
 
   Engine_node* node_engine = node_gui->get_node_engine();
-  Operation_node* node_ope = node_gui->get_node_ope();
+  Node_operation* node_ope = node_gui->get_node_ope();
   Load_node* node_load = node_engine->get_node_load();
 
   this->renderManager = node_engine->get_renderManager();

@@ -2,7 +2,7 @@
 
 #include "Heatmap.h"
 
-#include "../Operation_node.h"
+#include "../Node_operation.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
@@ -17,7 +17,7 @@
 
 
 //Constructor / destructor
-Color::Color(Operation_node* node_ope){
+Color::Color(Node_operation* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();

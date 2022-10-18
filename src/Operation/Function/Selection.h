@@ -1,7 +1,7 @@
 #ifndef Selection_H
 #define Selection_H
 
-class Operation_node;
+class Node_operation;
 class Scene;
 class Object;
 class Transforms;
@@ -16,7 +16,7 @@ class Selection
 {
 public:
   //Constructor / Destructor
-  Selection(Operation_node* node_ope);
+  Selection(Node_operation* node_ope);
   ~Selection();
 
 public:

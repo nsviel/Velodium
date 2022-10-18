@@ -3,7 +3,7 @@
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
-#include "../../Operation/Operation_node.h"
+#include "../../Operation/Node_operation.h"
 #include "../../Operation/Transformation/Filter.h"
 #include "../../Operation/Transformation/Transforms.h"
 #include "../../Operation/Optimization/Fitting.h"
@@ -16,7 +16,7 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_operation::WIN_operation(Operation_node* node_ope){
+WIN_operation::WIN_operation(Node_operation* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();

@@ -1,17 +1,15 @@
 #include "GUI_Radiometry.h"
 
-#include "../Radiometry.h"
-#include "../Plot_radio.h"
-#include "../Target/Reference.h"
-#include "../Approach/Linearization.h"
-#include "../Approach/Surfacic_local.h"
-#include "../Approach/Surfacic_global_piecewise.h"
-#include "../Approach/Surfacic_simplified.h"
-#include "../Approach/Surfacic_segmented.h"
-#include "../Approach/Separation_global.h"
-
-#include "../../Module_GUI.h"
-#include "../../Module_node.h"
+#include "../Module_radiometry.h"
+#include "../src/Radiometry.h"
+#include "../src/Plot_radio.h"
+#include "../src/Target/Reference.h"
+#include "../src/Approach/Linearization.h"
+#include "../src/Approach/Surfacic_local.h"
+#include "../src/Approach/Surfacic_global_piecewise.h"
+#include "../src/Approach/Surfacic_simplified.h"
+#include "../src/Approach/Surfacic_segmented.h"
+#include "../src/Approach/Separation_global.h"
 
 #include "../../../GUI/GUI_node.h"
 #include "../../../GUI/Windows/GUI_windows.h"
@@ -19,7 +17,7 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Load/Load_node.h"
 #include "../../../Load/Processing/Pather.h"
-#include "../../../Operation/Operation_node.h"
+#include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Function/Plotting.h"
@@ -27,16 +25,14 @@
 
 
 //Constructor / Destructor
-GUI_radiometry::GUI_radiometry(GUI_module* gui_module){
+GUI_radiometry::GUI_radiometry(Module_radiometry* module){
   //---------------------------
 
-  Engine_node* node_engine = gui_module->get_node_engine();
-  Module_node* node_module = gui_module->get_node_module();
-  Operation_node* node_ope = node_engine->get_node_ope();
-  Load_node* node_load = node_engine->get_node_load();
-  GUI_node* node_gui = gui_module->get_node_gui();
+  Engine_node* node_engine = module->get_node_engine();
+  Module_node* node_module = module->get_node_module();
+  Node_operation* node_ope = module->get_node_ope();
+  Load_node* node_load = module->get_node_load();
 
-  this->gui_winManager = node_gui->get_gui_window();
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->pathManager = node_load->get_pathManager();
@@ -556,20 +552,6 @@ void GUI_radiometry::options(){
 
     //If apply heatmap on processed cloud
     ImGui::Checkbox("Heatmap", &corr_heat);
-
-    //Correction application
-    if(ImGui::Button("Intensity", ImVec2(150,0))){
-      //bool* ptr = gui_winManager->get_show_intensity();
-      //*ptr = !*ptr;
-    }
-    if(ImGui::Button("Normal", ImVec2(150,0))){
-      //bool* ptr = gui_winManager->get_show_normal();
-      //*ptr = !*ptr;
-    }
-    if(ImGui::Button("Transformation", ImVec2(150,0))){
-      //bool* ptr = gui_winManager->get_show_transformation();
-      //*ptr = !*ptr;
-    }
 
     //Reference options
     if(ImGui::Button("Remove references", ImVec2(150,0))){

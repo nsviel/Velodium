@@ -3,16 +3,13 @@
 
 #include "../../../common.h"
 
-class GUI_windows;
-
-class Engine_node;
+class Module_radiometry;
 class Scene;
 class Pather;
 class Radiometry;
 class Heatmap;
 class Reference;
 class Linearization;
-class GUI_module;
 class Plot_radio;
 
 
@@ -20,7 +17,7 @@ class GUI_radiometry
 {
 public:
   //Constructor / Destructor
-  GUI_radiometry(GUI_module* node_gui);
+  GUI_radiometry(Module_radiometry* module);
   ~GUI_radiometry();
 
 public:
@@ -36,8 +33,6 @@ public:
   void correction();
 
 private:
-  GUI_windows* gui_winManager;
-
   Linearization* linManager;
   Scene* sceneManager;
   Radiometry* radioManager;

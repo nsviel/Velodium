@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class GUI_module;
+class Module_registration;
 class Scene;
 class Glyphs;
 class Attribut;
@@ -16,7 +16,7 @@ class Linearization;
 class GUI_matching
 {
 public:
-  GUI_matching(GUI_module* node_gui);
+  GUI_matching(Module_registration* module);
   ~GUI_matching();
 
 public:
