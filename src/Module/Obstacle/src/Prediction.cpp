@@ -1,5 +1,4 @@
 #include "Prediction.h"
-
 #include "Filemanager.h"
 
 #include "../Module_obstacle.h"
@@ -22,12 +21,10 @@ Prediction::Prediction(Module_obstacle* module){
 
   Node_engine* node_engine = module->get_node_engine();
   Configuration* configManager = module->get_configManager();
-  Filemanager* fileManager = module->get_fileManager();
 
+  this->fileManager = module->get_fileManager();
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->path_predi = fileManager->get_path_data_dir() + "prediction/";
-  this->path_grThr = fileManager->get_path_data_dir() + "groundtruth/";
   this->with_prediction = configManager->parse_json_b("interface", "with_prediction");
   this->is_prediction = false;
 
@@ -41,6 +38,7 @@ void Prediction::runtime_prediction(){
   //---------------------------
 
   if(with_prediction && cloud != nullptr){
+    string path_predi = fileManager->get_path_predi();
     vector<string> path_vec = list_allPaths(path_predi);
 
     for(int i=0; i<path_vec.size(); i++){

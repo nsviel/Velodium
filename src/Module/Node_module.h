@@ -25,6 +25,7 @@ public:
   void update();
   void runtime();
   void draw();
+  void online(Cloud* cloud, int subset_ID);
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
@@ -34,6 +35,8 @@ public:
   inline Module_obstacle* get_module_obstacle(){return module_obstacle;}
   inline Module_slam* get_module_slam(){return module_slam;}
 
+  inline bool* online_with_slam(){return &with_slam;}
+
 private:
   Node_engine* node_engine;
   Node_operation* node_ope;
@@ -42,6 +45,8 @@ private:
   Module_radiometry* module_radio;
   Module_obstacle* module_obstacle;
   Module_slam* module_slam;
+
+  bool with_slam;
 };
 
 #endif

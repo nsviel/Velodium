@@ -1,8 +1,10 @@
 #include "Online.h"
+#include "Saving.h"
 
 #include "../Node_operation.h"
 
 #include "../../Module/Node_module.h"
+#include "../../Module/SLAM/Module_slam.h"
 #include "../../Module/SLAM/src/SLAM.h"
 #include "../../Module/Obstacle/HTTP/http_command.h"
 
@@ -31,18 +33,16 @@
 Online::Online(Node_operation* node_ope){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
-  Node_module* node_module = node_engine->get_node_module();
-
+  this->node_engine = node_ope->get_node_engine();
   this->filterManager = node_ope->get_filterManager();
   this->dimManager = node_engine->get_dimManager();
-  //this->slamManager = node_module->get_slamManager();
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->colorManager = node_ope->get_colorManager();
   this->followManager = node_engine->get_followManager();
   this->objectManager = node_engine->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
+  this->savingManager = node_ope->get_savingManager();
   this->commandManager = new http_command();
 
   //---------------------------
@@ -57,13 +57,13 @@ void Online::update_configuration(){
   this->time_operation = 0;
   this->visibility_range = 15;
   this->with_subset_specific_color = false;
-  this->with_slam = configManager->parse_json_b("module", "with_slam");
   this->with_cylinder_cleaning = configManager->parse_json_b("module", "with_cylinder_cleaning");
 
   //---------------------------
 }
 void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //This function is called each time a new subset arrives
+  Node_module* node_module = node_engine->get_node_module();
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   auto t1 = start_chrono();
   //---------------------------
@@ -76,9 +76,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   cloud->subset_selected = subset;
 
   //Make slam on the current subset
-  if(with_slam){
-    slamManager->compute_slam(cloud, ID_subset);
-  }
+  node_module->online(cloud, ID_subset);
 
   //Make cleaning on the current subset
   if(with_cylinder_cleaning){
@@ -95,7 +93,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   this->compute_visibility(cloud, ID_subset);
 
   //Update dynamic interfaces
-  //interfaceManager->update_dynamic(cloud, ID_subset);
+  savingManager->update_dynamic(cloud, ID_subset);
 
   //Update dynamic glyphs
   objectManager->update_dynamic(cloud);

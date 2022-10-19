@@ -7,6 +7,7 @@
 
 class Module_obstacle;
 class Scene;
+class Filemanager;
 
 
 class Prediction
@@ -33,18 +34,15 @@ public:
   void parse_json_prediction(Subset* subset, string file_path);
   int parse_frame_ID(string file_path);
 
-  inline string get_path_grThr(){return path_grThr;}
-  inline string get_path_predi(){return path_predi;}
   inline bool* get_is_prediction(){return &is_prediction;}
   inline bool* get_with_prediction(){return &with_prediction;}
 
 private:
   Scene* sceneManager;
+  Filemanager* fileManager;
 
   bool is_prediction;
   bool with_prediction;
-  string path_predi;
-  string path_grThr;
 };
 
 #endif

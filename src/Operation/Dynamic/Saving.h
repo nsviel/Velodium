@@ -12,7 +12,6 @@ class Scene;
 class Renderer;
 class Configuration;
 class Saver;
-class Capture;
 
 
 class Saving
@@ -46,11 +45,11 @@ public:
   inline int* get_save_image_max(){return &save_image_max;}
 
 private:
+  Node_operation* node_ope;
   Scene* sceneManager;
   Renderer* renderManager;
   Configuration* configManager;
   Saver* saverManager;
-  Capture* captureManager;
 
   queue<string> save_frame_vec;
   queue<string> save_image_vec;

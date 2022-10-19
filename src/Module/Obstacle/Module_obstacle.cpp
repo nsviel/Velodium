@@ -25,12 +25,12 @@ Module_obstacle::Module_obstacle(Node_module* node){
   this->node_ope = node->get_node_ope();
   this->configManager = node_engine->get_configManager();
 
-  this->obstacleManager = new Obstacle(this);
-  this->fileManager = new Filemanager(this);
-  this->predManager = new Prediction(this);
-  this->warningManager = new Warning(this);
   this->mqttManager = new MQTT(this);
   this->httpsManager = new HTTP(this);
+  this->warningManager = new Warning(this);
+  this->fileManager = new Filemanager(this);
+  this->predManager = new Prediction(this);
+  this->obstacleManager = new Obstacle(this);
 
   this->gui_network = new GUI_Network(this);
   this->gui_obstacle = new GUI_Obstacle(this);

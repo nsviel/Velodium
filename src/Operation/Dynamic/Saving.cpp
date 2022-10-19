@@ -17,7 +17,8 @@
 
 
 //Constructor / Destructor
-Saving::Saving(Node_operation* node_ope){
+Saving::Saving(Node_operation* node){
+  this->node_ope = node;
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
@@ -27,7 +28,6 @@ Saving::Saving(Node_operation* node_ope){
   this->renderManager = node_engine->get_renderManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->saverManager = node_load->get_saveManager();
-  this->captureManager = node_ope->get_captureManager();
 
   //---------------------------
   this->update_configuration();
@@ -79,6 +79,7 @@ void Saving::controler_nb_subset(Cloud* cloud){
   }
   //Remove old frame if option is activated
   else{
+    Capture* captureManager = node_ope->get_captureManager();
     bool is_capturing = *captureManager->get_is_capturing();
     if(cloud->subset.size() > nb_subset_max && is_capturing){
       sceneManager->remove_subset_last(cloud);

@@ -18,6 +18,7 @@
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Transformation/Filter.h"
 #include "../../../Operation/Color/GUI/GUI_Color.h"
+#include "../../../Module/Node_module.h"
 
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
@@ -28,8 +29,7 @@ GUI_Online::GUI_Online(Node_operation* node_ope){
   //---------------------------
 
   this->node_engine = node_ope->get_node_engine();
-  Node_module* node_module = node_engine->get_node_module();
-
+  this->node_module = node_engine->get_node_module();
   this->gui_color = node_ope->get_gui_color();
   this->gui_player = node_ope->get_gui_player();
   this->filterManager = node_ope->get_filterManager();
@@ -115,7 +115,7 @@ void GUI_Online::parameter_online(){
   //---------------------------
 
   //SLAM activated at each frame
-  bool* with_slam = onlineManager->get_with_slam();
+  bool* with_slam = node_module->online_with_slam();
   ImGui::Checkbox("SLAM", with_slam);
 
   //Camera auto displacement
@@ -243,7 +243,7 @@ void GUI_Online::state_time(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_operation);
 
-  bool with_slam = *onlineManager->get_with_slam();
+  bool with_slam = *node_module->online_with_slam();
   int time_slam = 0;
   if(sceneManager->get_is_list_empty() == false){
     time_slam = (int)frame->time_slam;
@@ -293,7 +293,7 @@ void GUI_Online::state_online(){
   //---------------------------
 
   //Specific module
-  bool with_slam = *onlineManager->get_with_slam();
+  bool with_slam = *node_module->online_with_slam();
   ImGui::Text("Online - SLAM");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_slam ? "ON" : "OFF");

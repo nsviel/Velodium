@@ -1,5 +1,4 @@
 #include "Filemanager.h"
-#include "Prediction.h"
 
 #include "../Module_obstacle.h"
 
@@ -14,7 +13,6 @@ Filemanager::Filemanager(Module_obstacle* module){
   //---------------------------
 
   this->configManager = module->get_configManager();
-  this->predManager = module->get_predManager();
 
   //---------------------------
   this->update_configuration();
@@ -25,6 +23,8 @@ void Filemanager::update_configuration(){
   //---------------------------
 
   this->path_data_dir = configManager->parse_json_s("parameter", "path_data");
+  this->path_predi = path_data_dir + "prediction/";
+  this->path_grThr = path_data_dir + "groundtruth/";
   this->is_clean_dir = false;
 
   //---------------------------
@@ -35,10 +35,6 @@ void Filemanager::clean_directories(){
   if(is_clean_dir){
     //---------------------------
 
-    //Get directory paths
-    string path_predi = predManager->get_path_predi();
-    string path_grThr = predManager->get_path_grThr();
-
     //Clean directories
     clean_directory_files(path_predi.c_str());
     clean_directory_files(path_grThr.c_str());
@@ -48,10 +44,6 @@ void Filemanager::clean_directories(){
 }
 void Filemanager::check_directories(){
   //---------------------------
-
-  //Get directory paths
-  string path_predi = predManager->get_path_predi();
-  string path_grThr = predManager->get_path_grThr();
 
   //Clean directories
   create_new_dir(path_data_dir);

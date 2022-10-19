@@ -4,6 +4,7 @@
 #include "../../common.h"
 
 class Node_operation;
+class Node_engine;
 class SLAM;
 class Color;
 class Camera;
@@ -13,6 +14,7 @@ class Dimension;
 class Scene;
 class Configuration;
 class Followup;
+class Saving;
 class Interface;
 class Object;
 class Renderer;
@@ -36,12 +38,12 @@ public:
   void compute_visibility(Cloud* cloud, int& ID_subset);
   void compute_http_command();
 
-  inline bool* get_with_slam(){return &with_slam;}
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
   inline int* get_visibility_range(){return &visibility_range;}
   inline float get_time_operation(){return time_operation;}
 
 private:
+  Node_engine* node_engine;
   Scene* sceneManager;
   Color* colorManager;
   SLAM* slamManager;
@@ -52,6 +54,7 @@ private:
   Object* objectManager;
   Renderer* renderManager;
   http_command* commandManager;
+  Saving* savingManager;
 
   float time_operation;
   int visibility_range;

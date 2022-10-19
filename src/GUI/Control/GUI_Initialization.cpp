@@ -8,8 +8,8 @@
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Pather.h"
-#include "../../Module/Obstacle/src/Obstacle.h"
-#include "../../Module/SLAM/src/SLAM.h"
+#include "../../Module/Node_module.h"
+#include "../../Module/SLAM/Module_slam.h"
 #include "../../Module/SLAM/src/SLAM_parameter.h"
 #include "../../Operation/Node_operation.h"
 
@@ -21,14 +21,14 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   Node_engine* node_engine = node_gui->get_node_engine();
   Node_operation* node_ope = node_engine->get_node_ope();
   Node_load* node_load = node_engine->get_node_load();
-  //SLAM* slamManager = node_module->get_slamManager();
+  Node_module* node_module = node_engine->get_node_module();
+  Module_slam* module_slam = node_module->get_module_slam();
 
+  this->slam_param = module_slam->get_slam_param();
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
-  //this->obstacleManager = node_player->get_obstacleManager();
   this->loaderManager = node_load->get_loadManager();
   this->pathManager = node_load->get_pathManager();
-  //this->slam_param = slamManager->get_slam_param();
 
   //---------------------------
 }

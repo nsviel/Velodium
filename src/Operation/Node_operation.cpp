@@ -38,9 +38,9 @@ Node_operation::Node_operation(Node_engine* node){
   this->coordManager = new CoordTransform(this);
   this->selectionManager = new Selection(this);
   this->extractionManager = new Extraction(this);
+  this->savingManager = new Saving(this);
   this->onlineManager = new Online(this);
   this->playerManager = new Player(this);
-  this->savingManager = new Saving(this);
   this->captureManager = new Capture(this);
 
   this->gui_color = new GUI_Color(this);

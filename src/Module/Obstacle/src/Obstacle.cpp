@@ -38,9 +38,10 @@ Obstacle::~Obstacle(){}
 //Main functions
 void Obstacle::runtime(){
   Cloud* cloud = sceneManager->get_cloud_selected();
+  if(cloud == nullptr) return;
   //---------------------------
 
-  if(predManager->get_with_prediction() && cloud != nullptr){
+  if(predManager->get_with_prediction()){
     //Check for new prediction (ground thruth or prediction)
     bool* is_prediction = predManager->get_is_prediction();
 

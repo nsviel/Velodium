@@ -22,6 +22,9 @@ Node_module::Node_module(Node_engine* node){
   this->module_slam = new Module_slam(this);
   this->module_obstacle = new Module_obstacle(this);
 
+  Configuration* configManager = node_engine->get_configManager();
+  this->with_slam = configManager->parse_json_b("module", "with_slam");
+
   //---------------------------
 }
 Node_module::~Node_module(){}
@@ -53,6 +56,15 @@ void Node_module::draw(){
 
   module_obstacle->draw();
   module_slam->draw();
+
+  //---------------------------
+}
+void Node_module::online(Cloud* cloud, int subset_ID){
+  //---------------------------
+
+  if(with_slam){
+    module_slam->online(cloud, subset_ID);
+  }
 
   //---------------------------
 }

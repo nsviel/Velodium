@@ -64,6 +64,7 @@ void Node_engine::runtime(){
   //---------------------------
 
   node_module->runtime();
+  node_ope->runtime();
 
   //---------------------------
 }

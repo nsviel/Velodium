@@ -1,6 +1,7 @@
 #include "Module_slam.h"
 
 #include "src/SLAM.h"
+#include "src/SLAM_parameter.h"
 #include "GUI/GUI_Slam.h"
 
 #include "../Node_module.h"
@@ -18,7 +19,7 @@ Module_slam::Module_slam(Node_module* node){
   this->node_ope = node_engine->get_node_ope();
 
   this->slamManager = new SLAM(node_engine);
-
+  this->slam_param = slamManager->get_slam_param();
   this->gui_slam = new GUI_Slam(this);
 
   //---------------------------
@@ -55,6 +56,13 @@ void Module_slam::draw(){
   //---------------------------
 
   gui_slam->design_SLAM();
+
+  //---------------------------
+}
+void Module_slam::online(Cloud* cloud, int subset_ID){
+  //---------------------------
+
+  slamManager->compute_slam(cloud, subset_ID);
 
   //---------------------------
 }

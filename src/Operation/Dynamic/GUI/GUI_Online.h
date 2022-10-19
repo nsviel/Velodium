@@ -4,7 +4,9 @@
 #include "../../../common.h"
 
 class Node_engine;
+class Node_module;
 class Node_operation;
+
 class Scene;
 class Player_cloud;
 class Heatmap;
@@ -45,6 +47,7 @@ public:
   void state_configuration();
 
 private:
+  Node_module* node_module;
   Node_engine* node_engine;
   Followup* followManager;
   Scene* sceneManager;

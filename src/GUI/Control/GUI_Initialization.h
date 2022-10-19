@@ -7,7 +7,6 @@ class Node_gui;
 class Scene;
 class Loader;
 class Pather;
-class Obstacle;
 class Configuration;
 class SLAM_parameter;
 
@@ -27,7 +26,6 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Pather* pathManager;
-  Obstacle* obstacleManager;
   Configuration* configManager;
   SLAM_parameter* slam_param;
 };
