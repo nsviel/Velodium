@@ -4,7 +4,7 @@
 #include "../../../Engine/Data/struct_voxelMap.h"
 #include "../../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Scene;
 class Object;
 class Configuration;
@@ -22,7 +22,7 @@ class SLAM
 {
 public:
   //Constructor / Destructor
-  SLAM(Engine_node* node);
+  SLAM(Node_engine* node);
   ~SLAM();
 
 public:
@@ -30,7 +30,7 @@ public:
   bool compute_slam(Cloud* cloud, int subset_ID);
   void reset_slam();
 
-  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Node_engine* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return slam_normal;}
   inline SLAM_optim* get_slam_optim(){return slam_optim;}
   inline SLAM_assessment* get_slam_assess(){return slam_assess;}
@@ -48,7 +48,7 @@ private:
   void reset_visibility(Cloud* cloud, int subset_ID);
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
   Scene* sceneManager;
   Configuration* configManager;
 

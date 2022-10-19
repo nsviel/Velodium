@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 
-#include "../Engine_node.h"
+#include "../Node_engine.h"
 #include "../Scene/Configuration.h"
 
 #include "../../Load/Format/file_PTS.h"
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-Glyphs::Glyphs(Engine_node* node){
+Glyphs::Glyphs(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 

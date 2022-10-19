@@ -3,7 +3,7 @@
 #include "Target/Reference.h"
 #include "Target/Ref_Operation.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/Plotting.h"
@@ -14,7 +14,7 @@
 
 
 //Constructor / destructor
-Plot_radio::Plot_radio(Engine_node* node){
+Plot_radio::Plot_radio(Node_engine* node){
   //---------------------------
 
   Node_operation* node_ope = node->get_node_ope();

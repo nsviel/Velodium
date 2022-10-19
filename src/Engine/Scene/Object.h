@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Configuration;
 class Glyphs;
 
@@ -23,7 +23,7 @@ class Object
 {
 public:
   //Constructor / Destructor
-  Object(Engine_node* node);
+  Object(Node_engine* node);
   ~Object();
 
 public:
@@ -64,7 +64,7 @@ public:
   inline Localmap* get_object_localmap(){return mapObject;}
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
   Grid* gridObject;

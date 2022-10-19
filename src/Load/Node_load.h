@@ -6,29 +6,29 @@
 #include "Processing/Pather.h"
 #include "Processing/Extractor.h"
 
-#include "../Engine/Engine_node.h"
+#include "../Engine/Node_engine.h"
 
 #include "../common.h"
 
 
-class Load_node
+class Node_load
 {
 public:
   //Constructor / Destructor
-  Load_node(Engine_node* node);
-  ~Load_node();
+  Node_load(Node_engine* node);
+  ~Node_load();
 
   void update();
 
 public:
-  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Node_engine* get_node_engine(){return node_engine;}
   inline Pather* get_pathManager(){return pathManager;}
   inline Saver* get_saveManager(){return saveManager;}
   inline Loader* get_loadManager(){return loadManager;}
   inline Extractor* get_extractManager(){return extractManager;}
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
   Pather* pathManager;
   Saver* saveManager;
   Loader* loadManager;

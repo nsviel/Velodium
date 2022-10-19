@@ -1,17 +1,17 @@
 #include "Engine.h"
 
-#include "Engine_node.h"
+#include "Node_engine.h"
 #include "Scene/Glyphs.h"
 #include "Scene/Object.h"
 #include "Scene/Scene.h"
 #include "Scene/Configuration.h"
 
-#include "../GUI/GUI_node.h"
+#include "../GUI/Node_gui.h"
 #include "../GUI/GUI.h"
 
 
 //Constructor / Destructor
-Engine::Engine(Engine_node* engine){
+Engine::Engine(Node_engine* engine){
   this->node_engine = engine;
   //---------------------------
 

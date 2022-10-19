@@ -8,15 +8,15 @@ class Glyphs;
 class GUI;
 class Object;
 
-class Engine_node;
-class GUI_node;
+class Node_engine;
+class Node_gui;
 
 
 class Engine
 {
 public:
   //Constructor / Destructor
-  Engine(Engine_node* engine);
+  Engine(Node_engine* engine);
   ~Engine();
 
 public:
@@ -28,8 +28,8 @@ public:
   void runtime_draw_glyph();
   void runtime_draw_cloud();
 
-  inline Engine_node* get_node_engine(){return node_engine;}
-  inline GUI_node* get_node_gui(){return node_gui;}
+  inline Node_engine* get_node_engine(){return node_engine;}
+  inline Node_gui* get_node_gui(){return node_gui;}
 
 private:
   Scene* sceneManager;
@@ -37,8 +37,8 @@ private:
   GUI* guiManager;
   Object* objectManager;
 
-  Engine_node* node_engine;
-  GUI_node* node_gui;
+  Node_engine* node_engine;
+  Node_gui* node_gui;
 
   bool is_visualization;
   uint modelID, comID;

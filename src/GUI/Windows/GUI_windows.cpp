@@ -8,9 +8,9 @@
 #include "WIN_operation.h"
 #include "WIN_attribut.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Operation/Node_operation.h"
 
 #include "imgui/imgui.h"
@@ -19,11 +19,11 @@ Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_windows::GUI_windows(GUI_node* node_gui){
+GUI_windows::GUI_windows(Node_gui* node_gui){
   //---------------------------
 
   Node_operation* node_ope = node_gui->get_node_ope();
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
 
   this->win_camera = new WIN_camera(node_engine);
   this->win_shader = new WIN_shader(node_engine);

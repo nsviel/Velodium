@@ -2,7 +2,7 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 
@@ -13,7 +13,7 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_camera::WIN_camera(Engine_node* node_engine){
+WIN_camera::WIN_camera(Node_engine* node_engine){
   //---------------------------
 
   this->configManager = node_engine->get_configManager();

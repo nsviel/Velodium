@@ -2,7 +2,7 @@
 
 #include "../Node_operation.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 
@@ -14,7 +14,7 @@
 Fitting::Fitting(Node_operation* node_ope){
   //--------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();

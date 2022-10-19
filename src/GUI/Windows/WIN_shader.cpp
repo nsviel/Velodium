@@ -2,7 +2,7 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Shader/Shader.h"
 #include "../../Engine/OpenGL/Shader/ShaderObject.h"
 #include "../../Engine/OpenGL/Shader/PP_edl.h"
@@ -14,7 +14,7 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_shader::WIN_shader(Engine_node* node_engine){
+WIN_shader::WIN_shader(Node_engine* node_engine){
   //---------------------------
 
   this->shaderManager = node_engine->get_shaderManager();

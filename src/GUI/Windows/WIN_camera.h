@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Camera;
 class Configuration;
 
@@ -12,7 +12,7 @@ class WIN_camera
 {
 public:
   //Constructor / Destructor
-  WIN_camera(Engine_node* node_engine);
+  WIN_camera(Node_engine* node_engine);
   ~WIN_camera();
 
 public:

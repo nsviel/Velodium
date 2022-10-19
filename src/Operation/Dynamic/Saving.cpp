@@ -3,11 +3,11 @@
 #include "../Node_operation.h"
 #include "../Capture/Capture.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
 
 #include "../../Specific/fct_system.h"
@@ -20,8 +20,8 @@
 Saving::Saving(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
-  Load_node* node_load = node_engine->get_node_load();
+  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_load* node_load = node_engine->get_node_load();
 
   this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();

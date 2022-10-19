@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Scene;
 class Plotting;
 class Reference;
@@ -16,7 +16,7 @@ class Plot_radio
 {
 public:
   //Constructor / Destructor
-  Plot_radio(Engine_node* node);
+  Plot_radio(Node_engine* node);
   ~Plot_radio();
 
 public:

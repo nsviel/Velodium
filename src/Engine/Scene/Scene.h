@@ -7,7 +7,7 @@
 #include <GLFW/glfw3.h>
 
 class Data;
-class Engine_node;
+class Node_engine;
 class Object;
 
 
@@ -15,7 +15,7 @@ class Scene
 {
 public:
   //Constructor / Destructor
-  Scene(Engine_node* node_engine);
+  Scene(Node_engine* node_engine);
   ~Scene();
 
 public:

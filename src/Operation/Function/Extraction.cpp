@@ -3,9 +3,9 @@
 #include "../Node_operation.h"
 #include "../Transformation/Attribut.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 
 
@@ -13,8 +13,8 @@
 Extraction::Extraction(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
-  Load_node* node_load = node_engine->get_node_load();
+  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_load* node_load = node_engine->get_node_load();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();

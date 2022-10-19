@@ -15,7 +15,7 @@ class Glyphs;
 class Selection;
 class Heatmap;
 class Dimension;
-class GUI_node;
+class Node_gui;
 class Player;
 
 
@@ -23,7 +23,7 @@ class GUI_control
 {
 public:
   //Constructor / Destructor
-  GUI_control(GUI_node* node_gui);
+  GUI_control(Node_gui* node_gui);
   ~GUI_control();
 
 public:
@@ -47,7 +47,7 @@ public:
 private:
   Transforms transformManager;
 
-  GUI_node* node_gui;
+  Node_gui* node_gui;
   Dimension* dimManager;
   Camera* cameraManager;
   Scene* sceneManager;

@@ -1,18 +1,13 @@
 #include "GUI_Player.h"
-#include "GUI_Online.h"
 
 #include "../Player.h"
 #include "../Online.h"
 
 #include "../../Capture/Capture.h"
-#include "../../Transformation/Filter.h"
-#include "../../Color/Heatmap.h"
-#include "../../Color/GUI/GUI_Color.h"
 #include "../../Node_operation.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/OpenGL/Camera/Followup.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -21,17 +16,12 @@
 GUI_Player::GUI_Player(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->playerManager = node_ope->get_playerManager();
   this->onlineManager = node_ope->get_onlineManager();
   this->captureManager = node_ope->get_captureManager();
-  this->filterManager = node_ope->get_filterManager();
-  this->heatmapManager = node_ope->get_heatmapManager();
-  this->gui_online = node_ope->get_gui_online();
-  this->gui_color = node_ope->get_gui_color();
-  this->followManager = node_engine->get_followManager();
 
   this->item_width = 100;
 
@@ -40,15 +30,6 @@ GUI_Player::GUI_Player(Node_operation* node_ope){
 GUI_Player::~GUI_Player(){}
 
 //Main function
-void GUI_Player::design_player(){
-  //---------------------------
-
-  this->player_run();
-  this->parameter_online();
-  this->parameter_offline();
-
-  //---------------------------
-}
 void GUI_Player::runtime_player_mouse(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   ImGuiIO io = ImGui::GetIO();
@@ -72,7 +53,7 @@ void GUI_Player::runtime_player_mouse(){
   //----------------------------
 }
 
-//Subfunctions
+//Subfunction
 void GUI_Player::player_run(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = cloud->subset_selected;
@@ -204,97 +185,7 @@ void GUI_Player::player_selection(){
   //---------------------------
 }
 
-void GUI_Player::parameter_offline(){
-  if(ImGui::CollapsingHeader("Parameter - offline")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    //---------------------------
-
-    //Restart to zero when arrive to the end of cloud frames
-    bool* with_restart = playerManager->get_with_restart();
-    ImGui::Checkbox("Loop when end", with_restart);
-
-    //Filter all cloud subset with cylinder cleaner
-    if (ImGui::Button("Cylinder cleaning", ImVec2(120,0))){
-      if(cloud != nullptr){
-        filterManager->filter_cloud_cylinder(cloud);
-      }
-    }
-
-    //Display all cloud frames
-    if(ImGui::Button("All frame visible", ImVec2(120,0))){
-      if(cloud != nullptr){
-        for(int i=0; i<cloud->nb_subset; i++){
-          Subset* subset = sceneManager->get_subset(cloud, i);
-          subset->visibility = true;
-        }
-      }
-    }
-
-    //Setup cloud point size
-    if(cloud != nullptr){
-      int* point_size = &cloud->point_size;
-      ImGui::SliderInt("Point size", point_size, 1, 20);
-    }
-
-    //Set or not heatmap for the entire cloud
-    if(cloud != nullptr){
-      bool heatmap = cloud->heatmap;
-      if(ImGui::Checkbox("Heatmap", &heatmap)){
-        heatmapManager->make_cloud_heatmap(cloud);
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-  }
-}
-void GUI_Player::parameter_online(){
-  if(ImGui::CollapsingHeader("Parameter - online")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    Subset* subset = cloud->subset_selected;
-    //---------------------------
-
-    //SLAM activated at each frame
-    bool* with_slam = onlineManager->get_with_slam();
-    ImGui::Checkbox("SLAM", with_slam);
-
-    //Camera auto displacement
-    bool* with_camera_follow = followManager->get_with_camera_follow();
-    ImGui::Checkbox("Camera follow up", with_camera_follow);
-
-    //Camera follow absolute position
-    if(*with_camera_follow){
-      bool* with_camera_absolute = followManager->get_with_camera_absolute();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
-    }
-
-    //Cylinder cleaning filter
-    bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
-    ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
-    if(*cylinderFilter){
-      float* r_min = filterManager->get_cyl_r_min();
-      float* r_max = filterManager->get_cyl_r_max();
-      float* z_min = filterManager->get_cyl_z_min();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
-    }
-
-    //GUI interface parameters
-    gui_online->parameter_dynamic();
-
-    //Colorization
-    gui_color->colorization_choice();
-
-    //---------------------------
-    ImGui::Separator();
-  }
-}
-
+//Specific button function
 void GUI_Player::button_offline_play(Cloud* cloud){
   bool is_playing = *playerManager->get_player_isrunning();
   //---------------------------

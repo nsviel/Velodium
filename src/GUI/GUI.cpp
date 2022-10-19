@@ -1,6 +1,6 @@
 #include "GUI.h"
 
-#include "GUI_node.h"
+#include "Node_gui.h"
 
 #include "Interface/GUI_Consol.h"
 #include "Interface/GUI_MenuBar.h"
@@ -10,11 +10,10 @@
 #include "Control/GUI_Option.h"
 #include "Windows/GUI_windows.h"
 
-#include "../Module/Module_GUI.h"
 #include "../Engine/OpenGL/Camera/Camera.h"
 #include "../Engine/OpenGL/Dimension.h"
 #include "../Engine/Scene/Configuration.h"
-#include "../Engine/Engine_node.h"
+#include "../Engine/Node_engine.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -25,14 +24,13 @@
 
 
 //Constructor / Destructor
-GUI::GUI(GUI_node* node_gui){
+GUI::GUI(Node_gui* node_gui){
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
 
   this->dimManager = node_engine->get_dimManager();
-  this->gui_module = node_gui->get_gui_module();
   this->gui_window = node_gui->get_gui_window();
   this->gui_control = node_gui->get_gui_control();
   this->gui_option = node_gui->get_gui_option();

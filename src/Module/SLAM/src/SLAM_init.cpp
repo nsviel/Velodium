@@ -4,7 +4,7 @@
 
 #include "SLAM.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 
 
@@ -12,7 +12,7 @@
 SLAM_init::SLAM_init(SLAM* slam){
   //---------------------------
 
-  Engine_node* node_engine = slam->get_node_engine();
+  Node_engine* node_engine = slam->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->slam_map = slam->get_slam_map();

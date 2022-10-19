@@ -3,8 +3,10 @@
 
 #include "../common.h"
 
-class Engine_node;
-class Load_node;
+class Node_engine;
+class Node_load;
+class Node_gui;
+
 class Attribut;
 class Heatmap;
 class Filter;
@@ -18,25 +20,26 @@ class Online;
 class Saving;
 class Capture;
 
-class GUI_node;
 class GUI_Color;
 class GUI_Online;
 class GUI_Player;
+class GUI_Capture;
 
 
 class Node_operation
 {
 public:
   //Constructor / Destructor
-  Node_operation(Engine_node* engine);
+  Node_operation(Node_engine* engine);
   ~Node_operation();
 
 public:
   void update();
   void runtime();
+  void draw();
 
-  inline Engine_node* get_node_engine(){return node_engine;}
-  inline Load_node* get_node_load(){return node_load;}
+  inline Node_engine* get_node_engine(){return node_engine;}
+  inline Node_load* get_node_load(){return node_load;}
 
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Filter* get_filterManager(){return filterManager;}
@@ -51,14 +54,15 @@ public:
   inline Saving* get_savingManager(){return savingManager;}
   inline Capture* get_captureManager(){return captureManager;}
 
-  inline GUI_node* get_node_gui(){return node_gui;}
+  inline Node_gui* get_node_gui(){return node_gui;}
   inline GUI_Color* get_gui_color(){return gui_color;}
   inline GUI_Online* get_gui_online(){return gui_online;}
   inline GUI_Player* get_gui_player(){return gui_player;}
 
 private:
-  Engine_node* node_engine;
-  Load_node* node_load;
+  Node_engine* node_engine;
+  Node_load* node_load;
+  Node_gui* node_gui;
 
   Attribut* attribManager;
   Heatmap* heatmapManager;
@@ -73,7 +77,7 @@ private:
   Saving* savingManager;
   Capture* captureManager;
 
-  GUI_node* node_gui;
+  GUI_Capture* gui_capture;
   GUI_Color* gui_color;
   GUI_Online* gui_online;
   GUI_Player* gui_player;

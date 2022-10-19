@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class GUI_node;
+class Node_gui;
 class WIN_cloud;
 class WIN_loading;
 class WIN_camera;
@@ -16,7 +16,7 @@ class GUI_windows
 {
 public:
   //Constructor / Destructor
-  GUI_windows(GUI_node* node_gui);
+  GUI_windows(Node_gui* node_gui);
   ~GUI_windows();
 
 public:

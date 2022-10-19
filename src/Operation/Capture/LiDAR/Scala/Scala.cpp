@@ -6,9 +6,9 @@
 
 #include "../../../Node_operation.h"
 
-#include "../../../../Engine/Engine_node.h"
+#include "../../../../Engine/Node_engine.h"
 #include "../../../../Engine/Scene/Configuration.h"
-#include "../../../../Load/Load_node.h"
+#include "../../../../Load/Node_load.h"
 #include "../../../../Load/Processing/Extractor.h"
 #include "../../../../Specific/fct_system.h"
 #include "../../../../Specific/fct_watcher.h"
@@ -22,8 +22,8 @@
 Scala::Scala(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
-  Load_node* node_load = node_ope->get_node_load();
+  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_load* node_load = node_ope->get_node_load();
   Configuration* configManager = node_engine->get_configManager();
   string path_data = configManager->parse_json_s("parameter", "path_data");
 

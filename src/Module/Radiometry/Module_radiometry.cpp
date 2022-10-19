@@ -1,13 +1,13 @@
 #include "Module_radiometry.h"
 
-#include "../Module_node.h"
+#include "../Node_module.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Operation/Node_operation.h"
 
 
 //Constructor / Destructor
-Module_radiometry::Module_radiometry(Module_node* node){
+Module_radiometry::Module_radiometry(Node_module* node){
   this->node_module = node;
   //---------------------------
 

@@ -1,4 +1,4 @@
-#include "GUI_node.h"
+#include "Node_gui.h"
 
 #include "GUI.h"
 #include "Interface/GUI_Consol.h"
@@ -11,14 +11,13 @@
 #include "Control/GUI_Initialization.h"
 #include "Windows/GUI_windows.h"
 
-#include "../Module/Module_GUI.h"
-#include "../Module/Module_node.h"
-#include "../Engine/Engine_node.h"
+#include "../Module/Node_module.h"
+#include "../Engine/Node_engine.h"
 #include "../Operation/Node_operation.h"
 
 
 //Constructor / Destructor
-GUI_node::GUI_node(Engine_node* engine){
+Node_gui::Node_gui(Node_engine* engine){
   this->node_engine = engine;
   //---------------------------
 
@@ -26,8 +25,6 @@ GUI_node::GUI_node(Engine_node* engine){
   this->node_module = node_engine->get_node_module();
 
   this->gui_initialization = new GUI_Initialization(this);
-  this->gui_module = new GUI_module(this);
-
   this->gui_window = new GUI_windows(this);
   this->gui_control = new GUI_control(this);
   this->gui_option = new GUI_option(this);
@@ -39,10 +36,10 @@ GUI_node::GUI_node(Engine_node* engine){
 
   //---------------------------
 }
-GUI_node::~GUI_node(){}
+Node_gui::~Node_gui(){}
 
 //Main functions
-void GUI_node::reset(){
+void Node_gui::reset(){
   //---------------------------
 
   node_engine->reset();
@@ -50,16 +47,28 @@ void GUI_node::reset(){
 
   //---------------------------
 }
-void GUI_node::update(){}
-void GUI_node::runtime(){
+void Node_gui::update(){}
+void Node_gui::runtime(){
   //---------------------------
 
   //---------------------------
 }
-void GUI_node::exit(){
+void Node_gui::exit(){
   //---------------------------
 
   node_engine->exit();
 
   //---------------------------
+}
+void Node_gui::draw_leftPanel(){
+  if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
+    ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
+    //-------------------------------
+
+    node_ope->draw();
+
+    //-------------------------------
+    ImGui::PopStyleColor();
+    ImGui::EndTabBar();
+  }
 }

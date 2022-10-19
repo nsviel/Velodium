@@ -1,6 +1,6 @@
 #include "WIN_operation.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Node_operation.h"
@@ -19,7 +19,7 @@ extern struct Window_tab window_tab;
 WIN_operation::WIN_operation(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->filterManager = node_ope->get_filterManager();
   this->selectionManager = node_ope->get_selectionManager();

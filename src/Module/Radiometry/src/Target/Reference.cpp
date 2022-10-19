@@ -1,17 +1,17 @@
 #include "Reference.h"
 
-#include "../../../../Engine/Engine_node.h"
+#include "../../../../Engine/Node_engine.h"
 #include "../../../../Operation/Node_operation.h"
 #include "../../../../Operation/Transformation/Attribut.h"
-#include "../../../../Load/Load_node.h"
+#include "../../../../Load/Node_load.h"
 #include "../../../../Load/Processing/Loader.h"
 
 
 //Constructor / Destructor
-Reference::Reference(Engine_node* node){
+Reference::Reference(Node_engine* node){
   //---------------------------
 
-  Load_node* node_load = node->get_node_load();
+  Node_load* node_load = node->get_node_load();
   Node_operation* node_ope = node->get_node_ope();
 
   this->loaderManager = node_load->get_loadManager();

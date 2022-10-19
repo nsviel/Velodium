@@ -16,12 +16,12 @@
 #include "Object/Cloud/OOBB.h"
 #include "Object/Cloud/Normal.h"
 
-#include "../Engine_node.h"
+#include "../Node_engine.h"
 #include "../Scene/Scene.h"
 
 
 //Constructor / Destructor
-Object::Object(Engine_node* node){
+Object::Object(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 

@@ -3,18 +3,18 @@
 
 #include "../../common.h"
 
-class Module_node;
-class Engine_node;
-class Module_node;
+class Node_module;
+class Node_engine;
+class Node_module;
 class Node_operation;
-class Load_node;
+class Node_load;
 
 
 class Module_radiometry
 {
 public:
   //Constructor / Destructor
-  Module_radiometry(Module_node* node_module);
+  Module_radiometry(Node_module* node_module);
   ~Module_radiometry();
 
 public:
@@ -23,16 +23,16 @@ public:
   void runtime();
   void reset();
 
-  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
-  inline Module_node* get_node_module(){return node_module;}
-  inline Load_node* get_node_load(){return node_load;}
+  inline Node_module* get_node_module(){return node_module;}
+  inline Node_load* get_node_load(){return node_load;}
 
 private:
-  Engine_node* node_engine;
-  Module_node* node_module;
+  Node_engine* node_engine;
+  Node_module* node_module;
   Node_operation* node_ope;
-  Load_node* node_load;
+  Node_load* node_load;
 };
 
 #endif

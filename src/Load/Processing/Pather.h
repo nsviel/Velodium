@@ -3,10 +3,11 @@
 
 #include "../../common.h"
 
-class Load_node;
+class Node_load;
 class Scene;
 class Loader;
 class Saver;
+class Zenity;
 class Configuration;
 
 
@@ -14,7 +15,7 @@ class Pather
 {
 public:
   //Constructor / Destructor
-  Pather(Load_node* node_load);
+  Pather(Node_load* node_load);
   ~Pather();
 
 public:
@@ -46,12 +47,6 @@ public:
   string get_filePath(string path);
   vector<string> get_directoryAllFilePath(string path);
 
-  //Zenity stuff
-  vector<string> zenity_loading(string title);
-  string zenity_saving(string filename);
-  string zenity_directory();
-  void zenity_select_directory(string& path_dir);
-
   inline void set_spaceSampling(float value){this->spaceSampling = value;}
   inline void set_nbLineSampling(int value){this->nbLineSampling = value;}
   inline Loader* get_loaderManager(){return loaderManager;}
@@ -62,6 +57,7 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Saver* saverManager;
+  Zenity* zenityManager;
   Configuration* configManager;
 
   float spaceSampling;

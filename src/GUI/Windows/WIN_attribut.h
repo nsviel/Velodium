@@ -8,7 +8,7 @@ class Attribut;
 class Transforms;
 class Glyphs;
 class Heatmap;
-class GUI_node;
+class Node_gui;
 class GUI_Color;
 class Color;
 
@@ -17,7 +17,7 @@ class WIN_attribut
 {
 public:
   //Constructor / Destructor
-  WIN_attribut(GUI_node* node_gui);
+  WIN_attribut(Node_gui* node_gui);
   ~WIN_attribut();
 
 public:

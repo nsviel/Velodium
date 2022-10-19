@@ -1,4 +1,4 @@
-#include "GUI_Lidar.h"
+#include "GUI_Capture.h"
 
 #include "../Capture.h"
 #include "../LiDAR/Scala/Scala.h"
@@ -8,7 +8,7 @@
 
 
 //Constructor / Destructor
-GUI_Lidar::GUI_Lidar(Node_operation* node_ope){
+GUI_Capture::GUI_Capture(Node_operation* node_ope){
   //---------------------------
 
   this->captureManager = node_ope->get_captureManager();
@@ -19,23 +19,33 @@ GUI_Lidar::GUI_Lidar(Node_operation* node_ope){
 
   //---------------------------
 }
-GUI_Lidar::~GUI_Lidar(){}
+GUI_Capture::~GUI_Capture(){}
 
 //Main function
-void GUI_Lidar::design_Lidar(){
-  //---------------------------
+void GUI_Capture::design_Lidar(){
+  if(ImGui::BeginTabItem("Capture")){
+    if(ImGui::BeginTabBar("##tabs_capture", ImGuiTabBarFlags_None)){
+      //---------------------------
 
-  if(ImGui::BeginTabItem("LiDAR")){
-    this->design_Velodyne();
-    this->design_Scala();
+      if(ImGui::BeginTabItem("Velodyne")){
+        this->design_Velodyne();
+        ImGui::EndTabItem();
+      }
+
+      if(ImGui::BeginTabItem("Scala")){
+        this->design_Scala();
+        ImGui::EndTabItem();
+      }
+
+      //---------------------------
+      ImGui::EndTabBar();
+    }
     ImGui::EndTabItem();
   }
-
-  //---------------------------
 }
 
 //Specific functions
-void GUI_Lidar::design_Velodyne(){
+void GUI_Capture::design_Velodyne(){
   //---------------------------
 
   this->velo_state();
@@ -45,7 +55,7 @@ void GUI_Lidar::design_Velodyne(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Lidar::design_Scala(){
+void GUI_Capture::design_Scala(){
   //---------------------------
 
   this->scala_state();
@@ -56,7 +66,7 @@ void GUI_Lidar::design_Scala(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_Lidar::state_watcher(){
+void GUI_Capture::state_watcher(){
   //---------------------------
 
   //Watchers Velodyne
@@ -76,7 +86,7 @@ void GUI_Lidar::state_watcher(){
 }
 
 //Velodyne subfunctions
-void GUI_Lidar::velo_state(){
+void GUI_Capture::velo_state(){
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Velodyne");
@@ -110,7 +120,7 @@ void GUI_Lidar::velo_state(){
 
   //---------------------------
 }
-void GUI_Lidar::velo_capture(){
+void GUI_Capture::velo_capture(){
   bool is_capturing = *veloManager->get_is_capturing();
   //---------------------------
 
@@ -149,7 +159,7 @@ void GUI_Lidar::velo_capture(){
 
   //---------------------------
 }
-void GUI_Lidar::velo_parameter(){
+void GUI_Capture::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
 
@@ -181,14 +191,14 @@ void GUI_Lidar::velo_parameter(){
 }
 
 //Scala subfunctions
-void GUI_Lidar::scala_state(){
+void GUI_Capture::scala_state(){
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Scala");
 
   //---------------------------
 }
-void GUI_Lidar::scala_file(){
+void GUI_Capture::scala_file(){
   //---------------------------
 
   if(ImGui::Button("Load in dir", ImVec2(75, 0))){
@@ -201,7 +211,7 @@ void GUI_Lidar::scala_file(){
 
   //---------------------------
 }
-void GUI_Lidar::scala_capture(){
+void GUI_Capture::scala_capture(){
   bool is_capturing = *scalaManager->get_is_scala_capturing();
   //---------------------------
 
@@ -223,7 +233,7 @@ void GUI_Lidar::scala_capture(){
 
   //---------------------------
 }
-void GUI_Lidar::scala_parameter(){
+void GUI_Capture::scala_parameter(){
   if(ImGui::CollapsingHeader("Parameters##2")){
     //---------------------------
 

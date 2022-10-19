@@ -6,10 +6,10 @@
 #include "../Node_operation.h"
 #include "../Dynamic/Online.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Saver.h"
 
@@ -21,8 +21,8 @@
 Capture::Capture(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
-  Load_node* node_load = node_ope->get_node_load();
+  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_load* node_load = node_ope->get_node_load();
 
   this->configManager = node_engine->get_configManager();
   this->node_ope = node_engine->get_node_ope();

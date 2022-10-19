@@ -4,7 +4,7 @@
 #include "../../Engine/Data/struct_dataFile.h"
 #include "../../common.h"
 
-class Load_node;
+class Node_load;
 class Extractor;
 class Scene;
 
@@ -22,7 +22,7 @@ class Loader
 {
 public:
   //Constructor / Destructor
-  Loader(Load_node* node_load);
+  Loader(Node_load* node_load);
   ~Loader();
 
 public:

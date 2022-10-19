@@ -4,7 +4,7 @@
 
 #include "../Module_obstacle.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/Cloud/OOBB.h"
@@ -18,7 +18,7 @@
 Obstacle::Obstacle(Module_obstacle* module){
   //---------------------------
 
-  Engine_node* node_engine = module->get_node_engine();
+  Node_engine* node_engine = module->get_node_engine();
 
   this->predManager = module->get_predManager();
   this->sceneManager = node_engine->get_sceneManager();

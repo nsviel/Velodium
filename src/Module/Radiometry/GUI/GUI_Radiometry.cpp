@@ -11,11 +11,11 @@
 #include "../src/Approach/Surfacic_segmented.h"
 #include "../src/Approach/Separation_global.h"
 
-#include "../../../GUI/GUI_node.h"
+#include "../../../GUI/Node_gui.h"
 #include "../../../GUI/Windows/GUI_windows.h"
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Load/Load_node.h"
+#include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Pather.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
@@ -28,10 +28,10 @@
 GUI_radiometry::GUI_radiometry(Module_radiometry* module){
   //---------------------------
 
-  Engine_node* node_engine = module->get_node_engine();
-  Module_node* node_module = module->get_node_module();
+  Node_engine* node_engine = module->get_node_engine();
+  Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = module->get_node_ope();
-  Load_node* node_load = module->get_node_load();
+  Node_load* node_load = module->get_node_load();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();

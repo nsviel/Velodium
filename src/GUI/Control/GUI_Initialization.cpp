@@ -1,11 +1,11 @@
 #include "GUI_Initialization.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Pather.h"
 #include "../../Module/Obstacle/src/Obstacle.h"
@@ -15,12 +15,12 @@
 
 
 //Constructor / Destructor
-GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
+GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
   Node_operation* node_ope = node_engine->get_node_ope();
-  Load_node* node_load = node_engine->get_node_load();
+  Node_load* node_load = node_engine->get_node_load();
   //SLAM* slamManager = node_module->get_slamManager();
 
   this->configManager = node_engine->get_configManager();

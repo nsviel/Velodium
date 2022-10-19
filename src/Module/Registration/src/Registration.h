@@ -9,14 +9,14 @@ class Transforms;
 class ICP;
 class Attribut;
 class Plotting;
-class Engine_node;
+class Node_engine;
 
 
 class Registration
 {
 public:
   //Constructor / Destructor
-  Registration(Engine_node* node);
+  Registration(Node_engine* node);
   ~Registration();
 
 public:

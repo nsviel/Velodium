@@ -2,7 +2,7 @@
 
 #include "../Node_operation.h"
 
-#include "../../Module/Module_node.h"
+#include "../../Module/Node_module.h"
 #include "../../Module/SLAM/src/SLAM.h"
 #include "../../Module/Obstacle/HTTP/http_command.h"
 
@@ -16,7 +16,7 @@
 #include "../../Engine/OpenGL/Dimension.h"
 
 #include "../../Engine/Engine.h"
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Configuration.h"
@@ -31,8 +31,8 @@
 Online::Online(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
-  Module_node* node_module = node_engine->get_node_module();
+  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_module* node_module = node_engine->get_node_module();
 
   this->filterManager = node_ope->get_filterManager();
   this->dimManager = node_engine->get_dimManager();

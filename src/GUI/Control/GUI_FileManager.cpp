@@ -1,10 +1,10 @@
 #include "GUI_FileManager.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 #include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
 #include "../../Engine/Scene/Scene.h"
@@ -15,10 +15,10 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_fileManager::GUI_fileManager(GUI_node* node_gui){
+GUI_fileManager::GUI_fileManager(Node_gui* node_gui){
   //-------------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
 
   this->gui_window = node_gui->get_gui_window();
   this->dimManager = node_engine->get_dimManager();

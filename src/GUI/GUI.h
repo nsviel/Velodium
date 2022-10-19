@@ -11,16 +11,15 @@ class GUI_option;
 class GUI_menuBar;
 class GUI_leftPanel;
 class GUI_consol;
-class GUI_module;
 class GUI_operation;
-class GUI_node;
+class Node_gui;
 
 
 class GUI
 {
 public:
   //Constructor / Destructor
-  GUI(GUI_node* node_gui);
+  GUI(Node_gui* node_gui);
   ~GUI();
 
 public:
@@ -36,7 +35,6 @@ public:
 
 private:
   Dimension* dimManager;
-  GUI_module* gui_module;
   GUI_operation* gui_operation;
   GUI_windows* gui_window;
   GUI_control* gui_control;

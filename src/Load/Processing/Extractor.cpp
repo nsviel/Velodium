@@ -1,8 +1,8 @@
 #include "Extractor.h"
 
-#include "../Load_node.h"
+#include "../Node_load.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
@@ -11,10 +11,10 @@
 
 
 //Constructor / Destructor
-Extractor::Extractor(Load_node* node_load){
+Extractor::Extractor(Node_load* node_load){
   //---------------------------
 
-  Engine_node* node_engine = node_load->get_node_engine();
+  Node_engine* node_engine = node_load->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
@@ -291,12 +291,16 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
   subset->VAO = VAO;
-say(name);
+
   //Other stuff
   subset->ID = ID;
-  subset->name = name;
   subset->root = vec3(0.0);
   subset->angle = -1000;
+  if(name != ""){
+    subset->name = name;
+  }else{
+    subset->name = "frame_" + to_string(ID);
+  }
 
   //---------------------------
 }

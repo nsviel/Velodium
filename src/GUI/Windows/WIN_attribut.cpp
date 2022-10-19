@@ -2,9 +2,9 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Operation/Transformation/Attribut.h"
@@ -20,11 +20,11 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_attribut::WIN_attribut(GUI_node* node_gui){
+WIN_attribut::WIN_attribut(Node_gui* node_gui){
   //---------------------------
 
   Node_operation* node_ope = node_gui->get_node_ope();
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
 
   this->gui_color = node_ope->get_gui_color();
   this->heatmapManager = node_ope->get_heatmapManager();

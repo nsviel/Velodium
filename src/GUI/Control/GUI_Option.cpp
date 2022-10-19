@@ -1,13 +1,13 @@
 #include "GUI_Option.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 #include "../Control/GUI_Control.h"
 
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Pather.h"
 
 #include "../../Engine/Engine.h"
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/Scene/AABB.h"
@@ -26,12 +26,12 @@
 
 
 //Constructor / Destructor
-GUI_option::GUI_option(GUI_node* node_gui){
+GUI_option::GUI_option(Node_gui* node_gui){
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
   Node_operation* node_ope = node_gui->get_node_ope();
-  Load_node* node_load = node_engine->get_node_load();
+  Node_load* node_load = node_engine->get_node_load();
 
   this->renderManager = node_engine->get_renderManager();
   this->gui_control = node_gui->get_gui_control();

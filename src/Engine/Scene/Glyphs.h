@@ -3,14 +3,14 @@
 
 #include "../../common.h"
 
-class Engine_node;
+class Node_engine;
 
 
 class Glyphs
 {
 public:
   //Constructor / Destructor
-  Glyphs(Engine_node* node_engine);
+  Glyphs(Node_engine* node_engine);
   ~Glyphs();
 
 public:
@@ -35,7 +35,7 @@ public:
   inline list<Glyph*>* get_list_glyph(){return list_glyph;}
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
 
   list<Glyph*>* list_glyph;
   bool is_visualization;

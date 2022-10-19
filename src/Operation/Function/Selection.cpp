@@ -6,7 +6,7 @@
 #include "../Transformation/Transforms.h"
 #include "../Transformation/Attribut.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/Scene/Mark.h"
@@ -21,7 +21,7 @@
 Selection::Selection(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->dimManager = node_engine->get_dimManager();
   this->cameraManager = node_engine->get_cameraManager();

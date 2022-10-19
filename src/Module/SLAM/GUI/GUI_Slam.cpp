@@ -11,12 +11,11 @@
 #include "../optim/SLAM_optim_gn.h"
 #include "../optim/SLAM_normal.h"
 
-#include "../../Module_node.h"
-#include "../../Module_GUI.h"
+#include "../../Node_module.h"
 
-#include "../../../GUI/GUI_node.h"
+#include "../../../GUI/Node_gui.h"
 #include "../../../Engine/Engine.h"
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/SLAM/Car.h"
@@ -30,8 +29,8 @@
 GUI_Slam::GUI_Slam(Module_slam* module){
   //---------------------------
 
-  Module_node* node_module = module->get_node_module();
-  Engine_node* node_engine = node_module->get_node_engine();
+  Node_module* node_module = module->get_node_module();
+  Node_engine* node_engine = node_module->get_node_engine();
 
   this->slamManager = module->get_slamManager();
   SLAM_optim* optimManager = slamManager->get_slam_optim();

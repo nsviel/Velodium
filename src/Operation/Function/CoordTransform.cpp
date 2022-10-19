@@ -2,7 +2,7 @@
 
 #include "../Node_operation.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
 
@@ -13,7 +13,7 @@
 CoordTransform::CoordTransform(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();

@@ -5,7 +5,7 @@
 #include "../Node_operation.h"
 #include "../Transformation/Attribut.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
 
@@ -22,7 +22,7 @@
 Heatmap::Heatmap(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->colormapManager = new Colormap();
   this->sceneManager = node_engine->get_sceneManager();

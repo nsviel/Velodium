@@ -3,8 +3,8 @@
 
 #include "../../common.h"
 
-class Module_node;
-class Engine_node;
+class Node_module;
+class Node_engine;
 class Node_operation;
 
 class Obstacle;
@@ -22,7 +22,7 @@ class Module_obstacle
 {
 public:
   //Constructor / Destructor
-  Module_obstacle(Module_node* node_module);
+  Module_obstacle(Node_module* node_module);
   ~Module_obstacle();
 
 public:
@@ -31,10 +31,10 @@ public:
   void runtime();
   void reset();
 
-  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
 
-  inline Module_node* get_node_module(){return node_module;}
+  inline Node_module* get_node_module(){return node_module;}
   inline Configuration* get_configManager(){return configManager;}
   inline Obstacle* get_obstacleManager(){return obstacleManager;}
   inline Filemanager* get_fileManager(){return fileManager;}
@@ -46,11 +46,11 @@ public:
   inline GUI_Obstacle* get_gui_obstacle(){return gui_obstacle;}
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
   Node_operation* node_ope;
 
   Configuration* configManager;
-  Module_node* node_module;
+  Node_module* node_module;
   Obstacle* obstacleManager;
   Filemanager* fileManager;
   Prediction* predManager;

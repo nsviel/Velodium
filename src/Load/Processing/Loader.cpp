@@ -11,19 +11,19 @@
 #include "../Format/file_XYZ.h"
 #include "../Format/file_CBOR.h"
 
-#include "../Load_node.h"
+#include "../Node_load.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
-Loader::Loader(Load_node* node_load){
+Loader::Loader(Node_load* node_load){
   //---------------------------
 
-  Engine_node* node_engine = node_load->get_node_engine();
+  Node_engine* node_engine = node_load->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->extractManager = node_load->get_extractManager();

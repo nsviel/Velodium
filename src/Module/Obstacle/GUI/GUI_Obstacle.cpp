@@ -5,8 +5,7 @@
 #include "../src/Prediction.h"
 #include "../Module_obstacle.h"
 
-#include "../../Module_GUI.h"
-#include "../../Module_node.h"
+#include "../../Node_module.h"
 #include "../../SLAM/GUI/GUI_Slam.h"
 
 #include "../../../Operation/Node_operation.h"
@@ -17,7 +16,7 @@
 GUI_Obstacle::GUI_Obstacle(Module_obstacle* module){
   //---------------------------
 
-  Module_node* node_module = module->get_node_module();
+  Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = node_module->get_node_ope();
 
   this->coordManager = node_ope->get_coordManager();

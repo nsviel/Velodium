@@ -4,7 +4,7 @@
 
 #include "../Module_obstacle.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
 
@@ -20,7 +20,7 @@
 Prediction::Prediction(Module_obstacle* module){
   //---------------------------
 
-  Engine_node* node_engine = module->get_node_engine();
+  Node_engine* node_engine = module->get_node_engine();
   Configuration* configManager = module->get_configManager();
   Filemanager* fileManager = module->get_fileManager();
 

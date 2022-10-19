@@ -4,7 +4,7 @@
 #include "../../Engine/Data/struct_dataFile.h"
 #include "../../common.h"
 
-class Load_node;
+class Node_load;
 class Scene;
 
 class file_PTS;
@@ -20,7 +20,7 @@ class Saver
 {
 public:
   //Constructor / Destructor
-  Saver(Load_node* node_load);
+  Saver(Node_load* node_load);
   ~Saver();
 
 public:

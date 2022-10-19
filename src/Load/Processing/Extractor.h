@@ -6,7 +6,7 @@
 
 #include "../../common.h"
 
-class Load_node;
+class Node_load;
 class Scene;
 class Object;
 class Configuration;
@@ -16,7 +16,7 @@ class Extractor
 {
 public:
   //Constructor / Destructor
-  Extractor(Load_node* node_load);
+  Extractor(Node_load* node_load);
   ~Extractor();
 
 public:
@@ -46,7 +46,7 @@ private:
   Object* objectManager;
   Configuration* configManager;
 
-  int ID, oneFrame_VAO;
+  int ID;
   vec4 color_rdm;
   bool is_intensity;
   bool is_normal;

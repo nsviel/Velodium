@@ -1,4 +1,4 @@
-#include "Engine_node.h"
+#include "Node_engine.h"
 
 #include "Engine.h"
 
@@ -15,14 +15,14 @@
 #include "OpenGL/Camera/Viewport.h"
 #include "OpenGL/Shader/Shader.h"
 
-#include "../Load/Load_node.h"
+#include "../Load/Node_load.h"
 #include "../Operation/Node_operation.h"
-#include "../Module/Module_node.h"
-#include "../GUI/GUI_node.h"
+#include "../Module/Node_module.h"
+#include "../GUI/Node_gui.h"
 
 
 //Constructor / Destructor
-Engine_node::Engine_node(CoreGLengine* ogl){
+Node_engine::Node_engine(CoreGLengine* ogl){
   this->glManager = ogl;
   //---------------------------
 
@@ -37,18 +37,18 @@ Engine_node::Engine_node(CoreGLengine* ogl){
   this->objectManager = new Object(this);
   this->sceneManager = new Scene(this);
 
-  this->node_load = new Load_node(this);
+  this->node_load = new Node_load(this);
   this->node_ope = new Node_operation(this);
-  this->node_module = new Module_node(this);
-  this->node_gui = new GUI_node(this);
+  this->node_module = new Node_module(this);
+  this->node_gui = new Node_gui(this);
 
   this->engineManager = new Engine(this);
 
   //---------------------------
 }
-Engine_node::~Engine_node(){}
+Node_engine::~Node_engine(){}
 
-void Engine_node::update(){
+void Node_engine::update(){
   //---------------------------
 
   node_module->update();
@@ -60,14 +60,14 @@ void Engine_node::update(){
 
   //---------------------------
 }
-void Engine_node::runtime(){
+void Node_engine::runtime(){
   //---------------------------
 
   node_module->runtime();
 
   //---------------------------
 }
-void Engine_node::reset(){
+void Node_engine::reset(){
   //---------------------------
 
   cameraManager->viewport_reset();
@@ -77,7 +77,7 @@ void Engine_node::reset(){
 
   //---------------------------
 }
-void Engine_node::exit(){
+void Node_engine::exit(){
   //---------------------------
 
   GLFWwindow* window = glfwGetCurrentContext();

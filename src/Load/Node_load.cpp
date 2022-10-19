@@ -1,8 +1,8 @@
-#include "Load_node.h"
+#include "Node_load.h"
 
 
 //Constructor / destructor
-Load_node::Load_node(Engine_node* node){
+Node_load::Node_load(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 
@@ -13,9 +13,9 @@ Load_node::Load_node(Engine_node* node){
 
   //---------------------------
 }
-Load_node::~Load_node(){}
+Node_load::~Node_load(){}
 
-void Load_node::update(){
+void Node_load::update(){
   //---------------------------
 
   pathManager->update_configuration();

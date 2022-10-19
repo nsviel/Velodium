@@ -3,7 +3,7 @@
 
 #include "../common.h"
 
-class Engine_node;
+class Node_engine;
 class Node_operation;
 
 class Module_radiometry;
@@ -12,20 +12,21 @@ class Module_obstacle;
 class Module_slam;
 
 
-class Module_node
+class Node_module
 {
 public:
   //Constructor / Destructor
-  Module_node(Engine_node* engine);
-  ~Module_node();
+  Node_module(Node_engine* engine);
+  ~Node_module();
 
 public:
   //Main functions
   void reset();
   void update();
   void runtime();
+  void draw();
 
-  inline Engine_node* get_node_engine(){return node_engine;}
+  inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
 
   inline Module_radiometry* get_module_radio(){return module_radio;}
@@ -34,7 +35,7 @@ public:
   inline Module_slam* get_module_slam(){return module_slam;}
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
   Node_operation* node_ope;
 
   Module_registration* module_regist;

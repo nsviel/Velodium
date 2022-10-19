@@ -6,9 +6,9 @@
 
 #include "../../Node_operation.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../GUI/GUI_node.h"
+#include "../../../GUI/Node_gui.h"
 
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
@@ -18,7 +18,7 @@
 GUI_Color::GUI_Color(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->colorManager = node_ope->get_colorManager();
   this->heatmapManager = node_ope->get_heatmapManager();

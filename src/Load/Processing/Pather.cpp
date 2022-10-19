@@ -2,10 +2,11 @@
 
 #include "Loader.h"
 #include "Saver.h"
+#include "Zenity.h"
 
-#include "../Load_node.h"
+#include "../Node_load.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_transtypage.h"
@@ -19,15 +20,16 @@
 
 
 //Constructor / destructor
-Pather::Pather(Load_node* node_load){
+Pather::Pather(Node_load* node_load){
   //---------------------------
 
-  Engine_node* node_engine = node_load->get_node_engine();
+  Node_engine* node_engine = node_load->get_node_engine();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loadManager();
   this->saverManager = node_load->get_saveManager();
+  this->zenityManager = new Zenity();
 
   //---------------------------
   this->update_configuration();
@@ -64,7 +66,7 @@ void Pather::loading_cloud(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading("Cloud loading");
+  vector<string> path_vec = zenityManager->zenity_loading("Cloud loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -78,7 +80,7 @@ void Pather::loading_frames(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading("Frame loading");
+  vector<string> path_vec = zenityManager->zenity_loading("Frame loading");
 
   //Load files
   if(path_vec.size() != 0){
@@ -109,7 +111,7 @@ void Pather::loading_sampling(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading("Cloud with sampling loading");
+  vector<string> path_vec = zenityManager->zenity_loading("Cloud with sampling loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -169,7 +171,7 @@ void Pather::loading_treatment(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = this->zenity_loading("Cloud with processing loading");
+  vector<string> path_vec = zenityManager->zenity_loading("Cloud with processing loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -211,7 +213,7 @@ void Pather::saving_cloud_frame(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_directory();
+  string path_saving = zenityManager->zenity_directory(path_current_dir);
 
   //Save current cloud
   for(int i=0; i<cloud->nb_subset; i++){
@@ -229,7 +231,7 @@ void Pather::saving_subset(Subset* subset){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_saving(subset->name);
+  string path_saving = zenityManager->zenity_saving(subset->name, path_current_dir);
 
   //Save current cloud
   if(subset != nullptr && path_saving != ""){
@@ -243,7 +245,7 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_directory();
+  string path_saving = zenityManager->zenity_directory(path_current_dir);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
@@ -259,7 +261,7 @@ void Pather::saving_cloud(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_saving(cloud->name);
+  string path_saving = zenityManager->zenity_saving(cloud->name, path_current_dir);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
@@ -272,7 +274,7 @@ void Pather::saving_cloud_all(){
   //---------------------------
 
   //Select directory path
-  string path_dir = this->zenity_directory();
+  string path_dir = zenityManager->zenity_directory(path_current_dir);
 
   //Save all scene clouds
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -289,7 +291,7 @@ void Pather::saving_saved_frames(){
   //---------------------------
 
   //Select saving path
-  string path_saving = this->zenity_directory();
+  string path_saving = zenityManager->zenity_directory(path_current_dir);
   vector<string> file_path_vec = list_allPaths(path_saved_frame.c_str());
   vector<string> file_name_vec = list_allFiles(path_saved_frame.c_str());
 
@@ -385,130 +387,6 @@ void Pather::selectDirectory(string& folderPath){
 
     //Change path dir
     folderPath = path_str;
-  }
-
-  //---------------------------
-}
-
-//Zenity stuff
-vector<string> Pather::zenity_loading(string title){
-  //---------------------------
-
-  //Open zenity file manager
-  string path_current_dir = get_absolutePath_build() + '/';
-  string zenity = "zenity --file-selection --multiple --title=" + title + " --filename=" + path_current_dir + " 2> /dev/null";
-  FILE *file = popen(zenity.c_str(), "r");
-  char filename[32768];
-  const char* path_char = fgets(filename, 32768, file);
-  vector<string> path_vec;
-
-  //Check if not empty
-  if ((path_char != NULL) && (path_char[0] != '\0')){
-    string path_str(path_char);
-
-    //Check for multiple
-    if (path_str.find('|')){
-      int N = count(path_str.begin(), path_str.end(), '|');
-      for(int i=0; i<N; i++){
-        string path_file = path_str.substr(0, path_str.find('|'));
-
-        if (path_file.find('\n')){
-          path_file.erase(std::remove(path_file.begin(), path_file.end(), '\n'), path_file.end());
-        }
-
-        path_vec.push_back(path_file);
-
-        //Supress retrieved path from path list
-        path_str = path_str.substr(path_str.find('|')+1);
-      }
-    }
-
-    //Retrieve the last selected path
-    if (path_str.find('\n')){
-      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
-    }
-    path_vec.push_back(path_str);
-  }
-
-  //---------------------------
-  return path_vec;
-}
-string Pather::zenity_saving(string filename){
-  //---------------------------
-
-  string path_saving = "";
-  string path = path_current_dir + filename +".pts";
-
-  //Open Zenity window
-  string zenity = "zenity --file-selection --save --title=Save --filename=" + path;
-  FILE *file = popen(zenity.c_str(), "r");
-  char path_buffer[1024];
-  char* path_char = fgets(path_buffer, 1024, file);
-
-  //Check if empty
-  if ((path_char != NULL) && (path_char[0] != '\0')) {
-    //Supress unwanted line break
-    string path_str(path_char);
-    if (path_str.find('\n')){
-      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
-    }
-    path_saving = path_str;
-  }
-
-  //Set current directory
-  path_current_dir = path_saving.substr(0, path_saving.find_last_of("/") + 1);
-
-  //---------------------------
-  return path_saving;
-}
-string Pather::zenity_directory(){
-  string path_directory = "";
-  //---------------------------
-
-  //Retrieve dir path
-  string zenity = "zenity --file-selection --directory --title=Save --filename=" + path_current_dir;
-  FILE *file = popen(zenity.c_str(), "r");
-  char filename[1024];
-  char* path_char = fgets(filename, 1024, file);
-
-  //Check if empty
-  if ((path_char != NULL) && (path_char[0] != '\0')) {
-    string path_str(path_char);
-
-    //Remove unwanted break line
-    if (path_str.find('\n')){
-      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
-    }
-
-    path_directory = path_str;
-  }
-
-  //Set current directory
-  path_current_dir = path_directory;
-
-  //---------------------------
-  return path_directory;
-}
-void Pather::zenity_select_directory(string& path_dir){
-  //---------------------------
-
-  //Get absolute executable location
-  string zenity = "zenity --file-selection --directory --title=Save --filename=" + path_dir;
-
-  //Retrieve dir path
-  FILE *file = popen(zenity.c_str(), "r");
-  char filename[1024];
-  char* path_char = fgets(filename, 1024, file);
-
-  //Check if empty
-  if ((path_char != NULL) && (path_char[0] != '\0')) {
-    string path_str(path_char);
-
-    if (path_str.find('\n')){
-      path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end()); //-> Supress unwanted line break
-    }
-
-    path_dir = path_str + "/";
   }
 
   //---------------------------

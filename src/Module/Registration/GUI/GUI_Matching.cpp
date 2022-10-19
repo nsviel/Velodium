@@ -9,7 +9,7 @@
 #include "../../Radiometry/src/Approach/Linearization.h"
 
 #include "../../../GUI/Windows/GUI_windows.h"
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
@@ -20,8 +20,8 @@
 GUI_matching::GUI_matching(Module_registration* module){
   //---------------------------
 
-  Engine_node* node_engine = module->get_node_engine();
-  Module_node* node_module = module->get_node_module();
+  Node_engine* node_engine = module->get_node_engine();
+  Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = module->get_node_ope();
   //Registration* regisManager = module->get_regisManager();
 

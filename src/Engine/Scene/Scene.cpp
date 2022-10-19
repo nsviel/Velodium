@@ -2,7 +2,7 @@
 
 #include "Object.h"
 
-#include "../Engine_node.h"
+#include "../Node_engine.h"
 #include "../Scene/Configuration.h"
 
 #include "../../Specific/fct_system.h"
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-Scene::Scene(Engine_node* node_engine){
+Scene::Scene(Node_engine* node_engine){
   //---------------------------
 
   Configuration* configManager = node_engine->get_configManager();

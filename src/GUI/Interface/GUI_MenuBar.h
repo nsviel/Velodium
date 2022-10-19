@@ -7,7 +7,7 @@ class GUI_windows;
 class GUI_option;
 class GUI_leftPanel;
 class GUI_Player;
-class GUI_node;
+class Node_gui;
 class GUI_Initialization;
 
 class Scene;
@@ -21,7 +21,7 @@ class GUI_menuBar
 {
 public:
   //Constructor / Destructor
-  GUI_menuBar(GUI_node* node_gui);
+  GUI_menuBar(Node_gui* node_gui);
   ~GUI_menuBar();
 
 public:
@@ -42,7 +42,7 @@ private:
   Textures* texManager;
   CoreGLengine* glManager;
 
-  GUI_node* node_gui;
+  Node_gui* node_gui;
   GUI_windows* gui_window;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanel;

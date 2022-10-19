@@ -6,13 +6,12 @@
 #include "../Windows/GUI_windows.h"
 #include "../Control/GUI_Option.h"
 #include "../Control/GUI_Initialization.h"
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Pather.h"
-#include "../../Module/Module_GUI.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Data/struct_generic.h"
 #include "../../Engine/OpenGL/CoreGLengine.h"
@@ -33,15 +32,14 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_menuBar::GUI_menuBar(GUI_node* node){
+GUI_menuBar::GUI_menuBar(Node_gui* node){
   this->node_gui = node;
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
-  Module_node* node_module = node_gui->get_node_module();
-  GUI_module* gui_module = node_gui->get_gui_module();
+  Node_engine* node_engine = node_gui->get_node_engine();
+  Node_module* node_module = node_gui->get_node_module();
   Node_operation* node_ope = node_gui->get_node_ope();
-  Load_node* node_load = node_engine->get_node_load();
+  Node_load* node_load = node_engine->get_node_load();
 
   this->gui_init = node_gui->get_gui_initialization();
   this->optionManager = node_gui->get_gui_option();

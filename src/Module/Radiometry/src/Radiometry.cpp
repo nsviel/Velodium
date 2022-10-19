@@ -13,7 +13,7 @@
 #include "Approach/Separation_global.h"
 #include "Approach/Separation_local.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/Plotting.h"
@@ -22,7 +22,7 @@
 
 
 //Constructor / destructor
-Radiometry::Radiometry(Engine_node* node){
+Radiometry::Radiometry(Node_engine* node){
   //---------------------------
 
   Node_operation* node_ope = node->get_node_ope();

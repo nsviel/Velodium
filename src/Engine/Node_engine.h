@@ -4,9 +4,9 @@
 #include "../common.h"
 
 class Node_operation;
-class Load_node;
-class Module_node;
-class GUI_node;
+class Node_load;
+class Node_module;
+class Node_gui;
 class Configuration;
 class Scene;
 class Glyphs;
@@ -24,12 +24,12 @@ class Followup;
 #include <GLFW/glfw3.h>
 
 
-class Engine_node
+class Node_engine
 {
 public:
   //Constructor / Destructor
-  Engine_node(CoreGLengine* ogl);
-  ~Engine_node();
+  Node_engine(CoreGLengine* ogl);
+  ~Node_engine();
 
 public:
   //Main functions
@@ -38,10 +38,10 @@ public:
   void reset();
   void exit();
 
-  inline Module_node* get_node_module(){return node_module;}
+  inline Node_module* get_node_module(){return node_module;}
   inline Node_operation* get_node_ope(){return node_ope;}
-  inline GUI_node* get_node_gui(){return node_gui;}
-  inline Load_node* get_node_load(){return node_load;}
+  inline Node_gui* get_node_gui(){return node_gui;}
+  inline Node_load* get_node_load(){return node_load;}
 
   inline Configuration* get_configManager(){return configManager;}
   inline Dimension* get_dimManager(){return dimManager;}
@@ -58,9 +58,9 @@ public:
 
 private:
   Node_operation* node_ope;
-  Load_node* node_load;
-  Module_node* node_module;
-  GUI_node* node_gui;
+  Node_load* node_load;
+  Node_module* node_module;
+  Node_gui* node_gui;
 
   Followup* followManager;
   CoreGLengine* glManager;

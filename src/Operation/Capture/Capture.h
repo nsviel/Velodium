@@ -7,7 +7,7 @@ class Node_operation;
 class Scene;
 class Loader;
 class Extractor;
-class Module_node;
+class Node_module;
 class Configuration;
 class Node_operation;
 
@@ -51,7 +51,7 @@ public:
   inline int get_capture_nb_point_raw(){return capture_nb_point_raw;}
 
 private:
-  Module_node* node_module;
+  Node_module* node_module;
   Scene* sceneManager;
   Loader* loaderManager;
   Configuration* configManager;

@@ -2,7 +2,7 @@
 #define GUI_CONSOL_H
 
 class Dimension;
-class GUI_node;
+class Node_gui;
 class Configuration;
 
 #include "../../common.h"
@@ -12,7 +12,7 @@ class GUI_consol
 {
 public:
   //Constructor / Destructor
-  GUI_consol(GUI_node* node_gui);
+  GUI_consol(Node_gui* node_gui);
   ~GUI_consol();
 
 public:

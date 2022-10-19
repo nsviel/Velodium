@@ -5,9 +5,9 @@
 #include "../src/Registration.h"
 
 
-#include "../../Module_node.h"
+#include "../../Node_module.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Operation/Transformation/Transforms.h"
@@ -17,8 +17,8 @@
 GUI_registration::GUI_registration(Module_registration* module){
   //---------------------------
 
-  Engine_node* node_engine = module->get_node_engine();
-  Module_node* node_module = module->get_node_module();
+  Node_engine* node_engine = module->get_node_engine();
+  Node_module* node_module = module->get_node_module();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();

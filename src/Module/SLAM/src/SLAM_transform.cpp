@@ -4,7 +4,7 @@
 
 #include "SLAM.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/SLAM/Localmap.h"
@@ -16,7 +16,7 @@
 SLAM_transform::SLAM_transform(SLAM* slam){
   //---------------------------
 
-  Engine_node* node_engine = slam->get_node_engine();
+  Node_engine* node_engine = slam->get_node_engine();
 
   this->slam_map = slam->get_slam_map();
   this->sceneManager = node_engine->get_sceneManager();

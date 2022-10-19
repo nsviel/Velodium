@@ -1,11 +1,11 @@
 #include "GUI_Control.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 #include "../Windows/Window_table.h"
 
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Camera/struct_viewport.h"
 #include "../../Engine/OpenGL/Dimension.h"
@@ -26,14 +26,14 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_control::GUI_control(GUI_node* node){
+GUI_control::GUI_control(Node_gui* node){
   this->node_gui = node;
   //---------------------------
 
   Node_operation* node_ope = node_gui->get_node_ope();
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
-  Load_node* node_load = node_engine->get_node_load();
+  Node_load* node_load = node_engine->get_node_load();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();

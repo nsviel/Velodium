@@ -1,5 +1,5 @@
-#ifndef GUI_LIDAR_H
-#define GUI_LIDAR_H
+#ifndef GUI_CAPTURE_H
+#define GUI_CAPTURE_H
 
 #include "../../../common.h"
 
@@ -9,12 +9,12 @@ class Capture;
 class Node_operation;
 
 
-class GUI_Lidar
+class GUI_Capture
 {
 public:
   //Constructor / Destructor
-  GUI_Lidar(Node_operation* node_ope);
-  ~GUI_Lidar();
+  GUI_Capture(Node_operation* node_ope);
+  ~GUI_Capture();
 
 public:
   //Main function

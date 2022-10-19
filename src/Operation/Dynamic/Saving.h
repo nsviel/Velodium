@@ -7,7 +7,7 @@
 #include <queue>
 
 class Node_operation;
-class Engine_node;
+class Node_engine;
 class Scene;
 class Renderer;
 class Configuration;

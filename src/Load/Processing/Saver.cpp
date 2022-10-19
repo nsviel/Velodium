@@ -8,19 +8,19 @@
 #include "../Format/file_OBJ.h"
 #include "../Format/file_XYZ.h"
 
-#include "../Load_node.h"
+#include "../Node_load.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
-Saver::Saver(Load_node* node_load){
+Saver::Saver(Node_load* node_load){
   //---------------------------
 
-  Engine_node* node_engine = node_load->get_node_engine();
+  Node_engine* node_engine = node_load->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
 

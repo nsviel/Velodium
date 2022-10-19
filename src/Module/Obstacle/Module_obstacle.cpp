@@ -9,15 +9,15 @@
 #include "GUI/GUI_Obstacle.h"
 #include "GUI/GUI_Network.h"
 
-#include "../Module_node.h"
+#include "../Node_module.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Node_operation.h"
 
 
 //Constructor / Destructor
-Module_obstacle::Module_obstacle(Module_node* node){
+Module_obstacle::Module_obstacle(Node_module* node){
   this->node_module = node;
   //---------------------------
 

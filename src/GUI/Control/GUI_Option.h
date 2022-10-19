@@ -2,7 +2,7 @@
 #define GUI_OPION_H
 
 class GUI_control;
-class GUI_node;
+class Node_gui;
 
 class Scene;
 class Pather;
@@ -20,7 +20,7 @@ class GUI_option
 {
 public:
   //Constructor / Destructor
-  GUI_option(GUI_node* node_gui);
+  GUI_option(Node_gui* node_gui);
   ~GUI_option();
 
 public:

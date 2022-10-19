@@ -3,14 +3,14 @@
 #include "src/SLAM.h"
 #include "GUI/GUI_Slam.h"
 
-#include "../Module_node.h"
+#include "../Node_module.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Operation/Node_operation.h"
 
 
 //Constructor / Destructor
-Module_slam::Module_slam(Module_node* node){
+Module_slam::Module_slam(Node_module* node){
   this->node_module = node;
   //---------------------------
 

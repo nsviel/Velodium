@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Scene;
 class Pather;
 class Loader;
@@ -13,7 +13,7 @@ class WIN_loading
 {
 public:
   //Constructor / Destructor
-  WIN_loading(Engine_node* node_engine);
+  WIN_loading(Node_engine* node_engine);
   ~WIN_loading();
 
 public:

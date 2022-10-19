@@ -3,7 +3,7 @@
 
 #include "../../../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Attribut;
 class Loader;
 
@@ -12,7 +12,7 @@ class Reference
 {
 public:
   //Constructor / Destructor
-  Reference(Engine_node* node);
+  Reference(Node_engine* node);
   ~Reference();
 
 public:

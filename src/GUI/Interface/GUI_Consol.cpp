@@ -1,8 +1,8 @@
 #include "GUI_Consol.h"
 #include "struct_consol.h"
 
-#include "../../GUI/GUI_node.h"
-#include "../../Engine/Engine_node.h"
+#include "../../GUI/Node_gui.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Dimension.h"
 #include "../../Engine/Scene/Scene.h"
 
@@ -15,10 +15,10 @@ ConsoleApp console;
 
 
 //Constructor / Destructor
-GUI_consol::GUI_consol(GUI_node* node_gui){
+GUI_consol::GUI_consol(Node_gui* node_gui){
   //----------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
 
   this->dimManager = node_engine->get_dimManager();
 

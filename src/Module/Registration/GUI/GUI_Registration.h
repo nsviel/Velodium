@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Scene;
-class Engine_node;
+class Node_engine;
 class ICP;
 class Registration;
 class Glyphs;

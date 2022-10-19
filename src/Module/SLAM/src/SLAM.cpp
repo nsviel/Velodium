@@ -1,6 +1,6 @@
 #include "SLAM.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
 #include "../../../Specific/fct_transtypage.h"
@@ -18,7 +18,7 @@
 
 
 //Constructor / Destructor
-SLAM::SLAM(Engine_node* node){
+SLAM::SLAM(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 

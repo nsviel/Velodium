@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Shader;
 class PP_edl;
 
@@ -12,7 +12,7 @@ class WIN_shader
 {
 public:
   //Constructor / Destructor
-  WIN_shader(Engine_node* node_engine);
+  WIN_shader(Node_engine* node_engine);
   ~WIN_shader();
 
 public:

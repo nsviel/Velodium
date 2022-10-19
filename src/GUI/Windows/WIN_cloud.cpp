@@ -1,6 +1,6 @@
 #include "WIN_cloud.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Operation/Node_operation.h"
@@ -17,7 +17,7 @@ extern struct Window_tab window_tab;
 WIN_cloud::WIN_cloud(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();

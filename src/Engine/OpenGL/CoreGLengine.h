@@ -20,7 +20,7 @@ class Viewport;
 class GUI;
 class Engine;
 class Renderer;
-class Engine_node;
+class Node_engine;
 class Configuration;
 class Configuration;
 
@@ -55,7 +55,7 @@ public:
   inline float get_time_loop(){return time_loop;}
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
 
   GLFWwindow* window;
   Engine* engineManager;

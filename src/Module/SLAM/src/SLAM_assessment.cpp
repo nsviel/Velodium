@@ -4,7 +4,7 @@
 
 #include "SLAM.h"
 
-#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Transformation/Transforms.h"
 #include "../../../Specific/fct_maths.h"
@@ -14,7 +14,7 @@
 SLAM_assessment::SLAM_assessment(SLAM* slam){
   //---------------------------
 
-  Engine_node* node_engine = slam->get_node_engine();
+  Node_engine* node_engine = slam->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->slam_map = slam->get_slam_map();

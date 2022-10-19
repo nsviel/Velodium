@@ -1,17 +1,17 @@
-#include "Module_node.h"
+#include "Node_module.h"
 
 #include "SLAM/Module_slam.h"
 #include "Radiometry/Module_radiometry.h"
 #include "Registration/Module_registration.h"
 #include "Obstacle/Module_obstacle.h"
 
-#include "../Engine/Engine_node.h"
+#include "../Engine/Node_engine.h"
 #include "../Engine/Scene/Configuration.h"
 #include "../Operation/Node_operation.h"
 
 
 //Constructor / destructor
-Module_node::Module_node(Engine_node* node){
+Node_module::Node_module(Node_engine* node){
   //---------------------------
 
   this->node_engine = node;
@@ -24,23 +24,29 @@ Module_node::Module_node(Engine_node* node){
 
   //---------------------------
 }
-Module_node::~Module_node(){}
+Node_module::~Node_module(){}
 
-void Module_node::reset(){
+void Node_module::reset(){
   //---------------------------
 
   module_slam->reset();
 
   //---------------------------
 }
-void Module_node::update(){
+void Node_module::update(){
   //---------------------------
 
   module_slam->update();
 
   //---------------------------
 }
-void Module_node::runtime(){
+void Node_module::runtime(){
+  //---------------------------
+
+
+  //---------------------------
+}
+void Node_module::draw(){
   //---------------------------
 
 

@@ -3,16 +3,17 @@
 
 #include "../../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Node_operation;
 class Scene;
 class Player_cloud;
 class Heatmap;
 class Filter;
-class Capture;
 class Online;
 class GUI_Color;
+class GUI_Player;
 class Followup;
+class Player;
 class Saving;
 class Renderer;
 class Color;
@@ -29,30 +30,34 @@ public:
 public:
   //Main function
   void design_dynamic();
-  void state_dynamic();
-  void parameter_dynamic();
-
-  //Main function
   void design_state();
-  void design_time();
+  void design_online();
+  void design_player();
 
-  //Subfunctions
-  void state_configuration();
+  //Parameter function
+  void parameter_offline();
+  void parameter_online();
+  void parameter_export();
+
+  //State function
+  void state_time();
   void state_online();
+  void state_configuration();
 
 private:
-  Engine_node* node_engine;
+  Node_engine* node_engine;
   Followup* followManager;
   Scene* sceneManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
   Online* onlineManager;
-  Capture* captureManager;
   GUI_Color* gui_color;
+  GUI_Player* gui_player;
   Saving* savingManager;
   Renderer* renderManager;
   Configuration* configManager;
   Color* colorManager;
+  Player* playerManager;
 
   int item_width;
 };

@@ -3,7 +3,7 @@
 #include "../Node_operation.h"
 #include "../Optimization/Fitting.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_terminal.h"
@@ -15,7 +15,7 @@
 Attribut::Attribut(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_ope->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->fitManager = node_ope->get_fittingManager();

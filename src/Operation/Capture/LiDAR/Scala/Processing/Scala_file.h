@@ -3,7 +3,7 @@
 
 #include "../../../../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Scene;
 class Loader;
 
@@ -12,7 +12,7 @@ class Scala_file
 {
 public:
   //Constructor / Destructor
-  Scala_file(Engine_node* node_engine);
+  Scala_file(Node_engine* node_engine);
   ~Scala_file();
 
 public:

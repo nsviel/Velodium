@@ -1,27 +1,25 @@
 #include "GUI_LeftPanel.h"
 
-#include "../GUI_node.h"
+#include "../Node_gui.h"
 #include "../Windows/GUI_windows.h"
 #include "../Control/GUI_FileManager.h"
 
-#include "../../Module/Module_GUI.h"
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Dimension.h"
-
 
 #include "imgui/imgui.h"
 
 
 //Constructor / Destructor
-GUI_leftPanel::GUI_leftPanel(GUI_node* node_gui){
+GUI_leftPanel::GUI_leftPanel(Node_gui* node){
+  this->node_gui = node;
   //-------------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
 
   this->dimManager = node_engine->get_dimManager();
   this->gui_window = node_gui->get_gui_window();
   this->gui_fileManager = node_gui->get_gui_fileManager();
-  this->gui_module = node_gui->get_gui_module();
 
   //-------------------------------
 }
@@ -38,6 +36,7 @@ void GUI_leftPanel::design_leftPanel(){
   //----------------------------
 }
 
+//Sub-function
 void GUI_leftPanel::panel_top(){
   //----------------------------
 
@@ -103,7 +102,7 @@ void GUI_leftPanel::panel_bot(){
   ImGui::Begin("LeftPanel##botInner", NULL, window_flags);
 
   //Working areas
-  gui_module->display_moduleTabs();
+  node_gui->draw_leftPanel();
 
   ImGui::PopStyleVar();
 

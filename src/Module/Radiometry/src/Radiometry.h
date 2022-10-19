@@ -11,7 +11,7 @@ class Surfacic_segmented;
 class Separation_global;
 class Separation_local;
 
-class Engine_node;
+class Node_engine;
 class Scene;
 class Plotting;
 class Reference;
@@ -26,7 +26,7 @@ class Radiometry
 {
 public:
   //Constructor / Destructor
-  Radiometry(Engine_node* node);
+  Radiometry(Node_engine* node);
   ~Radiometry();
 
 public:

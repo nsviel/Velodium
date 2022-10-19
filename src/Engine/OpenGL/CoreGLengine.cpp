@@ -9,10 +9,10 @@
 #include "Shader/ShaderObject.h"
 
 #include "../Engine.h"
-#include "../Engine_node.h"
+#include "../Node_engine.h"
 #include "../Scene/Configuration.h"
 
-#include "../../GUI/GUI_node.h"
+#include "../../GUI/Node_gui.h"
 #include "../../GUI/GUI.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -122,7 +122,7 @@ void CoreGLengine::init_OGL(){
 void CoreGLengine::init_object(){
   //---------------------------
 
-  this->node_engine = new Engine_node(this);
+  this->node_engine = new Node_engine(this);
   this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();

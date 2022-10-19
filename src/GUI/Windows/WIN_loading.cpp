@@ -1,9 +1,9 @@
 #include "WIN_loading.h"
 
-#include "../../Engine/Engine_node.h"
+#include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 
-#include "../../Load/Load_node.h"
+#include "../../Load/Node_load.h"
 #include "../../Load/Processing/Pather.h"
 #include "../../Load/Processing/Loader.h"
 
@@ -16,10 +16,10 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_loading::WIN_loading(Engine_node* node_engine){
+WIN_loading::WIN_loading(Node_engine* node_engine){
   //---------------------------
 
-  Load_node* node_load = node_engine->get_node_load();
+  Node_load* node_load = node_engine->get_node_load();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loadManager();

@@ -11,8 +11,8 @@
 
 #include "../../../Node_operation.h"
 
-#include "../../../../Engine/Engine_node.h"
-#include "../../../../Load/Load_node.h"
+#include "../../../../Engine/Node_engine.h"
+#include "../../../../Load/Node_load.h"
 #include "../../../../Load/Processing/Extractor.h"
 
 #include <jsoncpp/json/value.h>
@@ -27,7 +27,7 @@
 Velodyne::Velodyne(Node_operation* node_ope){
   //---------------------------
 
-  Load_node* node_load = node_ope->get_node_load();
+  Node_load* node_load = node_ope->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
   this->udpServManager = new UDP_server();

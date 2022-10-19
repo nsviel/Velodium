@@ -1,7 +1,7 @@
 #include "Followup.h"
 #include "Camera.h"
 
-#include "../../Engine_node.h"
+#include "../../Node_engine.h"
 #include "../../Scene/Scene.h"
 #include "../../Scene/Configuration.h"
 
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-Followup::Followup(Engine_node* node){
+Followup::Followup(Node_engine* node){
   //---------------------------
 
   this->configManager = node->get_configManager();

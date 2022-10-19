@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Engine_node;
+class Node_engine;
 class Scene;
 class Camera;
 class Player_node;
@@ -14,7 +14,7 @@ class Followup
 {
 public:
   //Constructor / Destructor
-  Followup(Engine_node* node);
+  Followup(Node_engine* node);
   ~Followup();
 
 public:
