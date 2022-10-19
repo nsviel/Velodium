@@ -66,6 +66,7 @@ void Node_gui::draw_leftPanel(){
     //-------------------------------
 
     node_ope->draw();
+    node_module->draw();
 
     //-------------------------------
     ImGui::PopStyleColor();

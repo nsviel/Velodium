@@ -26,9 +26,10 @@ public:
 
 public:
   void design_SLAM();
+  void design_state();
+  void design_parameter();
 
   void parameter_offline();
-  void parameter_slam();
   void parameter_lidar();
   void parameter_glyph();
   void parameter_optimization();
@@ -36,7 +37,9 @@ public:
   void parameter_normal();
   void parameter_robustesse();
 
-  void statistics();
+  void state_SLAM();
+  void state_localmap();
+  void state_transformation();
   void display_stat(string title, vec3 abs, vec3 rlt);
   vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
 

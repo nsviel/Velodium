@@ -53,44 +53,49 @@ GUI_Slam::~GUI_Slam(){}
 
 //Main function
 void GUI_Slam::design_SLAM(){
-  if(ImGui::BeginTabBar("tabs##123", ImGuiTabBarFlags_None)){
-    //-------------------------------
+  if(ImGui::BeginTabItem("SLAM")){
+    if(ImGui::BeginTabBar("##tab_slam", ImGuiTabBarFlags_None)){
+      //---------------------------
 
-    ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
+      this->design_parameter();
+      this->design_state();
 
-    // SLAM State
-    if(ImGui::BeginTabItem("State##123")){
-      this->statistics();
-      ImGui::EndTabItem();
+      //---------------------------
+      ImGui::EndTabBar();
     }
+    ImGui::EndTabItem();
+  }
+}
+void GUI_Slam::design_state(){
+  if(ImGui::BeginTabItem("State##123")){
+    //---------------------------
 
-    // SLAM parameters
-    if(ImGui::BeginTabItem("Parameter##123")){
-      this->parameter_slam();
-      ImGui::EndTabItem();
-    }
+    this->state_SLAM();
+    this->state_localmap();
+    this->state_transformation();
 
-    ImGui::PopStyleColor();
+    //---------------------------
+    ImGui::EndTabItem();
+  }
+}
+void GUI_Slam::design_parameter(){
+  if(ImGui::BeginTabItem("Parameter##123")){
+    //---------------------------
 
-    //-------------------------------
-    ImGui::EndTabBar();
+    this->parameter_lidar();
+    this->parameter_glyph();
+    this->parameter_offline();
+    this->parameter_optimization();
+    this->parameter_localMap();
+    this->parameter_normal();
+    this->parameter_robustesse();
+
+    //---------------------------
+    ImGui::Separator();
+    ImGui::EndTabItem();
   }
 }
 
-void GUI_Slam::parameter_slam(){
-  //---------------------------
-
-  this->parameter_lidar();
-  this->parameter_glyph();
-  this->parameter_offline();
-  this->parameter_optimization();
-  this->parameter_localMap();
-  this->parameter_normal();
-  this->parameter_robustesse();
-
-  //---------------------------
-  ImGui::Separator();
-}
 void GUI_Slam::parameter_lidar(){
   //---------------------------
 
@@ -395,16 +400,69 @@ void GUI_Slam::parameter_robustesse(){
   }
 }
 
-void GUI_Slam::statistics(){
+void GUI_Slam::state_SLAM(){
   //---------------------------
 
   bool is_slamed = false;
   float time = 0;
 
+  if(sceneManager->get_is_list_empty() == false){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = cloud->subset_selected;
+    Frame* frame = &subset->frame;
+
+    is_slamed = frame->is_slamed;
+    time = frame->time_slam;
+  }
+
+  //SLAM applied
+  ImGui::Text("Applied:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_slamed ? "Yes" : "No");
+  ImGui::Text("Computation time:");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);
+
+  //---------------------------
+}
+void GUI_Slam::state_localmap(){
+  //---------------------------
+
   int map_size_abs = 0;
   int map_size_rlt = 0;
   int nb_residual = 0;
   int nb_keypoint = 0;
+
+  if(sceneManager->get_is_list_empty() == false){
+    Cloud* cloud = sceneManager->get_cloud_selected();
+    Subset* subset = cloud->subset_selected;
+    Frame* frame = &subset->frame;
+
+    map_size_abs = frame->map_size_abs;
+    map_size_rlt = frame->map_size_rlt;
+    nb_residual = frame->nb_residual;
+    nb_keypoint = subset->keypoint.location.size();
+  }
+
+  //Local map data
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Local map");
+  ImGui::Text("Nb keypoint: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_keypoint);
+  ImGui::Text("Nb residual: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual);
+  ImGui::Text("Nb voxel abs: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_abs);
+  ImGui::Text("Nb voxel rlt: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
+
+  //---------------------------
+}
+void GUI_Slam::state_transformation(){
+  //---------------------------
 
   vec3 trans_b = vec3(0, 0, 0);
   vec3 rotat_b = vec3(0, 0, 0);
@@ -421,14 +479,6 @@ void GUI_Slam::statistics(){
     Subset* subset = cloud->subset_selected;
     Frame* frame = &subset->frame;
 
-    is_slamed = frame->is_slamed;
-    time = frame->time_slam;
-
-    map_size_abs = frame->map_size_abs;
-    map_size_rlt = frame->map_size_rlt;
-    nb_residual = frame->nb_residual;
-    nb_keypoint = subset->keypoint.location.size();
-
     trans_b_rlt = frame->trans_b_rlt;
     rotat_b_rlt = frame->rotat_b_rlt;
     trans_e_rlt = frame->trans_e_rlt;
@@ -439,29 +489,6 @@ void GUI_Slam::statistics(){
     trans_e = vec3(frame->trans_e(0), frame->trans_e(1), frame->trans_e(2));
     rotat_e = frame->angle_e;
   }
-
-  //SLAM applied
-  ImGui::Text("Applied:");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_slamed ? "Yes" : "No");
-  ImGui::Text("Computation time:");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);
-
-  //Local map data
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Local map");
-  ImGui::Text("Nb keypoint: ");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_keypoint);
-  ImGui::Text("Nb residual: ");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual);
-  ImGui::Text("Nb voxel abs: ");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_abs);
-  ImGui::Text("Nb voxel rlt: ");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_rlt);
 
   //SLAM results - Ego transformation parameters
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Transformation");

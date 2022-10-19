@@ -36,6 +36,7 @@ void Node_module::reset(){
 void Node_module::update(){
   //---------------------------
 
+  module_obstacle->update();
   module_slam->update();
 
   //---------------------------
@@ -43,12 +44,15 @@ void Node_module::update(){
 void Node_module::runtime(){
   //---------------------------
 
+  module_obstacle->runtime();
 
   //---------------------------
 }
 void Node_module::draw(){
   //---------------------------
 
+  module_obstacle->draw();
+  module_slam->draw();
 
   //---------------------------
 }

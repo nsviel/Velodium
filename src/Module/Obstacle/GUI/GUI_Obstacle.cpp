@@ -1,4 +1,5 @@
 #include "GUI_Obstacle.h"
+#include "GUI_Network.h"
 
 #include "../HTTP/HTTP.h"
 #include "../src/Obstacle.h"
@@ -8,6 +9,8 @@
 #include "../../Node_module.h"
 #include "../../SLAM/GUI/GUI_Slam.h"
 
+#include "../../../Engine/Node_engine.h"
+#include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/CoordTransform.h"
 
@@ -18,11 +21,15 @@ GUI_Obstacle::GUI_Obstacle(Module_obstacle* module){
 
   Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = node_module->get_node_ope();
+  Node_engine* node_engine = module->get_node_engine();
 
+  this->sceneManager = node_engine->get_sceneManager();
   this->coordManager = node_ope->get_coordManager();
   this->obstacleManager = module->get_obstacleManager();
   this->predManager = module->get_predManager();
   this->httpsManager = module->get_httpsManager();
+
+  this->gui_network = module->get_gui_network();
 
   this->item_width = 100;
 
@@ -32,31 +39,34 @@ GUI_Obstacle::~GUI_Obstacle(){}
 
 //Main function
 void GUI_Obstacle::design_obstacle(){
-  //---------------------------
+  if(ImGui::BeginTabItem("Obstacle")){
+    if(ImGui::BeginTabBar("##tabs_obstacle", ImGuiTabBarFlags_None)){
+      //---------------------------
 
-  this->parameter_online();
-  this->parameter_interfacing();
+      this->design_prediction();
+      gui_network->design_Network();
 
-  //---------------------------
+      //---------------------------
+      ImGui::EndTabBar();
+    }
+    ImGui::EndTabItem();
+  }
 }
-void GUI_Obstacle::design_state(){
-  //---------------------------
+void GUI_Obstacle::design_prediction(){
+  if(ImGui::BeginTabItem("Prediction")){
+    //---------------------------
 
-  //Runtime AI
-  bool with_prediction = *predManager->get_with_prediction();
-  ImGui::Text("Runtime - AI");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
+    this->state_prediction();
+    this->parameter_prediction();
 
-  //HTTP server daemon
-  bool with_daemon = httpsManager->get_is_https_deamon();
-  ImGui::Text("Daemon - HTTP");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");
-
-  //---------------------------
+    //---------------------------
+    ImGui::EndTabItem();
+  }
 }
-void GUI_Obstacle::runtime_display_naming(Cloud* cloud){
+
+//Draw label text function
+void GUI_Obstacle::runtime_display_naming(){
+  Cloud* cloud = sceneManager->get_cloud_selected();
   if(cloud != nullptr){
     //---------------------------
 
@@ -77,8 +87,6 @@ void GUI_Obstacle::runtime_display_naming(Cloud* cloud){
     //---------------------------
   }
 }
-
-//Subfunctions
 void GUI_Obstacle::compute_draw_text(string text, vec3 position){
   //---------------------------
 
@@ -120,38 +128,51 @@ void GUI_Obstacle::compute_draw_text(string text, vec3 position){
 
   //---------------------------
 }
-void GUI_Obstacle::parameter_online(){
+
+//Parameter function
+void GUI_Obstacle::parameter_prediction(){
   //---------------------------
 
   //With MQTT warning
   bool* with_warning = obstacleManager->get_with_warning();
   ImGui::Checkbox("With MQTT prediction", with_warning);
 
+  //Prediction directory
+  if(ImGui::Button("...##1")){
+    //node_interface->select_dir_path();
+  }
+  ImGui::SameLine();
+  //string dir_path = node_interface->get_dir_path();
+  //ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
+
+  //Add predictions
+  if(ImGui::Button("Add predictions")){
+    obstacleManager->add_obstacle_pred();
+  }
+
+  //Add ground truth
+  if(ImGui::Button("Add ground truth")){
+    obstacleManager->add_obstacle_grTr();
+  }
+
   //---------------------------
 }
-void GUI_Obstacle::parameter_interfacing(){
-  //Obstacle detection parameters
-  if(ImGui::CollapsingHeader("Parameter - interface")){
-    //---------------------------
 
-    //Prediction directory
-    if(ImGui::Button("...##1")){
-      //node_interface->select_dir_path();
-    }
-    ImGui::SameLine();
-    //string dir_path = node_interface->get_dir_path();
-    //ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
+//State function
+void GUI_Obstacle::state_prediction(){
+  //---------------------------
 
-    //Add predictions
-    if(ImGui::Button("Add predictions")){
-      obstacleManager->add_obstacle_pred();
-    }
+  //Runtime AI
+  bool with_prediction = *predManager->get_with_prediction();
+  ImGui::Text("Runtime - AI");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
 
-    //Add ground truth
-    if(ImGui::Button("Add ground truth")){
-      obstacleManager->add_obstacle_grTr();
-    }
+  //HTTP server daemon
+  bool with_daemon = httpsManager->get_is_https_deamon();
+  ImGui::Text("Daemon - HTTP");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");
 
-    //---------------------------
-  }
+  //---------------------------
 }

@@ -18,6 +18,7 @@ Module_slam::Module_slam(Node_module* node){
   this->node_ope = node_engine->get_node_ope();
 
   this->slamManager = new SLAM(node_engine);
+
   this->gui_slam = new GUI_Slam(this);
 
   //---------------------------

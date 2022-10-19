@@ -5,9 +5,11 @@
 
 class Module_obstacle;
 class Obstacle;
+class GUI_Network;
 class Prediction;
 class CoordTransform;
 class HTTP;
+class Scene;
 
 
 class GUI_Obstacle
@@ -20,19 +22,25 @@ public:
 public:
   //Main function
   void design_obstacle();
-  void design_state();
-  void runtime_display_naming(Cloud* cloud);
+  void design_prediction();
 
-  //Subfunctions
+  //Draw label text function
+  void runtime_display_naming();
   void compute_draw_text(string text, vec3 position);
-  void parameter_online();
-  void parameter_interfacing();
+
+  //Parameter function
+  void parameter_prediction();
+
+  //State function
+  void state_prediction();
 
 private:
   Obstacle* obstacleManager;
   CoordTransform* coordManager;
   Prediction* predManager;
   HTTP* httpsManager;
+  Scene* sceneManager;
+  GUI_Network* gui_network;
 
   int label_ID;
   int item_width;
