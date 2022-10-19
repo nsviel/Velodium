@@ -1,4 +1,4 @@
-#include "Offline.h"
+#include "Player.h"
 #include "Online.h"
 
 #include "../Node_operation.h"
@@ -17,7 +17,7 @@
 
 
 //Constructor / Destructor
-Offline::Offline(Node_operation* node_ope){
+Player::Player(Node_operation* node_ope){
   //---------------------------
 
   Engine_node* node_engine = node_ope->get_node_engine();
@@ -33,9 +33,9 @@ Offline::Offline(Node_operation* node_ope){
   //---------------------------
   this->update_configuration();
 }
-Offline::~Offline(){}
+Player::~Player(){}
 
-void Offline::update_configuration(){
+void Player::update_configuration(){
   //---------------------------
 
   this->player_frequency = 10;
@@ -48,7 +48,7 @@ void Offline::update_configuration(){
 
   //---------------------------
 }
-void Offline::runtime(){
+void Player::runtime(){
   //Continually running, wait for flag to proceed
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
@@ -63,7 +63,7 @@ void Offline::runtime(){
 }
 
 //Selection functions
-void Offline::select_bySubsetID(Cloud* cloud, int ID_subset){
+void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 
   //If in side range, make operation on subset
@@ -78,7 +78,7 @@ void Offline::select_bySubsetID(Cloud* cloud, int ID_subset){
 
   //---------------------------
 }
-bool Offline::select_rangeLimit(Cloud* cloud, int& ID_subset){
+bool Player::select_rangeLimit(Cloud* cloud, int& ID_subset){
   Subset* subset_first = sceneManager->get_subset(cloud, 0);
   Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
   //---------------------------
@@ -117,7 +117,7 @@ bool Offline::select_rangeLimit(Cloud* cloud, int& ID_subset){
 }
 
 //Player functions
-void Offline::player_start(){
+void Player::player_start(){
   this->player_isrunning = true;
   this->player_ispaused = false;
   //---------------------------
@@ -140,7 +140,7 @@ void Offline::player_start(){
 
   //---------------------------
 }
-void Offline::player_pause(){
+void Player::player_pause(){
   this->player_isrunning = false;
   this->player_ispaused = true;
   //---------------------------
@@ -149,7 +149,7 @@ void Offline::player_pause(){
 
   //---------------------------
 }
-void Offline::player_start_or_pause(){
+void Player::player_start_or_pause(){
   //---------------------------
 
   if(player_ispaused){
@@ -160,7 +160,7 @@ void Offline::player_start_or_pause(){
 
   //---------------------------
 }
-void Offline::player_stop(){
+void Player::player_stop(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   this->player_isrunning = false;
   this->player_ispaused = false;
@@ -171,7 +171,7 @@ void Offline::player_stop(){
 
   //---------------------------
 }
-void Offline::player_save(Cloud* cloud){
+void Player::player_save(Cloud* cloud){
   //---------------------------
 
   //Save each subset
@@ -182,7 +182,7 @@ void Offline::player_save(Cloud* cloud){
 
   //---------------------------
 }
-void Offline::player_selectDirSave(){
+void Player::player_selectDirSave(){
   //---------------------------
 
   string path;
@@ -192,7 +192,7 @@ void Offline::player_selectDirSave(){
 
   //---------------------------
 }
-void Offline::player_setFrequency(int value){
+void Player::player_setFrequency(int value){
   //---------------------------
 
   timerManager->stop();

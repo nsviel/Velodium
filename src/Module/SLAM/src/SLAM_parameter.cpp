@@ -8,7 +8,7 @@
 #include "../optim/SLAM_optim_gn.h"
 #include "../optim/SLAM_normal.h"
 
-#include "../SLAM.h"
+#include "SLAM.h"
 
 
 //Constructor / Destructor

@@ -2,7 +2,7 @@
 
 #include "SLAM_optim_gn.h"
 
-#include "../SLAM.h"
+#include "../src/SLAM.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"

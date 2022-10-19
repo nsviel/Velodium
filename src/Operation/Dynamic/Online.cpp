@@ -3,8 +3,8 @@
 #include "../Node_operation.h"
 
 #include "../../Module/Module_node.h"
-#include "../../Module/SLAM/SLAM.h"
-#include "../../Module/Interface/Network/HTTP/http_command.h"
+#include "../../Module/SLAM/src/SLAM.h"
+#include "../../Module/Obstacle/HTTP/http_command.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Color/Color.h"
@@ -36,7 +36,7 @@ Online::Online(Node_operation* node_ope){
 
   this->filterManager = node_ope->get_filterManager();
   this->dimManager = node_engine->get_dimManager();
-  this->slamManager = node_module->get_slamManager();
+  //this->slamManager = node_module->get_slamManager();
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->colorManager = node_ope->get_colorManager();

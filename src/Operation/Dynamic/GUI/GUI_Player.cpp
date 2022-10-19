@@ -1,17 +1,37 @@
-#include "Player_GUI.h"
+#include "GUI_Player.h"
+#include "GUI_Online.h"
 
-#include "GUI/GUI_Dynamic.h"
-#include "GUI/GUI_Obstacle.h"
+#include "../Player.h"
+#include "../Online.h"
 
-#include "../../Operation_GUI.h"
+#include "../../Capture/Capture.h"
+#include "../../Transformation/Filter.h"
+#include "../../Color/Heatmap.h"
+#include "../../Color/GUI/GUI_Color.h"
+#include "../../Node_operation.h"
+
+#include "../../../Engine/Engine_node.h"
+#include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/OpenGL/Camera/Followup.h"
+
+#include "IconsFontAwesome5.h"
 
 
 //Constructor / Destructor
-GUI_Player::GUI_Player(GUI_operation* node_ope){
+GUI_Player::GUI_Player(Node_operation* node_ope){
   //---------------------------
 
-  this->gui_online = node_ope->get_gui_online;
-  this->gui_obstacle = new GUI_Obstacle(gui_module);
+  Engine_node* node_engine = node_ope->get_node_engine();
+
+  this->sceneManager = node_engine->get_sceneManager();
+  this->playerManager = node_ope->get_playerManager();
+  this->onlineManager = node_ope->get_onlineManager();
+  this->captureManager = node_ope->get_captureManager();
+  this->filterManager = node_ope->get_filterManager();
+  this->heatmapManager = node_ope->get_heatmapManager();
+  this->gui_online = node_ope->get_gui_online();
+  this->gui_color = node_ope->get_gui_color();
+  this->followManager = node_engine->get_followManager();
 
   this->item_width = 100;
 
@@ -45,7 +65,7 @@ void GUI_Player::runtime_player_mouse(){
         subset_selected_ID--;
       }
 
-      offlineManager->select_bySubsetID(cloud, subset_selected_ID);
+      playerManager->select_bySubsetID(cloud, subset_selected_ID);
     }
   }
 
@@ -76,23 +96,23 @@ void GUI_Player::player_run(){
   ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Displayed frames", player_subset_range, 1, 1, nb_subset_max)){
     if(cloud != nullptr){
-      offlineManager->select_bySubsetID(cloud, cloud->ID_selected);
+      playerManager->select_bySubsetID(cloud, cloud->ID_selected);
     }
   }
 
   //Recording
   if (ImGui::Button(ICON_FA_CIRCLE "##37")){
     if(cloud != nullptr){
-      offlineManager->player_save(cloud);
+      playerManager->player_save(cloud);
     }
   }
   ImGui::SameLine();
   //Dicrectory path selection & display
   if(ImGui::Button("...##23")){
-    offlineManager->player_selectDirSave();
+    playerManager->player_selectDirSave();
   }
   ImGui::SameLine();
-  string saveas = *offlineManager->get_player_saveas();
+  string saveas = *playerManager->get_player_saveas();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
@@ -103,7 +123,7 @@ void GUI_Player::player_button(){
   //---------------------------
 
   //Offline / Online mode
-  string* player_mode = offlineManager->get_player_mode();
+  string* player_mode = playerManager->get_player_mode();
   if(*player_mode == "offline"){
     if (ImGui::Button("Offline##444")){
       *player_mode = "online";
@@ -129,10 +149,10 @@ void GUI_Player::player_button(){
     ImGui::SameLine();
 
     //Frequency choice
-    int freq = *offlineManager->get_frequency();
+    int freq = *playerManager->get_frequency();
     ImGui::SetNextItemWidth(40);
     if(ImGui::SliderInt("Hz", &freq, 1, 25)){
-      offlineManager->player_setFrequency(freq);
+      playerManager->player_setFrequency(freq);
     }
   }
   //Online mode
@@ -171,7 +191,7 @@ void GUI_Player::player_selection(){
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
       if(cloud != nullptr){
-        offlineManager->select_bySubsetID(cloud, subset_selected_ID);
+        playerManager->select_bySubsetID(cloud, subset_selected_ID);
       }
     }
     ImGui::SameLine();
@@ -190,7 +210,7 @@ void GUI_Player::parameter_offline(){
     //---------------------------
 
     //Restart to zero when arrive to the end of cloud frames
-    bool* with_restart = offlineManager->get_with_restart();
+    bool* with_restart = playerManager->get_with_restart();
     ImGui::Checkbox("Loop when end", with_restart);
 
     //Filter all cloud subset with cylinder cleaner
@@ -265,7 +285,7 @@ void GUI_Player::parameter_online(){
     }
 
     //GUI interface parameters
-    gui_interface->parameter_dynamic();
+    gui_online->parameter_dynamic();
 
     //Colorization
     gui_color->colorization_choice();
@@ -276,14 +296,14 @@ void GUI_Player::parameter_online(){
 }
 
 void GUI_Player::button_offline_play(Cloud* cloud){
-  bool is_playing = *offlineManager->get_player_isrunning();
+  bool is_playing = *playerManager->get_player_isrunning();
   //---------------------------
 
   if(is_playing == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if (ImGui::Button(ICON_FA_PLAY "##36")){
       if(cloud != nullptr){
-        offlineManager->player_start();
+        playerManager->player_start();
       }
     }
     ImGui::PopStyleColor(1);
@@ -291,7 +311,7 @@ void GUI_Player::button_offline_play(Cloud* cloud){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
     if (ImGui::Button(ICON_FA_PLAY "##36")){
       if(cloud != nullptr){
-        offlineManager->player_pause();
+        playerManager->player_pause();
       }
     }
     ImGui::PopStyleColor(1);
@@ -300,7 +320,7 @@ void GUI_Player::button_offline_play(Cloud* cloud){
   //---------------------------
 }
 void GUI_Player::button_offline_pause(Cloud* cloud){
-  bool is_paused = *offlineManager->get_player_ispaused();
+  bool is_paused = *playerManager->get_player_ispaused();
   //---------------------------
 
   if(is_paused){
@@ -308,7 +328,7 @@ void GUI_Player::button_offline_pause(Cloud* cloud){
   }
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     if(cloud != nullptr){
-      offlineManager->player_pause();
+      playerManager->player_pause();
     }
   }
   if(is_paused){
@@ -322,7 +342,7 @@ void GUI_Player::button_offline_stop(Cloud* cloud){
 
   if (ImGui::Button(ICON_FA_STOP "##37")){
     if(cloud != nullptr){
-      offlineManager->player_stop();
+      playerManager->player_stop();
     }
   }
 

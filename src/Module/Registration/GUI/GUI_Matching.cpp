@@ -1,10 +1,10 @@
 #include "GUI_Matching.h"
 
+#include "../Module_registration.h"
 #include "../src/Registration.h"
 #include "../src/Pipeline/ICP.h"
 #include "../src/Correspondence/Keypoint.h"
 
-#include "../../Module_registration.h"
 #include "../../Radiometry/src/Radiometry.h"
 #include "../../Radiometry/src/Approach/Linearization.h"
 
@@ -23,14 +23,14 @@ GUI_matching::GUI_matching(Module_registration* module){
   Engine_node* node_engine = module->get_node_engine();
   Module_node* node_module = module->get_node_module();
   Node_operation* node_ope = module->get_node_ope();
-  Registration* regisManager = module->get_regisManager();
+  //Registration* regisManager = module->get_regisManager();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   //this->icpManager = regisManager->get_icpManager();
   //this->keyManager = icpManager->get_keyManager();
-  this->radioManager = node_module->get_radioManager();
+  //this->radioManager = node_module->get_radioManager();
 
   //---------------------------
 }

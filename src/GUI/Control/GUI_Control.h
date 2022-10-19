@@ -16,7 +16,7 @@ class Selection;
 class Heatmap;
 class Dimension;
 class GUI_node;
-class Offline;
+class Player;
 
 
 class GUI_control
@@ -57,7 +57,7 @@ private:
   Glyphs* glyphManager;
   Selection* selectionManager;
   Heatmap* heatmapManager;
-  Offline* offlineManager;
+  Player* playerManager;
 
   float cloud_trans_speed;
   float cloud_rotat_degree;

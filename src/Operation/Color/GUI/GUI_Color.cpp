@@ -15,11 +15,10 @@
 
 
 //Constructor / Destructor
-GUI_Color::GUI_Color(GUI_node* node_gui){
+GUI_Color::GUI_Color(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_gui->get_node_engine();
-  Node_operation* node_ope = node_gui->get_node_ope();
+  Engine_node* node_engine = node_ope->get_node_engine();
 
   this->colorManager = node_ope->get_colorManager();
   this->heatmapManager = node_ope->get_heatmapManager();

@@ -1,14 +1,15 @@
 #include "GUI_Slam.h"
 
-#include "../SLAM.h"
-#include "../optim/SLAM_optim.h"
-#include "../optim/SLAM_optim_ceres.h"
-#include "../optim/SLAM_optim_gn.h"
-#include "../optim/SLAM_normal.h"
+#include "../Module_slam.h"
+#include "../src/SLAM.h"
 #include "../src/SLAM_assessment.h"
 #include "../src/SLAM_map.h"
 #include "../src/SLAM_parameter.h"
 #include "../src/SLAM_transform.h"
+#include "../optim/SLAM_optim.h"
+#include "../optim/SLAM_optim_ceres.h"
+#include "../optim/SLAM_optim_gn.h"
+#include "../optim/SLAM_normal.h"
 
 #include "../../Module_node.h"
 #include "../../Module_GUI.h"
@@ -26,13 +27,13 @@
 
 
 //Constructor / Destructor
-GUI_Slam::GUI_Slam(GUI_module* node_gui){
+GUI_Slam::GUI_Slam(Module_slam* module){
   //---------------------------
 
-  Module_node* node_module = node_gui->get_node_module();
-  Engine_node* node_engine = node_gui->get_node_engine();
+  Module_node* node_module = module->get_node_module();
+  Engine_node* node_engine = node_module->get_node_engine();
 
-  this->slamManager = node_module->get_slamManager();
+  this->slamManager = module->get_slamManager();
   SLAM_optim* optimManager = slamManager->get_slam_optim();
 
   this->sceneManager = node_engine->get_sceneManager();

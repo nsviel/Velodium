@@ -1,9 +1,10 @@
 #include "GUI_Registration.h"
 
-#include "../Pipeline/ICP.h"
-#include "../Registration.h"
+#include "../Module_registration.h"
+#include "../src/Pipeline/ICP.h"
+#include "../src/Registration.h"
 
-#include "../../Module_GUI.h"
+
 #include "../../Module_node.h"
 
 #include "../../../Engine/Engine_node.h"
@@ -13,16 +14,16 @@
 
 
 //Constructor / Destructor
-GUI_registration::GUI_registration(GUI_module* module_gui){
+GUI_registration::GUI_registration(Module_registration* module){
   //---------------------------
 
-  Engine_node* node_engine = module_gui->get_node_engine();
-  Module_node* node_module = module_gui->get_node_module();
+  Engine_node* node_engine = module->get_node_engine();
+  Module_node* node_module = module->get_node_module();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
-  this->regisManager = node_module->get_regisManager();
-  this->icpManager = regisManager->get_icpManager();
+  //this->regisManager = node_module->get_regisManager();
+  //this->icpManager = regisManager->get_icpManager();
   this->transformManager = new Transforms();
 
   this->regis_algo = 0;

@@ -21,7 +21,6 @@ public:
 
 public:
   void display_moduleTabs();
-  void runtime();
 
   inline Engine_node* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}

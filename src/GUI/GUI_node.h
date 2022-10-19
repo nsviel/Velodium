@@ -15,7 +15,6 @@ class GUI_menuBar;
 class GUI_leftPanel;
 class GUI_consol;
 class GUI_module;
-class GUI_operation;
 class GUI_fileManager;
 class GUI_Initialization;
 
@@ -47,7 +46,6 @@ public:
   inline GUI_leftPanel* get_gui_leftPanel(){return gui_leftPanel;}
   inline GUI_consol* get_gui_consol(){return gui_consol;}
   inline GUI_module* get_gui_module(){return gui_module;}
-  inline GUI_operation* get_gui_operation(){return gui_operation;}
   inline GUI_fileManager* get_gui_fileManager(){return gui_fileManager;}
   inline GUI_Initialization* get_gui_initialization(){return gui_initialization;}
 
@@ -64,7 +62,6 @@ private:
   GUI_leftPanel* gui_leftPanel;
   GUI_consol* gui_consol;
   GUI_module* gui_module;
-  GUI_operation* gui_operation;
   GUI_fileManager* gui_fileManager;
   GUI_Initialization* gui_initialization;
 };

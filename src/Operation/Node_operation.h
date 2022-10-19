@@ -4,6 +4,7 @@
 #include "../common.h"
 
 class Engine_node;
+class Load_node;
 class Attribut;
 class Heatmap;
 class Filter;
@@ -15,6 +16,7 @@ class Color;
 class Player;
 class Online;
 class Saving;
+class Capture;
 
 class GUI_node;
 class GUI_Color;
@@ -34,6 +36,7 @@ public:
   void runtime();
 
   inline Engine_node* get_node_engine(){return node_engine;}
+  inline Load_node* get_node_load(){return node_load;}
 
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Filter* get_filterManager(){return filterManager;}
@@ -46,6 +49,7 @@ public:
   inline Online* get_onlineManager(){return onlineManager;}
   inline Player* get_playerManager(){return playerManager;}
   inline Saving* get_savingManager(){return savingManager;}
+  inline Capture* get_captureManager(){return captureManager;}
 
   inline GUI_node* get_node_gui(){return node_gui;}
   inline GUI_Color* get_gui_color(){return gui_color;}
@@ -54,6 +58,7 @@ public:
 
 private:
   Engine_node* node_engine;
+  Load_node* node_load;
 
   Attribut* attribManager;
   Heatmap* heatmapManager;
@@ -66,6 +71,7 @@ private:
   Online* onlineManager;
   Player* playerManager;
   Saving* savingManager;
+  Capture* captureManager;
 
   GUI_node* node_gui;
   GUI_Color* gui_color;

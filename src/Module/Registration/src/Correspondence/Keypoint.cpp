@@ -1,7 +1,7 @@
 #ifdef USE_PCL
 #include "Keypoint.h"
 
-#include "../../../Engine/Glyphs.h"
+#include "../../../../Engine/Glyphs.h"
 
 #include "pcl/features/pfh.h"
 #include <pcl/keypoints/sift_keypoint.h>

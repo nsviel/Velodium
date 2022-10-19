@@ -1,7 +1,7 @@
 #ifndef CAPTURE_H
 #define CAPTURE_H
 
-#include "../../../common.h"
+#include "../../common.h"
 
 class Node_operation;
 class Scene;

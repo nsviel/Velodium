@@ -1,6 +1,6 @@
 #include "GUI_Lidar.h"
 
-#include "../LiDAR/Capture.h"
+#include "../Capture.h"
 #include "../LiDAR/Scala/Scala.h"
 #include "../LiDAR/Velodyne/Velodyne.h"
 
@@ -26,8 +26,8 @@ void GUI_Lidar::design_Lidar(){
   //---------------------------
 
   if(ImGui::BeginTabItem("LiDAR")){
-    gui_lidarManager->design_Velodyne();
-    gui_lidarManager->design_Scala();
+    this->design_Velodyne();
+    this->design_Scala();
     ImGui::EndTabItem();
   }
 

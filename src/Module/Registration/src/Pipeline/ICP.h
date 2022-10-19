@@ -2,7 +2,7 @@
 #define ICP_H
 
 #include "ICP_Optimization.h"
-#include "../../../common.h"
+#include "../../../../common.h"
 
 class Transforms;
 class ICP_Matching;

@@ -11,8 +11,6 @@
 #include "../../Load/Load_node.h"
 #include "../../Load/Processing/Pather.h"
 #include "../../Module/Module_GUI.h"
-#include "../../Module/Player/GUI/GUI_Dynamic.h"
-#include "../../Module/Player/Player_GUI.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
@@ -20,6 +18,7 @@
 #include "../../Engine/OpenGL/CoreGLengine.h"
 #include "../../Engine/OpenGL/Textures.h"
 
+#include "../../Operation/Dynamic/GUI/GUI_Player.h"
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -42,14 +41,13 @@ GUI_menuBar::GUI_menuBar(GUI_node* node){
   Module_node* node_module = node_gui->get_node_module();
   GUI_module* gui_module = node_gui->get_gui_module();
   Node_operation* node_ope = node_gui->get_node_ope();
-  GUI_Player* gui_player = gui_module->get_gui_player();
   Load_node* node_load = node_engine->get_node_load();
 
   this->gui_init = node_gui->get_gui_initialization();
   this->optionManager = node_gui->get_gui_option();
   this->gui_window = node_gui->get_gui_window();
   this->gui_leftPanel = node_gui->get_gui_leftPanel();
-  this->gui_dynamic = gui_player->get_gui_dynamic();
+  this->gui_player = node_ope->get_gui_player();
   this->sceneManager = node_engine->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_pathManager();
@@ -198,9 +196,9 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //Distance from left
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
 
-  gui_dynamic->player_button();
+  gui_player->player_button();
   ImGui::SameLine();
-  gui_dynamic->player_selection();
+  gui_player->player_selection();
 
   //-------------------------
 }

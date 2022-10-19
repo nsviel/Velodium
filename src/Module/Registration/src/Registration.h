@@ -1,7 +1,7 @@
 #ifndef REGISTRATION_H
 #define REGISTRATION_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Scene;
 class Glyphs;

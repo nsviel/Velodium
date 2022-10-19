@@ -1,8 +1,8 @@
 #ifndef ICP_OPTIMIZATION_H
 #define ICP_OPTIMIZATION_H
 
-#include "../../../common.h"
-#include "../../../Operation/Optimization/SpeudoInverse.h"
+#include "../../../../common.h"
+#include "../../../../Operation/Optimization/SpeudoInverse.h"
 
 
 class ICP_Optimization

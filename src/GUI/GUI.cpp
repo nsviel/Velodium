@@ -11,8 +11,6 @@
 #include "Windows/GUI_windows.h"
 
 #include "../Module/Module_GUI.h"
-#include "../Module/SLAM/GUI/GUI_Slam.h"
-#include "../Module/SLAM/SLAM.h"
 #include "../Engine/OpenGL/Camera/Camera.h"
 #include "../Engine/OpenGL/Dimension.h"
 #include "../Engine/Scene/Configuration.h"

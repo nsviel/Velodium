@@ -1,19 +1,20 @@
 #include "GUI_Online.h"
 
-#include "../Player_node.h"
-#include "../Dynamic/Online.h"
-#include "../Dynamic/Offline.h"
-#include "../Dynamic/Saving.h"
+#include "../Online.h"
+#include "../Player.h"
+#include "../Saving.h"
 
 #include "../../Node_operation.h"
 #include "../../Capture/Capture.h"
-#include "../../Capture/LiDAR/Velodyne.h"
+#include "../../Capture/LiDAR/Velodyne/Velodyne.h"
+#include "../../Color/Color.h"
 
 #include "../../../Engine/OpenGL/Camera/Followup.h"
+#include "../../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Configuration.h"
 #include "../../../Operation/Node_operation.h"
-#include "../../../Operation/Operation_GUI.h"
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Transformation/Filter.h"
 #include "../../../Operation/Color/GUI/GUI_Color.h"
@@ -26,21 +27,20 @@
 GUI_Online::GUI_Online(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node_ope->get_node_engine();
-  Module_node* node_module = node_gui->get_node_module();
-  Player_node* node_player = node_gui->get_node_player();
-  GUI_operation* gui_operation = node_gui->get_gui_operation();
+  this->node_engine = node_ope->get_node_engine();
+  Module_node* node_module = node_engine->get_node_module();
 
-  this->gui_color = gui_operation->get_gui_color();
-  this->gui_interface = gui_module->get_gui_interface();
+  this->gui_color = node_ope->get_gui_color();
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->onlineManager = node_player->get_onlineManager();
-  this->offlineManager = node_player->get_offlineManager();
+  this->onlineManager = node_ope->get_onlineManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->followManager = node_engine->get_followManager();
   this->captureManager = node_ope->get_captureManager();
   this->savingManager = node_ope->get_savingManager();
+  this->renderManager = node_engine->get_renderManager();
+  this->colorManager = node_ope->get_colorManager();
+  this->configManager = node_engine->get_configManager();
 
   this->item_width = 100;
 
@@ -55,7 +55,6 @@ void GUI_Online::design_state(){
   //---------------------------
 
   this->state_configuration();
-  gui_interface->state_watcher();
   this->state_online();
 
   //---------------------------
@@ -102,7 +101,7 @@ void GUI_Online::design_time(){
 
   //---------------------------
 }
-void GUI_Interface::state_dynamic(){
+void GUI_Online::state_dynamic(){
   //---------------------------
 
   bool with_save_frame = *savingManager->get_with_save_frame();
@@ -117,9 +116,9 @@ void GUI_Interface::state_dynamic(){
 
   //---------------------------
 }
-void GUI_Interface::parameter_dynamic(){
+void GUI_Online::parameter_dynamic(){
   //---------------------------
-
+  /*
   //Save frame in folder for AI module
   bool* with_save_frame = savingManager->get_with_save_frame();
   ImGui::Checkbox("Save frame", with_save_frame);
@@ -154,13 +153,13 @@ void GUI_Interface::parameter_dynamic(){
       ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb image", save_image_max);
     }
-  }
+  }*/
 
   //---------------------------
 }
 //Main function
-void GUI_Player::design_player(){
-  /*//---------------------------
+/*void GUI_Player::design_player(){
+  //---------------------------
 
   if(ImGui::BeginTabBar("Obstacle##156", ImGuiTabBarFlags_None)){
     //-------------------------------
@@ -192,8 +191,8 @@ void GUI_Player::design_player(){
     ImGui::EndTabBar();
   }
 
-  //---------------------------*/
-}
+  //---------------------------
+}*/
 
 
 //Subfunctions
@@ -230,7 +229,7 @@ void GUI_Online::state_online(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", color_name.c_str());
 
-  gui_interface->state_dynamic();
+  this->state_dynamic();
 
   //---------------------------
   ImGui::Separator();

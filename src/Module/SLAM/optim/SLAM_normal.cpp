@@ -1,7 +1,7 @@
 #include "SLAM_normal.h"
 
 #include "../src/SLAM_map.h"
-#include "../SLAM.h"
+#include "../src/SLAM.h"
 
 #include "../../../Specific/fct_maths.h"
 

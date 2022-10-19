@@ -8,11 +8,10 @@
 #include "../../Load/Load_node.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Pather.h"
-#include "../../Module/Module_node.h"
-#include "../../Module/Player/Player_node.h"
-#include "../../Module/Player/Obstacle/Obstacle.h"
-#include "../../Module/SLAM/SLAM.h"
+#include "../../Module/Obstacle/src/Obstacle.h"
+#include "../../Module/SLAM/src/SLAM.h"
 #include "../../Module/SLAM/src/SLAM_parameter.h"
+#include "../../Operation/Node_operation.h"
 
 
 //Constructor / Destructor
@@ -20,17 +19,16 @@ GUI_Initialization::GUI_Initialization(GUI_node* node_gui){
   //---------------------------
 
   Engine_node* node_engine = node_gui->get_node_engine();
-  Module_node* node_module = node_gui->get_node_module();
-  Player_node* node_player = node_module->get_node_player();
+  Node_operation* node_ope = node_engine->get_node_ope();
   Load_node* node_load = node_engine->get_node_load();
-  SLAM* slamManager = node_module->get_slamManager();
+  //SLAM* slamManager = node_module->get_slamManager();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->obstacleManager = node_player->get_obstacleManager();
+  //this->obstacleManager = node_player->get_obstacleManager();
   this->loaderManager = node_load->get_loadManager();
   this->pathManager = node_load->get_pathManager();
-  this->slam_param = slamManager->get_slam_param();
+  //this->slam_param = slamManager->get_slam_param();
 
   //---------------------------
 }

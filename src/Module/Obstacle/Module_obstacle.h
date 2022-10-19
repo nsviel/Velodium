@@ -15,6 +15,7 @@ class Warning;
 class HTTP;
 class MQTT;
 class GUI_Obstacle;
+class GUI_Network;
 
 
 class Module_obstacle
@@ -41,12 +42,13 @@ public:
   inline Warning* get_warningManager(){return warningManager;}
   inline MQTT* get_mqttManager(){return mqttManager;}
   inline HTTP* get_httpsManager(){return httpsManager;}
+  inline GUI_Network* get_gui_network(){return gui_network;}
+  inline GUI_Obstacle* get_gui_obstacle(){return gui_obstacle;}
 
 private:
   Engine_node* node_engine;
   Node_operation* node_ope;
 
-  GUI_Obstacle* gui_obstacle;
   Configuration* configManager;
   Module_node* node_module;
   Obstacle* obstacleManager;
@@ -55,6 +57,8 @@ private:
   Warning* warningManager;
   MQTT* mqttManager;
   HTTP* httpsManager;
+  GUI_Network* gui_network;
+  GUI_Obstacle* gui_obstacle;
 };
 
 #endif

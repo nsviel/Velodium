@@ -36,7 +36,7 @@ GUI_radiometry::GUI_radiometry(Module_radiometry* module){
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->pathManager = node_load->get_pathManager();
-  this->radioManager = node_module->get_radioManager();
+  //this->radioManager = module->get_radioManager();
   this->refManager = radioManager->get_refManager();
   this->linManager = radioManager->get_linManager();
   this->radioplotManager = radioManager->get_plot_radio();

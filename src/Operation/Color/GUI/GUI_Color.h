@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Scene;
-class GUI_node;
+class Node_operation;
 class Heatmap;
 class Color;
 class Colormap;
@@ -14,7 +14,7 @@ class GUI_Color
 {
 public:
   //Constructor / Destructor
-  GUI_Color(GUI_node* node_gui);
+  GUI_Color(Node_operation* node_ope);
   ~GUI_Color();
 
 public:

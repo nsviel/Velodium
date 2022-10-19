@@ -3,7 +3,7 @@
 #include "Color/GUI/GUI_Color.h"
 #include "Dynamic/GUI/GUI_Player.h"
 #include "Dynamic/GUI/GUI_Online.h"
-
+#include "Capture/Capture.h"
 #include "Color/Color.h"
 #include "Color/Heatmap.h"
 #include "Function/Selection.h"
@@ -24,6 +24,7 @@ Node_operation::Node_operation(Engine_node* node){
   this->node_engine = node;
   //---------------------------
 
+  this->node_load = node->get_node_load();
   this->fittingManager = new Fitting(this);
   this->attribManager = new Attribut(this);
   this->heatmapManager = new Heatmap(this);
@@ -35,6 +36,7 @@ Node_operation::Node_operation(Engine_node* node){
   this->onlineManager = new Online(this);
   this->playerManager = new Player(this);
   this->savingManager = new Saving(this);
+  this->captureManager = new Capture(this);
 
   this->gui_color = new GUI_Color(this);
   this->gui_online = new GUI_Online(this);

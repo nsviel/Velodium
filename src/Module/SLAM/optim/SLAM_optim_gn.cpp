@@ -2,7 +2,7 @@
 
 #include "SLAM_normal.h"
 
-#include "../SLAM.h"
+#include "../src/SLAM.h"
 
 #include "../../../Specific/fct_terminal.h"
 #include "../../../Specific/fct_transtypage.h"

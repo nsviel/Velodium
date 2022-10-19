@@ -1,21 +1,31 @@
 #ifndef GUI_PLAYER_H
 #define GUI_PLAYER_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
-class GUI_operation;
+class Scene;
+class Player;
+class Online;
+class Capture;
+class Filter;
+class Heatmap;
+class Node_operation;
+class Followup;
+
 class GUI_node;
 class GUI_module;
 class GUI_Dynamic;
 class GUI_Obstacle;
 class GUI_State;
+class GUI_Online;
+class GUI_Color;
 
 
 class GUI_Player
 {
 public:
   //Constructor / Destructor
-  GUI_Player(GUI_operation* node_gui);
+  GUI_Player(Node_operation* node_ope);
   ~GUI_Player();
 
 public:
@@ -44,9 +54,19 @@ public:
   inline GUI_State* get_gui_state(){return gui_state;}
 
 private:
+  Scene* sceneManager;
+  Player* playerManager;
+  Online* onlineManager;
+  Capture* captureManager;
+  Filter* filterManager;
+  Heatmap* heatmapManager;
+  Followup* followManager;
+
   GUI_Dynamic* gui_dynamic;
   GUI_Obstacle* gui_obstacle;
   GUI_State* gui_state;
+  GUI_Online* gui_online;
+  GUI_Color* gui_color;
 
   int item_width;
 };

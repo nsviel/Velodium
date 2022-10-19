@@ -2,6 +2,9 @@
 
 #include "../Module_node.h"
 
+#include "../../Engine/Engine_node.h"
+#include "../../Operation/Node_operation.h"
+
 
 //Constructor / Destructor
 Module_radiometry::Module_radiometry(Module_node* node){

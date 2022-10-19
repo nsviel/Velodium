@@ -27,7 +27,7 @@ public:
 
 private:
   Engine_node* node_engine;
-  Node_operation* node_module;
+  Node_operation* node_ope;
   Module_node* node_module;
 };
 

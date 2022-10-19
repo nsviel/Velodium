@@ -9,14 +9,14 @@ class ICP;
 class Registration;
 class Glyphs;
 class Transforms;
-class GUI_module;
+class Module_registration;
 
 
 class GUI_registration
 {
 public:
   //Constructor / Destructor
-  GUI_registration(GUI_module* node_gui);
+  GUI_registration(Module_registration* module);
   ~GUI_registration();
 
 public:

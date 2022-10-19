@@ -1,5 +1,5 @@
-#ifndef OFFLINE_H
-#define OFFLINE_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "../../common.h"
 
@@ -12,12 +12,12 @@ class Object;
 class Configuration;
 
 
-class Offline
+class Player
 {
 public:
   //Constructor / Destructor
-  Offline(Node_operation* node_ope);
-  ~Offline();
+  Player(Node_operation* node_ope);
+  ~Player();
 
 public:
   void update_configuration();

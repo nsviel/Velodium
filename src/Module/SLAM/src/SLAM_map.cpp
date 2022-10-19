@@ -1,6 +1,6 @@
 #include "SLAM_map.h"
 
-#include "../SLAM.h"
+#include "SLAM.h"
 
 #include "../../../Engine/Engine_node.h"
 #include "../../../Engine/Scene/Scene.h"

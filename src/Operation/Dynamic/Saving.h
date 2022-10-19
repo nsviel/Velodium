@@ -11,6 +11,8 @@ class Engine_node;
 class Scene;
 class Renderer;
 class Configuration;
+class Saver;
+class Capture;
 
 
 class Saving
@@ -47,6 +49,8 @@ private:
   Scene* sceneManager;
   Renderer* renderManager;
   Configuration* configManager;
+  Saver* saverManager;
+  Capture* captureManager;
 
   queue<string> save_frame_vec;
   queue<string> save_image_vec;

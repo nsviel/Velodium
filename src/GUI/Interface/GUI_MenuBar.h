@@ -6,7 +6,7 @@
 class GUI_windows;
 class GUI_option;
 class GUI_leftPanel;
-class GUI_Dynamic;
+class GUI_Player;
 class GUI_node;
 class GUI_Initialization;
 
@@ -46,7 +46,7 @@ private:
   GUI_windows* gui_window;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanel;
-  GUI_Dynamic* gui_dynamic;
+  GUI_Player* gui_player;
   GUI_Initialization* gui_init;
 };
 

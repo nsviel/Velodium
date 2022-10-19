@@ -1,28 +1,28 @@
 #include "Capture.h"
 
-#include "Scala/Scala.h"
-#include "Velodyne/Velodyne.h"
+#include "LiDAR/Scala/Scala.h"
+#include "LiDAR/Velodyne/Velodyne.h"
 
-#include "../../../Operation/Node_operation.h"
-#include "../../../Operation/Dynamic/Online.h"
+#include "../Node_operation.h"
+#include "../Dynamic/Online.h"
 
-#include "../../../Engine/Engine_node.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Configuration.h"
-#include "../../../Load/Load_node.h"
-#include "../../../Load/Processing/Loader.h"
-#include "../../../Load/Processing/Saver.h"
+#include "../../Engine/Engine_node.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
+#include "../../Load/Load_node.h"
+#include "../../Load/Processing/Loader.h"
+#include "../../Load/Processing/Saver.h"
 
-#include "../../../Specific/fct_terminal.h"
-#include "../../../Specific/fct_system.h"
+#include "../../Specific/fct_terminal.h"
+#include "../../Specific/fct_system.h"
 
 
 //Constructor / Destructor
 Capture::Capture(Node_operation* node_ope){
   //---------------------------
 
-  Engine_node* node_engine = node->get_node_engine();
-  Load_node* node_load = node_engine->get_node_load();
+  Engine_node* node_engine = node_ope->get_node_engine();
+  Load_node* node_load = node_ope->get_node_load();
 
   this->configManager = node_engine->get_configManager();
   this->node_ope = node_engine->get_node_ope();

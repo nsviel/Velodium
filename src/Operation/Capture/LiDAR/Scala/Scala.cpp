@@ -4,7 +4,7 @@
 
 #include "Scala.h"
 
-#include "../../Local/Filemanager.h"
+#include "../../../Node_operation.h"
 
 #include "../../../../Engine/Engine_node.h"
 #include "../../../../Engine/Scene/Configuration.h"
@@ -22,9 +22,8 @@
 Scala::Scala(Node_operation* node_ope){
   //---------------------------
 
-  Filemanager* fileManager = node->get_fileManager();
-  Engine_node* node_engine = node->get_node_engine();
-  Load_node* node_load = node_engine->get_node_load();
+  Engine_node* node_engine = node_ope->get_node_engine();
+  Load_node* node_load = node_ope->get_node_load();
   Configuration* configManager = node_engine->get_configManager();
   string path_data = configManager->parse_json_s("parameter", "path_data");
 

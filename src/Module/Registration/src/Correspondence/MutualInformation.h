@@ -1,7 +1,7 @@
 #ifndef MI_H
 #define MI_H
 
-#include "../../../common.h"
+#include "../../../../common.h"
 
 
 class MutualInformation

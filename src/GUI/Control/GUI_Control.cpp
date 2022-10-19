@@ -4,9 +4,6 @@
 #include "../Windows/Window_table.h"
 
 #include "../../Load/Load_node.h"
-#include "../../Module/Module_node.h"
-#include "../../Module/Player/Player_node.h"
-#include "../../Module/Player/Dynamic/Offline.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
@@ -16,6 +13,7 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 
+#include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Function/Selection.h"
@@ -36,8 +34,6 @@ GUI_control::GUI_control(GUI_node* node){
   Engine_node* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
   Load_node* node_load = node_engine->get_node_load();
-  Module_node* node_module = node_engine->get_node_module();
-  Player_node* node_player = node_module->get_node_player();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
@@ -48,7 +44,7 @@ GUI_control::GUI_control(GUI_node* node){
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_pathManager();
-  this->offlineManager = node_player->get_offlineManager();
+  this->playerManager = node_ope->get_playerManager();
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");
@@ -238,7 +234,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //space key - Start / Pause player
     if(ImGui::IsKeyPressed(32) && !io.WantCaptureMouse){
-      offlineManager->player_start_or_pause();
+      playerManager->player_start_or_pause();
       break;
     }
   }

@@ -1,6 +1,7 @@
 #include "Saving.h"
 
 #include "../Node_operation.h"
+#include "../Capture/Capture.h"
 
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
@@ -25,6 +26,8 @@ Saving::Saving(Node_operation* node_ope){
   this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();
   this->sceneManager = node_engine->get_sceneManager();
+  this->saverManager = node_load->get_saveManager();
+  this->captureManager = node_ope->get_captureManager();
 
   //---------------------------
   this->update_configuration();
@@ -85,21 +88,19 @@ void Saving::controler_nb_subset(Cloud* cloud){
   //---------------------------
 }
 void Saving::clean_directories(){
-  if(is_clean_dir){
-    //---------------------------
+  //---------------------------
 
-    //Clean directories
-    clean_directory_files(path_image.c_str());
-    clean_directory_files(path_frame.c_str());
+  //Clean directories
+  clean_directory_files(path_image.c_str());
+  clean_directory_files(path_frame.c_str());
 
-    //---------------------------
-  }
+  //---------------------------
 }
 void Saving::check_directories(){
   //---------------------------
 
   //Clean directories
-  create_new_dir(path_data_dir);
+  create_new_dir(path_dir);
   create_new_dir(path_image);
   create_new_dir(path_frame);
 

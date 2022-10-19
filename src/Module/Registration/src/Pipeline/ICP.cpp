@@ -4,9 +4,9 @@
 
 #include "../Correspondence/Keypoint.h"
 
-#include "../../../Operation/Transformation/Transforms.h"
-#include "../../../Engine/Scene/Glyphs.h"
-#include "../../../Specific/fct_transtypage.h"
+#include "../../../../Operation/Transformation/Transforms.h"
+#include "../../../../Engine/Scene/Glyphs.h"
+#include "../../../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor

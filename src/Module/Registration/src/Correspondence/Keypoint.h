@@ -2,7 +2,7 @@
 #ifndef KEYPOINT_H
 #define KEYPOINT_H
 
-#include "../../../common.h"
+#include "../../../../common.h"
 
 class Glyphs;
 

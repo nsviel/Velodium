@@ -2,6 +2,8 @@
 
 #include "IconsFontAwesome5.h"
 
+#include "../GUI_node.h"
+
 #include "../../Engine/Engine_node.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyphs.h"
@@ -11,7 +13,6 @@
 #include "../../Operation/Color/Color.h"
 #include "../../Operation/Color/GUI/GUI_Color.h"
 #include "../../Operation/Node_operation.h"
-#include "../../Operation/Operation_GUI.h"
 #include "../../Specific/fct_maths.h"
 
 #include "Window_table.h"
@@ -24,9 +25,8 @@ WIN_attribut::WIN_attribut(GUI_node* node_gui){
 
   Node_operation* node_ope = node_gui->get_node_ope();
   Engine_node* node_engine = node_gui->get_node_engine();
-  GUI_operation* gui_operation = node_gui->get_gui_operation();
 
-  this->gui_color = gui_operation->get_gui_color();
+  this->gui_color = node_ope->get_gui_color();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();

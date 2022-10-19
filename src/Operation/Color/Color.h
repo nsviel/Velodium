@@ -1,5 +1,5 @@
-#ifndef COLOR_H
-#define COLOR_H
+#ifndef COLOR_FUNCTION_H
+#define COLOR_FUNCTION_H
 
 #include "../../common.h"
 
