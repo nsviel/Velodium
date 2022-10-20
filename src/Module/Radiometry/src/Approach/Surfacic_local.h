@@ -1,4 +1,4 @@
-#ifndef SURFACIC_LOCAL_H
+#if !defined(SURFACIC_LOCAL_H)
 #define SURFACIC_LOCAL_H
 
 #include "../../../../common.h"

@@ -1,4 +1,4 @@
-#ifndef RADIOMETRY_H
+#if !defined(RADIOMETRY_H)
 #define RADIOMETRY_H
 
 #include "../../../common.h"

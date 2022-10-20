@@ -49,6 +49,7 @@ void SLAM::update_configuration(){
   //---------------------------
 }
 bool SLAM::compute_slam(Cloud* cloud, int subset_ID){
+  sayHello();
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   auto t1 = start_chrono();
   if(check_condition(cloud, subset_ID) == false) return false;

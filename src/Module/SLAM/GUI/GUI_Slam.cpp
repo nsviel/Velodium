@@ -146,7 +146,7 @@ void GUI_Slam::parameter_glyph(){
   ImGui::Separator();
 }
 void GUI_Slam::parameter_offline(){
-  if(ImGui::TreeNode("Offline")){
+  if(ImGui::TreeNode("Offline##tree")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
@@ -182,7 +182,7 @@ void GUI_Slam::parameter_offline(){
   }
 }
 void GUI_Slam::parameter_optimization(){
-  if(ImGui::TreeNode("Optimization")){
+  if(ImGui::TreeNode("Optimization##tree")){
     Cloud* cloud = sceneManager->get_cloud_selected();
     //---------------------------
 
@@ -228,7 +228,7 @@ void GUI_Slam::parameter_optimization(){
   }
 }
 void GUI_Slam::parameter_localMap(){
-  if(ImGui::TreeNode("Local map")){
+  if(ImGui::TreeNode("Local map##tree")){
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
@@ -296,7 +296,7 @@ void GUI_Slam::parameter_localMap(){
   }
 }
 void GUI_Slam::parameter_normal(){
-  if(ImGui::TreeNode("Normal")){
+  if(ImGui::TreeNode("Normal##tree")){
     //---------------------------
 
     //Number k nearest neighbors
@@ -328,7 +328,7 @@ void GUI_Slam::parameter_normal(){
   }
 }
 void GUI_Slam::parameter_robustesse(){
-  if(ImGui::TreeNode("Robustesse")){
+  if(ImGui::TreeNode("Robustesse##tree")){
     //---------------------------
 
     //Minimal optimization score

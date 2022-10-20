@@ -120,12 +120,36 @@ namespace{
   }
 
   //File management
-  std::vector<std::string> list_allFiles(const char *path){
+  bool is_file_exist(std::string& fileName){
+    //---------------------------
+
+    std::ifstream infile(fileName.c_str());
+
+    //---------------------------
+    return infile.good();
+  }
+  bool is_dir_exist(std::string& path){
+    //---------------------------
+
+    if(std::filesystem::exists(path)){
+      return true;
+    }else{
+      return false;
+    }
+
+    //---------------------------
+  }
+  std::vector<std::string> list_allFiles(std::string path){
     //---------------------------
 
     struct dirent* files;
-    DIR* directory = opendir(path);
+    DIR* directory = opendir(path.c_str());
     std::vector<std::string> path_vec;
+
+    if(is_dir_exist(path) == false){
+      std::cout<<"[error] Directory does not exists: "<<path<<std::endl;
+      return path_vec;
+    }
 
     //Filtre and store files present in the folder
     while ((files = readdir(directory)) != NULL){
@@ -151,6 +175,17 @@ namespace{
     struct dirent* files;
     DIR* directory = opendir(path_dir.c_str());
     std::vector<std::string> path_vec;
+
+    //Check if directory exists
+    if(is_dir_exist(path_dir) == false){
+      std::cout<<"[error] Directory does not exists: "<<path_dir<<std::endl;
+      return path_vec;
+    }
+
+    //Supress unwanted line break
+    if(path_dir.find('\n')){
+      path_dir.erase(std::remove(path_dir.begin(), path_dir.end(), '\n'), path_dir.end());
+    }
 
     //Filtre and store files present in the folder
     while ((files = readdir(directory)) != NULL){
@@ -252,14 +287,6 @@ namespace{
     //---------------------------
     return i;
  }
-  bool is_file_exist(std::string& fileName){
-    //---------------------------
-
-    std::ifstream infile(fileName.c_str());
-
-    //---------------------------
-    return infile.good();
-  }
   void clean_directory_files(const char *path){
     struct stat buffer;
     if(stat (path, &buffer) != 0) return;

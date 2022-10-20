@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef KEYPOINT_H
 #define KEYPOINT_H
 

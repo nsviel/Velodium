@@ -1,4 +1,4 @@
-#ifndef MODULE_RADIOMETRY_H
+#if !defined(MODULE_RADIOMETRY_H)
 #define MODULE_RADIOMETRY_H
 
 #include "../../common.h"

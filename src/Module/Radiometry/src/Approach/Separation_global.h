@@ -1,4 +1,4 @@
-#ifndef SEPARATION_GLOBAL_H
+#if !defined(SEPARATION_GLOBAL_H)
 #define SEPARATION_GLOBAL_H
 
 #include "../../../../common.h"

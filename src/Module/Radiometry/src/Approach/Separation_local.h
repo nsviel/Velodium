@@ -1,4 +1,4 @@
-#ifndef LOCAL_SEPARATION_H
+#if !defined(LOCAL_SEPARATION_H)
 #define LOCAL_SEPARATION_H
 
 #include "../../../../common.h"

@@ -92,16 +92,12 @@ void Pather::loading_frames(){
 void Pather::loading_directory_frame(string path){
   //---------------------------
 
-  //Supress unwanted line break
-  if (path.find('\n')){
-    path.erase(std::remove(path.begin(), path.end(), '\n'), path.end());
-  }
-
   //Get all frame path
   vector<string> path_vec = list_allPaths(path);
-  fct_sort_alpha_num(path_vec);
 
+  //Sort alphabetically and load
   if(path_vec.size() != 0){
+    fct_sort_alpha_num(path_vec);
     loaderManager->load_cloud_byFrame(path_vec);
   }
 
@@ -292,8 +288,8 @@ void Pather::saving_saved_frames(){
 
   //Select saving path
   string path_saving = zenityManager->zenity_directory(path_current_dir);
-  vector<string> file_path_vec = list_allPaths(path_saved_frame.c_str());
-  vector<string> file_name_vec = list_allFiles(path_saved_frame.c_str());
+  vector<string> file_path_vec = list_allPaths(path_saved_frame);
+  vector<string> file_name_vec = list_allFiles(path_saved_frame);
 
   for(int i=0; i<file_path_vec.size(); i++){
     string file_in = file_path_vec[i];

@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #include "file_PCD.h"
 
 

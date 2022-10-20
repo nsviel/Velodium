@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef PCL_FUNCTIONS_H
 #define PCL_FUNCTIONS_H
 

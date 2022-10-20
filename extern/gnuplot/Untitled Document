@@ -1609,11 +1609,11 @@ private:
 //    via multiple inheritance as described at http://stackoverflow.com/a/3821756/1048959
 // 2. It remembers whether the handle needs to be closed via fclose or pclose.
 struct FileHandleWrapper {
-    FileHandleWrapper(std::FILE *_fh, bool _should_use_pclose) :
-        wrapped_fh(_fh), should_use_pclose(_should_use_pclose) { }
+    FileHandleWrapper(std::FILE *_fh, bool _should_WITH_PCLose) :
+        wrapped_fh(_fh), should_WITH_PCLose(_should_WITH_PCLose) { }
 
     void fh_close() {
-        if(should_use_pclose) {
+        if(should_WITH_PCLose) {
             if(GNUPLOT_PCLOSE(wrapped_fh)) {
                 std::cerr << "pclose returned error: " << strerror(errno) << std::endl;
             }
@@ -1629,7 +1629,7 @@ struct FileHandleWrapper {
     }
 
     std::FILE *wrapped_fh;
-    bool should_use_pclose;
+    bool should_WITH_PCLose;
 };
 
 // }}}1

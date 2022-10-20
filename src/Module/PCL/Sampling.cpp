@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 /*#include "Sampling.h"
 
 #include "pcl_transtypage.h"

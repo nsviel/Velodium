@@ -21,6 +21,7 @@ public:
 
 public:
   //Main functions
+  void load_module();
   void reset();
   void update();
   void runtime();

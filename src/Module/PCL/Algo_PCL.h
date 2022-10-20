@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef ALGO_PCL_H
 #define ALGO_PCL_H
 

@@ -8,5 +8,6 @@ sudo docker run \
     --env="DISPLAY=$DISPLAY" \
     --publish=2370:2370 \
     --publish=8888:8888 \
+    -v data:/app/hubium \
     velodium
 xhost - >/dev/null

@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #include "Keypoint.h"
 
 #include "../../../../Engine/Glyphs.h"

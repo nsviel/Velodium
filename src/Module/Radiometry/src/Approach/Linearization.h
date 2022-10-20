@@ -1,4 +1,4 @@
-#ifndef LINEARIZATION_H
+#if !defined(LINEARIZATION_H)
 #define LINEARIZATION_H
 
 #include "../../../../common.h"

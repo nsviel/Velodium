@@ -1,4 +1,4 @@
-#ifndef PLOT_RADIO_H
+#if !defined(PLOT_RADIO_H)
 #define PLOT_RADIO_H
 
 #include "../../../common.h"

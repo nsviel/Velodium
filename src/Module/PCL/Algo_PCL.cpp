@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #include "Algo_PCL.h"
 
 #include <pcl/filters/approximate_voxel_grid.h>

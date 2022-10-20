@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef REGISTRATION_STRUCT_H
 #define REGISTRATION_STRUCT_H
 

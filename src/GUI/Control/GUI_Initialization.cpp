@@ -97,7 +97,7 @@ void GUI_Initialization::init_mode(int mode){
     case 3:{//VLP16 Nuscene
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp16");
-      pathManager->loading_directory_frame("/home/aether/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
+      pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
       break;
     }
     case 4:{//VLP16 kitti
@@ -109,13 +109,13 @@ void GUI_Initialization::init_mode(int mode){
     case 5:{//HDL32 Tunnel
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_hdl32");
-      loaderManager->load_cloud("/home/aether/Desktop/Point_cloud/pcap/HDL32/HDL32-V2_Tunnel.pcap");
+      loaderManager->load_cloud("/home/aeter/Desktop/Point_cloud/pcap/HDL32/HDL32-V2_Tunnel.pcap");
       break;
     }
     case 6:{//VLP16 amphitheatre
       sceneManager->remove_cloud_all();
       slam_param->make_config("velodyne_vlp16");
-      pathManager->loading_directory_frame("/home/aether/Desktop/Point_cloud/13.05_amphi_entier/");
+      pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/amphitheatre/13.05_amphi_entier/");
       break;
     }
   }

@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef FILE_PCD_H
 #define FILE_PCD_H
 

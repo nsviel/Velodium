@@ -186,7 +186,9 @@ void Renderer::render_screenshot(string path_file){
     FreeImage_Unload(image);
 
     //Then copie created image into a ready-to-be-read image
-    std::filesystem::copy(path, path_file, std::filesystem::copy_options::update_existing);
+    remove(path_file.c_str());
+    std::rename(path.c_str(), path_file.c_str());
+    //std::filesystem::copy(path, path_file, std::filesystem::copy_options::update_existing);
   }
 
   //---------------------------

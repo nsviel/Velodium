@@ -1,4 +1,4 @@
-#ifndef METHOD_SIMPLIFIED_SURFACIC_H
+#if !defined(METHOD_SIMPLIFIED_SURFACIC_H)
 #define METHOD_SIMPLIFIED_SURFACIC_H
 
 #include "../../../../common.h"

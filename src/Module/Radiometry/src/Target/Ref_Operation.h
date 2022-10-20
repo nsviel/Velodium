@@ -1,4 +1,4 @@
-#ifndef REF_OPERATION_H
+#if !defined(REF_OPERATION_H)
 #define REF_OPERATION_H
 
 #include "../../../../common.h"

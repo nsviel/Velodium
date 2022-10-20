@@ -1,3 +1,4 @@
+
 #include "GUI_Radiometry.h"
 
 #include "../Module_radiometry.h"
@@ -793,3 +794,5 @@ void GUI_radiometry::Approaches(){
     ImGui::Separator();
   }*/
 }
+
+#endif

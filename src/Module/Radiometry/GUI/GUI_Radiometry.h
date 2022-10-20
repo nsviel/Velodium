@@ -1,4 +1,4 @@
-#ifndef GUI_RADIOMETRY_H
+#if !defined(GUI_RADIOMETRY_H)
 #define GUI_RADIOMETRY_H
 
 #include "../../../common.h"

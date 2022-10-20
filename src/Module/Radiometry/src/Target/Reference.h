@@ -1,4 +1,4 @@
-#ifndef REFERENCE_H
+#if !defined(REFERENCE_H)
 #define REFERENCE_H
 
 #include "../../../../common.h"

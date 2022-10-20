@@ -1,4 +1,4 @@
-#ifndef RADAR_EQUATION_H
+#if !defined(RADAR_EQUATION_H)
 #define RADAR_EQUATION_H
 
 #include "../../../../common.h"

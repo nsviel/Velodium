@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef TRANSTYPAGE_PCL_H
 #define TRANSTYPAGE_PCL_H
 

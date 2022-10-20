@@ -1,4 +1,4 @@
-#ifndef SURFACIC_GLOBAL_PIECEWISE_H
+#if !defined(SURFACIC_GLOBAL_PIECEWISE_H)
 #define SURFACIC_GLOBAL_PIECEWISE_H
 
 #include "../../../../common.h"

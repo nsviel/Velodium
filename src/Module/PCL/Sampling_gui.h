@@ -1,4 +1,4 @@
-#ifdef USE_PCL
+#ifdef WITH_PCL
 #ifndef SAMPLING_GUI_H
 #define SAMPLING_GUI_H
 

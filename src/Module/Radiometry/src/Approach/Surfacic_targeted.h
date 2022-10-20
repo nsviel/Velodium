@@ -1,4 +1,4 @@
-#ifndef SURFACIC_TARGETED_H
+#if !defined(SURFACIC_TARGETED_H)
 #define SURFACIC_TARGETED_H
 
 #include "../../../../common.h"
