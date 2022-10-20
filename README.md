@@ -1,5 +1,5 @@
 # Velodium
-**Open Source 3D Point Cloud Processing Software & Data Orchestrator**
+**Open Source 3D Point Cloud Software**
 
 ## Summary
 
@@ -27,7 +27,7 @@ All of the code is written in C++, for performance purpose. The incorporated ext
 ## Installation : 
 
 This code is only supported on Linux OS. 
-Tested on Ubuntu 18.04LTS, 20.04LTS.
+Tested on Ubuntu 18.04LTS, 20.04LTS, 22.04LTS.
 
 Simply run the script file 
 ```
