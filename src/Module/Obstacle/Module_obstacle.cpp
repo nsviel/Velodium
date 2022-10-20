@@ -4,10 +4,7 @@
 #include "src/Filemanager.h"
 #include "src/Prediction.h"
 #include "src/Warning.h"
-#include "HTTP/HTTP.h"
-#include "MQTT/MQTT.h"
 #include "GUI/GUI_Obstacle.h"
-#include "GUI/GUI_Network.h"
 
 #include "../Node_module.h"
 
@@ -32,7 +29,6 @@ Module_obstacle::Module_obstacle(Node_module* node){
   this->predManager = new Prediction(this);
   this->obstacleManager = new Obstacle(this);
 
-  this->gui_network = new GUI_Network(this);
   this->gui_obstacle = new GUI_Obstacle(this);
 
   //---------------------------

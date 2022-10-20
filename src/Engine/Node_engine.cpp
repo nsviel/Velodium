@@ -18,6 +18,7 @@
 #include "../Load/Node_load.h"
 #include "../Operation/Node_operation.h"
 #include "../Module/Node_module.h"
+#include "../Interface/Node_interface.h"
 #include "../GUI/Node_gui.h"
 
 
@@ -39,6 +40,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
 
   this->node_load = new Node_load(this);
   this->node_ope = new Node_operation(this);
+  this->node_interface = new Node_interface(this);
   this->node_module = new Node_module(this);
   this->node_gui = new Node_gui(this);
 

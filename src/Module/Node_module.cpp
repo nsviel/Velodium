@@ -49,39 +49,55 @@ void Node_module::load_module(){
 void Node_module::reset(){
   //---------------------------
 
-  module_slam->reset();
+  #if defined(WITH_SLAM)
+    module_slam->reset();
+  #endif
 
   //---------------------------
 }
 void Node_module::update(){
   //---------------------------
 
-  module_obstacle->update();
-  module_slam->update();
+  #if defined(WITH_OBSTACLE)
+    module_obstacle->update();
+  #endif
+
+  #if defined(WITH_SLAM)
+    module_slam->update();
+  #endif
 
   //---------------------------
 }
 void Node_module::runtime(){
   //---------------------------
 
-  module_obstacle->runtime();
+  #if defined(WITH_OBSTACLE)
+    module_obstacle->runtime();
+  #endif
 
   //---------------------------
 }
 void Node_module::draw(){
   //---------------------------
 
-  module_obstacle->draw();
-  module_slam->draw();
+  #if defined(WITH_OBSTACLE)
+    module_obstacle->draw();
+  #endif
+
+  #if defined(WITH_SLAM)
+    module_slam->draw();
+  #endif
 
   //---------------------------
 }
 void Node_module::online(Cloud* cloud, int subset_ID){
   //---------------------------
 
-  if(with_slam){
-    module_slam->online(cloud, subset_ID);
-  }
+  #if defined(WITH_SLAM)
+    if(with_slam){
+      module_slam->online(cloud, subset_ID);
+    }
+  #endif
 
   //---------------------------
 }

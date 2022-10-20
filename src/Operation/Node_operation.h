@@ -18,12 +18,10 @@ class Color;
 class Player;
 class Online;
 class Saving;
-class Capture;
 
 class GUI_Color;
 class GUI_Online;
 class GUI_Player;
-class GUI_Capture;
 
 
 class Node_operation
@@ -40,6 +38,7 @@ public:
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_load* get_node_load(){return node_load;}
+  inline Node_gui* get_node_gui(){return node_gui;}
 
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Filter* get_filterManager(){return filterManager;}
@@ -52,9 +51,7 @@ public:
   inline Online* get_onlineManager(){return onlineManager;}
   inline Player* get_playerManager(){return playerManager;}
   inline Saving* get_savingManager(){return savingManager;}
-  inline Capture* get_captureManager(){return captureManager;}
 
-  inline Node_gui* get_node_gui(){return node_gui;}
   inline GUI_Color* get_gui_color(){return gui_color;}
   inline GUI_Online* get_gui_online(){return gui_online;}
   inline GUI_Player* get_gui_player(){return gui_player;}
@@ -75,9 +72,7 @@ private:
   Online* onlineManager;
   Player* playerManager;
   Saving* savingManager;
-  Capture* captureManager;
 
-  GUI_Capture* gui_capture;
   GUI_Color* gui_color;
   GUI_Online* gui_online;
   GUI_Player* gui_player;

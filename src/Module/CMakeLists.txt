@@ -82,6 +82,7 @@ add_library(LIBRARY_MODULE
 )  
 target_link_libraries(LIBRARY_MODULE 
     LIBRARY_EXTERN
+    Eigen3::Eigen #Eigen library
     ${LIB_RADIOMETRY}
     ${LIB_REGISTRATION}
     ${LIB_SLAM}

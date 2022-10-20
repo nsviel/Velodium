@@ -36,6 +36,7 @@ file(GLOB_RECURSE ALL_SOURCES
   Engine/*.cpp
   GUI/*.cpp
   Load/*.cpp
+  Interface/*.cpp
   Operation/*.cpp
   Specific/*.cpp
   main.cpp
@@ -53,7 +54,7 @@ add_executable(executable
 target_link_libraries(executable
   ${ALL_LIBS}
   LIBRARY_EXTERN
-  LIBRARY_MODULE
+  LIBRARY_MODULE 
   ${CMAKE_DL_LIBS}
 )
 

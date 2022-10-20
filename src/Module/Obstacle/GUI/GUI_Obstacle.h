@@ -5,7 +5,6 @@
 
 class Module_obstacle;
 class Obstacle;
-class GUI_Network;
 class Prediction;
 class CoordTransform;
 class HTTP;
@@ -40,7 +39,6 @@ private:
   Prediction* predManager;
   HTTP* httpsManager;
   Scene* sceneManager;
-  GUI_Network* gui_network;
 
   int label_ID;
   int item_width;

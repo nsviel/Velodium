@@ -7,6 +7,8 @@ class Node_operation;
 class Node_load;
 class Node_module;
 class Node_gui;
+class Node_interface;
+
 class Configuration;
 class Scene;
 class Glyphs;
@@ -60,6 +62,7 @@ private:
   Node_operation* node_ope;
   Node_load* node_load;
   Node_module* node_module;
+  Node_interface* node_interface;
   Node_gui* node_gui;
 
   Followup* followManager;

@@ -1,5 +1,4 @@
 #include "GUI_Obstacle.h"
-#include "GUI_Network.h"
 
 #include "../HTTP/HTTP.h"
 #include "../src/Obstacle.h"
@@ -29,8 +28,6 @@ GUI_Obstacle::GUI_Obstacle(Module_obstacle* module){
   this->predManager = module->get_predManager();
   this->httpsManager = module->get_httpsManager();
 
-  this->gui_network = module->get_gui_network();
-
   this->item_width = 100;
 
   //---------------------------
@@ -44,7 +41,6 @@ void GUI_Obstacle::design_obstacle(){
       //---------------------------
 
       this->design_prediction();
-      gui_network->design_Network();
 
       //---------------------------
       ImGui::EndTabBar();
