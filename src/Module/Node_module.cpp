@@ -80,17 +80,18 @@ void Node_module::runtime(){
   //---------------------------
 }
 void Node_module::draw(){
-  //---------------------------
+  if(ImGui::BeginTabItem("Module")){
+    if(ImGui::BeginTabBar("##tabs_module", ImGuiTabBarFlags_None)){
+      //---------------------------
 
-  #if defined(WITH_OBSTACLE)
-    module_obstacle->draw();
-  #endif
+      module_obstacle->draw();
+      module_slam->draw();
 
-  #if defined(WITH_SLAM)
-    module_slam->draw();
-  #endif
-
-  //---------------------------
+      //---------------------------
+      ImGui::EndTabBar();
+    }
+    ImGui::EndTabItem();
+  }
 }
 void Node_module::online(Cloud* cloud, int subset_ID){
   //---------------------------

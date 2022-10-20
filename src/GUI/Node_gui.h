@@ -6,6 +6,7 @@
 class Node_engine;
 class Node_operation;
 class Node_module;
+class Node_interface;
 
 class GUI;
 class GUI_windows;
@@ -52,6 +53,7 @@ private:
   Node_engine* node_engine;
   Node_operation* node_ope;
   Node_module* node_module;
+  Node_interface* node_interface;
 
   GUI* guiManager;
   GUI_windows* gui_window;

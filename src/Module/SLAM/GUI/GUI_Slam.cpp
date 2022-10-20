@@ -53,8 +53,8 @@ GUI_Slam::~GUI_Slam(){}
 
 //Main function
 void GUI_Slam::design_SLAM(){
-  if(ImGui::BeginTabItem("SLAM")){
-    if(ImGui::BeginTabBar("##tab_slam", ImGuiTabBarFlags_None)){
+  if(ImGui::BeginTabItem("SLAM##hello")){
+    if(ImGui::BeginTabBar("##tabs_slam", ImGuiTabBarFlags_None)){
       //---------------------------
 
       this->design_parameter();

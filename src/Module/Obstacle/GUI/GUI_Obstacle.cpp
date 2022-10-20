@@ -38,7 +38,7 @@ GUI_Obstacle::~GUI_Obstacle(){}
 
 //Main function
 void GUI_Obstacle::design_obstacle(){
-  if(ImGui::BeginTabItem("Obstacle")){
+  if(ImGui::BeginTabItem("Obstacle##hello")){
     if(ImGui::BeginTabBar("##tabs_obstacle", ImGuiTabBarFlags_None)){
       //---------------------------
 
@@ -51,7 +51,7 @@ void GUI_Obstacle::design_obstacle(){
   }
 }
 void GUI_Obstacle::design_prediction(){
-  if(ImGui::BeginTabItem("Prediction")){
+  if(ImGui::BeginTabItem("Prediction##hello")){
     //---------------------------
 
     this->state_prediction();

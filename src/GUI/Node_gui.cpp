@@ -11,6 +11,7 @@
 #include "Control/GUI_Initialization.h"
 #include "Windows/GUI_windows.h"
 
+#include "../Interface/Node_interface.h"
 #include "../Module/Node_module.h"
 #include "../Engine/Node_engine.h"
 #include "../Operation/Node_operation.h"
@@ -23,6 +24,7 @@ Node_gui::Node_gui(Node_engine* engine){
 
   this->node_ope = node_engine->get_node_ope();
   this->node_module = node_engine->get_node_module();
+  this->node_interface = node_engine->get_node_interface();
 
   this->gui_initialization = new GUI_Initialization(this);
   this->gui_window = new GUI_windows(this);
@@ -67,6 +69,7 @@ void Node_gui::draw_leftPanel(){
 
     node_ope->draw();
     node_module->draw();
+    node_interface->draw();
 
     //-------------------------------
     ImGui::PopStyleColor();

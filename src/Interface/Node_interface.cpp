@@ -18,7 +18,7 @@ Node_interface::Node_interface(Node_engine* node){
 
   this->node_load = node->get_node_load();
   this->node_ope = node->get_node_ope();
-  
+
   this->configManager = node->get_configManager();
   this->captureManager = new Capture(this);
   this->mqttManager = new MQTT(this);
@@ -48,9 +48,16 @@ void Node_interface::runtime(){
   //---------------------------
 }
 void Node_interface::draw(){
-  //---------------------------
+  if(ImGui::BeginTabItem("Interface")){
+    if(ImGui::BeginTabBar("##Interface", ImGuiTabBarFlags_None)){
+      //---------------------------
 
-  gui_capture->design_Lidar();
+      gui_capture->design_Lidar();
+      gui_network->design_Network();
 
-  //---------------------------
+      //---------------------------
+      ImGui::EndTabBar();
+    }
+    ImGui::EndTabItem();
+  }
 }
