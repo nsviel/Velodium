@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Module_obstacle;
+class Node_interface;
 class MQTT;
 class HTTP;
 
@@ -12,7 +12,7 @@ class GUI_Network
 {
 public:
   //Constructor / Destructor
-  GUI_Network(Module_obstacle* module);
+  GUI_Network(Node_interface* node_interface);
   ~GUI_Network();
 
 public:

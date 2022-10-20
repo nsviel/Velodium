@@ -4,14 +4,14 @@
 #include "../LiDAR/Scala/Scala.h"
 #include "../LiDAR/Velodyne/Velodyne.h"
 
-#include "../../Node_operation.h"
+#include "../../Node_interface.h"
 
 
 //Constructor / Destructor
-GUI_Capture::GUI_Capture(Node_operation* node_ope){
+GUI_Capture::GUI_Capture(Node_interface* node_interface){
   //---------------------------
 
-  this->captureManager = node_ope->get_captureManager();
+  this->captureManager = node_interface->get_captureManager();
   this->scalaManager = captureManager->get_scalaManager();
   this->veloManager = captureManager->get_veloManager();
 

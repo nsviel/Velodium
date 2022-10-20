@@ -8,7 +8,7 @@
 
 #include <thread>
 
-class Node_operation;
+class Node_interface;
 class Extractor;
 
 
@@ -16,7 +16,7 @@ class Scala
 {
 public:
   //Constructor / Destructor
-  Scala(Node_operation* node_ope);
+  Scala(Node_interface* node_interface);
   ~Scala();
 
 public:

@@ -1,9 +1,10 @@
 #include "GUI_Network.h"
 
-#include "../Module_obstacle.h"
 #include "../MQTT/MQTT.h"
 #include "../MQTT/PAHO.h"
 #include "../HTTP/HTTP.h"
+
+#include "../../Node_interface.h"
 
 #include "../../../Specific/color.h"
 
@@ -11,11 +12,11 @@
 
 
 //Constructor / Destructor
-GUI_Network::GUI_Network(Module_obstacle* module){
+GUI_Network::GUI_Network(Node_interface* node_interface){
   //---------------------------
 
-  this->mqttManager = module->get_mqttManager();
-  this->httpsManager = module->get_httpsManager();
+  this->mqttManager = node_interface->get_mqttManager();
+  this->httpsManager = node_interface->get_httpsManager();
 
   this->item_width = 100;
 

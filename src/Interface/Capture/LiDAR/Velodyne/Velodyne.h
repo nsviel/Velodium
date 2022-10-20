@@ -8,7 +8,7 @@
 
 #include <thread>
 
-class Node_operation;
+class Node_interface;
 class Extractor;
 
 class UDP_frame;
@@ -20,7 +20,7 @@ class Velodyne
 {
 public:
   //Constructor / Destructor
-  Velodyne(Node_operation* node_ope);
+  Velodyne(Node_interface* node_interface);
   ~Velodyne();
 
 public:

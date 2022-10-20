@@ -6,6 +6,7 @@
 class Node_module;
 class Node_engine;
 class Node_operation;
+class Node_interface;
 
 class Obstacle;
 class Filemanager;
@@ -32,18 +33,20 @@ public:
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
   inline Node_module* get_node_module(){return node_module;}
+  inline Node_interface* get_node_interface(){return node_interface;}
 
   inline Configuration* get_configManager(){return configManager;}
   inline Obstacle* get_obstacleManager(){return obstacleManager;}
   inline Filemanager* get_fileManager(){return fileManager;}
   inline Prediction* get_predManager(){return predManager;}
   inline Warning* get_warningManager(){return warningManager;}
-  
+
   inline GUI_Obstacle* get_gui_obstacle(){return gui_obstacle;}
 
 private:
   Node_engine* node_engine;
   Node_operation* node_ope;
+  Node_interface* node_interface;
 
   Configuration* configManager;
   Node_module* node_module;

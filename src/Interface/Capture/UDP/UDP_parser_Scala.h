@@ -1,18 +1,18 @@
-#ifndef UDP_PARSER_HDL32_H
-#define UDP_PARSER_HDL32_H
+#ifndef UDP_PARSER_SCALA_H
+#define UDP_PARSER_SCALA_H
 
 // Server side implementation of UDP client-server model
 
-#include "../../../../Engine/Data/struct_UDPpacket.h"
-#include "../../../../common.h"
+#include "../../../Engine/Data/struct_UDPpacket.h"
+#include "../../../common.h"
 
 
-class UDP_parser_HDL32
+class UDP_parser_Scala
 {
 public:
   //Constructor / Destructor
-  UDP_parser_HDL32();
-  ~UDP_parser_HDL32();
+  UDP_parser_Scala();
+  ~UDP_parser_Scala();
 
 public:
   //Main functions

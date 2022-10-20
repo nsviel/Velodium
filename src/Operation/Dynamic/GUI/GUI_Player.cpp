@@ -3,11 +3,12 @@
 #include "../Player.h"
 #include "../Online.h"
 
-#include "../../Capture/Capture.h"
 #include "../../Node_operation.h"
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
+#include "../../../Interface/Node_interface.h"
+#include "../../../Interface/Capture/Capture.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -17,11 +18,12 @@ GUI_Player::GUI_Player(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_interface* node_interface = node_engine->get_node_interface();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->playerManager = node_ope->get_playerManager();
   this->onlineManager = node_ope->get_onlineManager();
-  this->captureManager = node_ope->get_captureManager();
+  this->captureManager = node_interface->get_captureManager();
 
   this->item_width = 100;
 

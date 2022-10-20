@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class Node_operation;
+class Node_interface;
 class Scene;
 class Loader;
 class Extractor;
@@ -19,7 +19,7 @@ class Capture
 {
 public:
   //Constructor / Destructor
-  Capture(Node_operation* node_ope);
+  Capture(Node_interface* node_interface);
   ~Capture();
 
 public:
@@ -51,7 +51,6 @@ public:
   inline int get_capture_nb_point_raw(){return capture_nb_point_raw;}
 
 private:
-  Node_module* node_module;
   Scene* sceneManager;
   Loader* loaderManager;
   Configuration* configManager;

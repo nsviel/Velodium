@@ -6,14 +6,14 @@
 class Scala;
 class Velodyne;
 class Capture;
-class Node_operation;
+class Node_interface;
 
 
 class GUI_Capture
 {
 public:
   //Constructor / Destructor
-  GUI_Capture(Node_operation* node_ope);
+  GUI_Capture(Node_interface* node_interface);
   ~GUI_Capture();
 
 public:

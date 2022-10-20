@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Configuration;
-class Module_obstacle;
+class Node_interface;
 class Saving;
 class http_daemon;
 
@@ -12,7 +12,7 @@ class http_daemon;
 class HTTP
 {
 public:
-  HTTP(Module_obstacle* node);
+  HTTP(Node_interface* node_interface);
   ~HTTP();
 
 public:

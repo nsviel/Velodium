@@ -3,7 +3,7 @@
 
 #include "../../../common.h"
 
-class Module_obstacle;
+class Node_interface;
 class Configuration;
 class PAHO;
 
@@ -12,7 +12,7 @@ class MQTT
 {
 public:
   //Constructor / Destructor
-  MQTT(Module_obstacle* module);
+  MQTT(Node_interface* node_interface);
   ~MQTT();
 
 public:

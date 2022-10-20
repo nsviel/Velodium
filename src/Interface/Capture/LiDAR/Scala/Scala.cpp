@@ -4,7 +4,7 @@
 
 #include "Scala.h"
 
-#include "../../../Node_operation.h"
+#include "../../../Node_interface.h"
 
 #include "../../../../Engine/Node_engine.h"
 #include "../../../../Engine/Scene/Configuration.h"
@@ -19,11 +19,11 @@
 
 
 //Constructor / Destructor
-Scala::Scala(Node_operation* node_ope){
+Scala::Scala(Node_interface* node_interface){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
-  Node_load* node_load = node_ope->get_node_load();
+  Node_engine* node_engine = node_interface->get_node_engine();
+  Node_load* node_load = node_interface->get_node_load();
   Configuration* configManager = node_engine->get_configManager();
   string path_data = configManager->parse_json_s("parameter", "path_data");
 

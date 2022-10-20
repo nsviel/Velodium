@@ -1,7 +1,9 @@
 #include "Saving.h"
 
 #include "../Node_operation.h"
-#include "../Capture/Capture.h"
+
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/Capture/Capture.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
@@ -24,6 +26,7 @@ Saving::Saving(Node_operation* node){
   Node_engine* node_engine = node_ope->get_node_engine();
   Node_load* node_load = node_engine->get_node_load();
 
+  this->node_interface = node_engine->get_node_interface();
   this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();
   this->sceneManager = node_engine->get_sceneManager();
@@ -79,7 +82,7 @@ void Saving::controler_nb_subset(Cloud* cloud){
   }
   //Remove old frame if option is activated
   else{
-    Capture* captureManager = node_ope->get_captureManager();
+    Capture* captureManager = node_interface->get_captureManager();
     bool is_capturing = *captureManager->get_is_capturing();
     if(cloud->subset.size() > nb_subset_max && is_capturing){
       sceneManager->remove_subset_last(cloud);

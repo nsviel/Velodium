@@ -1,8 +1,8 @@
 #include "file_PCAP.h"
 
-#include "../../Operation/Capture/src/UDP/UDP_parser_VLP16.h"
-#include "../../Operation/Capture/src/UDP/UDP_parser_HDL32.h"
-#include "../../Operation/Capture/src/UDP/UDP_frame.h"
+#include "../../Interface/Capture/UDP/UDP_parser_VLP16.h"
+#include "../../Interface/Capture/UDP/UDP_parser_HDL32.h"
+#include "../../Interface/Capture/UDP/UDP_frame.h"
 
 #include <tins/tins.h>
 #include <iostream>

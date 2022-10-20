@@ -1,6 +1,5 @@
 #include "GUI_Obstacle.h"
 
-#include "../HTTP/HTTP.h"
 #include "../src/Obstacle.h"
 #include "../src/Prediction.h"
 #include "../Module_obstacle.h"
@@ -12,6 +11,8 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/CoordTransform.h"
+#include "../../../Interface/Node_interface.h"
+#include "../../../Interface/Network/HTTP/HTTP.h"
 
 
 //Constructor / Destructor
@@ -21,12 +22,13 @@ GUI_Obstacle::GUI_Obstacle(Module_obstacle* module){
   Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = node_module->get_node_ope();
   Node_engine* node_engine = module->get_node_engine();
+  Node_interface* node_interface = node_engine->get_node_interface();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->coordManager = node_ope->get_coordManager();
   this->obstacleManager = module->get_obstacleManager();
   this->predManager = module->get_predManager();
-  this->httpsManager = module->get_httpsManager();
+  this->httpsManager = node_interface->get_httpsManager();
 
   this->item_width = 100;
 

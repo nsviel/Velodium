@@ -5,6 +5,7 @@
 
 class Node_engine;
 class Node_operation;
+class Node_interface;
 
 class Module_radiometry;
 class Module_registration;
@@ -30,6 +31,7 @@ public:
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
+  inline Node_interface* get_node_interface(){return node_interface;}
 
   inline Module_radiometry* get_module_radio(){return module_radio;}
   inline Module_registration* get_module_regist(){return module_regist;}
@@ -41,6 +43,7 @@ public:
 private:
   Node_engine* node_engine;
   Node_operation* node_ope;
+  Node_interface* node_interface;
 
   Module_registration* module_regist;
   Module_radiometry* module_radio;

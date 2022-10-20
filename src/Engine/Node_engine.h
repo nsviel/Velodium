@@ -44,6 +44,7 @@ public:
   inline Node_operation* get_node_ope(){return node_ope;}
   inline Node_gui* get_node_gui(){return node_gui;}
   inline Node_load* get_node_load(){return node_load;}
+  inline Node_interface* get_node_interface(){return node_interface;}
 
   inline Configuration* get_configManager(){return configManager;}
   inline Dimension* get_dimManager(){return dimManager;}

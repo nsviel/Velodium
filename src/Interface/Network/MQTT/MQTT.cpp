@@ -3,16 +3,16 @@
 
 #include "PAHO.h"
 
-#include "../Module_obstacle.h"
+#include "../../Node_interface.h"
 
 #include "../../../Engine/Scene/Configuration.h"
 
 
 //Constructor / Destructor
-MQTT::MQTT(Module_obstacle* module){
+MQTT::MQTT(Node_interface* node_interface){
   //---------------------------
 
-  this->configManager = module->get_configManager();
+  this->configManager = node_interface->get_configManager();
   this->mqtt_sncf = new PAHO();
   this->mqtt_local = new PAHO();
 

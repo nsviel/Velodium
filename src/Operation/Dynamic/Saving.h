@@ -6,8 +6,10 @@
 #include <thread>
 #include <queue>
 
-class Node_operation;
+class Node_interface;
 class Node_engine;
+class Node_operation;
+
 class Scene;
 class Renderer;
 class Configuration;
@@ -45,7 +47,9 @@ public:
   inline int* get_save_image_max(){return &save_image_max;}
 
 private:
+  Node_interface* node_interface;
   Node_operation* node_ope;
+  
   Scene* sceneManager;
   Renderer* renderManager;
   Configuration* configManager;

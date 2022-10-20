@@ -1,7 +1,7 @@
 #include "HTTP.h"
 #include "http_daemon.h"
 
-#include "../Module_obstacle.h"
+#include "../../Node_interface.h"
 
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Dynamic/Saving.h"
@@ -9,12 +9,12 @@
 
 
 //Constructor / Destructor
-HTTP::HTTP(Module_obstacle* module){
+HTTP::HTTP(Node_interface* node_interface){
   //---------------------------
 
-  Node_operation* node_ope = module->get_node_ope();
+  Node_operation* node_ope = node_interface->get_node_ope();
 
-  this->configManager = module->get_configManager();
+  this->configManager = node_interface->get_configManager();
   this->saveManager = node_ope->get_savingManager();
   this->daemonManager = new http_daemon();
 
@@ -27,7 +27,7 @@ HTTP::~HTTP(){}
 void HTTP::update_configuration(){
   //---------------------------
 
-  this->path_image = saveManager->get_path_image() + "image";
+  this->path_image = configManager->parse_json_s("parameter", "path_data") + "image";
   this->with_http_demon = configManager->parse_json_b("network", "with_http_demon");
   this->server_port = configManager->parse_json_i("network", "http_port");
 

@@ -53,7 +53,7 @@ private:
   Followup* followManager;
   Object* objectManager;
   Renderer* renderManager;
-  http_command* commandManager;
+  http_command* httpManager;
   Saving* savingManager;
 
   float time_operation;

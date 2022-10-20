@@ -6,7 +6,8 @@
 #include "../../Module/Node_module.h"
 #include "../../Module/SLAM/Module_slam.h"
 #include "../../Module/SLAM/src/SLAM.h"
-#include "../../Module/Obstacle/HTTP/http_command.h"
+
+#include "../../Interface/Network/HTTP/http_command.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Color/Color.h"
@@ -43,7 +44,7 @@ Online::Online(Node_operation* node_ope){
   this->objectManager = node_engine->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
   this->savingManager = node_ope->get_savingManager();
-  this->commandManager = new http_command();
+  this->httpManager = new http_command();
 
   //---------------------------
   this->update_configuration();
@@ -136,7 +137,7 @@ void Online::compute_displayStats(Subset* subset){
 void Online::compute_http_command(){
   //---------------------------
 
-  vector<vector<string>> option = commandManager->parse_http_config();
+  vector<vector<string>> option = httpManager->parse_http_config();
 
   for(int i=0; i<option.size(); i++){
     string opt = option[i][0];

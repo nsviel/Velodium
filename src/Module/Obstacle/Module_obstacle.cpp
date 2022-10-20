@@ -11,6 +11,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Operation/Node_operation.h"
+#include "../../Interface/Node_interface.h"
 
 
 //Constructor / Destructor
@@ -20,10 +21,9 @@ Module_obstacle::Module_obstacle(Node_module* node){
 
   this->node_engine = node->get_node_engine();
   this->node_ope = node->get_node_ope();
-  this->configManager = node_engine->get_configManager();
+  this->node_interface = node->get_node_interface();
 
-  this->mqttManager = new MQTT(this);
-  this->httpsManager = new HTTP(this);
+  this->configManager = node_engine->get_configManager();
   this->warningManager = new Warning(this);
   this->fileManager = new Filemanager(this);
   this->predManager = new Prediction(this);
@@ -47,8 +47,6 @@ void Module_obstacle::update(){
   //---------------------------
 
   fileManager->update_configuration();
-  httpsManager->update_configuration();
-  mqttManager->update_configuration();
 
   //---------------------------
 }

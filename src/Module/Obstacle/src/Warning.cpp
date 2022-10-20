@@ -1,15 +1,19 @@
 #include "Warning.h"
 
 #include "../Module_obstacle.h"
-#include "../MQTT/MQTT.h"
-#include "../MQTT/PAHO.h"
+
+#include "../../../Interface/Node_interface.h"
+#include "../../../Interface/Network/MQTT/MQTT.h"
+#include "../../../Interface/Network/MQTT/PAHO.h"
 
 
 //Constructor / Destructor
 Warning::Warning(Module_obstacle* module){
   //---------------------------
 
-  this->mqttManager = module->get_mqttManager();
+  Node_interface* node_interface = module->get_node_interface();
+
+  this->mqttManager = node_interface->get_mqttManager();
 
   //---------------------------
 }

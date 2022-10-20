@@ -3,9 +3,10 @@
 #include "LiDAR/Scala/Scala.h"
 #include "LiDAR/Velodyne/Velodyne.h"
 
-#include "../Node_operation.h"
-#include "../Dynamic/Online.h"
+#include "../Node_interface.h"
 
+#include "../../Operation/Node_operation.h"
+#include "../../Operation/Dynamic/Online.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
@@ -18,18 +19,18 @@
 
 
 //Constructor / Destructor
-Capture::Capture(Node_operation* node_ope){
+Capture::Capture(Node_interface* node_interface){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
-  Node_load* node_load = node_ope->get_node_load();
+  Node_engine* node_engine = node_interface->get_node_engine();
+  Node_load* node_load = node_interface->get_node_load();
 
   this->configManager = node_engine->get_configManager();
   this->node_ope = node_engine->get_node_ope();
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loadManager();
-  this->scalaManager = new Scala(node_ope);
-  this->veloManager = new Velodyne(node_ope);
+  this->scalaManager = new Scala(node_interface);
+  this->veloManager = new Velodyne(node_interface);
 
   //---------------------------
   this->update_configuration();

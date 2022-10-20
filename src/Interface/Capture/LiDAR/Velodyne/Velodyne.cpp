@@ -5,11 +5,11 @@
 
 #include "Velodyne.h"
 
-#include "../../src/UDP/UDP_frame.h"
-#include "../../src/UDP/UDP_server.h"
-#include "../../src/UDP/UDP_parser_VLP16.h"
+#include "../../UDP/UDP_frame.h"
+#include "../../UDP/UDP_server.h"
+#include "../../UDP/UDP_parser_VLP16.h"
 
-#include "../../../Node_operation.h"
+#include "../../../Node_interface.h"
 
 #include "../../../../Engine/Node_engine.h"
 #include "../../../../Load/Node_load.h"
@@ -24,10 +24,10 @@
 
 
 //Constructor / Destructor
-Velodyne::Velodyne(Node_operation* node_ope){
+Velodyne::Velodyne(Node_interface* node_interface){
   //---------------------------
 
-  Node_load* node_load = node_ope->get_node_load();
+  Node_load* node_load = node_interface->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
   this->udpServManager = new UDP_server();

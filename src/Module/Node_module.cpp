@@ -8,6 +8,7 @@
 #include "../Engine/Node_engine.h"
 #include "../Engine/Scene/Configuration.h"
 #include "../Operation/Node_operation.h"
+#include "../Interface/Node_interface.h"
 
 
 //Constructor / destructor
@@ -16,6 +17,7 @@ Node_module::Node_module(Node_engine* node){
 
   this->node_engine = node;
   this->node_ope = node->get_node_ope();
+  this->node_interface = node->get_node_interface();
 
   Configuration* configManager = node_engine->get_configManager();
   this->with_slam = configManager->parse_json_b("module", "with_slam");
