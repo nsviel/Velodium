@@ -65,6 +65,7 @@ void Node_engine::update(){
 void Node_engine::runtime(){
   //---------------------------
 
+  node_gui->runtime();
   node_module->runtime();
   node_ope->runtime();
 

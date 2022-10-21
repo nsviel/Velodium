@@ -4,8 +4,6 @@
 #include "../Node_operation.h"
 
 #include "../../Module/Node_module.h"
-#include "../../Module/SLAM/Module_slam.h"
-#include "../../Module/SLAM/src/SLAM.h"
 
 #include "../../Interface/Network/HTTP/http_command.h"
 
@@ -17,7 +15,6 @@
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../Engine/OpenGL/Camera/Followup.h"
 #include "../../Engine/OpenGL/Dimension.h"
-
 #include "../../Engine/Engine.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
@@ -94,7 +91,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   this->compute_visibility(cloud, ID_subset);
 
   //Update dynamic interfaces
-  savingManager->update_dynamic(cloud, ID_subset);
+  savingManager->compute_online(cloud, ID_subset);
 
   //Update dynamic glyphs
   objectManager->update_dynamic(cloud);

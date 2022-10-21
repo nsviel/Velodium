@@ -13,7 +13,7 @@
 #include "../Scene/Configuration.h"
 
 #include "../../GUI/Node_gui.h"
-#include "../../GUI/GUI.h"
+#include "../../GUI/Control/GUI.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #define GL_GLEXT_PROTOTYPES

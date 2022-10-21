@@ -2,9 +2,6 @@
 
 #include "../Node_operation.h"
 
-#include "../../Interface/Node_interface.h"
-#include "../../Interface/Capture/Capture.h"
-
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../Engine/Scene/Scene.h"
@@ -40,8 +37,6 @@ Saving::~Saving(){}
 void Saving::update_configuration(){
   //---------------------------
 
-  this->nb_subset_max = 50;
-  this->with_justOneFrame = false;
   this->with_save_frame = configManager->parse_json_b("interface", "with_save_frame");
   this->with_save_image = configManager->parse_json_b("interface", "with_save_image");
 
@@ -54,7 +49,7 @@ void Saving::update_configuration(){
 
   //---------------------------
 }
-void Saving::update_dynamic(Cloud* cloud, int ID_subset){
+void Saving::compute_online(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   //---------------------------
 
@@ -66,27 +61,6 @@ void Saving::update_dynamic(Cloud* cloud, int ID_subset){
   //Save rendered image
   if(with_save_image){
     this->save_image();
-  }
-
-  //Regulate the number of scene subsets
-  this->controler_nb_subset(cloud);
-
-  //---------------------------
-}
-void Saving::controler_nb_subset(Cloud* cloud){
-  //---------------------------
-
-  //If option, remove all other subset
-  if(with_justOneFrame){
-    sceneManager->remove_subset_last(cloud);
-  }
-  //Remove old frame if option is activated
-  else{
-    Capture* captureManager = node_interface->get_captureManager();
-    bool is_capturing = *captureManager->get_is_capturing();
-    if(cloud->subset.size() > nb_subset_max && is_capturing){
-      sceneManager->remove_subset_last(cloud);
-    }
   }
 
   //---------------------------

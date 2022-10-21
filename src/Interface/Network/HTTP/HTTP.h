@@ -5,7 +5,6 @@
 
 class Configuration;
 class Node_interface;
-class Saving;
 class http_daemon;
 
 
@@ -26,7 +25,6 @@ public:
 private:
   Configuration* configManager;
   http_daemon* daemonManager;
-  Saving* saveManager;
 
   bool with_http_demon;
   bool is_https_deamon;

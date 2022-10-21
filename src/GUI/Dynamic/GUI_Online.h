@@ -1,11 +1,11 @@
 #ifndef GUI_ONLINE_H
 #define GUI_ONLINE_H
 
-#include "../../../common.h"
+#include "../../common.h"
 
 class Node_engine;
 class Node_module;
-class Node_operation;
+class Node_gui;
 
 class Scene;
 class Player_cloud;
@@ -26,7 +26,7 @@ class GUI_Online
 {
 public:
   //Constructor / Destructor
-  GUI_Online(Node_operation* node_ope);
+  GUI_Online(Node_gui* node_ope);
   ~GUI_Online();
 
 public:
@@ -49,6 +49,7 @@ public:
 private:
   Node_module* node_module;
   Node_engine* node_engine;
+
   Followup* followManager;
   Scene* sceneManager;
   Heatmap* heatmapManager;

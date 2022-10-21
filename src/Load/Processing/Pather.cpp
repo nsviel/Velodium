@@ -89,7 +89,7 @@ void Pather::loading_frames(){
 
   //---------------------------
 }
-void Pather::loading_directory_frame(string path){
+Cloud* Pather::loading_directory_frame(string path){
   //---------------------------
 
   //Get all frame path
@@ -101,7 +101,11 @@ void Pather::loading_directory_frame(string path){
     loaderManager->load_cloud_byFrame(path_vec);
   }
 
+  //Get created cloud
+  Cloud* cloud = loaderManager->get_createdcloud();
+
   //---------------------------
+  return cloud;
 }
 void Pather::loading_sampling(){
   //---------------------------

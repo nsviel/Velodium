@@ -9,7 +9,6 @@ class GUI;
 class Object;
 
 class Node_engine;
-class Node_gui;
 
 
 class Engine
@@ -28,9 +27,6 @@ public:
   void runtime_draw_glyph();
   void runtime_draw_cloud();
 
-  inline Node_engine* get_node_engine(){return node_engine;}
-  inline Node_gui* get_node_gui(){return node_gui;}
-
 private:
   Scene* sceneManager;
   Glyphs* glyphManager;
@@ -38,7 +34,6 @@ private:
   Object* objectManager;
 
   Node_engine* node_engine;
-  Node_gui* node_gui;
 
   bool is_visualization;
   uint modelID, comID;

@@ -1,12 +1,12 @@
 #include "GUI_MenuBar.h"
-
 #include "GUI_LeftPanel.h"
 
+#include "../Node_gui.h"
 #include "../Windows/Window_table.h"
 #include "../Windows/GUI_windows.h"
 #include "../Control/GUI_Option.h"
 #include "../Control/GUI_Initialization.h"
-#include "../Node_gui.h"
+#include "../Dynamic/GUI_Player.h"
 
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Pather.h"
@@ -17,7 +17,6 @@
 #include "../../Engine/OpenGL/CoreGLengine.h"
 #include "../../Engine/OpenGL/Textures.h"
 
-#include "../../Operation/Dynamic/GUI/GUI_Player.h"
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Transformation/Transforms.h"
@@ -45,7 +44,7 @@ GUI_menuBar::GUI_menuBar(Node_gui* node){
   this->optionManager = node_gui->get_gui_option();
   this->gui_window = node_gui->get_gui_window();
   this->gui_leftPanel = node_gui->get_gui_leftPanel();
-  this->gui_player = node_ope->get_gui_player();
+  this->gui_player = node_gui->get_gui_player();
   this->sceneManager = node_engine->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_pathManager();

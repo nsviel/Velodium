@@ -7,8 +7,6 @@ class Node_gui;
 class Scene;
 class Loader;
 class Pather;
-class Configuration;
-class SLAM_parameter;
 
 
 class GUI_Initialization
@@ -26,8 +24,6 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Pather* pathManager;
-  Configuration* configManager;
-  SLAM_parameter* slam_param;
 };
 
 #endif

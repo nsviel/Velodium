@@ -17,6 +17,8 @@ class GUI_leftPanel;
 class GUI_consol;
 class GUI_fileManager;
 class GUI_Initialization;
+class GUI_Online;
+class GUI_Player;
 
 
 class Node_gui
@@ -48,6 +50,8 @@ public:
   inline GUI_consol* get_gui_consol(){return gui_consol;}
   inline GUI_fileManager* get_gui_fileManager(){return gui_fileManager;}
   inline GUI_Initialization* get_gui_initialization(){return gui_initialization;}
+  inline GUI_Online* get_gui_online(){return gui_online;}
+  inline GUI_Player* get_gui_player(){return gui_player;}
 
 private:
   Node_engine* node_engine;
@@ -64,6 +68,8 @@ private:
   GUI_consol* gui_consol;
   GUI_fileManager* gui_fileManager;
   GUI_Initialization* gui_initialization;
+  GUI_Online* gui_online;
+  GUI_Player* gui_player;
 };
 
 #endif

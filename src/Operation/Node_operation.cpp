@@ -7,8 +7,6 @@
 #include "Dynamic/Online.h"
 #include "Dynamic/Player.h"
 #include "Dynamic/Saving.h"
-#include "Dynamic/GUI/GUI_Player.h"
-#include "Dynamic/GUI/GUI_Online.h"
 
 #include "Function/Selection.h"
 #include "Function/CoordTransform.h"
@@ -27,6 +25,7 @@ Node_operation::Node_operation(Node_engine* node){
   //---------------------------
 
   this->node_load = node->get_node_load();
+
   this->fittingManager = new Fitting(this);
   this->attribManager = new Attribut(this);
   this->heatmapManager = new Heatmap(this);
@@ -40,8 +39,6 @@ Node_operation::Node_operation(Node_engine* node){
   this->playerManager = new Player(this);
 
   this->gui_color = new GUI_Color(this);
-  this->gui_player = new GUI_Player(this);
-  this->gui_online = new GUI_Online(this);
 
   //---------------------------
 }
@@ -61,14 +58,12 @@ void Node_operation::runtime(){
   //---------------------------
 
   playerManager->runtime();
-  gui_player->runtime_player_mouse();
 
   //---------------------------
 }
 void Node_operation::draw(){
   //---------------------------
 
-  gui_online->design_dynamic();
 
   //---------------------------
 }

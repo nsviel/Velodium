@@ -25,8 +25,7 @@ public:
 
 public:
   void update_configuration();
-  void update_dynamic(Cloud* cloud, int ID_subset);
-  void controler_nb_subset(Cloud* cloud);
+  void compute_online(Cloud* cloud, int ID_subset);
   void clean_directories();
   void check_directories();
 
@@ -39,7 +38,6 @@ public:
 
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
-  inline int* get_nb_subset_max(){return &nb_subset_max;}
   inline string get_path_image(){return path_image;}
   inline string get_path_image_last(){return path_image_last;}
   inline string get_path_frame(){return path_frame;}
@@ -49,7 +47,7 @@ public:
 private:
   Node_interface* node_interface;
   Node_operation* node_ope;
-  
+
   Scene* sceneManager;
   Renderer* renderManager;
   Configuration* configManager;
@@ -68,8 +66,6 @@ private:
   int save_image_ID;
   int save_image_max;
 
-  int nb_subset_max;
-  bool with_justOneFrame;
   bool with_save_frame;
   bool with_save_image;
 

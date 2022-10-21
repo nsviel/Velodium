@@ -1,7 +1,7 @@
 #ifndef GUI_MANAGER_H
 #define GUI_MANAGER_H
 
-#include "../common.h"
+#include "../../common.h"
 
 class Dimension;
 

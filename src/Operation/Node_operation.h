@@ -20,8 +20,6 @@ class Online;
 class Saving;
 
 class GUI_Color;
-class GUI_Online;
-class GUI_Player;
 
 
 class Node_operation
@@ -53,8 +51,6 @@ public:
   inline Saving* get_savingManager(){return savingManager;}
 
   inline GUI_Color* get_gui_color(){return gui_color;}
-  inline GUI_Online* get_gui_online(){return gui_online;}
-  inline GUI_Player* get_gui_player(){return gui_player;}
 
 private:
   Node_engine* node_engine;
@@ -74,8 +70,6 @@ private:
   Saving* savingManager;
 
   GUI_Color* gui_color;
-  GUI_Online* gui_online;
-  GUI_Player* gui_player;
 };
 
 #endif

@@ -1,29 +1,31 @@
 #include "GUI_Player.h"
 
-#include "../Player.h"
-#include "../Online.h"
+#include "../Node_gui.h"
 
-#include "../../Node_operation.h"
+#include "../../Operation/Node_operation.h"
+#include "../../Operation/Dynamic/Player.h"
+#include "../../Operation/Dynamic/Online.h"
 
-#include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Interface/Node_interface.h"
-#include "../../../Interface/Capture/Capture.h"
+#include "../../Engine/Node_engine.h"
+#include "../../Engine/Scene/Scene.h"
+
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/Capture/Capture.h"
 
 #include "IconsFontAwesome5.h"
 
 
 //Constructor / Destructor
-GUI_Player::GUI_Player(Node_operation* node_ope){
+GUI_Player::GUI_Player(Node_gui* node_gui){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
-  Node_interface* node_interface = node_engine->get_node_interface();
+  Node_engine* node_engine = node_gui->get_node_engine();
+  Node_operation* node_ope = node_gui->get_node_ope();
 
+  this->node_interface = node_engine->get_node_interface();
   this->sceneManager = node_engine->get_sceneManager();
   this->playerManager = node_ope->get_playerManager();
   this->onlineManager = node_ope->get_onlineManager();
-  this->captureManager = node_interface->get_captureManager();
 
   this->item_width = 100;
 
@@ -120,15 +122,15 @@ void GUI_Player::player_button(){
   //Offline mode
   if(*player_mode == "offline"){
     //Play button
-    this->button_offline_play(cloud);
+    this->button_player_play(cloud);
     ImGui::SameLine();
 
     //Pause button
-    this->button_offline_pause(cloud);
+    this->button_player_pause(cloud);
     ImGui::SameLine();
 
     //Stop button
-    this->button_offline_stop(cloud);
+    this->button_player_stop(cloud);
     ImGui::SameLine();
 
     //Frequency choice
@@ -140,23 +142,19 @@ void GUI_Player::player_button(){
   }
   //Online mode
   else if(*player_mode == "online"){
-    this->button_online_play(cloud);
+    this->button_capture_play(cloud);
     ImGui::SameLine();
 
     //Pause button
-    this->button_online_pause(cloud);
+    this->button_capture_pause(cloud);
     ImGui::SameLine();
 
     //Stop button
-    this->button_online_stop(cloud);
+    this->button_capture_stop(cloud);
     ImGui::SameLine();
 
     //Connection port
-    int* velo_port = captureManager->get_capture_port();
-    ImGui::SetNextItemWidth(75);
-    if(ImGui::InputInt("##555", velo_port)){
-      captureManager->stop_capture();
-    }
+    this->button_capture_port();
   }
 
   //---------------------------
@@ -188,7 +186,7 @@ void GUI_Player::player_selection(){
 }
 
 //Specific button function
-void GUI_Player::button_offline_play(Cloud* cloud){
+void GUI_Player::button_player_play(Cloud* cloud){
   bool is_playing = *playerManager->get_player_isrunning();
   //---------------------------
 
@@ -212,7 +210,7 @@ void GUI_Player::button_offline_play(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_offline_pause(Cloud* cloud){
+void GUI_Player::button_player_pause(Cloud* cloud){
   bool is_paused = *playerManager->get_player_ispaused();
   //---------------------------
 
@@ -230,7 +228,7 @@ void GUI_Player::button_offline_pause(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_offline_stop(Cloud* cloud){
+void GUI_Player::button_player_stop(Cloud* cloud){
   //---------------------------
 
   if (ImGui::Button(ICON_FA_STOP "##37")){
@@ -242,7 +240,8 @@ void GUI_Player::button_offline_stop(Cloud* cloud){
   //---------------------------
 }
 
-void GUI_Player::button_online_play(Cloud* cloud){
+void GUI_Player::button_capture_play(Cloud* cloud){
+  Capture* captureManager = node_interface->get_captureManager();
   bool* is_capturing = captureManager->get_is_capturing();
   //---------------------------
 
@@ -262,7 +261,8 @@ void GUI_Player::button_online_play(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_online_pause(Cloud* cloud){
+void GUI_Player::button_capture_pause(Cloud* cloud){
+  Capture* captureManager = node_interface->get_captureManager();
   bool is_capturing = *captureManager->get_is_capturing();
   //---------------------------
 
@@ -279,13 +279,26 @@ void GUI_Player::button_online_pause(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_online_stop(Cloud* cloud){
+void GUI_Player::button_capture_stop(Cloud* cloud){
+  Capture* captureManager = node_interface->get_captureManager();
   //---------------------------
 
   if (ImGui::Button(ICON_FA_STOP "##37")){
     if(cloud != nullptr){
       captureManager->stop_capture();
     }
+  }
+
+  //---------------------------
+}
+void GUI_Player::button_capture_port(){
+  Capture* captureManager = node_interface->get_captureManager();
+  //---------------------------
+
+  int* capture_port = captureManager->get_capture_port();
+  ImGui::SetNextItemWidth(75);
+  if(ImGui::InputInt("##555", capture_port)){
+    captureManager->stop_capture();
   }
 
   //---------------------------

@@ -7,7 +7,7 @@
 #include "Scene/Configuration.h"
 
 #include "../GUI/Node_gui.h"
-#include "../GUI/GUI.h"
+#include "../GUI/Control/GUI.h"
 
 
 //Constructor / Destructor
@@ -16,8 +16,8 @@ Engine::Engine(Node_engine* engine){
   //---------------------------
 
   Configuration* configManager = node_engine->get_configManager();
+  Node_gui* node_gui = node_engine->get_node_gui();
 
-  this->node_gui = node_engine->get_node_gui();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
   this->guiManager = node_gui->get_guiManager();
@@ -38,9 +38,6 @@ void Engine::loop_scene(){
 
   //Runtime glyph
   this->runtime_draw_glyph();
-
-  //Runtime gui
-  node_gui->runtime();
 
   //Runtime other
   node_engine->runtime();

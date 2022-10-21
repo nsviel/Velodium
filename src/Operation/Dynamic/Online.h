@@ -5,7 +5,6 @@
 
 class Node_operation;
 class Node_engine;
-class SLAM;
 class Color;
 class Camera;
 class Engine;
@@ -46,7 +45,6 @@ private:
   Node_engine* node_engine;
   Scene* sceneManager;
   Color* colorManager;
-  SLAM* slamManager;
   Filter* filterManager;
   Dimension* dimManager;
   Configuration* configManager;

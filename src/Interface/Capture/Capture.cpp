@@ -52,6 +52,8 @@ void Capture::update_configuration(){
   this->capture_nb_point = 0;
   this->capture_nb_point_raw = 0;
   this->is_first_run = true;
+  this->with_justOneFrame = false;
+  this->nb_subset_max = 50;
 
   if(with_capture){
     this->start_new_capture(lidar_model);
@@ -190,6 +192,9 @@ void Capture::capture_vlp16(){
   this->is_capturing = true;
   ID_capture++;
 
+  //Regulate the number of subsets
+  this->control_nb_subset(cloud_capture);
+
   //---------------------------
   console.AddLog("ok", "Watcher - Vlp16 capture");
 }
@@ -287,6 +292,22 @@ void Capture::supress_nullpoints(Subset* subset){
   }
   if(ts.size() != 0){
     subset->ts = ts;
+  }
+
+  //---------------------------
+}
+void Capture::control_nb_subset(Cloud* cloud){
+  //---------------------------
+
+  //If option, remove all other subset
+  if(with_justOneFrame){
+    sceneManager->remove_subset_last(cloud);
+  }
+  //Remove old frame if option is activated
+  else{
+    if(cloud->subset.size() > nb_subset_max){
+      sceneManager->remove_subset_last(cloud);
+    }
   }
 
   //---------------------------

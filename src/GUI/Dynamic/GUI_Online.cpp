@@ -1,37 +1,38 @@
 #include "GUI_Online.h"
 #include "GUI_Player.h"
 
-#include "../Online.h"
-#include "../Player.h"
-#include "../Saving.h"
+#include "../Node_gui.h"
 
-#include "../../Node_operation.h"
-#include "../../Color/Color.h"
-#include "../../Color/GUI/GUI_Color.h"
+#include "../../Operation/Node_operation.h"
+#include "../../Operation/Dynamic/Online.h"
+#include "../../Operation/Dynamic/Player.h"
+#include "../../Operation/Dynamic/Saving.h"
+#include "../../Operation/Color/Color.h"
+#include "../../Operation/Color/GUI/GUI_Color.h"
+#include "../../Operation/Color/Heatmap.h"
+#include "../../Operation/Transformation/Filter.h"
 
-#include "../../../Engine/OpenGL/Camera/Followup.h"
-#include "../../../Engine/OpenGL/Camera/Renderer.h"
-#include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Configuration.h"
-#include "../../../Operation/Node_operation.h"
-#include "../../../Operation/Color/Heatmap.h"
-#include "../../../Operation/Transformation/Filter.h"
-#include "../../../Operation/Color/GUI/GUI_Color.h"
-#include "../../../Module/Node_module.h"
+#include "../../Engine/Node_engine.h"
+#include "../../Engine/OpenGL/Camera/Followup.h"
+#include "../../Engine/OpenGL/Camera/Renderer.h"
+#include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Configuration.h"
+
+#include "../../Module/Node_module.h"
 
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
 
 
 //Constructor / Destructor
-GUI_Online::GUI_Online(Node_operation* node_ope){
+GUI_Online::GUI_Online(Node_gui* node_gui){
   //---------------------------
 
-  this->node_engine = node_ope->get_node_engine();
+  Node_operation* node_ope = node_gui->get_node_ope();
+
+  this->node_engine = node_gui->get_node_engine();
   this->node_module = node_engine->get_node_module();
-  this->gui_color = node_ope->get_gui_color();
-  this->gui_player = node_ope->get_gui_player();
+
   this->filterManager = node_ope->get_filterManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->onlineManager = node_ope->get_onlineManager();
@@ -42,6 +43,9 @@ GUI_Online::GUI_Online(Node_operation* node_ope){
   this->colorManager = node_ope->get_colorManager();
   this->configManager = node_engine->get_configManager();
   this->playerManager = node_ope->get_playerManager();
+
+  this->gui_color = node_ope->get_gui_color();
+  this->gui_player = node_gui->get_gui_player();
 
   this->item_width = 100;
 

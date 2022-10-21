@@ -1,15 +1,19 @@
 #include "Node_gui.h"
 
-#include "GUI.h"
 #include "Interface/GUI_Consol.h"
 #include "Interface/GUI_MenuBar.h"
 #include "Interface/GUI_LeftPanel.h"
 #include "Interface/struct_consol.h"
+
+#include "Control/GUI.h"
 #include "Control/GUI_Control.h"
 #include "Control/GUI_Option.h"
 #include "Control/GUI_FileManager.h"
 #include "Control/GUI_Initialization.h"
+
 #include "Windows/GUI_windows.h"
+#include "Dynamic/GUI_Online.h"
+#include "Dynamic/GUI_Player.h"
 
 #include "../Interface/Node_interface.h"
 #include "../Module/Node_module.h"
@@ -32,9 +36,11 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_option = new GUI_option(this);
   this->gui_fileManager = new GUI_fileManager(this);
   this->gui_leftPanel = new GUI_leftPanel(this);
+  this->gui_player = new GUI_Player(this);
   this->gui_menuBar = new GUI_menuBar(this);
   this->gui_consol = new GUI_consol(this);
   this->guiManager = new GUI(this);
+  this->gui_online = new GUI_Online(this);
 
   //---------------------------
 }
@@ -53,6 +59,8 @@ void Node_gui::update(){}
 void Node_gui::runtime(){
   //---------------------------
 
+  gui_player->runtime_player_mouse();
+
   //---------------------------
 }
 void Node_gui::exit(){
@@ -67,7 +75,7 @@ void Node_gui::draw_leftPanel(){
     ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
     //-------------------------------
 
-    node_ope->draw();
+    gui_online->design_dynamic();
     node_module->draw();
     node_interface->draw();
 

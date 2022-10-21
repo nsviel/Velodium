@@ -3,8 +3,6 @@
 
 #include "../../Node_interface.h"
 
-#include "../../../Operation/Node_operation.h"
-#include "../../../Operation/Dynamic/Saving.h"
 #include "../../../Engine/Scene/Configuration.h"
 
 
@@ -12,10 +10,7 @@
 HTTP::HTTP(Node_interface* node_interface){
   //---------------------------
 
-  Node_operation* node_ope = node_interface->get_node_ope();
-
   this->configManager = node_interface->get_configManager();
-  this->saveManager = node_ope->get_savingManager();
   this->daemonManager = new http_daemon();
 
   //---------------------------
