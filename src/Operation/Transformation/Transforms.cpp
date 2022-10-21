@@ -255,6 +255,21 @@ void Transforms::make_Transformation_normal(vector<vec3>& N, mat4 Transformation
   //---------------------------
 }
 
+void Transforms::make_cloud_rotation(Cloud* cloud, vec3 R, string direction){
+  //---------------------------
+
+  this->compute_COM(cloud);
+
+  if(direction == "up"){
+    this->make_rotation(cloud, cloud->COM, R);
+  }
+  else if(direction == "down"){
+    this->make_rotation(cloud, cloud->COM, -R);
+  }
+
+  //---------------------------
+}
+
 //Specific transformation functions
 void Transforms::make_centering(Cloud* cloud){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
@@ -677,6 +692,16 @@ void Transforms::compute_transformXYZ(vector<vec3>& XYZ, vec3& COM, mat4 Mat){
     }
 
     XYZ[i] = vec3(XYZ_tr.x, XYZ_tr.y, XYZ_tr.z);
+  }
+
+  //---------------------------
+}
+void Transforms::compute_COM(Cloud* cloud){
+  //---------------------------
+
+  if(cloud->nb_subset == 1){
+    Subset* subset = *next(cloud->subset.begin(), 0);
+    cloud->COM = fct_centroid(subset->xyz);
   }
 
   //---------------------------

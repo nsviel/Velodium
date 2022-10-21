@@ -24,6 +24,7 @@ public:
   void runtime();
 
   //Selection function
+  void wheel_selection(string direction);
   void select_bySubsetID(Cloud* cloud, int ID_subset);
   bool select_rangeLimit(Cloud* cloud, int& ID_subset);
 

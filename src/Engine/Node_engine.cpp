@@ -66,8 +66,6 @@ void Node_engine::runtime(){
   //---------------------------
 
   engineManager->runtime_scene();
-
-  node_gui->runtime();
   node_module->runtime();
   node_ope->runtime();
 

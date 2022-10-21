@@ -16,6 +16,7 @@
 #include "../../Specific/fct_maths.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
 
 
 //Constructor / Destructor
@@ -327,8 +328,6 @@ vec3 Selection::mouse_click_point(){
 
   //Get world location
   glReadPixels(mouse_pos.x, mouse_pos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &mouse_pos.z);
-  sayVec3(mouse_pos);
-
   if((mouse_pos.z > 0) && (mouse_pos.z < 1)){
     glm::tvec4<unsigned int> viewport(gui_X, 0, gl_X, gl_Y);
     mat4 viewMat = cameraManager->get_viewMat();
@@ -480,12 +479,18 @@ vec3 Selection::mouse_cameraPt(){
 }
 void Selection::update_glDims(){
   vec2 glDim = dimManager->get_gl_dim();
+  GLFWwindow* window = dimManager->get_window();
   //---------------------------
 
-  this->gui_X= ImGui::GetWindowSize().x;
-  this->gui_Y= ImGui::GetWindowSize().y;
-  this->gl_X= glDim.x;
-  this->gl_Y= glDim.y;
+  int width, height;
+  glfwGetWindowSize(window, &width, &height);
+
+  //this->gui_X = ImGui::GetWindowSize().x;
+  //this->gui_Y = ImGui::GetWindowSize().y;
+  this->gui_X = width;
+  this->gui_Y = height;
+  this->gl_X = glDim.x;
+  this->gl_Y = glDim.y;
 
   //---------------------------
 }

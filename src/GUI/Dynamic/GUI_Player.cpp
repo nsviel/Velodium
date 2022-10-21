@@ -34,30 +34,6 @@ GUI_Player::GUI_Player(Node_gui* node_gui){
 GUI_Player::~GUI_Player(){}
 
 //Main function
-void GUI_Player::runtime_player_mouse(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  ImGuiIO io = ImGui::GetIO();
-  //----------------------------
-
-  //Wheel - rolling stone
-  if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
-    if(cloud != nullptr){
-      int subset_selected_ID = cloud->ID_selected;
-
-      if(io.MouseWheel > 0){
-        subset_selected_ID++;
-      }else{
-        subset_selected_ID--;
-      }
-
-      playerManager->select_bySubsetID(cloud, subset_selected_ID);
-    }
-  }
-
-  //----------------------------
-}
-
-//Subfunction
 void GUI_Player::player_run(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = cloud->subset_selected;

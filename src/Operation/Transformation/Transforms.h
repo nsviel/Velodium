@@ -28,6 +28,8 @@ public:
   void make_Transformation_point(vec3& XYZ, vec3 COM, mat4 Transformation);
   void make_Transformation_normal(vector<vec3>& N, mat4 Transformation);
 
+  void make_cloud_rotation(Cloud* cloud, vec3 R, string direction);
+
   //Specific transformation functions
   void make_centering(Cloud* cloud);
   float make_orientAxis_X(Cloud* cloud);
@@ -56,7 +58,8 @@ public:
   vec3 compute_anglesError(Cloud* cloud);
   vector<vec3> compute_transformcloud_XYZ(Cloud* cloud, mat4 Mat);
   void compute_transformXYZ(vector<vec3>& XYZ, vec3& COM, mat4 Mat);
-
+  void compute_COM(Cloud* cloud);
+  
   //Setters / Getters
   inline void set_soilnb_point(int value){this->soilnb_point = value;}
 

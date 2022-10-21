@@ -63,6 +63,26 @@ void Player::runtime(){
 }
 
 //Selection functions
+void Player::wheel_selection(string direction){
+  Cloud* cloud = sceneManager->get_cloud_selected();
+  //----------------------------
+
+  //Wheel - rolling stone
+  if(cloud != nullptr){
+    int subset_selected_ID = cloud->ID_selected;
+
+    if(direction == "up"){
+      subset_selected_ID++;
+    }
+    else if(direction =="down"){
+      subset_selected_ID--;
+    }
+
+    this->select_bySubsetID(cloud, subset_selected_ID);
+  }
+
+  //----------------------------
+}
 void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 

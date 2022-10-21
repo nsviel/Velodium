@@ -21,6 +21,8 @@ GUI_Selection::GUI_Selection(Node_gui* node_gui){
   this->dimManager = node_engine->get_dimManager();
   this->selectionManager = node_ope->get_selectionManager();
 
+  this->mouse_state = 0;
+
   //---------------------------
 }
 GUI_Selection::~GUI_Selection(){}
@@ -32,7 +34,12 @@ void GUI_Selection::control_mouse(){
   //----------------------------
 
   int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-  if(GLFW_MOUSE_BUTTON_RIGHT && state == GLFW_PRESS)sayHello();
+  if(state == GLFW_PRESS && mouse_state == 0){
+    this->mouse_state = 1;
+  }else if(state == GLFW_RELEASE && mouse_state == 1){
+    selectionManager->mouse_click_point();
+    this->mouse_state = 0;
+  }
 
   //---------------------------
 }

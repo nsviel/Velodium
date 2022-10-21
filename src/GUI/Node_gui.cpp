@@ -66,14 +66,6 @@ void Node_gui::reset(){
 
   //---------------------------
 }
-void Node_gui::update(){}
-void Node_gui::runtime(){
-  //---------------------------
-
-  gui_player->runtime_player_mouse();
-
-  //---------------------------
-}
 void Node_gui::exit(){
   //---------------------------
 

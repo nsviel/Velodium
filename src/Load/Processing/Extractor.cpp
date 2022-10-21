@@ -330,6 +330,7 @@ void Extractor::init_random_color(){
   //---------------------------
 }
 
+//Data type extraction
 void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------

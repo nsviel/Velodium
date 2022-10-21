@@ -110,7 +110,7 @@ void GUI_control::control_mouse(){
 }
 void GUI_control::control_mouse_wheel(){
   Cloud* cloud = sceneManager->get_cloud_selected();
-  static int PCrotMode = 2;
+  static int wheelMode = 0;
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -119,10 +119,36 @@ void GUI_control::control_mouse_wheel(){
     cameraManager->compute_zoom_position(io.MouseWheel);
   }
 
-  //Wheel click - Change cloud rotation axis
+  //Wheel click - Change mouse wheel mode
   if(ImGui::IsMouseClicked(2) && !io.WantCaptureMouse){
-    PCrotMode++;
-    if(PCrotMode >= 3) PCrotMode = 0;
+    wheelMode++;
+    if(wheelMode >= 3) wheelMode = 0;
+  }
+
+  //Wheel actions
+  if(io.MouseWheel && io.MouseDownDuration[1] == -1 && !io.WantCaptureMouse){
+    //Get wheel direction
+    string direction;
+    if(io.MouseWheel > 0){
+      direction = "up";
+    }else{
+      direction = "down";
+    }
+
+    //Subset rotation
+    if(sceneManager->get_is_list_empty() == false){
+      if(cloud->nb_subset == 1){
+        vec3 R = vec3(0, 0, 0.1);
+        transformManager.make_cloud_rotation(cloud, R, direction);
+        sceneManager->update_subset_location(cloud->subset_selected);
+        sceneManager->update_cloud_glyphs(cloud);
+      }
+
+      //Subset selection
+      if(cloud->nb_subset > 1){
+        playerManager->wheel_selection(direction);
+      }
+    }
   }
 
   //----------------------------

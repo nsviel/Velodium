@@ -19,9 +19,6 @@ public:
 
 public:
   //Main function
-  void runtime_player_mouse();
-
-  //Subfunctions
   void player_run();
   void player_button();
   void player_selection();

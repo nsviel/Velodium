@@ -21,6 +21,8 @@ public:
 private:
   Selection* selectionManager;
   Dimension* dimManager;
+
+  int mouse_state;
 };
 
 #endif

@@ -36,13 +36,11 @@ public:
   //Main functions
   void init_objects();
   void reset();
-  void update();
-  void runtime();
   void exit();
   void draw_leftPanel();
   void loop();
   void loop_selection();
-  
+
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
   inline Node_module* get_node_module(){return node_module;}
