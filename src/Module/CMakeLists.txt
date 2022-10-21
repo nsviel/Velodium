@@ -55,9 +55,7 @@ if(WITH_MODULE_OBSTACLE)
     add_definitions(-DWITH_OBSTACLE)
 
     set(LIB_OBSTACLE
-        paho-mqttpp3 # MQTT library
-        paho-mqtt3as # async MQTT library
-        microhttpd #HTTP network protocol
+
     )
 
 endif()

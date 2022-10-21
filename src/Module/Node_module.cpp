@@ -84,8 +84,13 @@ void Node_module::draw(){
     if(ImGui::BeginTabBar("##tabs_module", ImGuiTabBarFlags_None)){
       //---------------------------
 
-      module_obstacle->draw();
-      module_slam->draw();
+      #if defined(WITH_OBSTACLE)
+        module_obstacle->draw();
+      #endif
+
+      #if defined(WITH_SLAM)
+        module_slam->draw();
+      #endif
 
       //---------------------------
       ImGui::EndTabBar();

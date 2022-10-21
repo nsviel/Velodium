@@ -48,7 +48,7 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_color = new GUI_Color(this);
   this->gui_network = new GUI_Network(this);
   this->gui_capture = new GUI_Capture(this);
-  
+
   this->guiManager = new GUI(this);
 
   //---------------------------
@@ -85,8 +85,8 @@ void Node_gui::draw_leftPanel(){
     //-------------------------------
 
     gui_online->design_dynamic();
-    node_module->draw();
     gui_capture->design_interface();
+    node_module->draw();
 
     //-------------------------------
     ImGui::PopStyleColor();
