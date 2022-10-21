@@ -229,10 +229,6 @@ void GUI_menuBar::MenuBar_Operations(){
     window_tab.show_transformation = !window_tab.show_transformation;
   }
 
-  if(ImGui::CollapsingHeader("Modules")){
-
-  }
-
   //---------------------------
 }
 void GUI_menuBar::MenuBar_appInfo(){

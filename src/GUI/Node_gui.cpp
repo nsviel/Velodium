@@ -11,6 +11,7 @@
 #include "Control/GUI_FileManager.h"
 #include "Control/GUI_Initialization.h"
 #include "Control/GUI_Color.h"
+#include "Control/GUI_Selection.h"
 
 #include "Box/GUI_windows.h"
 
@@ -48,6 +49,7 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_color = new GUI_Color(this);
   this->gui_network = new GUI_Network(this);
   this->gui_capture = new GUI_Capture(this);
+  this->gui_selection = new GUI_Selection(this);
 
   this->guiManager = new GUI(this);
 
@@ -92,4 +94,18 @@ void Node_gui::draw_leftPanel(){
     ImGui::PopStyleColor();
     ImGui::EndTabBar();
   }
+}
+void Node_gui::loop(){
+  //---------------------------
+
+  guiManager->Gui_loop();
+
+  //---------------------------
+}
+void Node_gui::loop_selection(){
+  //---------------------------
+
+  gui_selection->control_mouse();
+
+  //---------------------------
 }

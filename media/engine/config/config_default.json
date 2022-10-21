@@ -34,7 +34,7 @@
       "with_save_image" : false
    },
    "module" : {
-      "player_mode" : "offline",
+      "player_mode" : "player",
       "with_camera_follow" : true,
       "with_cylinder_cleaning" : true,
       "with_slam" : true

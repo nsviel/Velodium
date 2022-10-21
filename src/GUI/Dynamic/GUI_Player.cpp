@@ -107,20 +107,20 @@ void GUI_Player::player_button(){
   Cloud* cloud = sceneManager->get_cloud_selected();
   //---------------------------
 
-  //Offline / Online mode
+  //Player / Capture mode
   string* player_mode = playerManager->get_player_mode();
-  if(*player_mode == "offline"){
-    if (ImGui::Button("Offline##444")){
-      *player_mode = "online";
+  if(*player_mode == "player"){
+    if (ImGui::Button("Player##444")){
+      *player_mode = "capture";
     }
-  }else if(*player_mode == "online"){
-    if (ImGui::Button("Online##445")){
-      *player_mode = "offline";
+  }else if(*player_mode == "capture"){
+    if (ImGui::Button("Capture##445")){
+      *player_mode = "player";
     }
   }
 
-  //Offline mode
-  if(*player_mode == "offline"){
+  //Player mode
+  if(*player_mode == "player"){
     //Play button
     this->button_player_play(cloud);
     ImGui::SameLine();
@@ -141,7 +141,7 @@ void GUI_Player::player_button(){
     }
   }
   //Online mode
-  else if(*player_mode == "online"){
+  else if(*player_mode == "capture"){
     this->button_capture_play(cloud);
     ImGui::SameLine();
 

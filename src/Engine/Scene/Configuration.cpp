@@ -182,7 +182,7 @@ void Configuration::preconf_default(Json::Value& root){
   module["with_slam"] = true;
   module["with_camera_follow"] = true;
   module["with_cylinder_cleaning"] = true;
-  module["player_mode"] = "offline";
+  module["player_mode"] = "player";
   root["module"] = module;
 
   //Interface
@@ -210,7 +210,7 @@ void Configuration::preconf_capture(Json::Value& root){
   module["with_slam"] = false;
   module["with_camera_follow"] = false;
   module["with_cylinder_cleaning"] = false;
-  module["player_mode"] = "online";
+  module["player_mode"] = "capture";
   root["module"] = module;
 
   //Parameters

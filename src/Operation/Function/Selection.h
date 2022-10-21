@@ -9,6 +9,7 @@ class Attribut;
 class Camera;
 class Dimension;
 class CoordTransform;
+class Renderer;
 
 #include "../../common.h"
 
@@ -40,7 +41,7 @@ public:
   void mouse_drawFrame(vec2 point1, vec2 point2);
   void mouse_cloudPicking();
   vec3 mouse_cameraPt();
-  vec3 mouse_clickedPoint();
+  vec3 mouse_click_point();
   void update_glDims();
 
   //Plane
@@ -64,6 +65,7 @@ private:
   Object* objectManager;
   Camera* cameraManager;
   CoordTransform* coordManager;
+  Renderer* renderManager;
 
   list<Cloud*> list_Mark;
   list<int> list_glyph;

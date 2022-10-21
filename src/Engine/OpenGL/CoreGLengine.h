@@ -13,15 +13,15 @@ using namespace std;
 using namespace glm;
 using namespace Eigen;
 
+class Node_engine;
+class Node_gui;
+
 class Dimension;
 class Shader;
 class Camera;
 class Viewport;
 class GUI;
-class Engine;
 class Renderer;
-class Node_engine;
-class Configuration;
 class Configuration;
 
 
@@ -44,6 +44,7 @@ public:
   //GL loop
   void loop();
   void loop_gui();
+  void loop_selection();
   void loop_pass_1();
   void loop_pass_2();
   void loop_drawScene();
@@ -56,9 +57,9 @@ public:
 
 private:
   Node_engine* node_engine;
+  Node_gui* node_gui;
 
   GLFWwindow* window;
-  Engine* engineManager;
   Camera* cameraManager;
   Viewport* viewportManager;
   Dimension* dimManager;

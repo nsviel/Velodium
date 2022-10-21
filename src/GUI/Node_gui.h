@@ -22,6 +22,7 @@ class GUI_Player;
 class GUI_Color;
 class GUI_Network;
 class GUI_Capture;
+class GUI_Selection;
 
 
 class Node_gui
@@ -39,7 +40,9 @@ public:
   void runtime();
   void exit();
   void draw_leftPanel();
-
+  void loop();
+  void loop_selection();
+  
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
   inline Node_module* get_node_module(){return node_module;}
@@ -58,6 +61,7 @@ public:
   inline GUI_Player* get_gui_player(){return gui_player;}
   inline GUI_Color* get_gui_color(){return gui_color;}
   inline GUI_Network* get_gui_network(){return gui_network;}
+  inline GUI_Selection* get_gui_selection(){return gui_selection;}
 
 private:
   Node_engine* node_engine;
@@ -79,6 +83,7 @@ private:
   GUI_Color* gui_color;
   GUI_Network* gui_network;
   GUI_Capture* gui_capture;
+  GUI_Selection* gui_selection;
 };
 
 #endif

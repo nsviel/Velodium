@@ -8,7 +8,6 @@
 #include "Shader/Shader.h"
 #include "Shader/ShaderObject.h"
 
-#include "../Engine.h"
 #include "../Node_engine.h"
 #include "../Scene/Configuration.h"
 
@@ -123,11 +122,11 @@ void CoreGLengine::init_object(){
   //---------------------------
 
   this->node_engine = new Node_engine(this);
+  this->node_gui = node_engine->get_node_gui();
   this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
-  this->engineManager = node_engine->get_engineManager();
 
   //---------------------------
 }
@@ -152,6 +151,7 @@ void CoreGLengine::loop(){
     //---------------------------
     this->loop_pass_1();
     this->loop_drawScene();
+    this->loop_selection();
 
     //Second pass
     //---------------------------
@@ -178,7 +178,14 @@ void CoreGLengine::loop_gui(){
 
   //Draw GUI on fbo 0
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  engineManager->loop_gui();
+  node_gui->loop();
+
+  //---------------------------
+}
+void CoreGLengine::loop_selection(){
+  //---------------------------
+
+  node_gui->loop_selection();
 
   //---------------------------
 }
@@ -220,7 +227,7 @@ void CoreGLengine::loop_drawScene(){
 
   cameraManager->viewport_update(0);
   cameraManager->input_cam_mouse();
-  engineManager->loop_scene();
+  node_engine->runtime();
 
   //---------------------------
 }

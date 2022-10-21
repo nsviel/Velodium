@@ -20,8 +20,7 @@ public:
 
 public:
   //Program functions
-  void loop_scene();
-  void loop_gui();
+  void runtime_scene();
 
   //Subfunctions
   void runtime_draw_glyph();

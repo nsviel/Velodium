@@ -30,7 +30,7 @@ Engine::Engine(Node_engine* engine){
 Engine::~Engine(){}
 
 //Program functions
-void Engine::loop_scene(){
+void Engine::runtime_scene(){
   //---------------------------
 
   //Runtime cloud
@@ -38,16 +38,6 @@ void Engine::loop_scene(){
 
   //Runtime glyph
   this->runtime_draw_glyph();
-
-  //Runtime other
-  node_engine->runtime();
-
-  //---------------------------
-}
-void Engine::loop_gui(){
-  //---------------------------
-
-  guiManager->Gui_loop();
 
   //---------------------------
 }

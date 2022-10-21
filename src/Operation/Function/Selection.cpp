@@ -11,6 +11,7 @@
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Object/Scene/Mark.h"
 #include "../../Engine/OpenGL/Camera/Camera.h"
+#include "../../Engine/OpenGL/Camera/Renderer.h"
 #include "../../Engine/OpenGL/Dimension.h"
 #include "../../Specific/fct_maths.h"
 
@@ -25,6 +26,7 @@ Selection::Selection(Node_operation* node_ope){
 
   this->dimManager = node_engine->get_dimManager();
   this->cameraManager = node_engine->get_cameraManager();
+  this->renderManager = node_engine->get_renderManager();
   this->coordManager = node_ope->get_coordManager();
   this->transformManager = new Transforms();
   this->attribManager = node_ope->get_attribManager();
@@ -314,7 +316,7 @@ void Selection::mark_pointLocation(){
 }
 
 //Mouse interactivity
-vec3 Selection::mouse_clickedPoint(){
+vec3 Selection::mouse_click_point(){
   this->update_glDims();
   //---------------------------
 
@@ -325,6 +327,8 @@ vec3 Selection::mouse_clickedPoint(){
 
   //Get world location
   glReadPixels(mouse_pos.x, mouse_pos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &mouse_pos.z);
+  sayVec3(mouse_pos);
+
   if((mouse_pos.z > 0) && (mouse_pos.z < 1)){
     glm::tvec4<unsigned int> viewport(gui_X, 0, gl_X, gl_Y);
     mat4 viewMat = cameraManager->get_viewMat();

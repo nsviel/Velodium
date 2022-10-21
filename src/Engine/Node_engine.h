@@ -22,9 +22,6 @@ class CoreGLengine;
 class Object;
 class Followup;
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 
 class Node_engine
 {

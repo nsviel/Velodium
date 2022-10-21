@@ -13,8 +13,8 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 
-#include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Node_operation.h"
+#include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Function/Selection.h"
 #include "../../Operation/Function/Extraction.h"
@@ -104,12 +104,6 @@ void GUI_control::control_mouse(){
   }
   if(io.MouseDown[1] && !io.WantCaptureMouse){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-  }
-
-  //Left click - Point selection
-  if(ImGui::IsMouseClicked(0) && !io.WantCaptureMouse){
-    //vec3 point = selectionManager->mouse_clickedPoint();
-    //selectionManager->selectionPoint(point);
   }
 
   //---------------------------
