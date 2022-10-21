@@ -1,6 +1,5 @@
 #include "Node_operation.h"
 
-#include "Color/GUI/GUI_Color.h"
 #include "Color/Color.h"
 #include "Color/Heatmap.h"
 
@@ -38,8 +37,6 @@ Node_operation::Node_operation(Node_engine* node){
   this->onlineManager = new Online(this);
   this->playerManager = new Player(this);
 
-  this->gui_color = new GUI_Color(this);
-
   //---------------------------
 }
 Node_operation::~Node_operation(){}
@@ -58,12 +55,6 @@ void Node_operation::runtime(){
   //---------------------------
 
   playerManager->runtime();
-
-  //---------------------------
-}
-void Node_operation::draw(){
-  //---------------------------
-
 
   //---------------------------
 }

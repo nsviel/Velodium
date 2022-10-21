@@ -1,24 +1,25 @@
 #include "GUI_Color.h"
 
-#include "../Color.h"
-#include "../Colormap.h"
-#include "../Heatmap.h"
+#include "../Node_gui.h"
 
-#include "../../Node_operation.h"
+#include "../../Operation/Node_operation.h"
+#include "../../Operation/Color/Color.h"
+#include "../../Operation/Color/Colormap.h"
+#include "../../Operation/Color/Heatmap.h"
 
-#include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../GUI/Node_gui.h"
+#include "../../Engine/Node_engine.h"
+#include "../../Engine/Scene/Scene.h"
 
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
 
 
 //Constructor / Destructor
-GUI_Color::GUI_Color(Node_operation* node_ope){
+GUI_Color::GUI_Color(Node_gui* node_gui){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node_gui->get_node_engine();
+  Node_operation* node_ope = node_gui->get_node_ope();
 
   this->colorManager = node_ope->get_colorManager();
   this->heatmapManager = node_ope->get_heatmapManager();

@@ -27,7 +27,6 @@ public:
 public:
   void update();
   void runtime();
-  void draw();
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_load* get_node_load(){return node_load;}
@@ -49,9 +48,6 @@ private:
   HTTP* httpsManager;
   Capture* captureManager;
   Configuration* configManager;
-
-  GUI_Network* gui_network;
-  GUI_Capture* gui_capture;
 };
 
 #endif

@@ -2,8 +2,8 @@
 #include "GUI_LeftPanel.h"
 
 #include "../Node_gui.h"
-#include "../Windows/Window_table.h"
-#include "../Windows/GUI_windows.h"
+#include "../Box/Window_table.h"
+#include "../Box/GUI_windows.h"
 #include "../Control/GUI_Option.h"
 #include "../Control/GUI_Initialization.h"
 #include "../Dynamic/GUI_Player.h"

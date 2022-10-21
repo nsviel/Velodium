@@ -19,8 +19,6 @@ class Player;
 class Online;
 class Saving;
 
-class GUI_Color;
-
 
 class Node_operation
 {
@@ -32,7 +30,6 @@ public:
 public:
   void update();
   void runtime();
-  void draw();
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_load* get_node_load(){return node_load;}
@@ -50,8 +47,6 @@ public:
   inline Player* get_playerManager(){return playerManager;}
   inline Saving* get_savingManager(){return savingManager;}
 
-  inline GUI_Color* get_gui_color(){return gui_color;}
-
 private:
   Node_engine* node_engine;
   Node_load* node_load;
@@ -68,8 +63,6 @@ private:
   Online* onlineManager;
   Player* playerManager;
   Saving* savingManager;
-
-  GUI_Color* gui_color;
 };
 
 #endif

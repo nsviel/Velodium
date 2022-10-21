@@ -2,13 +2,13 @@
 #include "GUI_Player.h"
 
 #include "../Node_gui.h"
+#include "../Control/GUI_Color.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Dynamic/Online.h"
 #include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Dynamic/Saving.h"
 #include "../../Operation/Color/Color.h"
-#include "../../Operation/Color/GUI/GUI_Color.h"
 #include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Transformation/Filter.h"
 
@@ -44,7 +44,7 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
   this->configManager = node_engine->get_configManager();
   this->playerManager = node_ope->get_playerManager();
 
-  this->gui_color = node_ope->get_gui_color();
+  this->gui_color = node_gui->get_gui_color();
   this->gui_player = node_gui->get_gui_player();
 
   this->item_width = 100;

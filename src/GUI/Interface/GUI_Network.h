@@ -1,9 +1,9 @@
 #ifndef GUI_NETWORK_H
 #define GUI_NETWORK_H
 
-#include "../../../common.h"
+#include "../../common.h"
 
-class Node_interface;
+class Node_gui;
 class MQTT;
 class HTTP;
 
@@ -12,7 +12,7 @@ class GUI_Network
 {
 public:
   //Constructor / Destructor
-  GUI_Network(Node_interface* node_interface);
+  GUI_Network(Node_gui* node_gui);
   ~GUI_Network();
 
 public:

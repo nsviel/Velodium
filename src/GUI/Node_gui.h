@@ -19,6 +19,9 @@ class GUI_fileManager;
 class GUI_Initialization;
 class GUI_Online;
 class GUI_Player;
+class GUI_Color;
+class GUI_Network;
+class GUI_Capture;
 
 
 class Node_gui
@@ -40,6 +43,7 @@ public:
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}
   inline Node_module* get_node_module(){return node_module;}
+  inline Node_interface* get_node_interface(){return node_interface;}
 
   inline GUI* get_guiManager(){return guiManager;}
   inline GUI_windows* get_gui_window(){return gui_window;}
@@ -52,6 +56,8 @@ public:
   inline GUI_Initialization* get_gui_initialization(){return gui_initialization;}
   inline GUI_Online* get_gui_online(){return gui_online;}
   inline GUI_Player* get_gui_player(){return gui_player;}
+  inline GUI_Color* get_gui_color(){return gui_color;}
+  inline GUI_Network* get_gui_network(){return gui_network;}
 
 private:
   Node_engine* node_engine;
@@ -70,6 +76,9 @@ private:
   GUI_Initialization* gui_initialization;
   GUI_Online* gui_online;
   GUI_Player* gui_player;
+  GUI_Color* gui_color;
+  GUI_Network* gui_network;
+  GUI_Capture* gui_capture;
 };
 
 #endif

@@ -1,19 +1,24 @@
 #include "GUI_Capture.h"
+#include "GUI_Network.h"
 
-#include "../Capture.h"
-#include "../LiDAR/Scala/Scala.h"
-#include "../LiDAR/Velodyne/Velodyne.h"
+#include "../Node_gui.h"
 
-#include "../../Node_interface.h"
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/Capture/Capture.h"
+#include "../../Interface/Capture/LiDAR/Scala/Scala.h"
+#include "../../Interface/Capture/LiDAR/Velodyne/Velodyne.h"
 
 
 //Constructor / Destructor
-GUI_Capture::GUI_Capture(Node_interface* node_interface){
+GUI_Capture::GUI_Capture(Node_gui* node_gui){
   //---------------------------
+
+  Node_interface* node_interface = node_gui->get_node_interface();
 
   this->captureManager = node_interface->get_captureManager();
   this->scalaManager = captureManager->get_scalaManager();
   this->veloManager = captureManager->get_veloManager();
+  this->gui_network = node_gui->get_gui_network();
 
   this->item_width = 100;
 
@@ -22,7 +27,21 @@ GUI_Capture::GUI_Capture(Node_interface* node_interface){
 GUI_Capture::~GUI_Capture(){}
 
 //Main function
-void GUI_Capture::design_Lidar(){
+void GUI_Capture::design_interface(){
+  if(ImGui::BeginTabItem("Interface")){
+    if(ImGui::BeginTabBar("##Interface", ImGuiTabBarFlags_None)){
+      //---------------------------
+
+      this->design_capture();
+      gui_network->design_Network();
+
+      //---------------------------
+      ImGui::EndTabBar();
+    }
+    ImGui::EndTabItem();
+  }
+}
+void GUI_Capture::design_capture(){
   if(ImGui::BeginTabItem("Capture")){
     if(ImGui::BeginTabBar("##tabs_capture", ImGuiTabBarFlags_None)){
       //---------------------------

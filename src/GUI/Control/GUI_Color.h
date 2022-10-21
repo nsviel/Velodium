@@ -1,10 +1,11 @@
 #ifndef GUI_COLOR_H
 #define GUI_COLOR_H
 
-#include "../../../common.h"
+#include "../../common.h"
+
+class Node_gui;
 
 class Scene;
-class Node_operation;
 class Heatmap;
 class Color;
 class Colormap;
@@ -14,7 +15,7 @@ class GUI_Color
 {
 public:
   //Constructor / Destructor
-  GUI_Color(Node_operation* node_ope);
+  GUI_Color(Node_gui* node_ope);
   ~GUI_Color();
 
 public:

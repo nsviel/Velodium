@@ -1,7 +1,7 @@
 #include "GUI_Control.h"
 
 #include "../Node_gui.h"
-#include "../Windows/Window_table.h"
+#include "../Box/Window_table.h"
 
 #include "../../Load/Node_load.h"
 

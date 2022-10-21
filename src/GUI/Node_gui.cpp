@@ -1,17 +1,22 @@
 #include "Node_gui.h"
 
-#include "Interface/GUI_Consol.h"
-#include "Interface/GUI_MenuBar.h"
-#include "Interface/GUI_LeftPanel.h"
-#include "Interface/struct_consol.h"
+#include "Window/GUI_Consol.h"
+#include "Window/GUI_MenuBar.h"
+#include "Window/GUI_LeftPanel.h"
+#include "Window/struct_consol.h"
 
 #include "Control/GUI.h"
 #include "Control/GUI_Control.h"
 #include "Control/GUI_Option.h"
 #include "Control/GUI_FileManager.h"
 #include "Control/GUI_Initialization.h"
+#include "Control/GUI_Color.h"
 
-#include "Windows/GUI_windows.h"
+#include "Box/GUI_windows.h"
+
+#include "Interface/GUI_Network.h"
+#include "Interface/GUI_Capture.h"
+
 #include "Dynamic/GUI_Online.h"
 #include "Dynamic/GUI_Player.h"
 
@@ -39,8 +44,12 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_player = new GUI_Player(this);
   this->gui_menuBar = new GUI_menuBar(this);
   this->gui_consol = new GUI_consol(this);
-  this->guiManager = new GUI(this);
   this->gui_online = new GUI_Online(this);
+  this->gui_color = new GUI_Color(this);
+  this->gui_network = new GUI_Network(this);
+  this->gui_capture = new GUI_Capture(this);
+  
+  this->guiManager = new GUI(this);
 
   //---------------------------
 }
@@ -77,7 +86,7 @@ void Node_gui::draw_leftPanel(){
 
     gui_online->design_dynamic();
     node_module->draw();
-    node_interface->draw();
+    gui_capture->design_interface();
 
     //-------------------------------
     ImGui::PopStyleColor();

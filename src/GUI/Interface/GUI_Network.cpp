@@ -1,19 +1,21 @@
 #include "GUI_Network.h"
 
-#include "../MQTT/MQTT.h"
-#include "../MQTT/PAHO.h"
-#include "../HTTP/HTTP.h"
+#include "../Node_gui.h"
 
-#include "../../Node_interface.h"
-
-#include "../../../Specific/color.h"
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/Network/MQTT/MQTT.h"
+#include "../../Interface/Network/MQTT/PAHO.h"
+#include "../../Interface/Network/HTTP/HTTP.h"
+#include "../../Specific/color.h"
 
 #include "imgui/imgui_stdlib.h"
 
 
 //Constructor / Destructor
-GUI_Network::GUI_Network(Node_interface* node_interface){
+GUI_Network::GUI_Network(Node_gui* node_gui){
   //---------------------------
+
+  Node_interface* node_interface = node_gui->get_node_interface();
 
   this->mqttManager = node_interface->get_mqttManager();
   this->httpsManager = node_interface->get_httpsManager();

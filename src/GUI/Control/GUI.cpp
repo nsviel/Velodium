@@ -3,12 +3,12 @@
 #include "GUI_Option.h"
 
 #include "../Node_gui.h"
-#include "../Windows/GUI_windows.h"
+#include "../Box/GUI_windows.h"
 
-#include "../Interface/GUI_Consol.h"
-#include "../Interface/GUI_MenuBar.h"
-#include "../Interface/GUI_LeftPanel.h"
-#include "../Interface/struct_consol.h"
+#include "../Window/GUI_Consol.h"
+#include "../Window/GUI_MenuBar.h"
+#include "../Window/GUI_LeftPanel.h"
+#include "../Window/struct_consol.h"
 
 #include "../../Engine/OpenGL/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
