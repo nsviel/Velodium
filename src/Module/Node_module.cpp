@@ -6,7 +6,6 @@
 #include "Obstacle/Module_obstacle.h"
 
 #include "../Engine/Node_engine.h"
-#include "../Engine/Scene/Configuration.h"
 #include "../Operation/Node_operation.h"
 #include "../Interface/Node_interface.h"
 
@@ -18,9 +17,6 @@ Node_module::Node_module(Node_engine* node){
   this->node_engine = node;
   this->node_ope = node->get_node_ope();
   this->node_interface = node->get_node_interface();
-
-  Configuration* configManager = node_engine->get_configManager();
-  this->with_slam = configManager->parse_json_b("module", "with_slam");
 
   //---------------------------
   this->load_module();
@@ -98,13 +94,20 @@ void Node_module::draw(){
     ImGui::EndTabItem();
   }
 }
+void Node_module::draw_online(){
+  //---------------------------
+
+  #if defined(WITH_SLAM)
+    module_slam->draw_online();
+  #endif
+
+  //---------------------------
+}
 void Node_module::online(Cloud* cloud, int subset_ID){
   //---------------------------
 
   #if defined(WITH_SLAM)
-    if(with_slam){
-      module_slam->online(cloud, subset_ID);
-    }
+    module_slam->online(cloud, subset_ID);
   #endif
 
   //---------------------------

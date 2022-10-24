@@ -28,6 +28,7 @@ public:
   void design_SLAM();
   void design_state();
   void design_parameter();
+  void design_option();
 
   void parameter_offline();
   void parameter_lidar();

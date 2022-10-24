@@ -59,6 +59,13 @@ void Module_slam::draw(){
 
   //---------------------------
 }
+void Module_slam::draw_online(){
+  //---------------------------
+
+  gui_slam->design_option();
+
+  //---------------------------
+}
 void Module_slam::online(Cloud* cloud, int subset_ID){
   //---------------------------
 

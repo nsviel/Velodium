@@ -39,6 +39,7 @@ public:
   inline SLAM_transform* get_slam_transf(){return slam_transf;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
+  inline bool* get_with_slam(){return &with_slam;}
 
 private:
   bool check_condition(Cloud* cloud, int subset_ID);
@@ -61,6 +62,7 @@ private:
   SLAM_parameter* slam_param;
   SLAM_transform* slam_transf;
 
+  bool with_slam;
   string lidar_model;
   int nb_thread;
 };

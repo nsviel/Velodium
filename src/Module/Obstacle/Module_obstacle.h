@@ -29,6 +29,7 @@ public:
   void runtime();
   void reset();
   void draw();
+  void draw_online();
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}

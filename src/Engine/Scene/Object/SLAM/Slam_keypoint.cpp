@@ -6,7 +6,7 @@ Slam_keypoint::Slam_keypoint(){
   //---------------------------
 
   this->color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
-  this->visibility = true;
+  this->visibility = false;
 
   //---------------------------
 }

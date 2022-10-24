@@ -8,7 +8,7 @@ Localmap::Localmap(){
   //---------------------------
 
   this->color = vec4(66.0f/255.0f, 135.0f/255.0f, 245.0f/255.0f, 1.0f);
-  this->visibility = true;
+  this->visibility = false;
 
   //---------------------------
   this->create_localmap();

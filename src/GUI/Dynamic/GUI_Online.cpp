@@ -98,23 +98,19 @@ void GUI_Online::parameter_online(){
   Subset* subset = cloud->subset_selected;
   //---------------------------
 
-  //SLAM activated at each frame
-  #if defined(WITH_SLAM)
-  //SLAM on subset
-    bool* with_slam = node_module->online_with_slam();
-    ImGui::Checkbox("SLAM", with_slam);
+  //Module online stuff
+  node_module->draw_online();
 
-    //Camera auto displacement
-    bool* with_camera_follow = followManager->get_with_camera_follow();
-    ImGui::Checkbox("Camera follow up", with_camera_follow);
+  //Camera auto displacement
+  bool* with_camera_follow = followManager->get_with_camera_follow();
+  ImGui::Checkbox("Camera follow up", with_camera_follow);
 
-    //Camera follow absolute position
-    if(*with_camera_follow){
-      bool* with_camera_absolute = followManager->get_with_camera_absolute();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
-    }
-  #endif
+  //Camera follow absolute position
+  if(*with_camera_follow){
+    bool* with_camera_absolute = followManager->get_with_camera_absolute();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+    ImGui::Checkbox("Absolute positionning", with_camera_absolute);
+  }
 
   //Cylinder cleaning filter
   bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
@@ -186,16 +182,13 @@ void GUI_Online::state_time(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_operation);
 
-  bool with_slam = *node_module->online_with_slam();
   int time_slam = 0;
   if(sceneManager->get_is_list_empty() == false){
     time_slam = (int)frame->time_slam;
   }
-  if(with_slam){
-    ImGui::Text("SLAM");
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", time_slam);
-  }
+  ImGui::Text("SLAM");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", time_slam);
 
   bool with_save_frame = *savingManager->get_with_save_frame();
   int time_save_frame = 0;
@@ -234,12 +227,6 @@ void GUI_Online::state_configuration(){
 }
 void GUI_Online::state_online(){
   //---------------------------
-
-  //Specific module
-  bool with_slam = *node_module->online_with_slam();
-  ImGui::Text("Online - SLAM");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_slam ? "ON" : "OFF");
 
   bool with_camera_follow = *followManager->get_with_camera_follow();
   ImGui::Text("Online - Camera follow");

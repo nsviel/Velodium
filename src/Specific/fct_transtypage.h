@@ -52,7 +52,7 @@ namespace{
     return mat_glm;
   }
   glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3f mat_eig){
-    glm::mat4 mat_glm;
+    glm::mat4 mat_glm(1.0f);
     //---------------------------
 
     for(int i=0; i<mat_eig.rows(); i++){
@@ -65,7 +65,7 @@ namespace{
     return mat_glm;
   }
   glm::mat4 eigen_to_glm_mat4(Eigen::Matrix3d mat_eig){
-    glm::mat4 mat_glm;
+    glm::mat4 mat_glm(1.0f);
     //---------------------------
 
     for(int i=0; i<mat_eig.rows(); i++){

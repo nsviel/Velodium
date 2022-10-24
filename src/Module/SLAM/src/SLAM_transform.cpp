@@ -182,8 +182,8 @@ void SLAM_transform::transform_subset(Subset* subset){
   Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
   Eigen::Vector3d trans_b = frame->trans_b;
   Eigen::Vector3d trans_e = frame->trans_e;
-  say(frame->rotat_b);
 
+sayMat4(eigen_to_glm_mat4(quat_b.toRotationMatrix()));
   //Update frame root
   subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
   subset->root = eigen_to_glm_vec3(trans_b);

@@ -95,6 +95,14 @@ void GUI_Slam::design_parameter(){
     ImGui::EndTabItem();
   }
 }
+void GUI_Slam::design_option(){
+  //---------------------------
+
+  bool* with_slam = slamManager->get_with_slam();
+  ImGui::Checkbox("SLAM", with_slam);
+
+  //---------------------------
+}
 
 void GUI_Slam::parameter_lidar(){
   //---------------------------
