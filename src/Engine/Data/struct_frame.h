@@ -10,8 +10,8 @@ struct Frame{ //SLAM stuff
 
   std::vector<Eigen::Vector3d> xyz;
   std::vector<Eigen::Vector3d> xyz_raw;
-  std::vector<Eigen::Vector3d> N_nn;
-  std::vector<Eigen::Vector3d> nn; // Nearest Neighbor
+  std::vector<Eigen::Vector3d> N_nn; // Normal given by nearest neighbor
+  std::vector<Eigen::Vector3d> nn; // Closest point
   std::vector<double> a2D;
   std::vector<double> ts_n;
 

@@ -58,7 +58,7 @@ bool Saver::save_cloud(Cloud* cloud, string filePath){
   }
 
   //---------------------------
-  string log = "Saved" + filePath;
+  string log = "Saved " + filePath;
   console.AddLog("ok", log);
   return true;
 }

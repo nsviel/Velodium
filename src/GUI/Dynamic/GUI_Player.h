@@ -19,6 +19,10 @@ public:
 
 public:
   //Main function
+  void design_player();
+  void player_parameter();
+
+  //Player action
   void player_run();
   void player_button();
   void player_selection();

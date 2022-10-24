@@ -21,7 +21,8 @@ public:
   void compute_preprocessing(Cloud* cloud, int subset_ID);
 
   //Specific function
-  void grid_sample_subset(Subset* subset);
+  void sub_sampling_subset(Subset* subset);
+  void grid_sampling_subset(Subset* subset);
   void distort_frame(Frame* frame);
   void transform_frame(Frame* frame);
   void transform_subset(Subset* subset);

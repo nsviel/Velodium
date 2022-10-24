@@ -9,7 +9,6 @@
 #include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Dynamic/Saving.h"
 #include "../../Operation/Color/Color.h"
-#include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Transformation/Filter.h"
 
 #include "../../Engine/Node_engine.h"
@@ -34,7 +33,6 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
   this->node_module = node_engine->get_node_module();
 
   this->filterManager = node_ope->get_filterManager();
-  this->heatmapManager = node_ope->get_heatmapManager();
   this->onlineManager = node_ope->get_onlineManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->followManager = node_engine->get_followManager();
@@ -59,7 +57,7 @@ void GUI_Online::design_dynamic(){
     if(ImGui::BeginTabBar("##tabs_dynamic", ImGuiTabBarFlags_None)){
       //---------------------------
 
-      this->design_player();
+      gui_player->design_player();
       this->design_online();
       this->design_state();
 
@@ -93,24 +91,6 @@ void GUI_Online::design_online(){
     ImGui::EndTabItem();
   }
 }
-void GUI_Online::design_player(){
-  if(ImGui::BeginTabItem("Player")){
-    //---------------------------
-
-    gui_player->player_run();
-    if(ImGui::CollapsingHeader("Parameter - online")){
-      this->parameter_online();
-      gui_color->colorization_choice();
-      this->parameter_export();
-    }
-    if(ImGui::CollapsingHeader("Parameter - offline")){
-      this->parameter_offline();
-    }
-
-    //---------------------------
-    ImGui::EndTabItem();
-  }
-}
 
 //Parameter function
 void GUI_Online::parameter_online(){
@@ -119,19 +99,22 @@ void GUI_Online::parameter_online(){
   //---------------------------
 
   //SLAM activated at each frame
-  bool* with_slam = node_module->online_with_slam();
-  ImGui::Checkbox("SLAM", with_slam);
+  #if defined(WITH_SLAM)
+  //SLAM on subset
+    bool* with_slam = node_module->online_with_slam();
+    ImGui::Checkbox("SLAM", with_slam);
 
-  //Camera auto displacement
-  bool* with_camera_follow = followManager->get_with_camera_follow();
-  ImGui::Checkbox("Camera follow up", with_camera_follow);
+    //Camera auto displacement
+    bool* with_camera_follow = followManager->get_with_camera_follow();
+    ImGui::Checkbox("Camera follow up", with_camera_follow);
 
-  //Camera follow absolute position
-  if(*with_camera_follow){
-    bool* with_camera_absolute = followManager->get_with_camera_absolute();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-    ImGui::Checkbox("Absolute positionning", with_camera_absolute);
-  }
+    //Camera follow absolute position
+    if(*with_camera_follow){
+      bool* with_camera_absolute = followManager->get_with_camera_absolute();
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
+      ImGui::Checkbox("Absolute positionning", with_camera_absolute);
+    }
+  #endif
 
   //Cylinder cleaning filter
   bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
@@ -149,50 +132,6 @@ void GUI_Online::parameter_online(){
   }
 
   //---------------------------
-}
-void GUI_Online::parameter_offline(){
-  if(ImGui::CollapsingHeader("Parameter - offline")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
-    //---------------------------
-
-    //Restart to zero when arrive to the end of cloud frames
-    bool* with_restart = playerManager->get_with_restart();
-    ImGui::Checkbox("Loop when end", with_restart);
-
-    //Filter all cloud subset with cylinder cleaner
-    if (ImGui::Button("Cylinder cleaning", ImVec2(120,0))){
-      if(cloud != nullptr){
-        filterManager->filter_cloud_cylinder(cloud);
-      }
-    }
-
-    //Display all cloud frames
-    if(ImGui::Button("All frame visible", ImVec2(120,0))){
-      if(cloud != nullptr){
-        for(int i=0; i<cloud->nb_subset; i++){
-          Subset* subset = sceneManager->get_subset(cloud, i);
-          subset->visibility = true;
-        }
-      }
-    }
-
-    //Setup cloud point size
-    if(cloud != nullptr){
-      int* point_size = &cloud->point_size;
-      ImGui::SliderInt("Point size", point_size, 1, 20);
-    }
-
-    //Set or not heatmap for the entire cloud
-    if(cloud != nullptr){
-      bool heatmap = cloud->heatmap;
-      if(ImGui::Checkbox("Heatmap", &heatmap)){
-        heatmapManager->make_cloud_heatmap(cloud);
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-  }
 }
 void GUI_Online::parameter_export(){
   //---------------------------

@@ -138,7 +138,18 @@ void GUI_control::control_mouse_wheel(){
     //Subset rotation
     if(sceneManager->get_is_list_empty() == false){
       if(cloud->nb_subset == 1){
-        vec3 R = vec3(0, 0, 0.1);
+        float radian = cloud_rotat_degree*M_PI/180;
+        vec3 R;
+        if(wheelMode == 0){
+          R = vec3(0, 0, radian);
+        }
+        else if(wheelMode == 1){
+          R = vec3(0, radian, 0);
+        }
+        else if(wheelMode == 2){
+          R = vec3(radian, 0, 0);
+        }
+
         transformManager.make_cloud_rotation(cloud, R, direction);
         sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyphs(cloud);

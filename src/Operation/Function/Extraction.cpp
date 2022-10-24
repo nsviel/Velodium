@@ -5,6 +5,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
+#include "../../Engine/Scene/Object.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 
@@ -19,6 +20,7 @@ Extraction::Extraction(Node_operation* node_ope){
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
   this->loaderManager = node_load->get_loadManager();
+  this->objectManager = node_engine->get_objectManager();
 
   this->list_part = new list<subpart*>;
   this->highlightON = false;
@@ -30,7 +32,7 @@ Extraction::Extraction(Node_operation* node_ope){
 }
 Extraction::~Extraction(){}
 
-//Extraction
+//Extract / Cutting function
 void Extraction::fct_extractCloud(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
@@ -190,38 +192,37 @@ void Extraction::fct_cutCloud_all(){
 
   //---------------------------
 }
-void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
+void Extraction::supress_selectedpart(subpart* part){
+  //---------------------------
+
+  if(list_part->size() != 0){
+    int ID = part->ID;
+
+    list<subpart*>::iterator it = next(list_part->begin(), ID);
+    list_part->erase(it);
+  }
+
+  //---------------------------
+}
+void Extraction::fct_selectPart(Subset* subset, vec3 mina, vec3 maxa){
+  subpart* part = new subpart;
+  //---------------------------
+
   vec3 max = subset->max;
   vec3 min = subset->min;
-  vector<vec3>& pos = subset->xyz;
-  vector<vec4>& color = subset->RGB;
-  vector<vec4>& RGB = subset_init->RGB;
-  //---------------------------
 
-  if(highlightON == true){
-    for(int i=0; i<pos.size(); i++){
-      if(pos[i].x >= min.x &&
-        pos[i].y >= min.y &&
-        pos[i].z >= min.z &&
-        pos[i].x <= max.x &&
-        pos[i].y <= max.y &&
-        pos[i].z <= max.z){
-        //Qualify color according to previous unlighting color
-        color[i] = vec4(1,color[i].y,color[i].z,1);
-      }
-      else{
-        //Restaure original color
-        color[i] = RGB[i];
-      }
-    }
-  }
-  else{
-    subset->RGB = RGB;
-  }
+  part->ID = ID_part;
+  part->name = to_string(ID_part);
+  part->namePC = subset->name;
+  part->minloc = min;
+  part->maxloc = max;
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  list_part->push_back(part);
+  ID_part++;
 }
+
+//Merging function
 void Extraction::fct_merging_list(vector<Cloud*> list_part){
   //---------------------------
 
@@ -390,6 +391,40 @@ void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
 
   //---------------------------
 }
+
+//Selection function
+void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
+  vec3 max = subset->max;
+  vec3 min = subset->min;
+  vector<vec3>& pos = subset->xyz;
+  vector<vec4>& color = subset->RGB;
+  vector<vec4>& RGB = subset_init->RGB;
+  //---------------------------
+
+  if(highlightON == true){
+    for(int i=0; i<pos.size(); i++){
+      if(pos[i].x >= min.x &&
+        pos[i].y >= min.y &&
+        pos[i].z >= min.z &&
+        pos[i].x <= max.x &&
+        pos[i].y <= max.y &&
+        pos[i].z <= max.z){
+        //Qualify color according to previous unlighting color
+        color[i] = vec4(1,color[i].y,color[i].z,1);
+      }
+      else{
+        //Restaure original color
+        color[i] = RGB[i];
+      }
+    }
+  }
+  else{
+    subset->RGB = RGB;
+  }
+
+  //---------------------------
+  sceneManager->update_subset_color(subset);
+}
 void Extraction::set_AABB_min(vec3 min_in){
   Cloud* cloud = sceneManager->get_cloud_selected();
   Subset* subset = cloud->subset_selected;
@@ -421,6 +456,7 @@ void Extraction::set_AABB_min(vec3 min_in){
 
   //---------------------------
   this->fct_highlighting(subset, subset_init);
+  objectManager->update_glyph_cloud(cloud);
 }
 void Extraction::set_AABB_max(vec3 max_in){
   Cloud* cloud = sceneManager->get_cloud_selected();
@@ -453,35 +489,4 @@ void Extraction::set_AABB_max(vec3 max_in){
 
   //---------------------------
   this->fct_highlighting(subset, subset_init);
-}
-
-//Selection subparts
-void Extraction::fct_selectPart(Subset* subset, vec3 mina, vec3 maxa){
-  subpart* part = new subpart;
-  //---------------------------
-
-  vec3 max = subset->max;
-  vec3 min = subset->min;
-
-  part->ID = ID_part;
-  part->name = to_string(ID_part);
-  part->namePC = subset->name;
-  part->minloc = min;
-  part->maxloc = max;
-
-  //---------------------------
-  list_part->push_back(part);
-  ID_part++;
-}
-void Extraction::supress_selectedpart(subpart* part){
-  //---------------------------
-
-  if(list_part->size() != 0){
-    int ID = part->ID;
-
-    list<subpart*>::iterator it = next(list_part->begin(), ID);
-    list_part->erase(it);
-  }
-
-  //---------------------------
 }

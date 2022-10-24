@@ -41,7 +41,7 @@ void Pather::update_configuration(){
 
   this->spaceSampling = 0.08f;
   this->nbLineSampling = 1000000;
-  this->path_current_dir = get_absolutePath_build() + '/';
+  this->path_current_dir = get_absolutePath_build();
   this->open_mode = configManager->parse_json_s("parameter", "open_mode");
   this->save_mode = configManager->parse_json_s("parameter", "save_mode");
   this->path_saved_frame = configManager->parse_json_s("parameter", "path_data")  + "frame";
@@ -66,7 +66,7 @@ void Pather::loading_cloud(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading("Cloud loading");
+  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Cloud loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -80,7 +80,7 @@ void Pather::loading_frames(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading("Frame loading");
+  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Frame loading");
 
   //Load files
   if(path_vec.size() != 0){
@@ -111,7 +111,7 @@ void Pather::loading_sampling(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading("Cloud with sampling loading");
+  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Cloud with sampling loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -171,7 +171,7 @@ void Pather::loading_treatment(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading("Cloud with processing loading");
+  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Cloud with processing loading");
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -231,7 +231,7 @@ void Pather::saving_subset(Subset* subset){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_saving(subset->name, path_current_dir);
+  string path_saving = zenityManager->zenity_saving(path_current_dir, subset->name);
 
   //Save current cloud
   if(subset != nullptr && path_saving != ""){
@@ -261,7 +261,7 @@ void Pather::saving_cloud(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_saving(cloud->name, path_current_dir);
+  string path_saving = zenityManager->zenity_saving(path_current_dir, cloud->name);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){

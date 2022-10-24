@@ -85,15 +85,17 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     //Compute point-to-plane distance
     double dist_residual = 0;
     for(int j=0; j<3; j++){
-      dist_residual +=  (point[j] - nn[j]) * normal[j];
+      dist_residual += normal[j] * (point[j] - nn[j]);
     }
-    if(abs(dist_residual) > dist_residual_max) continue;
+    if(abs(dist_residual) > dist_residual_max){
+      continue;
+    }
 
     //Compute residual
     Eigen::Vector3d N_nn = a2D * a2D * normal;
     double residual = 0;
     for(int j=0; j<3; j++){
-      residual += (point[j] - nn[j]) * N_nn[j];
+      residual += N_nn[j] * (point[j] - nn[j]);
     }
     frame->nb_residual++;
 
@@ -170,10 +172,23 @@ void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::
   b(4) -= lambda_location * diff_traj(1);
   b(5) -= lambda_location * diff_traj(2);
 
-  Eigen::Vector3d diff_ego = (trans_e_m0 - trans_b_m0) + (trans_e_m1 - trans_b_m1);
+  Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
+  J(3, 3) += lambda_displace;
+  J(4, 4) += lambda_displace;
+  J(5, 5) += lambda_displace;
+  J(3, 9)  -= lambda_displace;
+  J(4, 10) -= lambda_displace;
+  J(5, 11) -= lambda_displace;
+  J(9, 3)  -= lambda_displace;
+  J(10, 4) -= lambda_displace;
+  J(11, 5) -= lambda_displace;
   J(9, 9)   += lambda_displace;
   J(10, 10) += lambda_displace;
   J(11, 11) += lambda_displace;
+
+  b(3) += lambda_displace * diff_ego(0);
+  b(4) += lambda_displace * diff_ego(1);
+  b(5) += lambda_displace * diff_ego(2);
   b(9)  -= lambda_displace * diff_ego(0);
   b(10) -= lambda_displace * diff_ego(1);
   b(11) -= lambda_displace * diff_ego(2);
@@ -201,12 +216,6 @@ Eigen::Matrix3d SLAM_optim_gn::compute_rotationMatrix(double rx, double ry, doub
 //Update function
 void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
-/*
-  X(0) = 0;
-  X(1) = 0;
-  X(6) = 0;
-  X(7) = 0;
-*/
 
   //Retrieve parameters
   Eigen::Matrix3d rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
@@ -216,10 +225,10 @@ void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
   Eigen::Vector3d trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
   //Update parameters
-  frame->rotat_b *= rotat_b;
+  frame->rotat_b = rotat_b * frame->rotat_b;
   frame->trans_b += trans_b;
 
-  frame->rotat_e *= rotat_e;
+  frame->rotat_e = rotat_e * frame->rotat_e;
   frame->trans_e += trans_e;
 
   frame->opti_score = X.norm();

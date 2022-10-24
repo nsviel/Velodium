@@ -17,11 +17,10 @@ Zenity::Zenity(){
 Zenity::~Zenity(){}
 
 //Zenity function
-vector<string> Zenity::zenity_loading(string title){
+vector<string> Zenity::zenity_loading(string& path_current_dir, string title){
   //---------------------------
 
   //Open zenity file manager
-  string path_current_dir = get_absolutePath_build() + '/';
   string zenity = "zenity --file-selection --multiple --title=" + title + " --filename=" + path_current_dir + " 2> /dev/null";
   FILE *file = popen(zenity.c_str(), "r");
   char filename[32768];
@@ -54,12 +53,16 @@ vector<string> Zenity::zenity_loading(string title){
       path_str.erase(std::remove(path_str.begin(), path_str.end(), '\n'), path_str.end());
     }
     path_vec.push_back(path_str);
+
+    //Actualize current directory path
+    string path = path_vec[0];
+    path_current_dir = path.substr(0, path.find_last_of("/") + 1);
   }
 
   //---------------------------
   return path_vec;
 }
-string Zenity::zenity_saving(string filename, string& path_current_dir){
+string Zenity::zenity_saving(string& path_current_dir, string filename){
   //---------------------------
 
   string path_saving = "";

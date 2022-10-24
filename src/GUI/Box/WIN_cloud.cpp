@@ -2,10 +2,11 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Specific/fct_maths.h"
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Color/Color.h"
+#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_transtypage.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -61,54 +62,44 @@ void WIN_cloud::window_cloudInfo(){
 
     //Name
     ImGui::Columns(2);
-    ImGui::SetColumnWidth(-1,50);
-    static char str[256];
-    strcpy(str, cloud->name.c_str());
+    ImGui::SetColumnWidth(-1,75);
     ImGui::Text("Name ");
     ImGui::NextColumn();
-    if(ImGui::InputText("##1", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue)){
-      cloud->name = str;
+    static char str_n[256];
+    strcpy(str_n, cloud->name.c_str());
+    if(ImGui::InputText("##name", str_n, IM_ARRAYSIZE(str_n), ImGuiInputTextFlags_EnterReturnsTrue)){
+      cloud->name = str_n;
     }
     ImGui::NextColumn();
 
     //Format
-    strcpy(str, cloud->format.c_str());
     ImGui::Text("Format ");
     ImGui::NextColumn();
-    static int format = 3;
-    if(cloud->format == "pts"){
-      format = 0;
+    static char str_f[256];
+    strcpy(str_f, cloud->format.c_str());
+    if(ImGui::InputText("##format", str_f, IM_ARRAYSIZE(str_f), ImGuiInputTextFlags_EnterReturnsTrue)){
+      cloud->format = str_f;
     }
-    else if(cloud->format == "ptx"){
-      format = 1;
-    }
-    else if(cloud->format == "ply"){
-      format = 2;
-    }
-    else if(cloud->format == "pcap"){
-      format = 3;
-    }
-    if(ImGui::RadioButton("pts", &format, 0)){
-      cloud->format = "pts";
-    }
-    ImGui::SameLine();
-    if(ImGui::RadioButton("ptx", &format, 1)){
-      cloud->format = "ptx";
-    }
-    if(ImGui::RadioButton("ply", &format, 2)){
-      cloud->format = "ply";
-    }
-    ImGui::SameLine();
-    if(ImGui::RadioButton("pcap", &format, 3)){
-      cloud->format = "pcap";
-    }
+    ImGui::NextColumn();
+
+    //Number of subset
+    ImGui::Text("Nb subset ");
+    ImGui::NextColumn();
+    ImGui::Text(to_string(cloud->nb_subset).c_str());
+    ImGui::NextColumn();
+
+    //Number of points
+    ImGui::Text("Nb point ");
+    ImGui::NextColumn();
+    string nb_point = thousandSeparator(cloud->nb_point);
+    ImGui::Text(nb_point.c_str());
     ImGui::NextColumn();
 
     //Root pos
     vec3& PCroot = cloud->root;
     ImGui::Text("Root ");
     ImGui::NextColumn();
-    ImGui::Text("%.2f, %.2f, %.2f", PCroot.x, PCroot.y, PCroot.z);
+    ImGui::Text("%.2f  %.2f  %.2f", PCroot.x, PCroot.y, PCroot.z);
     ImGui::SameLine();
     if(ImGui::Button("R", ImVec2(15,0))){
       PCroot = vec3(0,0,0);

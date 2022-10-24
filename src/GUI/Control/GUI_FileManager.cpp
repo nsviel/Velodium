@@ -102,9 +102,12 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   Cloud* cloud_selected = sceneManager->get_cloud_selected();
   //-------------------------------
 
-  ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-  if(cloud_selected->oID == cloud->oID){
-    node_flags = node_flags | ImGuiTreeNodeFlags_Selected;
+  ImGuiTreeNodeFlags node_flags;
+  if(cloud->nb_subset > 1){
+    node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+    if(cloud_selected->oID == cloud->oID){
+      node_flags |= ImGuiTreeNodeFlags_Selected;
+    }
   }
   bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
 
@@ -114,7 +117,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   }
 
   //Subset tree node
-  if(open_cloud_node && cloud != nullptr){
+  if(open_cloud_node && cloud != nullptr && cloud->nb_subset > 1){
 
     for(int j=0; j<cloud->subset.size(); j++){
       Subset* subset = *next(cloud->subset.begin(), j);
@@ -138,6 +141,8 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
       }
     }
 
+    ImGui::TreePop();
+  }else if(open_cloud_node && cloud != nullptr && cloud->nb_subset == 1){
     ImGui::TreePop();
   }
 

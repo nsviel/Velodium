@@ -9,7 +9,6 @@ class Node_gui;
 
 class Scene;
 class Player_cloud;
-class Heatmap;
 class Filter;
 class Online;
 class GUI_Color;
@@ -34,7 +33,6 @@ public:
   void design_dynamic();
   void design_state();
   void design_online();
-  void design_player();
 
   //Parameter function
   void parameter_offline();
@@ -52,7 +50,6 @@ private:
 
   Followup* followManager;
   Scene* sceneManager;
-  Heatmap* heatmapManager;
   Filter* filterManager;
   Online* onlineManager;
   GUI_Color* gui_color;

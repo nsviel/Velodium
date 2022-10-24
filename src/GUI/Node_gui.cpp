@@ -37,6 +37,7 @@ Node_gui::Node_gui(Node_engine* engine){
   this->node_interface = node_engine->get_node_interface();
 
   this->gui_initialization = new GUI_Initialization(this);
+  this->gui_color = new GUI_Color(this);
   this->gui_window = new GUI_windows(this);
   this->gui_control = new GUI_control(this);
   this->gui_option = new GUI_option(this);
@@ -46,7 +47,6 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_menuBar = new GUI_menuBar(this);
   this->gui_consol = new GUI_consol(this);
   this->gui_online = new GUI_Online(this);
-  this->gui_color = new GUI_Color(this);
   this->gui_network = new GUI_Network(this);
   this->gui_capture = new GUI_Capture(this);
   this->gui_selection = new GUI_Selection(this);

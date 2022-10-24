@@ -388,7 +388,8 @@ void SLAM_parameter::set_predefined_conf(int conf){
 }
 void SLAM_parameter::set_nb_thread(int value){
   //---------------------------
-
+//tochange
+value = 1;
   slamManager->set_nb_thread(value);
   slam_normal->set_nb_thread(value);
   slam_optim_gn->set_nb_thread(value);

@@ -25,7 +25,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->with_distorsion = false;
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
-  this->grid_voxel_width = 1;
+  this->grid_voxel_width = 0.3;
   this->max_total_point = 20000;
 
   //---------------------------
@@ -38,15 +38,37 @@ void SLAM_transform::compute_preprocessing(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
 
-  this->grid_sample_subset(subset);
-  this->distort_frame(frame);
-  //this->transform_frame(frame);
+  this->grid_sampling_subset(subset);
+  //this->distort_frame(frame);
+  this->transform_frame(frame);
 
   //---------------------------
 }
 
 //Specific function
-void SLAM_transform::grid_sample_subset(Subset* subset){
+void SLAM_transform::sub_sampling_subset(Subset* subset){
+  /*Frame* frame = &subset->frame;
+  float size_voxel = 0.2;
+  //---------------------------
+
+
+	std::unordered_map<Voxel, std::vector<Point3D>> grid;
+	for (int i = 0; i < (int)frame.size(); i++) {
+		short kx = static_cast<short>(frame[i].pt[0] / size_voxel);
+		short ky = static_cast<short>(frame[i].pt[1] / size_voxel);
+		short kz = static_cast<short>(frame[i].pt[2] / size_voxel);
+		grid[Voxel(kx, ky, kz)].push_back(frame[i]);
+	}
+	frame.resize(0);
+	for (const auto& n : grid) {
+		if (n.second.size() > 0) {
+			frame.push_back(n.second[0]);
+		}
+	}*/
+
+  //---------------------------
+}
+void SLAM_transform::grid_sampling_subset(Subset* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 
@@ -90,6 +112,12 @@ void SLAM_transform::grid_sample_subset(Subset* subset){
       if(frame->xyz.size() > max_total_point){
         break;
       }
+
+      //Eigen::Vector4d point = it->second[0];
+      //Eigen::Vector3d xyz(point(0), point(1), point(2));
+
+      //frame->xyz.push_back(xyz);
+      //frame->ts_n.push_back(point(3));
     }
   }
 
@@ -117,7 +145,7 @@ void SLAM_transform::distort_frame(Frame* frame){
       Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
       // Distort Raw Keypoints
-      frame->xyz_raw[i] = quat_e_inv * (quat_n * frame->xyz_raw[i] + t) + trans_e_inv;
+      frame->xyz[i] = quat_e_inv * (quat_n * frame->xyz[i] + t) + trans_e_inv;
     }
   }
 

@@ -92,10 +92,10 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
 
   //For the first 2 reference frames
   if(frame_m0->ID < 2){
-    frame_m0->rotat_b = Eigen::Matrix3d::Identity();
-    frame_m0->rotat_e = Eigen::Matrix3d::Identity();
     frame_m0->trans_b = Eigen::Vector3d::Zero();
     frame_m0->trans_e = Eigen::Vector3d::Zero();
+    frame_m0->rotat_b = Eigen::Matrix3d::Identity();
+    frame_m0->rotat_e = Eigen::Matrix3d::Identity();
   }
   //Other frame
   else{
@@ -110,6 +110,11 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
     //frame_m0->trans_b = trans_next_b;
     frame_m0->rotat_e = rotat_next_e;
     frame_m0->trans_e = trans_next_e;
+
+    Eigen::Vector3d t_diff = frame_m0->trans_e - frame_m0->trans_b;
+    if (t_diff.norm() > 5.0) {
+      std::cout << "Error in ego-motion distance !" << std::endl;
+    }
   }
 
   //---------------------------
