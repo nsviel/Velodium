@@ -67,7 +67,7 @@ void GUI_radiometry::design_Radiometry(){
 
 //Subfunctions
 void GUI_radiometry::cloudStat(){
-  /*Cloud* cloud = sceneManager->get_cloud_selected();
+  /*Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Radiometric cloud state
@@ -87,7 +87,7 @@ void GUI_radiometry::cloudStat(){
   ImGui::Separator();*/
 }
 void GUI_radiometry::correction(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Intensity correction
@@ -166,7 +166,7 @@ void GUI_radiometry::correction(){
 }
 void GUI_radiometry::plotting(){
   if(ImGui::CollapsingHeader("Plotting")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = sceneManager->get_subset_selected();
     const char* name_c = subset->name.c_str();
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity");
@@ -572,7 +572,7 @@ void GUI_radiometry::options(){
 }
 void GUI_radiometry::Approaches(){
   /*if(ImGui::CollapsingHeader("Approach")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     //---------------------------
 
     //Surfacic global piecewise approach

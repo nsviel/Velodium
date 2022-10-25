@@ -17,7 +17,6 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_transtypage.h"
-#include "../../Specific/fct_timer.h"
 
 
 //Constructor / Destructor
@@ -79,9 +78,31 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  float duration = toc_ms();
-  string log = "ok", "Loaded " + to_string(data_vec.size()) + " frames in " + to_string(duration) + " ms";
-  console.AddLog(log);
+  int duration = (int)toc_ms();
+  string log = "Loaded " + to_string(data_vec.size()) + " frames in " + to_string(duration) + " ms";
+  console.AddLog("ok", log);
+  return true;
+}
+bool Loader::load_cloud_onthefly(vector<string> path_vec){
+  vector<dataFile*> data_vec;
+  //---------------------------
+
+  //Load only the first cloud
+  dataFile* data = plyManager->Loader(path_vec[0]);
+  data_vec.push_back(data);
+
+  //Insert cloud
+  this->load_insertIntoDatabase(data_vec);
+
+  //Save list of file
+  cloud->list_path = path_vec;
+  cloud->onthefly = true;
+  cloud->ID_file++;
+
+  //---------------------------
+  int duration = (int)toc_ms();
+  string log = "Loaded " + to_string(data_vec.size()) + " frames in " + to_string(duration) + " ms";
+  console.AddLog("ok", log);
   return true;
 }
 bool Loader::load_cloud_silent(string filePath){
@@ -198,20 +219,16 @@ bool Loader::load_cloud_empty(){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_oneFrame(){
-  string filePath = "frame.pts";
-  dataFile* data = new dataFile();
+bool Loader::load_cloud_oneFrame(Cloud* cloud){
+  vector<string> list_path = cloud->list_path;
+  int idx = cloud->ID_file;
   //---------------------------
 
-  //Add an unique NULL point
-  vec3 zero = vec3(0, 0, 0);
-  data->location.push_back(zero);
+  //Retrieve data
+  dataFile* data = plyManager->Loader(list_path[idx]);
 
-  //Extraction of data
-  data->path = filePath;
-  vector<dataFile*> data_vec;
-  data_vec.push_back(data);
-  cloud = extractManager->extract_data(data_vec);
+  //Insert frame
+  this->load_insertIntoCloud(data, cloud);
 
   //---------------------------
   return true;
@@ -295,6 +312,15 @@ void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
   sceneManager->set_selected_cloud(cloud);
   sceneManager->update_cloud_oID(list_cloud);
   sceneManager->update_cloud_glyphs(cloud);
+
+  //---------------------------
+}
+void Loader::load_insertIntoCloud(dataFile* data, Cloud* cloud){
+  //---------------------------
+
+  //Extract data and put in the engine
+  extractManager->extract_data_frame(cloud, data);
+  cloud->ID_file++;
 
   //---------------------------
 }

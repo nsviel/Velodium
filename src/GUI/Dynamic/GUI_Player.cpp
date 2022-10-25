@@ -39,43 +39,19 @@ void GUI_Player::design_player(){
     //---------------------------
 
     this->player_run();
+    this->player_onthefly();
     this->player_parameter();
 
     //---------------------------
     ImGui::EndTabItem();
   }
 }
-void GUI_Player::player_parameter(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
-  string* player_mode = playerManager->get_player_mode();
-  //---------------------------
-
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Parameter");
-
-  //Restart to zero when arrive to the end of cloud frames
-  if(*player_mode == "player"){
-    bool* with_restart = playerManager->get_with_restart();
-    ImGui::Checkbox("Loop when end", with_restart);
-  }
-
-  //Setup cloud point size
-  if(cloud != nullptr){
-    int* point_size = &cloud->point_size;
-    ImGui::SliderInt("Point size", point_size, 1, 20);
-  }
-
-  //---------------------------
-  ImGui::Separator();
-}
 
 //Player action
 void GUI_Player::player_run(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
-
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Mode");
-  ImGui::SameLine();
 
   //Display set of player buttons
   this->player_button();
@@ -114,12 +90,47 @@ void GUI_Player::player_run(){
   //---------------------------
   ImGui::Separator();
 }
+void GUI_Player::player_onthefly(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //---------------------------
+
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "On the fly");
+
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Player::player_parameter(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  string* player_mode = playerManager->get_player_mode();
+  //---------------------------
+
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Parameter");
+
+  //Restart to zero when arrive to the end of cloud frames
+  if(*player_mode == "player"){
+    bool* with_restart = playerManager->get_with_restart();
+    ImGui::Checkbox("Loop when end", with_restart);
+  }
+
+  //Setup cloud point size
+  if(cloud != nullptr){
+    int* point_size = &cloud->point_size;
+    ImGui::SetNextItemWidth(50);
+    ImGui::SliderInt("Point size", point_size, 1, 20);
+  }
+
+  //---------------------------
+  ImGui::Separator();
+}
 void GUI_Player::player_button(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   string* player_mode = playerManager->get_player_mode();
   //---------------------------
 
   //Player / Capture mode
+  ImGui::Text("Mode");
+  ImGui::SameLine();
   if(*player_mode == "player"){
     if (ImGui::Button("Player##444")){
       *player_mode = "capture";
@@ -171,7 +182,7 @@ void GUI_Player::player_button(){
   //---------------------------
 }
 void GUI_Player::player_selection(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   if(cloud != nullptr && cloud->nb_subset > 2){

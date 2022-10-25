@@ -94,7 +94,7 @@ void GUI_Online::design_online(){
 
 //Parameter function
 void GUI_Online::parameter_online(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 

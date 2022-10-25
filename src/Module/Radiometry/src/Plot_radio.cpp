@@ -53,7 +53,7 @@ void Plot_radio::compute_IRmeans(list<Cloud*>* list){
   }
 
   //---------------------------
-  if(sceneManager->get_cloud_selected()->name.find("Sphere") != std::string::npos){
+  if(sceneManager->get_selected_cloud()->name.find("Sphere") != std::string::npos){
     I_saved.push_back(Is_mean);
     R_saved.push_back(R_mean);
   }
@@ -763,7 +763,7 @@ void Plot_radio::plot_IbyIt_Spectralon(bool normalised){
   }
 }
 void Plot_radio::plot_IbyCosIt_Sphere(bool normalised){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Bundle by classes
@@ -796,7 +796,7 @@ void Plot_radio::plot_IbyCosIt_Sphere(bool normalised){
   }
 }
 void Plot_radio::plot_IbyIt_Sphere(bool normalised){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Bundle by classes

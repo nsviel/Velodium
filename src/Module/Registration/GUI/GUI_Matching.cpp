@@ -50,7 +50,7 @@ void GUI_matching::design_Matching(){
 
 //Subcategories
 void GUI_matching::match_matching(){
-  Cloud* cloud_P = sceneManager->get_cloud_selected();
+  Cloud* cloud_P = sceneManager->get_selected_cloud();
   Cloud* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 
@@ -67,7 +67,7 @@ void GUI_matching::match_matching(){
   if(ImGui::Button("Apply", ImVec2(175,0))){
     int nbCloud = sceneManager->get_nb_cloud();
     if(nbCloud >=2){
-      Cloud* cloud_P = sceneManager->get_cloud_selected();
+      Cloud* cloud_P = sceneManager->get_selected_cloud();
       Cloud* cloud_Q = sceneManager->get_cloud_next();
 
       bool* restartCorrespondences = icpManager->get_makeCorrespondences();
@@ -127,7 +127,7 @@ void GUI_matching::match_dense(){
   }
 }
 void GUI_matching::match_methods(){
-  Cloud* cloud_P = sceneManager->get_cloud_selected();
+  Cloud* cloud_P = sceneManager->get_selected_cloud();
   Cloud* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 

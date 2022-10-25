@@ -53,7 +53,7 @@ Radiometry::~Radiometry(){}
 
 //Correction Methods
 void Radiometry::algo_RadarEquation(int num){
-  /*Cloud* cloud = sceneManager->get_cloud_selected();
+  /*Cloud* cloud = sceneManager->get_selected_cloud();
   attribManager->compute_attribut_cloud(cloud);
   //---------------------------
 

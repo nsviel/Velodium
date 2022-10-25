@@ -62,7 +62,7 @@ void GUI_option::design_Options(){
 
 //Subfunctions
 void GUI_option::option_glyphs(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   ImGui::Columns(2);
   //---------------------------
 
@@ -138,7 +138,7 @@ void GUI_option::option_glyphs(){
 }
 void GUI_option::option_heatmap(){
   if(ImGui::CollapsingHeader("Heatmap")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     //---------------------------
 
     //Heatmap
@@ -173,7 +173,7 @@ void GUI_option::option_heatmap(){
 }
 void GUI_option::option_colors(){
   if(ImGui::CollapsingHeader("Colors")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     int colorEditSize = 150;
     //---------------------------
 
@@ -230,7 +230,7 @@ void GUI_option::option_colors(){
 }
 void GUI_option::option_parameters(){
   if(ImGui::CollapsingHeader("Parameters")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
 

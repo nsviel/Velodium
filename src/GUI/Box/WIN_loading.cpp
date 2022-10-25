@@ -339,7 +339,7 @@ void WIN_loading::saving_configuration(){
     if(sceneManager->get_is_list_empty()){
       subset_max = 0;
     }else{
-      Cloud* cloud = sceneManager->get_cloud_selected();
+      Cloud* cloud = sceneManager->get_selected_cloud();
       subset_max = cloud->nb_subset - 1;
     }
 
@@ -394,7 +394,7 @@ void WIN_loading::saving_dataFormat(){
   //---------------------------
 }
 void WIN_loading::saving_action(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Save selected cloud

@@ -17,6 +17,7 @@ struct Cloud{ //Global set of the cloud
 
   int ID_selected; //Actual selected subset ID
   int ID_subset; //Last given subset ID
+  int ID_file; //For on the fly loading
 
   //Parameters
   int nb_subset;
@@ -24,6 +25,7 @@ struct Cloud{ //Global set of the cloud
   int point_size;
   bool visibility;
   bool heatmap;
+  bool onthefly;
 
   //Infos
   std::string path;
@@ -32,6 +34,7 @@ struct Cloud{ //Global set of the cloud
   std::string saveas;
   std::string dataFormat;
   std::string lidar_model;
+  std::vector<std::string> list_path;
 
   //Transformation
   glm::vec3 min;

@@ -43,7 +43,6 @@ void Capture::update_configuration(){
 
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
   this->capture_port = configManager->parse_json_i("interface", "capture_port");
-  bool with_capture = configManager->parse_json_i("interface", "with_capture");
   this->cloud_capture = nullptr;
   this->ID_capture = 0;
   this->is_capturing = false;
@@ -55,6 +54,7 @@ void Capture::update_configuration(){
   this->with_justOneFrame = false;
   this->nb_subset_max = 50;
 
+  bool with_capture = configManager->parse_json_i("interface", "with_capture");
   if(with_capture){
     this->start_new_capture(lidar_model);
   }
@@ -129,8 +129,7 @@ void Capture::stop_capture(){
 
 //LiDAR specific functions
 void Capture::runtime_velodyne(){
-  Subset* new_subset;
-  new_subset = nullptr;
+  Subset* new_subset = nullptr;
   //---------------------------
 
   bool *new_capture = veloManager->get_is_newSubset();
@@ -154,8 +153,7 @@ void Capture::runtime_velodyne(){
   //---------------------------
 }
 void Capture::runtime_scala(){
-  Subset* new_subset;
-  new_subset = nullptr;
+  Subset* new_subset = nullptr;
   //---------------------------
 
   bool* new_capture = scalaManager->get_is_newSubset();

@@ -70,7 +70,7 @@ void GUI_control::make_control(){
 
 //Subfunctions
 void GUI_control::control_mouse(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
   Viewport_obj* view = cameraManager->get_current_viewport();
@@ -109,7 +109,7 @@ void GUI_control::control_mouse(){
   //---------------------------
 }
 void GUI_control::control_mouse_wheel(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   static int wheelMode = 0;
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -165,7 +165,7 @@ void GUI_control::control_mouse_wheel(){
   //----------------------------
 }
 void GUI_control::control_frame_selection(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -191,7 +191,7 @@ void GUI_control::control_frame_selection(){
 }
 
 void GUI_control::control_keyboard_oneAction(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
   //----------------------------
@@ -273,7 +273,7 @@ void GUI_control::control_keyboard_oneAction(){
   //----------------------------
 }
 void GUI_control::control_keyboard_translation(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -383,7 +383,7 @@ void GUI_control::control_keyboard_ctrlAction(){
   if(ImGui::IsKeyPressed(341)){
     //ctrl+s - Save as
     if(ImGui::IsKeyPressed(83)){
-      Cloud* cloud = sceneManager->get_cloud_selected();
+      Cloud* cloud = sceneManager->get_selected_cloud();
       pathManager->saving_cloud(cloud);
     }
     //ctrl+w - Open

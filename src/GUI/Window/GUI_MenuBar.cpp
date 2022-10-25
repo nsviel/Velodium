@@ -72,24 +72,10 @@ void GUI_menuBar::design_MenuBar(){
 
 //Subfunctions
 void GUI_menuBar::MenuBar_menus(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //-------------------------
 
   if(ImGui::BeginMenu("File")){
-    string open = "Open [" + pathManager->get_open_mode() + "]";
-    if (ImGui::MenuItem(open.c_str())){
-      pathManager->loading();
-    }
-    if (ImGui::MenuItem("Open options")){
-      window_tab.show_loading = true;
-    }
-    string save = "Save [" + pathManager->get_save_mode() + "]";
-    if (ImGui::MenuItem(save.c_str())){
-      pathManager->saving();
-    }
-    if (ImGui::MenuItem("Save options")){
-      window_tab.show_saving = true;
-    }
     if(ImGui::MenuItem("Remove cloud", "Suppr")){
       sceneManager->remove_cloud(cloud);
     }
@@ -118,20 +104,49 @@ void GUI_menuBar::MenuBar_menus(){
 
     ImGui::EndMenu();
   }
-  if(ImGui::MenuItem(ICON_FA_FILE " Open")){
-    pathManager->loading();
+
+  //Loading menu
+  if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
+    if (ImGui::MenuItem("Open cloud")){
+      pathManager->loading_cloud();
+    }
+    if (ImGui::MenuItem("Open frames")){
+      pathManager->loading_frames();
+    }
+    if (ImGui::MenuItem("Options")){
+      window_tab.show_loading = true;
+    }
+    ImGui::EndMenu();
   }
-  if(ImGui::MenuItem(ICON_FA_BOOK " Save")){
-    pathManager->saving();
+
+  //Saving menu
+  if(ImGui::BeginMenu(ICON_FA_BOOK " Save")){
+    Cloud* cloud = sceneManager->get_selected_cloud();
+    if (ImGui::MenuItem("Save cloud")){
+      pathManager->saving_cloud(cloud);
+    }
+    if (ImGui::MenuItem("Save frame")){
+      pathManager->saving_cloud_frame(cloud);
+    }
+    if (ImGui::MenuItem("Options")){
+      window_tab.show_saving = true;
+    }
+    ImGui::EndMenu();
   }
+
+  //Option menu
   if(ImGui::BeginMenu(ICON_FA_COG " Option")){
     optionManager->design_Options();
     ImGui::EndMenu();
   }
+
+  //Operation menu
   if(ImGui::BeginMenu("Operation")){
     this->MenuBar_Operations();
     ImGui::EndMenu();
   }
+
+  //Init menu
   if(ImGui::BeginMenu("Init")){
     gui_init->init_gui();
     ImGui::EndMenu();
@@ -200,7 +215,7 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_Operations(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Functions

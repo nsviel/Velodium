@@ -42,7 +42,7 @@ WIN_attribut::~WIN_attribut(){}
 
 //Main function
 void WIN_attribut::window_normal(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
 
   if(window_tab.show_normal && cloud != nullptr){
     ImGui::Begin("Attributs", &window_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
@@ -200,7 +200,7 @@ void WIN_attribut::window_normal(){
   }
 }
 void WIN_attribut::window_intensity(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
 
   if(window_tab.show_intensity && cloud != nullptr){
     ImGui::Begin("Intensity", &window_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
@@ -313,7 +313,7 @@ void WIN_attribut::window_intensity(){
   }
 }
 void WIN_attribut::window_color(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
 
   if(window_tab.show_color && cloud != nullptr){
     ImGui::Begin("Colorization", &window_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);

@@ -40,7 +40,7 @@ void WIN_operation::window_filter(){
   bool* open = &window_tab.show_filter;
   if(*open){
     ImGui::Begin("Filter manager", open, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -102,7 +102,7 @@ void WIN_operation::window_filter(){
 void WIN_operation::window_selection(){
   if(window_tab.show_selection){
     ImGui::Begin("Selection part", &window_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -253,7 +253,7 @@ void WIN_operation::window_selection(){
   }
 }
 void WIN_operation::window_transformation(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   
   if(window_tab.show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &window_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
@@ -397,7 +397,7 @@ void WIN_operation::window_transformation(){
       if(cloud != nullptr){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
-        Cloud* cloud = sceneManager->get_cloud_selected();
+        Cloud* cloud = sceneManager->get_selected_cloud();
         Subset* subset = cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
@@ -420,7 +420,7 @@ void WIN_operation::window_transformation(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        Cloud* cloud = sceneManager->get_cloud_selected();
+        Cloud* cloud = sceneManager->get_selected_cloud();
         Subset* subset = cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
@@ -519,7 +519,7 @@ void WIN_operation::window_transformation(){
 void WIN_operation::window_fitting(){
   if(window_tab.show_fitting){
     ImGui::Begin("Fitting", &window_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     int sizeButton = 150;
     //---------------------------
@@ -557,7 +557,7 @@ void WIN_operation::window_fitting(){
 void WIN_operation::window_extractCloud(){
   if(window_tab.show_extractCloud){
     ImGui::Begin("Extract cloud", &window_tab.show_extractCloud,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -660,7 +660,7 @@ void WIN_operation::window_extractCloud(){
 void WIN_operation::window_cutCloud(){
   if(window_tab.show_cutCloud){
     ImGui::Begin("Cut cloud", &window_tab.show_cutCloud,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 

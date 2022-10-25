@@ -29,11 +29,12 @@ public:
   //Main functions
   bool load_cloud(string pathFile);
   bool load_cloud_byFrame(vector<string> path_vec);
+  bool load_cloud_onthefly(vector<string> path_vec);
   bool load_cloud_silent(string pathFile);
   bool load_cloud_part(string path, int lmin, int lmax);
   bool load_cloud_creation(Cloud* cloud_in);
   bool load_cloud_empty();
-  bool load_cloud_oneFrame();
+  bool load_cloud_oneFrame(Cloud* cloud);
   vector<vec3> load_vertices(string filePath);
 
   inline Cloud* get_createdcloud(){return cloud;}
@@ -44,6 +45,7 @@ public:
 private:
   vector<dataFile*> load_retrieve_data(string filePath);
   void load_insertIntoDatabase(vector<dataFile*> data_vec);
+  void load_insertIntoCloud(dataFile* data, Cloud* cloud);
 
 private:
   Extractor* extractManager;

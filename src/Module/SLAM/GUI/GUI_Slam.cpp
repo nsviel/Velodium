@@ -155,7 +155,7 @@ void GUI_Slam::parameter_glyph(){
 }
 void GUI_Slam::parameter_offline(){
   if(ImGui::TreeNode("Offline##tree")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     //---------------------------
 
     //Compute algorithm
@@ -191,7 +191,7 @@ void GUI_Slam::parameter_offline(){
 }
 void GUI_Slam::parameter_optimization(){
   if(ImGui::TreeNode("Optimization##tree")){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     //---------------------------
 
     //Number of threads
@@ -415,7 +415,7 @@ void GUI_Slam::state_SLAM(){
   float time = 0;
 
   if(sceneManager->get_is_list_empty() == false){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     Frame* frame = &subset->frame;
 
@@ -442,7 +442,7 @@ void GUI_Slam::state_localmap(){
   int nb_keypoint = 0;
 
   if(sceneManager->get_is_list_empty() == false){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     Frame* frame = &subset->frame;
 
@@ -483,7 +483,7 @@ void GUI_Slam::state_transformation(){
   vec3 rotat_e_rlt = vec3(0, 0, 0);
 
   if(sceneManager->get_is_list_empty() == false){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     Frame* frame = &subset->frame;
 

@@ -14,6 +14,7 @@
 
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
+#include "../../Load/Processing/Pather.h"
 
 
 //Constructor / Destructor
@@ -28,6 +29,7 @@ Player::Player(Node_operation* node_ope){
   this->objectManager = node_engine->get_objectManager();;
   this->sceneManager = node_engine->get_sceneManager();
   this->saveManager = node_load->get_saveManager();
+  this->pathManager = node_load->get_pathManager();
   this->timerManager = new Timer();
 
   //---------------------------
@@ -42,7 +44,7 @@ void Player::update_configuration(){
   this->player_isrunning = false;
   this->player_ispaused = false;
   this->player_returnToZero = false;
-  this->player_flag_1s = false;
+  this->player_time_flag = false;
   this->player_saveas = get_absolutePath_build() + "../media/data/";
   this->player_mode = configManager->parse_json_s("module", "player_mode");
 
@@ -50,13 +52,13 @@ void Player::update_configuration(){
 }
 void Player::runtime(){
   //Continually running, wait for flag to proceed
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
-  if(player_flag_1s && cloud != nullptr){
+  if(player_time_flag && cloud != nullptr){
     this->select_bySubsetID(cloud, cloud->ID_selected + 1);
 
-    player_flag_1s = false;
+    player_time_flag = false;
   }
 
   //---------------------------
@@ -64,7 +66,7 @@ void Player::runtime(){
 
 //Selection functions
 void Player::wheel_selection(string direction){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
   //Wheel - rolling stone
@@ -86,9 +88,13 @@ void Player::wheel_selection(string direction){
 void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 
+  //If on the fly option, load subset
+  if(cloud->onthefly){
+
+  }
+
   //If in side range, make operation on subset
-  bool range_ok = select_rangeLimit(cloud, ID_subset);
-  if(range_ok){
+  if(select_rangeLimit(cloud, ID_subset)){
     onlineManager->compute_onlineOpe(cloud, ID_subset);
   }
 
@@ -147,7 +153,7 @@ void Player::player_start(){
     float increment = (1 / (float)player_frequency) * 1000;
     timerManager->setFunc([&](){
       if(!sceneManager->get_is_list_empty()){
-        player_flag_1s = true;
+        player_time_flag = true;
       }else{
         timerManager->stop();
       }
@@ -181,7 +187,7 @@ void Player::player_start_or_pause(){
   //---------------------------
 }
 void Player::player_stop(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   this->player_isrunning = false;
   this->player_ispaused = false;
   //---------------------------

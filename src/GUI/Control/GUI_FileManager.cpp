@@ -99,7 +99,7 @@ void GUI_fileManager::fileManager(){
   //-------------------------------
 }
 void GUI_fileManager::cloudManager(Cloud* cloud){
-  Cloud* cloud_selected = sceneManager->get_cloud_selected();
+  Cloud* cloud_selected = sceneManager->get_selected_cloud();
   //-------------------------------
 
   ImGuiTreeNodeFlags node_flags;

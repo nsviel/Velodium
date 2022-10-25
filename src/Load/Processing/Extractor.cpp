@@ -270,7 +270,9 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
   cloud->nb_subset = data.size();
   cloud->ID_selected = 0;
   cloud->ID_subset = 0;
+  cloud->ID_file = 0;
   cloud->heatmap = false;
+  cloud->onthefly = false;
   cloud->lidar_model = "";
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;

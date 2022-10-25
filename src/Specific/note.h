@@ -5,7 +5,7 @@
 
 
 void Prediction::runtime_prediction(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   bool is_prediction = false;
   //---------------------------
 

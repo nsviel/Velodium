@@ -9,6 +9,7 @@ class Timer;
 class Online;
 class Saver;
 class Object;
+class Pather;
 class Configuration;
 
 
@@ -46,6 +47,7 @@ public:
 
 private:
   Scene* sceneManager;
+  Pather* pathManager;
   Timer* timerManager;
   Online* onlineManager;
   Saver* saveManager;
@@ -57,7 +59,7 @@ private:
   bool player_isrunning;
   bool player_ispaused;
   bool player_returnToZero;
-  bool player_flag_1s;
+  bool player_time_flag;
   int player_frequency;
 };
 

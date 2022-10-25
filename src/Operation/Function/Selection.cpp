@@ -57,7 +57,7 @@ void Selection::update(){
 }
 void Selection::validate(){
   if(!sceneManager->get_is_list_empty()){
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_selected_init();
     list<int>& idx = subset->highlighted;
@@ -439,7 +439,7 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   //---------------------------
 }
 void Selection::mouse_cloudPicking(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   vec3 point = coordManager->CursorToGround();
@@ -497,7 +497,7 @@ void Selection::update_glDims(){
 
 //Plane
 void Selection::mark_planeCreation(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 

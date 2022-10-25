@@ -30,7 +30,7 @@ WIN_cloud::~WIN_cloud(){}
 
 //Main function
 void WIN_cloud::window_cloudInfo(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   bool* open = &window_tab.show_modifyFileInfo;
   //---------------------------
 
@@ -85,14 +85,15 @@ void WIN_cloud::window_cloudInfo(){
     //Number of subset
     ImGui::Text("Nb subset ");
     ImGui::NextColumn();
-    ImGui::Text(to_string(cloud->nb_subset).c_str());
+    string nb_subset = to_string(cloud->nb_subset);
+    ImGui::Text("%s", nb_subset.c_str());
     ImGui::NextColumn();
 
     //Number of points
     ImGui::Text("Nb point ");
     ImGui::NextColumn();
     string nb_point = thousandSeparator(cloud->nb_point);
-    ImGui::Text(nb_point.c_str());
+    ImGui::Text("%s", nb_point.c_str());
     ImGui::NextColumn();
 
     //Root pos
@@ -153,7 +154,7 @@ void WIN_cloud::window_cloudInfo(){
 void WIN_cloud::window_asciiData(){
   if(window_tab.show_asciiData){
     ImGui::Begin("Data", &window_tab.show_asciiData);
-    Cloud* cloud = sceneManager->get_cloud_selected();
+    Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
 
     vector<vec3>& XYZ = subset->xyz;

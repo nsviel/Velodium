@@ -164,7 +164,7 @@ void Extraction::fct_cutCloud(Subset* subset){
 }
 void Extraction::fct_cutCloud_all(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-  Cloud* cloud_selected = sceneManager->get_cloud_selected();
+  Cloud* cloud_selected = sceneManager->get_selected_cloud();
   vec3& max = cloud_selected->max;
   vec3& min = cloud_selected->min;
   //---------------------------
@@ -426,7 +426,7 @@ void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
   sceneManager->update_subset_color(subset);
 }
 void Extraction::set_AABB_min(vec3 min_in){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   //---------------------------
@@ -459,7 +459,7 @@ void Extraction::set_AABB_min(vec3 min_in){
   objectManager->update_glyph_cloud(cloud);
 }
 void Extraction::set_AABB_max(vec3 max_in){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = sceneManager->get_subset_selected_init();
   //---------------------------

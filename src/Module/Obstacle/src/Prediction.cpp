@@ -34,7 +34,7 @@ Prediction::~Prediction(){}
 
 //Main functions
 void Prediction::runtime_prediction(){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   if(with_prediction && cloud != nullptr){
@@ -77,7 +77,7 @@ void Prediction::compute_prediction(Cloud* cloud, string path_file){
   //---------------------------
 }
 void Prediction::compute_prediction(string path_dir){
-  Cloud* cloud = sceneManager->get_cloud_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
   if(cloud == nullptr) return;
   //---------------------------
 
