@@ -9,7 +9,7 @@ class Timer;
 class Online;
 class Saver;
 class Object;
-class Pather;
+class Loader;
 class Configuration;
 
 
@@ -25,9 +25,10 @@ public:
   void runtime();
 
   //Selection function
-  void wheel_selection(string direction);
   void select_bySubsetID(Cloud* cloud, int ID_subset);
-  bool select_rangeLimit(Cloud* cloud, int& ID_subset);
+  void compute_wheel_selection(string direction);
+  void compute_onthefly(Cloud* cloud);
+  bool compute_range_limit(Cloud* cloud, int& ID_subset);
 
   //Player functions
   void player_start();
@@ -47,7 +48,7 @@ public:
 
 private:
   Scene* sceneManager;
-  Pather* pathManager;
+  Loader* loadManager;
   Timer* timerManager;
   Online* onlineManager;
   Saver* saveManager;

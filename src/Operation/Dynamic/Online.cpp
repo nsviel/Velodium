@@ -111,7 +111,7 @@ void Online::compute_visibility(Cloud* cloud, int& ID_subset){
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset->ID > ID_subset - visibility_range && subset->ID <= ID_subset){
+    if(subset->ID > ID_subset - visibility_range - 1 && subset->ID <= ID_subset){
       subset->visibility = true;
     }else{
       subset->visibility = false;
@@ -149,4 +149,28 @@ void Online::compute_http_command(){
   }
 
   //---------------------------
+}
+
+//Visibility function
+void Online::set_visibility_range(int value){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //---------------------------
+
+  this->visibility_range = value;
+
+  //---------------------------
+}
+int Online::get_visibility_range_max(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  int range_max = 15;
+  //---------------------------
+
+  if(cloud != nullptr && sceneManager->get_is_list_empty() == false){
+    if(cloud->nb_subset > 15){
+      range_max = cloud->nb_subset;
+    }
+  }
+
+  //---------------------------
+  return range_max;
 }

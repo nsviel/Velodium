@@ -14,7 +14,7 @@
 
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
-#include "../../Load/Processing/Pather.h"
+#include "../../Load/Processing/Loader.h"
 
 
 //Constructor / Destructor
@@ -29,7 +29,7 @@ Player::Player(Node_operation* node_ope){
   this->objectManager = node_engine->get_objectManager();;
   this->sceneManager = node_engine->get_sceneManager();
   this->saveManager = node_load->get_saveManager();
-  this->pathManager = node_load->get_pathManager();
+  this->loadManager = node_load->get_loadManager();
   this->timerManager = new Timer();
 
   //---------------------------
@@ -65,7 +65,38 @@ void Player::runtime(){
 }
 
 //Selection functions
-void Player::wheel_selection(string direction){
+void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
+  if(cloud == nullptr) return;
+  //---------------------------
+
+  //If on the fly option, load subset
+  if(cloud->onthefly){
+    this->compute_onthefly(cloud);
+  }
+
+  //If in side range, make operation on subset
+  if(compute_range_limit(cloud, ID_subset)){
+    onlineManager->compute_onlineOpe(cloud, ID_subset);
+  }
+
+  //Update glyphs
+  Subset* subset = sceneManager->get_subset(cloud, ID_subset);
+  objectManager->update_glyph_subset(subset);
+
+  //---------------------------
+}
+void Player::compute_onthefly(Cloud* cloud){
+  int range = onlineManager->get_visibility_range();
+  //---------------------------
+
+  loadManager->load_cloud_oneFrame(cloud);
+  if(cloud->subset.size() > range){
+    sceneManager->remove_subset_last(cloud);
+  }
+
+  //---------------------------
+}
+void Player::compute_wheel_selection(string direction){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
@@ -85,26 +116,7 @@ void Player::wheel_selection(string direction){
 
   //----------------------------
 }
-void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
-  //---------------------------
-
-  //If on the fly option, load subset
-  if(cloud->onthefly){
-
-  }
-
-  //If in side range, make operation on subset
-  if(select_rangeLimit(cloud, ID_subset)){
-    onlineManager->compute_onlineOpe(cloud, ID_subset);
-  }
-
-  //Update glyphs
-  Subset* subset = sceneManager->get_subset(cloud, ID_subset);
-  objectManager->update_glyph_subset(subset);
-
-  //---------------------------
-}
-bool Player::select_rangeLimit(Cloud* cloud, int& ID_subset){
+bool Player::compute_range_limit(Cloud* cloud, int& ID_subset){
   Subset* subset_first = sceneManager->get_subset(cloud, 0);
   Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
   //---------------------------

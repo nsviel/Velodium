@@ -38,7 +38,7 @@ void GUI_Player::design_player(){
   if(ImGui::BeginTabItem("Player")){
     //---------------------------
 
-    this->player_run();
+    this->design_run();
     this->player_onthefly();
     this->player_parameter();
 
@@ -46,11 +46,7 @@ void GUI_Player::design_player(){
     ImGui::EndTabItem();
   }
 }
-
-//Player action
-void GUI_Player::player_run(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
-  Subset* subset = cloud->subset_selected;
+void GUI_Player::design_run(){
   //---------------------------
 
   //Display set of player buttons
@@ -60,35 +56,54 @@ void GUI_Player::player_run(){
   this->player_selection();
 
   //Range of displayed frames
-  int* player_subset_range = onlineManager->get_visibility_range();
-  int nb_subset_max = *player_subset_range;
-  if(cloud != nullptr && sceneManager->get_is_list_empty() == false){
-    nb_subset_max = cloud->nb_subset - 1;
-  }
+  this->player_visibility();
+
+  //Recording
+  this->player_recording();
+
+  //---------------------------
+  ImGui::Separator();
+}
+
+//Player action
+void GUI_Player::player_visibility(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //---------------------------
+
+  int visible_range = onlineManager->get_visibility_range();
+  int visible_range_max = onlineManager->get_visibility_range_max();
   ImGui::SetNextItemWidth(140);
-  if(ImGui::DragInt("Displayed frames", player_subset_range, 1, 1, nb_subset_max)){
+  if(ImGui::DragInt("Display##666", &visible_range, 1, 1, visible_range_max)){
+    onlineManager->set_visibility_range(visible_range);
     if(cloud != nullptr){
       playerManager->select_bySubsetID(cloud, cloud->ID_selected);
     }
   }
 
-  //Recording
+  //---------------------------
+}
+void GUI_Player::player_recording(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //---------------------------
+
+  //Recording button
   if (ImGui::Button(ICON_FA_CIRCLE "##37")){
     if(cloud != nullptr){
       playerManager->player_save(cloud);
     }
   }
-  ImGui::SameLine();
+
   //Dicrectory path selection & display
+  ImGui::SameLine();
   if(ImGui::Button("...##23")){
     playerManager->player_selectDirSave();
   }
+
   ImGui::SameLine();
   string saveas = *playerManager->get_player_saveas();
   ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", saveas.c_str());
 
   //---------------------------
-  ImGui::Separator();
 }
 void GUI_Player::player_onthefly(){
   Cloud* cloud = sceneManager->get_selected_cloud();

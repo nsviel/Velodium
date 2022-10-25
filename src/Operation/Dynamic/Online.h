@@ -37,9 +37,13 @@ public:
   void compute_visibility(Cloud* cloud, int& ID_subset);
   void compute_http_command();
 
+  //Visibility function
+  void set_visibility_range(int value);
+  int get_visibility_range_max();
+
   inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
-  inline int* get_visibility_range(){return &visibility_range;}
   inline float get_time_operation(){return time_operation;}
+  inline int get_visibility_range(){return visibility_range;}
 
 private:
   Node_engine* node_engine;

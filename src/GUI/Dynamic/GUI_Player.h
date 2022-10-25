@@ -20,9 +20,11 @@ public:
 public:
   //Main function
   void design_player();
+  void design_run();
 
   //Player action
-  void player_run();
+  void player_recording();
+  void player_visibility();
   void player_onthefly();
   void player_parameter();
   void player_button();

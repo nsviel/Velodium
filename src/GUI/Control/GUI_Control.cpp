@@ -156,7 +156,7 @@ void GUI_control::control_mouse_wheel(){
       }
       //Subset selection
       else if(cloud->nb_subset > 1 || cloud->onthefly){
-        playerManager->wheel_selection(direction);
+        playerManager->compute_wheel_selection(direction);
       }
     }
   }
