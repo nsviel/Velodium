@@ -207,6 +207,14 @@ void Transforms::make_rotation(vector<vec3>& XYZ, vec3 radian){
 
   //---------------------------
 }
+void Transforms::make_rotation_origin(vector<vec3>& XYZ, mat4 R){
+  //---------------------------
+
+  vec3 COM = vec3(0, 0, 0);
+  this->make_Transformation_atomic(XYZ, COM, R);
+
+  //---------------------------
+}
 
 void Transforms::make_Transformation(Subset* subset, vec3 COM, mat4 transfMat){
   vector<vec3>& XYZ = subset->xyz;

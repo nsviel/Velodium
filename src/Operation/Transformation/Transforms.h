@@ -22,6 +22,7 @@ public:
 
   void make_translation(vector<vec3>& XYZ, vec3 trans);
   void make_rotation(vector<vec3>& XYZ, vec3 radian);
+  void make_rotation_origin(vector<vec3>& XYZ, mat4 R);
 
   void make_Transformation(Subset* subset, vec3 COM, mat4 transfMat);
   void make_Transformation_atomic(vector<vec3>& XYZ, vec3 COM, mat4 Transformation);
@@ -59,7 +60,7 @@ public:
   vector<vec3> compute_transformcloud_XYZ(Cloud* cloud, mat4 Mat);
   void compute_transformXYZ(vector<vec3>& XYZ, vec3& COM, mat4 Mat);
   void compute_COM(Cloud* cloud);
-  
+
   //Setters / Getters
   inline void set_soilnb_point(int value){this->soilnb_point = value;}
 

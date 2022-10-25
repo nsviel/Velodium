@@ -118,6 +118,20 @@ namespace{
     //-------------
     return duration;
   }
+  float toc_ms(){
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    float duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+
+    //-------------
+    return duration;
+  }
+  float toc_s(){
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    float duration = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
+
+    //-------------
+    return duration;
+  }
   std::string epoch_to_utc(float epoch) {
     const std::time_t old = (std::time_t)epoch;
     struct tm *oldt = std::gmtime(&old);

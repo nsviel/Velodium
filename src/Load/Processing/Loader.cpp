@@ -17,6 +17,7 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_transtypage.h"
+#include "../../Specific/fct_timer.h"
 
 
 //Constructor / Destructor
@@ -65,6 +66,7 @@ bool Loader::load_cloud(string filePath){
 }
 bool Loader::load_cloud_byFrame(vector<string> path_vec){
   vector<dataFile*> data_vec;
+  tic();
   //---------------------------
 
   //Retrieve data
@@ -77,7 +79,9 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  console.AddLog("ok", "Loaded " + to_string(data_vec.size()) + " frames");
+  float duration = toc_ms();
+  string log = "ok", "Loaded " + to_string(data_vec.size()) + " frames in " + to_string(duration) + " ms";
+  console.AddLog(log);
   return true;
 }
 bool Loader::load_cloud_silent(string filePath){
