@@ -37,7 +37,6 @@ public:
   void init_objects();
   void reset();
   void exit();
-  void draw_leftPanel();
   void loop();
   void loop_selection();
 
@@ -60,6 +59,7 @@ public:
   inline GUI_Color* get_gui_color(){return gui_color;}
   inline GUI_Network* get_gui_network(){return gui_network;}
   inline GUI_Selection* get_gui_selection(){return gui_selection;}
+  inline GUI_Capture* get_gui_capture(){return gui_capture;}
 
 private:
   Node_engine* node_engine;

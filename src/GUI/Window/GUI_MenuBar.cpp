@@ -75,6 +75,7 @@ void GUI_menuBar::MenuBar_menus(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //-------------------------
 
+  //File menu
   if(ImGui::BeginMenu("File")){
     if(ImGui::MenuItem("Remove cloud", "Suppr")){
       sceneManager->remove_cloud(cloud);
@@ -113,6 +114,10 @@ void GUI_menuBar::MenuBar_menus(){
     if (ImGui::MenuItem("Open frames")){
       pathManager->loading_frames();
     }
+    if (ImGui::MenuItem("Open \"On the fly\"")){
+      pathManager->loading_onthefly();
+    }
+    ImGui::Separator();
     if (ImGui::MenuItem("Options")){
       window_tab.show_loading = true;
     }
@@ -128,6 +133,7 @@ void GUI_menuBar::MenuBar_menus(){
     if (ImGui::MenuItem("Save frame")){
       pathManager->saving_cloud_frame(cloud);
     }
+    ImGui::Separator();
     if (ImGui::MenuItem("Options")){
       window_tab.show_saving = true;
     }

@@ -3,9 +3,13 @@
 #include "../Node_gui.h"
 #include "../Box/GUI_windows.h"
 #include "../Control/GUI_FileManager.h"
+#include "../Interface/GUI_Capture.h"
+#include "../Dynamic/GUI_Online.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Dimension.h"
+
+#include "../../Module/Node_module.h"
 
 #include "imgui/imgui.h"
 
@@ -17,9 +21,12 @@ GUI_leftPanel::GUI_leftPanel(Node_gui* node){
 
   Node_engine* node_engine = node_gui->get_node_engine();
 
+  this->node_module = node_engine->get_node_module();
   this->dimManager = node_engine->get_dimManager();
   this->gui_window = node_gui->get_gui_window();
   this->gui_fileManager = node_gui->get_gui_fileManager();
+  this->gui_online = node_gui->get_gui_online();
+  this->gui_capture = node_gui->get_gui_capture();
 
   //-------------------------------
 }
@@ -34,6 +41,20 @@ void GUI_leftPanel::design_leftPanel(){
   this->update_dimension();
 
   //----------------------------
+}
+void GUI_leftPanel::design_leftPanel_bottom(){
+  if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
+    ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
+    //-------------------------------
+
+    gui_online->design_dynamic();
+    gui_capture->design_interface();
+    node_module->draw();
+
+    //-------------------------------
+    ImGui::PopStyleColor();
+    ImGui::EndTabBar();
+  }
 }
 
 //Sub-function
@@ -102,7 +123,7 @@ void GUI_leftPanel::panel_bot(){
   ImGui::Begin("LeftPanel##botInner", NULL, window_flags);
 
   //Working areas
-  node_gui->draw_leftPanel();
+  this->design_leftPanel_bottom();
 
   ImGui::PopStyleVar();
 

@@ -42,13 +42,13 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_control = new GUI_control(this);
   this->gui_option = new GUI_option(this);
   this->gui_fileManager = new GUI_fileManager(this);
-  this->gui_leftPanel = new GUI_leftPanel(this);
   this->gui_player = new GUI_Player(this);
   this->gui_menuBar = new GUI_menuBar(this);
   this->gui_consol = new GUI_consol(this);
   this->gui_online = new GUI_Online(this);
   this->gui_network = new GUI_Network(this);
   this->gui_capture = new GUI_Capture(this);
+  this->gui_leftPanel = new GUI_leftPanel(this);
   this->gui_selection = new GUI_Selection(this);
 
   this->guiManager = new GUI(this);
@@ -72,20 +72,6 @@ void Node_gui::exit(){
   node_engine->exit();
 
   //---------------------------
-}
-void Node_gui::draw_leftPanel(){
-  if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)){
-    ImGui::PushStyleColor(ImGuiCol_Tab, IM_COL32(0, 0, 0, 255));
-    //-------------------------------
-
-    gui_online->design_dynamic();
-    gui_capture->design_interface();
-    node_module->draw();
-
-    //-------------------------------
-    ImGui::PopStyleColor();
-    ImGui::EndTabBar();
-  }
 }
 void Node_gui::loop(){
   //---------------------------

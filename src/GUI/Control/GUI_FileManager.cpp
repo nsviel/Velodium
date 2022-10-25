@@ -103,7 +103,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   //-------------------------------
 
   ImGuiTreeNodeFlags node_flags;
-  if(cloud->nb_subset > 1){
+  if(cloud->nb_subset > 1 || cloud->onthefly){
     node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
     if(cloud_selected->oID == cloud->oID){
       node_flags |= ImGuiTreeNodeFlags_Selected;
@@ -117,7 +117,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   }
 
   //Subset tree node
-  if(open_cloud_node && cloud != nullptr && cloud->nb_subset > 1){
+  if(open_cloud_node && cloud != nullptr && (cloud->nb_subset > 1 || cloud->onthefly)){
 
     for(int j=0; j<cloud->subset.size(); j++){
       Subset* subset = *next(cloud->subset.begin(), j);
