@@ -18,7 +18,7 @@ void Axis::create_axis_scene(){
 
   //Create glyph
   axis_scene->name = "axis";
-  axis_scene->draw_width = 3;
+  axis_scene->draw_width = 4;
   axis_scene->visibility = true;
   axis_scene->draw_type = "line";
   axis_scene->permanent = true;

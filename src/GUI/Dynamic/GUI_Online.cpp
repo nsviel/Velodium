@@ -101,16 +101,8 @@ void GUI_Online::parameter_online(){
   //Module online stuff
   node_module->draw_online();
 
-  //Camera auto displacement
-  bool* with_camera_follow = followManager->get_with_camera_follow();
-  ImGui::Checkbox("Camera follow up", with_camera_follow);
-
-  //Camera follow absolute position
-  if(*with_camera_follow){
-    bool* with_camera_absolute = followManager->get_with_camera_absolute();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(item_width);
-    ImGui::Checkbox("Absolute positionning", with_camera_absolute);
-  }
+  //Camera followup stuff
+  this->parameter_camera();
 
   //Cylinder cleaning filter
   bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
@@ -125,6 +117,55 @@ void GUI_Online::parameter_online(){
     ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
     ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
+  }
+
+  //---------------------------
+}
+void GUI_Online::parameter_camera(){
+  //---------------------------
+
+  //Camera auto displacement
+  bool* with_camera_follow = followManager->get_with_camera_follow();
+  ImGui::Checkbox("Camera follow up", with_camera_follow);
+
+  //Relative or absolute
+  if(*with_camera_follow){
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    static int view;
+    if(*followManager->get_with_camera_absolute()){
+      view = 1;
+    }else{
+      view = 0;
+    }
+    if(ImGui::RadioButton("Relative", &view, 0)){
+      bool* abs = followManager->get_with_camera_absolute();
+      *abs = false;
+    }
+    ImGui::SameLine();
+    if(ImGui::RadioButton("Absolute", &view, 1)){
+      bool* abs = followManager->get_with_camera_absolute();
+      *abs = true;
+    }
+  }
+
+  //Oblique or top view
+  if(*followManager->get_with_camera_absolute()){
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    static int view;
+    if(*followManager->get_with_camera_top()){
+      view = 1;
+    }else{
+      view = 0;
+    }
+    if(ImGui::RadioButton("Oblique##444", &view, 0)){
+      bool* abs = followManager->get_with_camera_top();
+      *abs = false;
+    }
+    ImGui::SameLine();
+    if(ImGui::RadioButton("Top##444", &view, 1)){
+      bool* abs = followManager->get_with_camera_top();
+      *abs = true;
+    }
   }
 
   //---------------------------

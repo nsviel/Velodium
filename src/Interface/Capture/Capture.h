@@ -4,13 +4,11 @@
 #include "../../common.h"
 
 class Node_interface;
-class Scene;
-class Loader;
-class Extractor;
-class Node_module;
-class Configuration;
 class Node_operation;
 
+class Scene;
+class Loader;
+class Configuration;
 class Scala;
 class Velodyne;
 
@@ -53,7 +51,7 @@ public:
   inline int get_capture_nb_point(){return capture_nb_point;}
   inline int get_capture_nb_point_raw(){return capture_nb_point_raw;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
-  
+
 private:
   Scene* sceneManager;
   Loader* loaderManager;

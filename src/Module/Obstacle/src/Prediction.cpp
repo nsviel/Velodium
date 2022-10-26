@@ -25,7 +25,7 @@ Prediction::Prediction(Module_obstacle* module){
   this->fileManager = module->get_fileManager();
   this->sceneManager = node_engine->get_sceneManager();
 
-  this->with_prediction = configManager->parse_json_b("interface", "with_prediction");
+  this->with_prediction = configManager->parse_json_b("module", "with_prediction");
   this->is_prediction = false;
 
   //---------------------------

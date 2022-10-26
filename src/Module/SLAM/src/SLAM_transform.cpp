@@ -26,7 +26,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->min_root_distance = 5.0f;
   this->max_root_distance = 100.0f;
   this->grid_voxel_width = 0.3;
-  this->max_total_point = 20000;
+  this->max_total_point = 2000;
 
   //---------------------------
 }
@@ -113,11 +113,6 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
         break;
       }
 
-      //Eigen::Vector4d point = it->second[0];
-      //Eigen::Vector3d xyz(point(0), point(1), point(2));
-
-      //frame->xyz.push_back(xyz);
-      //frame->ts_n.push_back(point(3));
     }
   }
 

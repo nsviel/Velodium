@@ -37,6 +37,7 @@ public:
   //Parameter function
   void parameter_offline();
   void parameter_online();
+  void parameter_camera();
   void parameter_export();
 
   //State function

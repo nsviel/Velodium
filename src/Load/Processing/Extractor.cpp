@@ -298,7 +298,6 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   //Other stuff
   subset->ID = ID;
   subset->root = vec3(0.0);
-  subset->angle = -1000;
   if(name != ""){
     subset->name = name;
   }else{

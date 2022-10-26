@@ -120,8 +120,10 @@ void Object::update_configuration(){
 
   Glyph* aabb = aabbObject->get_aabb();
   Glyph* grid = gridObject->get_grid();
+  Glyph* axis = axisObject->get_axis_scene();
   aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
   grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");
+  axis->visibility = configManager->parse_json_b("glyph", "axis_visibility");
 
   Glyph* car = carObject->get_glyph();
   Glyph* traj = trajObject->get_glyph();
@@ -130,8 +132,8 @@ void Object::update_configuration(){
 
   bool* car_visu = carObject->get_visibility();
   bool* traj_visu = trajObject->get_visibility();
-  *car_visu = configManager->parse_json_b("glyph", "trajectory_visibility");
-  *traj_visu = configManager->parse_json_b("glyph", "trajectory_visibility");
+  *car_visu = configManager->parse_json_b("glyph", "car_visibility");
+  *traj_visu = configManager->parse_json_b("glyph", "car_visibility");
 
   //---------------------------
 }
@@ -170,8 +172,10 @@ void Object::update_glyph_subset(Subset* subset){
   //---------------------------
 
   //Subset axis
-  axisObject->update_axis_subset(subset);
-  glyphManager->update_glyph_location(&subset->axis);
+  if(configManager->parse_json_b("glyph", "axis_cloud_visibility")){
+    axisObject->update_axis_subset(subset);
+    glyphManager->update_glyph_location(&subset->axis);
+  }
 
   //Subset keypoint
   keyObject->update_keypoint_location(subset);

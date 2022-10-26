@@ -255,13 +255,10 @@ void Camera::input_set_view(int view){
   switch(view){
     case 0:{ //Top
       viewport->view = "top";
-      viewport->cam_P = vec3(0, 0, viewport->cam_P.z);
       break;
     }
     case 1:{ //Oblique
       viewport->view = "oblique";
-      float camPos = configManager->parse_json_f("camera", "initial_pos");
-      viewport->cam_P = vec3(camPos, camPos, camPos);
       break;
     }
   }

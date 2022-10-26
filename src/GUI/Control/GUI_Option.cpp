@@ -73,6 +73,20 @@ void GUI_option::option_glyphs(){
   ImGui::Checkbox("Grid", &grid_ON);
   ImGui::NextColumn();
 
+  //Grid number of square
+  static int nb_square = 4;
+  ImGui::PushItemWidth(75);
+  if(ImGui::DragInt("##457", &nb_square, 1, 1, 100, "%d")){
+    Grid* gridObject = objectManager->get_object_grid();
+    gridObject->update_grid(nb_square);
+    gridObject->update_grid_sub(nb_square);
+    gridObject->update_grid_plane(nb_square);
+    objectManager->update_object(gridObject->get_grid());
+    objectManager->update_object(gridObject->get_grid_sub());
+    objectManager->update_object(gridObject->get_grid_plane());
+  }
+  ImGui::NextColumn();
+
   //Subgrid
   Glyph* grid_sub = gridObject->get_grid_sub();
   bool& grid_sub_ON = grid_sub->visibility;
@@ -106,13 +120,6 @@ void GUI_option::option_glyphs(){
   if(ImGui::Checkbox("Axis", &axis_scene_ON)){
     bool* axis_subset_visibility = axisObject->get_axis_subset_visibility();
     *axis_subset_visibility = axis_scene_ON;
-  }
-  ImGui::NextColumn();
-
-  //SLAM things
-  static bool slam_visibility = true;
-  if(ImGui::Checkbox("SLAM", &slam_visibility)){
-    objectManager->set_slam_object(slam_visibility);
   }
   ImGui::NextColumn();
 

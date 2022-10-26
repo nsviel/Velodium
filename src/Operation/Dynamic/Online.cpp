@@ -55,7 +55,7 @@ void Online::update_configuration(){
   this->time_operation = 0;
   this->visibility_range = 15;
   this->with_subset_specific_color = false;
-  this->with_cylinder_cleaning = configManager->parse_json_b("module", "with_cylinder_cleaning");
+  this->with_cylinder_cleaning = configManager->parse_json_b("dynamic", "with_cylinder_cleaning");
 
   //---------------------------
 }
@@ -82,7 +82,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   }
 
   //If camera follow up option activated
-  followManager->camera_followUp(cloud, ID_subset);
+  followManager->camera_followup(cloud, ID_subset);
 
   //Colorization
   colorManager->make_colorization(cloud, ID_subset);

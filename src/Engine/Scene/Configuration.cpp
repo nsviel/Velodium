@@ -130,6 +130,9 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Camera
   Json::Value camera;
+  camera["with_camera_follow"] = false;
+  camera["with_camera_absolute"] = false;
+  camera["with_camera_top"] = false;
   camera["fov"] = 65.0f;
   camera["initial_pos"] = 5.0f;
   camera["clip_near"] = 0.1f;
@@ -143,30 +146,25 @@ void Configuration::preconf_default(Json::Value& root){
   Json::Value network;
   network["with_http_demon"] = true;
   network["http_port"] = 8888;
-
   network["mqtt_sncf_port"] = 1883;
   network["mqtt_sncf_dest"] = "mqtt_sncf_broker";
   network["mqtt_sncf_client"] = "ai_module";
   network["mqtt_sncf_topic"] = "obstacle";
-
   network["mqtt_local_port"] = 1883;
   network["mqtt_local_dest"] = "localhost";
   network["mqtt_local_client"] = "velodium";
   network["mqtt_local_topic"] = "lidar";
-
   root["network"] = network;
 
   //Wallet
   Json::Value wallet;
   wallet["localhost"] = "127.0.0.1";
   wallet["mqtt_sncf_broker"] = "127.0.0.1";
-
   wallet["mine_ordi_nathan"] = "10.201.20.106";
   wallet["mine_ordi_louis"] = "10.201.20.110";
   wallet["mine_server"] = "10.201.224.13";
   wallet["portable_nathan_home"] = "192.168.1.27";
   wallet["portable_nathan_mine"] = "192.168.153.147";
-
   root["wallet"] = wallet;
 
   //Glyph
@@ -174,30 +172,35 @@ void Configuration::preconf_default(Json::Value& root){
   glyph["aabb_visibility"] = true;
   glyph["grid_visibility"] = true;
   glyph["normal_visibility"] = false;
-  glyph["trajectory_visibility"] = false;
+  glyph["car_visibility"] = false;
+  glyph["axis_visibility"] = true;
+  glyph["axis_cloud_visibility"] = true;
   root["glyph"] = glyph;
 
   //Module
   Json::Value module;
   module["with_slam"] = true;
-  module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = true;
-  module["player_mode"] = "player";
+  module["with_prediction"] = false;
   root["module"] = module;
+
+  //Dynamic
+  Json::Value dynamic;
+  dynamic["with_cylinder_cleaning"] = true;
+  dynamic["with_save_image"] = false;
+  dynamic["with_save_frame"] = false;
+  dynamic["nb_save_image"] = 1;
+  dynamic["nb_save_frame"] = 20;
+  dynamic["player_mode"] = "player";
+  dynamic["path_save_frame"] = "../../Hubium/data/frame/";
+  dynamic["path_save_image"] = "../../Hubium/data/image/";
+  root["dynamic"] = dynamic;
 
   //Interface
   Json::Value interface;
-  interface["path_save_frame"] = "../../Hubium/data/frame/";
-  interface["path_save_image"] = "../../Hubium/data/image/";
   interface["lidar_model"] = "velodyne_vlp64";
   interface["capture_port"] = 2370;
   interface["with_capture"] = false;
-  interface["with_prediction"] = false;
-  interface["with_save_image"] = false;
-  interface["with_save_frame"] = false;
   interface["with_remove_lastSubset"] = false;
-  interface["nb_save_frame"] = 20;
-  interface["nb_save_image"] = 1;
   root["interface"] = interface;
 
   //---------------------------
@@ -208,9 +211,7 @@ void Configuration::preconf_capture(Json::Value& root){
   //Module
   Json::Value module;
   module["with_slam"] = false;
-  module["with_camera_follow"] = false;
-  module["with_cylinder_cleaning"] = false;
-  module["player_mode"] = "capture";
+  module["with_prediction"] = false;
   root["module"] = module;
 
   //Parameters
@@ -222,16 +223,22 @@ void Configuration::preconf_capture(Json::Value& root){
   param["color_intensity_max"] = 100;
   root["parameter"] = param;
 
+  //Dynamic
+  Json::Value dynamic;
+  dynamic["with_cylinder_cleaning"] = false;
+  dynamic["with_save_image"] = false;
+  dynamic["with_save_frame"] = true;
+  dynamic["nb_save_image"] = 1;
+  dynamic["nb_save_frame"] = 200000;
+  dynamic["player_mode"] = "capture";
+  root["dynamic"] = dynamic;
+
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp16";
   interface["capture_port"] = 2369;
   interface["with_capture"] = true;
-  interface["with_prediction"] = true;
-  interface["with_save_image"] = false;
-  interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
-  interface["nb_save_frame"] = 200000;
   root["interface"] = interface;
 
   //---------------------------
@@ -247,24 +254,33 @@ void Configuration::preconf_ai(Json::Value& root){
   //Module
   Json::Value module;
   module["with_slam"] = true;
-  module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = false;
+  module["with_prediction"] = false;
   root["module"] = module;
+
+  //Camera
+  Json::Value camera;
+  camera["with_camera_follow"] = true;
+  camera["with_camera_absolute"] = true;
+  root["camera"] = camera;
 
   //Glyph
   Json::Value glyph;
   glyph["aabb_visibility"] = false;
-  glyph["trajectory_visibility"] = true;
+  glyph["car_visibility"] = true;
   root["glyph"] = glyph;
+
+  //Dynamic
+  Json::Value dynamic;
+  dynamic["with_cylinder_cleaning"] = true;
+  dynamic["with_save_image"] = false;
+  dynamic["with_save_frame"] = true;
+  dynamic["nb_save_image"] = 1;
+  root["dynamic"] = dynamic;
 
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp64";
-  interface["with_prediction"] = true;
-  interface["with_save_image"] = false;
-  interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = false;
-  interface["nb_save_image"] = 1;
   root["interface"] = interface;
 
   //---------------------------
@@ -276,29 +292,40 @@ void Configuration::preconf_server(Json::Value& root){
   Json::Value param;
   param["path_data"] = "../../data/";
   param["filter_cylinder_rmin"] = 0.5;
-  param["filter_cylinder_rmax"] = 30;
+  param["filter_cylinder_rmax"] = 50;
   param["color_mode"] = 2; //Heatmap
   root["parameter"] = param;
 
   //Glyph
   Json::Value glyph;
   glyph["aabb_visibility"] = false;
+  glyph["car_visibility"] = true;
+  glyph["axis_cloud_visibility"] = false;
   root["glyph"] = glyph;
+
+  //Camera
+  Json::Value camera;
+  camera["with_camera_follow"] = true;
+  camera["with_camera_absolute"] = true;
+  root["camera"] = camera;
 
   //Module
   Json::Value module;
   module["with_slam"] = true;
-  module["with_camera_follow"] = true;
-  module["with_cylinder_cleaning"] = true;
+  module["with_prediction"] = true;
   root["module"] = module;
+
+  //Dynamic
+  Json::Value dynamic;
+  dynamic["with_cylinder_cleaning"] = true;
+  dynamic["with_save_image"] = true;
+  dynamic["with_save_frame"] = true;
+  root["dynamic"] = dynamic;
 
   //Interface
   Json::Value interface;
   interface["lidar_model"] = "velodyne_vlp16";
   interface["with_capture"] = true;
-  interface["with_prediction"] = true;
-  interface["with_save_image"] = true;
-  interface["with_save_frame"] = true;
   interface["with_remove_lastSubset"] = true;
   root["interface"] = interface;
 

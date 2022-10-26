@@ -6,13 +6,28 @@
       "initial_pos" : 5.0,
       "speed_mouse" : 0.0030000000260770321,
       "speed_move" : 3.0,
-      "speed_zoom" : 0.10000000149011612
+      "speed_zoom" : 0.10000000149011612,
+      "with_camera_absolute" : false,
+      "with_camera_follow" : false,
+      "with_camera_top" : false
+   },
+   "dynamic" : {
+      "nb_save_frame" : 20,
+      "nb_save_image" : 1,
+      "path_save_frame" : "../../Hubium/data/frame/",
+      "path_save_image" : "../../Hubium/data/image/",
+      "player_mode" : "player",
+      "with_cylinder_cleaning" : true,
+      "with_save_frame" : false,
+      "with_save_image" : false
    },
    "glyph" : {
       "aabb_visibility" : true,
+      "axis_cloud_visibility" : true,
+      "axis_visibility" : true,
+      "car_visibility" : false,
       "grid_visibility" : true,
-      "normal_visibility" : false,
-      "trajectory_visibility" : false
+      "normal_visibility" : false
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -23,20 +38,11 @@
    "interface" : {
       "capture_port" : 2370,
       "lidar_model" : "velodyne_vlp64",
-      "nb_save_frame" : 20,
-      "nb_save_image" : 1,
-      "path_save_frame" : "../../Hubium/data/frame/",
-      "path_save_image" : "../../Hubium/data/image/",
       "with_capture" : false,
-      "with_prediction" : false,
-      "with_remove_lastSubset" : false,
-      "with_save_frame" : false,
-      "with_save_image" : false
+      "with_remove_lastSubset" : false
    },
    "module" : {
-      "player_mode" : "player",
-      "with_camera_follow" : true,
-      "with_cylinder_cleaning" : true,
+      "with_prediction" : false,
       "with_slam" : true
    },
    "network" : {
