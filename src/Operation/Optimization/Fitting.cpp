@@ -130,19 +130,31 @@ vec3 Fitting::Sphere_FindCenter(Subset* subset){
 }
 
 //Plane fitting
-void Fitting::Plane_cloud_all(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+vec3 Fitting::plane_fitting_normal(vector<vec3>& vec){
   //--------------------------
 
-  /*#ifdef PCL_FUNCTIONS_H
-  pcl_functions pclManager;
-  for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = cloud->subset_selected;
-    pclManager.Plane_cloud(subset);
-    sceneManager->update_subset_color(subset);
+	// copy coordinates to  matrix in Eigen format
+	size_t num_atoms = vec.size();
+	Eigen::MatrixXf coord(3, num_atoms);
+	for (size_t i = 0; i < num_atoms; ++i){
+    coord.col(i) = glm_to_eigen_vec3(vec[i]);
   }
-  #endif*/
+
+	// calculate centroid
+	Eigen::Vector3f centroid(coord.row(0).mean(), coord.row(1).mean(), coord.row(2).mean());
+
+	// subtract centroid
+	coord.row(0).array() -= centroid(0); coord.row(1).array() -= centroid(1); coord.row(2).array() -= centroid(2);
+
+	// we only need the left-singular matrix here
+	auto svd = coord.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV);
+	Eigen::Vector3f plane_normal = svd.matrixU().rightCols<1>();
+  vec3 normal = vec3(plane_normal(0), plane_normal(1), plane_normal(2));
+
+  //Another possible return
+  //std::pair<Vector3, Vector3>
+  //return std::make_pair(centroid, plane_normal);
 
   //--------------------------
+  return normal;
 }

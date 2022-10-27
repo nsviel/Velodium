@@ -7,6 +7,9 @@ class Glyphs;
 
 #include "../../common.h"
 
+#include <Eigen/Core>
+#include <Eigen/Dense>
+
 
 class Fitting
 {
@@ -21,7 +24,7 @@ public:
   vec3 Sphere_FindCenter(Subset* subset);
 
   //Plane fitting
-  void Plane_cloud_all();
+  vec3 plane_fitting_normal(vector<vec3>& vec);
 
 private:
   Scene* sceneManager;
