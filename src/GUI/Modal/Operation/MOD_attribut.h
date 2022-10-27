@@ -1,7 +1,7 @@
 #ifndef MOD_ATTRIBUT_H
 #define MOD_ATTRIBUT_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Scene;
 class Attribut;

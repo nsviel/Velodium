@@ -2,20 +2,20 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "../Node_gui.h"
-#include "../Control/GUI_Color.h"
+#include "../../Node_gui.h"
+#include "../../Control/GUI_Color.h"
 
-#include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyphs.h"
-#include "../../Operation/Transformation/Attribut.h"
-#include "../../Operation/Transformation/Transforms.h"
-#include "../../Operation/Color/Heatmap.h"
-#include "../../Operation/Color/Color.h"
-#include "../../Operation/Node_operation.h"
-#include "../../Specific/fct_maths.h"
+#include "../../../Engine/Node_engine.h"
+#include "../../../Engine/Scene/Scene.h"
+#include "../../../Engine/Scene/Glyphs.h"
+#include "../../../Operation/Transformation/Attribut.h"
+#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Color/Heatmap.h"
+#include "../../../Operation/Color/Color.h"
+#include "../../../Operation/Node_operation.h"
+#include "../../../Specific/fct_maths.h"
 
-#include "Modal_tab.h"
+#include "../Modal_tab.h"
 extern struct Modal_tab window_tab;
 
 

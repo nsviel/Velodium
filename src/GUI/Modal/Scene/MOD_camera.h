@@ -1,7 +1,7 @@
 #ifndef MOD_CAMERA_H
 #define MOD_CAMERA_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Node_engine;
 class Camera;

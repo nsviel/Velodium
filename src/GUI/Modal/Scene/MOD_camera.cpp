@@ -2,13 +2,13 @@
 
 #include "IconsFontAwesome5.h"
 
-#include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Configuration.h"
-#include "../../Engine/OpenGL/Camera/Camera.h"
+#include "../../../Engine/Node_engine.h"
+#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Engine/OpenGL/Camera/Camera.h"
 
 #include <fstream>
 
-#include "Modal_tab.h"
+#include "../Modal_tab.h"
 extern struct Modal_tab window_tab;
 
 

@@ -1,7 +1,7 @@
 #ifndef MOD_LOADING_H
 #define MOD_LOADING_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Node_engine;
 class Scene;

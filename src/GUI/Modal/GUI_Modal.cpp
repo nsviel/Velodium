@@ -1,12 +1,13 @@
 #include "GUI_Modal.h"
 
 #include "Modal_tab.h"
-#include "MOD_loading.h"
-#include "MOD_cloud.h"
-#include "MOD_camera.h"
-#include "MOD_shader.h"
-#include "MOD_operation.h"
-#include "MOD_attribut.h"
+#include "Scene/MOD_loading.h"
+#include "Scene/MOD_cloud.h"
+#include "Scene/MOD_camera.h"
+#include "Scene/MOD_shader.h"
+#include "Operation/MOD_operation.h"
+#include "Operation/MOD_attribut.h"
+#include "Operation/MOD_transformation.h"
 
 #include "../Node_gui.h"
 
@@ -31,6 +32,7 @@ GUI_Modal::GUI_Modal(Node_gui* node_gui){
   this->win_attribut = new MOD_attribut(node_gui);
   this->win_cloud = new MOD_cloud(node_ope);
   this->win_loading = new MOD_loading(node_engine);
+  this->mod_transformation = new MOD_transformation(node_engine);
 
   //---------------------------
   this->window_init();
@@ -71,8 +73,9 @@ void GUI_Modal::window_Draw(){
   win_cloud->window_cloudInfo();
   win_cloud->window_asciiData();
 
+  mod_transformation->design_transformation();
+
   win_operation->window_filter();
-  win_operation->window_transformation();
   win_operation->window_extractCloud();
   win_operation->window_cutCloud();
   win_operation->window_fitting();

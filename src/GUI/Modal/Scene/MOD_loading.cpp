@@ -1,17 +1,17 @@
 #include "MOD_loading.h"
 
-#include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
+#include "../../../Engine/Node_engine.h"
+#include "../../../Engine/Scene/Scene.h"
 
-#include "../../Load/Node_load.h"
-#include "../../Load/Processing/Pather.h"
-#include "../../Load/Processing/Loader.h"
+#include "../../../Load/Node_load.h"
+#include "../../../Load/Processing/Pather.h"
+#include "../../../Load/Processing/Loader.h"
 
-#include "../../Load/Format/file_PTS.h"
-#include "../../Load/Format/file_PTX.h"
-#include "../../Load/Format/file_PCAP.h"
+#include "../../../Load/Format/file_PTS.h"
+#include "../../../Load/Format/file_PTX.h"
+#include "../../../Load/Format/file_PCAP.h"
 
-#include "Modal_tab.h"
+#include "../Modal_tab.h"
 extern struct Modal_tab window_tab;
 
 

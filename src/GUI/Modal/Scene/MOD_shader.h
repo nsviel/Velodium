@@ -1,7 +1,7 @@
 #ifndef MOD_SHADER_H
 #define MOD_SHADER_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Node_engine;
 class Shader;

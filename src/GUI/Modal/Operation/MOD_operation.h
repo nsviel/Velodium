@@ -1,7 +1,7 @@
 #ifndef MOD_OPERATION_H
 #define MOD_OPERATION_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Scene;
 class Glyphs;
@@ -23,7 +23,6 @@ public:
 public:
   void window_filter();
   void window_selection();
-  void window_transformation();
   void window_fitting();
   void window_extractCloud();
   void window_cutCloud();

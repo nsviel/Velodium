@@ -10,6 +10,7 @@ class MOD_camera;
 class MOD_shader;
 class MOD_operation;
 class MOD_attribut;
+class MOD_transformation;
 
 
 class GUI_Modal
@@ -31,6 +32,7 @@ private:
   MOD_cloud* win_cloud;
   MOD_operation* win_operation;
   MOD_attribut* win_attribut;
+  MOD_transformation* mod_transformation;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef MOD_CLOUD_H
 #define MOD_CLOUD_H
 
-#include "../../common.h"
+#include "../../../common.h"
 
 class Node_operation;
 class Scene;
