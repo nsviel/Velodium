@@ -166,7 +166,7 @@ void GUI_Slam::parameter_offline(){
         //slamManager->compute_slam_offline(cloud);
 
         sceneManager->update_cloud_location(cloud);
-        sceneManager->update_cloud_glyphs(cloud);
+        sceneManager->update_cloud_glyph(cloud);
       }
     }
     ImGui::PopStyleColor(1);

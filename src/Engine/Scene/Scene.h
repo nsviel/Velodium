@@ -36,7 +36,7 @@ public:
   void reset_cloud_all();
 
   //Update cloud
-  void update_cloud_glyphs(Cloud* cloud);
+  void update_cloud_glyph(Cloud* cloud);
   void update_cloud_IntensityToColor(Cloud* cloud);
   void update_cloud_oID(list<Cloud*>* list);
   void update_cloud_MinMax(Cloud* cloud);

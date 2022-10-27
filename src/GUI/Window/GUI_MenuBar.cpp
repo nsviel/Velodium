@@ -21,6 +21,8 @@
 #include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Transformation/Transforms.h"
 
+#include "../../Specific/fct_maths.h"
+
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"
 
@@ -259,7 +261,9 @@ void GUI_menuBar::MenuBar_appInfo(){
 
     //OpenGl version
     const char* oglv = reinterpret_cast<const char*>(glGetString(GL_VERSION));
-    ImGui::MenuItem("OGL v.", oglv);
+    ImGui::Text("OGL v.");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.7f,0.7f,0.7f,1.0f), "%s", oglv);
     ImGui::Separator();
 
     //RAM memory
@@ -267,21 +271,42 @@ void GUI_menuBar::MenuBar_appInfo(){
     struct sysinfo si;
     sysinfo (&si);
     float percentFreeRam = ((float)si.freeram*100) / (float)si.totalram;
-    ImGui::Text("Total RAM: %5.1f MB\n", si.totalram / megabyte);
-    ImGui::Text("Free RAM: %5.1f MB - %.1f%%\n", si.freeram / megabyte, percentFreeRam);
+    string total_ram = thousandSeparator(si.totalram / megabyte);
+    ImGui::Text("Total RAM: ");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.5, 1, 0.5, 1), "%s", total_ram.c_str());
+    ImGui::SameLine();
+    ImGui::Text(" MB\n");
 
-    //Number of concurrency threads
-    int num_threads = std::thread::hardware_concurrency();
-    ImGui::Text("Max nb thread: %d\n", num_threads);
-    ImGui::Separator();
+    ImGui::Text("Free RAM: ");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.5, 1, 0.5, 1), "%5.1f", si.freeram / megabyte);
+    ImGui::SameLine();
+    ImGui::Text(" MB [");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.5, 1, 0.5, 1), "%.1f", percentFreeRam);
+    ImGui::SameLine();
+    ImGui::Text("%% ]");
 
     //Framerate
     ImGuiIO io = ImGui::GetIO();
-    ImGui::Text("%.1f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    ImGui::Text("Display: ");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.5, 1, 0.5, 1), "%.1f", 1000.0f / io.Framerate);
+    ImGui::SameLine();
+    ImGui::Text(" ms/frame [");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.5, 1, 0.5, 1), "%.1f", io.Framerate);
+    ImGui::SameLine();
+    ImGui::Text(" FPS ]");
 
     //Loop duration
     float time_loop = glManager->get_time_loop();
-    ImGui::Text("Loop: %.f ms", time_loop);
+    ImGui::Text("Loop: ");
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.5, 1, 0.5, 1), "%.f", time_loop);
+    ImGui::SameLine();
+    ImGui::Text(" ms");
 
     //---------------------------
     ImGui::EndMenu();

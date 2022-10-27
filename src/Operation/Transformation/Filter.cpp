@@ -105,7 +105,7 @@ void Filter::filter_sphereCleaning(){
       }
 
       attribManager->make_supressPoints(subset, idx);
-      sceneManager->update_cloud_glyphs(cloud);
+      sceneManager->update_cloud_glyph(cloud);
     }
   }
 

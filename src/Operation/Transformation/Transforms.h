@@ -60,7 +60,8 @@ public:
   vector<vec3> compute_transformcloud_XYZ(Cloud* cloud, mat4 Mat);
   void compute_transformXYZ(vector<vec3>& XYZ, vec3& COM, mat4 Mat);
   void compute_COM(Cloud* cloud);
-
+  void compute_min(Cloud* cloud);
+  
   //Setters / Getters
   inline void set_soilnb_point(int value){this->soilnb_point = value;}
 

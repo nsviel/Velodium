@@ -270,7 +270,7 @@ void Scene::reset_cloud(Cloud* cloud){
   cloud->ID_selected = get_subset(cloud, 0)->ID;
 
   //---------------------------
-  this->update_cloud_glyphs(cloud);
+  this->update_cloud_glyph(cloud);
 }
 void Scene::reset_cloud_all(){
   //---------------------------
@@ -281,14 +281,14 @@ void Scene::reset_cloud_all(){
     this->reset_cloud(cloud);
   }
 
-  this->update_cloud_glyphs(cloud_selected);
+  this->update_cloud_glyph(cloud_selected);
 
   //---------------------------
   console.AddLog("#", "Reset scene...");
 }
 
 //Updating - cloud
-void Scene::update_cloud_glyphs(Cloud* cloud){
+void Scene::update_cloud_glyph(Cloud* cloud){
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -468,7 +468,7 @@ void Scene::selection_setCloud(int ID){
     Cloud* cloud = *next(list_cloud->begin(),i);
     if(cloud->oID == ID){
       cloud_selected = cloud;
-      this->update_cloud_glyphs(cloud_selected);
+      this->update_cloud_glyph(cloud_selected);
     }
   }
 
@@ -478,7 +478,7 @@ void Scene::selection_setCloud(Cloud* cloud){
   //---------------------------
 
   cloud_selected = cloud;
-  this->update_cloud_glyphs(cloud_selected);
+  this->update_cloud_glyph(cloud_selected);
 
   //---------------------------
 }
@@ -524,7 +524,7 @@ void Scene::selection_cloudByName(string name){
 
     if(cloud->name == name){
       cloud_selected = cloud;
-      this->update_cloud_glyphs(cloud_selected);
+      this->update_cloud_glyph(cloud_selected);
     }
   }
 

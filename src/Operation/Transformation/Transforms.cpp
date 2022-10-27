@@ -280,16 +280,18 @@ void Transforms::make_cloud_rotation(Cloud* cloud, vec3 R, string direction){
 
 //Specific transformation functions
 void Transforms::make_centering(Cloud* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
-  vec3 COM = subset->COM;
+  vec3& COM = cloud->COM;
   //---------------------------
 
   //Cancel Center of mass from actual position
-  this->make_translation(cloud, vec3(-COM.x,-COM.y,-COM.z));
+  this->compute_COM(cloud);
+  vec3 centering = vec3(-COM.x,-COM.y,-COM.z);
+  this->make_translation(cloud, centering);
 
   //Set min(Z) as corresponding to 0
-  vec3 min = fct_min_vec3(subset->xyz);
-  this->make_translation(cloud, vec3(0,0,-min[2]));
+  this->compute_min(cloud);
+  vec3 redressing = vec3(0, 0, -cloud->min[2]);
+  this->make_translation(cloud, redressing);
 
   //---------------------------
   console.AddLog("#", "Point cloud centered");
@@ -705,12 +707,32 @@ void Transforms::compute_transformXYZ(vector<vec3>& XYZ, vec3& COM, mat4 Mat){
   //---------------------------
 }
 void Transforms::compute_COM(Cloud* cloud){
+  vec3 COM = vec3(0, 0, 0);
   //---------------------------
 
-  if(cloud->nb_subset == 1){
-    Subset* subset = *next(cloud->subset.begin(), 0);
-    cloud->COM = fct_centroid(subset->xyz);
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    COM += fct_centroid(subset->xyz);
   }
 
   //---------------------------
+  cloud->COM = COM;
+}
+void Transforms::compute_min(Cloud* cloud){
+  vec3 min = vec3(0, 0, 0);
+  //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    vec3 subset_min = fct_min_vec3(subset->xyz);
+
+    for(int j=0; j<3; j++){
+      if(subset_min[j] < min[j]){
+        min[j] = subset_min[j];
+      }
+    }
+  }
+
+  //---------------------------
+  cloud->min = min;
 }

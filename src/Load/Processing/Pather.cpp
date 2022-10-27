@@ -175,7 +175,7 @@ void Pather::loading_sampledCloud(string path){
     cout<<" - "<<cloud_base->nb_point<<" points"<<endl;
 
     //Update final cloud
-    sceneManager->update_cloud_glyphs(cloud_base);
+    sceneManager->update_cloud_glyph(cloud_base);
   }
   */
   //---------------------------
