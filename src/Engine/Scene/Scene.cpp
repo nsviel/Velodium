@@ -40,11 +40,21 @@ void Scene::remove_cloud(Cloud* cloud){
     //Keep trace of the ID order
     this->selection_setCloud(oID);
 
-    //Delete subsets
-    int size = cloud->nb_subset;
-    for(int i=0; i<size; i++){
-      Subset* subset = *next(cloud->subset.begin(), i);
-      this->remove_subset(cloud, subset->ID);
+    //Delete subsets - onthefly mode
+    if(cloud->onthefly){
+      list<int>& list_id = cloud->list_loaded;
+      for(auto i=list_id.begin(); i!=list_id.end(); i++){
+        Subset* subset = *next(cloud->subset.begin(), 0);
+        list_id.remove(subset->ID);
+        this->remove_subset_last(cloud);
+      }
+    //Delete subsets - normal mode
+    }else{
+      int size = cloud->nb_subset;
+      for(int i=0; i<size; i++){
+        Subset* subset = *next(cloud->subset.begin(), i);
+        this->remove_subset(cloud, subset->ID);
+      }
     }
 
     //Delete cloud

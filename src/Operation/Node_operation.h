@@ -18,6 +18,7 @@ class Color;
 class Player;
 class Online;
 class Saving;
+class Onthefly;
 
 
 class Node_operation
@@ -46,6 +47,7 @@ public:
   inline Online* get_onlineManager(){return onlineManager;}
   inline Player* get_playerManager(){return playerManager;}
   inline Saving* get_savingManager(){return savingManager;}
+  inline Onthefly* get_flyManager(){return flyManager;}
 
 private:
   Node_engine* node_engine;
@@ -63,6 +65,7 @@ private:
   Online* onlineManager;
   Player* playerManager;
   Saving* savingManager;
+  Onthefly* flyManager;
 };
 
 #endif

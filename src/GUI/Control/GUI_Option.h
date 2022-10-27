@@ -1,7 +1,7 @@
 #ifndef GUI_OPION_H
 #define GUI_OPION_H
 
-class GUI_control;
+class GUI_Control;
 class Node_gui;
 
 class Scene;
@@ -38,7 +38,7 @@ public:
   inline void set_backgroundColorPtr(vec3* value){this->backgColor = value;}
 
 private:
-  GUI_control* gui_control;
+  GUI_Control* gui_control;
   GUI_option* gui_option;
 
   Configuration* configManager;

@@ -266,9 +266,12 @@ void Attribut::make_supressPoints(Subset* subset, vector<int>& idx){
     subset->N = N_b;
   }
 
-  this->compute_Distances(subset);
-  this->compute_cosIt(subset);
-
+  if(subset->R.size() != 0){
+    this->compute_Distances(subset);
+  }
+  if(subset->cosIt.size() != 0){
+    this->compute_cosIt(subset);
+  }
   idx.clear();
 
   //---------------------------
@@ -311,8 +314,12 @@ void Attribut::make_supressPoint(Subset* subset, int id){
     subset->N = N_b;
   }
 
-  if(subset->R.size() != 0) compute_Distances(subset);
-  if(subset->cosIt.size() != 0) this->compute_cosIt(subset);
+  if(subset->R.size() != 0){
+    this->compute_Distances(subset);
+  }
+  if(subset->cosIt.size() != 0){
+    this->compute_cosIt(subset);
+  }
 
   subset->selected.clear();
 

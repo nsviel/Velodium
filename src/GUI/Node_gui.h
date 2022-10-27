@@ -10,7 +10,7 @@ class Node_interface;
 
 class GUI;
 class GUI_windows;
-class GUI_control;
+class GUI_Control;
 class GUI_option;
 class GUI_menuBar;
 class GUI_leftPanel;
@@ -47,7 +47,7 @@ public:
 
   inline GUI* get_guiManager(){return guiManager;}
   inline GUI_windows* get_gui_window(){return gui_window;}
-  inline GUI_control* get_gui_control(){return gui_control;}
+  inline GUI_Control* get_gui_control(){return gui_control;}
   inline GUI_option* get_gui_option(){return gui_option;}
   inline GUI_menuBar* get_gui_menuBar(){return gui_menuBar;}
   inline GUI_leftPanel* get_gui_leftPanel(){return gui_leftPanel;}
@@ -69,7 +69,7 @@ private:
 
   GUI* guiManager;
   GUI_windows* gui_window;
-  GUI_control* gui_control;
+  GUI_Control* gui_control;
   GUI_option* gui_option;
   GUI_menuBar* gui_menuBar;
   GUI_leftPanel* gui_leftPanel;

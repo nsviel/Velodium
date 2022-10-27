@@ -10,6 +10,7 @@ class Online;
 class Saver;
 class Object;
 class Loader;
+class Onthefly;
 class Configuration;
 
 
@@ -27,7 +28,7 @@ public:
   //Selection function
   void select_bySubsetID(Cloud* cloud, int ID_subset);
   void compute_wheel_selection(string direction);
-  void compute_onthefly(Cloud* cloud);
+  void compute_onthefly(Cloud* cloud, int ID);
   bool compute_range_limit(Cloud* cloud, int& ID_subset);
 
   //Player functions
@@ -53,6 +54,7 @@ private:
   Online* onlineManager;
   Saver* saveManager;
   Object* objectManager;
+  Onthefly* flyManager;
   Configuration* configManager;
 
   string player_saveas;

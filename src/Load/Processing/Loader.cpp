@@ -219,13 +219,11 @@ bool Loader::load_cloud_empty(){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_oneFrame(Cloud* cloud){
-  vector<string> list_path = cloud->list_path;
-  int idx = cloud->ID_file;
+bool Loader::load_cloud_oneFrame(Cloud* cloud, string path){
   //---------------------------
 
   //Retrieve data
-  dataFile* data = plyManager->Loader(list_path[idx]);
+  dataFile* data = plyManager->Loader(path);
 
   //Insert frame
   this->load_insertIntoCloud(data, cloud);

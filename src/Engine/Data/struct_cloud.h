@@ -35,6 +35,7 @@ struct Cloud{ //Global set of the cloud
   std::string dataFormat;
   std::string lidar_model;
   std::vector<std::string> list_path;
+  std::list<int> list_loaded;
 
   //Transformation
   glm::vec3 min;

@@ -19,26 +19,33 @@ class Node_gui;
 class Player;
 
 
-class GUI_control
+class GUI_Control
 {
 public:
   //Constructor / Destructor
-  GUI_control(Node_gui* node_gui);
-  ~GUI_control();
+  GUI_Control(Node_gui* node_gui);
+  ~GUI_Control();
 
 public:
   //Main function
   void make_control();
 
-  //Subfunctions
+  //Mouse function
   void control_frame_selection();
   void control_mouse();
   void control_mouse_wheel();
 
+  //Keyboard function
   void control_keyboard_oneAction();
   void control_keyboard_translation();
   void control_keyboard_camMove();
   void control_keyboard_ctrlAction();
+
+  //Specific function
+  void key_suppr();
+  void key_c();
+  void key_translation(vec3 trans);
+  void key_rotation(vec3 rotat);
 
   inline float* get_transCoef(){return &cloud_trans_speed;}
   inline float* get_rotatDegree(){return &cloud_rotat_degree;}

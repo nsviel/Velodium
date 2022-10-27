@@ -245,22 +245,24 @@ void Selection::mark_supressAll(){
 
   //---------------------------
 }
-void Selection::mark_supressSelectedPoints_all(){
+bool Selection::mark_supressSelectedPoints_all(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  bool is_selected_point = false;
   //---------------------------
 
   for(int i=0;i<list_cloud->size();i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
-
     vector<int>& idx = subset->selected;
 
     if(idx.size() != 0){
-      this->mark_supressSelectedPoints(cloud);
+      this->mark_supressSelectedPoints(subset);
+      is_selected_point = true;
     }
   }
 
   //---------------------------
+  return is_selected_point;
 }
 void Selection::mark_supressSelectedPoints(Cloud* cloud){
   for(int i=0; i<cloud->nb_subset; i++){
@@ -275,6 +277,17 @@ void Selection::mark_supressSelectedPoints(Cloud* cloud){
 
     //---------------------------
   }
+}
+void Selection::mark_supressSelectedPoints(Subset* subset){
+  vector<int>& idx = subset->selected;
+  //---------------------------
+
+  if(idx.size() != 0){
+    attribManager->make_supressPoints(subset, idx);
+    idx.clear();
+  }
+
+  //---------------------------
 }
 void Selection::mark_pointLocation(){
   /*list<Cloud*>* list_cloud = sceneManager->get_list_cloud();

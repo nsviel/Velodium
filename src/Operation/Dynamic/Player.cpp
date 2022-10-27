@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Online.h"
+#include "Onthefly.h"
 
 #include "../Node_operation.h"
 
@@ -30,6 +31,7 @@ Player::Player(Node_operation* node_ope){
   this->sceneManager = node_engine->get_sceneManager();
   this->saveManager = node_load->get_saveManager();
   this->loadManager = node_load->get_loadManager();
+  this->flyManager = node_ope->get_flyManager();
   this->timerManager = new Timer();
 
   //---------------------------
@@ -70,9 +72,7 @@ void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 
   //If on the fly option, load subset
-  if(cloud->onthefly){
-    this->compute_onthefly(cloud);
-  }
+  flyManager->compute_onthefly(cloud, ID_subset);
 
   //If in side range, make operation on subset
   if(compute_range_limit(cloud, ID_subset)){
@@ -85,12 +85,31 @@ void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
 
   //---------------------------
 }
-void Player::compute_onthefly(Cloud* cloud){
+void Player::compute_onthefly(Cloud* cloud, int ID){
   int range = onlineManager->get_visibility_range();
   //---------------------------
 
-  loadManager->load_cloud_oneFrame(cloud);
+  vector<string>& list_path = cloud->list_path;
+  list<int>& list_id = cloud->list_loaded;
+
+  //Check if the subset is already loaded
+  bool already_load = false;
+  for(auto i=list_id.begin(); i!=list_id.end(); i++){
+    if(*i == ID){
+      already_load = true;
+    }
+  }
+
+  //If not, load it
+  if(already_load == false && ID < list_path.size() && ID >= 0){
+    loadManager->load_cloud_oneFrame(cloud, list_path[ID]);
+    list_id.push_back(ID);
+  }
+
+  //If too mush subset, remove the last one
   if(cloud->subset.size() > range){
+    Subset* subset = *next(cloud->subset.begin(), 0);
+    list_id.remove(subset->ID);
     sceneManager->remove_subset_last(cloud);
   }
 

@@ -6,7 +6,7 @@
 class Dimension;
 
 class GUI_windows;
-class GUI_control;
+class GUI_Control;
 class GUI_option;
 class GUI_menuBar;
 class GUI_leftPanel;
@@ -37,7 +37,7 @@ private:
   Dimension* dimManager;
   GUI_operation* gui_operation;
   GUI_windows* gui_window;
-  GUI_control* gui_control;
+  GUI_Control* gui_control;
   GUI_option* gui_option;
   GUI_leftPanel* gui_leftPanel;
   GUI_menuBar* gui_menuBar;

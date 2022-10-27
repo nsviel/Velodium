@@ -26,7 +26,7 @@ extern struct Window_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_control::GUI_control(Node_gui* node){
+GUI_Control::GUI_Control(Node_gui* node){
   this->node_gui = node;
   //---------------------------
 
@@ -52,10 +52,10 @@ GUI_control::GUI_control(Node_gui* node){
 
   //---------------------------
 }
-GUI_control::~GUI_control(){}
+GUI_Control::~GUI_Control(){}
 
 //Main function
-void GUI_control::make_control(){
+void GUI_Control::make_control(){
   //---------------------------
 
   this->control_mouse();
@@ -68,8 +68,8 @@ void GUI_control::make_control(){
   //---------------------------
 }
 
-//Subfunctions
-void GUI_control::control_mouse(){
+//Mouse function
+void GUI_Control::control_mouse(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
@@ -108,7 +108,7 @@ void GUI_control::control_mouse(){
 
   //---------------------------
 }
-void GUI_control::control_mouse_wheel(){
+void GUI_Control::control_mouse_wheel(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   static int wheelMode = 0;
   ImGuiIO io = ImGui::GetIO();
@@ -163,7 +163,7 @@ void GUI_control::control_mouse_wheel(){
 
   //----------------------------
 }
-void GUI_control::control_frame_selection(){
+void GUI_Control::control_frame_selection(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -189,7 +189,8 @@ void GUI_control::control_frame_selection(){
   //----------------------------
 }
 
-void GUI_control::control_keyboard_oneAction(){
+//Keyboard function
+void GUI_Control::control_keyboard_oneAction(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
@@ -213,7 +214,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //Suppr key - Delete selected
     if (ImGui::IsKeyPressed(261)){
-      selectionManager->mark_supressSelectedPoints_all();
+      this->key_suppr();
       break;
     }
 
@@ -237,10 +238,7 @@ void GUI_control::control_keyboard_oneAction(){
 
     //5 key - Centering
     if (ImGui::IsKeyPressed(325) && !io.WantCaptureMouse){
-      if(!sceneManager->get_is_list_empty()){
-        transformManager.make_centering(cloud);
-        sceneManager->update_cloud_location(cloud);
-      }
+      this->key_c();
       break;
     }
 
@@ -271,7 +269,7 @@ void GUI_control::control_keyboard_oneAction(){
 
   //----------------------------
 }
-void GUI_control::control_keyboard_translation(){
+void GUI_Control::control_keyboard_translation(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -288,83 +286,51 @@ void GUI_control::control_keyboard_translation(){
       // Z key
       if(io.KeysDown[87]){
         vec3 translation = vec3(transCoef,0,0);
-
-        transformManager.make_translation(cloud->subset_selected, translation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_translation(translation);
         break;
       }
       // S key
       if(io.KeysDown[83]){
         vec3 translation = vec3(-transCoef,0,0);
-
-        transformManager.make_translation(cloud->subset_selected, translation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_translation(translation);
         break;
       }
       // D key
       if(io.KeysDown[68]){
         vec3 translation = vec3(0,transCoef,0);
-
-        transformManager.make_translation(cloud->subset_selected, translation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_translation(translation);
         break;
       }
       // Q key
       if(io.KeysDown[65]){
         vec3 translation = vec3(0,-transCoef,0);
-
-        transformManager.make_translation(cloud->subset_selected, translation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_translation(translation);
         break;
       }
       // A key
       if(io.KeysDown[81]){
         vec3 translation = vec3(0,0,transCoef);
-
-        transformManager.make_translation(cloud->subset_selected, translation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_translation(translation);
         break;
       }
       // E key
       if(io.KeysDown[69]){
         vec3 translation = vec3(0,0,-transCoef);
-
-        transformManager.make_translation(cloud->subset_selected, translation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_translation(translation);
         break;
       }
       // 7 key
       if(io.KeysDown[327]){
         float r = cloud_rotat_degree*M_PI/180;
         vec3 rotation = vec3(0,0,r);
-
-        transformManager.make_rotation(cloud->subset_selected, vec3(0,0,0), rotation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_rotation(rotation);
         break;
       }
       // 9 key
       if(io.KeysDown[329]){
         float r = cloud_rotat_degree*M_PI/180;
         vec3 rotation = vec3(0,0,-r);
-
-        transformManager.make_rotation(cloud->subset_selected, vec3(0,0,0), rotation);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyphs(cloud);
-
+        this->key_rotation(rotation);
         break;
       }
 
@@ -374,7 +340,7 @@ void GUI_control::control_keyboard_translation(){
 
   //----------------------------
 }
-void GUI_control::control_keyboard_ctrlAction(){
+void GUI_Control::control_keyboard_ctrlAction(){
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -393,7 +359,7 @@ void GUI_control::control_keyboard_ctrlAction(){
 
   //----------------------------
 }
-void GUI_control::control_keyboard_camMove(){
+void GUI_Control::control_keyboard_camMove(){
   ImGuiIO io = ImGui::GetIO();
   Viewport_obj* view = cameraManager->get_current_viewport();
   //----------------------------
@@ -443,4 +409,49 @@ void GUI_control::control_keyboard_camMove(){
   }
 
   //---------------------------
+}
+
+//Specific function
+void GUI_Control::key_suppr(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //----------------------------
+
+  bool is_selected = selectionManager->mark_supressSelectedPoints_all();
+
+  if(is_selected == false){
+    sceneManager->remove_cloud(cloud);
+  }
+
+  //----------------------------
+}
+void GUI_Control::key_c(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //----------------------------
+
+  if(!sceneManager->get_is_list_empty()){
+    transformManager.make_centering(cloud);
+    sceneManager->update_cloud_location(cloud);
+  }
+
+  //----------------------------
+}
+void GUI_Control::key_translation(vec3 trans){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //----------------------------
+
+  transformManager.make_translation(cloud->subset_selected, trans);
+  sceneManager->update_subset_location(cloud->subset_selected);
+  sceneManager->update_cloud_glyphs(cloud);
+
+  //----------------------------
+}
+void GUI_Control::key_rotation(vec3 rotat){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //----------------------------
+
+  transformManager.make_rotation(cloud->subset_selected, vec3(0,0,0), rotat);
+  sceneManager->update_subset_location(cloud->subset_selected);
+  sceneManager->update_cloud_glyphs(cloud);
+
+  //----------------------------
 }

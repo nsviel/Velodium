@@ -80,13 +80,13 @@ void GUI_menuBar::MenuBar_menus(){
     if(ImGui::MenuItem("Remove cloud", "Suppr")){
       sceneManager->remove_cloud(cloud);
     }
-    if(ImGui::MenuItem("Remove all")){
+    if(ImGui::MenuItem("Remove all", "Fin")){
       sceneManager->remove_cloud_all();
     }
     if(ImGui::MenuItem("Next cloud","tab")){
       sceneManager->selection_setNext();
     }
-    if(ImGui::MenuItem("Center cloud")){
+    if(ImGui::MenuItem("Center cloud", "c")){
       if(!sceneManager->get_is_list_empty()){
         Transforms transformManager;
         transformManager.make_centering(cloud);

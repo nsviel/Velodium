@@ -25,10 +25,23 @@ then
   case ${answer} in y|Y ) WITH_CERES=true ;;* ) WITH_CERES=false ;;esac
 fi
 
-# ICP library
-echo -n "With ${GREEN}PCL${NC} library [y/N]? "
+# Radiometry module
+#echo -n "With ${GREEN}Radiometry${NC} module [Y/n]? "
+#read answer
+#case ${answer} in y|Y|'' ) WITH_RADIO=true ;;* ) WITH_RADIO=false WITH_RADIO=false ;;esac
+
+# Registration module
+echo -n "With ${GREEN}Registration${NC} module [Y/n]? "
 read answer
-case ${answer} in y|Y ) WITH_PCL=true ;;* ) WITH_PCL=false ;;esac
+case ${answer} in y|Y|'' ) WITH_REGIS=true ;;* ) WITH_REGIS=false WITH_REGIS=false ;;esac
+
+# ICP library
+if [ ${WITH_REGIS} = true ]
+then
+  echo -n "With ${GREEN}PCL${NC} library [y/N]? "
+  read answer
+  case ${answer} in y|Y ) WITH_PCL=true ;;* ) WITH_PCL=false ;;esac
+fi
 
 
 

@@ -34,7 +34,7 @@ public:
   bool load_cloud_part(string path, int lmin, int lmax);
   bool load_cloud_creation(Cloud* cloud_in);
   bool load_cloud_empty();
-  bool load_cloud_oneFrame(Cloud* cloud);
+  bool load_cloud_oneFrame(Cloud* cloud, string path);
   vector<vec3> load_vertices(string filePath);
 
   inline Cloud* get_createdcloud(){return cloud;}

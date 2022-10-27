@@ -32,8 +32,9 @@ public:
   void mark_pointColor(Cloud* sphere, int num);
   void mark_pointLocation();
   void mark_supressAll();
-  void mark_supressSelectedPoints_all();
+  bool mark_supressSelectedPoints_all();
   void mark_supressSelectedPoints(Cloud* cloud);
+  void mark_supressSelectedPoints(Subset* subset);
 
   //Mouse interactivity
   void mouse_selection(int selectMouseMode);

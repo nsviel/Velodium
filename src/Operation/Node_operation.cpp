@@ -6,6 +6,7 @@
 #include "Dynamic/Online.h"
 #include "Dynamic/Player.h"
 #include "Dynamic/Saving.h"
+#include "Dynamic/Onthefly.h"
 
 #include "Function/Selection.h"
 #include "Function/CoordTransform.h"
@@ -35,6 +36,7 @@ Node_operation::Node_operation(Node_engine* node){
   this->extractionManager = new Extraction(this);
   this->savingManager = new Saving(this);
   this->onlineManager = new Online(this);
+  this->flyManager = new Onthefly(this);
   this->playerManager = new Player(this);
 
   //---------------------------
