@@ -1,5 +1,5 @@
-#ifndef WIN_ATTRIBUT_H
-#define WIN_ATTRIBUT_H
+#ifndef MOD_ATTRIBUT_H
+#define MOD_ATTRIBUT_H
 
 #include "../../common.h"
 
@@ -13,12 +13,12 @@ class GUI_Color;
 class Color;
 
 
-class WIN_attribut
+class MOD_attribut
 {
 public:
   //Constructor / Destructor
-  WIN_attribut(Node_gui* node_gui);
-  ~WIN_attribut();
+  MOD_attribut(Node_gui* node_gui);
+  ~MOD_attribut();
 
 public:
   void window_normal();

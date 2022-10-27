@@ -1,5 +1,5 @@
-#ifndef WIN_OPERATION_H
-#define WIN_OPERATION_H
+#ifndef MOD_OPERATION_H
+#define MOD_OPERATION_H
 
 #include "../../common.h"
 
@@ -13,12 +13,12 @@ class Extraction;
 class Selection;
 
 
-class WIN_operation
+class MOD_operation
 {
 public:
   //Constructor / Destructor
-  WIN_operation(Node_operation* node_ope);
-  ~WIN_operation();
+  MOD_operation(Node_operation* node_ope);
+  ~MOD_operation();
 
 public:
   void window_filter();

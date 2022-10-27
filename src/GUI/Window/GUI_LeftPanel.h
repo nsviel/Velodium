@@ -7,7 +7,7 @@ class Node_module;
 class Engine;
 class Dimension;
 
-class GUI_windows;
+class GUI_Modal;
 class GUI_fileManager;
 class GUI_Capture;
 class GUI_Online;
@@ -40,7 +40,7 @@ private:
 
   Dimension* dimManager;
 
-  GUI_windows* gui_window;
+  GUI_Modal* gui_window;
   GUI_fileManager* gui_fileManager;
   GUI_Capture* gui_capture;
   GUI_Online* gui_online;

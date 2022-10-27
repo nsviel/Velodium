@@ -1,8 +1,8 @@
-#ifndef WINDOW_TAB_H
-#define WINDOW_TAB_H
+#ifndef MODAL_TAB_H
+#define MODAL_TAB_H
 
 
-struct Window_tab{
+struct Modal_tab{
   bool show_loading;
   bool show_asciiData;
   bool show_selection;

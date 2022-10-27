@@ -1,4 +1,4 @@
-#include "WIN_operation.h"
+#include "MOD_operation.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
@@ -11,12 +11,12 @@
 #include "../../Operation/Function/Selection.h"
 #include "../../Specific/fct_transtypage.h"
 
-#include "Window_table.h"
-extern struct Window_tab window_tab;
+#include "Modal_tab.h"
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_operation::WIN_operation(Node_operation* node_ope){
+MOD_operation::MOD_operation(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
@@ -33,10 +33,10 @@ WIN_operation::WIN_operation(Node_operation* node_ope){
 
   //---------------------------
 }
-WIN_operation::~WIN_operation(){}
+MOD_operation::~MOD_operation(){}
 
 //Main function
-void WIN_operation::window_filter(){
+void MOD_operation::window_filter(){
   bool* open = &window_tab.show_filter;
   if(*open){
     ImGui::Begin("Filter manager", open, ImGuiWindowFlags_AlwaysAutoResize);
@@ -99,7 +99,7 @@ void WIN_operation::window_filter(){
     ImGui::End();
   }
 }
-void WIN_operation::window_selection(){
+void MOD_operation::window_selection(){
   if(window_tab.show_selection){
     ImGui::Begin("Selection part", &window_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_selected_cloud();
@@ -252,9 +252,9 @@ void WIN_operation::window_selection(){
     ImGui::End();
   }
 }
-void WIN_operation::window_transformation(){
+void MOD_operation::window_transformation(){
   Cloud* cloud = sceneManager->get_selected_cloud();
-  
+
   if(window_tab.show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &window_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
@@ -516,7 +516,7 @@ void WIN_operation::window_transformation(){
     ImGui::End();
   }
 }
-void WIN_operation::window_fitting(){
+void MOD_operation::window_fitting(){
   if(window_tab.show_fitting){
     ImGui::Begin("Fitting", &window_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_selected_cloud();
@@ -554,7 +554,7 @@ void WIN_operation::window_fitting(){
     ImGui::End();
   }
 }
-void WIN_operation::window_extractCloud(){
+void MOD_operation::window_extractCloud(){
   if(window_tab.show_extractCloud){
     ImGui::Begin("Extract cloud", &window_tab.show_extractCloud,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_selected_cloud();
@@ -657,7 +657,7 @@ void WIN_operation::window_extractCloud(){
     ImGui::End();
   }
 }
-void WIN_operation::window_cutCloud(){
+void MOD_operation::window_cutCloud(){
   if(window_tab.show_cutCloud){
     ImGui::Begin("Cut cloud", &window_tab.show_cutCloud,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_selected_cloud();

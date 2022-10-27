@@ -8,7 +8,7 @@
 #include "../../Radiometry/src/Radiometry.h"
 #include "../../Radiometry/src/Approach/Linearization.h"
 
-#include "../../../GUI/Windows/GUI_windows.h"
+#include "../../../GUI/Windows/GUI_Modal.h"
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"

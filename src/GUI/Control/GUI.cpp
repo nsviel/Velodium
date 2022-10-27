@@ -3,7 +3,7 @@
 #include "GUI_Option.h"
 
 #include "../Node_gui.h"
-#include "../Box/GUI_windows.h"
+#include "../Modal/GUI_Modal.h"
 
 #include "../Window/GUI_Consol.h"
 #include "../Window/GUI_MenuBar.h"

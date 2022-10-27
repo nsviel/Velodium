@@ -1,5 +1,5 @@
-#ifndef WIN_SHADER_H
-#define WIN_SHADER_H
+#ifndef MOD_SHADER_H
+#define MOD_SHADER_H
 
 #include "../../common.h"
 
@@ -8,12 +8,12 @@ class Shader;
 class PP_edl;
 
 
-class WIN_shader
+class MOD_shader
 {
 public:
   //Constructor / Destructor
-  WIN_shader(Node_engine* node_engine);
-  ~WIN_shader();
+  MOD_shader(Node_engine* node_engine);
+  ~MOD_shader();
 
 public:
   //Main function

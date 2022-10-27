@@ -1,4 +1,4 @@
-#include "WIN_loading.h"
+#include "MOD_loading.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
@@ -11,12 +11,12 @@
 #include "../../Load/Format/file_PTX.h"
 #include "../../Load/Format/file_PCAP.h"
 
-#include "Window_table.h"
-extern struct Window_tab window_tab;
+#include "Modal_tab.h"
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_loading::WIN_loading(Node_engine* node_engine){
+MOD_loading::MOD_loading(Node_engine* node_engine){
   //---------------------------
 
   Node_load* node_load = node_engine->get_node_load();
@@ -37,10 +37,10 @@ WIN_loading::WIN_loading(Node_engine* node_engine){
 
   //---------------------------
 }
-WIN_loading::~WIN_loading(){}
+MOD_loading::~MOD_loading(){}
 
 //Main function
-void WIN_loading::window_loading(){
+void MOD_loading::window_loading(){
   bool* open = &window_tab.show_loading;
   if(*open){
     ImGui::Begin("Loader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
@@ -54,7 +54,7 @@ void WIN_loading::window_loading(){
     this->loading_end(open);
   }
 }
-void WIN_loading::window_saving(){
+void MOD_loading::window_saving(){
   bool* open = &window_tab.show_saving;
   if(*open){
     ImGui::Begin("Save", open, ImGuiWindowFlags_AlwaysAutoResize);
@@ -70,7 +70,7 @@ void WIN_loading::window_saving(){
 }
 
 //Sub load functions
-void WIN_loading::loading_specific(){
+void MOD_loading::loading_specific(){
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Load options");
@@ -81,7 +81,7 @@ void WIN_loading::loading_specific(){
   //---------------------------
   ImGui::Separator();
 }
-void WIN_loading::loading_custom_file(){
+void MOD_loading::loading_custom_file(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Custom file");
   //---------------------------
 
@@ -136,7 +136,7 @@ void WIN_loading::loading_custom_file(){
   //---------------------------
   ImGui::Separator();
 }
-void WIN_loading::loading_dataFormat(){
+void MOD_loading::loading_dataFormat(){
   if(ImGui::TreeNode("Data format")){
     file_PTX* ptxManager = loaderManager->get_ptxManager();
     file_PTS* ptsManager = loaderManager->get_ptsManager();
@@ -203,7 +203,7 @@ void WIN_loading::loading_dataFormat(){
     ImGui::TreePop();
   }
 }
-void WIN_loading::loading_end(bool* open){
+void MOD_loading::loading_end(bool* open){
   ImGui::Separator();
   //---------------------------
 
@@ -223,7 +223,7 @@ void WIN_loading::loading_end(bool* open){
 }
 
 //sub sub laod functions
-void WIN_loading::loading_retrieve_info(string file_path){
+void MOD_loading::loading_retrieve_info(string file_path){
   file_PCAP* pcapManager = loaderManager->get_pcapManager();
   //---------------------------
 
@@ -231,7 +231,7 @@ void WIN_loading::loading_retrieve_info(string file_path){
 
   //---------------------------
 }
-void WIN_loading::loading_file_ptx(){
+void MOD_loading::loading_file_ptx(){
   file_PTX* ptxManager = loaderManager->get_ptxManager();
   //---------------------------
 
@@ -260,7 +260,7 @@ void WIN_loading::loading_file_ptx(){
 
   //---------------------------
 }
-void WIN_loading::loading_file_pcap(){
+void MOD_loading::loading_file_pcap(){
   file_PCAP* pcapManager = loaderManager->get_pcapManager();
   //---------------------------
 
@@ -292,7 +292,7 @@ void WIN_loading::loading_file_pcap(){
 
   //---------------------------
 }
-void WIN_loading::loading_action(){
+void MOD_loading::loading_action(){
   //---------------------------
 
   //Load cloud
@@ -309,7 +309,7 @@ void WIN_loading::loading_action(){
 }
 
 //Sub save functions
-void WIN_loading::saving_configuration(){
+void MOD_loading::saving_configuration(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Save options");
   //---------------------------
 
@@ -351,7 +351,7 @@ void WIN_loading::saving_configuration(){
   //---------------------------
   ImGui::Separator();
 }
-void WIN_loading::saving_dataFormat(){
+void MOD_loading::saving_dataFormat(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Save configuration");
   //---------------------------
 
@@ -393,7 +393,7 @@ void WIN_loading::saving_dataFormat(){
 
   //---------------------------
 }
-void WIN_loading::saving_action(){
+void MOD_loading::saving_action(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
@@ -420,7 +420,7 @@ void WIN_loading::saving_action(){
 
   //---------------------------
 }
-void WIN_loading::saving_end(bool* open){
+void MOD_loading::saving_end(bool* open){
   ImGui::Separator();
   //---------------------------
 

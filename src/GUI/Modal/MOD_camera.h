@@ -1,5 +1,5 @@
-#ifndef WIN_CAMERA_H
-#define WIN_CAMERA_H
+#ifndef MOD_CAMERA_H
+#define MOD_CAMERA_H
 
 #include "../../common.h"
 
@@ -8,12 +8,12 @@ class Camera;
 class Configuration;
 
 
-class WIN_camera
+class MOD_camera
 {
 public:
   //Constructor / Destructor
-  WIN_camera(Node_engine* node_engine);
-  ~WIN_camera();
+  MOD_camera(Node_engine* node_engine);
+  ~MOD_camera();
 
 public:
   //Main function

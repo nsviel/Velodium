@@ -1,7 +1,7 @@
 #include "GUI_LeftPanel.h"
 
 #include "../Node_gui.h"
-#include "../Box/GUI_windows.h"
+#include "../Modal/GUI_Modal.h"
 #include "../Control/GUI_FileManager.h"
 #include "../Interface/GUI_Capture.h"
 #include "../Dynamic/GUI_Online.h"

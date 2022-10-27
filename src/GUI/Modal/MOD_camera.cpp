@@ -1,4 +1,4 @@
-#include "WIN_camera.h"
+#include "MOD_camera.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -8,12 +8,12 @@
 
 #include <fstream>
 
-#include "Window_table.h"
-extern struct Window_tab window_tab;
+#include "Modal_tab.h"
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_camera::WIN_camera(Node_engine* node_engine){
+MOD_camera::MOD_camera(Node_engine* node_engine){
   //---------------------------
 
   this->configManager = node_engine->get_configManager();
@@ -23,10 +23,10 @@ WIN_camera::WIN_camera(Node_engine* node_engine){
 
   //---------------------------
 }
-WIN_camera::~WIN_camera(){}
+MOD_camera::~MOD_camera(){}
 
 //Main function
-void WIN_camera::window_camera(){
+void MOD_camera::window_camera(){
   bool* open = &window_tab.show_camera;
   if(*open){
     ImGui::Begin(ICON_FA_CAMERA " Camera", open,ImGuiWindowFlags_AlwaysAutoResize);
@@ -45,7 +45,7 @@ void WIN_camera::window_camera(){
 }
 
 //Sub functions
-void WIN_camera::cam_parameter(){
+void MOD_camera::cam_parameter(){
   //---------------------------
 
   //Zoom - Field Of View
@@ -87,7 +87,7 @@ void WIN_camera::cam_parameter(){
   //---------------------------
   ImGui::Separator();
 }
-void WIN_camera::cam_info(){
+void MOD_camera::cam_info(){
   //---------------------------
 
   //Camera projection matrix
@@ -125,7 +125,7 @@ void WIN_camera::cam_info(){
 
   //---------------------------
 }
-void WIN_camera::cam_definedPosition(){
+void MOD_camera::cam_definedPosition(){
   //---------------------------
 
   //Insert pre-defined pose

@@ -1,4 +1,4 @@
-#include "WIN_attribut.h"
+#include "MOD_attribut.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -15,12 +15,12 @@
 #include "../../Operation/Node_operation.h"
 #include "../../Specific/fct_maths.h"
 
-#include "Window_table.h"
-extern struct Window_tab window_tab;
+#include "Modal_tab.h"
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_attribut::WIN_attribut(Node_gui* node_gui){
+MOD_attribut::MOD_attribut(Node_gui* node_gui){
   //---------------------------
 
   Node_operation* node_ope = node_gui->get_node_ope();
@@ -38,10 +38,10 @@ WIN_attribut::WIN_attribut(Node_gui* node_gui){
 
   //---------------------------
 }
-WIN_attribut::~WIN_attribut(){}
+MOD_attribut::~MOD_attribut(){}
 
 //Main function
-void WIN_attribut::window_normal(){
+void MOD_attribut::window_normal(){
   Cloud* cloud = sceneManager->get_selected_cloud();
 
   if(window_tab.show_normal && cloud != nullptr){
@@ -199,7 +199,7 @@ void WIN_attribut::window_normal(){
     ImGui::End();
   }
 }
-void WIN_attribut::window_intensity(){
+void MOD_attribut::window_intensity(){
   Cloud* cloud = sceneManager->get_selected_cloud();
 
   if(window_tab.show_intensity && cloud != nullptr){
@@ -312,7 +312,7 @@ void WIN_attribut::window_intensity(){
     ImGui::End();
   }
 }
-void WIN_attribut::window_color(){
+void MOD_attribut::window_color(){
   Cloud* cloud = sceneManager->get_selected_cloud();
 
   if(window_tab.show_color && cloud != nullptr){

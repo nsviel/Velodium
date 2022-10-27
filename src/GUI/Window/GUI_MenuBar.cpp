@@ -2,8 +2,8 @@
 #include "GUI_LeftPanel.h"
 
 #include "../Node_gui.h"
-#include "../Box/Window_table.h"
-#include "../Box/GUI_windows.h"
+#include "../Modal/Modal_tab.h"
+#include "../Modal/GUI_Modal.h"
 #include "../Control/GUI_Option.h"
 #include "../Control/GUI_Initialization.h"
 #include "../Dynamic/GUI_Player.h"
@@ -29,7 +29,7 @@
 #include <thread>
 #include <sys/sysinfo.h>
 
-extern struct Window_tab window_tab;
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor

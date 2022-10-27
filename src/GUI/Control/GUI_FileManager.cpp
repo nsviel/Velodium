@@ -1,8 +1,8 @@
 #include "GUI_FileManager.h"
 
 #include "../Node_gui.h"
-#include "../Box/Window_table.h"
-#include "../Box/GUI_windows.h"
+#include "../Modal/Modal_tab.h"
+#include "../Modal/GUI_Modal.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Dimension.h"
@@ -11,7 +11,7 @@
 
 #include "IconsFontAwesome5.h"
 
-extern struct Window_tab window_tab;
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor

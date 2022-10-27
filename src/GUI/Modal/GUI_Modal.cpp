@@ -1,12 +1,12 @@
-#include "GUI_windows.h"
+#include "GUI_Modal.h"
 
-#include "Window_table.h"
-#include "WIN_loading.h"
-#include "WIN_cloud.h"
-#include "WIN_camera.h"
-#include "WIN_shader.h"
-#include "WIN_operation.h"
-#include "WIN_attribut.h"
+#include "Modal_tab.h"
+#include "MOD_loading.h"
+#include "MOD_cloud.h"
+#include "MOD_camera.h"
+#include "MOD_shader.h"
+#include "MOD_operation.h"
+#include "MOD_attribut.h"
 
 #include "../Node_gui.h"
 
@@ -15,30 +15,30 @@
 
 #include "imgui/imgui.h"
 
-Window_tab window_tab;
+Modal_tab window_tab;
 
 
 //Constructor / Destructor
-GUI_windows::GUI_windows(Node_gui* node_gui){
+GUI_Modal::GUI_Modal(Node_gui* node_gui){
   //---------------------------
 
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_engine* node_engine = node_gui->get_node_engine();
 
-  this->win_camera = new WIN_camera(node_engine);
-  this->win_shader = new WIN_shader(node_engine);
-  this->win_operation = new WIN_operation(node_ope);
-  this->win_attribut = new WIN_attribut(node_gui);
-  this->win_cloud = new WIN_cloud(node_ope);
-  this->win_loading = new WIN_loading(node_engine);
+  this->win_camera = new MOD_camera(node_engine);
+  this->win_shader = new MOD_shader(node_engine);
+  this->win_operation = new MOD_operation(node_ope);
+  this->win_attribut = new MOD_attribut(node_gui);
+  this->win_cloud = new MOD_cloud(node_ope);
+  this->win_loading = new MOD_loading(node_engine);
 
   //---------------------------
   this->window_init();
 }
-GUI_windows::~GUI_windows(){}
+GUI_Modal::~GUI_Modal(){}
 
 //Main functions
-void GUI_windows::window_init(){
+void GUI_Modal::window_init(){
   //---------------------------
 
   window_tab.show_loading = false;
@@ -59,7 +59,7 @@ void GUI_windows::window_init(){
 
   //---------------------------
 }
-void GUI_windows::window_Draw(){
+void GUI_Modal::window_Draw(){
   //---------------------------
 
   win_camera->window_camera();

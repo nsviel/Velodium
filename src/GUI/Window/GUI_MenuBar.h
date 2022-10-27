@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class GUI_windows;
+class GUI_Modal;
 class GUI_option;
 class GUI_leftPanel;
 class GUI_Player;
@@ -43,7 +43,7 @@ private:
   CoreGLengine* glManager;
 
   Node_gui* node_gui;
-  GUI_windows* gui_window;
+  GUI_Modal* gui_window;
   GUI_option* optionManager;
   GUI_leftPanel* gui_leftPanel;
   GUI_Player* gui_player;

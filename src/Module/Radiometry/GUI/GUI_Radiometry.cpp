@@ -13,7 +13,7 @@
 #include "../src/Approach/Separation_global.h"
 
 #include "../../../GUI/Node_gui.h"
-#include "../../../GUI/Windows/GUI_windows.h"
+#include "../../../GUI/Windows/GUI_Modal.h"
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Load/Node_load.h"

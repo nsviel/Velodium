@@ -5,7 +5,7 @@
 
 class Scene;
 class Dimension;
-class GUI_windows;
+class GUI_Modal;
 class Node_gui;
 
 class GUI_fileManager
@@ -26,7 +26,7 @@ public:
 private:
   Scene* sceneManager;
   Dimension* dimManager;
-  GUI_windows* gui_window;
+  GUI_Modal* gui_window;
 };
 
 #endif

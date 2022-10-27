@@ -1,5 +1,5 @@
-#ifndef WIN_LOADING_H
-#define WIN_LOADING_H
+#ifndef MOD_LOADING_H
+#define MOD_LOADING_H
 
 #include "../../common.h"
 
@@ -9,12 +9,12 @@ class Pather;
 class Loader;
 
 
-class WIN_loading
+class MOD_loading
 {
 public:
   //Constructor / Destructor
-  WIN_loading(Node_engine* node_engine);
-  ~WIN_loading();
+  MOD_loading(Node_engine* node_engine);
+  ~MOD_loading();
 
 public:
   //Main function

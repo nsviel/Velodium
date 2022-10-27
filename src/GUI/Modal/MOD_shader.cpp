@@ -1,4 +1,4 @@
-#include "WIN_shader.h"
+#include "MOD_shader.h"
 
 #include "IconsFontAwesome5.h"
 
@@ -9,12 +9,12 @@
 
 #include <fstream>
 
-#include "Window_table.h"
-extern struct Window_tab window_tab;
+#include "Modal_tab.h"
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor
-WIN_shader::WIN_shader(Node_engine* node_engine){
+MOD_shader::MOD_shader(Node_engine* node_engine){
   //---------------------------
 
   this->shaderManager = node_engine->get_shaderManager();
@@ -24,10 +24,10 @@ WIN_shader::WIN_shader(Node_engine* node_engine){
 
   //---------------------------
 }
-WIN_shader::~WIN_shader(){}
+MOD_shader::~MOD_shader(){}
 
 //Main function
-void WIN_shader::window_shader(){
+void MOD_shader::window_shader(){
   bool* open = &window_tab.show_shader;
   if(*open){
     ImGui::Begin("Shader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
@@ -45,7 +45,7 @@ void WIN_shader::window_shader(){
 }
 
 //Sub functions
-void WIN_shader::parameter(){
+void MOD_shader::parameter(){
   //---------------------------
 
   ImGui::SetNextItemWidth(item_width);

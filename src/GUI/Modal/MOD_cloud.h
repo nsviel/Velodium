@@ -1,5 +1,5 @@
-#ifndef WIN_CLOUD_H
-#define WIN_CLOUD_H
+#ifndef MOD_CLOUD_H
+#define MOD_CLOUD_H
 
 #include "../../common.h"
 
@@ -9,12 +9,12 @@ class Color;
 class Attribut;
 
 
-class WIN_cloud
+class MOD_cloud
 {
 public:
   //Constructor / Destructor
-  WIN_cloud(Node_operation* node_ope);
-  ~WIN_cloud();
+  MOD_cloud(Node_operation* node_ope);
+  ~MOD_cloud();
 
 public:
   //Main function

@@ -10,8 +10,10 @@ class Camera;
 class Dimension;
 class CoordTransform;
 class Renderer;
+class Fitting;
 
 #include "../../common.h"
+
 
 class Selection
 {
@@ -67,6 +69,7 @@ private:
   Camera* cameraManager;
   CoordTransform* coordManager;
   Renderer* renderManager;
+  Fitting* fittingManager;
 
   list<Cloud*> list_Mark;
   list<int> list_glyph;

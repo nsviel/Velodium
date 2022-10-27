@@ -1,7 +1,7 @@
 #include "GUI_Control.h"
 
 #include "../Node_gui.h"
-#include "../Box/Window_table.h"
+#include "../Modal/Modal_tab.h"
 
 #include "../../Load/Node_load.h"
 
@@ -22,7 +22,7 @@
 
 #include "imgui/imgui.h"
 
-extern struct Window_tab window_tab;
+extern struct Modal_tab window_tab;
 
 
 //Constructor / Destructor

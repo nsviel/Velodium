@@ -5,6 +5,7 @@
 #include "../Node_operation.h"
 #include "../Transformation/Transforms.h"
 #include "../Transformation/Attribut.h"
+#include "../Optimization/Fitting.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
@@ -33,6 +34,7 @@ Selection::Selection(Node_operation* node_ope){
   this->attribManager = node_ope->get_attribManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
+  this->fittingManager = node_ope->get_fittingManager();
 
   this->gui_X = 0;
   this->gui_Y = 0;
@@ -83,10 +85,12 @@ void Selection::selectionPoint(vec3 point){
   //---------------------------
 
   //If selected point already exist, suppress the mark
-  bool ptExist = this->mark_pointSupression(point);
+  bool point_exist = this->mark_pointSupression(point);
 
-  //else create a new mark
-  if(!ptExist) this->mark_pointCreation(point);
+  //Else create a new mark
+  if(!point_exist){
+    this->mark_pointCreation(point);
+  }
 
   //---------------------------
 }
