@@ -21,11 +21,8 @@ public:
   ~MOD_operation();
 
 public:
-  void window_filter();
   void window_selection();
   void window_fitting();
-  void window_extractCloud();
-  void window_cutCloud();
 
 private:
   Scene* sceneManager;

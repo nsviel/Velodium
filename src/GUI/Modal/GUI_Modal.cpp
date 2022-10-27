@@ -8,6 +8,8 @@
 #include "Operation/MOD_operation.h"
 #include "Operation/MOD_attribut.h"
 #include "Operation/MOD_transformation.h"
+#include "Operation/MOD_filter.h"
+#include "Operation/MOD_extraction.h"
 
 #include "../Node_gui.h"
 
@@ -16,7 +18,7 @@
 
 #include "imgui/imgui.h"
 
-Modal_tab window_tab;
+Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -33,6 +35,8 @@ GUI_Modal::GUI_Modal(Node_gui* node_gui){
   this->win_cloud = new MOD_cloud(node_ope);
   this->win_loading = new MOD_loading(node_engine);
   this->mod_transformation = new MOD_transformation(node_engine);
+  this->mod_filter = new MOD_filter(node_ope);
+  this->mod_extraction = new MOD_extraction(node_ope);
 
   //---------------------------
   this->window_init();
@@ -43,21 +47,20 @@ GUI_Modal::~GUI_Modal(){}
 void GUI_Modal::window_init(){
   //---------------------------
 
-  window_tab.show_loading = false;
-  window_tab.show_saving = false;
-  window_tab.show_asciiData = false;
-  window_tab.show_camera = false;
-  window_tab.show_modifyFileInfo = false;
-  window_tab.show_transformation = false;
-  window_tab.show_extractCloud = false;
-  window_tab.show_cutCloud = false;
-  window_tab.show_filter = false;
-  window_tab.show_normal = false;
-  window_tab.show_intensity = false;
-  window_tab.show_color = false;
-  window_tab.show_selection = false;
-  window_tab.show_fitting = false;
-  window_tab.show_shader = false;
+  modal_tab.show_loading = false;
+  modal_tab.show_saving = false;
+  modal_tab.show_asciiData = false;
+  modal_tab.show_camera = false;
+  modal_tab.show_modifyFileInfo = false;
+  modal_tab.show_transformation = false;
+  modal_tab.show_extractCloud = false;
+  modal_tab.show_filter = false;
+  modal_tab.show_normal = false;
+  modal_tab.show_intensity = false;
+  modal_tab.show_color = false;
+  modal_tab.show_selection = false;
+  modal_tab.show_fitting = false;
+  modal_tab.show_shader = false;
 
   //---------------------------
 }
@@ -74,10 +77,9 @@ void GUI_Modal::window_Draw(){
   win_cloud->window_asciiData();
 
   mod_transformation->design_transformation();
+  mod_filter->design_filter();
+  mod_extraction->design_extractCloud();
 
-  win_operation->window_filter();
-  win_operation->window_extractCloud();
-  win_operation->window_cutCloud();
   win_operation->window_fitting();
   win_operation->window_selection();
 

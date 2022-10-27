@@ -8,7 +8,7 @@
 #include "../../../Specific/fct_transtypage.h"
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -28,8 +28,8 @@ MOD_transformation::~MOD_transformation(){}
 //Main function
 void MOD_transformation::design_transformation(){
   Cloud* cloud = sceneManager->get_selected_cloud();
-  if(window_tab.show_transformation && cloud != nullptr){
-    ImGui::Begin("Transformation", &window_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
+  if(modal_tab.show_transformation && cloud != nullptr){
+    ImGui::Begin("Transformation", &modal_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -41,7 +41,7 @@ void MOD_transformation::design_transformation(){
 
     //---------------------------
     if(ImGui::Button("Close")){
-      window_tab.show_transformation = false;
+      modal_tab.show_transformation = false;
     }
     ImGui::End();
   }

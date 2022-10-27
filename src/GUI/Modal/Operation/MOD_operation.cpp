@@ -12,7 +12,7 @@
 #include "../../../Specific/fct_transtypage.h"
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -36,72 +36,9 @@ MOD_operation::MOD_operation(Node_operation* node_ope){
 MOD_operation::~MOD_operation(){}
 
 //Main function
-void MOD_operation::window_filter(){
-  bool* open = &window_tab.show_filter;
-  if(*open){
-    ImGui::Begin("Filter manager", open, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
-    //---------------------------
-
-    //Cylinder cleaning filter
-    if (ImGui::Button("Cylinder cleaning", ImVec2(item_width,0))){
-      if(cloud != nullptr){
-        filterManager->filter_cloud_cylinder(cloud);
-      }
-    }
-    float* r_min = filterManager->get_cyl_r_min();
-    float* r_max = filterManager->get_cyl_r_max();
-    float* z_min = filterManager->get_cyl_z_min();
-    ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-    ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
-    ImGui::Dummy(ImVec2(item_width, 0.0f)); ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-    ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
-    ImGui::Dummy(ImVec2(item_width, 0.0f)); ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-    ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
-
-    //Filter by angle
-    static int maxAngle = 80;
-    if(ImGui::Button("Filter by angle", ImVec2(item_width,0))){
-      if(cloud != nullptr){
-
-        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-        for(int i=0; i<list_cloud->size(); i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
-          filterManager->filter_maxAngle(cloud, maxAngle);
-          sceneManager->update_cloud_location(cloud);
-        }
-
-      }
-    }
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(item_width);
-    ImGui::DragInt("##1", &maxAngle, 1, 0, 90, "%d°");
-
-    //Sphere filtering
-    if(ImGui::Button("Clean sphere cloud", ImVec2(item_width,0))){
-      if(cloud != nullptr){
-        filterManager->filter_sphereCleaning();
-      }
-    }
-    ImGui::SameLine();
-    static float sphereDiameter = 0.139f;
-    ImGui::SetNextItemWidth(item_width);
-    if(ImGui::DragFloat("##6", &sphereDiameter, 0.0001, 0, 2, "%.5f")){
-      filterManager->set_sphereDiameter(sphereDiameter);
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      *open = false;
-    }
-    ImGui::End();
-  }
-}
 void MOD_operation::window_selection(){
-  if(window_tab.show_selection){
-    ImGui::Begin("Selection part", &window_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
+  if(modal_tab.show_selection){
+    ImGui::Begin("Selection part", &modal_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
@@ -247,14 +184,14 @@ void MOD_operation::window_selection(){
 
     //---------------------------
     if(ImGui::Button("Close")){
-      window_tab.show_selection = false;
+      modal_tab.show_selection = false;
     }
     ImGui::End();
   }
 }
 void MOD_operation::window_fitting(){
-  if(window_tab.show_fitting){
-    ImGui::Begin("Fitting", &window_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
+  if(modal_tab.show_fitting){
+    ImGui::Begin("Fitting", &modal_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     int sizeButton = 150;
@@ -285,200 +222,7 @@ void MOD_operation::window_fitting(){
 
     //---------------------------
     if(ImGui::Button("Close")){
-      window_tab.show_fitting = false;
-    }
-    ImGui::End();
-  }
-}
-void MOD_operation::window_extractCloud(){
-  if(window_tab.show_extractCloud){
-    ImGui::Begin("Extract cloud", &window_tab.show_extractCloud,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
-    //---------------------------
-
-    //Extraction functions
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Extract from AABB manipulators");
-    bool* highlightON = extractionManager->get_highlightON();
-    if(ImGui::Checkbox("Hightligth", highlightON)){
-      if(cloud != nullptr){
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = sceneManager->get_subset_selected_init();
-        extractionManager->fct_highlighting(subset, subset_init);
-      }
-    }
-
-    //Reset manipulators
-    static float xmin = 0, xmax = 100;
-    static float ymin = 0, ymax = 100;
-    static float zmin = 0, zmax = 100;
-    if(ImGui::Button("Reset X Y Z", ImVec2(100,0))){
-      xmin = 0;
-      xmax = 100;
-      ymin = 0;
-      ymax = 100;
-      zmin = 0;
-      zmax = 100;
-    }
-
-    //AABB manipulators
-    ImGui::PushAllowKeyboardFocus(false);
-    if(ImGui::DragFloatRange2("X", &xmin, &xmax, 0.25f, 0.01f, 100.0f, "%.1f %%", "%.1f %%")){
-      if(cloud != nullptr){
-        extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
-        extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        //glyphManager->update_glyph_object("aabb", cloud);
-      }
-    }
-    if(ImGui::DragFloatRange2("Y", &ymin, &ymax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
-      if(cloud != nullptr){
-        extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
-        extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        //glyphManager->update_glyph_object("aabb", cloud);
-      }
-    }
-    if(ImGui::DragFloatRange2("Z", &zmin, &zmax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
-      if(cloud != nullptr){
-        extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
-        extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        //glyphManager->update_glyph_object("aabb", cloud);
-      }
-    }
-    ImGui::PopAllowKeyboardFocus();
-
-    //Extract a new cloud from AABB manipulators
-    if(ImGui::Button("Extract cloud", ImVec2(100,0))){
-      if(cloud != nullptr){
-        //Reset color
-        *highlightON = false;
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = sceneManager->get_subset_selected_init();
-        extractionManager->fct_highlighting(subset, subset_init);
-
-        //Extract cloud
-        extractionManager->fct_extractCloud(cloud);
-      }
-    }
-    ImGui::SameLine();
-    static bool sliceON = false;
-    if(ImGui::Checkbox("Slice", &sliceON)){
-      extractionManager->set_sliceON(sliceON);
-    }
-    ImGui::Separator();
-
-    //Extract points selected with the mouse frame
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Extract from mouse frame");
-    if(ImGui::Button("Extract selected frame", ImVec2(150,0))){
-      if(cloud != nullptr){
-        extractionManager->fct_extractSelected(cloud);
-      }
-    }
-    ImGui::Separator();
-
-    //Merge and extract two clouds
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Merge and extract two clouds");
-    if(ImGui::Button("Merge clouds", ImVec2(150,0))){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-      if(list_cloud->size() >= 2){
-        Cloud* cloud_2 = sceneManager->get_cloud_next();
-        extractionManager->fct_merging_newCloud(cloud, cloud_2);
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      window_tab.show_extractCloud = false;
-    }
-    ImGui::End();
-  }
-}
-void MOD_operation::window_cutCloud(){
-  if(window_tab.show_cutCloud){
-    ImGui::Begin("Cut cloud", &window_tab.show_cutCloud,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
-    //---------------------------
-
-    bool* highlightON = extractionManager->get_highlightON();
-    if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
-      if(cloud != nullptr){
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = sceneManager->get_subset_selected_init();
-        extractionManager->fct_highlighting(subset, subset_init);
-      }
-    }
-    ImGui::SameLine();
-
-    //Reset manipulator
-    static float xmin = 0, xmax = 100;
-    static float ymin = 0, ymax = 100;
-    static float zmin = 0, zmax = 100;
-    if(ImGui::Button("Reset X Y Z", ImVec2(100,0))){
-      xmin = 0;
-      xmax = 100;
-      ymin = 0;
-      ymax = 100;
-      zmin = 0;
-      zmax = 100;
-    }
-
-    //AABB manipulators
-    ImGui::PushAllowKeyboardFocus(false);
-    if(ImGui::DragFloatRange2("X", &xmin, &xmax, 0.25f, 0.01f, 100.0f, "%.1f %%", "%.1f %%")){
-      if(cloud != nullptr){
-        extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
-        extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        //glyphManager->update_glyph_object("aabb", cloud);
-      }
-    }
-    if(ImGui::DragFloatRange2("Y", &ymin, &ymax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
-      if(cloud != nullptr){
-        extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
-        extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        //glyphManager->update_glyph_object("aabb", cloud);
-      }
-    }
-    if(ImGui::DragFloatRange2("Z", &zmin, &zmax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
-      if(cloud != nullptr){
-        extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
-        extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-        //glyphManager->update_glyph_object("aabb", cloud);
-      }
-    }
-    ImGui::PopAllowKeyboardFocus();
-
-    //Cuttinf functions
-    if(ImGui::Button("Cut", ImVec2(100,0))){
-      if(cloud != nullptr){
-        //Reset color
-        *highlightON = false;
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = sceneManager->get_subset_selected_init();
-        extractionManager->fct_highlighting(subset, subset_init);
-
-        //Cut cloud
-        extractionManager->fct_cutCloud(subset);
-      }
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Cut all cloud", ImVec2(100,0))){
-      if(cloud != nullptr){
-        //Reset color
-        *highlightON = false;
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = sceneManager->get_subset_selected_init();
-        extractionManager->fct_highlighting(subset, subset_init);
-
-        //Cut clouds
-        extractionManager->fct_cutCloud_all();
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Close")){
-      window_tab.show_cutCloud = false;
+      modal_tab.show_fitting = false;
     }
     ImGui::End();
   }

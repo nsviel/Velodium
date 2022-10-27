@@ -11,7 +11,7 @@
 #include "IconsFontAwesome5.h"
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -31,7 +31,7 @@ MOD_cloud::~MOD_cloud(){}
 //Main function
 void MOD_cloud::window_cloudInfo(){
   Cloud* cloud = sceneManager->get_selected_cloud();
-  bool* open = &window_tab.show_modifyFileInfo;
+  bool* open = &modal_tab.show_modifyFileInfo;
   //---------------------------
 
   if(*open && cloud != nullptr){
@@ -116,11 +116,11 @@ void MOD_cloud::window_cloudInfo(){
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Functions");
     if(ImGui::Button("Transformation", ImVec2(100,0))){
-      window_tab.show_transformation = !window_tab.show_transformation;
+      modal_tab.show_transformation = !modal_tab.show_transformation;
     }
     ImGui::SameLine();
     if(ImGui::Button("Data", ImVec2(100,0))){
-      window_tab.show_asciiData = !window_tab.show_asciiData;
+      modal_tab.show_asciiData = !modal_tab.show_asciiData;
     }
     ImGui::Separator();
 
@@ -152,8 +152,8 @@ void MOD_cloud::window_cloudInfo(){
   //---------------------------
 }
 void MOD_cloud::window_asciiData(){
-  if(window_tab.show_asciiData){
-    ImGui::Begin("Data", &window_tab.show_asciiData);
+  if(modal_tab.show_asciiData){
+    ImGui::Begin("Data", &modal_tab.show_asciiData);
     Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
 

@@ -11,7 +11,7 @@
 
 #include "IconsFontAwesome5.h"
 
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -72,7 +72,7 @@ void GUI_fileManager::fileManager(){
       ImGui::TableSetColumnIndex(1);
       if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
         sceneManager->selection_setCloud(cloud);
-        window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
+        modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
       }
 
       //Icon: delete
@@ -189,7 +189,7 @@ void GUI_fileManager::info_iconAction(Cloud* cloud){
   ImGui::SameLine(ImGui::GetWindowWidth()-60);
   if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
     sceneManager->selection_setCloud(cloud);
-    window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
+    modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
   }
   ImGui::PopID();
   ImGui::PopStyleColor();

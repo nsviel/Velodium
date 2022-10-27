@@ -16,7 +16,7 @@
 #include "../../../Specific/fct_maths.h"
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -44,8 +44,8 @@ MOD_attribut::~MOD_attribut(){}
 void MOD_attribut::window_normal(){
   Cloud* cloud = sceneManager->get_selected_cloud();
 
-  if(window_tab.show_normal && cloud != nullptr){
-    ImGui::Begin("Attributs", &window_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
+  if(modal_tab.show_normal && cloud != nullptr){
+    ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
     //---------------------------
@@ -194,7 +194,7 @@ void MOD_attribut::window_normal(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      window_tab.show_normal = false;
+      modal_tab.show_normal = false;
     }
     ImGui::End();
   }
@@ -202,8 +202,8 @@ void MOD_attribut::window_normal(){
 void MOD_attribut::window_intensity(){
   Cloud* cloud = sceneManager->get_selected_cloud();
 
-  if(window_tab.show_intensity && cloud != nullptr){
-    ImGui::Begin("Intensity", &window_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
+  if(modal_tab.show_intensity && cloud != nullptr){
+    ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_selected_init();
     //---------------------------
@@ -307,7 +307,7 @@ void MOD_attribut::window_intensity(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      window_tab.show_intensity = false;
+      modal_tab.show_intensity = false;
     }
     ImGui::End();
   }
@@ -315,8 +315,8 @@ void MOD_attribut::window_intensity(){
 void MOD_attribut::window_color(){
   Cloud* cloud = sceneManager->get_selected_cloud();
 
-  if(window_tab.show_color && cloud != nullptr){
-    ImGui::Begin("Colorization", &window_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
+  if(modal_tab.show_color && cloud != nullptr){
+    ImGui::Begin("Colorization", &modal_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -326,7 +326,7 @@ void MOD_attribut::window_color(){
     //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
-      window_tab.show_color = false;
+      modal_tab.show_color = false;
     }
     ImGui::End();
   }

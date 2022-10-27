@@ -12,7 +12,7 @@
 #include "../../../Load/Format/file_PCAP.h"
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -41,7 +41,7 @@ MOD_loading::~MOD_loading(){}
 
 //Main function
 void MOD_loading::window_loading(){
-  bool* open = &window_tab.show_loading;
+  bool* open = &modal_tab.show_loading;
   if(*open){
     ImGui::Begin("Loader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
@@ -55,7 +55,7 @@ void MOD_loading::window_loading(){
   }
 }
 void MOD_loading::window_saving(){
-  bool* open = &window_tab.show_saving;
+  bool* open = &modal_tab.show_saving;
   if(*open){
     ImGui::Begin("Save", open, ImGuiWindowFlags_AlwaysAutoResize);
     static bool all = false;

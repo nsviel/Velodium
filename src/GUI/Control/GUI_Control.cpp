@@ -22,7 +22,7 @@
 
 #include "imgui/imgui.h"
 
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -256,7 +256,7 @@ void GUI_Control::control_keyboard_oneAction(){
 
     //o key - Open options
     if(ImGui::IsKeyPressed(79) && !io.WantCaptureMouse){
-      window_tab.show_loading = !window_tab.show_loading;
+      modal_tab.show_loading = !modal_tab.show_loading;
       break;
     }
 

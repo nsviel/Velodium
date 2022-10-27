@@ -9,7 +9,7 @@
 #include <fstream>
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -27,7 +27,7 @@ MOD_camera::~MOD_camera(){}
 
 //Main function
 void MOD_camera::window_camera(){
-  bool* open = &window_tab.show_camera;
+  bool* open = &modal_tab.show_camera;
   if(*open){
     ImGui::Begin(ICON_FA_CAMERA " Camera", open,ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------

@@ -11,6 +11,8 @@ class MOD_shader;
 class MOD_operation;
 class MOD_attribut;
 class MOD_transformation;
+class MOD_filter;
+class MOD_extraction;
 
 
 class GUI_Modal
@@ -33,6 +35,8 @@ private:
   MOD_operation* win_operation;
   MOD_attribut* win_attribut;
   MOD_transformation* mod_transformation;
+  MOD_filter* mod_filter;
+  MOD_extraction* mod_extraction;
 };
 
 #endif

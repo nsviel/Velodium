@@ -29,7 +29,7 @@
 #include <thread>
 #include <sys/sysinfo.h>
 
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -121,7 +121,7 @@ void GUI_menuBar::MenuBar_menus(){
     }
     ImGui::Separator();
     if (ImGui::MenuItem("Options")){
-      window_tab.show_loading = true;
+      modal_tab.show_loading = true;
     }
     ImGui::EndMenu();
   }
@@ -137,7 +137,7 @@ void GUI_menuBar::MenuBar_menus(){
     }
     ImGui::Separator();
     if (ImGui::MenuItem("Options")){
-      window_tab.show_saving = true;
+      modal_tab.show_saving = true;
     }
     ImGui::EndMenu();
   }
@@ -178,7 +178,7 @@ void GUI_menuBar::MenuBar_icons(){
   //Cloud info
   if(ImGui::Button(ICON_FA_COMMENT, ImVec2(iconSize,iconSize))){
     if(!sceneManager->get_is_list_empty()){
-      window_tab.show_modifyFileInfo = !window_tab.show_modifyFileInfo;
+      modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
     }
   }
   if(ImGui::IsItemHovered()){
@@ -190,7 +190,7 @@ void GUI_menuBar::MenuBar_icons(){
   if(ImGui::Button(ICON_FA_EYE, ImVec2(iconSize,iconSize))){
     if(!sceneManager->get_is_list_empty()){
       //Heatmap window
-      window_tab.show_color = !window_tab.show_color;
+      modal_tab.show_color = !modal_tab.show_color;
     }
   }
   if(ImGui::IsItemHovered()){
@@ -200,7 +200,7 @@ void GUI_menuBar::MenuBar_icons(){
   //Camera
   //ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 2);
   if(ImGui::Button(ICON_FA_CAMERA, ImVec2(iconSize,iconSize))){
-    window_tab.show_camera = !window_tab.show_camera;
+    modal_tab.show_camera = !modal_tab.show_camera;
   }
   if(ImGui::IsItemHovered()){
     ImGui::SetTooltip("Camera");
@@ -228,28 +228,25 @@ void GUI_menuBar::MenuBar_Operations(){
 
   //Functions
   if(ImGui::Button("Shader", ImVec2(150,0))){
-    window_tab.show_shader = !window_tab.show_shader;
+    modal_tab.show_shader = !modal_tab.show_shader;
   }
   if(ImGui::Button("Filter", ImVec2(150,0))){
-    window_tab.show_filter = !window_tab.show_filter;
+    modal_tab.show_filter = !modal_tab.show_filter;
   }
   if(ImGui::Button("Intensity", ImVec2(150,0))){
-    window_tab.show_intensity = !window_tab.show_intensity;
+    modal_tab.show_intensity = !modal_tab.show_intensity;
   }
   if(ImGui::Button("Color", ImVec2(150,0))){
-    window_tab.show_color = !window_tab.show_color;
+    modal_tab.show_color = !modal_tab.show_color;
   }
   if(ImGui::Button("Normal", ImVec2(150,0))){
-    window_tab.show_normal = !window_tab.show_normal;
+    modal_tab.show_normal = !modal_tab.show_normal;
   }
-  if(ImGui::Button("Extract cloud", ImVec2(150,0))){
-    window_tab.show_extractCloud = !window_tab.show_extractCloud;
-  }
-  if(ImGui::Button("Cut cloud", ImVec2(150,0))){
-    window_tab.show_cutCloud = !window_tab.show_cutCloud;
+  if(ImGui::Button("Cutting tools", ImVec2(150,0))){
+    modal_tab.show_extractCloud = !modal_tab.show_extractCloud;
   }
   if(ImGui::Button("Transformation", ImVec2(150,0))){
-    window_tab.show_transformation = !window_tab.show_transformation;
+    modal_tab.show_transformation = !modal_tab.show_transformation;
   }
 
   //---------------------------

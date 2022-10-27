@@ -13,7 +13,6 @@ struct Modal_tab{
   bool show_saving;
   bool show_modifyFileInfo;
   bool show_extractCloud;
-  bool show_cutCloud;
   bool show_normal;
   bool show_intensity;
   bool show_color;

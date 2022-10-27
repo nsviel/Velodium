@@ -10,7 +10,7 @@
 #include <fstream>
 
 #include "../Modal_tab.h"
-extern struct Modal_tab window_tab;
+extern struct Modal_tab modal_tab;
 
 
 //Constructor / Destructor
@@ -28,7 +28,7 @@ MOD_shader::~MOD_shader(){}
 
 //Main function
 void MOD_shader::window_shader(){
-  bool* open = &window_tab.show_shader;
+  bool* open = &modal_tab.show_shader;
   if(*open){
     ImGui::Begin("Shader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
