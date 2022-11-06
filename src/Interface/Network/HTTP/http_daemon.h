@@ -23,6 +23,7 @@ public:
   static enum MHD_Result http_send_ok(void* cls, struct MHD_Connection* connection);
   static enum MHD_Result http_send_error(void* cls, struct MHD_Connection* connection);
   static enum MHD_Result http_send_image(void *cls, struct MHD_Connection *connection);
+  static enum MHD_Result http_send_time(void *cls, struct MHD_Connection *connection);
 
   //Get request functions
   static void http_get_slam_on();

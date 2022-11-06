@@ -83,6 +83,9 @@ enum MHD_Result http_daemon::http_answer(void* cls, struct MHD_Connection* conne
       http_get_view_oblique();
       ret = http_send_ok(cls, connection);
     }
+    else if(strcmp(url, "/time_slam") == 0){
+      ret = http_send_time(cls, connection);
+    }
   }
 
   //---------------------------
@@ -147,6 +150,31 @@ enum MHD_Result http_daemon::http_send_image(void* cls, struct MHD_Connection* c
 
   //---------------------------
   return ret;
+}
+enum MHD_Result http_daemon::http_send_time(void* cls, struct MHD_Connection* connection){
+  //---------------------------
+
+  string path = "../src/Module/SLAM/result.dat";
+  std::ifstream file (path);
+  string data;
+  if(file.is_open()){
+    data.assign((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
+  }else{
+    data = "0";
+  }
+
+  const char* errorstr = data.c_str();
+  struct MHD_Response* response = MHD_create_response_from_buffer (strlen (errorstr), (void* ) errorstr, MHD_RESPMEM_PERSISTENT);
+  if(response){
+    enum MHD_Result ret = MHD_queue_response (connection, MHD_HTTP_INTERNAL_SERVER_ERROR, response);
+    MHD_destroy_response (response);
+    return MHD_YES;
+  }
+  else{
+    return MHD_NO;
+  }
+
+  //---------------------------
 }
 
 // GET request handlers

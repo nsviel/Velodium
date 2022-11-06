@@ -29,6 +29,7 @@ public:
   void update_configuration();
   bool compute_slam(Cloud* cloud, int subset_ID);
   void reset_slam();
+  void print_result();
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline SLAM_normal* get_slam_normal(){return slam_normal;}
@@ -63,6 +64,7 @@ private:
   SLAM_transform* slam_transf;
 
   bool with_slam;
+  float time_slam;
   string lidar_model;
   int nb_thread;
 };

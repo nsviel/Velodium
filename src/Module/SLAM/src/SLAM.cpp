@@ -61,8 +61,8 @@ bool SLAM::compute_slam(Cloud* cloud, int subset_ID){
   bool success = slam_assess->compute_assessment(cloud, subset_ID);
 
   //---------------------------
-  float duration = stop_chrono(t1);
-  this->compute_finalization(cloud, subset_ID, success, duration);
+  time_slam = stop_chrono(t1);
+  this->compute_finalization(cloud, subset_ID, success, time_slam);
   return success;
 }
 void SLAM::reset_slam(){
@@ -94,6 +94,7 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
 
   //Compute SLAM statistiques
   slam_assess->compute_statistics(cloud, subset_ID, duration);
+  this->print_result();
 
   //---------------------------
 }
@@ -162,6 +163,19 @@ void SLAM::reset_visibility(Cloud* cloud, int subset_ID){
       subset->visibility = false;
     }
   }
+
+  //---------------------------
+}
+void SLAM::print_result(){
+  //---------------------------
+
+  string path = "../src/Module/SLAM/result.dat";
+  string result = to_string(time_slam);
+
+  ofstream file;
+  file.open(path, std::ofstream::out | std::ofstream::trunc);
+  file << result;
+  file.close();
 
   //---------------------------
 }
