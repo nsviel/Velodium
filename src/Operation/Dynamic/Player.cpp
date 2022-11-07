@@ -80,38 +80,8 @@ void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   }
 
   //Update glyphs
-  Subset* subset = sceneManager->get_subset(cloud, ID_subset);
+  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   objectManager->update_glyph_subset(subset);
-
-  //---------------------------
-}
-void Player::compute_onthefly(Cloud* cloud, int ID){
-  int range = onlineManager->get_visibility_range();
-  //---------------------------
-
-  vector<string>& list_path = cloud->list_path;
-  list<int>& list_id = cloud->list_loaded;
-
-  //Check if the subset is already loaded
-  bool already_load = false;
-  for(auto i=list_id.begin(); i!=list_id.end(); i++){
-    if(*i == ID){
-      already_load = true;
-    }
-  }
-
-  //If not, load it
-  if(already_load == false && ID < list_path.size() && ID >= 0){
-    loadManager->load_cloud_oneFrame(cloud, list_path[ID]);
-    list_id.push_back(ID);
-  }
-
-  //If too mush subset, remove the last one
-  if(cloud->subset.size() > range){
-    Subset* subset = *next(cloud->subset.begin(), 0);
-    list_id.remove(subset->ID);
-    sceneManager->remove_subset_last(cloud);
-  }
 
   //---------------------------
 }

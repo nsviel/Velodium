@@ -10,7 +10,13 @@ Axis::Axis(){
   //---------------------------
   this->create_axis_scene();
 }
-Axis::~Axis(){}
+Axis::~Axis(){
+  //---------------------------
+
+  delete axis_scene;
+
+  //---------------------------
+}
 
 void Axis::create_axis_scene(){
   axis_scene = new Glyph();

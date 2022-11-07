@@ -26,6 +26,11 @@ Scene::Scene(Node_engine* node_engine){
   //---------------------------
 }
 Scene::~Scene(){
+  //---------------------------
+
+  delete list_cloud;
+
+  //---------------------------
 }
 
 //Remove functions
@@ -40,21 +45,10 @@ void Scene::remove_cloud(Cloud* cloud){
     //Keep trace of the ID order
     this->selection_setCloud(oID);
 
-    //Delete subsets - onthefly mode
-    if(cloud->onthefly){
-      list<int>& list_id = cloud->list_loaded;
-      for(auto i=list_id.begin(); i!=list_id.end(); i++){
-        Subset* subset = *next(cloud->subset.begin(), 0);
-        list_id.remove(subset->ID);
-        this->remove_subset_last(cloud);
-      }
-    //Delete subsets - normal mode
-    }else{
-      int size = cloud->nb_subset;
-      for(int i=0; i<size; i++){
-        Subset* subset = *next(cloud->subset.begin(), i);
-        this->remove_subset(cloud, subset->ID);
-      }
+    //Delete subsets
+    for(int i=0; i<cloud->nb_subset; i++){
+      Subset* subset = *next(cloud->subset.begin(), i);
+      this->remove_subset(cloud, subset->ID);
     }
 
     //Delete cloud
@@ -117,7 +111,7 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   Subset* subset_buf = get_subset_buffer(cloud, oID);
   Subset* subset_ini = get_subset_init(cloud, oID);
 
-  this->remove_subset_to_gpu(subset);
+  this->remove_subset_from_gpu(subset);
 
   delete subset;
   delete subset_buf;
@@ -135,7 +129,7 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
 }
-void Scene::remove_subset_to_gpu(Subset* subset){
+void Scene::remove_subset_from_gpu(Subset* subset){
   //---------------------------
 
   glDeleteBuffers(1, &subset->VBO_xyz);
@@ -153,7 +147,7 @@ void Scene::remove_subset_last(Cloud* cloud){
   Subset* subset_buf = get_subset_buffer(cloud, 0);
   Subset* subset_ini = get_subset_init(cloud, 0);
 
-  this->remove_subset_to_gpu(subset);
+  this->remove_subset_from_gpu(subset);
 
   //Supress subset iterators
   cloud->subset.pop_front();

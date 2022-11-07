@@ -118,9 +118,12 @@ void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
 
+  Subset* subset_buf = new Subset(*subset);
+  Subset* subset_ini = new Subset(*subset);
+
   cloud->subset.push_back(subset);
-  cloud->subset_init.push_back(subset);
-  cloud->subset_buffer.push_back(subset);
+  cloud->subset_init.push_back(subset_buf);
+  cloud->subset_buffer.push_back(subset_ini);
   cloud->nb_subset++;
   cloud->ID_subset++;
 
@@ -252,17 +255,10 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
   }
 
   //General information
-  string filePath = data[0]->path;
-  if(filePath != ""){
-    string nameFormat = filePath.substr(filePath.find_last_of("/\\") + 1);
-    cloud->path =  nameFormat.substr(0, nameFormat.find_last_of("/"));
-    cloud->name = nameFormat.substr(0, nameFormat.find_last_of("."));
-    cloud->format = nameFormat.substr(nameFormat.find_last_of("."), string::npos);
-  }else{
-    cloud->path = "";
-    cloud->name = "";
-    cloud->format = "";
-  }
+  string path = data[0]->path;
+  cloud->path = path;
+  cloud->name = get_name_from_path(path);
+  cloud->format = get_format_from_path(path);
 
   cloud->dataFormat = "";
   cloud->visibility = true;

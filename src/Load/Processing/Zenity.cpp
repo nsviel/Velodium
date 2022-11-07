@@ -23,8 +23,8 @@ vector<string> Zenity::zenity_loading(string& path_current_dir, string title){
   //Open zenity file manager
   string zenity = "zenity --file-selection --multiple --title=" + title + " --filename=" + path_current_dir + " 2> /dev/null";
   FILE *file = popen(zenity.c_str(), "r");
-  char filename[32768];
-  const char* path_char = fgets(filename, 32768, file);
+  char filename[100000];
+  const char* path_char = fgets(filename, 100000, file);
   vector<string> path_vec;
 
   //Check if not empty

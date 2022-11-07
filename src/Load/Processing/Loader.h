@@ -35,7 +35,7 @@ public:
   bool load_cloud_creation(Cloud* cloud_in);
   bool load_cloud_empty();
   bool load_cloud_oneFrame(Cloud* cloud, string path);
-  vector<vec3> load_vertices(string filePath);
+  vector<vec3> load_vertices(string path);
 
   inline Cloud* get_createdcloud(){return cloud;}
   inline file_PTS* get_ptsManager(){return ptsManager;}
@@ -43,7 +43,7 @@ public:
   inline file_PCAP* get_pcapManager(){return pcapManager;}
 
 private:
-  vector<dataFile*> load_retrieve_data(string filePath);
+  vector<dataFile*> load_retrieve_data(string path);
   void load_insertIntoDatabase(vector<dataFile*> data_vec);
   void load_insertIntoCloud(dataFile* data, Cloud* cloud);
 

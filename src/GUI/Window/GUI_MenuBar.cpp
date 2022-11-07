@@ -116,7 +116,7 @@ void GUI_menuBar::MenuBar_menus(){
     if (ImGui::MenuItem("Open frames")){
       pathManager->loading_frames();
     }
-    if (ImGui::MenuItem("Open \"On the fly\"")){
+    if (ImGui::MenuItem("Open on-the-fly")){
       pathManager->loading_onthefly();
     }
     ImGui::Separator();

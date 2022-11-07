@@ -17,7 +17,7 @@ struct Cloud{ //Global set of the cloud
 
   int ID_selected; //Actual selected subset ID
   int ID_subset; //Last given subset ID
-  int ID_file; //For on the fly loading
+  int ID_file; //For on-the-fly loading
 
   //Parameters
   int nb_subset;

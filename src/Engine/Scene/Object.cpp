@@ -42,7 +42,22 @@ Object::Object(Node_engine* node){
   this->create_glyph_scene();
   this->update_configuration();
 }
-Object::~Object(){}
+Object::~Object(){
+  //---------------------------
+
+  delete gridObject;
+  delete axisObject;
+  delete aabbObject;
+  delete normObject;
+  delete oobbObject;
+  delete markObject;
+  delete trajObject;
+  delete carObject;
+  delete keyObject;
+  delete mapObject;
+
+  //---------------------------
+}
 
 //Runtime functions
 void Object::runtime_glyph_scene(){

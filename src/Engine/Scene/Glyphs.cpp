@@ -22,7 +22,13 @@ Glyphs::Glyphs(Node_engine* node){
 
   //---------------------------
 }
-Glyphs::~Glyphs(){}
+Glyphs::~Glyphs(){
+  //---------------------------
+
+  delete list_glyph;
+
+  //---------------------------
+}
 
 //Main functions
 void Glyphs::draw_glyph(Glyph* glyph){

@@ -17,7 +17,13 @@ Camera::Camera(Dimension* dimension){
 
   //---------------------------
 }
-Camera::~Camera(){}
+Camera::~Camera(){
+  //---------------------------
+
+  delete configManager;
+
+  //---------------------------
+}
 
 //Viewport stuff
 void Camera::viewport_init(){

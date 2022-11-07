@@ -28,7 +28,6 @@ public:
   //Selection function
   void select_bySubsetID(Cloud* cloud, int ID_subset);
   void compute_wheel_selection(string direction);
-  void compute_onthefly(Cloud* cloud, int ID);
   bool compute_range_limit(Cloud* cloud, int& ID_subset);
 
   //Player functions

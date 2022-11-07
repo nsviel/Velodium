@@ -37,18 +37,18 @@ Saver::Saver(Node_load* node_load){
 Saver::~Saver(){}
 
 //Main function
-bool Saver::save_cloud(Cloud* cloud, string filePath){
-  string format = filePath.substr(filePath.find_last_of(".") + 1);
+bool Saver::save_cloud(Cloud* cloud, string path){
+  string format = get_format_from_path(path);
   bool success = false;
   //---------------------------
 
   //Check file format
   if(format.at(0) == '/' || format == "pts"){
-    success = ptsManager->Exporter(filePath, cloud);
+    success = ptsManager->Exporter(path, cloud);
   }
   else if(format == "ply"){
     string format = "binary";
-    success = plyManager->Exporter_cloud(filePath, format, cloud);
+    success = plyManager->Exporter_cloud(path, format, cloud);
   }
 
   //Say if save is successfull
@@ -58,7 +58,7 @@ bool Saver::save_cloud(Cloud* cloud, string filePath){
   }
 
   //---------------------------
-  string log = "Saved " + filePath;
+  string log = "Saved " + path;
   console.AddLog("ok", log);
   return true;
 }

@@ -13,7 +13,13 @@ Localmap::Localmap(){
   //---------------------------
   this->create_localmap();
 }
-Localmap::~Localmap(){}
+Localmap::~Localmap(){
+  //---------------------------
+  
+  delete localmap;
+
+  //---------------------------
+}
 
 void Localmap::create_localmap(){
   this->localmap = new Glyph();

@@ -42,24 +42,24 @@ Loader::Loader(Node_load* node_load){
 Loader::~Loader(){}
 
 //Main functions
-bool Loader::load_cloud(string filePath){
+bool Loader::load_cloud(string path){
   //---------------------------
 
   //Check file existence
-  if(is_file_exist(filePath) == false){
-    string log = "File doesn't exists: "+ filePath;
+  if(is_file_exist(path) == false){
+    string log = "File doesn't exists: "+ path;
     console.AddLog("error", log);
     return false;
   }
 
   //Check file format & retrieve data
-  vector<dataFile*> data_vec = load_retrieve_data(filePath);
+  vector<dataFile*> data_vec = load_retrieve_data(path);
 
   //Insert cloud
   this->load_insertIntoDatabase(data_vec);
 
   //---------------------------
-  string log = "Loaded "+ filePath;
+  string log = "Loaded "+ path;
   console.AddLog("ok", log);
   return true;
 }
@@ -100,23 +100,22 @@ bool Loader::load_cloud_onthefly(vector<string> path_vec){
   cloud->ID_file++;
 
   //---------------------------
-  int duration = (int)toc_ms();
-  string log = "Loaded " + to_string(data_vec.size()) + " frames in " + to_string(duration) + " ms";
+  string log = "Loaded on-the-fly cloud";
   console.AddLog("ok", log);
   return true;
 }
-bool Loader::load_cloud_silent(string filePath){
+bool Loader::load_cloud_silent(string path){
   //---------------------------
 
   //Check file existence
-  if(is_file_exist(filePath) == false){
-    string log = "File doesn't exists: " + filePath;
+  if(is_file_exist(path) == false){
+    string log = "File doesn't exists: " + path;
     console.AddLog("error", log);
     return false;
   }
 
   //Check file format & retrieve data
-  vector<dataFile*> data_vec = load_retrieve_data(filePath);
+  vector<dataFile*> data_vec = load_retrieve_data(path);
 
   //Extract data and put in the engine
   cloud = extractManager->extract_data(data_vec);
@@ -124,20 +123,20 @@ bool Loader::load_cloud_silent(string filePath){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_part(string filePath, int lmin, int lmax){
+bool Loader::load_cloud_part(string path, int lmin, int lmax){
   vector<dataFile*> data_vec;
   //---------------------------
 
   //Check file existence
-  if(is_file_exist(filePath) == false){
+  if(is_file_exist(path) == false){
     console.AddLog("error", "File doesn't exists");
     return false;
   }
 
   //Check file format
-  string format = filePath.substr(filePath.find_last_of(".") + 1);
+  string format = get_format_from_path(path);
   if(format == "pts"){
-    dataFile* data = ptsManager->Loader(filePath);
+    dataFile* data = ptsManager->Loader(path);
     data_vec.push_back(data);
   }
   else{
@@ -222,26 +221,33 @@ bool Loader::load_cloud_empty(){
 bool Loader::load_cloud_oneFrame(Cloud* cloud, string path){
   //---------------------------
 
-  //Retrieve data
-  dataFile* data = plyManager->Loader(path);
+  if(is_file_exist(path)){
+    //Retrieve data
+    dataFile* data = plyManager->Loader(path);
 
-  //Insert frame
-  this->load_insertIntoCloud(data, cloud);
+    //Insert frame
+    this->load_insertIntoCloud(data, cloud);
+
+    //Delete raw data
+    delete data;
+  }else{
+    return false;
+  }
 
   //---------------------------
   return true;
 }
-vector<vec3> Loader::load_vertices(string filePath){
+vector<vec3> Loader::load_vertices(string path){
   //---------------------------
 
   //Check file existence
-  if(is_file_exist(filePath) == false){
-    string log = "File doesn't exists: " + filePath;
+  if(is_file_exist(path) == false){
+    string log = "File doesn't exists: " + path;
     console.AddLog("error", log);
   }
 
   //Check file format & retrieve data
-  vector<dataFile*> data_vec = load_retrieve_data(filePath);
+  vector<dataFile*> data_vec = load_retrieve_data(path);
 
   //Extract data
   vector<vec3> xyz = data_vec[0]->location;
@@ -251,45 +257,45 @@ vector<vec3> Loader::load_vertices(string filePath){
 }
 
 //Sub-functions
-vector<dataFile*> Loader::load_retrieve_data(string filePath){
-  string format = filePath.substr(filePath.find_last_of(".") + 1);
+vector<dataFile*> Loader::load_retrieve_data(string path){
+  string format = get_format_from_path(path);
   vector<dataFile*> data_vec;
   //---------------------------
 
   if     (format == "pts"){
-    dataFile* data = ptsManager->Loader(filePath);
+    dataFile* data = ptsManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "ptx"){
-    dataFile* data = ptxManager->Loader(filePath);
+    dataFile* data = ptxManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "pcap"){
-    data_vec = pcapManager->Loader(filePath);
+    data_vec = pcapManager->Loader(path);
   }
   else if(format == "pcd"){
     #ifdef FILE_PCD_H
-    dataFile* data = pcdManager->Loader(filePath);
+    dataFile* data = pcdManager->Loader(path);
     data_vec.push_back(data);
     #endif
   }
   else if(format == "ply"){
-    dataFile* data = plyManager->Loader(filePath);
+    dataFile* data = plyManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "obj"){
-    dataFile* data = objManager->Loader(filePath);
+    dataFile* data = objManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "xyz"){
-    dataFile* data = xyzManager->Loader(filePath);
+    dataFile* data = xyzManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "csv"){
-    data_vec = csvManager->Loader(filePath);
+    data_vec = csvManager->Loader(path);
   }
   else if(format == "cbor"){
-    data_vec = cborManager->Loader(filePath);
+    data_vec = cborManager->Loader(path);
   }
   else{
     console.AddLog("error", "File format not recognized");
@@ -310,6 +316,11 @@ void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
   sceneManager->set_selected_cloud(cloud);
   sceneManager->update_cloud_oID(list_cloud);
   sceneManager->update_cloud_glyph(cloud);
+
+  //Delete raw data
+  for(int i=0; i<data_vec.size(); i++){
+    delete data_vec[i];
+  }
 
   //---------------------------
 }

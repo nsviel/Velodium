@@ -36,6 +36,9 @@ CoreGLengine::CoreGLengine(){
 CoreGLengine::~CoreGLengine(){
   //---------------------------
 
+  delete configManager;
+  delete node_engine;
+
   glfwDestroyWindow(window);
   glfwTerminate();
 

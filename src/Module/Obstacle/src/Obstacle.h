@@ -13,6 +13,8 @@ class Prediction;
 class Pather;
 
 
+//BIEN CHECKER si les OOBB des preditions snot bien deleted
+
 class Obstacle
 {
 public:

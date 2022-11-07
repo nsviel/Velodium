@@ -33,7 +33,13 @@ MOD_operation::MOD_operation(Node_operation* node_ope){
 
   //---------------------------
 }
-MOD_operation::~MOD_operation(){}
+MOD_operation::~MOD_operation(){
+  //---------------------------
+
+  delete transformManager;
+
+  //---------------------------
+}
 
 //Main function
 void MOD_operation::window_selection(){

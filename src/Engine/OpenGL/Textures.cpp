@@ -9,7 +9,14 @@ Textures::Textures(){
 
   //---------------------------
 }
-Textures::~Textures(){}
+Textures::~Textures(){
+  //---------------------------
+
+  delete list_Texture;
+  delete glyph;
+
+  //---------------------------
+}
 
 //Texture management
 bool Textures::load_texture(string filePath, string name){

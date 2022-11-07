@@ -14,7 +14,13 @@ Trajectory::Trajectory(){
   //---------------------------
   this->create();
 }
-Trajectory::~Trajectory(){}
+Trajectory::~Trajectory(){
+  //---------------------------
+
+  delete trajectory;
+
+  //---------------------------
+}
 
 void Trajectory::create(){
   this->trajectory = new Glyph();

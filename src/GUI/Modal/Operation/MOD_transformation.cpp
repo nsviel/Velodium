@@ -23,7 +23,13 @@ MOD_transformation::MOD_transformation(Node_engine* node_engine){
 
   //---------------------------
 }
-MOD_transformation::~MOD_transformation(){}
+MOD_transformation::~MOD_transformation(){
+  //---------------------------
+
+  delete transformManager;
+
+  //---------------------------
+}
 
 //Main function
 void MOD_transformation::design_transformation(){

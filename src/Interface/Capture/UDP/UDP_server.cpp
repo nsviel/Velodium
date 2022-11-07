@@ -23,7 +23,14 @@ UDP_server::UDP_server(){
 
   //---------------------------
 }
-UDP_server::~UDP_server(){}
+UDP_server::~UDP_server(){
+  //---------------------------
+
+  delete sock_server;
+  delete sock_client;
+
+  //---------------------------
+}
 
 //Main function
 void UDP_server::capture_init(int port, int packet_size){

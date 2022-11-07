@@ -15,7 +15,13 @@ Viewport::Viewport(Dimension* dimension){
 
   //---------------------------
 }
-Viewport::~Viewport(){}
+Viewport::~Viewport(){
+  //---------------------------
+
+  delete cameraManager;
+
+  //---------------------------
+}
 
 void Viewport::update_viewport(){
   //---------------------------

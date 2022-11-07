@@ -23,6 +23,26 @@
 namespace{
   //---------------------------
 
+  //Retrieve name info from path
+  std::string get_name_from_path(std::string path){
+    if(path != ""){
+      std::string name_format = path.substr(path.find_last_of("/\\") + 1);
+      return name_format.substr(0, name_format.find_last_of("."));
+    }else{
+      return "";
+    }
+  }
+
+  //Retrieve format info from path
+  std::string get_format_from_path(std::string path){
+    if(path != ""){
+      std::string name_format = path.substr(path.find_last_of("/\\") + 1);
+      return name_format.substr(name_format.find_last_of(".") + 1, string::npos);
+    }else{
+      return "";
+    }
+  }
+
   //New directory creation
   void create_new_dir(std::string path){
     //---------------------------

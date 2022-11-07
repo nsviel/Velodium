@@ -34,7 +34,13 @@ Pather::Pather(Node_load* node_load){
   //---------------------------
   this->update_configuration();
 }
-Pather::~Pather(){}
+Pather::~Pather(){
+  //---------------------------
+
+  delete zenityManager;
+
+  //---------------------------
+}
 
 void Pather::update_configuration(){
   //---------------------------

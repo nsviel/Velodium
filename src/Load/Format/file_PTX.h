@@ -28,6 +28,8 @@ public:
   void Loader_cloudTransformation();
   void Loader_scannerAtOrigin();
 
+  string get_format_from_path(string path);
+
   inline void set_scannerAtOrigin(bool value){this->option_scannerAtOrigin = value;}
   inline void set_applyCloudTransfo(bool value){this->option_applyCloudTransfo = value;}
   inline void set_separateCloud(bool value){this->option_separateCloud = value;}

@@ -11,7 +11,13 @@ Mark::Mark(){
 
   //---------------------------
 }
-Mark::~Mark(){}
+Mark::~Mark(){
+  //---------------------------
+
+  delete selection_frame;
+
+  //---------------------------
+}
 
 void Mark::create_selection_frame(){
   selection_frame = new Glyph();

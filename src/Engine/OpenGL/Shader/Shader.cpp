@@ -15,7 +15,15 @@ Shader::Shader(Dimension* dimManager){
 
 	//---------------------------
 }
-Shader::~Shader(){}
+Shader::~Shader(){
+	//---------------------------
+
+	delete edlManager;
+	delete shader_scene;
+	delete shader_screen;
+
+	//---------------------------
+}
 
 void Shader::init(){
 	//---------------------------

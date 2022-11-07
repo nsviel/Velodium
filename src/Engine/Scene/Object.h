@@ -67,6 +67,7 @@ private:
   Node_engine* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
+  
   Grid* gridObject;
   Axis* axisObject;
   AABB* aabbObject;

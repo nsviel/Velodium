@@ -28,7 +28,13 @@ Renderer::Renderer(Dimension* dim){
 
   //---------------------------
 }
-Renderer::~Renderer(){}
+Renderer::~Renderer(){
+  //---------------------------
+
+  delete configManager;
+
+  //---------------------------
+}
 
 //Init
 void Renderer::init_rendering_fbo_1(){
@@ -189,6 +195,9 @@ void Renderer::render_screenshot(string path_file){
     remove(path_file.c_str());
     std::rename(path.c_str(), path_file.c_str());
     //std::filesystem::copy(path, path_file, std::filesystem::copy_options::update_existing);
+
+    //Delete raw data
+    delete pixels;
   }
 
   //---------------------------
@@ -224,6 +233,9 @@ void Renderer::render_screenshot_stb_image(string path){
 
     //Freeimage
     stbi_write_bmp(path.c_str(), gl_dim.x, gl_dim.y, 3, pixels);
+
+    //Delete raw data
+    delete pixels;
   }
 
   //---------------------------
@@ -239,7 +251,6 @@ void Renderer::render_screenshot_pbo(string path){
     int pbo_size = gl_dim.x * gl_dim.y * 3;
     uint8_t* pixels = new uint8_t[pbo_size];
 
-
     glReadBuffer(GL_BACK);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
     glReadPixels(0, 0, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, 0);
@@ -252,6 +263,9 @@ void Renderer::render_screenshot_pbo(string path){
     FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 0, 24, 0x0000FF, 0x00FF00, 0xFF0000, false);
     FreeImage_Save(FIF_JPEG, image, path.c_str(), 0);
     FreeImage_Unload(image);
+
+    //Delete raw data
+    delete pixels;
   }
 
   //---------------------------
@@ -277,6 +291,9 @@ void Renderer::render_screenshot_freeimage(string path){
     FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, gl_dim.x, gl_dim.y, 3 * gl_dim.x, 24, 0xFF0000, 0x00FF00,0x0000FF, false);
     FreeImage_Save(FIF_BMP, image, path.c_str(), 0);
     FreeImage_Unload(image);
+
+    //Delete raw data
+    delete pixels;
   }
 
   //---------------------------

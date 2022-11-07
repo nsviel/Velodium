@@ -15,7 +15,15 @@ Grid::Grid(){
 
   //---------------------------
 }
-Grid::~Grid(){}
+Grid::~Grid(){
+  //---------------------------
+
+  delete grid;
+  delete grid_sub;
+  delete grid_plane;
+
+  //---------------------------
+}
 
 void Grid::create_grid(){
   grid = new Glyph();

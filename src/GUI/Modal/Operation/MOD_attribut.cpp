@@ -38,7 +38,13 @@ MOD_attribut::MOD_attribut(Node_gui* node_gui){
 
   //---------------------------
 }
-MOD_attribut::~MOD_attribut(){}
+MOD_attribut::~MOD_attribut(){
+  //---------------------------
+
+  delete transformManager;
+
+  //---------------------------
+}
 
 //Main function
 void MOD_attribut::window_normal(){

@@ -52,9 +52,9 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
     }
 
     //If not, load it
-    if(already_load == false && ID < list_path.size() && ID >= 0){
-      loadManager->load_cloud_oneFrame(cloud, list_path[ID]);
-      list_id.push_back(ID);
+    if(already_load == false && ID < list_path.size() && ID >= cloud->ID_file){
+      bool ok = loadManager->load_cloud_oneFrame(cloud, list_path[ID]);
+      if(ok) list_id.push_back(ID);
     }
 
     //If too mush subset, remove the last one

@@ -74,7 +74,8 @@ bool file_PTX::Exporter(string path){
   //---------------------------
 
   //Create file
-  if(path.substr(path.find_last_of(".") + 1) != "ptx") path.append(".ptx");
+  string format = get_format_from_path(path);
+  if(format != "ptx") path.append(".ptx");
   ofstream file;
   file.open(path);
   if(!file)
@@ -272,4 +273,14 @@ void file_PTX::Loader_scannerAtOrigin(){
   }
 
   //---------------------------
+}
+
+//Retrieve format info from path
+string file_PTX::get_format_from_path(string path){
+  if(path != ""){
+    std::string name_format = path.substr(path.find_last_of("/\\") + 1);
+    return name_format.substr(name_format.find_last_of("."), string::npos);
+  }else{
+    return "";
+  }
 }

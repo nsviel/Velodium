@@ -23,7 +23,7 @@ public:
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
   void remove_subset(Cloud* cloud, int ID);
-  void remove_subset_to_gpu(Subset* subset);
+  void remove_subset_from_gpu(Subset* subset);
   void remove_subset_last(Cloud* cloud);
   void remove_subset_all(Cloud* cloud);
 

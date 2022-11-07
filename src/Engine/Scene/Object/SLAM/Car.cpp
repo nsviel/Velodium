@@ -18,7 +18,14 @@ Car::Car(){
   //---------------------------
   this->create();
 }
-Car::~Car(){}
+Car::~Car(){
+  //---------------------------
+
+  delete transformManager;
+  delete car;
+
+  //---------------------------
+}
 
 void Car::create(){
   this->car = new Glyph();

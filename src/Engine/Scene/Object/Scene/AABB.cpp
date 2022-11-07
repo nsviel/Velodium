@@ -12,7 +12,13 @@ AABB::AABB(){
 
   //---------------------------
 }
-AABB::~AABB(){}
+AABB::~AABB(){
+  //---------------------------
+
+  delete aabb;
+
+  //---------------------------
+}
 
 //Main function
 void AABB::create_aabb_scene(){
