@@ -48,6 +48,7 @@ public:
   void fct_adjustPosToScanner(Cloud* cloud, float Z_scan);
   float fct_soilDetermination(Cloud* cloud);
   vec3 fct_degreeToRadian(vec3 degree);
+  vec3 fct_radianToDegree(vec3 radian);
   mat4 compute_transformMatrix(Subset* subset, vec3 COM, mat4 transformation);
   mat4 compute_transformMatrix(float tx, float ty, float tz, float rx, float ry, float rz);
   mat4 compute_transformMatrix(vec3 trans, vec3 rotat, vec3 scale);
@@ -61,7 +62,7 @@ public:
   void compute_transformXYZ(vector<vec3>& XYZ, vec3& COM, mat4 Mat);
   void compute_COM(Cloud* cloud);
   void compute_min(Cloud* cloud);
-  
+
   //Setters / Getters
   inline void set_soilnb_point(int value){this->soilnb_point = value;}
 

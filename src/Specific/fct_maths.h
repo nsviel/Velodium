@@ -591,10 +591,57 @@ namespace{
   }
 
   //Geometric functions
+  float fct_get_angle(glm::vec3 vec_a, glm::vec3 vec_b){
+    float dot = vec_a.x*vec_b.x + vec_a.y*vec_b.y + vec_a.z*vec_b.z;
+    float lenSq1 = vec_a.x*vec_a.x + vec_a.y*vec_a.y + vec_a.z*vec_a.z;
+    float lenSq2 = vec_b.x*vec_b.x + vec_b.y*vec_b.y + vec_b.z*vec_b.z;
+    float angle = acos(dot/sqrt(lenSq1 * lenSq2));
+    return angle;
+  }
   double fct_angularDistance(const Eigen::Matrix3f &rota, const Eigen::Matrix3f &rotb) {
     double norm = ((rota * rotb.transpose()).trace() - 1) / 2;
     norm = std::acos(norm) * 180 / M_PI;
     return norm;
+  }
+  float fct_degreeToRadian(float degree){
+    float radian;
+    //---------------------------
+
+    radian = degree * 3.14159265358979323846f / 180;
+
+    //---------------------------
+    return radian;
+  }
+  float fct_radianToDegree(float radian){
+    float degree;
+    //---------------------------
+
+    degree = (radian * 180) / 3.14159265358979323846f;
+
+    //---------------------------
+    return degree;
+  }
+  glm::vec3 fct_degreeToRadian_vec3(glm::vec3 degree){
+    glm::vec3 radian;
+    //---------------------------
+
+    for(int i=0; i<3; i++){
+      radian[i] = degree[i] * 3.14159265358979323846f / 180;
+    }
+
+    //---------------------------
+    return radian;
+  }
+  glm::vec3 fct_radianToDegree_vec3(glm::vec3 radian){
+    glm::vec3 degree;
+    //---------------------------
+
+    for(int i=0; i<3; i++){
+      degree[i] = (radian[i] * 180) / 3.14159265358979323846f;
+    }
+
+    //---------------------------
+    return degree;
   }
 
   //---------------------------

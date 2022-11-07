@@ -491,6 +491,17 @@ vec3 Transforms::fct_degreeToRadian(vec3 degree){
   //---------------------------
   return radian;
 }
+vec3 Transforms::fct_radianToDegree(vec3 radian){
+  vec3 degree;
+  //---------------------------
+
+  for(int i=0; i<3; i++){
+    degree[i] = (radian[i] * 180) / M_PI;
+  }
+
+  //---------------------------
+  return degree;
+}
 mat4 Transforms::compute_transformMatrix(vec3 trans, vec3 rotat, vec3 scale){
   glm::mat4 transMat(1.0);
   glm::mat4 Rx(1.0);
