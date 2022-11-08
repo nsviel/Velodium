@@ -320,6 +320,17 @@ namespace{
 
     //---------------------------
   }
+  std::vector<std::string> get_dir_list_file(std::string path_dir){
+    std::vector<std::string> path_vec;
+    //---------------------------
+
+    for(const auto& entry : std::experimental::filesystem::directory_iterator(path_dir)){
+      path_vec.push_back(entry.path());
+    }
+
+    //---------------------------
+    return path_vec;
+  }
 
   //---------------------------
 }

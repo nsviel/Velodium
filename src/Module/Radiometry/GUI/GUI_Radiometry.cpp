@@ -473,7 +473,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_calibrationTargets = refManager->get_path_calibrationTargets();
     if(ImGui::Button("...##0")){
-      pathManager->selectDirectory(*path_calibrationTargets);
+      pathManager->zenity_directory(*path_calibrationTargets);
     }
 
     //Sphere
@@ -481,7 +481,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_sphereTarget_add80d = refManager->get_path_sphereTarget_add80d();
     if(ImGui::Button("...##sphere")){
-      pathManager->selectDirectory(*path_sphereTarget_add80d);
+      pathManager->zenity_directory(*path_sphereTarget_add80d);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R)##sphere", ImVec2(60,0))){
@@ -509,7 +509,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_spectralonTarget_dist = refManager->get_path_spectralonTarget_dist();
     if(ImGui::Button("...##spectralon1")){
-      pathManager->selectDirectory(*path_spectralonTarget_dist);
+      pathManager->zenity_directory(*path_spectralonTarget_dist);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R)##spectralon", ImVec2(60,0))){
@@ -523,7 +523,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_spectralonTarget_angle = refManager->get_path_spectralonTarget_angle();
     if(ImGui::Button("...##spectralon2")){
-      pathManager->selectDirectory(*path_spectralonTarget_angle);
+      pathManager->zenity_directory(*path_spectralonTarget_angle);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(alpha)##spectralon", ImVec2(60,0))){

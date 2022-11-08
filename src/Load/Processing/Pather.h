@@ -41,13 +41,6 @@ public:
   void saving_cloud_all();
   void saving_saved_frames();
 
-  //Specific functions
-  void convertIscale();
-  void selectDirectory(string& path);
-  string get_filePath();
-  string get_filePath(string path);
-  vector<string> get_directoryAllFilePath(string path);
-
   inline void set_spaceSampling(float value){this->spaceSampling = value;}
   inline void set_nbLineSampling(int value){this->nbLineSampling = value;}
   inline Loader* get_loaderManager(){return loaderManager;}

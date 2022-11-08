@@ -17,6 +17,7 @@ public:
   string zenity_saving(string& path_current_dir, string filename, string format);
   string zenity_directory(string& path_current_dir);
   void zenity_select_directory(string& path_dir);
+  string zenity_file(string path);
 
 private:
 };
