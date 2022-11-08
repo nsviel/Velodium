@@ -1,6 +1,8 @@
 #include "Pose.h"
 #include "Transformation.h"
 
+#include "../Optimization/Fitting.h"
+
 #include "../../Specific/fct_maths.h"
 
 
@@ -9,6 +11,7 @@ Pose::Pose(){
   //---------------------------
 
   this->transformManager = new Transformation();
+  this->fittingManager = new Fitting();
 
   this->soilnb_point = 1000;
 
@@ -16,7 +19,7 @@ Pose::Pose(){
 }
 Pose::~Pose(){}
 
-//Specific Pose functions
+// Pose
 void Pose::make_centering(Cloud* cloud){
   vec3& COM = cloud->COM;
   //---------------------------
@@ -48,6 +51,102 @@ void Pose::make_elevation(Cloud* cloud, float Z){
 
   //---------------------------
 }
+void Pose::make_positionning(Cloud* cloud, vec3 pos){
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  vec3& COM = subset->COM;
+  //---------------------------
+
+  vec3 diff;
+  diff.x = pos.x - COM.x;
+  diff.y = pos.y - COM.y;
+  diff.z = pos.z - COM.z;
+
+  //---------------------------
+  transformManager->make_translation(cloud, diff);
+}
+void Pose::make_positionning_XY(Cloud* cloud, vec3 pos){
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  vec3& COM = subset->COM;
+  //---------------------------
+
+  vec3 diff;
+  diff.x = pos.x - COM.x;
+  diff.y = pos.y - COM.y;
+  diff.z = 0;
+
+  //---------------------------
+  transformManager->make_translation(cloud, diff);
+}
+void Pose::make_positionning_glyph(vector<vec3>& XYZ, vec3& COM, vec3 pos){
+  //---------------------------
+
+  vec3 diff;
+  diff.x = pos.x - COM.x;
+  diff.y = pos.y - COM.y;
+  diff.z = pos.z - COM.z;
+
+  glm::mat4 Tmat(1.0);
+  Tmat[0][3] = diff.x;
+  Tmat[1][3] = diff.y;
+  Tmat[2][3] = diff.z;
+
+  //Application of the Pose
+  for(int i=0;i<XYZ.size();i++){
+    //Location
+    vec4 XYZ_hom = vec4(XYZ[i], 1.0);
+    for(int j=0;j<3;j++){
+      XYZ_hom[j] -= COM[j];
+    }
+    vec4 XYZ_tr = XYZ_hom * Tmat;
+    for(int j=0;j<3;j++){
+      XYZ_tr[j] += COM[j];
+    }
+    XYZ[i] = vec3(XYZ_tr.x, XYZ_tr.y, XYZ_tr.z);
+  }
+
+  //---------------------------
+}
+float Pose::make_soilDetermination(Cloud* cloud){
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  vector<vec3>& XYZ = subset->xyz;
+  //---------------------------
+
+  //Retrieve Z coordinates from XYZ
+  vector<float> Z_vec;
+  for(int i=0; i<XYZ.size(); i++){
+    Z_vec.push_back(XYZ[i].z);
+  }
+
+  //Sorting Z vector
+  sort(Z_vec.begin(), Z_vec.end());
+
+  //Get the XXX first Z values
+  vector<float> Z_fist;
+  for(int i=0; i<soilnb_point; i++){
+    Z_fist.push_back(Z_vec[i]);
+  }
+
+  //Compute soil estimation by Z mean;
+  float Z_soil = fct_mean(Z_fist);
+
+  //---------------------------
+  return Z_soil;
+}
+void Pose::make_adjustPosToScanner(Cloud* cloud, float Z_scan){
+  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  vector<vec3>& XYZ = subset->xyz;
+  vec3& min = subset->min;
+  float Z_soil = make_soilDetermination(cloud);
+  //---------------------------
+
+  for(int i=0; i<XYZ.size(); i++){
+    XYZ[i].z = XYZ[i].z - Z_soil - Z_scan;
+  }
+
+  //---------------------------
+}
+
+// Orientation
 float Pose::make_orientAxis_X(Cloud* cloud){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   //---------------------------
@@ -120,104 +219,45 @@ float Pose::make_alignAxisY_AB(Cloud* cloud, vec3 A, vec3 B){
   //---------------------------
   return angle;
 }
-
-//Position functions
-void Pose::make_positionning(Cloud* cloud, vec3 pos){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
-  vec3& COM = subset->COM;
+void Pose::make_alignSelectionToGround(Cloud* cloud){
+  vector<vec3> xyz;
   //---------------------------
 
-  vec3 diff;
-  diff.x = pos.x - COM.x;
-  diff.y = pos.y - COM.y;
-  diff.z = pos.z - COM.z;
-
-  //---------------------------
-  transformManager->make_translation(cloud, diff);
-}
-void Pose::make_positionning_XY(Cloud* cloud, vec3 pos){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
-  vec3& COM = subset->COM;
-  //---------------------------
-
-  vec3 diff;
-  diff.x = pos.x - COM.x;
-  diff.y = pos.y - COM.y;
-  diff.z = 0;
-
-  //---------------------------
-  transformManager->make_translation(cloud, diff);
-}
-void Pose::make_positionning_glyph(vector<vec3>& XYZ, vec3& COM, vec3 pos){
-  //---------------------------
-
-  vec3 diff;
-  diff.x = pos.x - COM.x;
-  diff.y = pos.y - COM.y;
-  diff.z = pos.z - COM.z;
-
-  glm::mat4 Tmat(1.0);
-  Tmat[0][3] = diff.x;
-  Tmat[1][3] = diff.y;
-  Tmat[2][3] = diff.z;
-
-  //Application of the Pose
-  for(int i=0;i<XYZ.size();i++){
-    //Location
-    vec4 XYZ_hom = vec4(XYZ[i], 1.0);
-    for(int j=0;j<3;j++){
-      XYZ_hom[j] -= COM[j];
+  // Get all selected points
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    if(subset->visibility){
+      vector<int>& idx = subset->selected;
+      for(int j=0; j<idx.size(); j++){
+        xyz.push_back(subset->xyz[idx[j]]);
+      }
     }
-    vec4 XYZ_tr = XYZ_hom * Tmat;
-    for(int j=0;j<3;j++){
-      XYZ_tr[j] += COM[j];
-    }
-    XYZ[i] = vec3(XYZ_tr.x, XYZ_tr.y, XYZ_tr.z);
   }
+
+  if(xyz.size() == 0){
+    console.AddLog("error" ,"No point selected");
+    return;
+  }
+
+  //Compute plane fitting on them
+  std::pair<vec3, vec3> centroid_normal = fittingManager->plane_fitting_normal(xyz);
+  vec3 centroid = centroid_normal.first;
+  vec3 normal = centroid_normal.second;
+  if(normal.z < 0) normal = -normal;
+
+  // Compute and supress angular angle between normal and basis axis
+  float angle = fct_oriented_angle(vec2(normal.x, normal.y), vec2(1, 0));
+  mat4 rotation = transformManager->make_rotation(cloud, centroid, vec3(0, 0, -angle));
+  transformManager->make_Transformation_point(normal, centroid, rotation);
+
+  angle = fct_oriented_angle(vec2(normal.x, normal.z), vec2(0, 1));
+  transformManager->make_rotation(cloud, centroid, vec3(0, -angle, 0));
+  transformManager->make_translation(cloud, -centroid);
 
   //---------------------------
 }
 
-//Operations
-float Pose::fct_soilDetermination(Cloud* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
-  vector<vec3>& XYZ = subset->xyz;
-  //---------------------------
-
-  //Retrieve Z coordinates from XYZ
-  vector<float> Z_vec;
-  for(int i=0; i<XYZ.size(); i++){
-    Z_vec.push_back(XYZ[i].z);
-  }
-
-  //Sorting Z vector
-  sort(Z_vec.begin(), Z_vec.end());
-
-  //Get the XXX first Z values
-  vector<float> Z_fist;
-  for(int i=0; i<soilnb_point; i++){
-    Z_fist.push_back(Z_vec[i]);
-  }
-
-  //Compute soil estimation by Z mean;
-  float Z_soil = fct_mean(Z_fist);
-
-  //---------------------------
-  return Z_soil;
-}
-void Pose::fct_adjustPosToScanner(Cloud* cloud, float Z_scan){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
-  vector<vec3>& XYZ = subset->xyz;
-  vec3& min = subset->min;
-  float Z_soil = fct_soilDetermination(cloud);
-  //---------------------------
-
-  for(int i=0; i<XYZ.size(); i++){
-    XYZ[i].z = XYZ[i].z - Z_soil - Z_scan;
-  }
-
-  //---------------------------
-}
+// Operation function
 mat4 Pose::compute_transformMatrix(vec3 trans, vec3 rotat, vec3 scale){
   glm::mat4 transMat(1.0);
   glm::mat4 Rx(1.0);
@@ -283,7 +323,6 @@ mat4 Pose::compute_transformMatrix(float tx, float ty, float tz, float rx, float
   //---------------------------
   return transMat;
 }
-
 vec3 Pose::compute_anglesError(Cloud* cloud){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   mat4 matReal = subset->transformation;//.RealPose;

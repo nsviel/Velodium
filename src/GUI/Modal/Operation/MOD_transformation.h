@@ -28,6 +28,11 @@ public:
   void cloud_elevation();
   void cloud_alignment();
 
+  //Elevation function
+  void elevation_ground();
+  void elevation_height();
+  void elevation_redressment();
+
 private:
   Transformation* transformManager;
   Pose* poseManager;
@@ -35,6 +40,7 @@ private:
   Glyphs* glyphManager;
 
   int item_width;
+  float ground;
 };
 
 #endif

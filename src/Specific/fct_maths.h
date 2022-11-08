@@ -619,7 +619,7 @@ namespace{
   }
 
   //Geometric functions
-  float fct_get_oriented_angle(glm::vec2 A, glm::vec2 B){
+  float fct_oriented_angle(glm::vec2 A, glm::vec2 B){
     float det = A.x * B.y - A.y * B.x;
     float dot = A.x * B.x + A.y * B.y;
     float angle = atan2(det, dot);

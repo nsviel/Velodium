@@ -26,7 +26,7 @@ Node_operation::Node_operation(Node_engine* node){
 
   this->node_load = node->get_node_load();
 
-  this->fittingManager = new Fitting(this);
+  this->fittingManager = new Fitting();
   this->attribManager = new Attribut(this);
   this->heatmapManager = new Heatmap(this);
   this->colorManager = new Color(this);

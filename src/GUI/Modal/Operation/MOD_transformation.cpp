@@ -23,6 +23,7 @@ MOD_transformation::MOD_transformation(Node_engine* node_engine){
   this->transformManager = new Transformation();
 
   this->item_width = 150;
+  this->ground = 0.0f;
 
   //---------------------------
 }
@@ -33,14 +34,13 @@ void MOD_transformation::design_transformation(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   if(modal_tab.show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &modal_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = cloud->subset_selected;
     //---------------------------
 
     this->actual_transformation_mat();
     this->manual_transformation_mat();
     this->cloud_translation();
     this->cloud_rotation();
-    this->cloud_alignment();
+    this->cloud_elevation();
 
     //---------------------------
     if(ImGui::Button("Close")){
@@ -179,7 +179,6 @@ void MOD_transformation::cloud_translation(){
   if(ImGui::CollapsingHeader("Cloud translation")){
     //---------------------------
 
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Cloud translation");
     ImGui::PushItemWidth(150);
     static float trans[3] = {0.0f, 0.0f, 0.0f};
     ImGui::DragFloat3("XYZ", trans, 0.01f, -10.0f, 10.0f);
@@ -206,7 +205,6 @@ void MOD_transformation::cloud_rotation(){
   if(ImGui::CollapsingHeader("Cloud rotation")){
     //---------------------------
 
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Cloud rotation");
     if(ImGui::Button("X ->")){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(90, 0, 0));
@@ -260,67 +258,102 @@ void MOD_transformation::cloud_rotation(){
   }
 }
 void MOD_transformation::cloud_elevation(){
-  //Z scanner
-  /*ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Cloud elevation");
+  if(ImGui::CollapsingHeader("Cloud elevation")){
+    //---------------------------
+
+    this->elevation_ground();
+    this->elevation_height();
+    this->elevation_redressment();
+
+    //---------------------------
+    ImGui::Separator();
+  }
+}
+
+//Elevation function
+void MOD_transformation::elevation_ground(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
+
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Ground");
+
+  static float ground = 0.0f;
+  ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Ground estimation: %.3f m", ground);
+  static int ground_nb_point = 10000;
+  ImGui::PushItemWidth(75);
+  if(ImGui::DragInt("Ground number of points", &ground_nb_point, 100, 0, 1000000)){
+    if(cloud != nullptr){
+      poseManager->set_ground_nbPoint(ground_nb_point);
+      ground = poseManager->make_soilDetermination(cloud);
+    }
+  }
+  static float Zpos = 0.0f;
+  ImGui::PushItemWidth(75);
+  if(ImGui::DragFloat("Manual setting", &Zpos, 0.01f)){
+    if(cloud != nullptr){
+      poseManager->make_elevation(cloud, Zpos);
+      sceneManager->update_cloud_location(cloud);
+      ground = poseManager->make_soilDetermination(cloud);
+    }
+  }
+
+  //---------------------------
+  ImGui::Separator();
+}
+void MOD_transformation::elevation_height(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //---------------------------
+
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Elevation");
+
+  //Scanner height from ground
+  static float Z_scan = 0.0f;
+  if(ImGui::DragFloat("Elevation", &Z_scan, 0.05f)){
+    if(cloud != nullptr){
+      ground = poseManager->make_soilDetermination(cloud);
+    }
+  }
+  ImGui::SameLine();
 
   //One or all cloud to operate
   static bool allClouds = false;
   ImGui::Checkbox("All clouds", &allClouds);
-
-  static float Z_approx = 0.0f;
-  static float Zpos = 0.0f;
-  ImGui::PushItemWidth(75);
-  if(ImGui::DragFloat("Z", &Zpos, 0.01f)){
-    if(cloud != nullptr){
-      transformManager->make_elevation(cloud, Zpos);
-      sceneManager->update_cloud_location(cloud);
-      Z_approx = transformManager->fct_soilDetermination(cloud);
-    }
-  }
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Z : %.3f", Z_approx);
 
-  //Scanner height from ground
-  static float Z_scan = 0.0f;
-  if(ImGui::DragFloat("Scanner height", &Z_scan, 0.05f)){
-    if(cloud != nullptr){
-      Z_approx = transformManager->fct_soilDetermination(cloud);
-    }
-  }
-  ImGui::SameLine();
-  static int soilnb_point = 10000;
-  if(ImGui::DragInt("Ground pts", &soilnb_point, 100)){
-    if(cloud != nullptr){
-      transformManager->set_soilnb_point(soilnb_point);
-      Z_approx = transformManager->fct_soilDetermination(cloud);
-    }
-  }
-
-  if(ImGui::Button("Accept##0")){
+  if(ImGui::Button("Apply##0")){
     if(allClouds){
       list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
-        transformManager->fct_adjustPosToScanner(cloud, Z_scan);
+        poseManager->make_adjustPosToScanner(cloud, Z_scan);
         sceneManager->update_cloud_location(cloud);
       }
     }
     else{
       if(cloud != nullptr){
-        transformManager->fct_adjustPosToScanner(cloud, Z_scan);
+        poseManager->make_adjustPosToScanner(cloud, Z_scan);
         sceneManager->update_cloud_location(cloud);
-        Z_approx = transformManager->fct_soilDetermination(cloud);
+        ground = poseManager->make_soilDetermination(cloud);
       }
     }
   }
 
   //---------------------------
-  ImGui::Separator();*/
+  ImGui::Separator();
 }
-void MOD_transformation::cloud_alignment(){
+void MOD_transformation::elevation_redressment(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Redressment");
+
+  if(ImGui::Button("Plane fitting on selected points")){
+    if(cloud != nullptr){
+      poseManager->make_alignSelectionToGround(cloud);
+      sceneManager->update_cloud_location(cloud);
+    }
+  }
 
   //---------------------------
+  ImGui::Separator();
 }

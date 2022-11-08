@@ -20,12 +20,8 @@ void Transformation::make_translation(Cloud* cloud, vec3 trans){
   //Apply
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-
-    if(subset->visibility){
-      subset->trans *= translation;
-      this->make_Transformation(subset, subset->root, translation);
-    }
-
+    subset->trans *= translation;
+    this->make_Transformation(subset, subset->root, translation);
   }
 
   //---------------------------
@@ -59,7 +55,7 @@ void Transformation::make_translation(vector<vec3>& XYZ, vec3 trans){
 }
 
 // Rotation
-void Transformation::make_rotation(Cloud* cloud, vec3 COM, vec3 radian){
+mat4 Transformation::make_rotation(Cloud* cloud, vec3 COM, vec3 radian){
   //Rotation matrice creation - rx, ry, rz are in radian !
   glm::mat4 Rx(1.0);
   glm::mat4 Ry(1.0);
@@ -90,15 +86,12 @@ void Transformation::make_rotation(Cloud* cloud, vec3 COM, vec3 radian){
   //Apply
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-
-    if(subset->visibility){
-      subset->rotat *= rotation;
-      this->make_Transformation(subset, COM, rotation);
-    }
-
+    subset->rotat *= rotation;
+    this->make_Transformation(subset, COM, rotation);
   }
 
   //---------------------------
+  return rotation;
 }
 void Transformation::make_rotation(Cloud* cloud, vec3 R, string direction){
   //---------------------------
@@ -194,17 +187,14 @@ void Transformation::make_scaling(Cloud* cloud, float Sxyz){
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = *next(cloud->subset.begin(), i);
 
-    if(subset->visibility){
-      //Reverso old scaling
-      mat4 scaling_reverse(1/subset->scale[0][0]);
-      this->make_Transformation_atomic(subset->xyz, subset->COM, scaling_reverse);
+    //Reverso old scaling
+    mat4 scaling_reverse(1/subset->scale[0][0]);
+    this->make_Transformation_atomic(subset->xyz, subset->COM, scaling_reverse);
 
-      //Scale to new value
-      mat4 scaling(Sxyz);
-      subset->scale = scaling;
-      this->make_Transformation_atomic(subset->xyz, subset->COM, scaling);
-    }
-
+    //Scale to new value
+    mat4 scaling(Sxyz);
+    subset->scale = scaling;
+    this->make_Transformation_atomic(subset->xyz, subset->COM, scaling);
   }
 
   //---------------------------

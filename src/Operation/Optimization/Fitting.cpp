@@ -1,31 +1,15 @@
 #include "Fitting.h"
 
-#include "../Node_operation.h"
-
-#include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyphs.h"
-
 #include "../../Specific/fct_maths.h"
 #include "../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
-Fitting::Fitting(Node_operation* node_ope){
-  //--------------------------
-
-  Node_engine* node_engine = node_ope->get_node_engine();
-
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
-
-  //--------------------------
-}
+Fitting::Fitting(){}
 Fitting::~Fitting(){}
 
 //Sphere fitting
-void Fitting::Sphere_cloudToCenter_all(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+void Fitting::Sphere_cloudToCenter_all(list<Cloud*>* list_cloud){
   //--------------------------
 
   for(int i=0; i<list_cloud->size(); i++){
@@ -130,7 +114,7 @@ vec3 Fitting::Sphere_FindCenter(Subset* subset){
 }
 
 //Plane fitting
-vec3 Fitting::plane_fitting_normal(vector<vec3>& vec){
+std::pair<vec3, vec3> Fitting::plane_fitting_normal(vector<vec3>& vec){
   //--------------------------
 
 	// copy coordinates to  matrix in Eigen format
@@ -149,12 +133,11 @@ vec3 Fitting::plane_fitting_normal(vector<vec3>& vec){
 	// we only need the left-singular matrix here
 	auto svd = coord.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV);
 	Eigen::Vector3f plane_normal = svd.matrixU().rightCols<1>();
+
+  // Transtypage
+  vec3 center = vec3(centroid(0), centroid(1), centroid(2));
   vec3 normal = vec3(plane_normal(0), plane_normal(1), plane_normal(2));
 
-  //Another possible return
-  //std::pair<Vector3, Vector3>
-  //return std::make_pair(centroid, plane_normal);
-
   //--------------------------
-  return normal;
+  return std::make_pair(center, normal);
 }

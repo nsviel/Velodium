@@ -18,7 +18,7 @@ public:
   void make_translation(vector<vec3>& XYZ, vec3 trans);
 
   // Rotation
-  void make_rotation(Cloud* cloud, vec3 COM, vec3 angles);
+  mat4 make_rotation(Cloud* cloud, vec3 COM, vec3 angles);
   void make_rotation(Cloud* cloud, vec3 R, string direction);
   void make_rotation(Subset* subset, vec3 COM, vec3 angles);
   void make_rotation(vector<vec3>& XYZ, vec3 radian);

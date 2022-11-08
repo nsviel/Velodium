@@ -200,7 +200,8 @@ void MOD_operation::window_fitting(){
     //Sphere fitting
     if(ImGui::Button("Sphere fitting", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        fitManager->Sphere_cloudToCenter_all();
+        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+        fitManager->Sphere_cloudToCenter_all(list_cloud);
       }
     }
 

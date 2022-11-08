@@ -4,6 +4,7 @@
 #include "../../common.h"
 
 class Transformation;
+class Fitting;
 
 
 class Pose
@@ -26,10 +27,11 @@ public:
     void make_positionning(Cloud* cloud, vec3 pos);
     void make_positionning_XY(Cloud* cloud, vec3 pos);
     void make_positionning_glyph(vector<vec3>& XYZ, vec3& COM, vec3 pos);
+    void make_alignSelectionToGround(Cloud* cloud);
 
     //Operations
-    void fct_adjustPosToScanner(Cloud* cloud, float Z_scan);
-    float fct_soilDetermination(Cloud* cloud);
+    void make_adjustPosToScanner(Cloud* cloud, float Z_scan);
+    float make_soilDetermination(Cloud* cloud);
     mat4 compute_transformMatrix(float tx, float ty, float tz, float rx, float ry, float rz);
     mat4 compute_transformMatrix(vec3 trans, vec3 rotat, vec3 scale);
     vec3 compute_anglesFromTransformationMatrix(const mat4& mat);
@@ -46,11 +48,12 @@ public:
     vec3 fct_radianToDegree(vec3 radian);
 
     //Setters / Getters
-    inline void set_soilnb_point(int value){this->soilnb_point = value;}
+    inline void set_ground_nbPoint(int value){this->soilnb_point = value;}
 
 private:
   Transformation* transformManager;
-  
+  Fitting* fittingManager;
+
   int soilnb_point;
 };
 
