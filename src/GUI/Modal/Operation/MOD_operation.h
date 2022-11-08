@@ -7,7 +7,7 @@ class Scene;
 class Glyphs;
 class Filter;
 class Node_operation;
-class Transforms;
+class Pose;
 class Fitting;
 class Extraction;
 class Selection;
@@ -25,10 +25,10 @@ public:
   void window_fitting();
 
 private:
+  Pose* poseManager;
   Scene* sceneManager;
   Glyphs* glyphManager;
   Filter* filterManager;
-  Transforms* transformManager;
   Fitting* fitManager;
   Extraction* extractionManager;
   Selection* selectionManager;

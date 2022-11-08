@@ -338,6 +338,34 @@ namespace{
 
     //---------------------------
   }
+  glm::vec3 fct_min_z(std::vector<glm::vec3> vec){
+    glm::vec3 min = vec[0];
+    int size = vec.size();
+    //---------------------------
+
+    for(int i=0; i<size; i++){
+      if(min.z > vec[i].z) min = vec[i];
+    }
+
+    //---------------------------
+    return min;
+  }
+  int fct_min_z_id(std::vector<glm::vec3> vec){
+    glm::vec3 min = vec[0];
+    int id = 0;
+    int size = vec.size();
+    //---------------------------
+
+    for(int i=0; i<size; i++){
+      if(min.z > vec[i].z){
+        min = vec[i];
+        id = i;
+      }
+    }
+
+    //---------------------------
+    return id;
+  }
   glm::vec2 fct_min_vec2(std::vector<glm::vec2> XY){
   glm::vec2 min = XY[0];
   int size = XY.size();
@@ -591,11 +619,10 @@ namespace{
   }
 
   //Geometric functions
-  float fct_get_angle(glm::vec3 vec_a, glm::vec3 vec_b){
-    float dot = vec_a.x*vec_b.x + vec_a.y*vec_b.y + vec_a.z*vec_b.z;
-    float lenSq1 = vec_a.x*vec_a.x + vec_a.y*vec_a.y + vec_a.z*vec_a.z;
-    float lenSq2 = vec_b.x*vec_b.x + vec_b.y*vec_b.y + vec_b.z*vec_b.z;
-    float angle = acos(dot/sqrt(lenSq1 * lenSq2));
+  float fct_get_oriented_angle(glm::vec2 A, glm::vec2 B){
+    float det = A.x * B.y - A.y * B.x;
+    float dot = A.x * B.x + A.y * B.y;
+    float angle = atan2(det, dot);
     return angle;
   }
   double fct_angularDistance(const Eigen::Matrix3f &rota, const Eigen::Matrix3f &rotb) {

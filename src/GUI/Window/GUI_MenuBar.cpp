@@ -19,7 +19,7 @@
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Function/Extraction.h"
-#include "../../Operation/Transformation/Transforms.h"
+#include "../../Operation/Transformation/Pose.h"
 
 #include "../../Specific/fct_maths.h"
 
@@ -90,8 +90,8 @@ void GUI_menuBar::MenuBar_menus(){
     }
     if(ImGui::MenuItem("Center cloud", "c")){
       if(!sceneManager->get_is_list_empty()){
-        Transforms transformManager;
-        transformManager.make_centering(cloud);
+        Pose poseManager;
+        poseManager.make_centering(cloud);
         //Module* moduleManager = engineManager->get_moduleManager();
         //moduleManager->module_update();
       }

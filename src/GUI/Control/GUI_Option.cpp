@@ -20,7 +20,7 @@
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Color/Color.h"
-#include "../../Operation/Transformation/Transforms.h"
+#include "../../Operation/Transformation/Transformation.h"
 
 #include "imgui/imgui.h"
 
@@ -252,7 +252,7 @@ void GUI_option::option_parameters(){
     ImGui::SetNextItemWidth(100);
     if(ImGui::DragFloat("Scale", &scale, 0.01, 0.1, 10, "%.2f X")){
       if(!sceneManager->get_is_list_empty()){
-        Transforms transformManager;
+        Transformation transformManager;
         transformManager.make_scaling(cloud, scale);
         sceneManager->update_cloud_location(cloud);
       }

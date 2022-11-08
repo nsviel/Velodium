@@ -8,7 +8,7 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/Cloud/OOBB.h"
-#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/color.h"
 #include "../../../Specific/fct_system.h"
 #include "../../../Specific/fct_zenity.h"
@@ -25,7 +25,7 @@ Obstacle::Obstacle(Module_obstacle* module){
   this->objectManager = node_engine->get_objectManager();
   this->warningManager = module->get_warningManager();
   this->oobbManager = new OOBB();
-  this->transformManager = new Transforms();
+  this->poseManager = new Pose();
 
   this->gt_color = vec4(0, 1, 0, 1.0f);
   this->pr_color = vec4(0.1, 0.1, 0.1, 1.0f);
@@ -135,7 +135,7 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
     vec3 To = obstacle_gt->position[j];
     vec3 Ro = vec3(0, 0, obstacle_gt->heading[j]);
     vec3 So = obstacle_gt->dimension[j];
-    mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
+    mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
 
     oobbManager->update_oobb(glyph, transf);
     objectManager->update_object(glyph);
@@ -155,7 +155,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
     vec3 To = obstacle_pr->position[i];
     vec3 Ro = vec3(0, 0, obstacle_pr->heading[i]);
     vec3 So = obstacle_pr->dimension[i];
-    mat4 transf = transformManager->compute_transformMatrix(To, Ro, So);
+    mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
     vec4 color = AI_color_dic.find(obstacle_pr->name[i])->second;
 
     oobbManager->update_oobb(glyph, transf);

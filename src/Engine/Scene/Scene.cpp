@@ -6,7 +6,7 @@
 #include "../Scene/Configuration.h"
 
 #include "../../Specific/fct_system.h"
-#include "../../Operation/Transformation/Transforms.h"
+#include "../../Operation/Transformation/Transformation.h"
 
 
 //Constructor / Destructor

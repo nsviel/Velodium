@@ -9,7 +9,8 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Operation/Transformation/Attribut.h"
-#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Transformation/Transformation.h"
+#include "../../../Operation/Transformation/Pose.h"
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Color/Color.h"
 #include "../../../Operation/Node_operation.h"
@@ -32,19 +33,14 @@ MOD_attribut::MOD_attribut(Node_gui* node_gui){
   this->attribManager = node_ope->get_attribManager();
   this->colorManager = node_ope->get_colorManager();
   this->glyphManager = node_engine->get_glyphManager();
-  this->transformManager = new Transforms();
+  this->poseManager = new Pose();
+  this->transformManager = new Transformation();
 
   this->item_width = 150;
 
   //---------------------------
 }
-MOD_attribut::~MOD_attribut(){
-  //---------------------------
-
-  delete transformManager;
-
-  //---------------------------
-}
+MOD_attribut::~MOD_attribut(){}
 
 //Main function
 void MOD_attribut::window_normal(){
@@ -106,7 +102,7 @@ void MOD_attribut::window_normal(){
         }
 
         if(normalMethod == 4){
-          float angle = transformManager->make_orientAxis_X(cloud);
+          float angle = poseManager->make_orientAxis_X(cloud);
           attribManager->compute_normals_planXaxis(subset);
           vec3 rotation = vec3(0, 0, -angle);
           transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
@@ -157,7 +153,7 @@ void MOD_attribut::window_normal(){
           }
 
           if(normalMethod == 4){
-            float angle = transformManager->make_orientAxis_X(cloud);
+            float angle = poseManager->make_orientAxis_X(cloud);
             attribManager->compute_normals_planXaxis(subset);
             vec3 rotation = vec3(0, 0, -angle);
             transformManager->make_rotation(cloud, vec3(0,0,0), rotation);

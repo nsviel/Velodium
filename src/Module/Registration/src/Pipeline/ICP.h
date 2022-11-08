@@ -4,7 +4,7 @@
 #include "ICP_Optimization.h"
 #include "../../../../common.h"
 
-class Transforms;
+class Transformation;
 class ICP_Matching;
 class ICP_Rejection;
 //class Keypoint;
@@ -77,7 +77,7 @@ private:
   ICP_Matching* matchManager;
   ICP_Optimization* optManager;
   ICP_Rejection* rejectManager;
-  Transforms* transformManager;
+  Transformation* transformManager;
   Glyphs* glyphManager;
   //Keypoint* keyManager;
   //Algo_PCL* pclManager;

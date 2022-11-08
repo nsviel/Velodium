@@ -9,7 +9,7 @@ class Pather;
 class Object;
 class Color;
 class Heatmap;
-class Transforms;
+class Transformation;
 class Renderer;
 class Configuration;
 
@@ -44,7 +44,7 @@ private:
   Configuration* configManager;
   Scene* sceneManager;
   Color* colorManager;
-  Transforms* transformManager;
+  Transformation* transformManager;
   Object* objectManager;
   Heatmap* heatmapManager;
   Pather* pathManager;

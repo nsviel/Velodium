@@ -1,4 +1,4 @@
-#include "GUI_Registration.h"
+poseManager.#include "GUI_Registration.h"
 
 #include "../Module_registration.h"
 #include "../src/Pipeline/ICP.h"
@@ -10,7 +10,7 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
-#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Transformation/Pose.h"
 
 
 //Constructor / Destructor
@@ -24,7 +24,6 @@ GUI_registration::GUI_registration(Module_registration* module){
   this->glyphManager = node_engine->get_glyphManager();
   //this->regisManager = node_module->get_regisManager();
   //this->icpManager = regisManager->get_icpManager();
-  this->transformManager = new Transforms();
 
   this->regis_algo = 0;
 
@@ -245,8 +244,8 @@ void GUI_registration::regist_Stats(){
   //--->world transformation
   vec3 E_trans, E_angle;
   if(!sceneManager->get_is_list_empty()){
-    E_trans = transformManager->compute_translationsError(cloud);
-    E_angle = transformManager->compute_anglesError(cloud);
+    E_trans = poseManager.compute_translationsError(cloud);
+    E_angle = poseManager.compute_anglesError(cloud);
 
     E_trans.x = E_trans.x * 1000;
     E_trans.y = E_trans.y * 1000;
@@ -262,9 +261,9 @@ void GUI_registration::regist_Stats(){
     if(ImGui::TreeNode("##146") && !sceneManager->get_is_list_empty()){
       mat4 matReal = cloud->transformation.RealTransformation;
       mat4 matIcp = cloud->transformation.TransformationMatrix;
-      vec3 angleReal = transformManager->compute_anglesFromTransformationMatrix(matReal);
-      vec3 transReal = transformManager->compute_translFromTransformationMatrix(matReal);
-      vec3 angleIcp = transformManager->compute_anglesFromTransformationMatrix(matIcp);
+      vec3 angleReal = poseManager.compute_anglesFromTransformationMatrix(matReal);
+      vec3 transReal = poseManager.compute_translFromTransformationMatrix(matReal);
+      vec3 angleIcp = poseManager.compute_anglesFromTransformationMatrix(matIcp);
       vec3 transIcp = transformManager->compute_translFromTransformationMatrix(matIcp);
       ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Real");
       ImGui::SameLine();

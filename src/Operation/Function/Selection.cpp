@@ -3,7 +3,8 @@
 #include "CoordTransform.h"
 
 #include "../Node_operation.h"
-#include "../Transformation/Transforms.h"
+#include "../Transformation/Transformation.h"
+#include "../Transformation/Pose.h"
 #include "../Transformation/Attribut.h"
 #include "../Optimization/Fitting.h"
 
@@ -30,11 +31,12 @@ Selection::Selection(Node_operation* node_ope){
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
   this->coordManager = node_ope->get_coordManager();
-  this->transformManager = new Transforms();
   this->attribManager = node_ope->get_attribManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
   this->fittingManager = node_ope->get_fittingManager();
+  this->poseManager = new Pose();
+  this->transformManager = new Transformation();
 
   this->gui_X = 0;
   this->gui_Y = 0;
@@ -68,7 +70,7 @@ void Selection::validate(){
     //Plane normal computation
     if(idx.size() == 0){
       this->mark_planeABpoints(cloud);
-      float angle = transformManager->make_orientAxis_X(cloud);
+      float angle = poseManager->make_orientAxis_X(cloud);
       attribManager->compute_normals(subset);
       vec3 rotation = vec3(0, 0, -angle);
       transformManager->make_rotation(cloud, subset->COM, rotation);
@@ -460,7 +462,7 @@ void Selection::mouse_cloudPicking(){
   //---------------------------
 
   vec3 point = coordManager->CursorToGround();
-  transformManager->make_positionning_XY(cloud, point);
+  poseManager->make_positionning_XY(cloud, point);
 
   //---------------------------
   sceneManager->update_cloud_location(cloud);

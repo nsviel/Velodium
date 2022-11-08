@@ -6,7 +6,7 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/fct_maths.h"
 
 
@@ -18,6 +18,7 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->slam_map = slam->get_slam_map();
+  this->poseManager = new Pose();
 
   this->thres_ego_trans = 2.0f;
   this->thres_ego_rotat = 15.0f;
@@ -111,7 +112,6 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
 bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
-  Transforms transformManager;
   bool success = true;
   //---------------------------
 
@@ -122,8 +122,8 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
     frame_m0->ego_rotat = AngularDistance(frame_m0->rotat_b, frame_m0->rotat_e);
     frame_m0->diff_trans = (frame_m0->trans_b - frame_m1->trans_b).norm() + (frame_m0->trans_e - frame_m1->trans_e).norm();
     frame_m0->diff_rotat = AngularDistance(frame_m1->rotat_b, frame_m0->rotat_b) + AngularDistance(frame_m1->rotat_e, frame_m0->rotat_e);
-    vec3 angles_m0 = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-    vec3 angles_m1 = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
+    vec3 angles_m0 = poseManager->compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    vec3 angles_m1 = poseManager->compute_anglesFromTransformationMatrix(frame_m1->rotat_b);
     diff_angle = angles_m1 - angles_m0;
   }
 
@@ -199,7 +199,6 @@ void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float dura
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   slamap* local_map = slam_map->get_local_map();
-  Transforms transformManager;
   //---------------------------
 
   //Fill stats
@@ -219,12 +218,12 @@ void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float dura
 
   vec3 rotat_b_rlt, rotat_e_rlt;
   if(frame_m1 != nullptr && frame_m0->ID != 0){
-    vec3 a1_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-    vec3 a2_b = transformManager.compute_anglesFromTransformationMatrix(frame_m1->rotat_e);
+    vec3 a1_b = poseManager->compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    vec3 a2_b = poseManager->compute_anglesFromTransformationMatrix(frame_m1->rotat_e);
     rotat_b_rlt = a1_b - a2_b;
 
-    vec3 a1_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
-    vec3 a2_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+    vec3 a1_e = poseManager->compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
+    vec3 a2_e = poseManager->compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
     rotat_e_rlt = a1_e - a2_e;
   }
 
@@ -232,8 +231,8 @@ void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float dura
   frame_m0->rotat_b_rlt = rotat_b_rlt;
   frame_m0->trans_e_rlt = trans_e_rlt;
   frame_m0->rotat_e_rlt = rotat_e_rlt;
-  frame_m0->angle_b = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
-  frame_m0->angle_e = transformManager.compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
+  frame_m0->angle_b = poseManager->compute_anglesFromTransformationMatrix(frame_m0->rotat_b);
+  frame_m0->angle_e = poseManager->compute_anglesFromTransformationMatrix(frame_m0->rotat_e);
 
   //---------------------------
 }

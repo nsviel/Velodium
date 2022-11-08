@@ -5,7 +5,7 @@
 
 class Scene;
 class Glyphs;
-class Transforms;
+class Transformation;
 class ICP;
 class Attribut;
 class Plotting;

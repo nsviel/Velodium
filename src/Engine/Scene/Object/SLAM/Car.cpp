@@ -1,7 +1,7 @@
 #include "Car.h"
 
 #include "../../../../Load/Format/file_OBJ.h"
-#include "../../../../Operation/Transformation/Transforms.h"
+#include "../../../../Operation/Transformation/Transformation.h"
 #include "../../../../Specific/fct_transtypage.h"
 
 
@@ -9,7 +9,8 @@
 Car::Car(){
   //---------------------------
 
-  this->transformManager = new Transforms();
+  this->transformManager = new Transformation();
+
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
   this->visibility = false;
   this->width = 2;
@@ -21,7 +22,6 @@ Car::Car(){
 Car::~Car(){
   //---------------------------
 
-  delete transformManager;
   delete car;
 
   //---------------------------

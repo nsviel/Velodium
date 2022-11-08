@@ -1,7 +1,7 @@
 #ifndef GUI_CONTROL_H
 #define GUI_CONTROL_H
 
-#include "../../Operation/Transformation/Transforms.h"
+#include "../../Operation/Transformation/Transformation.h"
 
 #include "../../common.h"
 
@@ -9,7 +9,7 @@ class Scene;
 class Camera;
 class Attribut;
 class Pather;
-class Transforms;
+class Transformation;
 class Extraction;
 class Glyphs;
 class Selection;
@@ -17,6 +17,7 @@ class Heatmap;
 class Dimension;
 class Node_gui;
 class Player;
+class Pose;
 
 
 class GUI_Control
@@ -52,8 +53,8 @@ public:
   inline int* get_mouseWheelMode(){return &wheel_mode;}
 
 private:
-  Transforms transformManager;
-
+  Transformation* transformManager;
+  Pose* poseManager;
   Node_gui* node_gui;
   Dimension* dimManager;
   Camera* cameraManager;

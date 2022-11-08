@@ -4,7 +4,8 @@
 class Node_operation;
 class Scene;
 class Object;
-class Transforms;
+class Transformation;
+class Pose;
 class Attribut;
 class Camera;
 class Dimension;
@@ -61,10 +62,11 @@ public:
   inline void set_glY(float value){this->gl_Y = value;}
 
 private:
+  Transformation* transformManager;
+  Pose* poseManager;
   Dimension* dimManager;
   Scene* sceneManager;
   Attribut* attribManager;
-  Transforms* transformManager;
   Object* objectManager;
   Camera* cameraManager;
   CoordTransform* coordManager;

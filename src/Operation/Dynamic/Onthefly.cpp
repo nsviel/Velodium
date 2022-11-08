@@ -12,7 +12,7 @@
 #include "../../Load/Processing/Saver.h"
 #include "../../Load/Processing/Loader.h"
 
-#include "../../Operation/Transformation/Transforms.h"
+#include "../../Operation/Transformation/Transformation.h"
 #include "../../Specific/fct_maths.h"
 
 
@@ -45,35 +45,6 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
   if(cloud->onthefly){
     vector<string>& list_path = cloud->list_path;
     list<int>& list_id = cloud->list_loaded;
-
-    //Find the correction
-    if(cloud->ID_file == 1){
-      Transforms transform;
-      Subset* subset = *next(cloud->subset.begin(), 0);
-      vec3 min = fct_min_vec3(subset->xyz);
-
-      float angle = fct_get_angle(min, vec3(1, 0, min.z));
-
-      transform.make_rotation(subset, vec3(0,0,0), vec3(0,0,-angle));
-
-      min = fct_min_vec3(subset->xyz);
-      //sayVec3(min)
-      float angle_2 = fct_get_angle(min, vec3(1, 0, 0));
-      transform.make_rotation(subset, vec3(0,0,0), vec3(0,-angle_2,0));
-
-
-      /*
-
-
-      float dot = min.x*min.x + min.y*min.y;
-      float lenSq1 = min.x*min.x + min.y*min.y + min.z*min.z;
-      float lenSq2 = min.x*min.x + min.y*min.y;
-      float angle = acos(dot/sqrt(lenSq1 * lenSq2));
-      say(fct_radianToDegree(angle));
-
-      transform.make_rotation(subset, vec3(0,0,0), vec3(0,0,fct_degreeToRadian(25)));
-*/
-    }
 
     //Check if the subset is already loaded
     bool already_load = false;

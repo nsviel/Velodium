@@ -8,7 +8,7 @@ class Node_engine;
 class ICP;
 class Registration;
 class Glyphs;
-class Transforms;
+class Pose;
 class Module_registration;
 
 
@@ -31,11 +31,12 @@ public:
   void regist_Stats();
 
 private:
+  Pose poseManager;
+  
   Scene* sceneManager;
   ICP* icpManager;
   Registration* regisManager;
   Glyphs* glyphManager;
-  Transforms* transformManager;
 
   int regis_algo;
 };

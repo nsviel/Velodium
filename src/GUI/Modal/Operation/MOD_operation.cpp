@@ -5,7 +5,7 @@
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Filter.h"
-#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Transformation/Pose.h"
 #include "../../../Operation/Optimization/Fitting.h"
 #include "../../../Operation/Function/Extraction.h"
 #include "../../../Operation/Function/Selection.h"
@@ -27,19 +27,13 @@ MOD_operation::MOD_operation(Node_operation* node_ope){
   this->extractionManager = node_ope->get_extractionManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
-  this->transformManager = new Transforms();
+  this->poseManager = new Pose();
 
   this->item_width = 150;
 
   //---------------------------
 }
-MOD_operation::~MOD_operation(){
-  //---------------------------
-
-  delete transformManager;
-
-  //---------------------------
-}
+MOD_operation::~MOD_operation(){}
 
 //Main function
 void MOD_operation::window_selection(){
@@ -220,8 +214,8 @@ void MOD_operation::window_fitting(){
     //Axis alignement
     if(ImGui::Button("X alignement", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        transformManager->make_orientAxis_X(cloud);
-        transformManager->make_alignAxis_X(cloud);
+        poseManager->make_orientAxis_X(cloud);
+        poseManager->make_alignAxis_X(cloud);
         sceneManager->update_cloud_location(cloud);
       }
     }

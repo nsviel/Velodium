@@ -101,7 +101,7 @@ Glyph* Mark::obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in
   /*sphere->COM = fct_c
 
   //Set glyph at location
-  Transforms transformManager;
+  Transformation transformManager;
   transformManager.make_positionning_glyph(sphere->location, sphere->COM, pos);
   this->update_glyph_location(glyph);
   ID_sphere++;*/

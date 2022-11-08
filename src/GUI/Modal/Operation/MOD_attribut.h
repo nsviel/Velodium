@@ -5,12 +5,13 @@
 
 class Scene;
 class Attribut;
-class Transforms;
+class Transformation;
 class Glyphs;
 class Heatmap;
 class Node_gui;
 class GUI_Color;
 class Color;
+class Pose;
 
 
 class MOD_attribut
@@ -26,11 +27,12 @@ public:
   void window_color();
 
 private:
+  Transformation* transformManager;
+  Pose* poseManager;
   GUI_Color* gui_color;
   Scene* sceneManager;
   Attribut* attribManager;
   Color* colorManager;
-  Transforms* transformManager;
   Glyphs* glyphManager;
   Heatmap* heatmapManager;
 

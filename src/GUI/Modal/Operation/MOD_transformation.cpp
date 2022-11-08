@@ -4,8 +4,10 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
-#include "../../../Operation/Transformation/Transforms.h"
+#include "../../../Operation/Transformation/Transformation.h"
+#include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/fct_transtypage.h"
+#include "../../../Specific/fct_maths.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;
@@ -17,19 +19,14 @@ MOD_transformation::MOD_transformation(Node_engine* node_engine){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
-  this->transformManager = new Transforms();
+  this->poseManager = new Pose();
+  this->transformManager = new Transformation();
 
   this->item_width = 150;
 
   //---------------------------
 }
-MOD_transformation::~MOD_transformation(){
-  //---------------------------
-
-  delete transformManager;
-
-  //---------------------------
-}
+MOD_transformation::~MOD_transformation(){}
 
 //Main function
 void MOD_transformation::design_transformation(){
@@ -212,7 +209,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Cloud rotation");
     if(ImGui::Button("X ->")){
       if(cloud != nullptr){
-        vec3 radian = transformManager->fct_degreeToRadian(vec3(90, 0, 0));
+        vec3 radian = fct_degreeToRadian_vec3(vec3(90, 0, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
         sceneManager->update_subset_location(subset);
       }
@@ -220,7 +217,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::SameLine();
     if(ImGui::Button("X <-")){
       if(cloud != nullptr){
-        vec3 radian = transformManager->fct_degreeToRadian(vec3(-90, 0, 0));
+        vec3 radian = fct_degreeToRadian_vec3(vec3(-90, 0, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
         sceneManager->update_subset_location(subset);
       }
@@ -228,7 +225,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::SameLine();
     if(ImGui::Button("Y ->")){
       if(cloud != nullptr){
-        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, 90, 0));
+        vec3 radian = fct_degreeToRadian_vec3(vec3(0, 90, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
         sceneManager->update_subset_location(subset);
       }
@@ -236,7 +233,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::SameLine();
     if(ImGui::Button("Y <-")){
       if(cloud != nullptr){
-        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, -90, 0));
+        vec3 radian = fct_degreeToRadian_vec3(vec3(0, -90, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
         sceneManager->update_subset_location(subset);
       }
@@ -244,7 +241,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::SameLine();
     if(ImGui::Button("Z ->")){
       if(cloud != nullptr){
-        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, 0, 90));
+        vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, 90));
         transformManager->make_rotation(subset, subset->COM, radian);
         sceneManager->update_subset_location(subset);
       }
@@ -252,7 +249,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::SameLine();
     if(ImGui::Button("Z <-")){
       if(cloud != nullptr){
-        vec3 radian = transformManager->fct_degreeToRadian(vec3(0, 0, -90));
+        vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, -90));
         transformManager->make_rotation(subset, subset->COM, radian);
         sceneManager->update_subset_location(subset);
       }

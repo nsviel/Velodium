@@ -6,6 +6,7 @@
 class SLAM;
 class Scene;
 class SLAM_map;
+class Pose;
 
 
 class SLAM_assessment
@@ -40,6 +41,7 @@ public:
   inline int* get_nb_rlt_previous_pose(){return &nb_rlt_previous_pose;}
 
 private:
+  Pose* poseManager;
   Scene* sceneManager;
   SLAM_map* slam_map;
 

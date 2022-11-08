@@ -6,7 +6,8 @@
 class Node_engine;
 class Scene;
 class Glyphs;
-class Transforms;
+class Transformation;
+class Pose;
 
 
 class MOD_transformation
@@ -28,9 +29,10 @@ public:
   void cloud_alignment();
 
 private:
+  Transformation* transformManager;
+  Pose* poseManager;
   Scene* sceneManager;
   Glyphs* glyphManager;
-  Transforms* transformManager;
 
   int item_width;
 };

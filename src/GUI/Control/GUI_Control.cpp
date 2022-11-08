@@ -16,6 +16,8 @@
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Transformation/Attribut.h"
+#include "../../Operation/Transformation/Transformation.h"
+#include "../../Operation/Transformation/Pose.h"
 #include "../../Operation/Function/Selection.h"
 #include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Color/Heatmap.h"
@@ -45,6 +47,8 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_pathManager();
   this->playerManager = node_ope->get_playerManager();
+  this->transformManager = new Transformation();
+  this->poseManager = new Pose();
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");
@@ -150,7 +154,8 @@ void GUI_Control::control_mouse_wheel(){
           R = vec3(radian, 0, 0);
         }
 
-        transformManager.make_cloud_rotation(cloud, R, direction);
+        poseManager->compute_COM(cloud);
+        transformManager->make_rotation(cloud, R, direction);
         sceneManager->update_subset_location(cloud->subset_selected);
         sceneManager->update_cloud_glyph(cloud);
       }
@@ -429,7 +434,7 @@ void GUI_Control::key_c(){
   //----------------------------
 
   if(!sceneManager->get_is_list_empty()){
-    transformManager.make_centering(cloud);
+    poseManager->make_centering(cloud);
     sceneManager->update_cloud_location(cloud);
     sceneManager->update_cloud_glyph(cloud);
   }
@@ -440,7 +445,7 @@ void GUI_Control::key_translation(vec3 trans){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
-  transformManager.make_translation(cloud->subset_selected, trans);
+  transformManager->make_translation(cloud->subset_selected, trans);
   sceneManager->update_subset_location(cloud->subset_selected);
   sceneManager->update_cloud_glyph(cloud);
 
@@ -450,7 +455,7 @@ void GUI_Control::key_rotation(vec3 rotat){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
-  transformManager.make_rotation(cloud->subset_selected, vec3(0,0,0), rotat);
+  transformManager->make_rotation(cloud->subset_selected, vec3(0,0,0), rotat);
   sceneManager->update_subset_location(cloud->subset_selected);
   sceneManager->update_cloud_glyph(cloud);
 

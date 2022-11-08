@@ -4,7 +4,7 @@
 
 #include "../Correspondence/Keypoint.h"
 
-#include "../../../../Operation/Transformation/Transforms.h"
+#include "../../../../Operation/Transformation/Transformation.h"
 #include "../../../../Engine/Scene/Glyphs.h"
 #include "../../../../Specific/fct_transtypage.h"
 
@@ -14,7 +14,7 @@ ICP::ICP(Glyphs* glyph){
   //---------------------------
 
   this->glyphManager = glyph;
-  this->transformManager = new Transforms();
+  this->transformManager = new Transformation();
   this->matchManager = new ICP_Matching();
   this->optManager = new ICP_Optimization();
   this->rejectManager = new ICP_Rejection();

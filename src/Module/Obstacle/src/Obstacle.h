@@ -8,7 +8,7 @@ class Scene;
 class Object;
 class Warning;
 class OOBB;
-class Transforms;
+class Pose;
 class Prediction;
 class Pather;
 
@@ -39,10 +39,10 @@ public:
   inline bool* get_with_warning(){return &with_warning;}
 
 private:
+  Pose* poseManager;
   Scene* sceneManager;
   OOBB* oobbManager;
   Warning* warningManager;
-  Transforms* transformManager;
   Object* objectManager;
   Prediction* predManager;
   Pather* pathManager;

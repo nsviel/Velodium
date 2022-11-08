@@ -6,7 +6,7 @@
 
 #include "../../../../common.h"
 
-class Transforms;
+class Transformation;
 
 
 class Car
@@ -26,7 +26,7 @@ public:
   inline void set_visibility(bool value){this->visibility = value;}
 
 private:
-  Transforms* transformManager;
+  Transformation* transformManager;
   Glyph* car;
 
   vec4 color;
