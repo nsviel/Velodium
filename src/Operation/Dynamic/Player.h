@@ -48,10 +48,10 @@ public:
 
 private:
   Scene* sceneManager;
-  Loader* loadManager;
+  Loader* loaderManager;
   Timer* timerManager;
   Online* onlineManager;
-  Saver* saveManager;
+  Saver* saverManager;
   Object* objectManager;
   Onthefly* flyManager;
   Configuration* configManager;

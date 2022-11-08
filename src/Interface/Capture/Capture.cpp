@@ -28,7 +28,7 @@ Capture::Capture(Node_interface* node_interface){
   this->configManager = node_engine->get_configManager();
   this->node_ope = node_engine->get_node_ope();
   this->sceneManager = node_engine->get_sceneManager();
-  this->loaderManager = node_load->get_loadManager();
+  this->loaderManager = node_load->get_loaderManager();
   this->scalaManager = new Scala(node_interface);
   this->veloManager = new Velodyne(node_interface);
 

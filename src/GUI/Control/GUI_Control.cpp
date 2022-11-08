@@ -45,7 +45,7 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->glyphManager = node_engine->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
-  this->pathManager = node_load->get_pathManager();
+  this->pathManager = node_load->get_patherManager();
   this->playerManager = node_ope->get_playerManager();
   this->transformManager = new Transformation();
   this->poseManager = new Pose();

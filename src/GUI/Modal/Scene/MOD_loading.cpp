@@ -22,8 +22,8 @@ MOD_loading::MOD_loading(Node_engine* node_engine){
   Node_load* node_load = node_engine->get_node_load();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->loaderManager = node_load->get_loadManager();
-  this->pathManager = node_load->get_pathManager();
+  this->loaderManager = node_load->get_loaderManager();
+  this->pathManager = node_load->get_patherManager();
 
   this->item_width = 150;
   this->file_selected = false;

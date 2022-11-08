@@ -19,7 +19,7 @@ Extraction::Extraction(Node_operation* node_ope){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
-  this->loaderManager = node_load->get_loadManager();
+  this->loaderManager = node_load->get_loaderManager();
   this->objectManager = node_engine->get_objectManager();
 
   this->list_part = new list<subpart*>;

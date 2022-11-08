@@ -18,7 +18,7 @@ Scala_file::Scala_file(Node_engine* node_engine){
   Node_load* node_load = node_engine->get_node_load();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->loaderManager = node_load->get_loadManager();
+  this->loaderManager = node_load->get_loaderManager();
 
   //---------------------------
 }

@@ -39,7 +39,7 @@ GUI_option::GUI_option(Node_gui* node_gui){
   this->sceneManager = node_engine->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->colorManager = node_ope->get_colorManager();
-  this->pathManager = node_load->get_pathManager();
+  this->pathManager = node_load->get_patherManager();
   this->configManager = node_engine->get_configManager();
 
   //---------------------------

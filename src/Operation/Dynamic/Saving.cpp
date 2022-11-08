@@ -27,7 +27,7 @@ Saving::Saving(Node_operation* node){
   this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->saverManager = node_load->get_saveManager();
+  this->saverManager = node_load->get_saverManager();
 
   //---------------------------
   this->update_configuration();

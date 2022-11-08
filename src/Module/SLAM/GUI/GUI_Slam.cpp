@@ -87,6 +87,7 @@ void GUI_Slam::design_parameter(){
     this->parameter_offline();
     this->parameter_optimization();
     this->parameter_localMap();
+    this->parameter_localCloud();
     this->parameter_normal();
     this->parameter_robustesse();
 
@@ -143,10 +144,10 @@ void GUI_Slam::parameter_glyph(){
   ImGui::Checkbox("Trajectory", traj_visu);
   ImGui::NextColumn();
 
-  //Trajectory
+  //Local map
   Localmap* mapObject = objectManager->get_object_localmap();
-  bool* map_visu = mapObject->get_visibility();
-  ImGui::Checkbox("Local map", map_visu);
+  Glyph* localmap = mapObject->get_localmap();
+  ImGui::Checkbox("Local map", &localmap->visibility);
   ImGui::NextColumn();
 
   //---------------------------
@@ -298,6 +299,43 @@ void GUI_Slam::parameter_localMap(){
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The maximum number of points per voxel of the map");
     }
+
+    //---------------------------
+    ImGui::TreePop();
+  }
+}
+void GUI_Slam::parameter_localCloud(){
+  if(ImGui::TreeNode("Local cloud##tree")){
+    //---------------------------
+
+    // With local cloud
+    bool* with_local_cloud = slam_map->get_with_local_cloud();
+    ImGui::Checkbox("With local cloud", with_local_cloud);
+
+    // Visibility
+    Localmap* mapObject = objectManager->get_object_localmap();
+    Glyph* glyph = mapObject->get_localcloud();
+    ImGui::Checkbox("Visibility", &glyph->visibility);
+
+    // Save resulting cloud
+    ImGui::PushItemWidth(100);
+    if(ImGui::Button("Save##localcloud", ImVec2(75,0))){
+      slam_map->save_local_cloud();
+    }
+
+    // Cloud map parameters
+    slamap* local_cloud = slam_map->get_local_cloud();
+    float voxel_width = (float)local_cloud->voxel_width;
+    int* voxel_capacity = &local_cloud->voxel_capacity;
+    ImGui::PushItemWidth(100);
+    if(ImGui::DragFloat("Voxel width", &voxel_width, 0.001f, 0.01f, 1.0f, "%.4lf")){
+      local_cloud->voxel_width = voxel_width;
+    }
+    if(ImGui::DragInt("Voxel capacity", voxel_capacity, 1, 1, 1000, "%d")){
+      local_cloud->voxel_capacity = *voxel_capacity;
+    }
+
+    //Local cloud color
 
     //---------------------------
     ImGui::TreePop();

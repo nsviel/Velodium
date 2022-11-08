@@ -10,6 +10,19 @@
 
 namespace{
 
+  //EIGEN TO EIGEN
+  Eigen::Vector4d eigen_4d(Eigen::Vector3d in){
+    Eigen::Vector4d out = Eigen::Vector4d::Zero();
+    //---------------------------
+
+    for(int i=0; i<3; i++){
+      out(i) = in[i];
+    }
+
+    //---------------------------
+    return out;
+  }
+
   //EIGEN to GLM
   Subset eigen_to_glm(Eigen::MatrixXf mat_in){
     Subset subset;
@@ -135,6 +148,18 @@ namespace{
     for(int i=0; i<3; i++){
       vec_eig(i) = vec_glm[i];
     }
+
+    //---------------------------
+    return vec_eig;
+  }
+  Eigen::Vector4d glm_to_eigen_vec3_4d(const glm::vec3& vec, float scalar){
+    Eigen::Vector4d vec_eig = Eigen::Vector4d::Zero();
+    //---------------------------
+
+    for(int i=0; i<3; i++){
+      vec_eig(i) = vec[i];
+    }
+    vec_eig(3) = scalar;
 
     //---------------------------
     return vec_eig;

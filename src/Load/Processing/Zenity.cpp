@@ -62,11 +62,11 @@ vector<string> Zenity::zenity_loading(string& path_current_dir, string title){
   //---------------------------
   return path_vec;
 }
-string Zenity::zenity_saving(string& path_current_dir, string filename){
+string Zenity::zenity_saving(string& path_current_dir, string filename, string format){
   //---------------------------
 
+  string path = path_current_dir + filename;
   string path_saving = "";
-  string path = path_current_dir + filename +".pts";
 
   //Open Zenity window
   string zenity = "zenity --file-selection --save --title=Save --filename=" + path;

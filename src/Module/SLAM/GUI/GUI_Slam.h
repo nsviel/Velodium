@@ -35,6 +35,7 @@ public:
   void parameter_glyph();
   void parameter_optimization();
   void parameter_localMap();
+  void parameter_localCloud();
   void parameter_normal();
   void parameter_robustesse();
 

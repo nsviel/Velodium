@@ -25,7 +25,7 @@ Onthefly::Onthefly(Node_operation* node_ope){
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->loadManager = node_load->get_loadManager();
+  this->loaderManager = node_load->get_loaderManager();
 
   //---------------------------
   this->update_configuration();
@@ -56,7 +56,7 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
 
     //If not, load it
     if(already_load == false && ID < list_path.size() && ID >= cloud->ID_file){
-      bool ok = loadManager->load_cloud_oneFrame(cloud, list_path[ID]);
+      bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[ID]);
       if(ok) list_id.push_back(ID);
     }
 

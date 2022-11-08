@@ -49,7 +49,7 @@ GUI_menuBar::GUI_menuBar(Node_gui* node){
   this->gui_player = node_gui->get_gui_player();
   this->sceneManager = node_engine->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();
-  this->pathManager = node_load->get_pathManager();
+  this->pathManager = node_load->get_patherManager();
   this->glManager = node_engine->get_glManager();
   this->texManager = new Textures();
 

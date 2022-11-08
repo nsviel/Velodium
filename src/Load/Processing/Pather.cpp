@@ -27,8 +27,8 @@ Pather::Pather(Node_load* node_load){
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
-  this->loaderManager = node_load->get_loadManager();
-  this->saverManager = node_load->get_saveManager();
+  this->loaderManager = node_load->get_loaderManager();
+  this->saverManager = node_load->get_saverManager();
   this->zenityManager = new Zenity();
 
   //---------------------------
@@ -249,11 +249,11 @@ void Pather::saving_subset(Subset* subset){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_saving(path_current_dir, subset->name);
+  string path_saving = zenityManager->zenity_saving(path_current_dir, subset->name, "ply");
 
   //Save current cloud
   if(subset != nullptr && path_saving != ""){
-    saverManager->save_subset(subset, ".ply", path_saving);
+    saverManager->save_subset(subset, "ply", path_saving);
   }
 
   //---------------------------
@@ -279,7 +279,7 @@ void Pather::saving_cloud(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_saving(path_current_dir, cloud->name);
+  string path_saving = zenityManager->zenity_saving(path_current_dir, cloud->name, cloud->format);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){

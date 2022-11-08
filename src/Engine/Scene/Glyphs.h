@@ -38,7 +38,6 @@ private:
   Node_engine* node_engine;
 
   list<Glyph*>* list_glyph;
-  bool is_visualization;
   int ID_glyph;
 };
 

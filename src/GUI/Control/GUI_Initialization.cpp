@@ -18,8 +18,8 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   Node_load* node_load = node_engine->get_node_load();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->loaderManager = node_load->get_loadManager();
-  this->pathManager = node_load->get_pathManager();
+  this->loaderManager = node_load->get_loaderManager();
+  this->pathManager = node_load->get_patherManager();
 
   //---------------------------
 }

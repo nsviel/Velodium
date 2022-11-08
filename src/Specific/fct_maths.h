@@ -67,6 +67,32 @@ namespace{
     //---------------------------
     return dist;
   }
+  double fct_distance(Eigen::Vector4d pt1, Eigen::Vector4d pt2){
+    //Euclidean distance
+    //---------------------------
+
+    double X = pt1(0) - pt2(0);
+    double Y = pt1(1) - pt2(1);
+    double Z = pt1(2) - pt2(2);
+
+    double dist = sqrt(pow(X, 2) + pow(Y, 2) + pow(Z, 2));
+
+    //---------------------------
+    return dist;
+  }
+  double fct_distance(Eigen::Vector4d pt1, Eigen::Vector3d pt2){
+    //Euclidean distance
+    //---------------------------
+
+    double X = pt1(0) - pt2(0);
+    double Y = pt1(1) - pt2(1);
+    double Z = pt1(2) - pt2(2);
+
+    double dist = sqrt(pow(X, 2) + pow(Y, 2) + pow(Z, 2));
+
+    //---------------------------
+    return dist;
+  }
   glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
     glm::vec3 centroid = glm::vec3(0, 0, 0);
     //---------------------------

@@ -22,7 +22,7 @@ public:
 
 private:
   Scene* sceneManager;
-  Loader* loadManager;
+  Loader* loaderManager;
   Configuration* configManager;
 
   int range;

@@ -29,8 +29,8 @@ Player::Player(Node_operation* node_ope){
   this->onlineManager = node_ope->get_onlineManager();
   this->objectManager = node_engine->get_objectManager();;
   this->sceneManager = node_engine->get_sceneManager();
-  this->saveManager = node_load->get_saveManager();
-  this->loadManager = node_load->get_loadManager();
+  this->saverManager = node_load->get_saverManager();
+  this->loaderManager = node_load->get_loaderManager();
   this->flyManager = node_ope->get_flyManager();
   this->timerManager = new Timer();
 
@@ -204,7 +204,7 @@ void Player::player_save(Cloud* cloud){
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
-    saveManager->save_subset(subset, "ply", player_saveas);
+    saverManager->save_subset(subset, "ply", player_saveas);
   }
 
   //---------------------------

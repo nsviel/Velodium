@@ -14,13 +14,14 @@ using priority_queue_iNN = std::priority_queue<iNN, std::vector<iNN>, Comparator
 
 typedef tsl::robin_map<int, std::vector<Eigen::Vector3d>> voxelMap;
 typedef tsl::robin_map<int, std::vector<Eigen::Vector3d>>::iterator voxelMap_it;
-typedef tsl::robin_map<int, std::vector<Eigen::Vector4d>> gridMap;
-typedef tsl::robin_map<int, std::vector<glm::vec3>> slamMap;
+typedef tsl::robin_map<int, std::vector<Eigen::Vector4d>> cloudMap;
+typedef tsl::robin_map<int, std::vector<Eigen::Vector4d>>::iterator cloudMap_it;
 
 struct slamap{
   //---------------------------
 
   voxelMap map;
+  cloudMap cloud;
 
   //Parameter
   double voxel_width;
@@ -42,6 +43,20 @@ struct slamap{
   int get_signature(int kx, int ky, int kz){
     int key = (kx*2000 + ky)*1000 + kz;
     return key;
+  }
+
+  void reset(){
+    this->map.clear();
+    this->cloud.clear();
+
+    this->linked_cloud_ID = -1;
+    this->linked_subset_ID = -1;
+    this->current_frame_ID = 0;
+
+    this->rotat_b = Eigen::Matrix3d::Identity();
+    this->rotat_e = Eigen::Matrix3d::Identity();
+    this->trans_b = Eigen::Vector3d::Zero();
+    this->trans_e = Eigen::Vector3d::Zero();
   }
 
   //---------------------------

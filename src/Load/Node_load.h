@@ -22,16 +22,16 @@ public:
 
 public:
   inline Node_engine* get_node_engine(){return node_engine;}
-  inline Pather* get_pathManager(){return pathManager;}
-  inline Saver* get_saveManager(){return saveManager;}
-  inline Loader* get_loadManager(){return loadManager;}
+  inline Pather* get_patherManager(){return patherManager;}
+  inline Saver* get_saverManager(){return saverManager;}
+  inline Loader* get_loaderManager(){return loaderManager;}
   inline Extractor* get_extractManager(){return extractManager;}
 
 private:
   Node_engine* node_engine;
-  Pather* pathManager;
-  Saver* saveManager;
-  Loader* loadManager;
+  Pather* patherManager;
+  Saver* saverManager;
+  Loader* loaderManager;
   Extractor* extractManager;
 };
 

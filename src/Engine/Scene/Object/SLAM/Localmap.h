@@ -16,15 +16,17 @@ public:
 
 public:
   void create_localmap();
-  void update_localmap(slamap* slam_map);
+  void create_localcloud();
+  void update_localmap(slamap* map);
+  void update_localcloud(slamap* map);
 
-  inline void set_visibility(bool value){this->visibility = value; this->localmap->visibility = value;}
-  inline bool* get_visibility(){return &visibility;}
-  inline Glyph* get_glyph(){return localmap;}
+  inline Glyph* get_localmap(){return localmap;}
+  inline Glyph* get_localcloud(){return localcloud;}
 
 private:
   Glyph* localmap;
-  bool visibility;
+  Glyph* localcloud;
+
   vec4 color;
 };
 

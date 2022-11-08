@@ -297,7 +297,12 @@ void Object::set_slam_object(bool value){
   trajObject->set_visibility(value);
   carObject->set_visibility(value);
   keyObject->set_visibility(value);
-  mapObject->set_visibility(value);
+
+  Glyph* localmap = mapObject->get_localmap();
+  localmap->visibility = value;
+
+  Glyph* localcloud = mapObject->get_localcloud();
+  localcloud->visibility = value;
 
   //---------------------------
 }
@@ -312,7 +317,8 @@ void Object::create_glyph_scene(){
   glyphManager->create_glyph_scene(trajObject->get_glyph());
   glyphManager->create_glyph_scene(aabbObject->get_aabb());
   glyphManager->create_glyph_scene(carObject->get_glyph());
-  glyphManager->create_glyph_scene(mapObject->get_glyph());
+  glyphManager->create_glyph_scene(mapObject->get_localmap());
+  glyphManager->create_glyph_scene(mapObject->get_localcloud());
 
   //---------------------------
 }

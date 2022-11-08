@@ -78,7 +78,7 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   frame->ts_n.clear();
 
   //Subsample the scan with voxels
-  gridMap grid;
+  cloudMap grid;
   Eigen::Vector4d point;
   for(int i=0; i<subset->xyz.size(); i++){
     vec3 xyz = subset->xyz[i];
@@ -97,7 +97,7 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   }
 
   //Take one point inside each voxel
-  gridMap::iterator it;
+  cloudMap::iterator it;
   for(auto it = grid.begin(); it != grid.end(); it++){
     if(it->second.size() != 0){
       //Take one random point
@@ -226,7 +226,9 @@ void SLAM_transform::transform_glyph(Subset* subset){
   //Update local map
   Localmap* mapObject = objectManager->get_object_localmap();
   mapObject->update_localmap(slam_map->get_local_map());
-  objectManager->update_object(mapObject->get_glyph());
+  objectManager->update_object(mapObject->get_localmap());
+  mapObject->update_localcloud(slam_map->get_local_cloud());
+  objectManager->update_object(mapObject->get_localcloud());
 
   //---------------------------
   objectManager->update_glyph_subset(subset);

@@ -14,7 +14,7 @@ Reference::Reference(Node_engine* node){
   Node_load* node_load = node->get_node_load();
   Node_operation* node_ope = node->get_node_ope();
 
-  this->loaderManager = node_load->get_loadManager();
+  this->loaderManager = node_load->get_loaderManager();
   this->attribManager = new Attribut(node_ope);
 
   this->list_Sphere = new list<Cloud*>;

@@ -69,7 +69,7 @@ void SLAM::reset_slam(){
   //---------------------------
 
   slam_transf->reset_glyph();
-  slam_map->reset_map_hard();
+  slam_map->reset_map();
 
   //---------------------------
 }
@@ -82,13 +82,13 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
 
   //Apply transformation
   if(success){
-    slam_map->update_map(cloud, subset_ID);
     slam_transf->transform_subset(subset);
+    slam_map->update_map(cloud, subset_ID);
     slam_transf->transform_glyph(subset);
   //Else reset slam map
   }else{
     frame->reset();
-    slam_map->reset_map_smooth();
+    slam_map->reset_map();
     this->reset_visibility(cloud, subset_ID);
   }
 
