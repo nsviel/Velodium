@@ -10,6 +10,7 @@
 #include "Operation/MOD_transformation.h"
 #include "Operation/MOD_filter.h"
 #include "Operation/MOD_extraction.h"
+#include "Operation/MOD_boxing.h"
 
 #include "../Node_gui.h"
 
@@ -28,15 +29,16 @@ GUI_Modal::GUI_Modal(Node_gui* node_gui){
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_engine* node_engine = node_gui->get_node_engine();
 
-  this->win_camera = new MOD_camera(node_engine);
-  this->win_shader = new MOD_shader(node_engine);
-  this->win_operation = new MOD_operation(node_ope);
-  this->win_attribut = new MOD_attribut(node_gui);
-  this->win_cloud = new MOD_cloud(node_ope);
-  this->win_loading = new MOD_loading(node_engine);
+  this->mod_camera = new MOD_camera(node_engine);
+  this->mod_shader = new MOD_shader(node_engine);
+  this->mod_operation = new MOD_operation(node_ope);
+  this->mod_attribut = new MOD_attribut(node_gui);
+  this->mod_cloud = new MOD_cloud(node_ope);
+  this->mod_loading = new MOD_loading(node_engine);
   this->mod_transformation = new MOD_transformation(node_engine);
   this->mod_filter = new MOD_filter(node_ope);
   this->mod_extraction = new MOD_extraction(node_ope);
+  this->mod_boxing = new MOD_boxing(node_ope);
 
   //---------------------------
   this->window_init();
@@ -61,31 +63,34 @@ void GUI_Modal::window_init(){
   modal_tab.show_selection = false;
   modal_tab.show_fitting = false;
   modal_tab.show_shader = false;
+  modal_tab.show_boxing = false;
 
   //---------------------------
 }
 void GUI_Modal::window_Draw(){
   //---------------------------
 
-  win_camera->window_camera();
-  win_shader->window_shader();
+  mod_camera->window_camera();
+  mod_shader->window_shader();
 
-  win_loading->window_loading();
-  win_loading->window_saving();
+  mod_loading->window_loading();
+  mod_loading->window_saving();
 
-  win_cloud->window_cloudInfo();
-  win_cloud->window_asciiData();
+  mod_cloud->window_cloudInfo();
+  mod_cloud->window_asciiData();
 
   mod_transformation->design_transformation();
   mod_filter->design_filter();
   mod_extraction->design_extractCloud();
 
-  win_operation->window_fitting();
-  win_operation->window_selection();
+  mod_operation->window_fitting();
+  mod_operation->window_selection();
 
-  win_attribut->window_normal();
-  win_attribut->window_intensity();
-  win_attribut->window_color();
+  mod_attribut->window_normal();
+  mod_attribut->window_intensity();
+  mod_attribut->window_color();
+
+  mod_boxing->design_boxing();
 
   //---------------------------
 }

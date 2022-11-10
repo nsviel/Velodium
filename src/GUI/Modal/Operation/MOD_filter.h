@@ -21,7 +21,7 @@ public:
   //Specific function
   void filter_cylinder();
   void filter_byAngle();
-  void filter_sphereCleaning();
+  void filter_sphere();
 
 private:
   Scene* sceneManager;

@@ -74,6 +74,8 @@ void Node_engine::runtime(){
 void Node_engine::reset(){
   //---------------------------
 
+  node_ope->reset();
+
   cameraManager->viewport_reset();
   objectManager->reset_scene_object();
   sceneManager->reset_cloud_all();

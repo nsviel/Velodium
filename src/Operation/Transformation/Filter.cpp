@@ -30,7 +30,9 @@ void Filter::update_configuration(){
   //---------------------------
 
   this->verbose = false;
-  this->sphereDiameter = 0.139f;
+  this->sphere_D = 0.139f;
+  this->sphere_min = 1;
+  this->sphere_max = 40;
   this->cyl_r_min = configManager->parse_json_f("parameter", "filter_cylinder_rmin");
   this->cyl_r_max = configManager->parse_json_f("parameter", "filter_cylinder_rmax");
   this->cyl_z_min = -3;
@@ -65,9 +67,9 @@ void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
     console.AddLog("ok", log);
   }
 }
-void Filter::filter_sphereCleaning(){
+void Filter::filter_sphere(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-  float r = sphereDiameter/2;
+  float r = sphere_D/2;
   float err = r/20;
   //---------------------------
 
@@ -111,7 +113,45 @@ void Filter::filter_sphereCleaning(){
 
   //---------------------------
 }
-void Filter::filter_subset_cylinder(Subset* subset){
+void Filter::filter_sphere_cloud(Cloud* cloud){
+  //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    this->filter_sphere_subset(subset);
+  }
+
+  //---------------------------
+}
+void Filter::filter_sphere_subset(Subset* subset){
+  vector<vec3>& xyz = subset->xyz;
+  vector<int> idx;
+  //---------------------------
+
+  for(int i=0; i<xyz.size(); i++){
+    float dist = fct_distance_origin(xyz[i]);
+    if(dist < sphere_min || dist > sphere_max){
+      idx.push_back(i);
+    }
+  }
+
+  //Supress points
+  int idx_size = idx.size();
+  attribManager->make_supressPoints(subset, idx);
+
+  //---------------------------
+}
+void Filter::filter_cylinder_cloud(Cloud* cloud){
+  //---------------------------
+
+  for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+    this->filter_cylinder_subset(subset);
+  }
+
+  //---------------------------
+}
+void Filter::filter_cylinder_subset(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<int> idx;
   //---------------------------
@@ -124,7 +164,6 @@ void Filter::filter_subset_cylinder(Subset* subset){
     if(dist < cyl_r_min || dist > cyl_r_max || point.z < cyl_z_min){
       idx.push_back(i);
     }
-
   }
 
   //Supress non valid points
@@ -136,14 +175,4 @@ void Filter::filter_subset_cylinder(Subset* subset){
     string result = "Cylinder filtering: " + to_string(idx_size) + " supressed";
     console.AddLog("#", result);
   }
-}
-void Filter::filter_cloud_cylinder(Cloud* cloud){
-  //---------------------------
-
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    this->filter_subset_cylinder(subset);
-  }
-
-  //---------------------------
 }

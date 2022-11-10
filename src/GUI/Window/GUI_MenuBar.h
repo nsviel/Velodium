@@ -29,7 +29,10 @@ public:
   void design_MenuBar();
 
   //Subfunctions
-  void MenuBar_menus();
+  void MenuBar_menu();
+  void MenuBar_menu_file();
+  void MenuBar_menu_load();
+  void MenuBar_menu_save();
   void MenuBar_icons();
   void MenuBar_appInfo();
   void MenuBar_subsetSelection();

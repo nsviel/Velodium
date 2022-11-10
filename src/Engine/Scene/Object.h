@@ -17,6 +17,7 @@ class Slam_keypoint;
 class Car;
 class Trajectory;
 class Localmap;
+class Box;
 
 
 class Object
@@ -27,13 +28,18 @@ public:
   ~Object();
 
 public:
-  //Runtime functions
+  //Creation function
+  void create_glyph_scene();
+  void create_glyph_subset(Subset* subset);
+  Glyph* create_glyph_ostacle();
+
+  //Runtime function
   void runtime_glyph_scene();
   void runtime_glyph_subset_all(Cloud* cloud);
   void runtime_glyph_subset_selected(Subset* subset);
   void runtime_glyph_pred(Subset* subset);
 
-  //Update functions
+  //Update function
   void update_configuration();
   void update_dynamic(Cloud* cloud);
   void update_glyph_subset(Subset* subset);
@@ -41,17 +47,14 @@ public:
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);
 
-  //Reset functions
+  //Reset function
   void reset_scene_object();
   void reset_color_object();
   void reset_object(Glyph* glyph);
 
-  //Misc functions
+  //Misc function
   void set_object_visibility(string name, bool val);
   void set_slam_object(bool value);
-  void create_glyph_scene();
-  void create_glyph_subset(Subset* subset);
-  Glyph* create_glyph_ostacle();
 
   inline Grid* get_object_grid(){return gridObject;}
   inline Axis* get_object_axis(){return axisObject;}
@@ -62,12 +65,13 @@ public:
   inline Car* get_object_car(){return carObject;}
   inline Slam_keypoint* get_object_keypoint(){return keyObject;}
   inline Localmap* get_object_localmap(){return mapObject;}
+  inline Box* get_object_box(){return boxObject;}
 
 private:
   Node_engine* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
-  
+
   Grid* gridObject;
   Axis* axisObject;
   AABB* aabbObject;
@@ -78,6 +82,7 @@ private:
   Localmap* mapObject;
   Mark* markObject;
   Car* carObject;
+  Box* boxObject;
 };
 
 #endif

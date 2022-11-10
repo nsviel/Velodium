@@ -109,7 +109,7 @@ void SLAM_parameter::make_config_default(){
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
   double* max_voxel_distance = slam_map->get_max_voxel_distance();
-  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* min_dist_point_in_voxel = slam_map->get_min_dist_point_in_voxel();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
   int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
@@ -139,7 +139,7 @@ void SLAM_parameter::make_config_default(){
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
-  *min_voxel_distance = 0.1f;
+  *min_dist_point_in_voxel = 0.1f;
   *grid_voxel_size = 1.0f;
   *map_voxel_capacity = 20;
 
@@ -178,7 +178,7 @@ void SLAM_parameter::make_config_0(){
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
   double* max_voxel_distance = slam_map->get_max_voxel_distance();
-  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* min_dist_point_in_voxel = slam_map->get_min_dist_point_in_voxel();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
   int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
@@ -208,7 +208,7 @@ void SLAM_parameter::make_config_0(){
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
-  *min_voxel_distance = 0.05f;
+  *min_dist_point_in_voxel = 0.05f;
   *grid_voxel_size = 1.0f;
   *map_voxel_capacity = 20;
 
@@ -247,7 +247,7 @@ void SLAM_parameter::make_config_1(){
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
   double* max_voxel_distance = slam_map->get_max_voxel_distance();
-  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* min_dist_point_in_voxel = slam_map->get_min_dist_point_in_voxel();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
   int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
@@ -279,7 +279,7 @@ void SLAM_parameter::make_config_1(){
   *min_root_distance = 0.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
-  *min_voxel_distance = 0.05f;
+  *min_dist_point_in_voxel = 0.05f;
   *grid_voxel_size = 0.06f;
   *map_voxel_capacity = 20;
 
@@ -318,7 +318,7 @@ void SLAM_parameter::make_config_2(){
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
   double* max_voxel_distance = slam_map->get_max_voxel_distance();
-  double* min_voxel_distance = slam_map->get_min_voxel_distance();
+  double* min_dist_point_in_voxel = slam_map->get_min_dist_point_in_voxel();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
   int* map_voxel_capacity = slam_map->get_map_voxel_capacity();
 
@@ -350,7 +350,7 @@ void SLAM_parameter::make_config_2(){
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *max_voxel_distance = 150.0f;
-  *min_voxel_distance = 0.05f;
+  *min_dist_point_in_voxel = 0.05f;
   *grid_voxel_size = 1.0f;
   *map_voxel_capacity = 20;
 

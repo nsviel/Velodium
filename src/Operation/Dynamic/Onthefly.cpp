@@ -70,3 +70,32 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
 
   //---------------------------
 }
+void Onthefly::reset(){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  //---------------------------
+
+  //Reset all clouds
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
+    if(cloud->onthefly){
+      vector<string>& list_path = cloud->list_path;
+      list<int>& list_id = cloud->list_loaded;
+
+      sceneManager->remove_subset_all(cloud);
+      cloud->list_loaded.clear();
+      cloud->ID_subset = 0;
+      cloud->ID_file = 0;
+      cloud->ID_selected = 0;
+      cloud->nb_subset = 0;
+
+      bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[0]);
+      if(ok) list_id.push_back(0);
+    }
+  }
+
+  // Reset glyph
+  Cloud* cloud_selected = sceneManager->get_selected_cloud();
+  sceneManager->update_cloud_glyph(cloud_selected);
+
+  //---------------------------
+}

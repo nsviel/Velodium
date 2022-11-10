@@ -92,7 +92,7 @@ void Localmap::update_localcloud(slamap* map){
         Eigen::Vector4d& point = voxel_xyz[i];
 
         vec3 xyz = vec3(point(0), point(1), point(2));
-        vec4 rgb = vec4(point(3), point(3), point(3), 1);
+        vec4 rgb = localcloud->color_unique;
 
         gly_xyz.push_back(xyz);
         gly_rgb.push_back(rgb);

@@ -41,9 +41,10 @@ public:
   void set_visibility_range(int value);
   int get_visibility_range_max();
 
-  inline bool* get_with_cylinder_filter(){return &with_cylinder_cleaning;}
+  inline bool* get_with_sphere_filter(){return &with_filter_sphere;}
   inline float get_time_operation(){return time_operation;}
   inline int get_visibility_range(){return visibility_range;}
+  inline int* get_filter_mode(){return &filter_mode;}
 
 private:
   Node_engine* node_engine;
@@ -60,9 +61,10 @@ private:
 
   float time_operation;
   int visibility_range;
+  int filter_mode;
   bool with_subset_specific_color;
   bool with_slam;
-  bool with_cylinder_cleaning;
+  bool with_filter_sphere;
   bool with_remove_lastSubset;
 };
 

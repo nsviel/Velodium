@@ -15,6 +15,7 @@ struct Modal_tab{
   bool show_extractCloud;
   bool show_normal;
   bool show_intensity;
+  bool show_boxing;
   bool show_color;
   bool show_shader;
   bool cloud_movement;

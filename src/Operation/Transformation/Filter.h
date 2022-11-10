@@ -20,22 +20,28 @@ public:
   void update_configuration();
 
   void filter_maxAngle(Cloud* cloud, float sampleAngle);
-  void filter_sphereCleaning();
-  void filter_subset_cylinder(Subset* subset);
-  void filter_cloud_cylinder(Cloud* cloud);
+  void filter_sphere();
+  void filter_sphere_cloud(Cloud* cloud);
+  void filter_sphere_subset(Subset* subset);
+  void filter_cylinder_cloud(Cloud* cloud);
+  void filter_cylinder_subset(Subset* subset);
 
   //Setters / Getters
-  inline void set_sphereDiameter(float value){this->sphereDiameter = value;}
+  inline void set_sphereDiameter(float value){this->sphere_D = value;}
   inline float* get_cyl_r_min(){return &cyl_r_min;}
   inline float* get_cyl_r_max(){return &cyl_r_max;}
   inline float* get_cyl_z_min(){return &cyl_z_min;}
+  inline float* get_sphere_min(){return &sphere_min;}
+  inline float* get_sphere_max(){return &sphere_max;}
 
 private:
   Configuration* configManager;
   Scene* sceneManager;
   Attribut* attribManager;
 
-  float sphereDiameter;
+  float sphere_D;
+  float sphere_min;
+  float sphere_max;
   float cyl_r_min;
   float cyl_r_max;
   float cyl_z_min;

@@ -84,6 +84,7 @@ void GUI_Online::design_online(){
     //---------------------------
 
     this->parameter_online();
+    this->parameter_filter();
     this->parameter_export();
     gui_color->colorization_choice();
 
@@ -104,19 +105,20 @@ void GUI_Online::parameter_online(){
   //Camera followup stuff
   this->parameter_camera();
 
-  //Cylinder cleaning filter
-  bool* cylinderFilter = onlineManager->get_with_cylinder_filter();
-  ImGui::Checkbox("Cylinder cleaning", cylinderFilter);
-  if(*cylinderFilter){
-    float* r_min = filterManager->get_cyl_r_min();
-    float* r_max = filterManager->get_cyl_r_max();
-    float* z_min = filterManager->get_cyl_z_min();
+  //---------------------------
+}
+void GUI_Online::parameter_filter(){
+  //---------------------------
+
+  bool* sphere_filter = onlineManager->get_with_sphere_filter();
+  ImGui::Checkbox("Sphere filter", sphere_filter);
+  if(*sphere_filter){
+    float* r_min = filterManager->get_sphere_min();
+    float* r_max = filterManager->get_sphere_max();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
     ImGui::InputFloat("r min", r_min, 0.1f, 1.0f, "%.2f");
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
     ImGui::InputFloat("r max", r_max, 0.1f, 1.0f, "%.2f");
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-    ImGui::InputFloat("z min", z_min, 0.1f, 1.0f, "%.2f");
   }
 
   //---------------------------

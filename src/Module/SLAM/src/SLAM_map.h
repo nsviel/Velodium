@@ -31,7 +31,7 @@ public:
   inline slamap* get_local_cloud(){return local_cloud;}
   inline bool* get_with_local_cloud(){return &with_local_cloud;}
   inline double* get_max_voxel_distance(){return &max_voxel_distance;}
-  inline double* get_min_voxel_distance(){return &min_voxel_distance;}
+  inline double* get_min_dist_point_in_voxel(){return &min_dist_point_in_voxel;}
   inline double* get_map_voxel_size(){return &local_map->voxel_width;}
   inline int* get_map_voxel_capacity(){return &local_map->voxel_capacity;}
 
@@ -45,7 +45,7 @@ private:
   bool with_local_cloud;
 
   double max_voxel_distance;
-  double min_voxel_distance;
+  double min_dist_point_in_voxel;
 };
 
 

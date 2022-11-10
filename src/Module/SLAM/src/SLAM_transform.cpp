@@ -23,7 +23,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->objectManager = node_engine->get_objectManager();
 
   this->with_distorsion = false;
-  this->min_root_distance = 5.0f;
+  this->min_root_distance = 3.0f;
   this->max_root_distance = 100.0f;
   this->grid_voxel_width = 0.3;
   this->max_total_point = 2000;

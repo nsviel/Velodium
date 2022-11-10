@@ -84,7 +84,6 @@ void GUI_Slam::design_parameter(){
 
     this->parameter_lidar();
     this->parameter_glyph();
-    this->parameter_offline();
     this->parameter_optimization();
     this->parameter_localMap();
     this->parameter_localCloud();
@@ -277,9 +276,9 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Mnimun distance between points inside a voxel
-    double* min_voxel_distance = slam_map->get_min_voxel_distance();
+    double* min_dist_point_in_voxel = slam_map->get_min_dist_point_in_voxel();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Min point dist voxel ", min_voxel_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Min point dist in voxel", min_dist_point_in_voxel, 0.001f, 10.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Mnimun distance between points inside a voxel");
     }
@@ -287,7 +286,7 @@ void GUI_Slam::parameter_localMap(){
     //Distance threshold to supress the voxels on run
     double* max_voxel_distance = slam_map->get_max_voxel_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Max dist from position", max_voxel_distance, 0.1f, 1.0f, "%.3f");
+    ImGui::InputDouble("Voxel max dist", max_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Distance threshold to supress the voxels on run");
     }
@@ -314,8 +313,8 @@ void GUI_Slam::parameter_localCloud(){
 
     // Visibility
     Localmap* mapObject = objectManager->get_object_localmap();
-    Glyph* glyph = mapObject->get_localcloud();
-    ImGui::Checkbox("Visibility", &glyph->visibility);
+    Glyph* glyph_localcloud = mapObject->get_localcloud();
+    ImGui::Checkbox("Visibility", &glyph_localcloud->visibility);
 
     // Save resulting cloud
     ImGui::PushItemWidth(100);
@@ -336,6 +335,13 @@ void GUI_Slam::parameter_localCloud(){
     }
 
     //Local cloud color
+    ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
+    flags |= ImGuiColorEditFlags_AlphaBar;
+    vec4 rgb = glyph_localcloud->color_unique;
+    if(ImGui::ColorEdit4("Color", (float*)&rgb, flags)){
+      glyph_localcloud->color_unique = rgb;
+    }
+    ImGui::Separator();
 
     //---------------------------
     ImGui::TreePop();

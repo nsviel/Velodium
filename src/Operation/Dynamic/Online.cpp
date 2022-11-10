@@ -55,7 +55,7 @@ void Online::update_configuration(){
   this->time_operation = 0;
   this->visibility_range = 15;
   this->with_subset_specific_color = false;
-  this->with_cylinder_cleaning = configManager->parse_json_b("dynamic", "with_cylinder_cleaning");
+  this->with_filter_sphere = configManager->parse_json_b("dynamic", "with_filter_sphere");
 
   //---------------------------
 }
@@ -77,8 +77,8 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   node_module->online(cloud, ID_subset);
 
   //Make cleaning on the current subset
-  if(with_cylinder_cleaning){
-    filterManager->filter_subset_cylinder(subset);
+  if(with_filter_sphere){
+    filterManager->filter_sphere_subset(subset);
   }
 
   //If camera follow up option activated

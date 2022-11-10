@@ -13,6 +13,7 @@ class MOD_attribut;
 class MOD_transformation;
 class MOD_filter;
 class MOD_extraction;
+class MOD_boxing;
 
 
 class GUI_Modal
@@ -28,15 +29,16 @@ public:
   void window_Draw();
 
 private:
-  MOD_camera* win_camera;
-  MOD_shader* win_shader;
-  MOD_loading* win_loading;
-  MOD_cloud* win_cloud;
-  MOD_operation* win_operation;
-  MOD_attribut* win_attribut;
+  MOD_camera* mod_camera;
+  MOD_shader* mod_shader;
+  MOD_loading* mod_loading;
+  MOD_cloud* mod_cloud;
+  MOD_operation* mod_operation;
+  MOD_attribut* mod_attribut;
   MOD_transformation* mod_transformation;
   MOD_filter* mod_filter;
   MOD_extraction* mod_extraction;
+  MOD_boxing* mod_boxing;
 };
 
 #endif

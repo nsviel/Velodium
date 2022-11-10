@@ -60,3 +60,10 @@ void Node_operation::runtime(){
 
   //---------------------------
 }
+void Node_operation::reset(){
+  //---------------------------
+
+  flyManager->reset();
+
+  //---------------------------
+}

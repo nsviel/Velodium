@@ -7,6 +7,7 @@
 #include "Object/Scene/Axis.h"
 #include "Object/Scene/AABB.h"
 #include "Object/Scene/Mark.h"
+#include "Object/Scene/Box.h"
 
 #include "Object/SLAM/Slam_keypoint.h"
 #include "Object/SLAM/Trajectory.h"
@@ -37,6 +38,7 @@ Object::Object(Node_engine* node){
   this->carObject = new Car();
   this->keyObject = new Slam_keypoint();
   this->mapObject = new Localmap();
+  this->boxObject = new Box();
 
   //---------------------------
   this->create_glyph_scene();
@@ -55,11 +57,58 @@ Object::~Object(){
   delete carObject;
   delete keyObject;
   delete mapObject;
+  delete boxObject;
 
   //---------------------------
 }
 
-//Runtime functions
+//Creation function
+void Object::create_glyph_scene(){
+  //---------------------------
+
+  glyphManager->create_glyph_scene(markObject->get_selection_frame());
+  glyphManager->create_glyph_scene(gridObject->get_grid());
+  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
+  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
+  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
+  glyphManager->create_glyph_scene(trajObject->get_glyph());
+  glyphManager->create_glyph_scene(aabbObject->get_aabb());
+  glyphManager->create_glyph_scene(carObject->get_glyph());
+  glyphManager->create_glyph_scene(mapObject->get_localmap());
+  glyphManager->create_glyph_scene(mapObject->get_localcloud());
+  glyphManager->create_glyph_scene(boxObject->get_glyph());
+
+  //---------------------------
+}
+void Object::create_glyph_subset(Subset* subset){
+  //---------------------------
+
+  //Cloud axis stuff
+  axisObject->create_axis_subset(subset);
+  glyphManager->insert_into_gpu(&subset->axis);
+
+  //Normal stuff
+  normObject->create_normal_subset(subset);
+  glyphManager->insert_into_gpu(&subset->normal);
+
+  //Keypoint stuff
+  keyObject->create_keypoint(subset);
+  glyphManager->insert_into_gpu(&subset->keypoint);
+
+  //---------------------------
+}
+Glyph* Object::create_glyph_ostacle(){
+  //---------------------------
+
+  //Creat new OOBB object
+  Glyph* oobb = oobbObject->create_oobb();
+  glyphManager->insert_into_gpu(oobb);
+
+  //---------------------------
+  return oobb;
+}
+
+//Runtime function
 void Object::runtime_glyph_scene(){
   list<Glyph*>* list_glyph = glyphManager->get_list_glyph();
   //---------------------------
@@ -129,7 +178,7 @@ void Object::runtime_glyph_pred(Subset* subset){
   //---------------------------
 }
 
-//Update functions
+//Update function
 void Object::update_configuration(){
   //---------------------------
 
@@ -219,7 +268,7 @@ void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 }
 
-//Reset functions
+//Reset function
 void Object::reset_scene_object(){
   //---------------------------
 
@@ -236,6 +285,9 @@ void Object::reset_scene_object(){
 
   Glyph* car = carObject->get_glyph();
   car->visibility = false;
+
+  Glyph* box = boxObject->get_glyph();
+  box->visibility = false;
 
   //---------------------------
 }
@@ -262,7 +314,7 @@ void Object::reset_object(Glyph* glyph){
   //---------------------------
 }
 
-//Misc functions
+//Misc function
 void Object::set_object_visibility(string name, bool val){
   Scene* sceneManager = node_engine->get_sceneManager();
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -305,47 +357,4 @@ void Object::set_slam_object(bool value){
   localcloud->visibility = value;
 
   //---------------------------
-}
-void Object::create_glyph_scene(){
-  //---------------------------
-
-  glyphManager->create_glyph_scene(markObject->get_selection_frame());
-  glyphManager->create_glyph_scene(gridObject->get_grid());
-  glyphManager->create_glyph_scene(gridObject->get_grid_sub());
-  glyphManager->create_glyph_scene(gridObject->get_grid_plane());
-  glyphManager->create_glyph_scene(axisObject->get_axis_scene());
-  glyphManager->create_glyph_scene(trajObject->get_glyph());
-  glyphManager->create_glyph_scene(aabbObject->get_aabb());
-  glyphManager->create_glyph_scene(carObject->get_glyph());
-  glyphManager->create_glyph_scene(mapObject->get_localmap());
-  glyphManager->create_glyph_scene(mapObject->get_localcloud());
-
-  //---------------------------
-}
-void Object::create_glyph_subset(Subset* subset){
-  //---------------------------
-
-  //Cloud axis stuff
-  axisObject->create_axis_subset(subset);
-  glyphManager->insert_into_gpu(&subset->axis);
-
-  //Normal stuff
-  normObject->create_normal_subset(subset);
-  glyphManager->insert_into_gpu(&subset->normal);
-
-  //Keypoint stuff
-  keyObject->create_keypoint(subset);
-  glyphManager->insert_into_gpu(&subset->keypoint);
-
-  //---------------------------
-}
-Glyph* Object::create_glyph_ostacle(){
-  //---------------------------
-
-  //Creat new OOBB object
-  Glyph* oobb = oobbObject->create_oobb();
-  glyphManager->insert_into_gpu(oobb);
-
-  //---------------------------
-  return oobb;
 }

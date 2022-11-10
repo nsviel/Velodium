@@ -34,7 +34,7 @@ void MOD_filter::design_filter(){
 
     this->filter_cylinder();
     this->filter_byAngle();
-    this->filter_sphereCleaning();
+    this->filter_sphere();
 
     //---------------------------
     ImGui::Separator();
@@ -53,7 +53,7 @@ void MOD_filter::filter_cylinder(){
 
   if (ImGui::Button("Cylinder cleaning", ImVec2(item_width,0))){
     if(cloud != nullptr){
-      filterManager->filter_cloud_cylinder(cloud);
+      filterManager->filter_cylinder_cloud(cloud);
     }
   }
   float* r_min = filterManager->get_cyl_r_min();
@@ -92,14 +92,14 @@ void MOD_filter::filter_byAngle(){
 
   //---------------------------
 }
-void MOD_filter::filter_sphereCleaning(){
+void MOD_filter::filter_sphere(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 
   if(ImGui::Button("Clean sphere cloud", ImVec2(item_width,0))){
     if(cloud != nullptr){
-      filterManager->filter_sphereCleaning();
+      filterManager->filter_sphere();
     }
   }
   ImGui::SameLine();

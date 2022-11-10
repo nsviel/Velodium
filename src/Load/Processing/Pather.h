@@ -38,6 +38,7 @@ public:
   void saving_subset(Subset* subset);
   void saving_subset_range(int frame_b, int frame_e);
   void saving_cloud(Cloud* cloud);
+  void saving_cloud_same(Cloud* cloud);
   void saving_cloud_all();
   void saving_saved_frames();
 

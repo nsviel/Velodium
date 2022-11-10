@@ -288,6 +288,16 @@ void Pather::saving_cloud(Cloud* cloud){
 
   //---------------------------
 }
+void Pather::saving_cloud_same(Cloud* cloud){
+  //---------------------------
+
+  //Save current cloud
+  if(cloud != nullptr && cloud->path != ""){
+    saverManager->save_cloud(cloud, cloud->path);
+  }
+
+  //---------------------------
+}
 void Pather::saving_cloud_all(){
   //---------------------------
 

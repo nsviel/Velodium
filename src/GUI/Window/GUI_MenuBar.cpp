@@ -62,7 +62,7 @@ void GUI_menuBar::design_MenuBar(){
   if(ImGui::BeginMainMenuBar()){
     //------------------------
 
-    this->MenuBar_menus();
+    this->MenuBar_menu();
     this->MenuBar_icons();
     this->MenuBar_subsetSelection();
     this->MenuBar_appInfo();
@@ -73,9 +73,37 @@ void GUI_menuBar::design_MenuBar(){
 }
 
 //Subfunctions
-void GUI_menuBar::MenuBar_menus(){
+void GUI_menuBar::MenuBar_menu(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //-------------------------
+
+  this->MenuBar_menu_file();
+  this->MenuBar_menu_load();
+  this->MenuBar_menu_save();
+
+  //Option menu
+  if(ImGui::BeginMenu(ICON_FA_COG " Option")){
+    optionManager->design_Options();
+    ImGui::EndMenu();
+  }
+
+  //Operation menu
+  if(ImGui::BeginMenu("Operation")){
+    this->MenuBar_Operations();
+    ImGui::EndMenu();
+  }
+
+  //Init menu
+  if(ImGui::BeginMenu("Init")){
+    gui_init->init_gui();
+    ImGui::EndMenu();
+  }
+
+  //-------------------------
+}
+void GUI_menuBar::MenuBar_menu_file(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //---------------------------
 
   //File menu
   if(ImGui::BeginMenu("File")){
@@ -108,7 +136,12 @@ void GUI_menuBar::MenuBar_menus(){
     ImGui::EndMenu();
   }
 
-  //Loading menu
+  //---------------------------
+}
+void GUI_menuBar::MenuBar_menu_load(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //-------------------------
+
   if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
     if (ImGui::MenuItem("Open cloud")){
       pathManager->loading_cloud();
@@ -126,37 +159,26 @@ void GUI_menuBar::MenuBar_menus(){
     ImGui::EndMenu();
   }
 
-  //Saving menu
+  //-------------------------
+}
+void GUI_menuBar::MenuBar_menu_save(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  //-------------------------
+
   if(ImGui::BeginMenu(ICON_FA_BOOK " Save")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
-    if (ImGui::MenuItem("Save cloud")){
+    if(ImGui::MenuItem("Save")){
+      pathManager->saving_cloud_same(cloud);
+    }
+    if(ImGui::MenuItem("Save cloud")){
       pathManager->saving_cloud(cloud);
     }
-    if (ImGui::MenuItem("Save frame")){
+    if(ImGui::MenuItem("Save frame")){
       pathManager->saving_cloud_frame(cloud);
     }
     ImGui::Separator();
-    if (ImGui::MenuItem("Options")){
+    if(ImGui::MenuItem("Options")){
       modal_tab.show_saving = true;
     }
-    ImGui::EndMenu();
-  }
-
-  //Option menu
-  if(ImGui::BeginMenu(ICON_FA_COG " Option")){
-    optionManager->design_Options();
-    ImGui::EndMenu();
-  }
-
-  //Operation menu
-  if(ImGui::BeginMenu("Operation")){
-    this->MenuBar_Operations();
-    ImGui::EndMenu();
-  }
-
-  //Init menu
-  if(ImGui::BeginMenu("Init")){
-    gui_init->init_gui();
     ImGui::EndMenu();
   }
 
@@ -186,7 +208,6 @@ void GUI_menuBar::MenuBar_icons(){
   }
 
   //Heatmap
-  //ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 10);
   if(ImGui::Button(ICON_FA_EYE, ImVec2(iconSize,iconSize))){
     if(!sceneManager->get_is_list_empty()){
       //Heatmap window
@@ -198,12 +219,19 @@ void GUI_menuBar::MenuBar_icons(){
   }
 
   //Camera
-  //ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 2);
   if(ImGui::Button(ICON_FA_CAMERA, ImVec2(iconSize,iconSize))){
     modal_tab.show_camera = !modal_tab.show_camera;
   }
   if(ImGui::IsItemHovered()){
     ImGui::SetTooltip("Camera");
+  }
+
+  //Boxing
+  if(ImGui::Button(ICON_FA_CUBE, ImVec2(iconSize,iconSize))){
+    modal_tab.show_boxing = !modal_tab.show_boxing;
+  }
+  if(ImGui::IsItemHovered()){
+    ImGui::SetTooltip("Cloud boxing");
   }
 
   //---------------------------

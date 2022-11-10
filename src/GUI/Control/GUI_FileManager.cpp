@@ -105,9 +105,9 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   ImGuiTreeNodeFlags node_flags;
   if(cloud->nb_subset > 1 || cloud->onthefly){
     node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-    if(cloud_selected->oID == cloud->oID){
-      node_flags |= ImGuiTreeNodeFlags_Selected;
-    }
+  }
+  if(cloud_selected->oID == cloud->oID){
+    node_flags |= ImGuiTreeNodeFlags_Selected;
   }
   bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
 

@@ -106,25 +106,23 @@ void Scene::remove_subset(Cloud* cloud, int ID){
     return;
   }
 
-  //Supress subset objects
-  Subset* subset = get_subset(cloud, oID);
-  Subset* subset_buf = get_subset_buffer(cloud, oID);
-  Subset* subset_ini = get_subset_init(cloud, oID);
+  //Get subset object
+  Subset* subset = get_subset(cloud, 0);
+  Subset* subset_buf = get_subset_buffer(cloud, 0);
+  Subset* subset_ini = get_subset_init(cloud, 0);
 
+  //Remove data from GPU
   this->remove_subset_from_gpu(subset);
 
+  //Supress Subset pointer
+  cloud->subset.pop_front();
+  cloud->subset_buffer.pop_front();
+  cloud->subset_init.pop_front();
+
+  //Delete Subset object
   delete subset;
   delete subset_buf;
   delete subset_ini;
-
-  //Supress subset iterators
-  list<Subset*>::iterator it = next(cloud->subset.begin(), oID);
-  list<Subset*>::iterator it_buf = next(cloud->subset_buffer.begin(), oID);
-  list<Subset*>::iterator it_ini = next(cloud->subset_init.begin(), oID);
-
-  cloud->subset.erase(it);
-  cloud->subset_buffer.erase(it_buf);
-  cloud->subset_init.erase(it_ini);
 
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
@@ -142,18 +140,20 @@ void Scene::remove_subset_from_gpu(Subset* subset){
 void Scene::remove_subset_last(Cloud* cloud){
   //---------------------------
 
-  //Supress subset objects
+  //Get subset object
   Subset* subset = get_subset(cloud, 0);
   Subset* subset_buf = get_subset_buffer(cloud, 0);
   Subset* subset_ini = get_subset_init(cloud, 0);
 
+  //Remove data from GPU
   this->remove_subset_from_gpu(subset);
 
-  //Supress subset iterators
+  //Supress Subset pointer
   cloud->subset.pop_front();
   cloud->subset_buffer.pop_front();
   cloud->subset_init.pop_front();
 
+  //Delete Subset object
   delete subset;
   delete subset_buf;
   delete subset_ini;
@@ -162,11 +162,11 @@ void Scene::remove_subset_last(Cloud* cloud){
   cloud->nb_subset = cloud->subset.size();
 }
 void Scene::remove_subset_all(Cloud* cloud){
+  int size = cloud->subset.size();
   //---------------------------
 
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    this->remove_subset(cloud, subset->ID);
+  for(int i=0; i<size; i++){
+    this->remove_subset_last(cloud);
   }
 
   //---------------------------
@@ -272,7 +272,9 @@ void Scene::reset_cloud_all(){
   //Reset all clouds
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    this->reset_cloud(cloud);
+    if(!cloud->onthefly){
+      this->reset_cloud(cloud);
+    }
   }
 
   this->update_cloud_glyph(cloud_selected);

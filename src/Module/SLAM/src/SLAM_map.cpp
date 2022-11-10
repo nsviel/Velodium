@@ -47,12 +47,12 @@ void SLAM_map::update_configuration(){
 
   //Cloud map for voxelized cloud
   local_cloud->reset();
-  local_cloud->voxel_width = 0.05;
+  local_cloud->voxel_width = 0.1;
   local_cloud->voxel_capacity = 100;
 
   //Point distance for no taking account
   this->max_voxel_distance = 150.0f;
-  this->min_voxel_distance = 0.05;
+  this->min_dist_point_in_voxel = 0.05;
 
   //---------------------------
 }
@@ -115,7 +115,7 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
         }
 
         //If all conditions are fullfiled, add the point to local map
-        if(dist_min > min_voxel_distance){
+        if(dist_min > min_dist_point_in_voxel){
           voxel_xyz.push_back(point);
         }
       }
@@ -167,7 +167,7 @@ void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
         }
 
         //If all conditions are fullfiled, add the point to local map
-        if(dist_min > min_voxel_distance){
+        if(dist_min > min_dist_point_in_voxel){
           voxel_xyz.push_back(point_4d);
         }
       }

@@ -19,6 +19,7 @@ public:
 public:
   void update_configuration();
   void compute_onthefly(Cloud* cloud, int ID);
+  void reset();
 
 private:
   Scene* sceneManager;
