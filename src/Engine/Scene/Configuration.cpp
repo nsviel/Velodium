@@ -185,7 +185,7 @@ void Configuration::preconf_default(Json::Value& root){
 
   //Dynamic
   Json::Value dynamic;
-  dynamic["with_cylinder_cleaning"] = true;
+  dynamic["with_filter_sphere"] = true;
   dynamic["with_save_image"] = false;
   dynamic["with_save_frame"] = false;
   dynamic["nb_save_image"] = 1;
@@ -225,7 +225,7 @@ void Configuration::preconf_capture(Json::Value& root){
 
   //Dynamic
   Json::Value dynamic;
-  dynamic["with_cylinder_cleaning"] = false;
+  dynamic["with_filter_sphere"] = false;
   dynamic["with_save_image"] = false;
   dynamic["with_save_frame"] = true;
   dynamic["nb_save_image"] = 1;
@@ -271,7 +271,7 @@ void Configuration::preconf_ai(Json::Value& root){
 
   //Dynamic
   Json::Value dynamic;
-  dynamic["with_cylinder_cleaning"] = true;
+  dynamic["with_filter_sphere"] = true;
   dynamic["with_save_image"] = false;
   dynamic["with_save_frame"] = true;
   dynamic["nb_save_image"] = 1;
@@ -317,7 +317,7 @@ void Configuration::preconf_server(Json::Value& root){
 
   //Dynamic
   Json::Value dynamic;
-  dynamic["with_cylinder_cleaning"] = true;
+  dynamic["with_filter_sphere"] = true;
   dynamic["with_save_image"] = true;
   dynamic["with_save_frame"] = true;
   root["dynamic"] = dynamic;

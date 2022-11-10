@@ -18,6 +18,7 @@ public:
   ~MOD_boxing();
 
 public:
+  void box_shape();
   void design_boxing();
 
   //Specific function

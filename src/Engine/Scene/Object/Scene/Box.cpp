@@ -5,8 +5,8 @@
 Box::Box(){
   //---------------------------
 
-  this->color = vec4(0.0f, 0.0f, 0.8f, 0.05f);
-  this->width = 1;
+  this->color = vec4(0.0f, 0.0f, 0.8f, 0.2f);
+  this->width = 3;
 
   //---------------------------
   this->create_box();
@@ -28,7 +28,7 @@ void Box::create_box(){
   box->name = "box";
   box->draw_width = width;
   box->visibility = false;
-  box->draw_type = "triangle";
+  box->draw_type = "line";
   box->permanent = true;
   box->color_unique = color;
 
@@ -62,47 +62,89 @@ void Box::build_box_location(){
   xyz.clear();
 
   //Location
-  xyz.push_back(min);
-  xyz.push_back(vec3(max.x, min.y, min.z));
-  xyz.push_back(vec3(max.x, max.y, min.z));
-  xyz.push_back(min);
-  xyz.push_back(vec3(min.x, max.y, min.z));
-  xyz.push_back(vec3(max.x, max.y, min.z));
-  xyz.push_back(min);
-  xyz.push_back(vec3(max.x, min.y, min.z));
-  xyz.push_back(vec3(max.x, min.y, max.z));
-  xyz.push_back(min);
-  xyz.push_back(vec3(min.x, min.y, max.z));
-  xyz.push_back(vec3(max.x, min.y, max.z));
-  xyz.push_back(min);
-  xyz.push_back(vec3(min.x, max.y, min.z));
-  xyz.push_back(vec3(min.x, max.y, max.z));
-  xyz.push_back(min);
-  xyz.push_back(vec3(min.x, min.y, max.z));
-  xyz.push_back(vec3(min.x, max.y, max.z));
-  xyz.push_back(min);
+  if(box->draw_type == "triangle"){
+    xyz.push_back(min);
+    xyz.push_back(vec3(max.x, min.y, min.z));
+    xyz.push_back(vec3(max.x, max.y, min.z));
+    xyz.push_back(min);
+    xyz.push_back(vec3(min.x, max.y, min.z));
+    xyz.push_back(vec3(max.x, max.y, min.z));
+    xyz.push_back(min);
+    xyz.push_back(vec3(max.x, min.y, min.z));
+    xyz.push_back(vec3(max.x, min.y, max.z));
+    xyz.push_back(min);
+    xyz.push_back(vec3(min.x, min.y, max.z));
+    xyz.push_back(vec3(max.x, min.y, max.z));
+    xyz.push_back(min);
+    xyz.push_back(vec3(min.x, max.y, min.z));
+    xyz.push_back(vec3(min.x, max.y, max.z));
+    xyz.push_back(min);
+    xyz.push_back(vec3(min.x, min.y, max.z));
+    xyz.push_back(vec3(min.x, max.y, max.z));
+    xyz.push_back(min);
 
-  xyz.push_back(max);
-  xyz.push_back(max);
-  xyz.push_back(max);
-  xyz.push_back(vec3(max.x, min.y, max.z));
-  xyz.push_back(vec3(max.x, min.y, min.z));
-  xyz.push_back(max);
-  xyz.push_back(vec3(max.x, min.y, min.z));
-  xyz.push_back(vec3(max.x, max.y, min.z));
-  xyz.push_back(max);
-  xyz.push_back(vec3(min.x, max.y, min.z));
-  xyz.push_back(vec3(min.x, max.y, max.z));
-  xyz.push_back(max);
-  xyz.push_back(vec3(max.x, max.y, min.z));
-  xyz.push_back(vec3(min.x, max.y, min.z));
-  xyz.push_back(max);
-  xyz.push_back(vec3(max.x, min.y, max.z));
-  xyz.push_back(vec3(min.x, min.y, max.z));
-  xyz.push_back(max);
-  xyz.push_back(vec3(min.x, max.y, max.z));
-  xyz.push_back(vec3(min.x, min.y, max.z));
-  xyz.push_back(max);
+    xyz.push_back(max);
+    xyz.push_back(max);
+    xyz.push_back(max);
+    xyz.push_back(vec3(max.x, min.y, max.z));
+    xyz.push_back(vec3(max.x, min.y, min.z));
+    xyz.push_back(max);
+    xyz.push_back(vec3(max.x, min.y, min.z));
+    xyz.push_back(vec3(max.x, max.y, min.z));
+    xyz.push_back(max);
+    xyz.push_back(vec3(min.x, max.y, min.z));
+    xyz.push_back(vec3(min.x, max.y, max.z));
+    xyz.push_back(max);
+    xyz.push_back(vec3(max.x, max.y, min.z));
+    xyz.push_back(vec3(min.x, max.y, min.z));
+    xyz.push_back(max);
+    xyz.push_back(vec3(max.x, min.y, max.z));
+    xyz.push_back(vec3(min.x, min.y, max.z));
+    xyz.push_back(max);
+    xyz.push_back(vec3(min.x, max.y, max.z));
+    xyz.push_back(vec3(min.x, min.y, max.z));
+    xyz.push_back(max);
+  }
+  else if(box->draw_type == "line"){
+    vec3 l1, l2;
+    for(int i=0; i<3; i++){
+      l1=min;
+      l2=min;
+      l2[i]=max[i];
+      xyz.push_back(l1);
+      xyz.push_back(l2);
+
+      l1=max;
+      l2=max;
+      l2[i]=min[i];
+      xyz.push_back(l1);
+      xyz.push_back(l2);
+    }
+    for(int i=0; i<2; i++){
+      l1=min;
+      l1.z=max.z;
+      l2=min;
+      l2.z=max.z;
+      l2[i]=max[i];
+      xyz.push_back(l1);
+      xyz.push_back(l2);
+
+      l1=max;
+      l1.z=min.z;
+      l2=max;
+      l2.z=min.z;
+      l2[i]=min[i];
+      xyz.push_back(l1);
+      xyz.push_back(l2);
+
+      l1=min;
+      l1[i]=max[i];
+      l2=l1;
+      l2.z=max.z;
+      xyz.push_back(l1);
+      xyz.push_back(l2);
+    }
+  }
 
   //---------------------------
 }
@@ -150,9 +192,6 @@ void Box::compute_box_MinMax(Subset* subset, vec3 min_perc, vec3 max_perc){
     max_abs[i] = min[i] + diff_max[i];
   }
   box->max = max_abs;
-
-  say("----");
-  sayVec3(min_abs);sayVec3(diff_max);
 
   //---------------------------
 }

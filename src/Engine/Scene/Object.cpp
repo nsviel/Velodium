@@ -289,6 +289,8 @@ void Object::reset_scene_object(){
   Glyph* box = boxObject->get_glyph();
   box->visibility = false;
 
+  mapObject->clear();
+
   //---------------------------
 }
 void Object::reset_color_object(){

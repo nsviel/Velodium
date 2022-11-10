@@ -35,6 +35,7 @@ void MOD_boxing::design_boxing(){
     ImGui::Begin("Boxing", &modal_tab.show_boxing,ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
 
+    this->box_shape();
     this->control_box();
 
     //---------------------------
@@ -47,6 +48,26 @@ void MOD_boxing::design_boxing(){
 }
 
 //Specific function
+void MOD_boxing::box_shape(){
+  Box* box = objectManager->get_object_box();
+  Glyph* glyph = box->get_glyph();
+  //---------------------------
+
+  static int box_shape = 0;
+  if(ImGui::RadioButton("Wire", &box_shape, 0)){
+    glyph->draw_type = "line";
+    box->build_box_location();
+    glyphManager->update_glyph_location(box->get_glyph());
+  }
+  ImGui::SameLine();
+  if(ImGui::RadioButton("Plain", &box_shape, 1)){
+    glyph->draw_type = "triangle";
+    box->build_box_location();
+    glyphManager->update_glyph_location(box->get_glyph());
+  }
+
+  //---------------------------
+}
 void MOD_boxing::control_box(){
   //---------------------------
 

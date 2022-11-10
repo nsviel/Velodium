@@ -17,7 +17,7 @@
       "path_save_frame" : "../../Hubium/data/frame/",
       "path_save_image" : "../../Hubium/data/image/",
       "player_mode" : "player",
-      "with_cylinder_cleaning" : true,
+      "with_filter_sphere" : true,
       "with_save_frame" : false,
       "with_save_image" : false
    },

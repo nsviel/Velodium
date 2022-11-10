@@ -15,6 +15,7 @@ public:
   ~Localmap();
 
 public:
+  void clear();
   void create_localmap();
   void create_localcloud();
   void update_localmap(slamap* map);

@@ -22,6 +22,17 @@ Localmap::~Localmap(){
   //---------------------------
 }
 
+void Localmap::clear(){
+  //---------------------------
+
+  localmap->location.clear();
+  localmap->color.clear();
+
+  localcloud->location.clear();
+  localcloud->color.clear();
+
+  //---------------------------
+}
 void Localmap::create_localmap(){
   this->localmap = new Glyph();
   //---------------------------
