@@ -7,6 +7,7 @@
 #include "../../../Engine/Scene/Object/Scene/Box.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/Extraction.h"
+#include "../../../Operation/Function/Visibility.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;
@@ -22,6 +23,7 @@ MOD_boxing::MOD_boxing(Node_operation* node_ope){
   this->extractionManager = node_ope->get_extractionManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
+  this->visibleManager = node_ope->get_visibleManager();
 
   this->item_width = 150;
 
@@ -42,6 +44,7 @@ void MOD_boxing::design_boxing(){
     ImGui::Separator();
     if(ImGui::Button("Close")){
       modal_tab.show_boxing = false;
+      visibleManager->stop_boxing();
     }
     ImGui::End();
   }
@@ -102,19 +105,13 @@ void MOD_boxing::control_box(){
 }
 void MOD_boxing::change_box(float xmin, float ymin, float zmin, float xmax, float ymax, float zmax){
   Cloud* cloud = sceneManager->get_selected_cloud();
-  Box* box = objectManager->get_object_box();
   //---------------------------
 
   if(cloud != nullptr){
-    Subset* subset = cloud->subset_selected;
-    sceneManager->update_subset_MinMax(subset);
-
     vec3 min_perc = vec3(xmin, ymin, zmin);
     vec3 max_perc = vec3(xmax, ymax, zmax);
-    box->compute_box_MinMax(subset, min_perc, max_perc);
-    box->update_box();
-    glyphManager->update_glyph_location(box->get_glyph());
-    glyphManager->update_glyph_color(box->get_glyph());
+    visibleManager->compute_box_MinMax(cloud, min_perc, max_perc);
+    visibleManager->compute_visibility(cloud);
   }
 
   //---------------------------

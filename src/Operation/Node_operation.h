@@ -19,6 +19,7 @@ class Player;
 class Online;
 class Saving;
 class Onthefly;
+class Visibility;
 
 
 class Node_operation
@@ -49,12 +50,14 @@ public:
   inline Player* get_playerManager(){return playerManager;}
   inline Saving* get_savingManager(){return savingManager;}
   inline Onthefly* get_flyManager(){return flyManager;}
+  inline Visibility* get_visibleManager(){return visibleManager;}
 
 private:
   Node_engine* node_engine;
   Node_load* node_load;
   Node_gui* node_gui;
 
+  Visibility* visibleManager;
   Attribut* attribManager;
   Heatmap* heatmapManager;
   Filter* filterManager;

@@ -23,9 +23,12 @@ struct Cloud{ //Global set of the cloud
   int nb_subset;
   int nb_point;
   int point_size;
+
+  //Flags
   bool visibility;
   bool heatmap;
   bool onthefly;
+  bool boxed;
 
   //Infos
   std::string path;

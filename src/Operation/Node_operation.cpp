@@ -11,6 +11,7 @@
 #include "Function/Selection.h"
 #include "Function/CoordTransform.h"
 #include "Function/Extraction.h"
+#include "Function/Visibility.h"
 
 #include "Transformation/Filter.h"
 #include "Transformation/Attribut.h"
@@ -38,6 +39,7 @@ Node_operation::Node_operation(Node_engine* node){
   this->onlineManager = new Online(this);
   this->flyManager = new Onthefly(this);
   this->playerManager = new Player(this);
+  this->visibleManager = new Visibility(this);
 
   //---------------------------
 }

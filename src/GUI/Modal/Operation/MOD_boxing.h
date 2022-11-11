@@ -8,6 +8,7 @@ class Glyphs;
 class Node_operation;
 class Extraction;
 class Object;
+class Visibility;
 
 
 class MOD_boxing
@@ -30,6 +31,7 @@ private:
   Glyphs* glyphManager;
   Object* objectManager;
   Extraction* extractionManager;
+  Visibility* visibleManager;
 
   int item_width;
 };
