@@ -39,7 +39,7 @@ void GUI_Player::design_player(){
     //---------------------------
 
     this->design_run();
-    this->player_onthefly();
+    //this->player_onthefly();
     this->player_parameter();
 
     //---------------------------
@@ -120,7 +120,7 @@ void GUI_Player::player_parameter(){
   string* player_mode = playerManager->get_player_mode();
   //---------------------------
 
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Parameter");
+  //ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Parameter");
 
   //Restart to zero when arrive to the end of cloud frames
   if(*player_mode == "player"){

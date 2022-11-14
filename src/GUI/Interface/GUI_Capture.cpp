@@ -65,6 +65,7 @@ void GUI_Capture::design_capture(){
 
 //Specific functions
 void GUI_Capture::design_Velodyne(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Velodyne");
   //---------------------------
 
   this->velo_capture();
@@ -72,7 +73,6 @@ void GUI_Capture::design_Velodyne(){
   this->velo_parameter();
 
   //---------------------------
-  ImGui::Separator();
 }
 void GUI_Capture::design_Scala(){
   //---------------------------
@@ -107,8 +107,6 @@ void GUI_Capture::state_watcher(){
 //Velodyne subfunctions
 void GUI_Capture::velo_state(){
   //---------------------------
-
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Velodyne");
 
   //Capture time
   ImGui::Text("Packet ");
@@ -146,8 +144,10 @@ void GUI_Capture::velo_state(){
   ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d rpm", rot_rpm);
 
   //---------------------------
+  ImGui::Separator();
 }
 void GUI_Capture::velo_capture(){
+  bool is_rotating = *veloManager->get_is_rotating();
   bool is_capturing = *veloManager->get_run_capture();
   //---------------------------
 
@@ -167,14 +167,28 @@ void GUI_Capture::velo_capture(){
   }
   ImGui::PopStyleColor(1);
 
-  //LiDAR motor
+  //Start LIDAR motor
+  if(is_capturing && is_rotating == false){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+  }
   if(ImGui::Button("Start motor", ImVec2(75, 0))){
     veloManager->lidar_start_motor();
   }
-  //Stop button
+  if(is_capturing && is_rotating == false){
+    ImGui::PopStyleColor(1);
+  }
+
+
+  //Stop LIDAR motor
   ImGui::SameLine();
+  if(is_capturing && is_rotating){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 45, 133, 255));
+  }
   if(ImGui::Button("Stop motor", ImVec2(75, 0))){
     veloManager->lidar_stop_motor();
+  }
+  if(is_capturing && is_rotating){
+    ImGui::PopStyleColor(1);
   }
 
   //Connection port
@@ -185,6 +199,7 @@ void GUI_Capture::velo_capture(){
   }
 
   //---------------------------
+  ImGui::Separator();
 }
 void GUI_Capture::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
