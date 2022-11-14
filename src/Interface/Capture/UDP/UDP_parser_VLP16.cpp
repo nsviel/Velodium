@@ -224,14 +224,10 @@ void UDP_parser_VLP16::parse_timestamp(){
   float packet_ts_s = packet_ts_us / 1000000; //(us to s)
   float packet_ts_min = packet_ts_s / 60;  // (s to min)
 
-  //Get actual timestamp
-  const auto p1 = std::chrono::system_clock::now();
-  float timestamp = std::chrono::duration_cast<std::chrono::seconds>(p1.time_since_epoch()).count();
-
   // calculating relative timestamp [microsec] of each firing
   vector<float> timing_offsets = calc_timing_offsets();
   for(int i=0; i<timing_offsets.size(); i++){
-    float ts = timestamp + timing_offsets[i] / 1000000;
+    float ts = packet_ts_s + timing_offsets[i] / 1000000;
     packet_t.push_back(ts);
   }
 
