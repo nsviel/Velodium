@@ -182,7 +182,7 @@ void GUI_Capture::velo_capture(){
   //Stop LIDAR motor
   ImGui::SameLine();
   if(is_capturing && is_rotating){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 45, 133, 255));
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(150, 40, 40, 255));
   }
   if(ImGui::Button("Stop motor", ImVec2(75, 0))){
     veloManager->lidar_stop_motor();

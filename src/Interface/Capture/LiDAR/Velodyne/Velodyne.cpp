@@ -169,7 +169,6 @@ void Velodyne::lidar_stop_motor(){
   }
 
   //Set state
-  this->lidar_stop_watcher();
   this->is_rotating = false;
 
   //---------------------------
