@@ -25,7 +25,7 @@ public:
 
 public:
   //Recording functions
-  void lidar_start_watcher(int capture_port);
+  void lidar_start_watcher();
   void lidar_stop_watcher();
   Subset* get_subset_capture();
 
@@ -49,6 +49,7 @@ public:
   inline bool* get_is_rotating(){return &is_rotating;}
   inline bool* get_is_capturing(){return &is_capturing;}
   inline bool get_is_first_run(){return is_first_run;}
+  inline int* get_capture_port(){return &capture_port;}
   inline int get_rot_freq(){return rot_freq;}
   inline int get_rot_rpm(){return rot_rpm;}
   inline int get_fov_min(){return fov_min;}
@@ -66,6 +67,7 @@ private:
 
   int rot_freq, rot_rpm;
   int fov_min, fov_max;
+  int capture_port;
   bool is_newSubset;
   bool is_capturing;
   bool is_rotating;

@@ -178,7 +178,9 @@ void Capture::capture_vlp16(){
   //---------------------------
 
   if(is_capturing == false){
-    veloManager->lidar_start_watcher(capture_port);
+    int* port = veloManager->get_capture_port();
+    *port = capture_port;
+    veloManager->lidar_start_watcher();
   }
 
   //Create new empty cloud

@@ -64,7 +64,7 @@ Subset* Velodyne::get_subset_capture(){
 }
 
 //Capturing functions
-void Velodyne::lidar_start_watcher(int capture_port){
+void Velodyne::lidar_start_watcher(){
   this->is_capturing = true;
   //---------------------------
 
@@ -72,9 +72,8 @@ void Velodyne::lidar_start_watcher(int capture_port){
   thread_capture = std::thread([&]() {
     int port = capture_port;
     int size_max = 1248;
-    port = 2370;
-    udpServManager->capture_init(port, size_max);
 
+    udpServManager->capture_init(port, size_max);
 
     while (is_capturing){
       //Get packet in decimal format
