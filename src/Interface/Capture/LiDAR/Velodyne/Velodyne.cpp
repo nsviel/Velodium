@@ -72,11 +72,11 @@ Subset* Velodyne::get_subset_capture(){
 //Capturing functions
 void Velodyne::lidar_start_watcher(){
   this->run_capture = true;
-  auto time_frame_begin = high_resolution_clock::now();
   //---------------------------
 
   //Start udp packets watcher
   thread_capture = std::thread([&]() {
+    auto start_frame = high_resolution_clock::now();
     int port = capture_port;
     int size_max = 1248;
 
@@ -102,8 +102,8 @@ void Velodyne::lidar_start_watcher(){
 
           //Time
           auto stop_frame = high_resolution_clock::now();
-          this->time_frame = duration_cast<milliseconds>(stop_frame - time_frame_begin).count();
-          time_frame_begin = high_resolution_clock::now();
+          this->time_frame = duration_cast<milliseconds>(stop_frame - start_frame).count();
+          start_frame = high_resolution_clock::now();
 
           //Do not record the first frame
           if(is_first_run == false){

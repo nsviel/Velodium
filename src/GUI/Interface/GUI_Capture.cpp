@@ -67,8 +67,8 @@ void GUI_Capture::design_capture(){
 void GUI_Capture::design_Velodyne(){
   //---------------------------
 
-  this->velo_state();
   this->velo_capture();
+  this->velo_state();
   this->velo_parameter();
 
   //---------------------------

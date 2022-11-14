@@ -46,6 +46,7 @@ public:
 
   inline string* get_lidar_model(){return &lidar_model;}
   inline bool* get_is_capturing(){return &is_capturing;}
+  inline bool* get_is_capture_finished(){return &is_capture_finished;}
   inline int* get_capture_port(){return &capture_port;}
   inline int get_capture_time(){return capture_time;}
   inline int get_capture_nb_point(){return capture_nb_point;}

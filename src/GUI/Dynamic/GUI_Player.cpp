@@ -282,16 +282,16 @@ void GUI_Player::button_capture_play(Cloud* cloud){
   bool* is_capturing = captureManager->get_is_capturing();
   //---------------------------
 
-  if(*is_capturing == false){
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
-    if (ImGui::Button(ICON_FA_PLAY "##36")){
-      captureManager->start_new_capture("velodyne_vlp16");
+  if(*is_capturing){
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+    if(ImGui::Button(ICON_FA_PLAY "##36")){
+      *is_capturing = false;
     }
     ImGui::PopStyleColor(1);
   }else{
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if (ImGui::Button(ICON_FA_PLAY "##36")){
-      *is_capturing = false;
+      captureManager->start_new_capture("velodyne_vlp16");
     }
     ImGui::PopStyleColor(1);
   }
@@ -301,16 +301,17 @@ void GUI_Player::button_capture_play(Cloud* cloud){
 void GUI_Player::button_capture_pause(Cloud* cloud){
   Capture* captureManager = node_interface->get_captureManager();
   bool is_capturing = *captureManager->get_is_capturing();
+  bool is_finished = *captureManager->get_is_capture_finished();
   //---------------------------
 
-  if(is_capturing){
+  if(is_capturing == false && is_finished == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
   }
   if (ImGui::Button(ICON_FA_PAUSE "##37")){
     bool* capture = captureManager->get_is_capturing();
     *capture = !*capture;
   }
-  if(is_capturing){
+  if(is_capturing == false && is_finished == false){
     ImGui::PopStyleColor(1);
   }
 

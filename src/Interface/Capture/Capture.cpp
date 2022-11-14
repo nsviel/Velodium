@@ -64,11 +64,12 @@ void Capture::update_configuration(){
 void Capture::runtime(){
   //---------------------------
 
-  if(is_capturing == false){
-    return;
-  }
+  //Check if capture cloud is always here
   if(sceneManager->get_is_list_empty() || cloud_capture == nullptr){
     this->stop_capture();
+    return;
+  }
+  if(is_capturing == false){
     return;
   }
 
