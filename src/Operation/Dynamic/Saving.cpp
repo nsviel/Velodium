@@ -47,6 +47,8 @@ void Saving::update_configuration(){
   this->save_image_max = configManager->parse_json_i("dynamic", "nb_save_image");
   this->save_image_ID = 0;
 
+  this->check_directories();
+
   //---------------------------
 }
 void Saving::compute_online(Cloud* cloud, int ID_subset){

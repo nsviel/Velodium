@@ -184,7 +184,11 @@ void GUI_Online::parameter_export(){
 
     //Path where frames are saved
     string path = savingManager->get_path_frame();
-    ImGui::TextColored(ImVec4(0.0f,0.7f,0.0f,1.0f), "%s", realpath(path.c_str(), NULL));
+    if(path == ""){
+      ImGui::TextColored(ImVec4(0.0f,0.0f,0.7f,1.0f), "[error] No path");
+    }else{
+      ImGui::TextColored(ImVec4(0.0f,0.7f,0.0f,1.0f), "%s", realpath(path.c_str(), NULL));
+    }
   }
 
   //Save image for interfacing
@@ -215,7 +219,11 @@ void GUI_Online::parameter_export(){
 
     //Path where images are saved
     string path = savingManager->get_path_image();
-    ImGui::TextColored(ImVec4(0.0f,0.7f,0.0f,1.0f), "%s", realpath(path.c_str(), NULL));
+    if(path == ""){
+      ImGui::TextColored(ImVec4(0.0f,0.0f,0.7f,1.0f), "[error] No path");
+    }else{
+      ImGui::TextColored(ImVec4(0.0f,0.7f,0.0f,1.0f), "%s", realpath(path.c_str(), NULL));
+    }
   }
 
   //---------------------------
