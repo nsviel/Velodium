@@ -4,7 +4,7 @@
 #include "../../../common.h"
 
 class Module_obstacle;
-class MQTT;
+//class MQTT;
 
 
 class Warning
@@ -19,7 +19,7 @@ public:
   string build_jsonFile(Subset* subset);
 
 private:
-  MQTT* mqttManager;
+  //MQTT* mqttManager;
 };
 
 #endif

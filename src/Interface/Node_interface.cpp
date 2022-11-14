@@ -3,7 +3,7 @@
 #include "Capture/Capture.h"
 
 #include "Network/HTTP/HTTP.h"
-#include "Network/MQTT/MQTT.h"
+//#include "Network/MQTT/MQTT.h"
 
 #include "../Engine/Node_engine.h"
 #include "../Engine/Scene/Configuration.h"
@@ -19,7 +19,7 @@ Node_interface::Node_interface(Node_engine* node){
 
   this->configManager = node->get_configManager();
   this->captureManager = new Capture(this);
-  this->mqttManager = new MQTT(this);
+  //this->mqttManager = new MQTT(this);
   this->httpsManager = new HTTP(this);
 
   //---------------------------
@@ -30,7 +30,7 @@ void Node_interface::update(){
   //---------------------------
 
   captureManager->update_configuration();
-  mqttManager->update_configuration();
+  //mqttManager->update_configuration();
   httpsManager->update_configuration();
 
   //---------------------------

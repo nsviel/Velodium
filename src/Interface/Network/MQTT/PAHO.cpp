@@ -1,5 +1,5 @@
 //Sample at https://github.com/eclipse/paho.mqtt.cpp/blob/master/src/samples/async_publish.cpp
-#include "PAHO.h"
+/*#include "PAHO.h"
 
 #include "PAHO_callback.h"
 
@@ -171,3 +171,5 @@ void PAHO::paho_test_localhost(){
   //---------------------------
   this->selected_ip = old_ip;
 }
+
+*/

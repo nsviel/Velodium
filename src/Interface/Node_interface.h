@@ -10,7 +10,7 @@ class Node_operation;
 
 class Configuration;
 class Capture;
-class MQTT;
+//class MQTT;
 class HTTP;
 
 class GUI_Capture;
@@ -35,7 +35,7 @@ public:
 
   inline Capture* get_captureManager(){return captureManager;}
   inline Configuration* get_configManager(){return configManager;}
-  inline MQTT* get_mqttManager(){return mqttManager;}
+  //inline MQTT* get_mqttManager(){return mqttManager;}
   inline HTTP* get_httpsManager(){return httpsManager;}
 
 private:
@@ -44,7 +44,7 @@ private:
   Node_load* node_load;
   Node_gui* node_gui;
 
-  MQTT* mqttManager;
+  //MQTT* mqttManager;
   HTTP* httpsManager;
   Capture* captureManager;
   Configuration* configManager;

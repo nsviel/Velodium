@@ -1,4 +1,4 @@
-#ifndef PAHO_MQTT_H
+/*#ifndef PAHO_MQTT_H
 #define PAHO_MQTT_H
 
 #include "../../../common.h"
@@ -57,3 +57,4 @@ private:
 };
 
 #endif
+*/

@@ -1,4 +1,4 @@
-#ifndef PAHO_MQTT_CALLBACK_H
+/*#ifndef PAHO_MQTT_CALLBACK_H
 #define PAHO_MQTT_CALLBACK_H
 
 #include <atomic>
@@ -46,3 +46,4 @@ public:
 };
 
 #endif
+*/

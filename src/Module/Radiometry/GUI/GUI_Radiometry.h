@@ -1,11 +1,11 @@
-#if !defined(GUI_RADIOMETRY_H)
+#ifndef GUI_RADIOMETRY_H
 #define GUI_RADIOMETRY_H
 
 #include "../../../common.h"
 
 class Module_radiometry;
 class Scene;
-class Pather;
+class Zenity;
 class Radiometry;
 class Heatmap;
 class Reference;
@@ -38,7 +38,7 @@ private:
   Radiometry* radioManager;
   Heatmap* heatmapManager;
   Reference* refManager;
-  Pather* pathManager;
+  Zenity* zenityManager;
   Plot_radio* radioplotManager;
 
   int corr_num;

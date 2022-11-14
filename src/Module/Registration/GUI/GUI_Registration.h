@@ -10,6 +10,7 @@ class Registration;
 class Glyphs;
 class Pose;
 class Module_registration;
+class Pose;
 
 
 class GUI_registration
@@ -31,8 +32,7 @@ public:
   void regist_Stats();
 
 private:
-  Pose poseManager;
-  
+  Pose* poseManager;
   Scene* sceneManager;
   ICP* icpManager;
   Registration* regisManager;

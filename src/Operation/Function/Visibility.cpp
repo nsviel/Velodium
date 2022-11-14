@@ -114,6 +114,19 @@ void Visibility::supress_selected_point(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
+    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset_init = sceneManager->get_subset_init(cloud, i);
+    vector<int>& idx = subset->selected;
+
+    subset->xyz = subset_init->xyz;
+    subset->RGB = subset_init->RGB;
+    subset->I = subset_init->I;
+
+    if(idx.size() != 0){
+      attribManager->make_supressPoints(subset, idx);
+      idx.clear();
+    }
+
     this->compute_visibility(cloud, i);
   }
 
@@ -125,14 +138,15 @@ void Visibility::stop_boxing(){
 
   //By cloud
   for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Cloud* cloud = *next(list_cloud->begin(), i);
     cloud->boxed = false;
-    for(int j=0; j<cloud->nb_subset; i++){
-      Subset* subset = sceneManager->get_subset(cloud, i);
-      Subset* subset_init = sceneManager->get_subset_init(cloud, i);
+    for(int j=0; j<cloud->nb_subset; j++){
+      Subset* subset = sceneManager->get_subset(cloud, j);
+      Subset* subset_init = sceneManager->get_subset_init(cloud, j);
       subset->xyz = subset_init->xyz;
       subset->RGB = subset_init->RGB;
       subset->I = subset_init->I;
+      sceneManager->update_subset_location(subset);
     }
   }
 

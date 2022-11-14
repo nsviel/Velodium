@@ -20,6 +20,7 @@
 #include "../../Operation/Transformation/Pose.h"
 #include "../../Operation/Function/Selection.h"
 #include "../../Operation/Function/Extraction.h"
+#include "../../Operation/Function/Visibility.h"
 #include "../../Operation/Color/Heatmap.h"
 
 #include "imgui/imgui.h"
@@ -47,6 +48,7 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();
   this->playerManager = node_ope->get_playerManager();
+  this->visibleManager = node_ope->get_visibleManager();
   this->transformManager = new Transformation();
   this->poseManager = new Pose();
 
@@ -421,10 +423,14 @@ void GUI_Control::key_suppr(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
-  bool is_selected = selectionManager->mark_supressSelectedPoints_all();
+  if(cloud->boxed == false){
+    bool is_selected = selectionManager->mark_supressSelectedPoints_all();
 
-  if(is_selected == false){
-    sceneManager->remove_cloud(cloud);
+    if(is_selected == false){
+      sceneManager->remove_cloud(cloud);
+    }
+  }else{
+    visibleManager->supress_selected_point(cloud);
   }
 
   //----------------------------

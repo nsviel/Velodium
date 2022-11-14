@@ -34,7 +34,7 @@ MOD_boxing::~MOD_boxing(){}
 //Main function
 void MOD_boxing::design_boxing(){
   if(modal_tab.show_boxing){
-    ImGui::Begin("Boxing", &modal_tab.show_boxing,ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Boxing", &modal_tab.show_boxing, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
 
     this->box_shape();

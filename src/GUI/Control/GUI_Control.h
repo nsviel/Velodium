@@ -16,6 +16,7 @@ class Selection;
 class Heatmap;
 class Dimension;
 class Node_gui;
+class Visibility;
 class Player;
 class Pose;
 
@@ -66,6 +67,7 @@ private:
   Selection* selectionManager;
   Heatmap* heatmapManager;
   Player* playerManager;
+  Visibility* visibleManager;
 
   float cloud_trans_speed;
   float cloud_rotat_degree;

@@ -1,3 +1,4 @@
+/*
 #ifndef PROTOCOL_MQTT_H
 #define PROTOCOL_MQTT_H
 
@@ -28,3 +29,4 @@ private:
 };
 
 #endif
+*/

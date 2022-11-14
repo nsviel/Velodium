@@ -3,8 +3,8 @@
 #include "../Module_obstacle.h"
 
 #include "../../../Interface/Node_interface.h"
-#include "../../../Interface/Network/MQTT/MQTT.h"
-#include "../../../Interface/Network/MQTT/PAHO.h"
+//#include "../../../Interface/Network/MQTT/MQTT.h"
+//#include "../../../Interface/Network/MQTT/PAHO.h"
 
 
 //Constructor / Destructor
@@ -13,19 +13,19 @@ Warning::Warning(Module_obstacle* module){
 
   Node_interface* node_interface = module->get_node_interface();
 
-  this->mqttManager = node_interface->get_mqttManager();
+  //this->mqttManager = node_interface->get_mqttManager();
 
   //---------------------------
 }
 Warning::~Warning(){}
 
 void Warning::send_warning(Subset* subset){
-  PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
+  //PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
   //---------------------------
 
-  string warning = build_jsonFile(subset);
-  mqtt_sncf->paho_connection();
-  mqtt_sncf->paho_publish(warning);
+  //string warning = build_jsonFile(subset);
+  //mqtt_sncf->paho_connection();
+  //mqtt_sncf->paho_publish(warning);
 
   //---------------------------
 }

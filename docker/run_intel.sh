@@ -9,5 +9,6 @@ sudo docker run \
     --publish=2370:2370 \
     --publish=8888:8888 \
     -v data:/app/hubium \
-    velodium
+    velodium \
+    ./executable
 xhost - >/dev/null

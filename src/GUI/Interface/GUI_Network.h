@@ -4,7 +4,7 @@
 #include "../../common.h"
 
 class Node_gui;
-class MQTT;
+//class MQTT;
 class HTTP;
 
 
@@ -27,7 +27,7 @@ public:
   void http_parameter();
 
 private:
-  MQTT* mqttManager;
+  //MQTT* mqttManager;
   HTTP* httpsManager;
 
   int item_width;

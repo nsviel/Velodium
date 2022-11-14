@@ -3,8 +3,8 @@
 #include "../Node_gui.h"
 
 #include "../../Interface/Node_interface.h"
-#include "../../Interface/Network/MQTT/MQTT.h"
-#include "../../Interface/Network/MQTT/PAHO.h"
+//#include "../../Interface/Network/MQTT/MQTT.h"
+//#include "../../Interface/Network/MQTT/PAHO.h"
 #include "../../Interface/Network/HTTP/HTTP.h"
 #include "../../Specific/color.h"
 
@@ -17,7 +17,7 @@ GUI_Network::GUI_Network(Node_gui* node_gui){
 
   Node_interface* node_interface = node_gui->get_node_interface();
 
-  this->mqttManager = node_interface->get_mqttManager();
+  //this->mqttManager = node_interface->get_mqttManager();
   this->httpsManager = node_interface->get_httpsManager();
 
   this->item_width = 100;
@@ -50,7 +50,7 @@ void GUI_Network::design_Network(){
 
 //MQTT
 void GUI_Network::mqtt_connection(){
-  PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
+  /*PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
   //---------------------------
 
   ImGui::Text("SNCF broker connected ");
@@ -83,10 +83,10 @@ void GUI_Network::mqtt_connection(){
   ImGui::PopStyleColor(1);
 
   //---------------------------
-  ImGui::Separator();
+  ImGui::Separator();*/
 }
 void GUI_Network::mqtt_parameter(){
-  PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
+  /*PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
   //---------------------------
 
   //Text mesage
@@ -114,7 +114,7 @@ void GUI_Network::mqtt_parameter(){
   ImGui::InputText("Client ID", client_ID);
 
   //---------------------------
-  ImGui::Separator();
+  ImGui::Separator();*/
 }
 
 //HTTP

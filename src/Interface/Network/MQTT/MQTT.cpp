@@ -1,5 +1,5 @@
 //Sample at https://github.com/eclipse/paho.mqtt.cpp/blob/master/src/samples/async_publish.cpp
-#include "MQTT.h"
+/*#include "MQTT.h"
 
 #include "PAHO.h"
 
@@ -45,3 +45,4 @@ void MQTT::update_configuration(){
 
   //---------------------------
 }
+*/

@@ -161,7 +161,6 @@ bool Reference::load_SpectralonTarget(){
   //---------------------------
   return true;
 }
-
 bool Reference::load_calibrationTargets(list<Cloud*>* list, string path_str){
   /*char path[PATH_MAX];
   vector<string> list_path;
@@ -296,6 +295,7 @@ bool Reference::compute_list(list<Cloud*>* list){
   }else{
     return false;
   }*/
+  return true;
 }
 bool Reference::extract_listSphere(){
   //---------------------------

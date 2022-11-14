@@ -28,8 +28,6 @@ set(ALL_LIBS
   boost_iostreams #necessary for gnuplot
   lz4 #Necessary for FLANN
   freeimage #Screenchot lib
-  paho-mqttpp3 # MQTT library
-  paho-mqtt3as # async MQTT library
   microhttpd #HTTP network protocol
   -fopenmp  #Multithreading
 )

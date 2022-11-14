@@ -31,7 +31,7 @@ void Filter::update_configuration(){
 
   this->verbose = false;
   this->sphere_D = 0.139f;
-  this->sphere_min = 1;
+  this->sphere_min = 4;
   this->sphere_max = 40;
   this->cyl_r_min = configManager->parse_json_f("parameter", "filter_cylinder_rmin");
   this->cyl_r_max = configManager->parse_json_f("parameter", "filter_cylinder_rmax");
@@ -129,7 +129,7 @@ void Filter::filter_sphere_subset(Subset* subset){
   //---------------------------
 
   for(int i=0; i<xyz.size(); i++){
-    float dist = fct_distance_origin(xyz[i]);
+    float dist = fct_distance(xyz[i], subset->root);
     if(dist < sphere_min || dist > sphere_max){
       idx.push_back(i);
     }

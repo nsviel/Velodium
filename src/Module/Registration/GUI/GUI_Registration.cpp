@@ -1,4 +1,4 @@
-poseManager.#include "GUI_Registration.h"
+#include "GUI_Registration.h"
 
 #include "../Module_registration.h"
 #include "../src/Pipeline/ICP.h"
@@ -22,6 +22,7 @@ GUI_registration::GUI_registration(Module_registration* module){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
+  this->poseManager = new Pose();
   //this->regisManager = node_module->get_regisManager();
   //this->icpManager = regisManager->get_icpManager();
 
