@@ -80,6 +80,9 @@ void Capture::runtime(){
     this->runtime_scala();
   }
 
+  //Regulate the number of subsets
+  this->control_nb_subset(cloud_capture);
+
   //---------------------------
 }
 
@@ -191,9 +194,6 @@ void Capture::capture_vlp16(){
 
   this->is_capturing = true;
   ID_capture++;
-
-  //Regulate the number of subsets
-  this->control_nb_subset(cloud_capture);
 
   //---------------------------
   console.AddLog("ok", "Watcher - Vlp16 capture");

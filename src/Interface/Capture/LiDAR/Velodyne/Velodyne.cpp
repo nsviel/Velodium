@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <curl/curl.h>
+#include <chrono>
 
 
 //Constructor / Destructor
@@ -35,6 +36,7 @@ Velodyne::Velodyne(Node_interface* node_interface){
   this->frameManager = new UDP_frame();
   this->subset_capture = new Subset();
 
+  this->capture_time = 0;
   this->rot_freq = 0;
   this->rot_rpm = 0;
   this->fov_min = 0;
@@ -73,7 +75,10 @@ void Velodyne::lidar_start_watcher(){
     int port = capture_port;
     int size_max = 1248;
 
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     udpServManager->capture_init(port, size_max);
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
     while (run_capture){
       //Get packet in decimal format

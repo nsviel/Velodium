@@ -65,6 +65,8 @@ private:
   Subset* subset_capture;
   udpPacket udp_capture;
 
+  float capture_time_frame;
+  float capture_time_packet;
   int rot_freq, rot_rpm;
   int fov_min, fov_max;
   int capture_port;

@@ -173,7 +173,7 @@ void GUI_Capture::velo_capture(){
   int* velo_port = captureManager->get_capture_port();
   ImGui::SetNextItemWidth(item_width);
   if(ImGui::InputInt("Port", velo_port)){
-    veloManager->lidar_stop_watcher();
+    captureManager->stop_capture();
   }
 
   //---------------------------
