@@ -41,7 +41,7 @@ Velodyne::Velodyne(Node_interface* node_interface){
   this->fov_max = 359;
 
   this->is_first_run = true;
-  this->is_capturing = false;
+  this->run_capture = false;
   this->is_rotating = false;
   this->is_connected = false;
   this->is_newSubset = false;
@@ -65,7 +65,7 @@ Subset* Velodyne::get_subset_capture(){
 
 //Capturing functions
 void Velodyne::lidar_start_watcher(){
-  this->is_capturing = true;
+  this->run_capture = true;
   //---------------------------
 
   //Start udp packets watcher
@@ -75,7 +75,7 @@ void Velodyne::lidar_start_watcher(){
 
     udpServManager->capture_init(port, size_max);
 
-    while (is_capturing){
+    while (run_capture){
       //Get packet in decimal format
       vector<int> packet_dec = udpServManager->capture_packet();
 
@@ -109,7 +109,7 @@ void Velodyne::lidar_start_watcher(){
 void Velodyne::lidar_stop_watcher(){
   //---------------------------
 
-  this->is_capturing = false;
+  this->run_capture = false;
   frameManager->reset_frame();
 
   //---------------------------

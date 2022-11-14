@@ -64,11 +64,11 @@ void Capture::update_configuration(){
 void Capture::runtime(){
   //---------------------------
 
-  if(is_capturing == false){return;}
-  if(cloud_capture == nullptr){return;}
-  if(sceneManager->get_is_list_empty()){
-    this->is_capturing = false;
-    this->is_capture_finished = true;
+  if(is_capturing == false){
+    return;
+  }
+  if(sceneManager->get_is_list_empty() || cloud_capture == nullptr){
+    this->stop_capture();
     return;
   }
 
@@ -114,7 +114,7 @@ void Capture::stop_capture(){
   //---------------------------
 
   if(lidar_model == "velodyne_vlp16"){
-    *veloManager->get_is_capturing() = false;
+    *veloManager->get_run_capture() = false;
   }
   else if(lidar_model == "scala"){
     *scalaManager->get_is_scala_capturing() = false;
@@ -174,7 +174,7 @@ void Capture::runtime_scala(){
   //---------------------------
 }
 void Capture::capture_vlp16(){
-  bool is_capturing = *veloManager->get_is_capturing();
+  bool is_capturing = *veloManager->get_run_capture();
   //---------------------------
 
   if(is_capturing == false){

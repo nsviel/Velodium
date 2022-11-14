@@ -47,7 +47,7 @@ public:
   inline bool* get_is_newSubset(){return &is_newSubset;}
   inline bool* get_is_connected(){return &is_connected;}
   inline bool* get_is_rotating(){return &is_rotating;}
-  inline bool* get_is_capturing(){return &is_capturing;}
+  inline bool* get_run_capture(){return &run_capture;}
   inline bool get_is_first_run(){return is_first_run;}
   inline int* get_capture_port(){return &capture_port;}
   inline int get_rot_freq(){return rot_freq;}
@@ -69,7 +69,7 @@ private:
   int fov_min, fov_max;
   int capture_port;
   bool is_newSubset;
-  bool is_capturing;
+  bool run_capture;
   bool is_rotating;
   bool is_connected;
   bool is_first_run;

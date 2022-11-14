@@ -128,45 +128,43 @@ void GUI_Online::parameter_camera(){
 
   //Camera auto displacement
   bool* with_camera_follow = followManager->get_with_camera_follow();
+  bool* with_camera_absolu = followManager->get_with_camera_absolute();
+  bool* with_camera_top = followManager->get_with_camera_top();
   ImGui::Checkbox("Camera follow up", with_camera_follow);
 
   //Relative or absolute
   if(*with_camera_follow){
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
     static int view;
-    if(*followManager->get_with_camera_absolute()){
+    if(*with_camera_absolu){
       view = 1;
     }else{
       view = 0;
     }
     if(ImGui::RadioButton("Relative", &view, 0)){
-      bool* abs = followManager->get_with_camera_absolute();
-      *abs = false;
+      *with_camera_absolu = false;
     }
     ImGui::SameLine();
     if(ImGui::RadioButton("Absolute", &view, 1)){
-      bool* abs = followManager->get_with_camera_absolute();
-      *abs = true;
+      *with_camera_absolu = true;
     }
   }
 
   //Oblique or top view
-  if(*followManager->get_with_camera_absolute()){
+  if(*with_camera_follow && *with_camera_absolu){
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
     static int view;
-    if(*followManager->get_with_camera_top()){
+    if(*with_camera_top){
       view = 1;
     }else{
       view = 0;
     }
     if(ImGui::RadioButton("Oblique##444", &view, 0)){
-      bool* abs = followManager->get_with_camera_top();
-      *abs = false;
+      *with_camera_top = false;
     }
     ImGui::SameLine();
     if(ImGui::RadioButton("Top##444", &view, 1)){
-      bool* abs = followManager->get_with_camera_top();
-      *abs = true;
+      *with_camera_top = true;
     }
   }
 

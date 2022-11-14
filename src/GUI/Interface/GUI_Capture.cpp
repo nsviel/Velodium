@@ -140,7 +140,7 @@ void GUI_Capture::velo_state(){
   //---------------------------
 }
 void GUI_Capture::velo_capture(){
-  bool is_capturing = *veloManager->get_is_capturing();
+  bool is_capturing = *veloManager->get_run_capture();
   //---------------------------
 
   //Capturing button
