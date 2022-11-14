@@ -111,10 +111,18 @@ void GUI_Capture::velo_state(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Velodyne");
 
   //Capture time
-  ImGui::Text("Capture time");
+  ImGui::Text("Packet ");
   ImGui::SameLine();
-  int capture_time = captureManager->get_capture_time();
-  ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d ms", capture_time);
+  float time_packet = veloManager->get_time_packet();
+  ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%.2f", time_packet);
+  ImGui::SameLine();
+  ImGui::Text(" ms");
+  ImGui::Text("Frame");
+  ImGui::SameLine();
+  float time_frame = veloManager->get_time_frame();
+  ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%.2f", time_frame);
+  ImGui::SameLine();
+  ImGui::Text(" ms");
 
   //Number of points
   ImGui::Text("Number of points");

@@ -23,6 +23,8 @@
 #include <curl/curl.h>
 #include <chrono>
 
+using namespace std::chrono;
+
 
 //Constructor / Destructor
 Velodyne::Velodyne(Node_interface* node_interface){
@@ -36,7 +38,9 @@ Velodyne::Velodyne(Node_interface* node_interface){
   this->frameManager = new UDP_frame();
   this->subset_capture = new Subset();
 
-  this->capture_time = 0;
+  this->time_frame = 0;
+  this->time_packet = 0;
+
   this->rot_freq = 0;
   this->rot_rpm = 0;
   this->fov_min = 0;
@@ -68,6 +72,7 @@ Subset* Velodyne::get_subset_capture(){
 //Capturing functions
 void Velodyne::lidar_start_watcher(){
   this->run_capture = true;
+  auto time_frame_begin = high_resolution_clock::now();
   //---------------------------
 
   //Start udp packets watcher
@@ -75,10 +80,10 @@ void Velodyne::lidar_start_watcher(){
     int port = capture_port;
     int size_max = 1248;
 
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    auto start = high_resolution_clock::now();
     udpServManager->capture_init(port, size_max);
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+    auto stop = high_resolution_clock::now();
+    this->time_packet = duration_cast<milliseconds>(stop - start).count();
 
     while (run_capture){
       //Get packet in decimal format
@@ -94,6 +99,11 @@ void Velodyne::lidar_start_watcher(){
         if(frame_rev){
           udpPacket* frame = frameManager->get_endedFrame();
           this->udp_capture = *frame;
+
+          //Time
+          auto stop_frame = high_resolution_clock::now();
+          this->time_frame = duration_cast<milliseconds>(stop_frame - time_frame_begin).count();
+          time_frame_begin = high_resolution_clock::now();
 
           //Do not record the first frame
           if(is_first_run == false){

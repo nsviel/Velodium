@@ -54,6 +54,8 @@ public:
   inline int get_rot_rpm(){return rot_rpm;}
   inline int get_fov_min(){return fov_min;}
   inline int get_fov_max(){return fov_max;}
+  inline float get_time_frame(){return time_frame;}
+  inline float get_time_packet(){return time_packet;}
 
 private:
   Extractor* extractManager;
@@ -65,8 +67,8 @@ private:
   Subset* subset_capture;
   udpPacket udp_capture;
 
-  float capture_time_frame;
-  float capture_time_packet;
+  float time_frame;
+  float time_packet;
   int rot_freq, rot_rpm;
   int fov_min, fov_max;
   int capture_port;
