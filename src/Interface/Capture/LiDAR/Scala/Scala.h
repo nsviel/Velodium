@@ -21,7 +21,9 @@ public:
 
 public:
   //Recording functions
-  void lidar_start_watcher();
+  void start_watcher();
+  void stop_watcher();
+  
   void lidar_create_subset(udpPacket* udp_packet);
 
   inline Subset* get_subset_capture(){return subset_capture;}

@@ -192,9 +192,9 @@ void GUI_Capture::velo_capture(){
   }
 
   //Connection port
-  int* velo_port = captureManager->get_capture_port();
+  int* port = captureManager->get_capture_port();
   ImGui::SetNextItemWidth(item_width);
-  if(ImGui::InputInt("Port", velo_port)){
+  if(ImGui::InputInt("Port", port)){
     captureManager->stop_capture();
   }
 

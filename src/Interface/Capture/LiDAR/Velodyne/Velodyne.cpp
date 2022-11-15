@@ -56,26 +56,15 @@ Velodyne::Velodyne(Node_interface* node_interface){
 }
 Velodyne::~Velodyne(){}
 
-Subset* Velodyne::get_subset_capture(){
-  //---------------------------
-
-  //Free the memory to get synchroneous data
-  udp_capture.name = "";
-
-  //Convert the udp packet into subset
-  Subset* subset = extractManager->extract_data(udp_capture);
-
-  //---------------------------
-  return subset;
-}
-
 //Capturing functions
-void Velodyne::lidar_start_watcher(){
+void Velodyne::start_watcher(int port){
   this->run_capture = true;
+  this->is_first_run = true;
+  this->capture_port = port;
   //---------------------------
 
   //Start udp packets watcher
-  thread_capture = std::thread([&]() {
+  this->thread_capture = std::thread([&]() {
     auto start_frame = high_resolution_clock::now();
     int port = capture_port;
     int size_max = 1248;
@@ -84,12 +73,10 @@ void Velodyne::lidar_start_watcher(){
 
     while (run_capture){
       //Get packet in decimal format
-      this->is_rotating = false;
       auto start = high_resolution_clock::now();
       vector<int> packet_dec = udpServManager->capture_packet();
       auto stop = high_resolution_clock::now();
       this->time_packet = duration_cast<milliseconds>(stop - start).count();
-      this->is_rotating = true;
 
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
@@ -112,6 +99,7 @@ void Velodyne::lidar_start_watcher(){
             this->is_newSubset = true;
           }else{
             this->is_first_run = false;
+            this->is_rotating = true;
           }
         }
       }
@@ -123,7 +111,7 @@ void Velodyne::lidar_start_watcher(){
 
   //---------------------------
 }
-void Velodyne::lidar_stop_watcher(){
+void Velodyne::stop_watcher(){
   //---------------------------
 
   this->run_capture = false;
@@ -131,8 +119,20 @@ void Velodyne::lidar_stop_watcher(){
 
   //---------------------------
 }
+Subset* Velodyne::get_subset_capture(){
+  //---------------------------
 
-//LiDAR motor
+  //Free the memory to get synchroneous data
+  udp_capture.name = "";
+
+  //Convert the udp packet into subset
+  Subset* subset = extractManager->extract_data(udp_capture);
+
+  //---------------------------
+  return subset;
+}
+
+//LiDAR function
 void Velodyne::lidar_start_motor(){
   //---------------------------
 
@@ -175,8 +175,6 @@ void Velodyne::lidar_stop_motor(){
 
   //---------------------------
 }
-
-//LiDAR status
 void Velodyne::lidar_check_status(){
   if(is_first_run == true){
     //---------------------------

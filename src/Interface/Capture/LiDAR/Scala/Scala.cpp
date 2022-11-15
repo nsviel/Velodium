@@ -38,7 +38,8 @@ Scala::Scala(Node_interface* node_interface){
 Scala::~Scala(){}
 
 //Capturing functions
-void Scala::lidar_start_watcher(){
+void Scala::start_watcher(){
+  this->is_capturing = true;
   //---------------------------
 
   //Start udp packets watcher
@@ -56,7 +57,13 @@ void Scala::lidar_start_watcher(){
   thread_scala.detach();
 
   //---------------------------
-  this->is_capturing = true;
+}
+void Scala::stop_watcher(){
+  //---------------------------
+
+  this->is_capturing = false;
+
+  //---------------------------
 }
 void Scala::lidar_create_subset(udpPacket* udp_packet){
   //Asynchroneous function (used by theaded watcher)
