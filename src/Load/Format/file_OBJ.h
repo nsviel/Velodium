@@ -4,6 +4,16 @@
 #include "../../Engine/Data/struct_dataFile.h"
 #include "../../common.h"
 
+struct Vertex{
+    glm::vec3 position;
+    glm::vec2 texcoord;
+    glm::vec3 normal;
+};
+struct VertRef{
+    VertRef( int v, int vt, int vn ) : v(v), vt(vt), vn(vn) { }
+    int v, vt, vn;
+};
+
 
 class file_OBJ
 {
@@ -13,8 +23,11 @@ public:
   ~file_OBJ();
 
 public:
+  //Main function
   dataFile* Loader(string filePath);
-  dataFile* Loader_complete(string filePath);
+
+  //Subfunction
+  vector<Vertex> get_data_from_file(istream& in);
 
 private:
   //Datatypes

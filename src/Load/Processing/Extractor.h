@@ -34,6 +34,8 @@ private:
   void init_subset_parameter(Subset* subset, string path, int ID);
   void init_frame_parameter(Subset* subset);
   void init_random_color();
+  void define_visibility(Subset* subset, string draw_type, int i);
+  void define_buffer_init(Cloud* cloud, Subset* subset);
 
   void extract_location(Subset* subset, vector<vec3>& locationOBJ);
   void extract_color(Subset* subset, vector<vec4>& colorOBJ);

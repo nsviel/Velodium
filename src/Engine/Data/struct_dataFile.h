@@ -11,6 +11,7 @@ struct dataFile{
   int size;
   std::string name;
   std::string path;
+  std::string draw_type;
 
   std::vector<glm::vec3> location;
   std::vector<glm::vec3> normal;

@@ -21,10 +21,11 @@ public:
 public:
   //Program functions
   void runtime_scene();
-
-  //Subfunctions
   void runtime_draw_glyph();
   void runtime_draw_cloud();
+
+  //Subfunctions
+  void draw_mesh(Subset* subset);
 
 private:
   Scene* sceneManager;

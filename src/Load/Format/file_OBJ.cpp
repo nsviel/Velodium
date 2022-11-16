@@ -9,101 +9,95 @@ file_OBJ::~file_OBJ(){}
 
 //Main function
 dataFile* file_OBJ::Loader(string filePath){
-  std::ifstream infile(filePath);
-  std::string line;
-  float a, b, c;
-  string ID;
+  ifstream infile(filePath);
   dataFile* data = new dataFile();
   //---------------------------
 
-  float R = float(rand()%101)/100;
-  float G = float(rand()%101)/100;
-  float B = float(rand()%101)/100;
+  vector<Vertex> file = get_data_from_file(infile);
 
-  while (std::getline(infile, line)){
-    std::istringstream iss(line);
-    iss >> ID >> a >> b >> c;
-
-    //Data extraction
-    if(ID == "v" ){
-      data->location.push_back(vec3(a, b, c));
-    }
-    if(ID == "vn"){
-      data->normal.push_back(vec3(a, b, c));
-    }
+  for(int i=0; i<file.size(); i++){
+    data->location.push_back(file[i].position);
+    data->normal.push_back(file[i].normal);
   }
+
+  data->draw_type = "triangle";
 
   //---------------------------
   return data;
 }
 
-dataFile* file_OBJ::Loader_complete(string filePath){
-  dataFile* data = new dataFile();
-  //---------------------------
+//Subfunction
+vector<Vertex> file_OBJ::get_data_from_file(istream& in){
+  std::vector< Vertex > verts;
 
-  //Prepare data
-  std::ifstream infile(filePath);
-  vector<vec4> location_idx;
-  vector<vec4> normal_idx;
-  vector<vec3> location;
-  vector<vec3> normal;
-  std::string line;
-  float a, b, c;
-  string ID;
+  std::vector< glm::vec4 > positions( 1, glm::vec4( 0, 0, 0, 0 ) );
+  std::vector< glm::vec3 > texcoords( 1, glm::vec3( 0, 0, 0 ) );
+  std::vector< glm::vec3 > normals( 1, glm::vec3( 0, 0, 0 ) );
+  std::string lineStr;
+  while( std::getline( in, lineStr ) ){
+    std::istringstream lineSS( lineStr );
+    std::string lineType;
+    lineSS >> lineType;
 
-  //Check file opening
-  FILE* file = fopen(filePath.c_str(), "r");
-  if(file == NULL){
-    cout<<"Failed to open the file"<<endl;
+    // vertex
+    if( lineType == "v" ){
+      float x = 0, y = 0, z = 0, w = 1;
+      lineSS >> x >> y >> z >> w;
+      positions.push_back( glm::vec4( x, y, z, w ) );
+    }
+
+    // texture
+    if( lineType == "vt" ){
+      float u = 0, v = 0, w = 0;
+      lineSS >> u >> v >> w;
+      texcoords.push_back( glm::vec3( u, v, w ) );
+    }
+
+    // normal
+    if( lineType == "vn" ){
+      float i = 0, j = 0, k = 0;
+      lineSS >> i >> j >> k;
+      normals.push_back( glm::normalize( glm::vec3( i, j, k ) ) );
+    }
+
+    // polygon
+    if( lineType == "f" ){
+      std::vector< VertRef > refs;
+      std::string refStr;
+      while( lineSS >> refStr ){
+        std::istringstream ref( refStr );
+        std::string vStr, vtStr, vnStr;
+        std::getline( ref, vStr, '/' );
+        std::getline( ref, vtStr, '/' );
+        std::getline( ref, vnStr, '/' );
+        int v = atoi( vStr.c_str() );
+        int vt = atoi( vtStr.c_str() );
+        int vn = atoi( vnStr.c_str() );
+        v  = (  v >= 0 ?  v : positions.size() +  v );
+        vt = ( vt >= 0 ? vt : texcoords.size() + vt );
+        vn = ( vn >= 0 ? vn : normals.size()   + vn );
+        refs.push_back( VertRef( v, vt, vn ) );
+      }
+
+      // triangulate, assuming n>3-gons are convex and coplanar
+      for( size_t i = 1; i+1 < refs.size(); ++i ){
+        const VertRef* p[3] = { &refs[0], &refs[i], &refs[i+1] };
+
+        // http://www.opengl.org/wiki/Calculating_a_Surface_Normal
+        glm::vec3 U( positions[ p[1]->v ] - positions[ p[0]->v ] );
+        glm::vec3 V( positions[ p[2]->v ] - positions[ p[0]->v ] );
+        glm::vec3 faceNormal = glm::normalize( glm::cross( U, V ) );
+
+        for( size_t j = 0; j < 3; ++j ){
+          Vertex vert;
+          vert.position = glm::vec3( positions[ p[j]->v ] );
+          vert.texcoord = glm::vec2( texcoords[ p[j]->vt ] );
+          vert.normal = ( p[j]->vn != 0 ? normals[ p[j]->vn ] : faceNormal );
+          verts.push_back( vert );
+        }
+      }
+    }
   }
 
-  //Reading loop
-  while(1){
-    char lineHeader[128];
-
-    // read the first word of the line
-    int res = fscanf(file, "%s", lineHeader);
-    if(res == EOF){
-      break;
-    }
-
-    //Location
-    if(strcmp(lineHeader, "v") == 0){
-      glm::vec3 vertex;
-      int err = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-      location.push_back(vertex);
-    }
-    //Texture
-    else if(strcmp(lineHeader, "vt") == 0){
-      glm::vec2 uv;
-      int err = fscanf(file, "%f %f\n", &uv.x, &uv.y );
-    }
-    //Normal
-    else if(strcmp(lineHeader, "vn") == 0){
-      glm::vec3 nxy;
-      int err = fscanf(file, "%f %f %f\n", &nxy.x, &nxy.y, &nxy.z );
-      normal.push_back(nxy);
-    }
-    //Face
-    else if(strcmp(lineHeader, "f") == 0){
-      vec4 vertex_id, uv_id, normal_id;
-      int matches = fscanf(file, "%f/%f/%f %f/%f/%f %f/%f/%f %f/%f/%f\n", &vertex_id.x, &uv_id.x, &normal_id.x,
-        &vertex_id.y, &uv_id.y, &normal_id.y,
-        &vertex_id.z, &uv_id.z, &normal_id.z,
-        &vertex_id.w, &uv_id.w, &normal_id.w);
-      location_idx.push_back(vertex_id);
-      normal_idx.push_back(normal_id);
-    }
-  }
-
-  //Indexation
-  for(int i=0; i<location_idx.size(); i++){
-    for(int j=0; j<4; j++){
-      data->location.push_back(location[location_idx[i][j] - 1]);
-      data->normal.push_back(normal[normal_idx[i][j] - 1]);
-    }
-  }
-
-  //---------------------------
-  return data;
+  return verts;
 }

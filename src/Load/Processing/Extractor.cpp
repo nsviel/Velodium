@@ -55,22 +55,12 @@ Cloud* Extractor::extract_data(vector<dataFile*> data){
     this->extract_normal(subset, data[i]->normal);
     this->extract_timestamp(subset, data[i]->timestamp);
 
-    if(i == 0){
-      subset->visibility = true;
-    }else{
-      subset->visibility = false;
-    }
-
     //Create associated glyphs
     objectManager->create_glyph_subset(subset);
 
-    Subset* subset_buf = new Subset(*subset);
-    Subset* subset_ini = new Subset(*subset);
-
-    cloud->subset_selected = subset;
-    cloud->subset.push_back(subset);
-    cloud->subset_buffer.push_back(subset_buf);
-    cloud->subset_init.push_back(subset_ini);
+    //Set final parametrization
+    this->define_visibility(subset, data[i]->draw_type, i);
+    this->define_buffer_init(cloud, subset);
   }
 
   //---------------------------
@@ -117,13 +107,8 @@ void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
+  this->define_buffer_init(cloud, subset);
 
-  Subset* subset_buf = new Subset(*subset);
-  Subset* subset_ini = new Subset(*subset);
-
-  cloud->subset.push_back(subset);
-  cloud->subset_init.push_back(subset_buf);
-  cloud->subset_buffer.push_back(subset_ini);
   cloud->nb_subset++;
   cloud->ID_subset++;
 
@@ -245,6 +230,32 @@ void Extractor::check_data(udpPacket& data){
 
   //---------------------------
 }
+void Extractor::define_visibility(Subset* subset, string draw_type, int i){
+  //---------------------------
+
+  subset->draw_type = draw_type;
+
+  if(i == 0){
+    subset->visibility = true;
+  }else{
+    subset->visibility = false;
+  }
+
+  //---------------------------
+}
+void Extractor::define_buffer_init(Cloud* cloud, Subset* subset){
+  //---------------------------
+
+  Subset* subset_buf = new Subset(*subset);
+  Subset* subset_ini = new Subset(*subset);
+
+  cloud->subset_selected = subset;
+  cloud->subset.push_back(subset);
+  cloud->subset_buffer.push_back(subset_buf);
+  cloud->subset_init.push_back(subset_ini);
+
+  //---------------------------
+}
 void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
   //---------------------------
 
@@ -295,6 +306,7 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   //Other stuff
   subset->ID = ID;
   subset->root = vec3(0.0);
+  subset->draw_type = "point";
   if(name != ""){
     subset->name = name;
   }else{

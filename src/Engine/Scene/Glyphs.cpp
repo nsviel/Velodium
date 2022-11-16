@@ -48,6 +48,12 @@ void Glyphs::draw_glyph(Glyph* glyph){
     else if(glyph->draw_type == "triangle"){
       glDrawArrays(GL_TRIANGLES, 0, glyph->location.size());
     }
+    else if(glyph->draw_type == "triangle_strip"){
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, glyph->location.size());
+    }
+    else if(glyph->draw_type == "triangle_fan"){
+      glDrawArrays(GL_TRIANGLE_FAN, 0, glyph->location.size());
+    }
     else if(glyph->draw_type == "quad"){
       glDrawArrays(GL_QUADS, 0, glyph->location.size());
     }
