@@ -21,6 +21,9 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   this->loaderManager = node_load->get_loaderManager();
   this->pathManager = node_load->get_patherManager();
 
+  this->remove_cloud = true;
+  this->lidar_model = "velodyne_vlp16";
+
   //---------------------------
 }
 GUI_Initialization::~GUI_Initialization(){}
@@ -28,6 +31,18 @@ GUI_Initialization::~GUI_Initialization(){}
 //Main functions
 void GUI_Initialization::init_gui(){
   //---------------------------
+
+  //Options
+  ImGui::Checkbox("Remove clouds", &remove_cloud);
+  static int lidar_model_id = 0;
+  ImGui::SetNextItemWidth(125);
+  if(ImGui::Combo("Lidar", &lidar_model_id, "velodyne_vlp16\0velodyne_hdl32\0")){
+    if(lidar_model_id == 0){
+      this->lidar_model = "velodyne_vlp16";
+    }else if(lidar_model_id == 1){
+      this->lidar_model = "velodyne_hdl32";
+    }
+  }
 
   if(ImGui::Button("Buddha", ImVec2(100,0))){
     this->init_mode(0);
@@ -57,10 +72,12 @@ void GUI_Initialization::init_mode(int mode){
   char path[PATH_MAX];
   //---------------------------
 
+  if(remove_cloud){
+    sceneManager->remove_cloud_all();
+  }
+
   switch(mode){
     case 0:{//Buddha
-      sceneManager->remove_cloud_all();
-
       Matrix4f realTransformation;
       realTransformation <<
         0.306093,   -0.951146,  -0.0403608,    0.585185,
@@ -70,48 +87,37 @@ void GUI_Initialization::init_mode(int mode){
 
       loaderManager->load_cloud("../media/engine/fastScene/buddha.pts");
       loaderManager->load_cloud("../media/engine/fastScene/buddha_moved.pts");
-      //loaderManager->load_cloud("../media/engine/fastScene/buddha_moved.pts", realTransformation);
       break;
     }
     case 1:{//Torus
-      sceneManager->remove_cloud_all();
       loaderManager->load_cloud("../media/engine/fastScene/torus_1.ply");
       loaderManager->load_cloud("../media/engine/fastScene/torus_2.ply");
       break;
     }
     case 2:{//VLP16 PCAP
-      sceneManager->remove_cloud_all();
       loaderManager->load_cloud("../media/engine/fastScene/pcap_test.pcap");
-      Cloud* cloud = loaderManager->get_createdcloud();
-      cloud->lidar_model = "velodyne_vlp16";
       break;
     }
     case 3:{//VLP16 Nuscene
-      sceneManager->remove_cloud_all();
-      Cloud* cloud = pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
-      cloud->lidar_model = "velodyne_vlp16";
+      pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/dataset/NuScene/scene-0002/");
       break;
     }
     case 4:{//VLP16 kitti
-      sceneManager->remove_cloud_all();
-      Cloud* cloud = pathManager->loading_directory_frame("../media/point_cloud/kitti/");
-      cloud->lidar_model = "velodyne_vlp64";
+      pathManager->loading_directory_frame("../media/point_cloud/kitti/");
       break;
     }
     case 5:{//HDL32 Tunnel
-      sceneManager->remove_cloud_all();
       loaderManager->load_cloud("/home/aeter/Desktop/Point_cloud/pcap/HDL32/HDL32-V2_Tunnel.pcap");
-      Cloud* cloud = loaderManager->get_createdcloud();
-      cloud->lidar_model = "velodyne_hdl32";
       break;
     }
     case 6:{//VLP16 amphitheatre
-      sceneManager->remove_cloud_all();
-      Cloud* cloud = pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/amphitheatre/13.05_amphi_entier/");
-      cloud->lidar_model = "velodyne_hdl32";
+      pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/amphitheatre/13.05_amphi_entier/");
       break;
     }
   }
+
+  Cloud* cloud = loaderManager->get_createdcloud();
+  cloud->lidar_model = lidar_model;
 
   //---------------------------
 }

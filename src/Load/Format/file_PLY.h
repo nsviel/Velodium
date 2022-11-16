@@ -28,6 +28,7 @@ private:
   void Loader_data_ascii(std::ifstream& file);
   void Loader_data_binary(std::ifstream& file);
   void reorder_by_timestamp();
+  int get_id_property(string name);
 
   //Exporter subfunctions
   void Exporter_header(std::ofstream& file, string format, Subset* subset);
@@ -46,6 +47,7 @@ private:
   bool is_intensity;
   int point_data_idx;
   int point_number;
+  int face_number;
   int property_number;
   int header_size;
 };

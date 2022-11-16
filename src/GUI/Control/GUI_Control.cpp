@@ -54,7 +54,6 @@ GUI_Control::GUI_Control(Node_gui* node){
 
   this->cloud_trans_speed = configManager->parse_json_f("parameter", "cloud_translation");
   this->cloud_rotat_degree = configManager->parse_json_f("parameter", "cloud_rotation");
-  this->wheel_mode = 0;
 
   //---------------------------
 }

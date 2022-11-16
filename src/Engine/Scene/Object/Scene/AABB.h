@@ -20,8 +20,8 @@ public:
   void update_aabb(Subset* subset);
   vector<vec3> build_box(vec3 min, vec3 max);
 
-  inline Glyph* get_aabb(){return aabb;}
-  inline vec4* get_aabb_color(){return &color;}
+  inline Glyph* get_glyph(){return aabb;}
+  inline vec4* get_glyph_color(){return &color;}
 
 private:
   Glyph* aabb;

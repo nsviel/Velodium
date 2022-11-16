@@ -35,6 +35,7 @@ struct Cloud{ //Global set of the cloud
   std::string name;
   std::string format;
   std::string saveas;
+  std::string draw_type;
   std::string dataFormat;
   std::string lidar_model;
   std::vector<std::string> list_path;

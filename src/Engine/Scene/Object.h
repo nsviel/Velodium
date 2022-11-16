@@ -46,6 +46,7 @@ public:
   void update_glyph_cloud(Cloud* cloud);
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);
+  void update_object(string obj, vec4 color);
 
   //Reset function
   void reset_scene_object();
@@ -55,6 +56,7 @@ public:
   //Misc function
   void set_object_visibility(string name, bool val);
   void set_slam_object(bool value);
+  Glyph* get_glyph_by_name(string name);
 
   inline Grid* get_object_grid(){return gridObject;}
   inline Axis* get_object_axis(){return axisObject;}

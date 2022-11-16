@@ -28,10 +28,9 @@ public:
   void design_Options();
 
   //Subfunctions
-  void option_colors();
-  void option_glyphs();
-  void option_heatmap();
-  void option_parameters();
+  void option_color();
+  void option_glyph();
+  void option_parameter();
   void option_mode();
   void option_font();
 

@@ -143,7 +143,7 @@ void GUI_menuBar::MenuBar_menu_load(){
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
-    if (ImGui::MenuItem("Open cloud")){
+    if (ImGui::MenuItem("Open")){
       pathManager->loading_cloud();
     }
     if (ImGui::MenuItem("Open frames")){

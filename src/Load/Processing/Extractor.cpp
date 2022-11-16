@@ -59,7 +59,7 @@ Cloud* Extractor::extract_data(vector<dataFile*> data){
     objectManager->create_glyph_subset(subset);
 
     //Set final parametrization
-    this->define_visibility(subset, data[i]->draw_type, i);
+    this->define_visibility(subset, i);
     this->define_buffer_init(cloud, subset);
   }
 
@@ -230,10 +230,8 @@ void Extractor::check_data(udpPacket& data){
 
   //---------------------------
 }
-void Extractor::define_visibility(Subset* subset, string draw_type, int i){
+void Extractor::define_visibility(Subset* subset, int i){
   //---------------------------
-
-  subset->draw_type = draw_type;
 
   if(i == 0){
     subset->visibility = true;
@@ -272,6 +270,7 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
   cloud->format = get_format_from_path(path);
 
   cloud->dataFormat = "";
+  cloud->draw_type = data[0]->draw_type;
   cloud->visibility = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
@@ -306,7 +305,6 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   //Other stuff
   subset->ID = ID;
   subset->root = vec3(0.0);
-  subset->draw_type = "point";
   if(name != ""){
     subset->name = name;
   }else{

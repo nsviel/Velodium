@@ -51,17 +51,30 @@ void GUI_option::design_Options(){
   //---------------------------
 
   this->option_font();
-  this->option_glyphs();
+  this->option_glyph();
   this->option_mode();
-  this->option_heatmap();
-  this->option_parameters();
-  this->option_colors();
+  this->option_parameter();
+  this->option_color();
 
   //---------------------------
 }
 
 //Subfunctions
-void GUI_option::option_glyphs(){
+void GUI_option::option_font(){
+  ImGuiIO& io = ImGui::GetIO();
+  //---------------------------
+
+  static int font_selected = 0;
+  ImGui::PushItemWidth(50);
+  if(ImGui::Combo("Font size", &font_selected, "13\0 12\0")){
+    ImFont* font = io.Fonts->Fonts[font_selected];
+    io.FontDefault = font;
+  }
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_option::option_glyph(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   ImGui::Columns(2);
   //---------------------------
@@ -98,7 +111,7 @@ void GUI_option::option_glyphs(){
 
   //Display Bounding Box
   AABB* aabbObject = objectManager->get_object_aabb();
-  Glyph* aabb = aabbObject->get_aabb();
+  Glyph* aabb = aabbObject->get_glyph();
   bool& aabb_ON = aabb->visibility;
   ImGui::Checkbox("AABB", &aabb_ON);
   ImGui::NextColumn();
@@ -143,99 +156,52 @@ void GUI_option::option_glyphs(){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_option::option_heatmap(){
-  if(ImGui::CollapsingHeader("Heatmap")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+void GUI_option::option_mode(){
+  if(ImGui::CollapsingHeader("Mode")){
     //---------------------------
 
-    //Heatmap
-    if(ImGui::Button("Apply##238", ImVec2(75,0))){
-      if(!sceneManager->get_is_list_empty()){
-        heatmapManager->make_cloud_heatmap(cloud);
-      }
-    }
-    ImGui::SameLine();
-
-    //Heatmap all
-    static bool heatAll = false;
-    if(ImGui::Button("Apply all", ImVec2(75,0))){
-      if(!sceneManager->get_is_list_empty()){
-        heatAll = !heatAll;
-        heatmapManager->make_heatmap_all(heatAll);
-      }
-    }
-
-    int* HMmode = heatmapManager->get_heatmap_mode();
-    ImGui::SetNextItemWidth(75);
-    ImGui::Combo("##1", HMmode, "height\0Is\0dist\0cos(It)\0It\0");
-    ImGui::SameLine();
-
-    //fct_normalize heatmap
-    bool* normalizeON = heatmapManager->get_is_normalization();
-    ImGui::Checkbox("fct_normalized", normalizeON);
-
-    //---------------------------
-    ImGui::Separator();
-  }
-}
-void GUI_option::option_colors(){
-  if(ImGui::CollapsingHeader("Colors")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
-    int colorEditSize = 150;
-    //---------------------------
-
-    //Background color
-    vec4* screen_color = renderManager->get_screen_color();
-    ImGui::SetNextItemWidth(colorEditSize);
-    ImGui::ColorEdit4("Background", (float*)screen_color);
-
-    /*/Normals color
-    ImGui::SetNextItemWidth(colorEditSize);
-    vec4* color_normals = objectManager->get_glyph_color("normal");
-    if(ImGui::ColorEdit4("Normals", (float*)color_normals)){
-      objectManager->update_object("normal", *color_normals);
-    }*/
-
-    //Grid color
-    ImGui::SetNextItemWidth(colorEditSize);
-    Grid* gridObject = objectManager->get_object_grid();
-    vec4* grid_color = gridObject->get_grid_color();
-    if(ImGui::ColorEdit4("Grid", (float*)grid_color)){
-      objectManager->update_object(gridObject->get_grid(), *grid_color);
-    }
-
-    //Bounding box color
-    ImGui::SetNextItemWidth(colorEditSize);
-    AABB* aabbObject = objectManager->get_object_aabb();
-    vec4* aabb_color = aabbObject->get_aabb_color();
-    if(ImGui::ColorEdit4("AABB", (float*)aabb_color)){
-      objectManager->update_object(aabbObject->get_aabb(), *aabb_color);
-    }
-
-    //Uniform cloud color
-    if(cloud != nullptr){
-      vec4 cloud_color = cloud->unicolor;
-
-      ImGui::SetNextItemWidth(colorEditSize);
-      if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
-        if(!sceneManager->get_is_list_empty()){
-          colorManager->set_color_new(cloud, cloud_color);
-        }
-      }
-    }
-
-    //---------------------------
-    ImGui::Separator();
-    if(ImGui::Button("Reset", ImVec2(75,0))){
-      float bkg_color = configManager->parse_json_f("window", "background_color");
+    //Light / Dark mode
+    static bool darkMode = false;
+    static vec4 color_old;
+    if(ImGui::Checkbox("Dark mode", &darkMode)){
       vec4* screen_color = renderManager->get_screen_color();
-      *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
-      objectManager->reset_color_object();
+      if(darkMode == true){
+        color_old = *screen_color;
+        objectManager->update_object("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        objectManager->update_object("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      }else{
+        objectManager->update_object("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        objectManager->update_object("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        *screen_color = color_old;
+      }
     }
+
+    //Visualization mode
+    static bool visualization = false;
+    if(ImGui::Checkbox("Display mode", &visualization)){
+      vec4* screen_color = renderManager->get_screen_color();
+      Glyph* axis = objectManager->get_glyph_by_name("axis");
+      Glyph* aabb = objectManager->get_glyph_by_name("aabb");
+      Glyph* grid = objectManager->get_glyph_by_name("grid");
+
+      if(visualization == true){
+        axis->visibility = false;
+        aabb->visibility = false;
+        grid->visibility = false;
+      }else{
+        axis->visibility = true;
+        aabb->visibility = true;
+        grid->visibility = true;
+      }
+    }
+
+    //---------------------------
+    ImGui::Separator();
   }
 }
-void GUI_option::option_parameters(){
+void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = sceneManager->get_selected_cloud();
     ImGuiStyle& style = ImGui::GetStyle();
@@ -243,14 +209,14 @@ void GUI_option::option_parameters(){
 
     //cloud movement
     float* transCoef = gui_control->get_transCoef();
-    ImGui::DragFloat("Translation", transCoef, 0.001, 0, 100, "%.4f");
+    ImGui::DragFloat("Translation", transCoef, 0.001, 0, 100, "%.4f m");
     float* rotatDegree = gui_control->get_rotatDegree();
-    ImGui::DragFloat("Rotation", rotatDegree, 0.5, 0, 90, "%.4f");
+    ImGui::DragFloat("Rotation", rotatDegree, 0.5, 0, 90, "%.4f °");
 
     //Point cloud scaling
     static float scale = 1.0f;
-    ImGui::SetNextItemWidth(100);
-    if(ImGui::DragFloat("Scale", &scale, 0.01, 0.1, 10, "%.2f X")){
+    ImGui::SetNextItemWidth(75);
+    if(ImGui::DragFloat("Scale", &scale, 0.01, 0.1, 100, "%.2f x")){
       if(!sceneManager->get_is_list_empty()){
         Transformation transformManager;
         transformManager.make_scaling(cloud, scale);
@@ -266,6 +232,31 @@ void GUI_option::option_parameters(){
       }
       else if(point_shape == 1){
         glEnable(GL_POINT_SMOOTH);
+      }
+    }
+
+    //Draw type
+    static int draw_type = 0;
+    if(cloud != nullptr){
+      if(cloud->draw_type == "point"){
+        draw_type = 0;
+      }
+      if(cloud->draw_type == "line"){
+        draw_type = 1;
+      }
+      if(cloud->draw_type == "triangle"){
+        draw_type = 2;
+      }
+    }
+    if(ImGui::Combo("Draw type", &draw_type, "Point\0Line\0Triangle\0")){
+      if(draw_type == 0){
+        cloud->draw_type = "point";
+      }
+      else if(draw_type == 1){
+        cloud->draw_type = "line";
+      }
+      else if(draw_type == 2){
+        cloud->draw_type = "triangle";
       }
     }
 
@@ -335,69 +326,60 @@ void GUI_option::option_parameters(){
     ImGui::Separator();
   }
 }
-void GUI_option::option_mode(){
-  if(ImGui::CollapsingHeader("Mode")){
+void GUI_option::option_color(){
+  if(ImGui::CollapsingHeader("Colors")){
+    Cloud* cloud = sceneManager->get_selected_cloud();
+    int colorEditSize = 150;
     //---------------------------
 
-    //Light / Dark mode
-    static bool darkMode = false;
-    if(ImGui::Checkbox("Dark mode", &darkMode)){
-      vec4* screen_color = renderManager->get_screen_color();
+    //Background color
+    vec4* screen_color = renderManager->get_screen_color();
+    ImGui::SetNextItemWidth(colorEditSize);
+    ImGui::ColorEdit4("Background", (float*)screen_color);
 
-      /*if(darkMode == true){
-        objectManager->update_object("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        objectManager->update_object("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-      }else{
-        objectManager->update_object("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        objectManager->update_object("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
-      }*/
+    /*/Normals color
+    ImGui::SetNextItemWidth(colorEditSize);
+    vec4* color_normals = objectManager->get_glyph_color("normal");
+    if(ImGui::ColorEdit4("Normals", (float*)color_normals)){
+      objectManager->update_object("normal", *color_normals);
+    }*/
+
+    //Grid color
+    ImGui::SetNextItemWidth(colorEditSize);
+    Grid* gridObject = objectManager->get_object_grid();
+    vec4* grid_color = gridObject->get_grid_color();
+    if(ImGui::ColorEdit4("Grid", (float*)grid_color)){
+      objectManager->update_object(gridObject->get_grid(), *grid_color);
     }
 
-    //Visualization mode
-    static bool visualization = false;
-    if(ImGui::Checkbox("Visualization", &visualization)){
-      vec4* screen_color = renderManager->get_screen_color();
+    //Bounding box color
+    ImGui::SetNextItemWidth(colorEditSize);
+    AABB* aabbObject = objectManager->get_object_aabb();
+    vec4* aabb_color = aabbObject->get_glyph_color();
+    if(ImGui::ColorEdit4("AABB", (float*)aabb_color)){
+      objectManager->update_object(aabbObject->get_glyph(), *aabb_color);
+    }
 
-      /*if(visualization == true){
-        objectManager->set_visibility("axis", false);
-        objectManager->set_visibility("axiscloud", false);
-        objectManager->set_visibility("grid", false);
-        objectManager->set_visibility("aabb", false);
-        *screen_color = vec4(1.0f,1.0f,1.0f, 1.0f);
-      }else{
-        objectManager->set_visibility("axis", true);
-        objectManager->set_visibility("axiscloud", true);
-        objectManager->set_visibility("grid", true);
-        objectManager->set_visibility("aabb", true);
+    //Uniform cloud color
+    if(cloud != nullptr){
+      vec4 cloud_color = cloud->unicolor;
 
-        if(darkMode == true){
-          *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      ImGui::SetNextItemWidth(colorEditSize);
+      if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
+        if(!sceneManager->get_is_list_empty()){
+          colorManager->set_color_new(cloud, cloud_color);
         }
-      }*/
+      }
     }
-
-    //Mouse wheel mode
-    int* wheel_mode = gui_control->get_mouseWheelMode();
-    ImGui::Text("Mouse wheel");
-    ImGui::Combo("##1", wheel_mode, "Frame ID\0Cloud rotation\0");
 
     //---------------------------
     ImGui::Separator();
-  }
-}
-void GUI_option::option_font(){
-  ImGuiIO& io = ImGui::GetIO();
-  //---------------------------
+    if(ImGui::Button("Reset", ImVec2(75,0))){
+      float bkg_color = configManager->parse_json_f("window", "background_color");
+      vec4* screen_color = renderManager->get_screen_color();
+      *screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
-  static int font_selected = 0;
-  ImGui::PushItemWidth(50);
-  if(ImGui::Combo("Font size", &font_selected, "13\0 12\0")){
-    ImFont* font = io.Fonts->Fonts[font_selected];
-    io.FontDefault = font;
+      objectManager->reset_color_object();
+    }
   }
-
-  //---------------------------
-  ImGui::Separator();
 }

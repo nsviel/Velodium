@@ -51,7 +51,6 @@ public:
 
   inline float* get_transCoef(){return &cloud_trans_speed;}
   inline float* get_rotatDegree(){return &cloud_rotat_degree;}
-  inline int* get_mouseWheelMode(){return &wheel_mode;}
 
 private:
   Transformation* transformManager;
@@ -71,7 +70,6 @@ private:
 
   float cloud_trans_speed;
   float cloud_rotat_degree;
-  int wheel_mode;
 };
 
 #endif

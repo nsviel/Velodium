@@ -24,6 +24,9 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Pather* pathManager;
+
+  bool remove_cloud;
+  string lidar_model;
 };
 
 #endif

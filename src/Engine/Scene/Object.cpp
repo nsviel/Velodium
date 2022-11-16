@@ -72,7 +72,7 @@ void Object::create_glyph_scene(){
   glyphManager->create_glyph_scene(gridObject->get_grid_plane());
   glyphManager->create_glyph_scene(axisObject->get_axis_scene());
   glyphManager->create_glyph_scene(trajObject->get_glyph());
-  glyphManager->create_glyph_scene(aabbObject->get_aabb());
+  glyphManager->create_glyph_scene(aabbObject->get_glyph());
   glyphManager->create_glyph_scene(carObject->get_glyph());
   glyphManager->create_glyph_scene(mapObject->get_localmap());
   glyphManager->create_glyph_scene(mapObject->get_localcloud());
@@ -182,7 +182,7 @@ void Object::runtime_glyph_pred(Subset* subset){
 void Object::update_configuration(){
   //---------------------------
 
-  Glyph* aabb = aabbObject->get_aabb();
+  Glyph* aabb = aabbObject->get_glyph();
   Glyph* grid = gridObject->get_grid();
   Glyph* axis = axisObject->get_axis_scene();
   aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
@@ -232,6 +232,17 @@ void Object::update_object(Glyph* glyph, vec4 color){
 
   //---------------------------
 }
+void Object::update_object(string obj, vec4 color){
+  Glyph* glyph = get_glyph_by_name(obj);
+  //---------------------------
+
+  if(glyph != nullptr){
+    glyphManager->update_glyph_location(glyph);
+    glyphManager->update_glyph_color(glyph, color);
+  }
+
+  //---------------------------
+}
 void Object::update_glyph_subset(Subset* subset){
   //---------------------------
 
@@ -257,7 +268,7 @@ void Object::update_glyph_cloud(Cloud* cloud){
 
   //Update cloud AABB
   aabbObject->update_aabb(cloud);
-  this->update_object(aabbObject->get_aabb());
+  this->update_object(aabbObject->get_glyph());
 
   //Update cloud subset glyphs
   for(int i=0; i<cloud->nb_subset; i++){
@@ -276,7 +287,7 @@ void Object::reset_scene_object(){
   glyphManager->remove_temporary_glyph();
 
   //Invisibilize all cloud dependant glyphs
-  Glyph* aabb = aabbObject->get_aabb();
+  Glyph* aabb = aabbObject->get_glyph();
   aabb->location.clear();
 
   //Reset specific glyphs
@@ -296,7 +307,7 @@ void Object::reset_scene_object(){
 void Object::reset_color_object(){
   //---------------------------
 
-  Glyph* aabb = aabbObject->get_aabb();
+  Glyph* aabb = aabbObject->get_glyph();
   Glyph* grid = gridObject->get_grid();
 
   glyphManager->update_glyph_color(aabb, vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -359,4 +370,21 @@ void Object::set_slam_object(bool value){
   localcloud->visibility = value;
 
   //---------------------------
+}
+Glyph* Object::get_glyph_by_name(string name){
+  Glyph* glyph = nullptr;
+  //---------------------------
+
+  if(name == "aabb"){
+    glyph = aabbObject->get_glyph();
+  }else if(name == "selection"){
+    glyph = markObject->get_selection_frame();
+  }else if(name == "axis"){
+    glyph = axisObject->get_axis_scene();
+  }else if(name == "grid"){
+    glyph = gridObject->get_grid();
+  }
+
+  //---------------------------
+  return glyph;
 }

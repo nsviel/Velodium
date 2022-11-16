@@ -49,16 +49,14 @@ void Engine::runtime_draw_cloud(){
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
-    glPointSize(cloud->point_size);
-
     //By subset
     if(cloud->visibility){
+      glPointSize(cloud->point_size);
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
-        this->draw_mesh(subset);
+        this->draw_mesh(subset, cloud->draw_type);
       }
     }
-
   }
 
   //---------------------------
@@ -96,34 +94,34 @@ void Engine::runtime_draw_glyph(){
 }
 
 //Subfunction
-void Engine::draw_mesh(Subset* subset){
+void Engine::draw_mesh(Subset* subset, string draw_type){
   //---------------------------
 
   if(subset->visibility){
     // Bind the glyph VAO
     glBindVertexArray(subset->VAO);
-    if(subset->draw_type == "point"){
+    if(draw_type == "point"){
       glDrawArrays(GL_POINTS, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "line"){
+    else if(draw_type == "line"){
       glDrawArrays(GL_LINES, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "triangle"){
+    else if(draw_type == "triangle"){
       glDrawArrays(GL_TRIANGLES, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "triangle_strip"){
+    else if(draw_type == "triangle_strip"){
       glDrawArrays(GL_TRIANGLE_STRIP, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "triangle_fan"){
+    else if(draw_type == "triangle_fan"){
       glDrawArrays(GL_TRIANGLE_FAN, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "quad"){
+    else if(draw_type == "quad"){
       glDrawArrays(GL_QUADS, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "quad_strip"){
+    else if(draw_type == "quad_strip"){
       glDrawArrays(GL_QUAD_STRIP, 0, subset->xyz.size());
     }
-    else if(subset->draw_type == "polygon"){
+    else if(draw_type == "polygon"){
       glDrawArrays(GL_POLYGON, 0, subset->xyz.size());
     }
     else{

@@ -80,7 +80,7 @@ void file_PLY::Loader_header(std::ifstream& file){
 
     //Retrieve number of point
     if(h1 + h2 == "elementvertex"){
-      point_number = std::stoi(h3);
+      this->point_number = std::stoi(h3);
     }
 
     //Retrieve property
@@ -116,35 +116,94 @@ void file_PLY::Loader_header(std::ifstream& file){
       property_name.push_back(h3);
       property_number++;
     }
+
+    //Retrieve property
+    if(h1 + h2 == "elementface"){
+      this->face_number = std::stoi(h3);
+    }
   }while (line.find("end_header") != 0);
 
   //---------------------------
 }
 void file_PLY::Loader_data_ascii(std::ifstream& file){
+  vector<vec3> vertex;
+  vector<vec3> normal;
+  vector<float> intensity;
   //---------------------------
 
-  //Retrieve data
+  //Retrieve vertex data
   string line;
-  int cpt = 1;
+  int cpt = 0;
   while (std::getline(file, line)){
-    std::istringstream iss(line);
-
-    //Stocke all line values
-    float d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10;
-    iss >> d0 >> d1 >> d2 >> d3 >> d4 >> d5 >> d6 >> d7 >> d8 >> d9 >> d10;
-
-    //Location
-    data_out->location.push_back(vec3(d0, d1, d2));
-
-    //Normal
-    data_out->normal.push_back(vec3(d3, d4, d5));
-
-    //Check for data end
-    if(cpt >= point_number){
+    //Check vertex number
+    if(cpt == point_number){
       break;
     }
     cpt++;
+
+    //Stocke all line values
+    std::istringstream iss(line);
+    vector<float> data;
+    for(int i=0; i<property_number; i++){
+      float d;
+      iss >> d;
+      data.push_back(d);
+    }
+
+    //Location
+    int id_x = get_id_property("x");
+    if(id_x != -1){
+      vertex.push_back(vec3(data[id_x], data[id_x+1], data[id_x+2]));
+    }
+
+    //Normal
+    int id_nx = get_id_property("nx");
+    if(id_nx != -1){
+      normal.push_back(vec3(data[id_nx], data[id_nx+1], data[id_nx+2]));
+    }
+
+    //Intensity
+    int id_i = get_id_property("intensity");
+    if(id_i != -1){
+      intensity.push_back(data[id_i]);
+    }
   }
+
+  //Retrieve face data
+  while (std::getline(file, line)){
+    std::istringstream iss(line);
+    float nb_vertice;
+    iss >> nb_vertice;
+
+    //Stocke all line values
+    vector<float> data;
+    for(int i=0; i<nb_vertice; i++){
+      float d;
+      iss >> d;
+      data.push_back(d);
+    }
+
+    //Vertex IDs
+    int id_0 = data[0];
+    int id_1 = data[1];
+    int id_2 = data[2];
+
+    //Location
+    data_out->location.push_back(vertex[id_0]);
+    data_out->location.push_back(vertex[id_1]);
+    data_out->location.push_back(vertex[id_2]);
+    data_out->location.push_back(vertex[id_0]);
+
+    //Intensity
+    data_out->intensity.push_back(intensity[id_0]);
+    data_out->intensity.push_back(intensity[id_1]);
+    data_out->intensity.push_back(intensity[id_2]);
+    data_out->intensity.push_back(intensity[id_0]);
+  }
+
+  data_out->location = vertex;
+  data_out->normal = normal;
+  data_out->draw_type = "triangle";
 
   //---------------------------
   data_out->size = data_out->location.size();
@@ -229,6 +288,18 @@ void file_PLY::reorder_by_timestamp(){
   }
 
   //---------------------------
+}
+int file_PLY::get_id_property(string name){
+  //---------------------------
+
+  for(int i=0; i<property_name.size(); i++){
+    if(property_name[i] == name){
+      return i;
+    }
+  }
+
+  //---------------------------
+  return -1;
 }
 
 //Main exporter functions

@@ -25,7 +25,7 @@ public:
   void runtime_draw_cloud();
 
   //Subfunctions
-  void draw_mesh(Subset* subset);
+  void draw_mesh(Subset* subset, string draw_type);
 
 private:
   Scene* sceneManager;
