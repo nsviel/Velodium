@@ -27,8 +27,10 @@ private:
   void Loader_header(std::ifstream& file);
   void Loader_data_ascii(std::ifstream& file);
   void Loader_data_binary(std::ifstream& file);
+  void Loader_data_binary_withface(std::ifstream& file);
   void reorder_by_timestamp();
   int get_id_property(string name);
+  float get_value_from_binary(char* data, int& offset);
 
   //Exporter subfunctions
   void Exporter_header(std::ofstream& file, string format, Subset* subset);

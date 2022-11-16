@@ -16,6 +16,7 @@ dataFile* file_PLY::Loader(string path_file){
   string nameFormat = path_file.substr(path_file.find_last_of("/\\") + 1);
   data_out->name = nameFormat.substr(0, nameFormat.find_last_of("."));
   data_out->path = path_file;
+  this->face_number = 0;
   //---------------------------
 
   //Get format type
@@ -45,7 +46,11 @@ dataFile* file_PLY::Loader(string path_file){
     this->Loader_header(file);
 
     //Read data
-    this->Loader_data_binary(file);
+    if(face_number == 0){
+      this->Loader_data_binary(file);
+    }else{
+      this->Loader_data_binary_withface(file);
+    }
 
     //Close file
     file.close();
@@ -210,49 +215,114 @@ void file_PLY::Loader_data_binary(std::ifstream& file){
   //---------------------------
 
   //Read data
-  int buffer_size = property_number * point_number * sizeof(float);
-  char* data = new char[buffer_size];
-  file.read(data, buffer_size);
+  int block_size = property_number * point_number * sizeof(float);
+  char* block_data = new char[block_size];
+  file.read(block_data, block_size);
 
   //Convert raw data into decimal data
   int offset = 0;
-  vector<vector<float>> data_columns;
-  data_columns.resize(property_number, vector<float>(point_number));
+  vector<vector<float>> block_vec;
+  block_vec.resize(property_number, vector<float>(point_number));
   for (int i=0; i<point_number; i++){
     //Get data for each property
     for (int j=0; j<property_number; j++){
-      float value =  *((float *) (data + offset));
-      offset += sizeof(float);
-      data_columns[j][i] = value;
+      float value = get_value_from_binary(block_data, offset);
+      block_vec[j][i] = value;
     }
   }
 
-  //Insert data in the adequate vector
+  //Resize vectors accordingly
   data_out->location.resize(point_number, vec3(0,0,0));
   if(is_timestamp) data_out->timestamp.resize(point_number, 0);
   if(is_intensity) data_out->intensity.resize(point_number, 0);
   data_out->size = point_number;
 
+  //Insert data in the adequate vector
   #pragma omp parallel for
   for (int i=0; i<point_number; i++){
     for (int j=0; j<property_number; j++){
       //Location
       if(property_name[j] == "x"){
-        vec3 point = vec3(data_columns[j][i], data_columns[j+1][i], data_columns[j+2][i]);
+        vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
         data_out->location[i] = point;
       }
 
       //Intensity
       if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
-        float Is = data_columns[j][i];
+        float Is = block_vec[j][i];
         data_out->intensity[i] = Is;
       }
 
       //Timestamp
       if(property_name[j] == "timestamp"){
-        float ts = data_columns[j][i];
+        float ts = block_vec[j][i];
         data_out->timestamp[i] = ts;
       }
+    }
+  }
+
+  //---------------------------
+}
+void file_PLY::Loader_data_binary_withface(std::ifstream& file){
+  //---------------------------
+
+  //Read data
+  int block_size = property_number * point_number * sizeof(float);
+  char* block_data = new char[block_size];
+  file.read(block_data, block_size);
+
+  //Convert raw data into decimal data
+  int offset = 0;
+  vector<vector<float>> block_vec;
+  block_vec.resize(property_number, vector<float>(point_number));
+  for (int i=0; i<point_number; i++){
+    //Get data for each property
+    for (int j=0; j<property_number; j++){
+      float value = get_value_from_binary(block_data, offset);
+      block_vec[j][i] = value;
+    }
+  }
+
+  //Insert data in the adequate vector
+  vector<vec3> vertex;
+  vector<vec3> normal;
+  vector<float> intensity;
+  vector<float> timestamp;
+  for (int i=0; i<point_number; i++){
+    for (int j=0; j<property_number; j++){
+      //Location
+      if(property_name[j] == "x"){
+        vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
+        vertex.push_back(point);
+      }
+
+      //Intensity
+      if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
+        float Is = block_vec[j][i];
+        intensity.push_back(Is);
+      }
+
+      //Timestamp
+      if(property_name[j] == "timestamp"){
+        float ts = block_vec[j][i];
+        timestamp.push_back(ts);
+      }
+    }
+  }
+
+  //Get face index
+  int block_size_id = property_number * face_number * sizeof(float);
+  char* block_data_id = new char[block_size_id];
+  file.read(block_data_id, block_size_id);
+  offset = 0;
+  //Convert raw data into decimal data
+  block_vec.clear();
+  block_vec.resize(4, vector<float>(face_number));
+  for (int i=0; i<face_number; i++){
+    for (int j=0; j<4; j++){
+      float value = get_value_from_binary(block_data_id, offset);
+      block_vec[j][i] = value;
+      say(value);
     }
   }
 
@@ -298,6 +368,15 @@ int file_PLY::get_id_property(string name){
 
   //---------------------------
   return -1;
+}
+float file_PLY::get_value_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  float value =  *((float *) (block_data + offset));
+  offset += sizeof(float);
+
+  //---------------------------
+  return value;
 }
 
 //Main exporter functions
@@ -532,33 +611,33 @@ void file_PLY::Exporter_data_binary(std::ofstream& file, Subset* subset){
   //---------------------------
 
   //Prepare data writing by blocks
-  int buffer_size = property_number * point_number * sizeof(float);
-  char* data = new char[buffer_size];
+  int block_size = property_number * point_number * sizeof(float);
+  char* block_data = new char[block_size];
 
   //Convert decimal data into binary data
   int offset = 0;
   for (int i=0; i<point_number; i++){
     //Location
     for(int j=0; j<3; j++){
-      memcpy(data + offset, &subset->xyz[i][j], sizeof(float));
+      memcpy(block_data + offset, &subset->xyz[i][j], sizeof(float));
       offset += sizeof(float);
     }
 
     //Intensity
     if(subset->I.size() != 0){
-      memcpy(data + offset, &subset->I[i], sizeof(float));
+      memcpy(block_data + offset, &subset->I[i], sizeof(float));
       offset += sizeof(float);
     }
 
     //Timestamp
     if(subset->ts.size() != 0){
-      memcpy(data + offset, &subset->ts[i], sizeof(float));
+      memcpy(block_data + offset, &subset->ts[i], sizeof(float));
       offset += sizeof(float);
     }
   }
 
   //Read all data blocks & read the last data block
-  file.write(data, buffer_size);
+  file.write(block_data, block_size);
 
   //---------------------------
 }
