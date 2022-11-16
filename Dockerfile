@@ -5,9 +5,7 @@ RUN apt update \
     && apt install -y --no-install-recommends git libtool sudo xterm build-essential mesa-utils cmake gnuplot ca-certificates xvfb \
     libglfw3-dev libglew-dev libeigen3-dev libglm-dev libflann-dev libcurl4-openssl-dev libtins-dev libjsoncpp-dev \
     libssh-dev libfreetype-dev  libfreeimage-dev libboost-all-dev libgoogle-glog-dev libgflags-dev libatlas-base-dev libsuitesparse-dev libgflags-dev libglvnd0 libgl1 libglx0 libegl1 libxext6 libx11-6 libgl1-mesa-glx libgl1-mesa-dri libgnutls28-dev libmicrohttpd12 robin-map-dev libmicrohttpd-dev libmicrohttpd12 \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt autoremove -y
+    && rm -rf /var/lib/apt/lists/*
 
 # Env vars for the nvidia-container-runtime.
 ENV NVIDIA_VISIBLE_DEVICES all
@@ -24,7 +22,7 @@ WORKDIR /app/velodium/build
 RUN cmake .. && make -j4
 
 # Open port
+# Lidar data
 EXPOSE 2370
+# http server
 EXPOSE 8888
-
-

@@ -40,6 +40,7 @@ Velodyne::Velodyne(Node_interface* node_interface){
 
   this->time_frame = 0;
   this->time_packet = 0;
+  this->lidar_ip = "192.168.1.201";
 
   this->rot_freq = 0;
   this->rot_rpm = 0;
@@ -76,7 +77,7 @@ void Velodyne::start_watcher(int port){
       auto start = high_resolution_clock::now();
       vector<int> packet_dec = udpServManager->capture_packet();
       auto stop = high_resolution_clock::now();
-      this->time_packet = duration_cast<milliseconds>(stop - start).count();
+      this->time_packet = duration_cast<microseconds>(stop - start).count() / 1000;
 
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
@@ -91,7 +92,7 @@ void Velodyne::start_watcher(int port){
 
           //Time
           auto stop_frame = high_resolution_clock::now();
-          this->time_frame = duration_cast<milliseconds>(stop_frame - start_frame).count();
+          this->time_frame = duration_cast<microseconds>(stop_frame - start_frame).count() / 1000;
           start_frame = high_resolution_clock::now();
 
           //Do not record the first frame
@@ -161,7 +162,8 @@ void Velodyne::lidar_stop_motor(){
 
   //Send stop motor command
   if(rot_freq > 0){
-    int err = system("curl -s --connect-timeout 1 --data rpm=0 http://192.168.1.201/cgi/setting");
+    string command = "curl -s --connect-timeout 1 --data rpm=0 http://" + lidar_ip + "/cgi/setting";
+    int err = system(command.c_str());
     rot_freq = 0;
     rot_rpm = 0;
 

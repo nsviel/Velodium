@@ -65,6 +65,7 @@ private:
 
   float time_frame;
   float time_packet;
+  string lidar_ip;
   int rot_freq, rot_rpm;
   int fov_min, fov_max;
   int capture_port;
