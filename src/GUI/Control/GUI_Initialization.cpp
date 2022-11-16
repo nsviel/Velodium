@@ -7,6 +7,7 @@
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Pather.h"
+#include "../../Operation/Transformation/Transformation.h"
 #include "../../Module/Node_module.h"
 
 
@@ -22,6 +23,7 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   this->pathManager = node_load->get_patherManager();
 
   this->remove_cloud = true;
+  this->cloud_scale = 1;
   this->lidar_model = "velodyne_vlp16";
 
   //---------------------------
@@ -35,7 +37,7 @@ void GUI_Initialization::init_gui(){
   //Options
   ImGui::Checkbox("Remove clouds", &remove_cloud);
   static int lidar_model_id = 0;
-  ImGui::SetNextItemWidth(125);
+  ImGui::SetNextItemWidth(100);
   if(ImGui::Combo("Lidar", &lidar_model_id, "velodyne_vlp16\0velodyne_hdl32\0")){
     if(lidar_model_id == 0){
       this->lidar_model = "velodyne_vlp16";
@@ -43,12 +45,18 @@ void GUI_Initialization::init_gui(){
       this->lidar_model = "velodyne_hdl32";
     }
   }
+  //Point cloud scaling
+  ImGui::SetNextItemWidth(100);
+  ImGui::DragFloat("Scale", &cloud_scale, 0.01, 0.1, 100, "%.2f x");
 
   if(ImGui::Button("Buddha", ImVec2(100,0))){
     this->init_mode(0);
   }
   if(ImGui::Button("Torus", ImVec2(100,0))){
     this->init_mode(1);
+  }
+  if(ImGui::Button("Bunny", ImVec2(100,0))){
+    this->init_mode(7);
   }
   if(ImGui::Button("VLP16 - PCAP file", ImVec2(100,0))){
     this->init_mode(2);
@@ -114,10 +122,25 @@ void GUI_Initialization::init_mode(int mode){
       pathManager->loading_directory_frame("/home/aeter/Desktop/Point_cloud/amphitheatre/13.05_amphi_entier/");
       break;
     }
+    case 7:{//Bunny
+      loaderManager->load_cloud("/home/aeter/Desktop/System/Velodium/media/engine/Marks/bunny.ply");
+      break;
+    }
   }
 
-  Cloud* cloud = loaderManager->get_createdcloud();
-  cloud->lidar_model = lidar_model;
+  //Final setup
+  if(!sceneManager->get_is_list_empty()){
+    //Set lidar model
+    Cloud* cloud = loaderManager->get_createdcloud();
+    cloud->lidar_model = lidar_model;
+
+    if(cloud_scale != 1.0f){
+      //Set scaling
+      Transformation transformManager;
+      transformManager.make_scaling(cloud, cloud_scale);
+      sceneManager->update_cloud_location(cloud);
+    }
+  }
 
   //---------------------------
 }

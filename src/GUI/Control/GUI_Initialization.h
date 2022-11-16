@@ -26,6 +26,7 @@ private:
   Pather* pathManager;
 
   bool remove_cloud;
+  float cloud_scale;
   string lidar_model;
 };
 
