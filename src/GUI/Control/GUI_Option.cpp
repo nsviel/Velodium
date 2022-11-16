@@ -247,8 +247,11 @@ void GUI_option::option_parameter(){
       if(cloud->draw_type == "triangle"){
         draw_type = 2;
       }
+      if(cloud->draw_type == "quad"){
+        draw_type = 3;
+      }
     }
-    if(ImGui::Combo("Draw type", &draw_type, "Point\0Line\0Triangle\0")){
+    if(ImGui::Combo("Draw type", &draw_type, "Point\0Line\0Triangle\0Quad\0")){
       if(draw_type == 0){
         cloud->draw_type = "point";
       }
@@ -257,6 +260,9 @@ void GUI_option::option_parameter(){
       }
       else if(draw_type == 2){
         cloud->draw_type = "triangle";
+      }
+      else if(draw_type == 3){
+        cloud->draw_type = "quad";
       }
     }
 

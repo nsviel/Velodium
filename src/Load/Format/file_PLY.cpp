@@ -175,35 +175,33 @@ void file_PLY::Loader_data_ascii(std::ifstream& file){
     float nb_vertice;
     iss >> nb_vertice;
 
-    //Stocke all line values
-    vector<float> data;
+    //Stocke all line index
+    vector<int> idx;
     for(int i=0; i<nb_vertice; i++){
       float d;
       iss >> d;
-      data.push_back(d);
+      idx.push_back(d);
     }
 
-    //Vertex IDs
-    int id_0 = data[0];
-    int id_1 = data[1];
-    int id_2 = data[2];
+    //Retrieve face data
+    for(int i=0; i<nb_vertice; i++){
+      data_out->location.push_back(vertex[idx[i]]);
+      if(get_id_property("nx") != -1){
+        data_out->normal.push_back(normal[idx[i]]);
+      }
+      if(get_id_property("intensity") != -1){
+        data_out->intensity.push_back(intensity[idx[i]]);
+      }
+    }
 
-    //Location
-    data_out->location.push_back(vertex[id_0]);
-    data_out->location.push_back(vertex[id_1]);
-    data_out->location.push_back(vertex[id_2]);
-    data_out->location.push_back(vertex[id_0]);
-
-    //Intensity
-    data_out->intensity.push_back(intensity[id_0]);
-    data_out->intensity.push_back(intensity[id_1]);
-    data_out->intensity.push_back(intensity[id_2]);
-    data_out->intensity.push_back(intensity[id_0]);
+    //Deduce drawing type
+    if(nb_vertice == 3){
+      data_out->draw_type = "triangle";
+    }
+    else if(nb_vertice == 4){
+      data_out->draw_type = "quad";
+    }
   }
-
-  data_out->location = vertex;
-  data_out->normal = normal;
-  data_out->draw_type = "triangle";
 
   //---------------------------
   data_out->size = data_out->location.size();

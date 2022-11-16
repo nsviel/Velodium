@@ -18,7 +18,10 @@ public:
 
 public:
   void init_gui();
-  void init_mode(int mode);
+
+  void operation_init(int mode);
+  void operation_cloud(Cloud* cloud);
+  void operation_option();
 
 private:
   Scene* sceneManager;
@@ -26,7 +29,7 @@ private:
   Pather* pathManager;
 
   bool remove_cloud;
-  float cloud_scale;
+  int cloud_scale;
   string lidar_model;
 };
 
