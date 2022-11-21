@@ -6,7 +6,7 @@
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Pather.h"
 #include "../../../Load/Processing/Loader.h"
-#include "../../../Load/Processing/Zenity.h"
+#include "../../../Specific/fct_zenity.h"
 
 #include "../../../Load/Format/file_PTS.h"
 #include "../../../Load/Format/file_PTX.h"
@@ -88,8 +88,7 @@ void MOD_loading::loading_custom_file(){
 
   //Get info for a specified file
   if (ImGui::Button("Select file", ImVec2(item_width, 0))){
-    Zenity zenityManager;
-    file_path = zenityManager.zenity_file("");
+    file_path = zenity_file();
     this->loading_retrieve_info(file_path);
     file_selected = true;
   }

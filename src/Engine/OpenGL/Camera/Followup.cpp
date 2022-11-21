@@ -42,6 +42,7 @@ void Followup::camera_followup(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   if(subset == nullptr) return;
   Frame* frame_m0 = &subset->frame;
+  vec3 empty(0.0);
   //---------------------------
 
   if(frame_m0->ID >= camera_nb_pose && with_camera_follow){
@@ -49,10 +50,12 @@ void Followup::camera_followup(Cloud* cloud, int ID_subset){
     vec3 E = camera_payload(cloud, ID_subset);
 
     //Camera pose
-    this->camera_position(subset, E);
+    if(E != empty){
+      this->camera_position(subset, E);
 
-    //Camera orientation
-    this->camera_orientation(subset, E);
+      //Camera orientation
+      this->camera_orientation(subset, E);
+    }
   }
 
   //---------------------------

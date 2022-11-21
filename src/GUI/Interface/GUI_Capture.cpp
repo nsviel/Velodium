@@ -205,20 +205,27 @@ void GUI_Capture::velo_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     //---------------------------
 
+    //Set frame ratio
+    int ratio_frame = captureManager->get_ratio_frame();
+    ImGui::SetNextItemWidth(item_width);
+    if(ImGui::SliderInt("Frame ratio", &ratio_frame, 1, 20)){
+      captureManager->set_ratio_frame(ratio_frame);
+    }
+
     //Set RPM parameter
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "RPM");
+    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "LiDAR RPM");
     static int rot_freq_desired = 10;
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("##007", &rot_freq_desired, 5, 20, "%d Hz");
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(1.0f,1.0f,1.0f,1.0f), "%d rpm", rot_freq_desired * 60);
+    ImGui::TextColored(ImVec4(1.0f,1.0f,0.4f,1.0f), "%d rpm", rot_freq_desired * 60);
     if(ImGui::Button("Set##1", ImVec2(item_width, 0))){
       int rot_rpm_desired = rot_freq_desired * 60;
       veloManager->lidar_set_rpm(rot_rpm_desired);
     }
 
     //Define Fiel Of View
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Field Of View");
+    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "LiDAR Field Of View");
     int fov_min = veloManager->get_fov_min();
     int fov_max = veloManager->get_fov_max();
     ImGui::SetNextItemWidth(item_width);

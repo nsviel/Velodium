@@ -31,8 +31,8 @@ void Filter::update_configuration(){
 
   this->verbose = false;
   this->sphere_D = 0.139f;
-  this->sphere_min = 4;
-  this->sphere_max = 40;
+  this->sphere_min = configManager->parse_json_f("parameter", "filter_sphere_rmin");
+  this->sphere_max = configManager->parse_json_f("parameter", "filter_sphere_rmax");
   this->cyl_r_min = configManager->parse_json_f("parameter", "filter_cylinder_rmin");
   this->cyl_r_max = configManager->parse_json_f("parameter", "filter_cylinder_rmax");
   this->cyl_z_min = -3;

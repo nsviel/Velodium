@@ -42,7 +42,7 @@ public:
   int get_visibility_range_max();
 
   inline bool* get_with_sphere_filter(){return &with_filter_sphere;}
-  inline float get_time_operation(){return time_operation;}
+  inline float get_time_operation(){return time_ope;}
   inline int get_visibility_range(){return visibility_range;}
   inline int* get_filter_mode(){return &filter_mode;}
 
@@ -59,7 +59,7 @@ private:
   http_command* httpManager;
   Saving* savingManager;
 
-  float time_operation;
+  float time_ope;
   int visibility_range;
   int filter_mode;
   bool with_subset_specific_color;

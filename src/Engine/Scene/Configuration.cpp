@@ -126,6 +126,8 @@ void Configuration::preconf_default(Json::Value& root){
   param["color_intensity_max"] = 255;
   param["filter_cylinder_rmin"] = 5;
   param["filter_cylinder_rmax"] = 30;
+  param["filter_sphere_rmin"] = 1.5;
+  param["filter_sphere_rmax"] = 40;
   root["parameter"] = param;
 
   //Camera
@@ -201,6 +203,7 @@ void Configuration::preconf_default(Json::Value& root){
   interface["capture_port"] = 2370;
   interface["with_capture"] = false;
   interface["with_remove_lastSubset"] = false;
+  interface["ratio_frame"] = 1;
   root["interface"] = interface;
 
   //---------------------------
@@ -299,7 +302,7 @@ void Configuration::preconf_server(Json::Value& root){
   //Glyph
   Json::Value glyph;
   glyph["aabb_visibility"] = false;
-  glyph["car_visibility"] = true;
+  glyph["car_visibility"] = false;
   glyph["axis_cloud_visibility"] = false;
   root["glyph"] = glyph;
 
@@ -327,6 +330,7 @@ void Configuration::preconf_server(Json::Value& root){
   interface["lidar_model"] = "velodyne_vlp16";
   interface["with_capture"] = true;
   interface["with_remove_lastSubset"] = true;
+  interface["ratio_frame"] = 2;
   root["interface"] = interface;
 
 

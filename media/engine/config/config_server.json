@@ -11,7 +11,7 @@
    "glyph" : {
       "aabb_visibility" : false,
       "axis_cloud_visibility" : false,
-      "car_visibility" : true
+      "car_visibility" : false
    },
    "gui" : {
       "botPanel_height" : 100,
@@ -21,6 +21,7 @@
    },
    "interface" : {
       "lidar_model" : "velodyne_vlp16",
+      "ratio_frame" : 2,
       "with_capture" : true,
       "with_remove_lastSubset" : true
    },

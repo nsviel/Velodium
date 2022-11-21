@@ -2,7 +2,6 @@
 
 #include "Loader.h"
 #include "Saver.h"
-#include "Zenity.h"
 
 #include "../Node_load.h"
 
@@ -12,6 +11,7 @@
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_zenity.h"
 
 #include <Eigen/Dense>
 #include <set>
@@ -29,7 +29,6 @@ Pather::Pather(Node_load* node_load){
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loaderManager();
   this->saverManager = node_load->get_saverManager();
-  this->zenityManager = new Zenity();
 
   //---------------------------
   this->update_configuration();
@@ -37,7 +36,6 @@ Pather::Pather(Node_load* node_load){
 Pather::~Pather(){
   //---------------------------
 
-  delete zenityManager;
 
   //---------------------------
 }
@@ -72,7 +70,7 @@ void Pather::loading_cloud(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Cloud loading");
+  vector<string> path_vec = zenity_file_vec("Cloud loading", path_current_dir);
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -86,7 +84,7 @@ void Pather::loading_frames(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Frame loading");
+  vector<string> path_vec = zenity_file_vec("Frame loading", path_current_dir);
 
   //Load files
   if(path_vec.size() != 0){
@@ -99,7 +97,7 @@ void Pather::loading_onthefly(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Frame loading");
+  vector<string> path_vec = zenity_file_vec("Frame loading", path_current_dir);
 
   //Load files
   if(path_vec.size() != 0){
@@ -130,7 +128,7 @@ void Pather::loading_sampling(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Cloud with sampling loading");
+  vector<string> path_vec = zenity_file_vec("Cloud with sampling loading", path_current_dir);
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -190,7 +188,7 @@ void Pather::loading_treatment(){
   //---------------------------
 
   //select files
-  vector<string> path_vec = zenityManager->zenity_loading(path_current_dir, "Cloud with processing loading");
+  vector<string> path_vec = zenity_file_vec("Cloud with processing loading", path_current_dir);
 
   //Load files
   for(int i=0; i<path_vec.size(); i++){
@@ -231,7 +229,7 @@ void Pather::saving_cloud_frame(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_directory(path_current_dir);
+  string path_saving = zenity_directory("Save frame", path_current_dir);
 
   //Save current cloud
   for(int i=0; i<cloud->nb_subset; i++){
@@ -249,7 +247,7 @@ void Pather::saving_subset(Subset* subset){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_saving(path_current_dir, subset->name, "ply");
+  string path_saving = zenity_saving(path_current_dir, subset->name);
 
   //Save current cloud
   if(subset != nullptr && path_saving != ""){
@@ -263,7 +261,7 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_directory(path_current_dir);
+  string path_saving = zenity_directory("Save", path_current_dir);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
@@ -279,7 +277,7 @@ void Pather::saving_cloud(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_saving(path_current_dir, cloud->name, cloud->format);
+  string path_saving = zenity_saving(path_current_dir, cloud->name);
 
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
@@ -302,7 +300,7 @@ void Pather::saving_cloud_all(){
   //---------------------------
 
   //Select directory path
-  string path_dir = zenityManager->zenity_directory(path_current_dir);
+  string path_dir = zenity_directory("Save clouds", path_current_dir);
 
   //Save all scene clouds
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -319,7 +317,7 @@ void Pather::saving_saved_frames(){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenityManager->zenity_directory(path_current_dir);
+  string path_saving = zenity_directory("Save frame", path_current_dir);
   vector<string> file_path_vec = list_allPaths(path_saved_frame);
   vector<string> file_name_vec = list_allFiles(path_saved_frame);
 

@@ -15,7 +15,11 @@ printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Dependencies ${NC}\n"
 printf "${GREEN}--------------${NC}\n"
 sudo apt update -y
-sudo apt install -y git build-essential cmake libglfw3-dev libglew-dev libeigen3-dev libflann-dev libboost-all-dev libglm-dev gnuplot libtins-dev libjsoncpp-dev libssh-dev libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev libmicrohttpd12 libgnutls28-dev libarmadillo-dev
+sudo apt install -y git build-essential cmake libglfw3-dev \
+     libglew-dev libeigen3-dev libflann-dev libboost-all-dev \
+     libglm-dev gnuplot libtins-dev libjsoncpp-dev libssh-dev \
+     libfreetype-dev doxygen libcurl4-openssl-dev libfreeimage-dev \
+     libmicrohttpd12 libgnutls28-dev libarmadillo-dev socat
 
 printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Module ${NC}\n"

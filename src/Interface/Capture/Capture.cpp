@@ -52,6 +52,8 @@ void Capture::update_configuration(){
   this->is_first_run = true;
   this->with_justOneFrame = false;
   this->nb_subset_max = 50;
+  this->ratio_frame = configManager->parse_json_i("interface", "ratio_frame");
+  this->ratio_cpt = ratio_frame;
 
   bool with_capture = configManager->parse_json_i("interface", "with_capture");
   if(with_capture){
@@ -211,24 +213,31 @@ void Capture::start_capture_scala(){
 void Capture::operation_new_subset(Subset* subset){
   //---------------------------
 
-  //Do not record the first run
-  if(is_first_run){
-    sceneManager->remove_subset_last(cloud_capture);
-    cloud_capture->nb_subset = 0;
-    is_first_run = false;
-  }
-
-  //Set new subset identifieurs
-  subset->name = "frame_" + to_string(cloud_capture->ID_subset);
-  subset->ID = cloud_capture->ID_subset;
-  cloud_capture->ID_subset++;
-
-  //Supress null points
-  this->supress_nullpoints(subset);
-  this->capture_nb_point = subset->xyz.size();
+  //We take only one frame amounst several with ratio_frame
+  int modulo = ratio_frame - ratio_cpt;
+  ratio_cpt++;
 
   //If ok insert subset into scene
-  if(subset->xyz.size() != 0){
+  if(modulo == 0){
+    ratio_cpt = 1;
+
+    //Do not record the first run
+    if(is_first_run){
+      sceneManager->remove_subset_last(cloud_capture);
+      cloud_capture->nb_subset = 0;
+      is_first_run = false;
+    }
+
+    //Set new subset identifieurs
+    subset->name = "frame_" + to_string(cloud_capture->ID_subset);
+    subset->ID = cloud_capture->ID_subset;
+    cloud_capture->ID_subset++;
+
+    //Supress null points
+    this->supress_nullpoints(subset);
+    this->capture_nb_point = subset->xyz.size();
+    if(subset->xyz.size() == 0) return;
+
     //Update subset data
     sceneManager->update_subset_location(subset);
 

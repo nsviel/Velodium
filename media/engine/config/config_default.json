@@ -38,6 +38,7 @@
    "interface" : {
       "capture_port" : 2370,
       "lidar_model" : "velodyne_vlp64",
+      "ratio_frame" : 1,
       "with_capture" : false,
       "with_remove_lastSubset" : false
    },
@@ -68,6 +69,8 @@
       "color_mode" : 0,
       "filter_cylinder_rmax" : 30,
       "filter_cylinder_rmin" : 5,
+      "filter_sphere_rmax" : 40,
+      "filter_sphere_rmin" : 1.5,
       "open_mode" : "cloud",
       "path_data" : "../media/data/",
       "path_media" : "../media/",

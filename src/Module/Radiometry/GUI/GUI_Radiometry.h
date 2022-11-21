@@ -5,7 +5,6 @@
 
 class Module_radiometry;
 class Scene;
-class Zenity;
 class Radiometry;
 class Heatmap;
 class Reference;
@@ -38,7 +37,6 @@ private:
   Radiometry* radioManager;
   Heatmap* heatmapManager;
   Reference* refManager;
-  Zenity* zenityManager;
   Plot_radio* radioplotManager;
 
   int corr_num;

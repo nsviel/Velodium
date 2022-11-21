@@ -52,7 +52,7 @@ Online::~Online(){}
 void Online::update_configuration(){
   //---------------------------
 
-  this->time_operation = 0;
+  this->time_ope = 0;
   this->visibility_range = 15;
   this->with_subset_specific_color = false;
   this->with_filter_sphere = configManager->parse_json_b("dynamic", "with_filter_sphere");
@@ -97,7 +97,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   objectManager->update_dynamic(cloud);
 
   //---------------------------
-  this->time_operation = stop_chrono(t1);
+  this->time_ope = stop_chrono(t1);
   this->compute_displayStats(subset);
 }
 
@@ -126,7 +126,7 @@ void Online::compute_displayStats(Subset* subset){
 
   //Consol result
   string stats = subset->name + ": ope in ";
-  stats += to_string((int)time_operation) + " ms";
+  stats += to_string((int)time_ope) + " ms";
   console.AddLog("#", stats);
 
   //---------------------------

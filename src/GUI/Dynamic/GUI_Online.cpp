@@ -177,20 +177,19 @@ void GUI_Online::parameter_export(){
   bool* with_save_frame = savingManager->get_with_save_frame();
   ImGui::Checkbox("Save frame", with_save_frame);
   if(*with_save_frame){
-    //Path where images are saved
-    if(ImGui::IsItemHovered()){
-      string path = savingManager->get_path_frame();
-      if(path == ""){
-        ImGui::SetTooltip("[error] No path");
-      }else{
-        ImGui::SetTooltip("%s", realpath(path.c_str(), NULL));
-      }
-    }
-
     // Number of saved frames
     int* save_frame_max = savingManager->get_save_frame_max();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
     ImGui::InputInt("Nb frame", save_frame_max);
+
+    //Path where images are saved
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    if(ImGui::Button("...##23")){
+      savingManager->select_path_frame();
+    }
+    ImGui::SameLine();
+    string path = savingManager->get_path_frame();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
   }
 
   //Save image for interfacing
@@ -228,6 +227,15 @@ void GUI_Online::parameter_export(){
       ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
       ImGui::InputInt("Nb image", save_image_max);
     }
+
+    //Path where images are saved
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    if(ImGui::Button("...##25")){
+      savingManager->select_path_image();
+    }
+    ImGui::SameLine();
+    string path = savingManager->get_path_image();
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
   }
 
   //---------------------------

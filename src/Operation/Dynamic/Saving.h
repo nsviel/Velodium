@@ -36,6 +36,10 @@ public:
   void save_image_path();
   void save_frame(Subset* subset);
 
+  //Path selection
+  void select_path_image();
+  void select_path_frame();
+
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
   inline string get_path_image(){return path_image;}

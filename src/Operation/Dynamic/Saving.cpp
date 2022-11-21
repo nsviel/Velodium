@@ -8,7 +8,6 @@
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
-
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_zenity.h"
 
@@ -140,10 +139,7 @@ void Saving::save_image_multiple(){
 void Saving::save_image_path(){
   //---------------------------
 
-  string path;
-  zenity_directory("", path);
-
-  this->path_image = path + "/";
+  zenity_directory(path_image);
 
   //---------------------------
 }
@@ -168,4 +164,26 @@ void Saving::save_frame(Subset* subset){
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
   frame->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+}
+
+//Path selection
+void Saving::select_path_image(){
+  //---------------------------
+
+  string path = zenity_directory("Path image", path_image);
+  say(path);
+
+  this->path_image = path + "/";
+
+  //---------------------------
+}
+void Saving::select_path_frame(){
+  //---------------------------
+
+  string path = zenity_directory("Path frame", path_frame);
+  say(path);
+
+  this->path_frame = path + "/";
+
+  //---------------------------
 }

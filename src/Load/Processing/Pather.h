@@ -7,7 +7,6 @@ class Node_load;
 class Scene;
 class Loader;
 class Saver;
-class Zenity;
 class Configuration;
 
 
@@ -52,7 +51,6 @@ private:
   Scene* sceneManager;
   Loader* loaderManager;
   Saver* saverManager;
-  Zenity* zenityManager;
   Configuration* configManager;
 
   float spaceSampling;

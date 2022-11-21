@@ -16,12 +16,12 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Load/Node_load.h"
-#include "../../../Load/Processing/Zenity.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Function/Plotting.h"
 #include "../../../Operation/Function/BundleByClass.h"
+#include "../../../Specific/fct_zenity.h"
 
 
 //Constructor / Destructor
@@ -39,7 +39,6 @@ GUI_radiometry::GUI_radiometry(Module_radiometry* module){
   this->refManager = radioManager->get_refManager();
   this->linManager = radioManager->get_linManager();
   this->radioplotManager = radioManager->get_plot_radio();
-  this->zenityManager = new Zenity();
 
   this->corr_data = 0;
   this->corr_num = 1;
@@ -472,7 +471,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_calibrationTargets = refManager->get_path_calibrationTargets();
     if(ImGui::Button("...##0")){
-      zenityManager->zenity_directory(*path_calibrationTargets);
+      zenity_directory(*path_calibrationTargets);
     }
 
     //Sphere
@@ -480,7 +479,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_sphereTarget_add80d = refManager->get_path_sphereTarget_add80d();
     if(ImGui::Button("...##sphere")){
-      zenityManager->zenity_directory(*path_sphereTarget_add80d);
+      zenity_directory(*path_sphereTarget_add80d);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R)##sphere", ImVec2(60,0))){
@@ -508,7 +507,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_spectralonTarget_dist = refManager->get_path_spectralonTarget_dist();
     if(ImGui::Button("...##spectralon1")){
-      zenityManager->zenity_directory(*path_spectralonTarget_dist);
+      zenity_directory(*path_spectralonTarget_dist);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(R)##spectralon", ImVec2(60,0))){
@@ -522,7 +521,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     string* path_spectralonTarget_angle = refManager->get_path_spectralonTarget_angle();
     if(ImGui::Button("...##spectralon2")){
-      zenityManager->zenity_directory(*path_spectralonTarget_angle);
+      zenity_directory(*path_spectralonTarget_angle);
     }
     ImGui::SameLine();
     if(ImGui::Button("I(alpha)##spectralon", ImVec2(60,0))){

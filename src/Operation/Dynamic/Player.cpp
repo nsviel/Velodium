@@ -212,10 +212,7 @@ void Player::player_save(Cloud* cloud){
 void Player::player_selectDirSave(){
   //---------------------------
 
-  string path;
-  zenity_directory("", path);
-
-  this->player_saveas = path + "/";
+  zenity_directory(player_saveas);
 
   //---------------------------
 }
