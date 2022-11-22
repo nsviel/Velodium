@@ -52,6 +52,20 @@ void Pather::update_configuration(){
 
   //---------------------------
 }
+bool Pather::check_folder_format(string path, string format){
+  bool all_ok = true;
+  //---------------------------
+
+  vector<string> path_vec = list_allPaths(path);
+  for(int i=0; i<path_vec.size(); i++){
+    if(get_format_from_path(path_vec[i]) != format){
+      all_ok = false;
+    }
+  }
+
+  //---------------------------
+  return all_ok;
+}
 
 //Loading functions
 void Pather::loading(){
@@ -106,7 +120,7 @@ void Pather::loading_onthefly(){
 
   //---------------------------
 }
-Cloud* Pather::loading_directory_frame(string path){
+bool Pather::loading_directory_frame(string path){
   //---------------------------
 
   //Get all frame path
@@ -118,11 +132,8 @@ Cloud* Pather::loading_directory_frame(string path){
     loaderManager->load_cloud_byFrame(path_vec);
   }
 
-  //Get created cloud
-  Cloud* cloud = loaderManager->get_createdcloud();
-
   //---------------------------
-  return cloud;
+  return true;
 }
 void Pather::loading_sampling(){
   //---------------------------
@@ -133,7 +144,7 @@ void Pather::loading_sampling(){
   //Load files
   for(int i=0; i<path_vec.size(); i++){
     string path = path_vec[i];
-    int size = get_fileSize(path);
+    int size = get_file_nbPoint(path);
     if(size > 1000000){
       this->loading_sampledCloud(path);
     }
@@ -146,7 +157,7 @@ void Pather::loading_sampledCloud(string path){
   int nbPart = 0;
   int lmin = 0;
   int lmax = nbLinePart;
-  int size = get_fileSize(path);
+  int size = get_file_nbPoint(path);
   Filter filterManager;
   //---------------------------
 

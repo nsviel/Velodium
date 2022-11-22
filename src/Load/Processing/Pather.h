@@ -19,13 +19,14 @@ public:
 
 public:
   void update_configuration();
+  bool check_folder_format(string path, string format);
 
   //Loading function
   void loading();
   void loading_cloud();
   void loading_frames();
   void loading_onthefly();
-  Cloud* loading_directory_frame(string path);
+  bool loading_directory_frame(string path);
   void loading_sampling();
   void loading_treatment();
   void loading_sampledCloud(string path);

@@ -32,6 +32,23 @@ namespace{
       return "";
     }
   }
+  std::string get_filename_from_path(std::string path){
+    if(path != ""){
+      std::string name_format = path.substr(path.find_last_of("/\\") + 1);
+      return name_format;
+    }else{
+      return "";
+    }
+  }
+  std::string get_type_from_path(std::string path){
+    string type;
+    if(std::filesystem::is_directory(path)){
+      type = "Folder";
+    }else{
+      type = "File";
+    }
+    return type;
+  }
 
   //Retrieve format info from path
   std::string get_format_from_path(std::string path){
@@ -42,7 +59,13 @@ namespace{
       return "";
     }
   }
-
+  bool is_dir(std::string path){
+    if(std::filesystem::is_directory(path)){
+      return true;
+    }else{
+      return false;
+    }
+  }
   //New directory creation
   void create_new_dir(std::string path){
     //---------------------------
@@ -105,7 +128,7 @@ namespace{
   }
 
   //Get size of file - number of points
-  int get_fileSize(std::string pathFile){
+  int get_file_nbPoint(std::string pathFile){
     //---------------------------
 
     int cpt=0;
@@ -117,6 +140,11 @@ namespace{
 
     //---------------------------
     return cpt;
+  }
+  float get_file_size(std::string path){
+    std::ifstream in(path.c_str(), std::ifstream::ate | std::ifstream::binary);
+    float result = (float)in.tellg() / 1000000.0f;
+    return result;
   }
 
   //Random selection vector - int r = *select_randomly(foo.begin(), foo.end());
@@ -189,7 +217,7 @@ namespace{
     //---------------------------
     return path_vec;
   }
-  std::vector<std::string> list_allPaths(string path_dir){
+  std::vector<std::string> list_allPaths(std::string path_dir){
     //---------------------------
 
     struct dirent* files;
@@ -198,7 +226,6 @@ namespace{
 
     //Check if directory exists
     if(is_dir_exist(path_dir) == false){
-      std::cout<<"[error] Directory does not exists: "<<path_dir<<std::endl;
       return path_vec;
     }
 
@@ -226,11 +253,11 @@ namespace{
     //---------------------------
     return path_vec;
   }
-  std::vector<std::string> list_allDirs(const char *path){
+  std::vector<std::string> list_allDirs(std::string path){
     //---------------------------
 
     struct dirent* files;
-    DIR* directory = opendir(path);
+    DIR* directory = opendir(path.c_str());
     std::vector<std::string> list;
 
     //Filtre and store files present in the folder

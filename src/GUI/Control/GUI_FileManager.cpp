@@ -142,9 +142,9 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
     }
 
     ImGui::TreePop();
-  }else if(open_cloud_node && cloud != nullptr && cloud->nb_subset == 1){
+  }/*else if(open_cloud_node && cloud != nullptr && cloud->nb_subset == 1){
     ImGui::TreePop();
-  }
+  }*/
 
   //-------------------------------
 

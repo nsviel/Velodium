@@ -204,6 +204,9 @@ void Configuration::preconf_default(Json::Value& root){
   interface["with_capture"] = false;
   interface["with_remove_lastSubset"] = false;
   interface["ratio_frame"] = 1;
+  interface["path_point_cloud_1"] = "../media/engine";
+  interface["path_point_cloud_2"] = "../media/point_cloud";
+  interface["path_point_cloud_3"] = "";
   root["interface"] = interface;
 
   //---------------------------

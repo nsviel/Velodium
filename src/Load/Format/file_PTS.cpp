@@ -632,7 +632,7 @@ int file_PTS::check_configuration(string pathFile){
 int file_PTS::check_size(string pathFile, bool FILE_hasHeader){
   //---------------------------
 
-  int FILE_size = get_fileSize(pathFile);
+  int FILE_size = get_file_nbPoint(pathFile);
   if(FILE_size > nbptMax){
     cout << "Too much points : "<< FILE_size << ">"<< nbptMax << endl;
   }
