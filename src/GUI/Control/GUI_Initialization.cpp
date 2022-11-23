@@ -114,7 +114,7 @@ void GUI_Initialization::treeview(){
   //---------------------------
 
   static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
-  if (ImGui::BeginTable("3ways", 3, flags)){
+  if (ImGui::BeginTable("init_tree", 3, flags)){
     // The first column will use the default _WidthStretch when ScrollX is Off and _WidthFixed when ScrollX is On
     ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide, 175);
     ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthFixed, 75);
@@ -146,7 +146,7 @@ void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
 
     //Save root
     tree_file* node = new tree_file();
-    node->name = get_filename_from_path(path);
+    node->name = path;
     node->type = get_type_from_path(path);
     node->path = path;
     nodes.push_back(node);
@@ -193,27 +193,6 @@ void GUI_Initialization::node_child_scan(string path, vector<tree_file*>& nodes,
     tree_file* node = nodes[i];
     if(node->type == "Folder"){
       is_sub_folder = true;
-    }
-  }
-  if(is_sub_folder){
-    parent->end_folder = false;
-  }else{
-    parent->end_folder = true;
-  }
-
-  //---------------------------
-}
-void GUI_Initialization::recursive_folder(string path, vector<tree_file*>& nodes, tree_file* parent){
-  //---------------------------
-
-  int id = nodes.size();
-  bool is_sub_folder = false;
-  for(int i=id; i<nodes.size(); i++){
-
-    tree_file* node = nodes[i];
-    if(node->type == "Folder"){
-      is_sub_folder = true;
-      node_child_scan(node->path, nodes, node);
     }
   }
   if(is_sub_folder){

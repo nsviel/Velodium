@@ -38,7 +38,6 @@ public:
   void construst_tree();
   void construct_node(string path, vector<tree_file*>& nodes);
   void display_node(tree_file* node, vector<tree_file*>& all_nodes);
-  void recursive_folder(string path, vector<tree_file*>& nodes, tree_file* parent);
   void node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent);
   bool check_file_format(string path);
   void open_selection(tree_file* node);

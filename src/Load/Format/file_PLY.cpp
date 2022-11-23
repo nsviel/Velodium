@@ -93,6 +93,7 @@ void file_PLY::Loader_header(std::ifstream& file){
 
   // Separate the header
   string line, h1, h2, h3, h4;
+  bool vertex_ended = false;
   do{
     getline(file, line);
     std::istringstream iss(line);
@@ -107,7 +108,7 @@ void file_PLY::Loader_header(std::ifstream& file){
     }
 
     //Retrieve property
-    if(h1 == "property"){
+    if(h1 == "property" && vertex_ended == false){
       if (h2 == "float32" | h2 == "float"){
         property_type.push_back("float32");
         property_size.push_back(4);
@@ -142,6 +143,7 @@ void file_PLY::Loader_header(std::ifstream& file){
 
     //Retrieve property
     if(h1 + h2 == "elementface"){
+      vertex_ended = true;
       this->face_number = std::stoi(h3);
     }
   }while (line.find("end_header") != 0);
@@ -259,7 +261,9 @@ void file_PLY::Loader_ascii_withface(std::ifstream& file){
 
     //Retrieve face data
     for(int i=0; i<nb_vertice; i++){
-      data_out->location.push_back(vertex[idx[i]]);
+      if(i < 3){
+        data_out->location.push_back(vertex[idx[i]]);
+      }
       if(get_id_property("nx") != -1){
         data_out->normal.push_back(normal[idx[i]]);
       }
@@ -295,7 +299,7 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   for (int i=0; i<point_number; i++){
     //Get data for each property
     for (int j=0; j<property_number; j++){
-      float value = get_value_from_binary(block_data, offset);
+      float value = get_float_from_binary(block_data, offset);
       block_vec[j][i] = value;
     }
   }
@@ -345,9 +349,8 @@ void file_PLY::Loader_bin_little_endian_withface(std::ifstream& file){
   vector<vector<float>> block_vec;
   block_vec.resize(property_number, vector<float>(point_number));
   for (int i=0; i<point_number; i++){
-    //Get data for each property
     for (int j=0; j<property_number; j++){
-      float value = get_value_from_binary(block_data, offset);
+      float value = get_float_from_binary(block_data, offset);
       block_vec[j][i] = value;
     }
   }
@@ -380,22 +383,43 @@ void file_PLY::Loader_bin_little_endian_withface(std::ifstream& file){
   }
 
   //Get face index
-  int block_size_id = property_number * face_number * sizeof(float);
+  int block_size_id = 4 * face_number * sizeof(int);
   char* block_data_id = new char[block_size_id];
   file.read(block_data_id, block_size_id);
-  offset = 0;
+
   //Convert raw data into decimal data
-  block_vec.clear();
-  block_vec.resize(4, vector<float>(face_number));
-  for (int i=0; i<face_number; i++){
-    for (int j=0; j<4; j++){
-      float value = get_value_from_binary(block_data_id, offset);
-      block_vec[j][i] = value;
-      say(value);
+  offset = 0;
+  int nb_vertice;
+  for(int i=0; i<face_number; i++){
+    //Get number of face vertices
+    int value =  (int)*((u_char *) (block_data_id + offset));
+    offset += sizeof(u_char);
+    nb_vertice = value;
+
+    //Get face vertices index
+    vector<int> idx;
+    for (int j=0; j<value; j++){
+      int value =  *((int *) (block_data_id + offset));
+      offset += sizeof(int);
+      idx.push_back(value);
+    }
+
+    //Location
+    for(int j=0; j<idx.size(); j++){
+      data_out->location.push_back(vertex[idx[j]]);
     }
   }
 
+  //Deduce drawing type
+  if(nb_vertice == 3){
+    data_out->draw_type = "triangle";
+  }
+  else if(nb_vertice == 4){
+    data_out->draw_type = "quad";
+  }
+
   //---------------------------
+  data_out->size = data_out->location.size();
 }
 void file_PLY::Loader_bin_big_endian(std::ifstream& file){
   //---------------------------
@@ -410,10 +434,9 @@ void file_PLY::Loader_bin_big_endian(std::ifstream& file){
   vector<vector<float>> block_vec;
   block_vec.resize(property_number, vector<float>(point_number));
   for (int i=0; i<point_number; i++){
-    //Get data for each property
     for (int j=0; j<property_number; j++){
-      float value = get_value_from_binary(block_data, offset);
-      block_vec[j][i] = value;
+      float value = get_float_from_binary(block_data, offset);
+      block_vec[j][i] = reverse_float(value);
     }
   }
 
@@ -462,10 +485,9 @@ void file_PLY::Loader_bin_big_endian_withface(std::ifstream& file){
   vector<vector<float>> block_vec;
   block_vec.resize(property_number, vector<float>(point_number));
   for (int i=0; i<point_number; i++){
-    //Get data for each property
     for (int j=0; j<property_number; j++){
-      float value = get_value_from_binary(block_data, offset);
-      block_vec[j][i] = value;
+      float value = get_float_from_binary(block_data, offset);
+      block_vec[j][i] = reverse_float(value);
     }
   }
 
@@ -497,25 +519,72 @@ void file_PLY::Loader_bin_big_endian_withface(std::ifstream& file){
   }
 
   //Get face index
-  int block_size_id = property_number * face_number * sizeof(float);
+  int block_size_id = 4 * face_number * sizeof(int);
   char* block_data_id = new char[block_size_id];
   file.read(block_data_id, block_size_id);
-  offset = 0;
+
   //Convert raw data into decimal data
-  block_vec.clear();
-  block_vec.resize(4, vector<float>(face_number));
-  for (int i=0; i<face_number; i++){
-    for (int j=0; j<4; j++){
-      float value = get_value_from_binary(block_data_id, offset);
-      block_vec[j][i] = value;
-      say(value);
+  offset = 0;
+  int nb_vertice;
+  for(int i=0; i<face_number; i++){
+    //Get number of face vertices
+    int value =  (int)*((u_char *) (block_data_id + offset));
+    offset += sizeof(u_char);
+    nb_vertice = value;
+
+    //Get face vertices index
+    vector<int> idx;
+    for (int j=0; j<value; j++){
+      int value =  *((int *) (block_data_id + offset));
+      offset += sizeof(int);
+      idx.push_back(reverse_int(value));
+    }
+
+    //Location
+    for(int j=0; j<idx.size(); j++){
+      data_out->location.push_back(vertex[idx[j]]);
     }
   }
 
+  //Deduce drawing type
+  if(nb_vertice == 3){
+    data_out->draw_type = "triangle";
+  }
+  else if(nb_vertice == 4){
+    data_out->draw_type = "quad";
+  }
+
   //---------------------------
+  data_out->size = data_out->location.size();
 }
 
 //Loader subfunctions
+float file_PLY::reverse_float(const float inFloat){
+   float retVal;
+   char *floatToConvert = ( char* ) & inFloat;
+   char *returnFloat = ( char* ) & retVal;
+
+   // swap the bytes into a temporary buffer
+   returnFloat[0] = floatToConvert[3];
+   returnFloat[1] = floatToConvert[2];
+   returnFloat[2] = floatToConvert[1];
+   returnFloat[3] = floatToConvert[0];
+
+   return retVal;
+}
+int file_PLY::reverse_int(const int inInt){
+   int retVal;
+   char *intToConvert = ( char* ) & inInt;
+   char *returnInt = ( char* ) & retVal;
+
+   // swap the bytes into a temporary buffer
+   returnInt[0] = intToConvert[3];
+   returnInt[1] = intToConvert[2];
+   returnInt[2] = intToConvert[1];
+   returnInt[3] = intToConvert[0];
+
+   return retVal;
+}
 void file_PLY::reorder_by_timestamp(){
   vector<vec3> pos;
   vector<float> ts;
@@ -557,11 +626,20 @@ int file_PLY::get_id_property(string name){
   //---------------------------
   return -1;
 }
-float file_PLY::get_value_from_binary(char* block_data, int& offset){
+float file_PLY::get_float_from_binary(char* block_data, int& offset){
   //---------------------------
 
   float value =  *((float *) (block_data + offset));
   offset += sizeof(float);
+
+  //---------------------------
+  return value;
+}
+int file_PLY::get_int_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  int value =  *((int *) (block_data + offset));
+  offset += sizeof(int);
 
   //---------------------------
   return value;

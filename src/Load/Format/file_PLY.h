@@ -33,9 +33,12 @@ private:
   void Loader_bin_big_endian_withface(std::ifstream& file);
 
   //Loader subfunctions
+  float reverse_float(const float inFloat);
+  int reverse_int(const int inInt);
   void reorder_by_timestamp();
   int get_id_property(string name);
-  float get_value_from_binary(char* data, int& offset);
+  float get_float_from_binary(char* data, int& offset);
+  int get_int_from_binary(char* data, int& offset);
 
   //Exporter subfunctions
   void Exporter_header(std::ofstream& file, string format, Subset* subset);
