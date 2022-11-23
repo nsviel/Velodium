@@ -13,7 +13,7 @@ struct tree_file{
   string          name;
   string          type;
   string          path;
-  float           size;
+  float           size = -1;
   bool            end_folder;
   int             leaf_idx;
   int             leaf_nb;
@@ -35,10 +35,12 @@ public:
   void operation_option();
 
   void treeview();
+  void construst_tree();
+  void construct_node(string path, vector<tree_file*>& nodes);
   void display_node(tree_file* node, vector<tree_file*>& all_nodes);
-  void recursive_scan(string path, vector<tree_file*>& nodes, tree_file* parent);
+  void recursive_folder(string path, vector<tree_file*>& nodes, tree_file* parent);
+  void node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent);
   bool check_file_format(string path);
-  void construct_tree(string path, vector<tree_file*>& nodes);
   void open_selection(tree_file* node);
 
 private:
@@ -47,6 +49,9 @@ private:
   Pather* pathManager;
   Configuration* configManager;
 
+  vector<tree_file*> nodes_path_1;
+  vector<tree_file*> nodes_path_2;
+  vector<tree_file*> nodes_path_3;
   vector<string> accepted_format;
   bool remove_cloud;
   int cloud_scale;

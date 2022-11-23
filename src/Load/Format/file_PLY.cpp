@@ -33,7 +33,11 @@ dataFile* file_PLY::Loader(string path_file){
     this->Loader_header(file);
 
     //Read data
-    this->Loader_data_ascii(file);
+    if(face_number == 0){
+      this->Loader_ascii(file);
+    }else{
+      this->Loader_ascii_withface(file);
+    }
 
     file.close();
 
@@ -47,23 +51,37 @@ dataFile* file_PLY::Loader(string path_file){
 
     //Read data
     if(face_number == 0){
-      this->Loader_data_binary(file);
+      this->Loader_bin_little_endian(file);
     }else{
-      this->Loader_data_binary_withface(file);
+      this->Loader_bin_little_endian_withface(file);
     }
 
     //Close file
     file.close();
   }
   else if (format == "binary_big_endian"){
-    cout << "WARNING: function not implemented for binary big endian file" << endl;
+    //Open file
+    std::ifstream file(path_file, ios::binary);
+
+    //Read header
+    this->Loader_header(file);
+
+    //Read data
+    if(face_number == 0){
+      this->Loader_bin_big_endian(file);
+    }else{
+      this->Loader_bin_big_endian_withface(file);
+    }
+
+    //Close file
+    file.close();
   }
 
   //---------------------------
   return data_out;
 }
 
-//Loader subfunctions
+//Loader data
 void file_PLY::Loader_header(std::ifstream& file){
   this->property_name.clear();
   this->property_type.clear();
@@ -130,7 +148,58 @@ void file_PLY::Loader_header(std::ifstream& file){
 
   //---------------------------
 }
-void file_PLY::Loader_data_ascii(std::ifstream& file){
+void file_PLY::Loader_ascii(std::ifstream& file){
+  vector<vec3> vertex;
+  vector<vec3> normal;
+  vector<float> intensity;
+  //---------------------------
+
+  //Retrieve vertex data
+  string line;
+  int cpt = 0;
+  while (std::getline(file, line)){
+    //Check vertex number
+    if(cpt == point_number){
+      break;
+    }
+    cpt++;
+
+    //Stocke all line values
+    std::istringstream iss(line);
+    vector<float> data;
+    for(int i=0; i<property_number; i++){
+      float d;
+      iss >> d;
+      data.push_back(d);
+    }
+
+    //Location
+    int id_x = get_id_property("x");
+    if(id_x != -1){
+      vertex.push_back(vec3(data[id_x], data[id_x+1], data[id_x+2]));
+    }
+
+    //Normal
+    int id_nx = get_id_property("nx");
+    if(id_nx != -1){
+      normal.push_back(vec3(data[id_nx], data[id_nx+1], data[id_nx+2]));
+    }
+
+    //Intensity
+    int id_i = get_id_property("intensity");
+    if(id_i != -1){
+      intensity.push_back(data[id_i]);
+    }
+  }
+
+  data_out->location = vertex;
+  data_out->normal = normal;
+  data_out->intensity = intensity;
+
+  //---------------------------
+  data_out->size = data_out->location.size();
+}
+void file_PLY::Loader_ascii_withface(std::ifstream& file){
   vector<vec3> vertex;
   vector<vec3> normal;
   vector<float> intensity;
@@ -211,7 +280,7 @@ void file_PLY::Loader_data_ascii(std::ifstream& file){
   //---------------------------
   data_out->size = data_out->location.size();
 }
-void file_PLY::Loader_data_binary(std::ifstream& file){
+void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   //---------------------------
 
   //Read data
@@ -263,7 +332,7 @@ void file_PLY::Loader_data_binary(std::ifstream& file){
 
   //---------------------------
 }
-void file_PLY::Loader_data_binary_withface(std::ifstream& file){
+void file_PLY::Loader_bin_little_endian_withface(std::ifstream& file){
   //---------------------------
 
   //Read data
@@ -328,6 +397,125 @@ void file_PLY::Loader_data_binary_withface(std::ifstream& file){
 
   //---------------------------
 }
+void file_PLY::Loader_bin_big_endian(std::ifstream& file){
+  //---------------------------
+
+  //Read data
+  int block_size = property_number * point_number * sizeof(float);
+  char* block_data = new char[block_size];
+  file.read(block_data, block_size);
+
+  //Convert raw data into decimal data
+  int offset = 0;
+  vector<vector<float>> block_vec;
+  block_vec.resize(property_number, vector<float>(point_number));
+  for (int i=0; i<point_number; i++){
+    //Get data for each property
+    for (int j=0; j<property_number; j++){
+      float value = get_value_from_binary(block_data, offset);
+      block_vec[j][i] = value;
+    }
+  }
+
+  //Resize vectors accordingly
+  data_out->location.resize(point_number, vec3(0,0,0));
+  if(is_timestamp) data_out->timestamp.resize(point_number, 0);
+  if(is_intensity) data_out->intensity.resize(point_number, 0);
+  data_out->size = point_number;
+
+  //Insert data in the adequate vector
+  #pragma omp parallel for
+  for (int i=0; i<point_number; i++){
+    for (int j=0; j<property_number; j++){
+      //Location
+      if(property_name[j] == "x"){
+        vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
+        data_out->location[i] = point;
+      }
+
+      //Intensity
+      if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
+        float Is = block_vec[j][i];
+        data_out->intensity[i] = Is;
+      }
+
+      //Timestamp
+      if(property_name[j] == "timestamp"){
+        float ts = block_vec[j][i];
+        data_out->timestamp[i] = ts;
+      }
+    }
+  }
+
+  //---------------------------
+}
+void file_PLY::Loader_bin_big_endian_withface(std::ifstream& file){
+  //---------------------------
+
+  //Read data
+  int block_size = property_number * point_number * sizeof(float);
+  char* block_data = new char[block_size];
+  file.read(block_data, block_size);
+
+  //Convert raw data into decimal data
+  int offset = 0;
+  vector<vector<float>> block_vec;
+  block_vec.resize(property_number, vector<float>(point_number));
+  for (int i=0; i<point_number; i++){
+    //Get data for each property
+    for (int j=0; j<property_number; j++){
+      float value = get_value_from_binary(block_data, offset);
+      block_vec[j][i] = value;
+    }
+  }
+
+  //Insert data in the adequate vector
+  vector<vec3> vertex;
+  vector<vec3> normal;
+  vector<float> intensity;
+  vector<float> timestamp;
+  for (int i=0; i<point_number; i++){
+    for (int j=0; j<property_number; j++){
+      //Location
+      if(property_name[j] == "x"){
+        vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
+        vertex.push_back(point);
+      }
+
+      //Intensity
+      if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
+        float Is = block_vec[j][i];
+        intensity.push_back(Is);
+      }
+
+      //Timestamp
+      if(property_name[j] == "timestamp"){
+        float ts = block_vec[j][i];
+        timestamp.push_back(ts);
+      }
+    }
+  }
+
+  //Get face index
+  int block_size_id = property_number * face_number * sizeof(float);
+  char* block_data_id = new char[block_size_id];
+  file.read(block_data_id, block_size_id);
+  offset = 0;
+  //Convert raw data into decimal data
+  block_vec.clear();
+  block_vec.resize(4, vector<float>(face_number));
+  for (int i=0; i<face_number; i++){
+    for (int j=0; j<4; j++){
+      float value = get_value_from_binary(block_data_id, offset);
+      block_vec[j][i] = value;
+      say(value);
+    }
+  }
+
+  //---------------------------
+}
+
+//Loader subfunctions
 void file_PLY::reorder_by_timestamp(){
   vector<vec3> pos;
   vector<float> ts;

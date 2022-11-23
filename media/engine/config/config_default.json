@@ -40,7 +40,7 @@
       "lidar_model" : "velodyne_vlp64",
       "path_point_cloud_1" : "../media/engine",
       "path_point_cloud_2" : "../media/point_cloud",
-      "path_point_cloud_3" : "",
+      "path_point_cloud_3" : "../../../Point_cloud",
       "ratio_frame" : 1,
       "with_capture" : false,
       "with_remove_lastSubset" : false

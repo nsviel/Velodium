@@ -23,11 +23,16 @@ public:
   bool Exporter_subset(string path_dir, string format, Subset* subset, string fileName);
 
 private:
-  //Loader subfunctions
+  //Loader data
   void Loader_header(std::ifstream& file);
-  void Loader_data_ascii(std::ifstream& file);
-  void Loader_data_binary(std::ifstream& file);
-  void Loader_data_binary_withface(std::ifstream& file);
+  void Loader_ascii(std::ifstream& file);
+  void Loader_ascii_withface(std::ifstream& file);
+  void Loader_bin_little_endian(std::ifstream& file);
+  void Loader_bin_little_endian_withface(std::ifstream& file);
+  void Loader_bin_big_endian(std::ifstream& file);
+  void Loader_bin_big_endian_withface(std::ifstream& file);
+
+  //Loader subfunctions
   void reorder_by_timestamp();
   int get_id_property(string name);
   float get_value_from_binary(char* data, int& offset);

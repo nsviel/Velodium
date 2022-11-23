@@ -1,4 +1,5 @@
 #include "file_OBJ.h"
+#include "../../Specific/fct_system.h"
 
 #include <fstream>
 
@@ -11,6 +12,8 @@ file_OBJ::~file_OBJ(){}
 dataFile* file_OBJ::Loader(string filePath){
   ifstream infile(filePath);
   dataFile* data = new dataFile();
+  data->name = get_name_from_path(filePath);
+  data->path = filePath;
   //---------------------------
 
   vector<Vertex> file = get_data_from_file(infile);

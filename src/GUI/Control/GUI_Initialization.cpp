@@ -61,8 +61,10 @@ void GUI_Initialization::update_configuration(){
   this->path_3 = configManager->parse_json_s("interface", "path_point_cloud_3");
 
   //---------------------------
+  this->construst_tree();
 }
 
+//GUI subfunctions
 void GUI_Initialization::operation_cloud(Cloud* cloud){
   //---------------------------
 
@@ -114,82 +116,47 @@ void GUI_Initialization::treeview(){
   static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
   if (ImGui::BeginTable("3ways", 3, flags)){
     // The first column will use the default _WidthStretch when ScrollX is Off and _WidthFixed when ScrollX is On
-    ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide, 150);
-    ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthFixed, 50);
+    ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide, 175);
+    ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthFixed, 75);
     ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, 75);
     ImGui::TableHeadersRow();
 
-    //Get directory paths
-    vector<tree_file*> nodes_path_1;
-    this->construct_tree(path_1, nodes_path_1);
+    //Display pre-built trees
     this->display_node(nodes_path_1[0], nodes_path_1);
-
-    vector<tree_file*> nodes_path_2;
-    this->construct_tree(path_2, nodes_path_2);
     this->display_node(nodes_path_2[0], nodes_path_2);
-
-    if(path_3 != ""){
-      vector<tree_file*> nodes_path_3;
-      this->construct_tree(path_3, nodes_path_3);
-      this->display_node(nodes_path_3[0], nodes_path_3);
-    }
+    this->display_node(nodes_path_3[0], nodes_path_3);
 
     ImGui::EndTable();
   }
 
   //---------------------------
 }
-void GUI_Initialization::display_node(tree_file* node, vector<tree_file*>& all_nodes){
+void GUI_Initialization::construst_tree(){
   //---------------------------
 
-  ImGui::TableNextRow();
-  ImGui::TableNextColumn();
-  const bool is_folder = (node->leaf_nb > 0);
-  if(is_folder){
-    bool open = ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_SpanFullWidth);
-    if(ImGui::IsItemClicked()){
-      this->open_selection(node);
-    }
-    ImGui::TableNextColumn();
-    ImGui::TextDisabled("--");
-    ImGui::TableNextColumn();
-    ImGui::TextUnformatted(node->type.c_str());
-    if(open){
-      for(int i=0; i<node->leaf_nb; i++){
-        int id = node->leaf_idx + i;
-        display_node(all_nodes[id], all_nodes);
-      }
-      ImGui::TreePop();
-    }
-  }
-  else if(node->type != "Folder"){
-    ImGui::TreeNodeEx(node->name.c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
-    if(ImGui::IsItemClicked()){
-      this->open_selection(node);
-    }
-    ImGui::TableNextColumn();
-    ImGui::Text("%.2f", node->size);
-    ImGui::TableNextColumn();
-    ImGui::TextUnformatted(node->type.c_str());
-  }
+  this->construct_node(path_1, nodes_path_1);
+  this->construct_node(path_2, nodes_path_2);
+  this->construct_node(path_3, nodes_path_3);
 
   //---------------------------
 }
-void GUI_Initialization::construct_tree(string path, vector<tree_file*>& nodes){
-  vector<string> list_path = list_allPaths(path);
-  //---------------------------
+void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
+  if(path != ""){
+    //---------------------------
 
-  //Save root
-  tree_file* truc = new tree_file();
-  truc->name = get_filename_from_path(path);
-  truc->type = get_type_from_path(path);
-  nodes.push_back(truc);
+    //Save root
+    tree_file* node = new tree_file();
+    node->name = get_filename_from_path(path);
+    node->type = get_type_from_path(path);
+    node->path = path;
+    nodes.push_back(node);
 
-  this->recursive_scan(path, nodes, truc);
+    this->node_child_scan(path, nodes, node);
 
-  //---------------------------
+    //---------------------------
+  }
 }
-void GUI_Initialization::recursive_scan(string path, vector<tree_file*>& nodes, tree_file* parent){
+void GUI_Initialization::node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent){
   vector<string> list_path = list_allPaths(path);
   //---------------------------
 
@@ -200,30 +167,32 @@ void GUI_Initialization::recursive_scan(string path, vector<tree_file*>& nodes, 
   for(int i=0; i<list_path.size(); i++){
     string path_file = list_path[i];
 
-    tree_file* truc = new tree_file();
-    truc->name = get_filename_from_path(path_file);
-    truc->type = get_type_from_path(path_file);
-    truc->path = path_file;
+    tree_file* node = new tree_file();
+    node->name = get_filename_from_path(path_file);
+    node->type = get_type_from_path(path_file);
+    node->path = path_file;
 
-    if(truc->type != "Folder"){
+    if(node->type != "Folder"){
       if(check_file_format(path_file)){
-        truc->size = get_file_size(path_file);
-        nodes.push_back(truc);
+        node->leaf_nb = 0;
+        node->size = get_file_size(path_file);
+        nodes.push_back(node);
       }else{
         parent->leaf_nb--;
-        delete truc;
+        delete node;
       }
     }else{
-      nodes.push_back(truc);
+      node->leaf_nb = 1;
+      nodes.push_back(node);
     }
   }
 
   bool is_sub_folder = false;
   for(int i=id; i<nodes.size(); i++){
+
     tree_file* node = nodes[i];
     if(node->type == "Folder"){
       is_sub_folder = true;
-      recursive_scan(node->path, nodes, node);
     }
   }
   if(is_sub_folder){
@@ -233,6 +202,69 @@ void GUI_Initialization::recursive_scan(string path, vector<tree_file*>& nodes, 
   }
 
   //---------------------------
+}
+void GUI_Initialization::recursive_folder(string path, vector<tree_file*>& nodes, tree_file* parent){
+  //---------------------------
+
+  int id = nodes.size();
+  bool is_sub_folder = false;
+  for(int i=id; i<nodes.size(); i++){
+
+    tree_file* node = nodes[i];
+    if(node->type == "Folder"){
+      is_sub_folder = true;
+      node_child_scan(node->path, nodes, node);
+    }
+  }
+  if(is_sub_folder){
+    parent->end_folder = false;
+  }else{
+    parent->end_folder = true;
+  }
+
+  //---------------------------
+}
+void GUI_Initialization::display_node(tree_file* node, vector<tree_file*>& all_nodes){
+  if(all_nodes.size() != 0){
+    //---------------------------
+
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
+    const bool is_folder = (node->leaf_nb > 0);
+    if(is_folder){
+
+      ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth;
+      bool open = ImGui::TreeNodeEx(node->name.c_str(), node_flags);
+      if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
+        this->open_selection(node);
+      }
+      ImGui::TableNextColumn();
+      ImGui::TextDisabled("--");
+      ImGui::TableNextColumn();
+      ImGui::TextUnformatted(node->type.c_str());
+      if(open){
+        this->node_child_scan(node->path, all_nodes, node);
+        for(int i=0; i<node->leaf_nb; i++){
+          int id = node->leaf_idx + i;
+          display_node(all_nodes[id], all_nodes);
+        }
+        ImGui::TreePop();
+      }
+    }
+    else if(node->type != "Folder"){
+      ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
+      ImGui::TreeNodeEx(node->name.c_str(), node_flags);
+      if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
+        this->open_selection(node);
+      }
+      ImGui::TableNextColumn();
+      ImGui::Text("%.1f MB", node->size);
+      ImGui::TableNextColumn();
+      ImGui::TextUnformatted(node->type.c_str());
+    }
+
+    //---------------------------
+  }
 }
 bool GUI_Initialization::check_file_format(string path){
   string format = get_format_from_path(path);

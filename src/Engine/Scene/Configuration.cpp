@@ -206,7 +206,7 @@ void Configuration::preconf_default(Json::Value& root){
   interface["ratio_frame"] = 1;
   interface["path_point_cloud_1"] = "../media/engine";
   interface["path_point_cloud_2"] = "../media/point_cloud";
-  interface["path_point_cloud_3"] = "";
+  interface["path_point_cloud_3"] = "../../../Point_cloud";
   root["interface"] = interface;
 
   //---------------------------
