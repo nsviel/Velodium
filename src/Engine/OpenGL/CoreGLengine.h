@@ -32,10 +32,8 @@ public:
   ~CoreGLengine();
 
 public:
-  //Argument processing
-  void arg(int argc, char* argv[]);
-
   //Init opengl stuff
+  void arg(int argc, char* argv[]);
   void init();
   void init_OGL();
   void init_object();

@@ -9,6 +9,7 @@
 #include "Shader/ShaderObject.h"
 
 #include "../Node_engine.h"
+#include "../Argument.h"
 #include "../Scene/Configuration.h"
 
 #include "../../GUI/Node_gui.h"
@@ -28,6 +29,8 @@ using std::chrono::duration_cast;
 CoreGLengine::CoreGLengine(){
   //---------------------------
 
+  this->configManager = new Configuration();
+
   this->openglRunning = true;
   this->window = nullptr;
 
@@ -45,34 +48,15 @@ CoreGLengine::~CoreGLengine(){
   //---------------------------
 }
 
-//Argument processing
+//Init opengl stuff
 void CoreGLengine::arg(int argc, char* argv[]){
-  this->configManager = new Configuration();
+  Argument argManager(node_engine);
   //---------------------------
 
-  //Command line processing
-  if(argc > 1){
-    string arg_1 = argv[1];
-
-    if(arg_1 == "capture"){
-      configManager->make_preconfig(1);
-    }
-    else if(arg_1 == "ai"){
-      configManager->make_preconfig(2);
-    }
-    else if(arg_1 == "server"){
-      configManager->make_preconfig(3);
-    }
-  }
-  //Else make default configuration
-  else{
-    configManager->make_preconfig(0);
-  }
+  argManager.process_arg(argc, argv);
 
   //---------------------------
 }
-
-//Init opengl stuff
 void CoreGLengine::init(){
   //---------------------------
 

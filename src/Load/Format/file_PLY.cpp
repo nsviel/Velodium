@@ -89,6 +89,8 @@ void file_PLY::Loader_header(std::ifstream& file){
   this->property_number = 0;
   this->is_intensity = false;
   this->is_timestamp = false;
+  this->is_normal = false;
+  this->is_color = false;
   //---------------------------
 
   // Separate the header
@@ -133,7 +135,13 @@ void file_PLY::Loader_header(std::ifstream& file){
       if(h3 == "timestamp"){
         is_timestamp = true;
       }
-      if(h3 == "scalar_Scalar_field" || h3 == "intensity"){
+      else if(h3 == "nx"){
+        is_normal = true;
+      }
+      else if(h3 == "red"){
+        is_color = true;
+      }
+      else if(h3 == "scalar_Scalar_field" || h3 == "intensity"){
         is_intensity = true;
       }
 
@@ -297,10 +305,15 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   vector<vector<float>> block_vec;
   block_vec.resize(property_number, vector<float>(point_number));
   for (int i=0; i<point_number; i++){
-    //Get data for each property
     for (int j=0; j<property_number; j++){
-      float value = get_float_from_binary(block_data, offset);
-      block_vec[j][i] = value;
+      if(property_type[j] == "float32"){
+        float value = get_float_from_binary(block_data, offset);
+        block_vec[j][i] = value;
+      }
+      if(property_type[j] == "uchar"){
+        float value = get_uchar_from_binary(block_data, offset);
+        block_vec[j][i] = value;
+      }
     }
   }
 
@@ -308,6 +321,8 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   data_out->location.resize(point_number, vec3(0,0,0));
   if(is_timestamp) data_out->timestamp.resize(point_number, 0);
   if(is_intensity) data_out->intensity.resize(point_number, 0);
+  if(is_normal) data_out->normal.resize(point_number, vec3(0,0,0));
+  if(is_color) data_out->color.resize(point_number, vec4(0,0,0,0));
   data_out->size = point_number;
 
   //Insert data in the adequate vector
@@ -318,6 +333,21 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
       if(property_name[j] == "x"){
         vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
         data_out->location[i] = point;
+      }
+
+      //Normal
+      if(property_name[j] == "nx"){
+        vec3 normal = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
+        data_out->normal[i] = normal;
+      }
+
+      //Color
+      if(property_name[j] == "red"){
+        float red = block_vec[j][i] / 255;
+        float green = block_vec[j+1][i] / 255;
+        float blue = block_vec[j+2][i] / 255;
+        vec4 rgb = vec4(red, green, blue, 1.0f);
+        data_out->color[i] = rgb;
       }
 
       //Intensity
@@ -635,11 +665,20 @@ float file_PLY::get_float_from_binary(char* block_data, int& offset){
   //---------------------------
   return value;
 }
-int file_PLY::get_int_from_binary(char* block_data, int& offset){
+float file_PLY::get_int_from_binary(char* block_data, int& offset){
   //---------------------------
 
-  int value =  *((int *) (block_data + offset));
+  float value =  (float)*((int *) (block_data + offset));
   offset += sizeof(int);
+
+  //---------------------------
+  return value;
+}
+float file_PLY::get_uchar_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  float value =  (float)*((u_char *) (block_data + offset));
+  offset += sizeof(u_char);
 
   //---------------------------
   return value;

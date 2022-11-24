@@ -18,6 +18,7 @@ Configuration::Configuration(){
   this->config = 0;
 
   //---------------------------
+  this->make_preconfig(0);
 }
 Configuration::~Configuration(){}
 
@@ -92,7 +93,7 @@ void Configuration::preconf_default(Json::Value& root){
 
   //OpenGL stuff
   Json::Value window;
-  window["title"] = "Velodium";
+  window["title"] = "Lidium";
   window["resolution_width"] = 1024;
   window["resolution_height"] = 500;
   window["resolution_ratio"] = 4.0f/3.0f;

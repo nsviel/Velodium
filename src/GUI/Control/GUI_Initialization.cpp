@@ -44,7 +44,8 @@ void GUI_Initialization::init_gui(){
 void GUI_Initialization::update_configuration(){
   //---------------------------
 
-  this->remove_cloud = true;
+  this->with_remove_cloud = true;
+  this->with_onthefly = false;
   this->cloud_scale = 1;
   this->lidar_model = "velodyne_vlp16";
   this->accepted_format.push_back("pts");
@@ -90,9 +91,12 @@ void GUI_Initialization::operation_option(){
   ImGui::DragInt("Scale", &cloud_scale, 1, 1, 100, "%d x");
   ImGui::SameLine();
 
+  //Remove old clouds
+  ImGui::Checkbox("Remove##222", &with_remove_cloud);
+
   //Lidar model
   static int lidar_model_id = 0;
-  ImGui::SetNextItemWidth(110);
+  ImGui::SetNextItemWidth(100);
   if(ImGui::Combo("Lidar", &lidar_model_id, "vlp16\0vlp64\0hdl32\0")){
     if(lidar_model_id == 0){
       this->lidar_model = "velodyne_vlp16";
@@ -102,9 +106,10 @@ void GUI_Initialization::operation_option(){
       this->lidar_model = "velodyne_hdl32";
     }
   }
+  ImGui::SameLine();
 
   //Remove old clouds
-  ImGui::Checkbox("Remove##222", &remove_cloud);
+  ImGui::Checkbox("On the fly##222", &with_onthefly);
 
   //---------------------------
 }
@@ -160,9 +165,11 @@ void GUI_Initialization::node_child_scan(string path, vector<tree_file*>& nodes,
   vector<string> list_path = list_allPaths(path);
   //---------------------------
 
+  bool is_sub_folder = false;
   int id = nodes.size();
   parent->leaf_nb = list_path.size();
   parent->leaf_idx = id;
+  parent->already_open = true;
 
   for(int i=0; i<list_path.size(); i++){
     string path_file = list_path[i];
@@ -182,19 +189,12 @@ void GUI_Initialization::node_child_scan(string path, vector<tree_file*>& nodes,
         delete node;
       }
     }else{
+      is_sub_folder = true;
       node->leaf_nb = 1;
       nodes.push_back(node);
     }
   }
 
-  bool is_sub_folder = false;
-  for(int i=id; i<nodes.size(); i++){
-
-    tree_file* node = nodes[i];
-    if(node->type == "Folder"){
-      is_sub_folder = true;
-    }
-  }
   if(is_sub_folder){
     parent->end_folder = false;
   }else{
@@ -211,10 +211,12 @@ void GUI_Initialization::display_node(tree_file* node, vector<tree_file*>& all_n
     ImGui::TableNextColumn();
     const bool is_folder = (node->leaf_nb > 0);
     if(is_folder){
-
       ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth;
       bool open = ImGui::TreeNodeEx(node->name.c_str(), node_flags);
       if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
+        if(node->already_open == false){
+          this->node_child_scan(node->path, all_nodes, node);
+        }
         this->open_selection(node);
       }
       ImGui::TableNextColumn();
@@ -222,7 +224,9 @@ void GUI_Initialization::display_node(tree_file* node, vector<tree_file*>& all_n
       ImGui::TableNextColumn();
       ImGui::TextUnformatted(node->type.c_str());
       if(open){
-        this->node_child_scan(node->path, all_nodes, node);
+        if(node->already_open == false){
+          this->node_child_scan(node->path, all_nodes, node);
+        }
         for(int i=0; i<node->leaf_nb; i++){
           int id = node->leaf_idx + i;
           display_node(all_nodes[id], all_nodes);
@@ -261,25 +265,29 @@ bool GUI_Initialization::check_file_format(string path){
 void GUI_Initialization::open_selection(tree_file* node){
   //---------------------------
 
+  if(with_remove_cloud){
+    sceneManager->remove_cloud_all();
+  }
+
   if(node->type == "File"){
-    if(remove_cloud){
-      sceneManager->remove_cloud_all();
-    }
-    if(loaderManager->load_cloud(node->path)){
+    bool ok = loaderManager->load_cloud(node->path);
+    if(ok){
       this->operation_cloud(loaderManager->get_createdcloud());
     }
   }
   else if(node->type == "Folder" && node->end_folder){
     if(pathManager->check_folder_format(node->path, "ply")){
-      if(remove_cloud){
-        sceneManager->remove_cloud_all();
+      bool ok = false;
+      if(with_onthefly == false){
+        ok = pathManager->loading_directory_frame(node->path);
+      }else{
+        ok = pathManager->loading_onthefly(node->path);
       }
-      if(pathManager->loading_directory_frame(node->path)){
+      if(ok){
         this->operation_cloud(loaderManager->get_createdcloud());
       }
     }
   }
-
 
   //---------------------------
 }

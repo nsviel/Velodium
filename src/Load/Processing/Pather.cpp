@@ -120,7 +120,24 @@ void Pather::loading_onthefly(){
 
   //---------------------------
 }
+bool Pather::loading_onthefly(string path){
+  bool ok = false;
+  //---------------------------
+
+  //select files
+  vector<string> path_vec = list_allPaths(path);
+
+  //Load files
+  if(path_vec.size() != 0){
+    ok = loaderManager->load_cloud_onthefly(path_vec);
+  }
+
+  //---------------------------
+  return ok;
+}
+
 bool Pather::loading_directory_frame(string path){
+  bool ok = false;
   //---------------------------
 
   //Get all frame path
@@ -128,12 +145,12 @@ bool Pather::loading_directory_frame(string path){
 
   //Sort alphabetically and load
   if(path_vec.size() != 0){
-    fct_sort_alpha_num(path_vec);
-    loaderManager->load_cloud_byFrame(path_vec);
+    fct_sort_alpha_num_(path_vec);sayHello();
+    ok = loaderManager->load_cloud_byFrame(path_vec);
   }
 
   //---------------------------
-  return true;
+  return ok;
 }
 void Pather::loading_sampling(){
   //---------------------------

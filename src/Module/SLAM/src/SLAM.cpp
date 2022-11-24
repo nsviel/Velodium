@@ -122,7 +122,7 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
     return false;
   }
   if(subset->has_timestamp == false){
-    console.AddLog("error" ,"[SLAM] No subset timestamp");
+    console.AddLog("error" ,"[SLAM] No timestamp");
     return false;
   }
 

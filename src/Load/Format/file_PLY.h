@@ -38,7 +38,8 @@ private:
   void reorder_by_timestamp();
   int get_id_property(string name);
   float get_float_from_binary(char* data, int& offset);
-  int get_int_from_binary(char* data, int& offset);
+  float get_int_from_binary(char* data, int& offset);
+  float get_uchar_from_binary(char* block_data, int& offset);
 
   //Exporter subfunctions
   void Exporter_header(std::ofstream& file, string format, Subset* subset);
@@ -55,6 +56,8 @@ private:
   string format;
   bool is_timestamp;
   bool is_intensity;
+  bool is_normal;
+  bool is_color;
   int point_data_idx;
   int point_number;
   int face_number;

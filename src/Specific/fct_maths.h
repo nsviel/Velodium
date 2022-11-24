@@ -625,7 +625,12 @@ namespace{
 
     return idx;
   }
-  void fct_sort_alpha_num(std::vector<std::string>& vec){
+  bool is_number(const std::string& s){
+      std::string::const_iterator it = s.begin();
+      while (it != s.end() && std::isdigit(*it)) ++it;
+      return !s.empty() && it == s.end();
+  }
+  void fct_sort_alpha_num_(std::vector<std::string>& vec){
     //---------------------------
 
     std::sort(vec.begin(), vec.end(), [](const std::string& a, const std::string& b) {
@@ -634,11 +639,33 @@ namespace{
       } else if (a[0] > b[0]) {
           return false;
       }
-      string a_num = a.substr(0, a.find_last_of("."));
-      a_num = a_num.substr(a.find_last_of("_") + 1);
-      string b_num = b.substr(0, b.find_last_of("."));
-      b_num = b_num.substr(b.find_last_of("_") + 1);
-      return std::stoi(a_num) < std::stoi(b_num);
+
+      if(is_number(a) && is_number(b)){
+        string a_path = a.substr(a.find_last_of("/")+1);
+        string b_path = b.substr(b.find_last_of("/")+1);
+
+        string a_num = a_path.substr(0, a_path.find_last_of("."));
+        string b_num = b_path.substr(0, b_path.find_last_of("."));
+
+        if(a_num.find("_") != std::string::npos){
+          a_num = a_num.substr(a_num.find_last_of("_") + 1);
+        }
+        if(b_num.find("_") != std::string::npos){
+          b_num = b_num.substr(b_num.find_last_of("_") + 1);
+        }
+
+        return std::stoi(a_num) < std::stoi(b_num);
+      }else{
+        if(is_number(a) && is_number(b)){
+          string a_path = a.substr(a.find_last_of("/")+1);
+          string b_path = b.substr(b.find_last_of("/")+1);
+
+          string a_name = a_path.substr(0, a_path.find_last_of("."));
+          string b_name = b_path.substr(0, b_path.find_last_of("."));
+
+          return a_name < b_name;
+        }
+      }
     });
 
     //---------------------------

@@ -26,6 +26,7 @@ public:
   void loading_cloud();
   void loading_frames();
   void loading_onthefly();
+  bool loading_onthefly(string path);
   bool loading_directory_frame(string path);
   void loading_sampling();
   void loading_treatment();

@@ -14,6 +14,7 @@ struct tree_file{
   string          type;
   string          path;
   float           size = -1;
+  bool            already_open = false;
   bool            end_folder;
   int             leaf_idx;
   int             leaf_nb;
@@ -52,7 +53,8 @@ private:
   vector<tree_file*> nodes_path_2;
   vector<tree_file*> nodes_path_3;
   vector<string> accepted_format;
-  bool remove_cloud;
+  bool with_remove_cloud;
+  bool with_onthefly;
   int cloud_scale;
   string lidar_model;
   string path_1;

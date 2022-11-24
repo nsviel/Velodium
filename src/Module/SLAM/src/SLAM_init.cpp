@@ -74,7 +74,7 @@ void SLAM_init::init_frame_ts(Cloud* cloud, int subset_ID){
   }
   //If there is no timestamp data, create synthetic one
   else{
-    console.AddLog("error" ,"[SLAM] No subset timestamp");
+    console.AddLog("error" ,"[SLAM] No timestamp");
     for(int i=0; i<subset->xyz.size(); i++){
       double ts_n = i / subset->xyz.size();
       subset->ts_n.push_back(ts_n);
