@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
   //---------------------------
 
   CoreGLengine GLengine;
-  GLengine.arg(argc, argv);
   GLengine.init();
+  GLengine.arg(argc, argv);
   GLengine.loop();
 
   //---------------------------

@@ -5,6 +5,7 @@
 
 class Configuration;
 class Node_engine;
+class Loader;
 
 
 class Argument
@@ -19,6 +20,7 @@ public:
 
 private:
   Configuration* configManager;
+  Loader* loadManager;
 };
 
 #endif
