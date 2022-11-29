@@ -3,12 +3,12 @@
 
 #include "../common.h"
 
+class Node_engine;
 class Scene;
 class Glyphs;
 class GUI;
 class Object;
-
-class Node_engine;
+class Camera;
 
 
 class Engine
@@ -23,17 +23,18 @@ public:
   void runtime_scene();
   void runtime_draw_glyph();
   void runtime_draw_cloud();
+  void runtime_camera();
 
   //Subfunctions
   void draw_mesh(Subset* subset, string draw_type);
 
 private:
+  Node_engine* node_engine;
   Scene* sceneManager;
   Glyphs* glyphManager;
   GUI* guiManager;
   Object* objectManager;
-
-  Node_engine* node_engine;
+  Camera* cameraManager;
 
   bool is_visualization;
   uint modelID, comID;

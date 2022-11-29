@@ -485,8 +485,8 @@ vec3 Selection::mouse_cameraPt(){
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 
-  vec3 cam_pos = cameraManager->get_camPos();
-  vec3 cam_forw = cameraManager->get_camForward();
+  vec3 cam_pos = cameraManager->get_cam_P();
+  vec3 cam_forw = cameraManager->get_cam_F();
   vec3 frustum = cam_pos + vec3(cam_forw.x*0.5,cam_forw.y*0.5,cam_forw.z*0.5);
 
   vec3 D = ray_dir;

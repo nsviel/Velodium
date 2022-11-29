@@ -66,8 +66,8 @@ vec3 CoordTransform::ScreenToWorld(vec2 cursorPos){
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 
-  vec3 cam_pos = cameraManager->get_camPos();
-  vec3 cam_forw = cameraManager->get_camForward();
+  vec3 cam_pos = cameraManager->get_cam_P();
+  vec3 cam_forw = cameraManager->get_cam_F();
   vec3 frustum = cam_pos + vec3(cam_forw.x*0.5,cam_forw.y*0.5,cam_forw.z*0.5);
 
   vec3 D = ray_dir;
@@ -100,7 +100,7 @@ vec3 CoordTransform::CursorToGround(){
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 
-  vec3 cam_pos = cameraManager->get_camPos();
+  vec3 cam_pos = cameraManager->get_cam_P();
   vec3 P0 = vec3(0,0,0);
   vec3 P1 = vec3(1,0,0);
   vec3 P2 = vec3(0,1,0);

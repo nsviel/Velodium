@@ -86,7 +86,6 @@ void GUI_Control::control_mouse(){
   //Right click - Camera movement
   static vec2 cursorPos;
   if(ImGui::IsMouseClicked(1) && !io.WantCaptureMouse){
-
     //Save cursor position
     cursorPos = dimManager->get_mouse_pose();
 
@@ -100,6 +99,7 @@ void GUI_Control::control_mouse(){
     //Enable camera movement
     view->cam_move = true;
   }
+  //Right click release
   if(ImGui::IsMouseReleased(1) && cameraManager->is_cameraMovON()){
     //Restaure cursor position
     dimManager->set_mouse_pose(cursorPos);

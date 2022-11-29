@@ -141,14 +141,15 @@ void Object::runtime_glyph_subset_selected(Subset* subset){
 
   //If the subset is visible
   if(subset->visibility){
-    //Subset glyphs
+    //Keypoint
     Glyph* keypoint = &subset->keypoint;
-    Glyph* normal = &subset->normal;
-    bool* visibility = keyObject->get_visibility();
-
-    //Draw subset glyphs
-    if(keypoint->visibility && *visibility){
+    if(keypoint->visibility){
       glyphManager->draw_glyph(keypoint);
+    }
+
+    //Normal
+    Glyph* normal = &subset->normal;
+    if(normal->visibility){
       glyphManager->draw_glyph(normal);
     }
   }

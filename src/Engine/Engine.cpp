@@ -5,6 +5,7 @@
 #include "Scene/Object.h"
 #include "Scene/Scene.h"
 #include "Scene/Configuration.h"
+#include "OpenGL/Camera/Camera.h"
 
 #include "../GUI/Node_gui.h"
 #include "../GUI/Control/GUI.h"
@@ -22,6 +23,7 @@ Engine::Engine(Node_engine* engine){
   this->glyphManager = node_engine->get_glyphManager();
   this->guiManager = node_gui->get_guiManager();
   this->objectManager = node_engine->get_objectManager();
+  this->cameraManager = node_engine->get_cameraManager();
 
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
@@ -38,6 +40,9 @@ void Engine::runtime_scene(){
 
   //Runtime glyph
   this->runtime_draw_glyph();
+
+  //Runtime camera
+  this->runtime_camera();
 
   //---------------------------
 }
@@ -88,6 +93,17 @@ void Engine::runtime_draw_glyph(){
       objectManager->runtime_glyph_pred(subset_pred);
     }
 
+  }
+
+  //---------------------------
+}
+void Engine::runtime_camera(){
+  Subset* subset = sceneManager->get_subset_selected();
+  //---------------------------
+
+  if(subset != nullptr){
+    vec3* cam_COM = cameraManager->get_cam_COM();
+    *cam_COM = subset->COM;
   }
 
   //---------------------------

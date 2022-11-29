@@ -46,7 +46,6 @@ void Viewport::update_viewport(int loop_cpt){
 
   }else{
     glViewport(pos.x + dim.x/2, pos.y + dim.y/2, dim.x/2, dim.y/2);
-
   }
 
   cameraManager->input_cam_mouse();

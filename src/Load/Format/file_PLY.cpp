@@ -217,19 +217,15 @@ void file_PLY::Loader_ascii_withface(std::ifstream& file){
 
   //Retrieve vertex data
   string line;
-  int cpt = 0;
-  while (std::getline(file, line)){
-    //Check vertex number
-    if(cpt == point_number){
-      break;
-    }
-    cpt++;
+  for(int i=0; i<point_number; i++){
+    //Get line
+    std::getline(file, line);
+    std::istringstream iss(line);
 
     //Stocke all line values
-    std::istringstream iss(line);
     vector<float> data;
+    float d;
     for(int i=0; i<property_number; i++){
-      float d;
       iss >> d;
       data.push_back(d);
     }
@@ -261,17 +257,15 @@ void file_PLY::Loader_ascii_withface(std::ifstream& file){
 
     //Stocke all line index
     vector<int> idx;
+    float d;
     for(int i=0; i<nb_vertice; i++){
-      float d;
       iss >> d;
       idx.push_back(d);
     }
 
     //Retrieve face data
     for(int i=0; i<nb_vertice; i++){
-      if(i < 3){
-        data_out->location.push_back(vertex[idx[i]]);
-      }
+      data_out->location.push_back(vertex[idx[i]]);
       if(get_id_property("nx") != -1){
         data_out->normal.push_back(normal[idx[i]]);
       }

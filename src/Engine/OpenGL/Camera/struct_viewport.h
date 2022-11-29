@@ -13,6 +13,7 @@ struct Viewport_obj{
   glm::vec3 cam_R; // Right
   glm::vec3 cam_U; // Up
   glm::vec3 cam_P; // Pose
+  glm::vec3 cam_COM;
 
   float angle_azimuth;
   float angle_elevation;
@@ -26,6 +27,7 @@ struct Viewport_obj{
 
   std::string projection;
   std::string view;
+  std::string mode;
 
   bool cam_move;
   bool cam_pose;

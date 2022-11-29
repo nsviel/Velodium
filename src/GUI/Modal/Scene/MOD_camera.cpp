@@ -60,7 +60,7 @@ void MOD_camera::cam_parameter(){
   ImGui::Separator();
 
   //Camera mode
-  ImGui::Columns(2);
+  ImGui::Columns(3);
 
   static int projection = 0;
   ImGui::Text("Projection");
@@ -69,6 +69,17 @@ void MOD_camera::cam_parameter(){
   }
   if(ImGui::RadioButton("Orthographic", &projection, 1)){
     cameraManager->input_set_projection(projection);
+  }
+
+  ImGui::NextColumn();
+
+  static int mode = 0;
+  ImGui::Text("Mode");
+  if(ImGui::RadioButton("Default", &mode, 0)){
+    cameraManager->input_set_mode(mode);
+  }
+  if(ImGui::RadioButton("Arcball", &mode, 1)){
+    cameraManager->input_set_mode(mode);
   }
 
   ImGui::NextColumn();
@@ -109,7 +120,7 @@ void MOD_camera::cam_info(){
   ImGui::Columns(1);
 
   //Camera position
-  vec3* cam_position = cameraManager->get_camPosPtr();
+  vec3* cam_position = cameraManager->get_cam_PPtr();
   float *floatArray = &cam_position[0].x;
   if(ImGui::Button("R")){
     *cam_position = vec3(0,0,0);

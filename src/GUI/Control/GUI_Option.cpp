@@ -65,7 +65,7 @@ void GUI_option::option_font(){
   //---------------------------
 
   static int font_selected = 0;
-  ImGui::PushItemWidth(50);
+  ImGui::SetNextItemWidth(150);
   if(ImGui::Combo("Font size", &font_selected, "13\0 12\0")){
     ImFont* font = io.Fonts->Fonts[font_selected];
     io.FontDefault = font;
@@ -136,15 +136,13 @@ void GUI_option::option_glyph(){
   }
   ImGui::NextColumn();
 
-  ImGui::Columns(1);
-
   //Display Axis circle
   static bool axisCircleON = false;
   if(ImGui::Checkbox("Axis circle", &axisCircleON)){
     //objectManager->obj_axisCircle(circleRadius);
     //objectManager->set_visibility("axisCircle", axisCircleON);
   }
-  ImGui::SameLine();
+  ImGui::NextColumn();
 
   //Axis circlev radius
   static float circleRadius = 1;
@@ -152,8 +150,10 @@ void GUI_option::option_glyph(){
   if(ImGui::DragFloat("##456", &circleRadius, 0.001, 0, 5, "%.3f")){
     //objectManager->obj_axisCircle(circleRadius);
   }
+  ImGui::NextColumn();
 
   //---------------------------
+  ImGui::Columns(1);
   ImGui::Separator();
 }
 void GUI_option::option_mode(){

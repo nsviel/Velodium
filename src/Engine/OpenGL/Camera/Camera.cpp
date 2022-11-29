@@ -44,6 +44,8 @@ void Camera::viewport_init(){
   view_main.cam_pose = false;
   view_main.view = "oblique";
   view_main.projection = "perspective";
+  view_main.mode = "default";
+  view_main.cam_COM = vec3(0, 0, 0);
   view_main.zoom = 0;
   view_main.clip_near = configManager->parse_json_f("camera", "clip_near");
   view_main.clip_far = configManager->parse_json_f("camera", "clip_far");
@@ -99,24 +101,53 @@ mat4 Camera::compute_cam_view(){
 
   if(viewport->cam_pose){
     viewMat = viewport->cam_pose_mat;
-  }else{
-    float azimuth = viewport->angle_azimuth;
-    float elevation = viewport->angle_elevation;
-
-    //Forward and Up camera
-    if(viewport->view == "top"){
-      elevation = -M_PI/2.0f;
-    }
-
-    //Compute camera
-    viewport->cam_R = normalize(vec3(cos(azimuth - M_PI/2.0f), sin(azimuth - M_PI/2.0f), 0));
-    viewport->cam_F = vec3(cos(elevation) * cos(azimuth), cos(elevation) * sin(azimuth), sin(elevation));
-    viewport->cam_U = normalize(cross(viewport->cam_R, viewport->cam_F));
-    vec3 cam_target = viewport->cam_P + viewport->cam_F;
-
-    //Compute view matrix
-    viewMat = lookAt(viewport->cam_P, cam_target, viewport->cam_U);
+  }else if(viewport->mode == "default"){
+    viewMat = compute_cam_default();
+  }else if(viewport->mode == "arcball"){
+    viewMat = compute_cam_arcball();
   }
+
+  //---------------------------
+  return viewMat;
+}
+mat4 Camera::compute_cam_default(){
+  mat4 viewMat;
+  //---------------------------
+
+  float azimuth = viewport->angle_azimuth;
+  float elevation = viewport->angle_elevation;
+
+  //Forward and Up camera
+  if(viewport->view == "top"){
+    elevation = -M_PI/2.0f;
+  }
+
+  //Compute camera
+  viewport->cam_R = normalize(vec3(cos(azimuth - M_PI/2.0f), sin(azimuth - M_PI/2.0f), 0));
+  viewport->cam_F = vec3(cos(elevation) * cos(azimuth), cos(elevation) * sin(azimuth), sin(elevation));
+  viewport->cam_U = normalize(cross(viewport->cam_R, viewport->cam_F));
+  vec3 cam_target = viewport->cam_P + viewport->cam_F;
+
+  //Compute view matrix
+  viewMat = lookAt(viewport->cam_P, cam_target, viewport->cam_U);
+
+  //---------------------------
+  return viewMat;
+}
+mat4 Camera::compute_cam_arcball(){
+  mat4 viewMat;
+  //---------------------------
+
+  float azimuth = viewport->angle_azimuth;
+  float elevation = viewport->angle_elevation;
+
+  //Compute camera
+  viewport->cam_R = normalize(vec3(cos(azimuth - M_PI/2.0f), sin(azimuth - M_PI/2.0f), 0));
+  viewport->cam_F = -viewport->cam_P;
+  viewport->cam_U = normalize(cross(viewport->cam_R, viewport->cam_F));
+
+  //Compute view matrix
+  viewMat = lookAt(viewport->cam_P, viewport->cam_COM, viewport->cam_U);
 
   //---------------------------
   return viewMat;
@@ -144,6 +175,7 @@ mat4 Camera::compute_cam_proj(){
 mat4 Camera::compute_cam_mvp(){
   //---------------------------
 
+  //mat4 viewMat = compute_cam_view();
   mat4 viewMat = compute_cam_view();
   mat4 projMat = compute_cam_proj();
 
@@ -170,14 +202,6 @@ mat4 Camera::compute_cam_world_pose(){
 }
 
 //Functions
-void Camera::compute_view_arcball(){
-  //---------------------------
-
-  mat4 arc_Rx(1.0);
-  mat4 arc_Rz(1.0);
-
-  //---------------------------
-}
 void Camera::compute_zoom_optic(float yoffset){
   GLFWwindow* window = glfwGetCurrentContext();
   //---------------------------
@@ -213,29 +237,82 @@ void Camera::compute_zoom_position(float yoffset){
 
 //Inputs
 void Camera::input_cam_mouse(){
+  if(viewport->cam_move){
+    //---------------------------
+
+    if(viewport->mode == "default"){
+      this->input_cam_mouse_default();
+    }else if(viewport->mode == "arcball"){
+      this->input_cam_mouse_arcball();
+    }
+
+    //---------------------------
+  }
+}
+void Camera::input_cam_mouse_default(){
   //---------------------------
 
-  if(viewport->cam_move){
-    float& azimuth = viewport->angle_azimuth;
-    float& elevation = viewport->angle_elevation;
+  float& azimuth = viewport->angle_azimuth;
+  float& elevation = viewport->angle_elevation;
 
-    //Cursor movement
-    vec2 mouse_pose = dimManager->get_mouse_pose();
-    dimManager->set_mouse_pose(dimManager->get_gl_middle());
+  //Cursor movement
+  vec2 mouse_pose = dimManager->get_mouse_pose();
+  dimManager->set_mouse_pose(dimManager->get_gl_middle());
 
-    // Compute new orientation
-    vec2 gl_mid = dimManager->get_gl_middle();
-    azimuth += viewport->speed_mouse * float(gl_mid.x - mouse_pose.x);
-    elevation += viewport->speed_mouse * float(gl_mid.y - mouse_pose.y);
+  // Compute new orientation
+  vec2 gl_mid = dimManager->get_gl_middle();
+  azimuth += viewport->speed_mouse * float(gl_mid.x - mouse_pose.x);
+  elevation += viewport->speed_mouse * float(gl_mid.y - mouse_pose.y);
 
-    //Limites of camera rotation
-    if(elevation > M_PI/2) elevation = M_PI/2;
-    if(elevation < -M_PI/2) elevation = -M_PI/2;
-    if(azimuth > M_PI*2) azimuth = 0;
-    if(azimuth < -M_PI*2) azimuth = 0;
+  //Limites of camera rotation
+  if(elevation > M_PI/2) elevation = M_PI/2;
+  if(elevation < -M_PI/2) elevation = -M_PI/2;
+  if(azimuth > M_PI*2) azimuth = 0;
+  if(azimuth < -M_PI*2) azimuth = 0;
 
-    glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-  }
+  glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+  //---------------------------
+}
+void Camera::input_cam_mouse_arcball(){
+  //---------------------------
+
+  vec2 mouse_pose = dimManager->get_mouse_pose();
+  dimManager->set_mouse_pose(dimManager->get_gl_middle());
+  vec2 gl_mid = dimManager->get_gl_middle();
+  vec2 gl_dim = dimManager->get_gl_dim();
+
+  // step 1 : Calculate the amount of rotation given the mouse movement.
+  float deltaAngleX = (2 * M_PI / gl_dim.x); // a movement from left to right = 2*PI = 360 deg
+  float deltaAngleY = (M_PI / gl_dim.y);  // a movement from top to bottom = PI = 180 deg
+  float xAngle = float(gl_mid.x - mouse_pose.x) * deltaAngleX * 0.1;
+  float yAngle = float(gl_mid.y - mouse_pose.y) * deltaAngleY * 0.1;
+
+  // Get the homogenous position of the camera and pivot point
+  glm::vec4 position (view_main.cam_P.x, view_main.cam_P.y, view_main.cam_P.z, 1);
+  glm::vec4 pivot (viewport->cam_COM.x, viewport->cam_COM.y, viewport->cam_COM.z, 1);
+
+  // step 2: Rotate the camera around the pivot point on the first axis.
+  glm::mat4x4 rotationMatrixX(1.0f);
+  rotationMatrixX = glm::rotate(rotationMatrixX, xAngle, view_main.cam_U);
+  position = (rotationMatrixX * (position - pivot)) + pivot;
+
+  // step 3: Rotate the camera around the pivot point on the second axis.
+  glm::mat4x4 rotationMatrixY(1.0f);
+  rotationMatrixY = glm::rotate(rotationMatrixY, yAngle, view_main.cam_R);
+  glm::vec3 finalPosition = (rotationMatrixY * (position - pivot)) + pivot;
+
+  view_main.cam_P = finalPosition;
+
+  // Compute new orientation
+  vec3 C = view_main.cam_F;
+  vec3 D = view_main.cam_P;
+  float angle_x = atan(C.y, C.x) - atan(D.y, D.x);
+  angle_x = angle_x + M_PI;
+  float& azimuth = viewport->angle_azimuth;
+  azimuth -= angle_x;
+
+  glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
   //---------------------------
 }
@@ -265,6 +342,23 @@ void Camera::input_set_view(int view){
     }
     case 1:{ //Oblique
       viewport->view = "oblique";
+      break;
+    }
+  }
+
+  //---------------------------
+}
+void Camera::input_set_mode(int mode){
+  this->viewport_reset();
+  //---------------------------
+
+  switch(mode){
+    case 0:{ //Default
+      viewport->mode = "default";
+      break;
+    }
+    case 1:{ //Arcball
+      viewport->mode = "arcball";
       break;
     }
   }
