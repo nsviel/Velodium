@@ -145,7 +145,7 @@ bool Pather::loading_directory_frame(string path){
 
   //Sort alphabetically and load
   if(path_vec.size() != 0){
-    fct_sort_alpha_num_(path_vec);sayHello();
+    fct_sort_alpha_num_(path_vec);
     ok = loaderManager->load_cloud_byFrame(path_vec);
   }
 

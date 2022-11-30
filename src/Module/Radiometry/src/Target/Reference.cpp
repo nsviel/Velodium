@@ -494,10 +494,10 @@ bool Reference::is_cloudReference(Cloud* cloud){
 }
 
 Cloud* Reference::get_specificSpectralon(string p, string m, bool degree){
-  /*Cloud* cloud_out;
+  Cloud* cloud_out;
   //---------------------------
 
-  for(int i=0;i<list_Spectralon->size();i++){
+  /*for(int i=0;i<list_Spectralon->size();i++){
     Cloud* cloud = *next(list_Spectralon->begin(),i);
 
     if(cloud->name.find(p) == std::string::npos &&
@@ -513,23 +513,23 @@ Cloud* Reference::get_specificSpectralon(string p, string m, bool degree){
         }
       }
     }
-  }
+  }*/
 
   //---------------------------
-  return cloud_out;*/
+  return cloud_out;
 }
 Cloud* Reference::get_specificSphere(string m){
-  /*Cloud* cloud_out;
+  Cloud* cloud_out;
   //---------------------------
 
-  for(int i=0;i<list_Sphere->size();i++){
+  /*for(int i=0;i<list_Sphere->size();i++){
     Cloud* cloud = *next(list_Sphere->begin(),i);
 
     if(cloud->name.find(m) != std::string::npos){
       cloud_out = cloud;
     }
-  }
+  }*/
 
   //---------------------------
-  return cloud_out;*/
+  return cloud_out;
 }

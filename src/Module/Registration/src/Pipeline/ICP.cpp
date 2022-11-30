@@ -260,6 +260,7 @@ void ICP::step_transformation(Cloud* cloud_P, Cloud* cloud_Q){
 
 //Subfunctions
 float ICP::compute_SSE(Cloud* cloud_P, Cloud* cloud_Q){
+  float SSE;
   /*vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
   //---------------------------
@@ -274,12 +275,13 @@ float ICP::compute_SSE(Cloud* cloud_P, Cloud* cloud_Q){
       SSE += pow(distance(P, Q), 2);
     }
     SSE = SSE / key_P.size();
-  }
+  }*/
 
   //---------------------------
-  return SSE;*/
+  return SSE;
 }
 float ICP::compute_SSE_groundTruth(Cloud* cloud){
+  float SSE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   //---------------------------
@@ -297,12 +299,13 @@ float ICP::compute_SSE_groundTruth(Cloud* cloud){
     vec3 P(XYZ[i]);
     vec3 Pg(XYZ_truth[i]);
     SSE += pow(distance(P, Pg), 2);
-  }
+  }*/
 
   //---------------------------
-  return SSE;*/
+  return SSE;
 }
 float ICP::compute_MSE_groundTruth(Cloud* cloud){
+  float MSE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   float MSE;
@@ -324,12 +327,13 @@ float ICP::compute_MSE_groundTruth(Cloud* cloud){
     vec3 Pg(XYZ_truth[i]);
     MSE += pow(distance(P, Pg), 2);
   }
-  MSE = MSE / XYZ.size();
+  MSE = MSE / XYZ.size();*/
 
   //---------------------------
-  return MSE;*/
+  return MSE;
 }
 float ICP::compute_RMSE_groundTruth(Cloud* cloud){
+  float RMSE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
   float RMSE;
@@ -350,15 +354,15 @@ float ICP::compute_RMSE_groundTruth(Cloud* cloud){
     RMSE += pow(distance(P, Pg), 2);
   }
   RMSE = RMSE / XYZ.size();
-  RMSE = sqrt(RMSE);
+  RMSE = sqrt(RMSE);*/
 
   //---------------------------
-  return RMSE;*/
+  return RMSE;
 }
 float ICP::compute_MAE_groundTruth(Cloud* cloud){
+  float MAE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
-  float MAE;
   //---------------------------
 
   if(XYZ.size() == 0 || XYZ_truth.size() == 0){
@@ -375,10 +379,10 @@ float ICP::compute_MAE_groundTruth(Cloud* cloud){
     vec3 Pg(XYZ_truth[i]);
     MAE += abs(distance(P, Pg));
   }
-  MAE = MAE / XYZ.size();
+  MAE = MAE / XYZ.size();*/
 
   //---------------------------
-  return MAE;*/
+  return MAE;
 }
 void ICP::compute_prepareData(Cloud* cloud_P, Cloud* cloud_Q){
   /*//Prepare source data combining location and intensity for registration based intensity
