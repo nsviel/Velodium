@@ -227,15 +227,15 @@ void Capture::operation_new_subset(Subset* subset){
       is_first_run = false;
     }
 
-    //Set new subset identifieurs
-    subset->name = "frame_" + to_string(cloud_capture->ID_subset);
-    subset->ID = cloud_capture->ID_subset;
-    cloud_capture->ID_subset++;
-
     //Supress null points
     this->supress_nullpoints(subset);
     this->capture_nb_point = subset->xyz.size();
     if(subset->xyz.size() == 0) return;
+
+    //Set new subset identifieurs
+    subset->name = "frame_" + to_string(cloud_capture->ID_subset);
+    subset->ID = cloud_capture->ID_subset;
+    cloud_capture->ID_subset++;
 
     //Update subset data
     sceneManager->update_subset_location(subset);
