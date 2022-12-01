@@ -56,6 +56,7 @@ void Node_engine::update(){
   node_module->update();
   node_ope->update();
   node_load->update();
+  node_interface->update();
 
   objectManager->update_configuration();
   followManager->update_configuration();

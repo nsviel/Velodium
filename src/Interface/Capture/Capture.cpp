@@ -55,8 +55,7 @@ void Capture::update_configuration(){
   this->ratio_frame = configManager->parse_json_i("interface", "ratio_frame");
   this->ratio_cpt = ratio_frame;
 
-  bool with_capture = configManager->parse_json_i("interface", "with_capture");
-  if(with_capture){
+  if(configManager->parse_json_b("interface", "with_capture")){
     this->start_new_capture(lidar_model);
   }
 

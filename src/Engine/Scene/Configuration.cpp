@@ -595,7 +595,7 @@ bool Configuration::parse_json_b(string field, string value){
 
     ifs_default.close();
   }
-
+  
   ifs.close();
 
   //---------------------------

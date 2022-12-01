@@ -52,6 +52,7 @@ void Node_operation::update(){
   filterManager->update_configuration();
   onlineManager->update_configuration();
   playerManager->update_configuration();
+  savingManager->update_configuration();
 
   //---------------------------
 }
