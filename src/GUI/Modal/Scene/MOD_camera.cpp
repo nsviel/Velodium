@@ -4,7 +4,7 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Configuration.h"
-#include "../../../Engine/OpenGL/Camera/Camera.h"
+#include "../../../Engine/Camera/Camera.h"
 
 #include <fstream>
 

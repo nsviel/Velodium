@@ -1,6 +1,6 @@
 #include "Node_engine.h"
 
-#include "Engine.h"
+#include "Core/Engine.h"
 
 #include "Scene/Configuration.h"
 #include "Scene/Scene.h"
@@ -9,11 +9,12 @@
 
 #include "OpenGL/Dimension.h"
 #include "OpenGL/CoreGLengine.h"
-#include "OpenGL/Camera/Renderer.h"
-#include "OpenGL/Camera/Camera.h"
-#include "OpenGL/Camera/Followup.h"
-#include "OpenGL/Camera/Viewport.h"
+#include "OpenGL/Renderer.h"
 #include "OpenGL/Shader/Shader.h"
+
+#include "Camera/Camera.h"
+#include "Camera/Followup.h"
+#include "Camera/Viewport.h"
 
 #include "../Load/Node_load.h"
 #include "../Operation/Node_operation.h"

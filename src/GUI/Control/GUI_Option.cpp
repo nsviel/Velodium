@@ -6,7 +6,7 @@
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Pather.h"
 
-#include "../../Engine/Engine.h"
+#include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"
@@ -15,7 +15,7 @@
 #include "../../Engine/Scene/Object/Scene/Axis.h"
 #include "../../Engine/Scene/Object/Cloud/Normal.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Engine/OpenGL/Camera/Renderer.h"
+#include "../../Engine/OpenGL/Renderer.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Color/Heatmap.h"

@@ -1,7 +1,7 @@
 #ifndef ARGUMENT_H
 #define ARGUMENT_H
 
-#include "../common.h"
+#include "../../common.h"
 
 class Configuration;
 class Node_engine;

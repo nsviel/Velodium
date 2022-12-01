@@ -1,15 +1,14 @@
 #include "CoreGLengine.h"
-
+#include "Renderer.h"
 #include "Dimension.h"
 
-#include "Camera/Camera.h"
-#include "Camera/Viewport.h"
-#include "Camera/Renderer.h"
 #include "Shader/Shader.h"
 #include "Shader/ShaderObject.h"
 
+#include "../Camera/Camera.h"
+#include "../Camera/Viewport.h"
 #include "../Node_engine.h"
-#include "../Argument.h"
+#include "../Core/Argument.h"
 #include "../Scene/Configuration.h"
 
 #include "../../GUI/Node_gui.h"

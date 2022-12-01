@@ -12,8 +12,8 @@
 #include "../../Operation/Transformation/Filter.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/OpenGL/Camera/Followup.h"
-#include "../../Engine/OpenGL/Camera/Renderer.h"
+#include "../../Engine/Camera/Followup.h"
+#include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 

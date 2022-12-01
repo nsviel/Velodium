@@ -1,14 +1,14 @@
 #include "Engine.h"
 
-#include "Node_engine.h"
-#include "Scene/Glyphs.h"
-#include "Scene/Object.h"
-#include "Scene/Scene.h"
-#include "Scene/Configuration.h"
-#include "OpenGL/Camera/Camera.h"
+#include "../Node_engine.h"
+#include "../Scene/Glyphs.h"
+#include "../Scene/Object.h"
+#include "../Scene/Scene.h"
+#include "../Scene/Configuration.h"
+#include "../Camera/Camera.h"
 
-#include "../GUI/Node_gui.h"
-#include "../GUI/Control/GUI.h"
+#include "../../GUI/Node_gui.h"
+#include "../../GUI/Control/GUI.h"
 
 
 //Constructor / Destructor

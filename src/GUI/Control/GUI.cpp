@@ -10,7 +10,7 @@
 #include "../Window/GUI_LeftPanel.h"
 #include "../Window/struct_consol.h"
 
-#include "../../Engine/OpenGL/Camera/Camera.h"
+#include "../../Engine/Camera/Camera.h"
 #include "../../Engine/OpenGL/Dimension.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/Node_engine.h"

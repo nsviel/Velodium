@@ -1,11 +1,10 @@
 #include "Renderer.h"
+#include "Dimension.h"
 
-#include "../Dimension.h"
-
-#include "../../Scene/Configuration.h"
+#include "../Scene/Configuration.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../../../../extern/stb_image_write.h"
+#include "../../../extern/stb_image_write.h"
 
 #include <filesystem>
 #include <FreeImage.h>

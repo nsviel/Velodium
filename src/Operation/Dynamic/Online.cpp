@@ -12,10 +12,10 @@
 #include "../../Operation/Transformation/Transformation.h"
 #include "../../Operation/Transformation/Filter.h"
 
-#include "../../Engine/OpenGL/Camera/Renderer.h"
-#include "../../Engine/OpenGL/Camera/Followup.h"
+#include "../../Engine/OpenGL/Renderer.h"
+#include "../../Engine/Camera/Followup.h"
 #include "../../Engine/OpenGL/Dimension.h"
-#include "../../Engine/Engine.h"
+#include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Object.h"

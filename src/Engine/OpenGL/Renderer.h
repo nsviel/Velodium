@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "../../../common.h"
+#include "../../common.h"
 
 class Dimension;
 class Configuration;

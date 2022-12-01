@@ -1,7 +1,7 @@
 #include "Camera.h"
 
-#include "../../OpenGL/Dimension.h"
-#include "../../Scene/Configuration.h"
+#include "../OpenGL/Dimension.h"
+#include "../Scene/Configuration.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -277,6 +277,14 @@ void Camera::input_cam_mouse_default(){
 void Camera::input_cam_mouse_arcball(){
   //---------------------------
 
+  vec2 angle = get_mouse_angle();
+  this->update_arcbal_cam(angle);
+
+  //---------------------------
+}
+vec2 Camera::get_mouse_angle(){
+  //---------------------------
+
   vec2 mouse_pose = dimManager->get_mouse_pose();
   dimManager->set_mouse_pose(dimManager->get_gl_middle());
   vec2 gl_mid = dimManager->get_gl_middle();
@@ -287,6 +295,15 @@ void Camera::input_cam_mouse_arcball(){
   float deltaAngleY = (M_PI / gl_dim.y);  // a movement from top to bottom = PI = 180 deg
   float xAngle = float(gl_mid.x - mouse_pose.x) * deltaAngleX * 0.1;
   float yAngle = float(gl_mid.y - mouse_pose.y) * deltaAngleY * 0.1;
+  vec2 angle = vec2(xAngle, yAngle);
+
+  glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+  //---------------------------
+  return angle;
+}
+void Camera::update_arcbal_cam(vec2 angle){
+  //---------------------------
 
   // Get the homogenous position of the camera and pivot point
   glm::vec4 position (view_main.cam_P.x, view_main.cam_P.y, view_main.cam_P.z, 1);
@@ -294,25 +311,17 @@ void Camera::input_cam_mouse_arcball(){
 
   // step 2: Rotate the camera around the pivot point on the first axis.
   glm::mat4x4 rotationMatrixX(1.0f);
-  rotationMatrixX = glm::rotate(rotationMatrixX, xAngle, view_main.cam_U);
+  rotationMatrixX = glm::rotate(rotationMatrixX, angle.x, view_main.cam_U);
   position = (rotationMatrixX * (position - pivot)) + pivot;
 
   // step 3: Rotate the camera around the pivot point on the second axis.
   glm::mat4x4 rotationMatrixY(1.0f);
-  rotationMatrixY = glm::rotate(rotationMatrixY, yAngle, view_main.cam_R);
+  rotationMatrixY = glm::rotate(rotationMatrixY, angle.y, view_main.cam_R);
   glm::vec3 finalPosition = (rotationMatrixY * (position - pivot)) + pivot;
 
   view_main.cam_P = finalPosition;
-
-  // Compute new orientation
-  vec3 C = view_main.cam_F;
-  vec3 D = view_main.cam_P;
-  float angle_x = atan(C.y, C.x) - atan(D.y, D.x);
-  angle_x = angle_x + M_PI;
-  float& azimuth = viewport->angle_azimuth;
-  azimuth -= angle_x;
-
-  glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+  viewport->angle_azimuth += angle.x;
+  viewport->angle_elevation += angle.y;
 
   //---------------------------
 }

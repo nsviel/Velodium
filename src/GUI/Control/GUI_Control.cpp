@@ -6,8 +6,8 @@
 #include "../../Load/Node_load.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/OpenGL/Camera/Camera.h"
-#include "../../Engine/OpenGL/Camera/struct_viewport.h"
+#include "../../Engine/Camera/Camera.h"
+#include "../../Engine/Camera/struct_viewport.h"
 #include "../../Engine/OpenGL/Dimension.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Engine/Scene/Scene.h"
@@ -194,7 +194,7 @@ void GUI_Control::control_frame_selection(){
 
   //----------------------------
 }
-
+#include <glm/gtc/matrix_transform.hpp>
 //Keyboard function
 void GUI_Control::control_keyboard_oneAction(){
   Cloud* cloud = sceneManager->get_selected_cloud();
@@ -403,12 +403,24 @@ void GUI_Control::control_keyboard_camMove(){
 
         //Q key or Right key
         if(io.KeysDown[65] || io.KeysDown[263]){
-          view->cam_P -= view->cam_R * cam_speed;
+          if(view->mode == "default"){
+            view->cam_P -= view->cam_R * cam_speed;
+          }else if(view->mode == "arcball"){
+            vec2 angle =vec2(-cam_speed/10, 0);
+            cameraManager->update_arcbal_cam(angle);
+            cameraManager->compute_cam_arcball();
+          }
         }
 
         //D key or Left key
         if(io.KeysDown[68] || io.KeysDown[262]){
-          view->cam_P += view->cam_R * cam_speed;
+          if(view->mode == "default"){
+            view->cam_P += view->cam_R * cam_speed;
+          }else if(view->mode == "arcball"){
+            vec2 angle =vec2(cam_speed/10, 0);
+            cameraManager->update_arcbal_cam(angle);
+            cameraManager->compute_cam_arcball();
+          }
         }
       }
     }

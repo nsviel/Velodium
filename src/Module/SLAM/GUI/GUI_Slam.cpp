@@ -14,7 +14,7 @@
 #include "../../Node_module.h"
 
 #include "../../../GUI/Node_gui.h"
-#include "../../../Engine/Engine.h"
+#include "../../../Engine/Core/Engine.h"
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"

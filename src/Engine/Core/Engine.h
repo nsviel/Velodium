@@ -1,7 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "../common.h"
+#include "../../common.h"
 
 class Node_engine;
 class Scene;

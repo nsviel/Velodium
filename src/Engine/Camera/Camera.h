@@ -3,7 +3,7 @@
 
 #include "struct_viewport.h"
 
-#include "../../../common.h"
+#include "../../common.h"
 
 class Dimension;
 class Configuration;
@@ -40,6 +40,9 @@ public:
   void input_set_projection(int value);
   void input_set_view(int value);
   void input_set_mode(int value);
+
+  vec2 get_mouse_angle();
+  void update_arcbal_cam(vec2 angle);
 
   //Accessors
   inline void set_desiredViewMatrix(mat4 value){view_main.cam_pose_mat = value;}

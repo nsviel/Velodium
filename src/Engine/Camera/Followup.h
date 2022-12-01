@@ -1,7 +1,7 @@
 #ifndef FOLLOWUP_H
 #define FOLLOWUP_H
 
-#include "../../../common.h"
+#include "../../common.h"
 
 class Node_engine;
 class Scene;

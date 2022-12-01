@@ -3,7 +3,7 @@
 #include "../Node_operation.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/OpenGL/Camera/Renderer.h"
+#include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Load/Node_load.h"

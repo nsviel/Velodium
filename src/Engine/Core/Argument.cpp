@@ -1,10 +1,11 @@
 #include "Argument.h"
-#include "Node_engine.h"
-#include "Scene/Configuration.h"
-#include "OpenGL/Camera/Camera.h"
 
-#include "../Load/Node_load.h"
-#include "../Load/Processing/Loader.h"
+#include "../Node_engine.h"
+#include "../Scene/Configuration.h"
+#include "../Camera/Camera.h"
+
+#include "../../Load/Node_load.h"
+#include "../../Load/Processing/Loader.h"
 
 
 //Constructor / Destructor

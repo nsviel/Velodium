@@ -1,12 +1,12 @@
 #include "Followup.h"
 #include "Camera.h"
 
-#include "../../Node_engine.h"
-#include "../../Scene/Scene.h"
-#include "../../Scene/Configuration.h"
+#include "../Node_engine.h"
+#include "../Scene/Scene.h"
+#include "../Scene/Configuration.h"
 
-#include "../../../Specific/fct_maths.h"
-#include "../../../Specific/fct_transtypage.h"
+#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_transtypage.h"
 
 
 //Constructor / Destructor
