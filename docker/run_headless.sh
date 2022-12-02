@@ -9,5 +9,4 @@ sudo docker run \
     --publish=2370:2370 \
     --publish=8888:8888 \
     -v data:/app/hubium \
-    --entrypoint="sudo xvfb-run --server-args='-screen 0 1024x500x24' ./executable server" \
-    velodium
+    velodium bash -c "sudo xvfb-run --server-args='-screen 0 1024x500x24' ./executable server"
