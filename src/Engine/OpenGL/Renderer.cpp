@@ -178,7 +178,7 @@ void Renderer::render_screenshot(string path_file){
 
     //Parameters
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
-    glReadBuffer(GL_FRONT);
+    glReadBuffer(GL_BACK);
 
     //Configure buffer
     int size = 3 * gl_dim.x * gl_dim.y;
