@@ -40,6 +40,7 @@ Dimension::~Dimension(){}
 
 //Main functions
 void Dimension::update(){
+  this->is_resized = false;
   //---------------------------
 
   this->update_opengl_dim();

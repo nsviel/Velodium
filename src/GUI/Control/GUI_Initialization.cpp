@@ -11,6 +11,8 @@
 #include "../../Operation/Transformation/Transformation.h"
 #include "../../Module/Node_module.h"
 #include "../../Specific/fct_system.h"
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/Capture/Capture.h"
 
 #include <filesystem>
 
@@ -21,11 +23,13 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
 
   Node_engine* node_engine = node_gui->get_node_engine();
   Node_load* node_load = node_engine->get_node_load();
+  Node_interface* node_interface = node_engine->get_node_interface();
 
   this->sceneManager = node_engine->get_sceneManager();
   this->loaderManager = node_load->get_loaderManager();
   this->pathManager = node_load->get_patherManager();
   this->configManager = node_engine->get_configManager();
+  this->captureManager = node_interface->get_captureManager();
 
   //---------------------------
   this->update_configuration();
@@ -266,6 +270,7 @@ void GUI_Initialization::open_selection(tree_file* node){
   //---------------------------
 
   if(with_remove_cloud){
+    captureManager->stop_capture();
     sceneManager->remove_cloud_all();
   }
 

@@ -32,6 +32,7 @@ CoreGLengine::CoreGLengine(){
 
   this->openglRunning = true;
   this->window = nullptr;
+  this->flag_resized = false;
 
   //---------------------------
 }

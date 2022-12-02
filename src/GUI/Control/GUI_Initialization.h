@@ -8,6 +8,7 @@ class Scene;
 class Loader;
 class Pather;
 class Configuration;
+class Capture;
 
 struct tree_file{
   string          name;
@@ -48,6 +49,7 @@ private:
   Loader* loaderManager;
   Pather* pathManager;
   Configuration* configManager;
+  Capture* captureManager;
 
   vector<tree_file*> nodes_path_1;
   vector<tree_file*> nodes_path_2;
