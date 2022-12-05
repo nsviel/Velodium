@@ -64,10 +64,10 @@ void Followup::camera_mode(string mode){
   //---------------------------
 
   if(mode == "top"){
-    cameraManager->input_set_view(0);
+    cameraManager->set_mode_angle(0);
   }
   else if(mode == "oblique"){
-    cameraManager->input_set_view(1);
+    cameraManager->set_mode_angle(1);
   }
 
   //---------------------------
@@ -116,13 +116,13 @@ void Followup::camera_position(Subset* subset, vec3 E){
     if(with_camera_top){
       vec3 camPos = vec3(pose.x, pose.y, camera_top_z);
       cameraManager->set_cameraPos(camPos);
-      cameraManager->input_set_view(0);
+      cameraManager->set_mode_angle(0);
     }
     //Oblique view
     else{
       vec3 camPos = vec3(C.x, C.y, camera_oblique_z);
       cameraManager->set_cameraPos(camPos);
-      cameraManager->input_set_view(1);
+      cameraManager->set_mode_angle(1);
     }
   }
   //Forced relative camera pose

@@ -47,7 +47,7 @@ void Argument::process_arg(int argc, char* argv[]){
       node_engine->update();
     }
     else if(arg_vec[0] == "load" && argc == 3){
-      cameraManager->input_set_mode(1);
+      cameraManager->set_mode_view(1);
       loadManager->load_cloud(arg_vec[1]);
     }
   }

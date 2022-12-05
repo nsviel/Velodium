@@ -7,24 +7,17 @@
 
 //Constructor / Destructor
 Viewport::Viewport(Dimension* dimension){
+  this->dimManager = dimension;
   //---------------------------
 
-  cameraManager = new Camera(dimension);
   this->configManager = new Configuration();
 
-  this->dimManager = dimension;
   this->nb_viewport = 2;
 
   //---------------------------
   this->viewport_init();
 }
-Viewport::~Viewport(){
-  //---------------------------
-
-  delete cameraManager;
-
-  //---------------------------
-}
+Viewport::~Viewport(){}
 
 void Viewport::viewport_init(){
   //---------------------------
@@ -75,6 +68,33 @@ void Viewport::viewport_init_map(){
   //---------------------------
   this->nb_viewport++;
 }
+void Viewport::viewport_update(int ID){
+  //---------------------------
+
+  //Main viewport
+  if(ID == 0){
+    view_main.dim = dimManager->get_gl_dim();
+    view_main.pos = dimManager->get_gl_pos();
+    glViewport(0, 0, view_main.dim.x, view_main.dim.y);
+  }
+  //Map viewport
+  else if(ID == 1){
+    glViewport(view_map.pos.x, view_map.pos.y, view_map.dim.x, view_map.dim.y);
+  }
+
+  //---------------------------
+}
+void Viewport::viewport_reset(){
+  //---------------------------
+
+  float camPos = configManager->parse_json_f("camera", "initial_pos");
+  view_main.cam_P = vec3(camPos, camPos, camPos);
+  view_main.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
+  view_main.angle_elevation = - M_PI/6;// Initial vertical angle
+
+  //---------------------------
+}
+
 void Viewport::update_viewport(){
   //---------------------------
 
@@ -100,7 +120,7 @@ void Viewport::update_viewport(int loop_cpt){
     glViewport(pos.x + dim.x/2, pos.y + dim.y/2, dim.x/2, dim.y/2);
   }
 
-  cameraManager->input_cam_mouse();
+  //cameraManager->input_cam_mouse();
 
   //---------------------------
 }

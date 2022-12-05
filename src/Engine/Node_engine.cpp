@@ -31,10 +31,10 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->configManager = ogl->get_configManager();
   this->dimManager = new Dimension(ogl->get_window(), configManager);
   this->shaderManager = new Shader(dimManager);
-  this->cameraManager = new Camera(dimManager);
+  this->viewportManager = new Viewport(dimManager);
+  this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
   this->renderManager = new Renderer(dimManager);
-  this->viewportManager = new Viewport(dimManager);
   this->glyphManager = new Glyphs(this);
   this->objectManager = new Object(this);
   this->sceneManager = new Scene(this);
@@ -79,7 +79,7 @@ void Node_engine::reset(){
 
   node_ope->reset();
 
-  cameraManager->viewport_reset();
+  viewportManager->viewport_reset();
   objectManager->reset_scene_object();
   sceneManager->reset_cloud_all();
   followManager->camera_reset();

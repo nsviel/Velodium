@@ -34,20 +34,20 @@ public:
   inline Node_operation* get_node_ope(){return node_ope;}
   inline Node_interface* get_node_interface(){return node_interface;}
 
+  inline Module_slam* get_module_slam(){return module_slam;}
   inline Module_radiometry* get_module_radio(){return module_radio;}
   inline Module_registration* get_module_regist(){return module_regist;}
   inline Module_obstacle* get_module_obstacle(){return module_obstacle;}
-  inline Module_slam* get_module_slam(){return module_slam;}
 
 private:
   Node_engine* node_engine;
   Node_operation* node_ope;
   Node_interface* node_interface;
 
-  Module_registration* module_regist;
-  Module_radiometry* module_radio;
-  Module_obstacle* module_obstacle;
   Module_slam* module_slam;
+  Module_radiometry* module_radio;
+  Module_registration* module_regist;
+  Module_obstacle* module_obstacle;
 };
 
 #endif

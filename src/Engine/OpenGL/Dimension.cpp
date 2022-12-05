@@ -40,7 +40,6 @@ Dimension::~Dimension(){}
 
 //Main functions
 void Dimension::update(){
-  this->is_resized = false;
   //---------------------------
 
   this->update_opengl_dim();
@@ -56,8 +55,8 @@ void Dimension::update_opengl_dim(){
   int gl_w = win_dim.x - gui_ltp_dim.x;
   int gl_h = win_dim.y - gui_tp_dim.y - gui_bp_dim.y;
 
+  //Set up new values
   if(gl_w != gl_dim.x || gl_h != gl_dim.y && !with_custom_gl_dim){
-    //Set up new values
     this->gl_dim = vec2(gl_w, gl_h);
     this->gl_pos = vec2(gui_ltp_dim.x, gui_bp_dim.y);
     this->is_resized = true;

@@ -65,10 +65,10 @@ void MOD_camera::cam_parameter(){
   static int projection = 0;
   ImGui::Text("Projection");
   if(ImGui::RadioButton("Perspective", &projection, 0)){
-    cameraManager->input_set_projection(projection);
+    cameraManager->set_mode_projection(projection);
   }
   if(ImGui::RadioButton("Orthographic", &projection, 1)){
-    cameraManager->input_set_projection(projection);
+    cameraManager->set_mode_projection(projection);
   }
 
   ImGui::NextColumn();
@@ -76,10 +76,10 @@ void MOD_camera::cam_parameter(){
   static int mode = 0;
   ImGui::Text("Mode");
   if(ImGui::RadioButton("Default", &mode, 0)){
-    cameraManager->input_set_mode(mode);
+    cameraManager->set_mode_view(mode);
   }
   if(ImGui::RadioButton("Arcball", &mode, 1)){
-    cameraManager->input_set_mode(mode);
+    cameraManager->set_mode_view(mode);
   }
 
   ImGui::NextColumn();
@@ -87,10 +87,10 @@ void MOD_camera::cam_parameter(){
   static int view = 1;
   ImGui::Text("View");
   if(ImGui::RadioButton("Top", &view, 0)){
-    cameraManager->input_set_view(view);
+    cameraManager->set_mode_angle(view);
   }
   if(ImGui::RadioButton("Oblique", &view, 1)){
-    cameraManager->input_set_view(view);
+    cameraManager->set_mode_angle(view);
   }
 
   ImGui::Columns(1);

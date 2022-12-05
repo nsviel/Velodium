@@ -113,6 +113,7 @@ void CoreGLengine::init_object(){
   this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
+  this->viewportManager = node_engine->get_viewportManager();
   this->renderManager = node_engine->get_renderManager();
 
   //---------------------------
@@ -212,7 +213,7 @@ void CoreGLengine::loop_pass_2(){
 void CoreGLengine::loop_drawScene(){
   //---------------------------
 
-  cameraManager->viewport_update(0);
+  viewportManager->viewport_update(0);
   cameraManager->input_cam_mouse();
   node_engine->runtime();
 

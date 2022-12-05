@@ -19,8 +19,8 @@ class Node_gui;
 class Dimension;
 class Shader;
 class Camera;
-class Viewport;
 class GUI;
+class Viewport;
 class Renderer;
 class Configuration;
 
@@ -59,11 +59,11 @@ private:
 
   GLFWwindow* window;
   Camera* cameraManager;
-  Viewport* viewportManager;
   Dimension* dimManager;
   Renderer* renderManager;
   GUI* guiManager;
   Shader* shaderManager;
+  Viewport* viewportManager;
   Configuration* configManager;
 
   float time_loop;

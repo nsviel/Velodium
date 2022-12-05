@@ -1,5 +1,7 @@
 #include "Camera.h"
+#include "Viewport.h"
 
+#include "../Node_engine.h"
 #include "../OpenGL/Dimension.h"
 #include "../Scene/Configuration.h"
 
@@ -7,92 +9,18 @@
 
 
 //Constructor / Destructor
-Camera::Camera(Dimension* dimension){
-  this->dimManager = dimension;
+Camera::Camera(Node_engine* node_engine){
   //---------------------------
 
-  this->configManager = new Configuration();
+  this->dimManager = node_engine->get_dimManager();
+  this->configManager = node_engine->get_configManager();
+  this->viewportManager = node_engine->get_viewportManager();
 
-  this->viewport_init();
-
-  //---------------------------
-}
-Camera::~Camera(){
-  //---------------------------
-
-  delete configManager;
+  this->viewport = viewportManager->get_viewport_main();
 
   //---------------------------
 }
-
-//Viewport stuff
-void Camera::viewport_init(){
-  //---------------------------
-
-  this->nb_viewport = 2;
-  this->viewport = &view_main;
-
-  //Main viewport
-  float camPos = configManager->parse_json_f("camera", "initial_pos");
-  view_main.cam_P = vec3(camPos, camPos, camPos);
-  view_main.speed_move = configManager->parse_json_f("camera", "speed_move");
-  view_main.speed_mouse = configManager->parse_json_f("camera", "speed_mouse");
-  view_main.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
-  view_main.angle_elevation = - M_PI/6;// Initial vertical angle
-  view_main.fov = configManager->parse_json_f("camera", "fov");
-  view_main.cam_move = false;
-  view_main.cam_pose = false;
-  view_main.view = "oblique";
-  view_main.projection = "perspective";
-  view_main.mode = "default";
-  view_main.cam_COM = vec3(0, 0, 0);
-  view_main.zoom = 0;
-  view_main.clip_near = configManager->parse_json_f("camera", "clip_near");
-  view_main.clip_far = configManager->parse_json_f("camera", "clip_far");
-
-  //Map viewport
-  view_map.pos = vec2(800,400);
-  view_map.dim = vec2(100,100);
-  view_map.cam_P = vec3(0, 0, 0);
-  view_map.angle_azimuth = 0;
-  view_map.angle_elevation = 0;
-  view_map.fov = configManager->parse_json_f("camera", "fov");
-  view_map.projection = "perspective";
-  view_map.view = "oblique";
-  view_map.zoom = 0;
-  view_map.clip_near = configManager->parse_json_f("camera", "clip_near");
-  view_map.clip_far = configManager->parse_json_f("camera", "clip_far");
-
-  //---------------------------
-}
-void Camera::viewport_update(int ID){
-  //---------------------------
-
-  //Main viewport
-  if(ID == 0){
-    viewport->dim = dimManager->get_gl_dim();
-    viewport->pos = dimManager->get_gl_pos();
-
-    vec2 gl_dim = dimManager->get_gl_dim();
-    glViewport(0, 0, gl_dim[0], gl_dim[1]);
-  }
-  //Map viewport
-  else if(ID == 1){
-    glViewport(view_map.pos[0], view_map.pos[1], view_map.dim[0], view_map.dim[1]);
-  }
-
-  //---------------------------
-}
-void Camera::viewport_reset(){
-  //---------------------------
-
-  float camPos = configManager->parse_json_f("camera", "initial_pos");
-  view_main.cam_P = vec3(camPos, camPos, camPos);
-  view_main.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
-  view_main.angle_elevation = - M_PI/6;// Initial vertical angle
-
-  //---------------------------
-}
+Camera::~Camera(){}
 
 //MVP Matrix
 mat4 Camera::compute_cam_view(){
@@ -282,6 +210,8 @@ void Camera::input_cam_mouse_arcball(){
 
   //---------------------------
 }
+
+//Arcball function
 vec2 Camera::get_mouse_angle(){
   //---------------------------
 
@@ -306,26 +236,28 @@ void Camera::update_arcbal_cam(vec2 angle){
   //---------------------------
 
   // Get the homogenous position of the camera and pivot point
-  glm::vec4 position (view_main.cam_P.x, view_main.cam_P.y, view_main.cam_P.z, 1);
+  glm::vec4 position (viewport->cam_P.x, viewport->cam_P.y, viewport->cam_P.z, 1);
   glm::vec4 pivot (viewport->cam_COM.x, viewport->cam_COM.y, viewport->cam_COM.z, 1);
 
   // step 2: Rotate the camera around the pivot point on the first axis.
   glm::mat4x4 rotationMatrixX(1.0f);
-  rotationMatrixX = glm::rotate(rotationMatrixX, angle.x, view_main.cam_U);
+  rotationMatrixX = glm::rotate(rotationMatrixX, angle.x, viewport->cam_U);
   position = (rotationMatrixX * (position - pivot)) + pivot;
 
   // step 3: Rotate the camera around the pivot point on the second axis.
   glm::mat4x4 rotationMatrixY(1.0f);
-  rotationMatrixY = glm::rotate(rotationMatrixY, angle.y, view_main.cam_R);
+  rotationMatrixY = glm::rotate(rotationMatrixY, angle.y, viewport->cam_R);
   glm::vec3 finalPosition = (rotationMatrixY * (position - pivot)) + pivot;
 
-  view_main.cam_P = finalPosition;
+  viewport->cam_P = finalPosition;
   viewport->angle_azimuth += angle.x;
   viewport->angle_elevation += angle.y;
 
   //---------------------------
 }
-void Camera::input_set_projection(int proj){
+
+//Camera mode
+void Camera::set_mode_projection(int proj){
   //---------------------------
 
   switch(proj){
@@ -341,7 +273,7 @@ void Camera::input_set_projection(int proj){
 
   //---------------------------
 }
-void Camera::input_set_view(int view){
+void Camera::set_mode_angle(int view){
   //---------------------------
 
   switch(view){
@@ -357,8 +289,8 @@ void Camera::input_set_view(int view){
 
   //---------------------------
 }
-void Camera::input_set_mode(int mode){
-  this->viewport_reset();
+void Camera::set_mode_view(int mode){
+  viewportManager->viewport_reset();
   //---------------------------
 
   switch(mode){
