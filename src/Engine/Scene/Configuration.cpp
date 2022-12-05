@@ -194,8 +194,8 @@ void Configuration::preconf_default(Json::Value& root){
   dynamic["nb_save_image"] = 1;
   dynamic["nb_save_frame"] = 20;
   dynamic["player_mode"] = "player";
-  dynamic["path_save_frame"] = "../../Hubium/data/frame/";
-  dynamic["path_save_image"] = "../../Hubium/data/image/";
+  dynamic["path_save_frame"] = "../../data/frames/";
+  dynamic["path_save_image"] = "../../data/image/";
   root["dynamic"] = dynamic;
 
   //Interface
@@ -595,7 +595,7 @@ bool Configuration::parse_json_b(string field, string value){
 
     ifs_default.close();
   }
-  
+
   ifs.close();
 
   //---------------------------

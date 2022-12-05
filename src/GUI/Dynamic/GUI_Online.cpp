@@ -198,16 +198,7 @@ void GUI_Online::parameter_export(){
   if(*with_save_image){
     int* save_image_max = savingManager->get_save_image_max();
 
-    //Path where images are saved
-    if(ImGui::IsItemHovered()){
-      string path = savingManager->get_path_image();
-      if(path == ""){
-        ImGui::SetTooltip("[error] No path");
-      }else{
-        ImGui::SetTooltip("%s", realpath(path.c_str(), NULL));
-      }
-    }
-
+    //Save image
     static bool save_image_unique;
     if(*save_image_max == 1){
       save_image_unique = true;

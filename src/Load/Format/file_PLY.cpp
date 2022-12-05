@@ -754,10 +754,6 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
   else if (ply_format == "binary" || ply_format == "binary_little_endian"){
     ply_format = "binary_little_endian";
 
-    //Locak file
-    //int fd = open(filePath.c_str(), O_RDWR | O_CREAT, 0666);
-    //flock(fd, LOCK_EX | LOCK_NB);
-
     //Open file
     std::ofstream file(filePath, ios::binary);
 

@@ -14,8 +14,8 @@
    "dynamic" : {
       "nb_save_frame" : 20,
       "nb_save_image" : 1,
-      "path_save_frame" : "../../Hubium/data/frame/",
-      "path_save_image" : "../../Hubium/data/image/",
+      "path_save_frame" : "../../data/frames/",
+      "path_save_image" : "../../data/image/",
       "player_mode" : "player",
       "with_filter_sphere" : true,
       "with_save_frame" : false,
