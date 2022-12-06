@@ -4,8 +4,8 @@ project(VELODIUM LANGUAGES CXX)
 cmake_policy(SET CMP0072 NEW)
 
 # Options
-option(WITH_MODULE_RADIOMETRY "Use RADIOMETRY module" ON)
-option(WITH_MODULE_REGISTRATION "Use REGISTRATION module" ON)
+option(WITH_MODULE_RADIOMETRY "Use RADIOMETRY module" OFF)
+option(WITH_MODULE_REGISTRATION "Use REGISTRATION module" OFF)
 option(WITH_MODULE_SLAM "Use SLAM module" ON)
 option(WITH_MODULE_OBSTACLE "Use OBSTACLE module" ON)
 option(WITH_LIBRAY_PCL "Use PCL library" OFF)
@@ -21,8 +21,3 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Child CMakeLists
 add_subdirectory(extern)
 add_subdirectory(src)
-
-
-
-
- 

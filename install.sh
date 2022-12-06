@@ -24,7 +24,7 @@ sudo apt install -y git build-essential cmake libglfw3-dev \
 printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Module ${NC}\n"
 printf "${GREEN}--------------${NC}\n"
-sudo ../src/Module/install.sh
+sudo src/Module/install.sh
 
 printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Parametrization ${NC}\n"

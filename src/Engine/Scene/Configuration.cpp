@@ -184,6 +184,7 @@ void Configuration::preconf_default(Json::Value& root){
   Json::Value module;
   module["with_slam"] = true;
   module["with_prediction"] = false;
+  module["silent_slam"] = false;
   root["module"] = module;
 
   //Dynamic
@@ -262,6 +263,7 @@ void Configuration::preconf_ai(Json::Value& root){
   Json::Value module;
   module["with_slam"] = true;
   module["with_prediction"] = false;
+  module["silent_slam"] = true;
   root["module"] = module;
 
   //Camera
@@ -320,6 +322,7 @@ void Configuration::preconf_server(Json::Value& root){
   Json::Value module;
   module["with_slam"] = true;
   module["with_prediction"] = true;
+  module["silent_slam"] = true;
   root["module"] = module;
 
   //Dynamic

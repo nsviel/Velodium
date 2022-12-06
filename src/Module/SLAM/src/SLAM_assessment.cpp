@@ -69,16 +69,18 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
     //Test 1: check ego distance
     frame_m0->ego_trans = (frame_m0->trans_e - frame_m0->trans_b).norm();
     if(frame_m0->ego_trans > thres_ego_trans){
-      cout<<"[error] Ego translation too important ";
-      cout<<"["<<frame_m0->ego_trans<<"/"<<thres_ego_trans<<"]"<<endl;
+
+      string log = "Ego translation [" + to_string(frame_m0->ego_trans) + "/" + to_string(thres_ego_trans) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
     //Test 2: Ego angular distance
     frame_m0->ego_rotat = AngularDistance(frame_m0->rotat_b, frame_m0->rotat_e);
     if(frame_m0->ego_rotat > thres_ego_rotat){
-      cout<<"[error] Ego rotation too important ";
-      cout<<"["<<frame_m0->ego_rotat<<"/"<<thres_ego_rotat<<"]"<<endl;
+
+      string log = "Ego rotation [" + to_string(frame_m0->ego_rotat) + "/" + to_string(thres_ego_rotat) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
@@ -87,21 +89,24 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
       frame_m0->diff_trans = (frame_m0->trans_b - frame_m1->trans_b).norm() + (frame_m0->trans_e - frame_m1->trans_e).norm();
       frame_m0->diff_rotat = AngularDistance(frame_m1->rotat_b, frame_m0->rotat_b) + AngularDistance(frame_m1->rotat_e, frame_m0->rotat_e);
       if(frame_m0->diff_trans > thres_pose_trans){
-        cout<<"[error] Pose translation too important ";
-        cout<<"["<<frame_m0->diff_trans<<"/"<<thres_pose_trans<<"]"<<endl;
+
+        string log = "Pose translation [" + to_string(frame_m0->diff_trans) + "/" + to_string(thres_pose_trans) + "]";
+        console.AddLog("error", log);
         success = false;
       }
       if(frame_m0->diff_rotat > thres_pose_rotat){
-        cout<<"[error] Pose rotation too important ";
-        cout<<"["<<frame_m0->diff_rotat<<"/"<<thres_pose_rotat<<"]"<<endl;
+
+        string log = "Pose rotation [" + to_string(frame_m0->diff_rotat) + "/" + to_string(thres_pose_rotat) + "]";
+        console.AddLog("error", log);
         success = false;
       }
     }
 
     //Test 4: check if ICP has converged
     if(frame_m0->opti_score > thres_optimMinNorm){
-      cout<<"[error] Optimization score too important ";
-      cout<<"["<<frame_m0->opti_score<<"/"<<thres_optimMinNorm<<"]"<<endl;
+
+      string log = "Optimization score [" + to_string(frame_m0->opti_score) + "/" + to_string(thres_optimMinNorm) + "]";
+      console.AddLog("error", log);
       success = false;
     }
   }
@@ -133,48 +138,48 @@ bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
 
     //Test 1: check ego distance
     if(frame_m0->ego_trans > sum_ego_trans + 1){
-      cout<<"[error] Ego relative translation too important ";
-      cout<<"["<<frame_m0->ego_trans<<"/"<<sum_ego_trans<<"]"<<endl;
+      string log = "Ego relative translation [" + to_string(frame_m0->ego_trans) + "/" + to_string(sum_ego_trans) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
     //Test 2: Ego angular distance
     if(frame_m0->ego_rotat > sum_ego_rotat + 1 && sum_ego_rotat != 0){
-      cout<<"[error] Ego relative rotation too important ";
-      cout<<"["<<frame_m0->ego_rotat<<"/"<<sum_ego_rotat<<"]"<<endl;
+      string log = "Ego relative rotation [" + to_string(frame_m0->ego_rotat) + "/" + to_string(sum_ego_rotat) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
     //Test 3: check relative distance between two poses
     if(frame_m0->diff_trans > sum_diff_trans + 1){
-      cout<<"[error] Pose relative translation too important ";
-      cout<<"["<<frame_m0->diff_trans<<"/"<<sum_diff_trans<<"]"<<endl;
+      string log = "Pose relative translation [" + to_string(frame_m0->diff_trans) + "/" + to_string(sum_diff_trans) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
     //Test 4: check relative rotation between two poses
     if(frame_m0->diff_rotat > sum_diff_rotat + 1 && frame_m0->diff_rotat != 0 && sum_diff_rotat != 0){
-      cout<<"[error] Pose relative rotation too important ";
-      cout<<"["<<frame_m0->diff_rotat<<"/"<<sum_diff_rotat<<"]"<<endl;
+      string log = "Pose relative rotation [" + to_string(frame_m0->diff_rotat) + "/" + to_string(sum_diff_rotat) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
     //Test 5: check if ICP has converged
     if(frame_m0->opti_score > sum_opti_score + 1){
-      cout<<"[error] Optimization relative score too important ";
-      cout<<"["<<frame_m0->opti_score<<"/"<<sum_opti_score<<"]"<<endl;
+      string log = "Optimization relative score [" + to_string(frame_m0->opti_score) + "/" + to_string(sum_opti_score) + "]";
+      console.AddLog("error", log);
       success = false;
     }
 
     //Test 6: restriction on X & Y rotation axis
     if(diff_angle.x > thres_diff_angle){
-      cout<<"[error] Relative X axis rotation angle too high ";
-      cout<<"["<<diff_angle.x<<"/"<<thres_diff_angle<<"]"<<endl;
+      string log = "Relative X axis rotation [" + to_string(diff_angle.x) + "/" + to_string(thres_diff_angle) + "]";
+      console.AddLog("error", log);
       success = false;
     }
     if(diff_angle.y > thres_diff_angle){
-      cout<<"[error] Relative Y axis rotation angle too high ";
-      cout<<"["<<diff_angle.y<<"/"<<thres_diff_angle<<"]"<<endl;
+      string log = "Relative Y axis rotation [" + to_string(diff_angle.y) + "/" + to_string(thres_diff_angle) + "]";
+      console.AddLog("error", log);
       success = false;
     }
   }
