@@ -41,8 +41,8 @@ public:
   void set_mode_view(int value);
 
   //Arcball function
-  vec2 get_mouse_angle();
-  void update_arcbal_cam(vec2 angle);
+  vec2 arcball_mouse_angle();
+  void arcball_viewport_angle(vec2 angle);
 
   inline void set_desiredViewMatrix(mat4 value){viewport->cam_pose_mat = value;}
   inline void set_desiredPoseON(bool value){viewport->cam_pose = value;}

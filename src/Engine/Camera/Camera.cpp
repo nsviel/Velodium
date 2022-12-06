@@ -66,12 +66,8 @@ mat4 Camera::compute_cam_arcball(){
   mat4 viewMat;
   //---------------------------
 
-  float azimuth = viewport->angle_azimuth;
-  float elevation = viewport->angle_elevation;
-
   //Compute camera
-  viewport->cam_R = normalize(vec3(cos(azimuth - M_PI/2.0f), sin(azimuth - M_PI/2.0f), 0));
-  viewport->cam_F = -viewport->cam_P;
+  viewport->cam_F = viewport->cam_COM - viewport->cam_P;
   viewport->cam_U = normalize(cross(viewport->cam_R, viewport->cam_F));
 
   //Compute view matrix
@@ -205,14 +201,14 @@ void Camera::input_cam_mouse_default(){
 void Camera::input_cam_mouse_arcball(){
   //---------------------------
 
-  vec2 angle = get_mouse_angle();
-  this->update_arcbal_cam(angle);
+  vec2 angle = arcball_mouse_angle();
+  this->arcball_viewport_angle(angle);
 
   //---------------------------
 }
 
 //Arcball function
-vec2 Camera::get_mouse_angle(){
+vec2 Camera::arcball_mouse_angle(){
   //---------------------------
 
   vec2 mouse_pose = dimManager->get_mouse_pose();
@@ -232,26 +228,24 @@ vec2 Camera::get_mouse_angle(){
   //---------------------------
   return angle;
 }
-void Camera::update_arcbal_cam(vec2 angle){
+void Camera::arcball_viewport_angle(vec2 angle){
   //---------------------------
 
   // Get the homogenous position of the camera and pivot point
-  glm::vec4 position (viewport->cam_P.x, viewport->cam_P.y, viewport->cam_P.z, 1);
-  glm::vec4 pivot (viewport->cam_COM.x, viewport->cam_COM.y, viewport->cam_COM.z, 1);
+  vec4 cam_P (viewport->cam_P.x, viewport->cam_P.y, viewport->cam_P.z, 1);
+  vec4 cam_COM (viewport->cam_COM.x, viewport->cam_COM.y, viewport->cam_COM.z, 1);
+  vec4 cam_R (viewport->cam_R.x, viewport->cam_R.y, viewport->cam_R.z, 1);
 
   // step 2: Rotate the camera around the pivot point on the first axis.
-  glm::mat4x4 rotationMatrixX(1.0f);
-  rotationMatrixX = glm::rotate(rotationMatrixX, angle.x, viewport->cam_U);
-  position = (rotationMatrixX * (position - pivot)) + pivot;
+  mat4x4 Rz(1.0f);
+  Rz = glm::rotate(Rz, angle.x, vec3(0, 0, 1));
+  cam_P  = (Rz * (cam_P - cam_COM)) + cam_COM;
+  viewport->cam_R = Rz * cam_R;
 
   // step 3: Rotate the camera around the pivot point on the second axis.
-  glm::mat4x4 rotationMatrixY(1.0f);
-  rotationMatrixY = glm::rotate(rotationMatrixY, angle.y, viewport->cam_R);
-  glm::vec3 finalPosition = (rotationMatrixY * (position - pivot)) + pivot;
-
-  viewport->cam_P = finalPosition;
-  viewport->angle_azimuth += angle.x;
-  viewport->angle_elevation += angle.y;
+  mat4x4 Rr(1.0f);
+  Rr = glm::rotate(Rr, angle.y, viewport->cam_R);
+  viewport->cam_P = (Rr * (cam_P - cam_COM)) + cam_COM;
 
   //---------------------------
 }

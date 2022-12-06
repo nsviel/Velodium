@@ -277,6 +277,7 @@ void GUI_Control::control_keyboard_oneAction(){
 }
 void GUI_Control::control_keyboard_translation(){
   Cloud* cloud = sceneManager->get_selected_cloud();
+  Viewport_obj* view = cameraManager->get_current_viewport();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -293,36 +294,42 @@ void GUI_Control::control_keyboard_translation(){
       if(io.KeysDown[87]){
         vec3 translation = vec3(transCoef,0,0);
         this->key_translation(translation);
+        view->cam_P += translation;
         break;
       }
       // S key
       if(io.KeysDown[83]){
         vec3 translation = vec3(-transCoef,0,0);
         this->key_translation(translation);
+        view->cam_P += translation;
         break;
       }
       // D key
       if(io.KeysDown[68]){
         vec3 translation = vec3(0,transCoef,0);
         this->key_translation(translation);
+        view->cam_P += translation;
         break;
       }
       // Q key
       if(io.KeysDown[65]){
         vec3 translation = vec3(0,-transCoef,0);
         this->key_translation(translation);
+        view->cam_P += translation;
         break;
       }
       // A key
       if(io.KeysDown[81]){
         vec3 translation = vec3(0,0,transCoef);
         this->key_translation(translation);
+        view->cam_P += translation;
         break;
       }
       // E key
       if(io.KeysDown[69]){
         vec3 translation = vec3(0,0,-transCoef);
         this->key_translation(translation);
+        view->cam_P += translation;
         break;
       }
       // 7 key
@@ -388,6 +395,7 @@ void GUI_Control::control_keyboard_camMove(){
           if(view->view == "top"){
             view->cam_P += view->cam_U * cam_speed;
           }else{
+            vec3 old = view->cam_P;
             view->cam_P += view->cam_F * cam_speed;
           }
         }
@@ -407,7 +415,7 @@ void GUI_Control::control_keyboard_camMove(){
             view->cam_P -= view->cam_R * cam_speed;
           }else if(view->mode == "arcball"){
             vec2 angle =vec2(-cam_speed/10, 0);
-            cameraManager->update_arcbal_cam(angle);
+            cameraManager->arcball_viewport_angle(angle);
             cameraManager->compute_cam_arcball();
           }
         }
@@ -418,7 +426,7 @@ void GUI_Control::control_keyboard_camMove(){
             view->cam_P += view->cam_R * cam_speed;
           }else if(view->mode == "arcball"){
             vec2 angle =vec2(cam_speed/10, 0);
-            cameraManager->update_arcbal_cam(angle);
+            cameraManager->arcball_viewport_angle(angle);
             cameraManager->compute_cam_arcball();
           }
         }

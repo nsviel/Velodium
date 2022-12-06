@@ -36,6 +36,7 @@ void Viewport::viewport_init_main(){
   view_main.speed_mouse = configManager->parse_json_f("camera", "speed_mouse");
   view_main.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   view_main.angle_elevation = - M_PI/6;// Initial vertical angle
+  view_main.cam_R = normalize(vec3(cos(view_main.angle_azimuth - M_PI/2.0f), sin(view_main.angle_azimuth - M_PI/2.0f), 0));
   view_main.fov = configManager->parse_json_f("camera", "fov");
   view_main.cam_move = false;
   view_main.cam_pose = false;
@@ -91,6 +92,7 @@ void Viewport::viewport_reset(){
   view_main.cam_P = vec3(camPos, camPos, camPos);
   view_main.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   view_main.angle_elevation = - M_PI/6;// Initial vertical angle
+  view_main.cam_R = normalize(vec3(cos(view_main.angle_azimuth - M_PI/2.0f), sin(view_main.angle_azimuth - M_PI/2.0f), 0));
 
   //---------------------------
 }
