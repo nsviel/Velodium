@@ -24,7 +24,17 @@ sudo apt install -y git build-essential cmake libglfw3-dev \
 printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Module ${NC}\n"
 printf "${GREEN}--------------${NC}\n"
-sudo src/Module/install.sh
+sudo sh ../src/Module/install.sh
+
+printf "${GREEN}--------------${NC}\n"
+printf "${GREEN} Libhttpserver ${NC}\n"
+printf "${GREEN}--------------${NC}\n"
+sudo apt install -y libmicrohttpd-dev=0.9.75-3ubuntu1 libmicrohttpd12=0.9.75-3ubuntu1
+git clone https://github.com/etr/libhttpserver
+cd libhttpserver && ./bootstrap && make -f Makefile.cvs
+mkdir build && cd build && ../configure
+make -j4 && sudo make install
+cd ../.. && sudo rm -rf libhttpserver
 
 printf "${GREEN}--------------${NC}\n"
 printf "${GREEN} Parametrization ${NC}\n"

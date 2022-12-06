@@ -34,21 +34,36 @@ void Argument::process_arg(int argc, char* argv[]){
 
   //Command line processing
   if(argc > 1){
+    //Capture mode
     if(arg_vec[0] == "capture"){
       configManager->make_preconfig(1);
       node_engine->update();
     }
+    //AI interface mode
     else if(arg_vec[0] == "ai"){
       configManager->make_preconfig(2);
       node_engine->update();
     }
+    //Server mode
     else if(arg_vec[0] == "server"){
       configManager->make_preconfig(3);
       node_engine->update();
     }
+    //Load at start
     else if(arg_vec[0] == "load" && argc == 3){
       cameraManager->set_mode_view(1);
       loadManager->load_cloud(arg_vec[1]);
+    }
+    //Help
+    else{
+      cout << endl;
+      cout << "[Help] Possible commands are:" << endl;
+      cout << "   \033[1;32mcapture\033[0m                 [LiDAR capture mode]" << endl;
+      cout << "   \033[1;32mai\033[0m                      [AI interface mode]" << endl;
+      cout << "   \033[1;32mserver\033[0m                  [Server mode]" << endl;
+      cout << "   \033[1;32mload + absolute_path\033[0m    [Load a cloud at start]" << endl;
+      cout << endl;
+      exit(0);
     }
   }
 

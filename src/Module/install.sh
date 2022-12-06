@@ -26,9 +26,9 @@ then
 fi
 
 # Radiometry module
-#echo -n "With ${GREEN}Radiometry${NC} module [Y/n]? "
-#read answer
-#case ${answer} in y|Y|'' ) WITH_RADIO=true ;;* ) WITH_RADIO=false WITH_RADIO=false ;;esac
+echo -n "With ${GREEN}Radiometry${NC} module [Y/n]? "
+read answer
+case ${answer} in y|Y|'' ) WITH_RADIO=true ;;* ) WITH_RADIO=false WITH_RADIO=false ;;esac
 
 # Registration module
 echo -n "With ${GREEN}Registration${NC} module [Y/n]? "
@@ -72,33 +72,8 @@ fi
 
 if [ ${WITH_OBSTACLE} = true ]
 then
-    printf "${GREEN}--------------${NC}\n"
-    printf "${GREEN} Eclyspe Paho v. C ${NC}\n"
-    printf "${GREEN}--------------${NC}\n"
-    git clone https://github.com/eclipse/paho.mqtt.c
-    cd paho.mqtt.c && cmake . -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
-    sudo make install
-    sudo ldconfig
-    cd .. && sudo rm -rf paho.mqtt.c
 
-    printf "${GREEN}--------------${NC}\n"
-    printf "${GREEN} Eclyspe Paho v. C++ ${NC}\n"
-    printf "${GREEN}--------------${NC}\n"
-    git clone https://github.com/eclipse/paho.mqtt.cpp
-    cd paho.mqtt.cpp && cmake -Bbuild -H. -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE
-    sudo cmake --build build/ --target install
-    sudo ldconfig
-    cd .. && sudo rm -rf paho.mqtt.cpp
 
-    printf "${GREEN}--------------${NC}\n"
-    printf "${GREEN} Libhttpserver ${NC}\n"
-    printf "${GREEN}--------------${NC}\n"
-    sudo apt install -y libmicrohttpd-dev libmicrohttpd12
-    git clone https://github.com/etr/libhttpserver
-    cd libhttpserver && ./bootstrap && make -f Makefile.cvs
-    mkdir build && cd build && ../configure
-    make -j4 && sudo make install
-    cd ../.. && sudo rm -rf libhttpserver
 fi
 
 if [ ${WITH_SLAM} = true ]
