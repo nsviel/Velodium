@@ -84,7 +84,7 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
   vec3 pos_m0 = eigen_to_glm_vec3(frame_m0->trans_b);
   vec3 pos_m1 = eigen_to_glm_vec3(frame_m1->trans_b);
   float pos_dist = fct_distance(pos_m0, pos_m1);
-  if(pos_dist < 0.1) return E;
+  if(pos_dist < 0.1) return E;say(pos_dist);
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){

@@ -86,6 +86,10 @@ enum MHD_Result http_daemon::http_answer(void* cls, struct MHD_Connection* conne
     else if(strcmp(url, "/time_slam") == 0){
       ret = http_send_time(cls, connection);
     }
+    else if(strcmp(url, "/reset") == 0){
+      http_get_reset();
+      ret = http_send_ok(cls, connection);
+    }
   }
 
   //---------------------------
@@ -214,6 +218,16 @@ void http_daemon::http_get_view_oblique(){
   ofstream file;
   file.open ("../media/engine/config/http_conf.txt", std::ios_base::app);
   file << "view oblique\n";
+  file.close();
+
+  //---------------------------
+}
+void http_daemon::http_get_reset(){
+  //---------------------------
+
+  ofstream file;
+  file.open ("../media/engine/config/http_conf.txt", std::ios_base::app);
+  file << "reset\n";
   file.close();
 
   //---------------------------

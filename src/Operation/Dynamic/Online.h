@@ -63,7 +63,6 @@ private:
   int visibility_range;
   int filter_mode;
   bool with_subset_specific_color;
-  bool with_slam;
   bool with_filter_sphere;
   bool with_remove_lastSubset;
 };

@@ -137,6 +137,7 @@ void Object::runtime_glyph_subset_all(Cloud* cloud){
   //---------------------------
 }
 void Object::runtime_glyph_subset_selected(Subset* subset){
+  if(subset == nullptr) return;
   //---------------------------
 
   //If the subset is visible

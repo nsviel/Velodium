@@ -30,6 +30,7 @@ public:
   static void http_get_slam_off();
   static void http_get_view_top();
   static void http_get_view_oblique();
+  static void http_get_reset();
 
   //Accesseur
   inline void set_path_image(string value){this->path_image = value;}

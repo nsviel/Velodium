@@ -4,6 +4,8 @@
 #include "../Node_operation.h"
 
 #include "../../Module/Node_module.h"
+#include "../../Module/SLAM/Module_slam.h"
+#include "../../Module/SLAM/src/SLAM.h"
 
 #include "../../Interface/Network/HTTP/http_command.h"
 
@@ -132,19 +134,28 @@ void Online::compute_displayStats(Subset* subset){
   //---------------------------
 }
 void Online::compute_http_command(){
+  Node_module* node_module = node_engine->get_node_module();
+  Module_slam* module_slam = node_module->get_module_slam();
+  SLAM* slamManager = module_slam->get_slamManager();
   //---------------------------
 
+  //Get list of HTTP commands
   vector<vector<string>> option = httpManager->parse_http_config();
 
+  //Parse HTTP commands
   for(int i=0; i<option.size(); i++){
     string opt = option[i][0];
     string val = option[i][1];
 
     if(opt == "slam"){
-      this->with_slam = string_to_bool(val);
+      bool* module_with_slam = slamManager->get_with_slam();
+      *module_with_slam = string_to_bool(val);
     }
     else if(opt == "view"){
       followManager->camera_mode(val);
+    }
+    else if(opt == "reset"){
+      node_engine->reset();
     }
   }
 

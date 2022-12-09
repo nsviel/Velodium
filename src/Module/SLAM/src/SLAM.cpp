@@ -103,6 +103,8 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
   //---------------------------
 
   if(with_slam == false){
+    this->time_slam = 0;
+    this->print_result();
     return false;
   }
 
