@@ -14,6 +14,7 @@ class file_PTX;
 class file_CSV;
 class file_OBJ;
 class file_XYZ;
+class file_LAS;
 class file_PCAP;
 class file_CBOR;
 
@@ -58,6 +59,7 @@ private:
   file_CSV* csvManager;
   file_OBJ* objManager;
   file_XYZ* xyzManager;
+  file_LAS* lasManager;
   file_PCAP* pcapManager;
   file_CBOR* cborManager;
 };

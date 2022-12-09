@@ -9,6 +9,7 @@
 #include "../Format/file_CSV.h"
 #include "../Format/file_OBJ.h"
 #include "../Format/file_XYZ.h"
+#include "../Format/file_LAS.h"
 #include "../Format/file_CBOR.h"
 
 #include "../Node_load.h"
@@ -34,6 +35,7 @@ Loader::Loader(Node_load* node_load){
   this->csvManager = new file_CSV();
   this->objManager = new file_OBJ();
   this->xyzManager = new file_XYZ();
+  this->lasManager = new file_LAS();
   this->pcapManager = new file_PCAP();
   this->cborManager = new file_CBOR();
 
