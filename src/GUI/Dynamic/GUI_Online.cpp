@@ -177,10 +177,19 @@ void GUI_Online::parameter_export(){
   bool* with_save_frame = savingManager->get_with_save_frame();
   ImGui::Checkbox("Save frame", with_save_frame);
   if(*with_save_frame){
-    // Number of saved frames
-    int* save_frame_max = savingManager->get_save_frame_max();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-    ImGui::InputInt("Nb frame", save_frame_max);
+    // Unlimited save frame
+    static bool with_save_frame_unlimited = false;
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    if(ImGui::Checkbox("Unlimited##1", &with_save_frame_unlimited)){
+      savingManager->select_frame_unlimited(with_save_frame_unlimited);
+    }
+
+    // If not, number of saved frames
+    if(with_save_frame_unlimited == false){
+      int* save_frame_max = savingManager->get_save_frame_max();
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
+      ImGui::InputInt("Nb frame", save_frame_max);
+    }
 
     //Path where images are saved
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
@@ -196,28 +205,19 @@ void GUI_Online::parameter_export(){
   bool* with_save_image = savingManager->get_with_save_image();
   ImGui::Checkbox("Save image", with_save_image);
   if(*with_save_image){
+    // set save image number
+    static bool with_number = true;
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+    if(ImGui::Checkbox("##1232", &with_number)){
+      savingManager->select_image_unlimited(!with_number);
+    }
+    ImGui::SameLine();
+
+    // If not set number of image
     int* save_image_max = savingManager->get_save_image_max();
-
-    //Save image
-    static bool save_image_unique;
-    if(*save_image_max == 1){
-      save_image_unique = true;
-    }else{
-      save_image_unique = false;
-    }
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-    if(ImGui::Checkbox("Unique", &save_image_unique)){
-      if(save_image_unique == true){
-        *save_image_max = 1;
-      }else{
-        *save_image_max = 20;
-      }
-    }
-
-    if(save_image_unique == false){
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputInt("Nb image", save_image_max);
-    }
+    ImGui::SetNextItemWidth(100);
+    ImGui::InputInt("Number", save_image_max);
+    ImGui::Text("\x88 \x97");
 
     //Path where images are saved
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);

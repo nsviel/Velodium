@@ -39,6 +39,8 @@ public:
   //Path selection
   void select_path_image();
   void select_path_frame();
+  void select_image_unlimited(bool value);
+  void select_frame_unlimited(bool value);
 
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}

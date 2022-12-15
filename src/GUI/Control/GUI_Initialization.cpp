@@ -60,6 +60,8 @@ void GUI_Initialization::update_configuration(){
   this->accepted_format.push_back("pcap");
   this->accepted_format.push_back("ptx");
   this->accepted_format.push_back("csv");
+  this->accepted_format.push_back("las");
+  this->accepted_format.push_back("laz");
 
   this->path_1 = configManager->parse_json_s("interface", "path_point_cloud_1");
   this->path_2 = configManager->parse_json_s("interface", "path_point_cloud_2");

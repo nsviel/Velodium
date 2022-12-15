@@ -9,7 +9,7 @@
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
 #include "../../Specific/fct_system.h"
-#include "../../Specific/fct_zenity.h"
+#include "../../Interface/File/Zenity.h"
 
 #include <chrono>
 
@@ -181,9 +181,27 @@ void Saving::select_path_frame(){
   //---------------------------
 
   string path = zenity_directory("Path frame", path_frame);
-  say(path);
 
   this->path_frame = path + "/";
+
+  //---------------------------
+}
+void Saving::select_image_unlimited(bool value){
+  static int old_value;
+  //---------------------------
+
+  if(value){
+    old_value = save_image_max;
+    this->save_image_max = 999999;
+  }else{
+    this->save_image_max = old_value;
+  }
+
+  //---------------------------
+}
+void Saving::select_frame_unlimited(bool value){
+  //---------------------------
+
 
   //---------------------------
 }

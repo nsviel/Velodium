@@ -15,7 +15,7 @@ public:
 public:
   //Main function
   dataFile* Loader(string filePath);
-
+  void read(string path);
 
 private:
   //Datatypes

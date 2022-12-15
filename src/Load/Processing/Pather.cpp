@@ -11,7 +11,7 @@
 #include "../../Specific/fct_transtypage.h"
 #include "../../Specific/fct_system.h"
 #include "../../Specific/fct_maths.h"
-#include "../../Specific/fct_zenity.h"
+#include "../../Interface/File/Zenity.h"
 
 #include <Eigen/Dense>
 #include <set>

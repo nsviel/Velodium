@@ -11,7 +11,7 @@
 #include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/color.h"
 #include "../../../Specific/fct_system.h"
-#include "../../../Specific/fct_zenity.h"
+#include "../../../Interface/File/Zenity.h"
 
 
 //Constructor / Destructor

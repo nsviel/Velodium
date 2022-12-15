@@ -21,7 +21,7 @@
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Function/Plotting.h"
 #include "../../../Operation/Function/BundleByClass.h"
-#include "../../../Specific/fct_zenity.h"
+#include "../../../Interface/File/Zenity.h"
 
 
 //Constructor / Destructor

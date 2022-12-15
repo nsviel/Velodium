@@ -11,6 +11,7 @@
 
 
 namespace{
+
 void watcher_all_directory(std::string path){
   std::string event_str;
   //---------------------------
@@ -154,6 +155,7 @@ void watcher_modify_file(std::string format_in, std::string path, std::string& p
 
   //---------------------------
 }
+
 }
 
 #endif
