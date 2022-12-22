@@ -1,6 +1,6 @@
 #include "NearestNeighbors.h"
 
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 #include "../../Specific/fct_transtypage.h"
 
 

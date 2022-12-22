@@ -5,7 +5,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 #include "../../Specific/fct_terminal.h"
 
 #include "NormalHough/Normals.h"

@@ -1,11 +1,12 @@
 #include "Path.h"
 
 
-//Constructor / Destructor
-Path::Path(){
+std::string get_absolutePath_build(){
   //---------------------------
 
+  std::string absPath = std::experimental::filesystem::current_path();
+  absPath += "/";
 
   //---------------------------
+  return absPath;
 }
-Path::~Path(){}

@@ -177,19 +177,18 @@ void GUI_Online::parameter_export(){
   bool* with_save_frame = savingManager->get_with_save_frame();
   ImGui::Checkbox("Save frame", with_save_frame);
   if(*with_save_frame){
-    // Unlimited save frame
-    static bool with_save_frame_unlimited = false;
+    // set save image number
+    static bool with_number = true;
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::Checkbox("Unlimited##1", &with_save_frame_unlimited)){
-      savingManager->select_frame_unlimited(with_save_frame_unlimited);
+    if(ImGui::Checkbox("##12323", &with_number)){
+      savingManager->select_frame_unlimited(!with_number);
     }
+    ImGui::SameLine();
 
-    // If not, number of saved frames
-    if(with_save_frame_unlimited == false){
-      int* save_frame_max = savingManager->get_save_frame_max();
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10); ImGui::SetNextItemWidth(100);
-      ImGui::InputInt("Nb frame", save_frame_max);
-    }
+    // If not set number of image
+    int* save_frame_max = savingManager->get_save_frame_max();
+    ImGui::SetNextItemWidth(100);
+    ImGui::InputInt("Number##1", save_frame_max);
 
     //Path where images are saved
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
@@ -216,8 +215,7 @@ void GUI_Online::parameter_export(){
     // If not set number of image
     int* save_image_max = savingManager->get_save_image_max();
     ImGui::SetNextItemWidth(100);
-    ImGui::InputInt("Number", save_image_max);
-    ImGui::Text("\x88 \x97");
+    ImGui::InputInt("Number##2", save_image_max);
 
     //Path where images are saved
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);

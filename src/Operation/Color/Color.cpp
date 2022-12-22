@@ -7,13 +7,28 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
+
+#include <random>
 
 /* color_mode
  * 0 = unicolor
  * 1 = intensity
  * 2 = heatmap
 */
+
+
+glm::vec4 random_color(){
+  //---------------------------
+
+  float Red = float(rand()%101)/100;
+  float Green = float(rand()%101)/100;
+  float Blue = float(rand()%101)/100;
+  glm::vec4 color = glm::vec4(Red, Green, Blue, 1.0f);
+
+  //---------------------------
+  return color;
+}
 
 
 //Constructor / destructor

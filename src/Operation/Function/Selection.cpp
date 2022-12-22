@@ -15,7 +15,7 @@
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/OpenGL/Dimension.h"
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>

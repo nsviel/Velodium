@@ -10,7 +10,8 @@
 #include "../../Load/Processing/Pather.h"
 #include "../../Operation/Transformation/Transformation.h"
 #include "../../Module/Node_module.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
+#include "../../Interface/File/Info.h"
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/Capture/Capture.h"
 

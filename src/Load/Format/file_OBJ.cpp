@@ -1,5 +1,5 @@
 #include "file_OBJ.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Info.h"
 
 #include <fstream>
 

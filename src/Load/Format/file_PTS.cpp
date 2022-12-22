@@ -1,6 +1,6 @@
 #include "file_PTS.h"
 
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Info.h"
 
 
 //Constructor / Destructor

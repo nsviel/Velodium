@@ -8,11 +8,12 @@
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
 #include "../../Interface/File/Zenity.h"
 
 #include <chrono>
 
+//Remplacer name saving by Record
 
 //Constructor / Destructor
 Saving::Saving(Node_operation* node){
@@ -200,8 +201,15 @@ void Saving::select_image_unlimited(bool value){
   //---------------------------
 }
 void Saving::select_frame_unlimited(bool value){
+  static int old_value;
   //---------------------------
 
+  if(value){
+    old_value = save_frame_max;
+    this->save_frame_max = 999999;
+  }else{
+    this->save_frame_max = old_value;
+  }
 
   //---------------------------
 }

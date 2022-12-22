@@ -9,9 +9,11 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_transtypage.h"
-#include "../../Specific/fct_system.h"
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
+#include "../../Interface/File/Directory.h"
 #include "../../Interface/File/Zenity.h"
+#include "../../Interface/File/Info.h"
+#include "../../Interface/File/Path.h"
 
 #include <Eigen/Dense>
 #include <set>

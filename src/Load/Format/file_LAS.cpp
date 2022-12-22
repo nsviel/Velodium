@@ -1,5 +1,5 @@
 #include "file_LAS.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Info.h"
 
 #include <fstream>
 

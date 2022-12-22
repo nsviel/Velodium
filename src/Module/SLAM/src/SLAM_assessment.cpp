@@ -7,7 +7,7 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Operation/Transformation/Pose.h"
-#include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_math.h"
 
 
 //Constructor / Destructor

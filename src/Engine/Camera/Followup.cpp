@@ -5,7 +5,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/Configuration.h"
 
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 #include "../../Specific/fct_transtypage.h"
 
 

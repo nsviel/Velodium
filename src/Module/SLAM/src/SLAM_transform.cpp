@@ -8,7 +8,7 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Object.h"
 #include "../../../Engine/Scene/Object/SLAM/Localmap.h"
-#include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_transtypage.h"
 
 

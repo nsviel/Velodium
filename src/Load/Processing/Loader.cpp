@@ -16,7 +16,8 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
+#include "../../Interface/File/Info.h"
 #include "../../Specific/fct_transtypage.h"
 
 

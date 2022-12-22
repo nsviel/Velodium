@@ -1,20 +1,11 @@
 #ifndef PATH_H
 #define PATH_H
 
-#include "../../common.h"
+#include <string>
+#include <experimental/filesystem>
 
 
-class Path
-{
-public:
-  //Constructor / Destructor
-  Path();
-  ~Path();
+std::string get_absolutePath_build();
 
-public:
-
-private:
-
-};
 
 #endif

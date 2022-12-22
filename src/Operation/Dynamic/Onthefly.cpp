@@ -2,7 +2,7 @@
 
 #include "../Node_operation.h"
 
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
@@ -13,7 +13,7 @@
 #include "../../Load/Processing/Loader.h"
 
 #include "../../Operation/Transformation/Transformation.h"
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 
 
 //Constructor / Destructor

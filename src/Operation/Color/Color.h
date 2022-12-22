@@ -9,6 +9,10 @@ class Heatmap;
 class Configuration;
 
 
+//Get a RGB random color
+glm::vec4 random_color();
+
+
 class Color
 {
 public:

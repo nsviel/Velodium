@@ -1,6 +1,6 @@
 #include "file_PLY.h"
 
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 
 #include <iomanip>
 #include <sys/file.h>

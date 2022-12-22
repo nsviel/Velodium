@@ -15,7 +15,7 @@
 #include "../../Load/Processing/Saver.h"
 
 #include "../../Specific/fct_terminal.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
 
 
 //Constructor / Destructor

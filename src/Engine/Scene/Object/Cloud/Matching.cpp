@@ -1,6 +1,6 @@
 #include "Matching.h"
 
-#include "../../../../Specific/fct_maths.h"
+#include "../../../../Specific/fct_math.h"
 
 
 //Constructor / destructor

@@ -6,8 +6,12 @@
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
-#include "../../Specific/fct_maths.h"
-#include "../../Specific/fct_system.h"
+#include "../../Specific/fct_math.h"
+#include "../../Specific/color.h"
+#include "../../Interface/File/Directory.h"
+#include "../../Interface/File/Info.h"
+#include "../../Interface/File/Path.h"
+#include "../../Operation/Color/Color.h"
 
 
 //Constructor / Destructor

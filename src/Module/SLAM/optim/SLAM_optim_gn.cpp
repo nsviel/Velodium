@@ -6,7 +6,7 @@
 
 #include "../../../Specific/fct_terminal.h"
 #include "../../../Specific/fct_transtypage.h"
-#include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_math.h"
 
 
 //Constructor / Destructor

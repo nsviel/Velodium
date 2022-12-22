@@ -4,7 +4,7 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
 #include "../../../Specific/fct_transtypage.h"
-#include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_chrono.h"
 
 #include "SLAM_init.h"

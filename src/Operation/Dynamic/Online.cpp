@@ -23,9 +23,9 @@
 #include "../../Engine/Scene/Object.h"
 #include "../../Engine/Scene/Configuration.h"
 
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 #include "../../Specific/fct_transtypage.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
 #include "../../Specific/fct_chrono.h"
 
 

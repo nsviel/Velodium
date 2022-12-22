@@ -18,7 +18,7 @@
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/Plotting.h"
 #include "../../../Operation/Transformation/Attribut.h"
-#include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_math.h"
 
 
 //Constructor / destructor

@@ -5,8 +5,9 @@
 #include "../Node_operation.h"
 
 #include "../../Specific/fct_timer.h"
-#include "../../Specific/fct_system.h"
+#include "../../Interface/File/Directory.h"
 #include "../../Interface/File/Zenity.h"
+#include "../../Interface/File/Path.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"

@@ -9,7 +9,7 @@
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Pather.h"
 
-#include "../../../Specific/fct_maths.h"
+#include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_transtypage.h"
 
 

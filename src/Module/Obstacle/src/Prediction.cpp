@@ -7,8 +7,8 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Configuration.h"
 
-#include "../../../Interface/File/Watcher.h"
-#include "../../../Specific/fct_system.h"
+#include "../../../Interface/File/Directory.h"
+#include "../../../Interface/File/Info.h"
 
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
@@ -43,7 +43,7 @@ void Prediction::runtime_prediction(){
 
     for(int i=0; i<path_vec.size(); i++){
       string path = path_vec[i];
-      string format = get_file_format(path);
+      string format = get_format_from_filename(path);
 
       if(format == ".json"){
         this->compute_prediction(cloud, path);

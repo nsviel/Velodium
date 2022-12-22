@@ -21,7 +21,7 @@
 #include "../../Operation/Function/Extraction.h"
 #include "../../Operation/Transformation/Pose.h"
 
-#include "../../Specific/fct_maths.h"
+#include "../../Specific/fct_math.h"
 
 #include "imgui/imgui.h"
 #include "IconsFontAwesome5.h"

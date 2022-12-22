@@ -3,7 +3,7 @@
 
 #include "../../../../Operation/Function/BundleByClass.h"
 #include "../../../../Operation/Optimization/Polyfit.h"
-#include "../../../../Specific/fct_maths.h"
+#include "../../../../Specific/fct_math.h"
 
 
 //Constructor / Destructor
