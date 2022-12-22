@@ -17,6 +17,7 @@
 #include "../../Engine/Scene/Configuration.h"
 
 #include "../../Interface/Node_interface.h"
+#include "../../Interface/File/Path.h"
 #include "../../Interface/IO/Recorder.h"
 #include "../../Module/Node_module.h"
 
@@ -199,7 +200,7 @@ void GUI_Online::parameter_recorder(){
     }
     ImGui::SameLine();
     string path = recordManager->get_path_frame();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", get_path_abs(path));
   }
 
   //Save image for interfacing
@@ -226,7 +227,7 @@ void GUI_Online::parameter_recorder(){
     }
     ImGui::SameLine();
     string path = recordManager->get_path_image();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
+    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", get_path_abs(path));
   }
 
   //---------------------------

@@ -28,7 +28,7 @@ GUI_Scala::~GUI_Scala(){}
 void GUI_Scala::design_Scala(){
   //---------------------------
 
-  this->scala_state();
+  this->scala_statistique();
   this->scala_capture();
   this->scala_file();
   this->scala_parameter();
@@ -39,6 +39,17 @@ void GUI_Scala::design_Scala(){
 
 //Scala subfunctions
 void GUI_Scala::scala_state(){
+  //---------------------------
+
+  //Watcher Scala
+  bool is_scala_watcher = *scalaManager->get_run_capture();
+  ImGui::Text("Watcher - Scala");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_scala_watcher ? "ON" : "OFF");
+
+  //---------------------------
+}
+void GUI_Scala::scala_statistique(){
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Scala");

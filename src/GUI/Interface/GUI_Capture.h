@@ -26,6 +26,8 @@ public:
 
   //Specific functions
   void state_watcher();
+  void recorder_screenshot();
+  void recorder_frame();
 
 private:
   Capture* captureManager;

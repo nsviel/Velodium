@@ -7,7 +7,7 @@ std::vector<std::string> zenity_file_vec(std::string title, std::string path_dir
   //---------------------------
 
   //Open zenity file manager
-  std::string path_current_dir = get_absolutePath_build() + '/';
+  std::string path_current_dir = get_path_abs_build() + '/';
   std::string zenity = "zenity --file-selection --multiple --title=" + title + " --filename=" + path_dir + " 2> /dev/null";
   FILE *file = popen(zenity.c_str(), "r");
   char filename[32768];

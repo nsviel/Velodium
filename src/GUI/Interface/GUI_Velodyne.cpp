@@ -30,7 +30,7 @@ void GUI_Velodyne::design_Velodyne(){
   //---------------------------
 
   this->velo_capture();
-  this->velo_state();
+  this->velo_statistique();
   this->velo_parameter();
 
   //---------------------------
@@ -38,6 +38,17 @@ void GUI_Velodyne::design_Velodyne(){
 
 //Velodyne subfunctions
 void GUI_Velodyne::velo_state(){
+  //---------------------------
+
+  //Watchers Velodyne
+  bool is_velodyne_watcher = *veloManager->get_run_capture();
+  ImGui::Text("Watcher - Velodyne");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_velodyne_watcher ? "ON" : "OFF");
+
+  //---------------------------
+}
+void GUI_Velodyne::velo_statistique(){
   //---------------------------
 
   //Capture time

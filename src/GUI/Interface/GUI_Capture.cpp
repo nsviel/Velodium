@@ -7,6 +7,7 @@
 
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/IO/Recorder.h"
+#include "../../Interface/File/Path.h"
 #include "../../Interface/Capture/Capture.h"
 #include "../../Interface/Capture/LiDAR/Scala/Scala.h"
 #include "../../Interface/Capture/LiDAR/Velodyne/Velodyne.h"
@@ -72,62 +73,11 @@ void GUI_Capture::design_capture(){
   }
 }
 void GUI_Capture::design_recorder(){
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Recorder");
   //---------------------------
 
-  //Save frame in folder for AI module
-  bool* with_save_frame = recordManager->get_with_save_frame();
-  ImGui::Checkbox("Save frame", with_save_frame);
-  if(*with_save_frame){
-    // set save image number
-    static bool with_number = true;
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::Checkbox("##12323", &with_number)){
-      recordManager->select_frame_unlimited(!with_number);
-    }
-    ImGui::SameLine();
-
-    // If not set number of image
-    int* save_frame_max = recordManager->get_save_frame_max();
-    ImGui::SetNextItemWidth(100);
-    ImGui::InputInt("Number##1", save_frame_max);
-
-    //Path where images are saved
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::Button("...##23")){
-      recordManager->select_path_frame();
-    }
-    ImGui::SameLine();
-    string path = recordManager->get_path_frame();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
-  }
-
-  //Save image for interfacing
-  bool* with_save_image = recordManager->get_with_save_image();
-  ImGui::Checkbox("Save screenshot", with_save_image);
-  if(*with_save_image){
-    // set save image number
-    static bool with_number = true;
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::Checkbox("##1232", &with_number)){
-      recordManager->select_image_unlimited(!with_number);
-    }
-    ImGui::SameLine();
-
-    // If not set number of image
-    int* save_image_max = recordManager->get_save_image_max();
-    ImGui::SetNextItemWidth(100);
-    ImGui::InputInt("Number##2", save_image_max);
-
-    //Path where images are saved
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    if(ImGui::Button("...##25")){
-      recordManager->select_path_image();
-    }
-    ImGui::SameLine();
-    string path = recordManager->get_path_image();
-    ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
-  }
+  this->state_watcher();
+  this->recorder_frame();
+  this->recorder_screenshot();
 
   //---------------------------
 }
@@ -136,17 +86,70 @@ void GUI_Capture::design_recorder(){
 void GUI_Capture::state_watcher(){
   //---------------------------
 
-  //Watchers Velodyne
-  bool is_velodyne_watcher = *captureManager->get_is_capturing();
-  ImGui::Text("Watcher - Velodyne");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_velodyne_watcher ? "ON" : "OFF");
+  gui_velodyne->velo_state();
+  gui_scala->scala_state();
 
-  //Watcher Scala
-  bool is_scala_watcher = *captureManager->get_is_capturing();
-  ImGui::Text("Watcher - Scala");
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Capture::recorder_frame(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
+  //---------------------------
+
+  //Save frame in folder for AI module
+  bool* with_save_frame = recordManager->get_with_save_frame();
+  ImGui::Checkbox("Activated##1", with_save_frame);
+
+  // set save image number
+  static bool with_number = true;
+  if(ImGui::Checkbox("##12323", &with_number)){
+    recordManager->select_frame_unlimited(!with_number);
+  }
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_scala_watcher ? "ON" : "OFF");
+
+  // If not set number of image
+  int* save_frame_max = recordManager->get_save_frame_max();
+  ImGui::SetNextItemWidth(100);
+  ImGui::InputInt("Number##1", save_frame_max);
+
+  //Path where images are saved
+  if(ImGui::Button("...##23")){
+    recordManager->select_path_frame();
+  }
+  ImGui::SameLine();
+  string path = get_path_abs(recordManager->get_path_frame());
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", path.c_str());
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Capture::recorder_screenshot(){
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Screenshot");
+  //---------------------------
+
+  //Save image for interfacing
+  bool* with_save_image = recordManager->get_with_save_image();
+  ImGui::Checkbox("Activated##2", with_save_image);
+
+  // set save image number
+  static bool with_number = true;
+  if(ImGui::Checkbox("##1232", &with_number)){
+    recordManager->select_image_unlimited(!with_number);
+  }
+  ImGui::SameLine();
+
+  // If not set number of image
+  int* save_image_max = recordManager->get_save_image_max();
+  ImGui::SetNextItemWidth(100);
+  ImGui::InputInt("Number##2", save_image_max);
+
+  //Path where images are saved
+  if(ImGui::Button("...##25")){
+    recordManager->select_path_image();
+  }
+  ImGui::SameLine();
+  string path = get_path_abs(recordManager->get_path_image());
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", path.c_str());
 
   //---------------------------
   ImGui::Separator();

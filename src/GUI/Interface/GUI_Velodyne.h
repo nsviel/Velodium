@@ -21,6 +21,7 @@ public:
 
   //Velodyn functions
   void velo_state();
+  void velo_statistique();
   void velo_capture();
   void velo_parameter();
 

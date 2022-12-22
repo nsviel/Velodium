@@ -287,7 +287,7 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
   cloud->lidar_model = "";
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;
-  cloud->saveas = get_absolutePath_build() + "../media/data/";
+  cloud->saveas = get_path_abs_build() + "../media/data/";
 
   //ID
   int* ID_cloud = sceneManager->get_new_ID_cloud();

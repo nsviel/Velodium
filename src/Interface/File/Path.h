@@ -5,7 +5,8 @@
 #include <experimental/filesystem>
 
 
-std::string get_absolutePath_build();
+std::string get_path_abs_build();
+std::string get_path_abs(std::string path);
 
 
 #endif

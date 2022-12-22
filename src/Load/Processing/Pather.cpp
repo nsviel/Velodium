@@ -47,7 +47,7 @@ void Pather::update_configuration(){
 
   this->spaceSampling = 0.08f;
   this->nbLineSampling = 1000000;
-  this->path_current_dir = get_absolutePath_build();
+  this->path_current_dir = get_path_abs_build();
   this->open_mode = configManager->parse_json_s("parameter", "open_mode");
   this->save_mode = configManager->parse_json_s("parameter", "save_mode");
   this->path_saved_frame = configManager->parse_json_s("parameter", "path_data")  + "frame";

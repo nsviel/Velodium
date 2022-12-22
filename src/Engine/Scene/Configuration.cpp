@@ -10,10 +10,10 @@
 Configuration::Configuration(){
   //---------------------------
 
-  this->path_config_default = get_absolutePath_build() + "../media/engine/config/config_default.json";
-  this->path_config_capture = get_absolutePath_build() + "../media/engine/config/config_capture.json";
-  this->path_config_ai = get_absolutePath_build() + "../media/engine/config/config_ai.json";
-  this->path_config_server = get_absolutePath_build() + "../media/engine/config/config_server.json";
+  this->path_config_default = get_path_abs_build() + "../media/engine/config/config_default.json";
+  this->path_config_capture = get_path_abs_build() + "../media/engine/config/config_capture.json";
+  this->path_config_ai = get_path_abs_build() + "../media/engine/config/config_ai.json";
+  this->path_config_server = get_path_abs_build() + "../media/engine/config/config_server.json";
   this->path_config = path_config_default;
   this->config = 0;
 

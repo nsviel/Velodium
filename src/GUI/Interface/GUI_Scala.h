@@ -21,6 +21,7 @@ public:
 
   //Scala functions
   void scala_state();
+  void scala_statistique();
   void scala_file();
   void scala_capture();
   void scala_parameter();

@@ -48,7 +48,7 @@ void Player::update_configuration(){
   this->player_ispaused = false;
   this->player_returnToZero = false;
   this->player_time_flag = false;
-  this->player_saveas = get_absolutePath_build() + "../media/data/";
+  this->player_saveas = get_path_abs_build() + "../media/data/";
   this->player_mode = configManager->parse_json_s("dynamic", "player_mode");
 
   //---------------------------
