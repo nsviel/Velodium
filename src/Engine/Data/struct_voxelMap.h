@@ -25,6 +25,8 @@ struct slamap{
 
   //Parameter
   double voxel_width;
+  double voxel_min_point_dist;
+  double voxel_max_dist;
   int voxel_capacity;
   int size;
 
@@ -33,7 +35,7 @@ struct slamap{
   int linked_subset_ID;
   int current_frame_ID;
 
-  //Pose
+  //Current pose
   Eigen::Matrix3d rotat_b;
   Eigen::Vector3d trans_b;
   Eigen::Matrix3d rotat_e;

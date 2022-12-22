@@ -39,7 +39,7 @@ void Prediction::runtime_prediction(){
 
   if(with_prediction && cloud != nullptr){
     string path_predi = fileManager->get_path_predi();
-    vector<string> path_vec = list_allPaths(path_predi);
+    vector<string> path_vec = list_all_path(path_predi);
 
     for(int i=0; i<path_vec.size(); i++){
       string path = path_vec[i];
@@ -82,7 +82,7 @@ void Prediction::compute_prediction(string path_dir){
   //---------------------------
 
   //Retrieve prediction frame ID
-  vector<string> path_vec = list_allPaths(path_dir);
+  vector<string> path_vec = list_all_path(path_dir);
 
   for(int i=0; i<path_vec.size(); i++){
     string path_file = path_vec[i];

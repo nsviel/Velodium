@@ -56,9 +56,9 @@ vector<Eigen::Vector3d> SLAM_normal::compute_kNN_search(Eigen::Vector3d& point){
   int cpt = 0;
   //---------------------------
 
-  int vx = static_cast<int>(point[0] / knn_voxel_width);
-  int vy = static_cast<int>(point[1] / knn_voxel_width);
-  int vz = static_cast<int>(point[2] / knn_voxel_width);
+  int vx = static_cast<int>(point[0] / local_map->voxel_width);
+  int vy = static_cast<int>(point[1] / local_map->voxel_width);
+  int vz = static_cast<int>(point[2] / local_map->voxel_width);
 
   //Search inside all surrounding voxels
   for (int vi = vx - knn_voxel_search; vi <= vx + knn_voxel_search; vi++){

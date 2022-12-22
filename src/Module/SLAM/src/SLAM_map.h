@@ -30,10 +30,12 @@ public:
   inline slamap* get_local_map(){return local_map;}
   inline slamap* get_local_cloud(){return local_cloud;}
   inline bool* get_with_local_cloud(){return &with_local_cloud;}
-  inline double* get_max_voxel_distance(){return &max_voxel_distance;}
-  inline double* get_min_dist_point_in_voxel(){return &min_dist_point_in_voxel;}
-  inline double* get_map_voxel_size(){return &local_map->voxel_width;}
-  inline int* get_map_voxel_capacity(){return &local_map->voxel_capacity;}
+
+  //Localmap parameters
+  inline double* get_voxel_max_dist(){return &local_map->voxel_max_dist;}
+  inline double* get_voxel_min_point_dist(){return &local_map->voxel_min_point_dist;}
+  inline double* get_voxel_width(){return &local_map->voxel_width;}
+  inline int* get_voxel_capacity(){return &local_map->voxel_capacity;}
 
 private:
   Scene* sceneManager;
@@ -41,11 +43,7 @@ private:
 
   slamap* local_map;
   slamap* local_cloud;
-
   bool with_local_cloud;
-
-  double max_voxel_distance;
-  double min_dist_point_in_voxel;
 };
 
 

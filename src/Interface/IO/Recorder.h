@@ -41,37 +41,32 @@ public:
   void select_image_unlimited(bool value);
   void select_frame_unlimited(bool value);
 
+  inline string get_path_image(){return path_image;}
+  inline string get_path_frame(){return path_frame;}
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
-  inline string get_path_image(){return path_image;}
-  inline string get_path_image_last(){return path_image_last;}
-  inline string get_path_frame(){return path_frame;}
   inline int* get_save_frame_max(){return &save_frame_max;}
   inline int* get_save_image_max(){return &save_image_max;}
 
 private:
   Node_interface* node_interface;
-
   Renderer* renderManager;
   Configuration* configManager;
   Saver* saverManager;
 
-  queue<string> save_frame_vec;
-  queue<string> save_image_vec;
-
   string path_dir;
   string path_frame;
   string path_image;
-  string path_image_last;
   float time_save_image;
   float time_save_frame;
   int save_frame_max;
   int save_image_ID;
   int save_image_max;
-
   bool with_save_frame;
   bool with_save_image;
 
+  queue<string> save_frame_vec;
+  queue<string> save_image_vec;
   std::thread thread_frame;
 };
 

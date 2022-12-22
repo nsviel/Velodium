@@ -32,6 +32,7 @@ public:
   inline double* get_min_root_distance(){return &min_root_distance;}
   inline double* get_max_root_distance(){return &max_root_distance;}
   inline double* get_grid_voxel_size(){return &grid_voxel_width;}
+  inline int* get_max_keypoint(){return &max_keypoint;}
 
 private:
   Scene* sceneManager;
@@ -42,7 +43,7 @@ private:
   double max_root_distance;
   double grid_voxel_width;
   bool with_distorsion;
-  int max_total_point;
+  int max_keypoint;
 };
 
 

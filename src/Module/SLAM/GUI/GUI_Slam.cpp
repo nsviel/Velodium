@@ -110,7 +110,7 @@ void GUI_Slam::parameter_lidar(){
   //Configuration model
   int slam_conf = *slam_param->get_predefined_conf();
   ImGui::SetNextItemWidth(item_width);
-  if(ImGui::Combo("LiDAR", &slam_conf, "vlp_64\0vlp_16\0hdl_32\0")){
+  if(ImGui::Combo("LiDAR", &slam_conf, "vlp_16\0vlp_64\0hdl_32\0train\0")){
     slam_param->set_predefined_conf(slam_conf);
   }
 
@@ -231,14 +231,6 @@ void GUI_Slam::parameter_optimization(){
       ImGui::SetTooltip("The minimum number of residuals for a valid ICP problem");
     }
 
-    //---------------------------
-    ImGui::TreePop();
-  }
-}
-void GUI_Slam::parameter_localMap(){
-  if(ImGui::TreeNode("Local map##tree")){
-    //---------------------------
-
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
 
     //Subset point minimum distance
@@ -257,8 +249,6 @@ void GUI_Slam::parameter_localMap(){
       ImGui::SetTooltip("Suppresses points to far from the center of the sensor");
     }
 
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Voxel");
-
     //Subsampling voxel width
     double* grid_voxel_size = slam_transf->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
@@ -267,8 +257,24 @@ void GUI_Slam::parameter_localMap(){
       ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
     }
 
+    //Max keypoints
+    int* max_keypoint = slam_transf->get_max_keypoint();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::SliderInt("Max keypoint", max_keypoint, 100, 10000);
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("");
+    }
+
+    //---------------------------
+    ImGui::TreePop();
+  }
+}
+void GUI_Slam::parameter_localMap(){
+  if(ImGui::TreeNode("Local map##tree")){
+    //---------------------------
+
     //Width of the local map voxel
-    double* localMap_width = slam_map->get_map_voxel_size();
+    double* localMap_width = slam_map->get_voxel_width();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -276,7 +282,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Mnimun distance between points inside a voxel
-    double* min_dist_point_in_voxel = slam_map->get_min_dist_point_in_voxel();
+    double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Min point dist in voxel", min_dist_point_in_voxel, 0.001f, 10.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -284,7 +290,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Distance threshold to supress the voxels on run
-    double* max_voxel_distance = slam_map->get_max_voxel_distance();
+    double* max_voxel_distance = slam_map->get_voxel_max_dist();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Voxel max dist", max_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -292,7 +298,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Number of point per voxel
-    int* nb_points_per_voxel = slam_map->get_map_voxel_capacity();
+    int* nb_points_per_voxel = slam_map->get_voxel_capacity();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -368,12 +374,12 @@ void GUI_Slam::parameter_normal(){
     }
 
     //kNN voxel size
-    double* knn_voxel_capacity = slam_normal->get_knn_voxel_width();
+    /*double* knn_voxel_capacity = slam_normal->get_knn_voxel_width();
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("kNN voxel size", knn_voxel_capacity, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the kNN search");
-    }
+    }*/
 
     //---------------------------
     ImGui::TreePop();

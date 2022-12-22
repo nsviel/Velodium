@@ -58,7 +58,7 @@ bool Pather::check_folder_format(string path, string format){
   bool all_ok = true;
   //---------------------------
 
-  vector<string> path_vec = list_allPaths(path);
+  vector<string> path_vec = list_all_path(path);
   for(int i=0; i<path_vec.size(); i++){
     if(get_format_from_path(path_vec[i]) != format){
       all_ok = false;
@@ -127,7 +127,7 @@ bool Pather::loading_onthefly(string path){
   //---------------------------
 
   //select files
-  vector<string> path_vec = list_allPaths(path);
+  vector<string> path_vec = list_all_path(path);
 
   //Load files
   if(path_vec.size() != 0){
@@ -143,7 +143,7 @@ bool Pather::loading_directory_frame(string path){
   //---------------------------
 
   //Get all frame path
-  vector<string> path_vec = list_allPaths(path);
+  vector<string> path_vec = list_all_path(path);
 
   //Sort alphabetically and load
   if(path_vec.size() != 0){
@@ -348,8 +348,8 @@ void Pather::saving_saved_frames(){
 
   //Select saving path
   string path_saving = zenity_directory("Save frame", path_current_dir);
-  vector<string> file_path_vec = list_allPaths(path_saved_frame);
-  vector<string> file_name_vec = list_allFiles(path_saved_frame);
+  vector<string> file_path_vec = list_all_path(path_saved_frame);
+  vector<string> file_name_vec = list_all_file(path_saved_frame);
 
   for(int i=0; i<file_path_vec.size(); i++){
     string file_in = file_path_vec[i];

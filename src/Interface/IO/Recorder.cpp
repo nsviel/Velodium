@@ -67,8 +67,8 @@ void Recorder::clean_directories(){
   //---------------------------
 
   //Clean directories
-  clean_directory_files(path_image.c_str());
-  clean_directory_files(path_frame.c_str());
+  dir_clean_file(path_image.c_str());
+  dir_clean_file(path_frame.c_str());
 
   //---------------------------
 }
@@ -76,9 +76,9 @@ void Recorder::check_directories(){
   //---------------------------
 
   //Clean directories
-  create_new_dir(path_dir);
-  create_new_dir(path_image);
-  create_new_dir(path_frame);
+  dir_create_new(path_dir);
+  dir_create_new(path_image);
+  dir_create_new(path_frame);
 
   //---------------------------
 }
@@ -106,7 +106,6 @@ void Recorder::save_image_unique(){
   *renderManager->get_is_screenshot() = true;
 
   //---------------------------
-  this->path_image_last = path;
 }
 void Recorder::save_image_multiple(){
   //---------------------------
@@ -127,7 +126,6 @@ void Recorder::save_image_multiple(){
   }
 
   //---------------------------
-  this->path_image_last = path;
 }
 void Recorder::save_image_path(){
   //---------------------------
@@ -164,15 +162,19 @@ void Recorder::select_path_image(){
   //---------------------------
 
   string path = zenity_directory("Path image", path_image);
-  this->path_image = path + "/";
-
+  if(path != ""){
+    this->path_image = path + "/";
+  }
+  
   //---------------------------
 }
 void Recorder::select_path_frame(){
   //---------------------------
 
   string path = zenity_directory("Path frame", path_frame);
-  this->path_frame = path + "/";
+  if(path != ""){
+    this->path_frame = path + "/";
+  }
 
   //---------------------------
 }

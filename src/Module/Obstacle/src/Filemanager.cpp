@@ -36,8 +36,8 @@ void Filemanager::clean_directories(){
     //---------------------------
 
     //Clean directories
-    clean_directory_files(path_predi.c_str());
-    clean_directory_files(path_grThr.c_str());
+    dir_clean_file(path_predi.c_str());
+    dir_clean_file(path_grThr.c_str());
 
     //---------------------------
   }
@@ -46,9 +46,9 @@ void Filemanager::check_directories(){
   //---------------------------
 
   //Clean directories
-  create_new_dir(path_data_dir);
-  create_new_dir(path_predi);
-  create_new_dir(path_grThr);
+  dir_create_new(path_data_dir);
+  dir_create_new(path_predi);
+  dir_create_new(path_grThr);
 
   //---------------------------
 }

@@ -39,8 +39,10 @@ void SLAM_map::update_configuration(){
 
   //Local map for SLAM algo
   local_map->reset();
-  local_map->voxel_width = 1.0f;
-  local_map->voxel_capacity = 20;
+  local_map->voxel_width = 0.5f;
+  local_map->voxel_capacity = 100;
+  local_map->voxel_min_point_dist = 0.05;
+  local_map->voxel_max_dist = 150;
   local_map->linked_cloud_ID = -1;
   local_map->linked_subset_ID = -1;
   local_map->current_frame_ID = 0;
@@ -49,10 +51,6 @@ void SLAM_map::update_configuration(){
   local_cloud->reset();
   local_cloud->voxel_width = 0.1;
   local_cloud->voxel_capacity = 100;
-
-  //Point distance for no taking account
-  this->max_voxel_distance = 150.0f;
-  this->min_dist_point_in_voxel = 0.05;
 
   //---------------------------
 }
@@ -115,7 +113,7 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
         }
 
         //If all conditions are fullfiled, add the point to local map
-        if(dist_min > min_dist_point_in_voxel){
+        if(dist_min > map->voxel_min_point_dist){
           voxel_xyz.push_back(point);
         }
       }
@@ -167,7 +165,7 @@ void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
         }
 
         //If all conditions are fullfiled, add the point to local map
-        if(dist_min > min_dist_point_in_voxel){
+        if(dist_min > map->voxel_min_point_dist){
           voxel_xyz.push_back(point_4d);
         }
       }
@@ -190,7 +188,7 @@ void SLAM_map::end_clearTooFarVoxels(slamap* map, Eigen::Vector3d &pose){
     Eigen::Vector3d voxel_point = it->second[0];
     double dist = fct_distance(voxel_point, pose);
 
-    if(dist > max_voxel_distance){
+    if(dist > map->voxel_max_dist){
       voxels_to_erase.push_back(it->first);
     }
 

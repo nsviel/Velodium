@@ -1,26 +1,31 @@
 #include "Directory.h"
 
 
-void create_new_dir(std::string path){
+//Directory operations
+void dir_create_new(std::string path){
   //---------------------------
 
-  int last = path.find_last_of("/");
-  std::string dir = path.substr(0, last);
-  last = dir.find_last_of("/");
-  dir = dir.substr(0, last);
+  //If path dir end with a / (/path/dir_to_create/)
+  if(path.find_last_of(path) == path.find_last_of("/")){
+    path = path.substr(0, path.find_last_of("/"));
+  }
 
-  if(std::filesystem::exists(dir) == true && std::filesystem::exists(path) == false){
+  //Retrieve parent path
+  std::string parent = path.substr(0, path.find_last_of("/"));
+
+  //If the parent exist and dir_to_create not
+  if(is_dir_exist(parent) == true && is_dir_exist(path) == false){
     std::filesystem::create_directory(path);
   }
 
   //---------------------------
 }
-void clean_directory_files(const char *path){
+void dir_clean_file(const char *path){
   struct stat buffer;
   if(stat (path, &buffer) != 0) return;
   //---------------------------
 
-  std::vector<std::string> path_vec = list_allFiles(path);
+  std::vector<std::string> path_vec = list_all_file(path);
   for(int i=0; i<path_vec.size(); i++){
     std::string path_full = path + path_vec[i];
     std::remove (path_full.c_str());
@@ -28,39 +33,7 @@ void clean_directory_files(const char *path){
 
   //---------------------------
 }
-
-bool is_dir(std::string path){
-  //---------------------------
-
-  if(std::filesystem::is_directory(path)){
-    return true;
-  }else{
-    return false;
-  }
-
-  //---------------------------
-}
-bool is_file_exist(std::string fileName){
-  //---------------------------
-
-  std::ifstream infile(fileName.c_str());
-
-  //---------------------------
-  return infile.good();
-}
-bool is_dir_exist(std::string path){
-  //---------------------------
-
-  if(std::filesystem::exists(path)){
-    return true;
-  }else{
-    return false;
-  }
-
-  //---------------------------
-}
-
-int get_dir_numberOfFile(std::string path){
+int dir_number_file(std::string path){
   DIR *dp;
   //---------------------------
 
@@ -85,7 +58,29 @@ int get_dir_numberOfFile(std::string path){
   return i;
 }
 
-std::vector<std::string> list_allFiles(std::string path){
+//Check existence
+bool is_file_exist(std::string path){
+  //---------------------------
+
+  std::ifstream infile(path.c_str());
+
+  //---------------------------
+  return infile.good();
+}
+bool is_dir_exist(std::string path){
+  //---------------------------
+
+  if(std::filesystem::exists(path)){
+    return true;
+  }else{
+    return false;
+  }
+
+  //---------------------------
+}
+
+//List files & paths
+std::vector<std::string> list_all_file(std::string path){
   //---------------------------
 
   struct dirent* files;
@@ -115,7 +110,7 @@ std::vector<std::string> list_allFiles(std::string path){
   //---------------------------
   return path_vec;
 }
-std::vector<std::string> list_allPaths(std::string path_dir){
+std::vector<std::string> list_all_path(std::string path_dir){
   //---------------------------
 
   struct dirent* files;
@@ -151,7 +146,7 @@ std::vector<std::string> list_allPaths(std::string path_dir){
   //---------------------------
   return path_vec;
 }
-std::vector<std::string> list_allDirs(std::string path){
+std::vector<std::string> list_all_dir(std::string path){
   //---------------------------
 
   struct dirent* files;
@@ -171,17 +166,6 @@ std::vector<std::string> list_allDirs(std::string path){
 
   //---------------------------
   return list;
-}
-std::vector<std::string> get_dir_list_file(std::string path_dir){
-  std::vector<std::string> path_vec;
-  //---------------------------
-
-  for(const auto& entry : std::experimental::filesystem::directory_iterator(path_dir)){
-    path_vec.push_back(entry.path());
-  }
-
-  //---------------------------
-  return path_vec;
 }
 
 // Watcher function

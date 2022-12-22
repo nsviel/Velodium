@@ -26,7 +26,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->min_root_distance = 3.0f;
   this->max_root_distance = 100.0f;
   this->grid_voxel_width = 0.3;
-  this->max_total_point = 2000;
+  this->max_keypoint = 5000;
 
   //---------------------------
 }
@@ -77,6 +77,10 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   frame->xyz_raw.clear();
   frame->ts_n.clear();
 
+  if(grid_voxel_width == 0){
+    grid_voxel_width = 0.00001;
+  }
+
   //Subsample the scan with voxels
   cloudMap grid;
   Eigen::Vector4d point;
@@ -100,7 +104,23 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   cloudMap::iterator it;
   for(auto it = grid.begin(); it != grid.end(); it++){
     if(it->second.size() != 0){
-      //Take one random point
+
+      for(int i=0; i<1; i++){
+        int rdm = rand() % it->second.size();
+
+        Eigen::Vector4d point = it->second[rdm];
+        Eigen::Vector3d xyz(point(0), point(1), point(2));
+
+        frame->xyz.push_back(xyz);
+        frame->ts_n.push_back(point(3));
+
+        if(frame->xyz.size() > max_keypoint){
+          break;
+        }
+      }
+
+
+      /*//Take one random point
       int rdm = rand() % it->second.size();
 
       Eigen::Vector4d point = it->second[rdm];
@@ -109,9 +129,9 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
       frame->xyz.push_back(xyz);
       frame->ts_n.push_back(point(3));
 
-      if(frame->xyz.size() > max_total_point){
+      if(frame->xyz.size() > max_keypoint){
         break;
-      }
+      }*/
 
     }
   }

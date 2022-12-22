@@ -29,6 +29,7 @@ public:
   void make_config_0();
   void make_config_1();
   void make_config_2();
+  void make_config_3();
 
   //Setting function
   void set_predefined_conf(int conf);

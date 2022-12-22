@@ -20,19 +20,19 @@
 #include "../../common.h"
 
 
-void clean_directory_files(const char *path);
-void create_new_dir(std::string path);
+//Directory operations
+void dir_clean_file(const char *path);
+void dir_create_new(std::string path);
+int dir_number_file(std::string path);
 
-bool is_dir(std::string path);
+//Check existence
 bool is_file_exist(std::string fileName);
 bool is_dir_exist(std::string path);
 
-int get_dir_numberOfFile(std::string path);
-
-std::vector<std::string> list_allFiles(std::string path);
-std::vector<std::string> list_allPaths(std::string path);
-std::vector<std::string> list_allDirs(std::string path);
-std::vector<std::string> get_dir_list_file(std::string path_dir);
+//List files & paths
+std::vector<std::string> list_all_file(std::string path);
+std::vector<std::string> list_all_path(std::string path);
+std::vector<std::string> list_all_dir(std::string path);
 
 // Watcher function
 void watcher_all_directory(std::string path);

@@ -169,7 +169,7 @@ void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
   }
 }
 void GUI_Initialization::node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent){
-  vector<string> list_path = list_allPaths(path);
+  vector<string> list_path = list_all_path(path);
   //---------------------------
 
   bool is_sub_folder = false;
