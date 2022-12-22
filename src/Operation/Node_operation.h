@@ -17,7 +17,6 @@ class Fitting;
 class Color;
 class Player;
 class Online;
-class Saving;
 class Onthefly;
 class Visibility;
 
@@ -48,7 +47,6 @@ public:
   inline Color* get_colorManager(){return colorManager;}
   inline Online* get_onlineManager(){return onlineManager;}
   inline Player* get_playerManager(){return playerManager;}
-  inline Saving* get_savingManager(){return savingManager;}
   inline Onthefly* get_flyManager(){return flyManager;}
   inline Visibility* get_visibleManager(){return visibleManager;}
 
@@ -68,7 +66,6 @@ private:
   Color* colorManager;
   Online* onlineManager;
   Player* playerManager;
-  Saving* savingManager;
   Onthefly* flyManager;
 };
 

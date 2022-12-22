@@ -27,25 +27,31 @@ GUI_Network::GUI_Network(Node_gui* node_gui){
 GUI_Network::~GUI_Network(){}
 
 void GUI_Network::design_Network(){
-  //---------------------------
+  if(ImGui::BeginTabItem("Network")){
+    if(ImGui::BeginTabBar("##tabs_network", ImGuiTabBarFlags_None)){
+      //---------------------------
 
-  if(ImGui::BeginTabItem("MQTT")){
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connection");
-    this->mqtt_connection();
-    this->mqtt_parameter();
+      if(ImGui::BeginTabItem("HTTP")){
+        ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "HTTP connection");
+        this->http_connection();
+        this->http_parameter();
 
+        ImGui::EndTabItem();
+      }
+
+      if(ImGui::BeginTabItem("MQTT")){
+        ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "MQTT connection");
+        this->mqtt_connection();
+        this->mqtt_parameter();
+
+        ImGui::EndTabItem();
+      }
+
+      //---------------------------
+      ImGui::EndTabBar();
+    }
     ImGui::EndTabItem();
   }
-
-  if(ImGui::BeginTabItem("HTTP")){
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "HTTP connection");
-    this->http_connection();
-    this->http_parameter();
-
-    ImGui::EndTabItem();
-  }
-
-  //---------------------------
 }
 
 //MQTT

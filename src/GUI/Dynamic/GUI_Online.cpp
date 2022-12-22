@@ -7,7 +7,6 @@
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Dynamic/Online.h"
 #include "../../Operation/Dynamic/Player.h"
-#include "../../Operation/Dynamic/Saving.h"
 #include "../../Operation/Color/Color.h"
 #include "../../Operation/Transformation/Filter.h"
 
@@ -17,6 +16,8 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/IO/Recorder.h"
 #include "../../Module/Node_module.h"
 
 #include "imgui/imgui.h"
@@ -28,6 +29,7 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
   //---------------------------
 
   Node_operation* node_ope = node_gui->get_node_ope();
+  Node_interface* node_interface = node_gui->get_node_interface();
 
   this->node_engine = node_gui->get_node_engine();
   this->node_module = node_engine->get_node_module();
@@ -36,7 +38,7 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
   this->onlineManager = node_ope->get_onlineManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->followManager = node_engine->get_followManager();
-  this->savingManager = node_ope->get_savingManager();
+  this->recordManager = node_interface->get_recordManager();
   this->renderManager = node_engine->get_renderManager();
   this->colorManager = node_ope->get_colorManager();
   this->configManager = node_engine->get_configManager();
@@ -85,7 +87,7 @@ void GUI_Online::design_online(){
 
     this->parameter_online();
     this->parameter_filter();
-    this->parameter_export();
+    this->parameter_recorder();
     gui_color->colorization_choice();
 
     //---------------------------
@@ -170,60 +172,60 @@ void GUI_Online::parameter_camera(){
 
   //---------------------------
 }
-void GUI_Online::parameter_export(){
+void GUI_Online::parameter_recorder(){
   //---------------------------
 
   //Save frame in folder for AI module
-  bool* with_save_frame = savingManager->get_with_save_frame();
+  bool* with_save_frame = recordManager->get_with_save_frame();
   ImGui::Checkbox("Save frame", with_save_frame);
   if(*with_save_frame){
     // set save image number
     static bool with_number = true;
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
     if(ImGui::Checkbox("##12323", &with_number)){
-      savingManager->select_frame_unlimited(!with_number);
+      recordManager->select_frame_unlimited(!with_number);
     }
     ImGui::SameLine();
 
     // If not set number of image
-    int* save_frame_max = savingManager->get_save_frame_max();
+    int* save_frame_max = recordManager->get_save_frame_max();
     ImGui::SetNextItemWidth(100);
     ImGui::InputInt("Number##1", save_frame_max);
 
     //Path where images are saved
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
     if(ImGui::Button("...##23")){
-      savingManager->select_path_frame();
+      recordManager->select_path_frame();
     }
     ImGui::SameLine();
-    string path = savingManager->get_path_frame();
+    string path = recordManager->get_path_frame();
     ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
   }
 
   //Save image for interfacing
-  bool* with_save_image = savingManager->get_with_save_image();
+  bool* with_save_image = recordManager->get_with_save_image();
   ImGui::Checkbox("Save image", with_save_image);
   if(*with_save_image){
     // set save image number
     static bool with_number = true;
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
     if(ImGui::Checkbox("##1232", &with_number)){
-      savingManager->select_image_unlimited(!with_number);
+      recordManager->select_image_unlimited(!with_number);
     }
     ImGui::SameLine();
 
     // If not set number of image
-    int* save_image_max = savingManager->get_save_image_max();
+    int* save_image_max = recordManager->get_save_image_max();
     ImGui::SetNextItemWidth(100);
     ImGui::InputInt("Number##2", save_image_max);
 
     //Path where images are saved
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
     if(ImGui::Button("...##25")){
-      savingManager->select_path_image();
+      recordManager->select_path_image();
     }
     ImGui::SameLine();
-    string path = savingManager->get_path_image();
+    string path = recordManager->get_path_image();
     ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", realpath(path.c_str(), NULL));
   }
 
@@ -249,7 +251,7 @@ void GUI_Online::state_time(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", time_slam);
 
-  bool with_save_frame = *savingManager->get_with_save_frame();
+  bool with_save_frame = *recordManager->get_with_save_frame();
   int time_save_frame = 0;
   if(sceneManager->get_is_list_empty() == false){
     time_save_frame = (int)frame->time_save_frame;
@@ -260,7 +262,7 @@ void GUI_Online::state_time(){
     ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", time_save_frame);
   }
 
-  bool with_save_image = *savingManager->get_with_save_frame();
+  bool with_save_image = *recordManager->get_with_save_frame();
   if(with_save_image){
     float time_screenshot = renderManager->get_time_screenshot();
     ImGui::Text("Save image");
@@ -297,12 +299,12 @@ void GUI_Online::state_online(){
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", color_name.c_str());
 
-  bool with_save_frame = *savingManager->get_with_save_frame();
+  bool with_save_frame = *recordManager->get_with_save_frame();
   ImGui::Text("Online - Save frame");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_frame ? "ON" : "OFF");
 
-  bool with_save_image = *savingManager->get_with_save_image();
+  bool with_save_image = *recordManager->get_with_save_image();
   ImGui::Text("Online - Save image");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_save_image ? "ON" : "OFF");

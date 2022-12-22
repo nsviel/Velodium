@@ -1,40 +1,36 @@
-#include "Saving.h"
+#include "Recorder.h"
 
-#include "../Node_operation.h"
+#include "../Node_interface.h"
+#include "../File/Directory.h"
+#include "../File/Zenity.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
-#include "../../Interface/File/Directory.h"
-#include "../../Interface/File/Zenity.h"
 
 #include <chrono>
 
-//Remplacer name saving by Record
 
 //Constructor / Destructor
-Saving::Saving(Node_operation* node){
-  this->node_ope = node;
+Recorder::Recorder(Node_interface* node){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
+  Node_engine* node_engine = node->get_node_engine();
   Node_load* node_load = node_engine->get_node_load();
 
   this->node_interface = node_engine->get_node_interface();
   this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();
-  this->sceneManager = node_engine->get_sceneManager();
   this->saverManager = node_load->get_saverManager();
 
   //---------------------------
   this->update_configuration();
 }
-Saving::~Saving(){}
+Recorder::~Recorder(){}
 
-void Saving::update_configuration(){
+void Recorder::update_configuration(){
   //---------------------------
 
   this->with_save_frame = configManager->parse_json_b("dynamic", "with_save_frame");
@@ -51,8 +47,8 @@ void Saving::update_configuration(){
 
   //---------------------------
 }
-void Saving::compute_online(Cloud* cloud, int ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+void Recorder::compute_online(Cloud* cloud, int ID_subset){
+  Subset* subset = *next(cloud->subset.begin(), ID_subset);
   //---------------------------
 
   //Save subset frame
@@ -67,7 +63,7 @@ void Saving::compute_online(Cloud* cloud, int ID_subset){
 
   //---------------------------
 }
-void Saving::clean_directories(){
+void Recorder::clean_directories(){
   //---------------------------
 
   //Clean directories
@@ -76,7 +72,7 @@ void Saving::clean_directories(){
 
   //---------------------------
 }
-void Saving::check_directories(){
+void Recorder::check_directories(){
   //---------------------------
 
   //Clean directories
@@ -88,7 +84,7 @@ void Saving::check_directories(){
 }
 
 //Output: frame & Image saving
-void Saving::save_image(){
+void Recorder::save_image(){
   //---------------------------
 
   if(save_image_max == 1){
@@ -101,7 +97,7 @@ void Saving::save_image(){
 
   //---------------------------
 }
-void Saving::save_image_unique(){
+void Recorder::save_image_unique(){
   //---------------------------
 
   //Put screenshot flag on
@@ -112,12 +108,8 @@ void Saving::save_image_unique(){
   //---------------------------
   this->path_image_last = path;
 }
-void Saving::save_image_multiple(){
+void Recorder::save_image_multiple(){
   //---------------------------
-
-  //Save image
-  //string path = path_image + "image_" + to_string(save_image_ID);
-  //renderManager->render_screenshot(path);
 
   //Put screenshot flag on
   string path = path_image + "image_" + to_string(save_image_ID);
@@ -137,14 +129,14 @@ void Saving::save_image_multiple(){
   //---------------------------
   this->path_image_last = path;
 }
-void Saving::save_image_path(){
+void Recorder::save_image_path(){
   //---------------------------
 
   zenity_directory(path_image);
 
   //---------------------------
 }
-void Saving::save_frame(Subset* subset){
+void Recorder::save_frame(Subset* subset){
   Frame* frame = &subset->frame;
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
@@ -168,26 +160,23 @@ void Saving::save_frame(Subset* subset){
 }
 
 //Path selection
-void Saving::select_path_image(){
+void Recorder::select_path_image(){
   //---------------------------
 
   string path = zenity_directory("Path image", path_image);
-  say(path);
-
   this->path_image = path + "/";
 
   //---------------------------
 }
-void Saving::select_path_frame(){
+void Recorder::select_path_frame(){
   //---------------------------
 
   string path = zenity_directory("Path frame", path_frame);
-
   this->path_frame = path + "/";
 
   //---------------------------
 }
-void Saving::select_image_unlimited(bool value){
+void Recorder::select_image_unlimited(bool value){
   static int old_value;
   //---------------------------
 
@@ -200,7 +189,7 @@ void Saving::select_image_unlimited(bool value){
 
   //---------------------------
 }
-void Saving::select_frame_unlimited(bool value){
+void Recorder::select_frame_unlimited(bool value){
   static int old_value;
   //---------------------------
 

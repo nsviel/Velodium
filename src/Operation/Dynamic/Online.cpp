@@ -1,5 +1,4 @@
 #include "Online.h"
-#include "Saving.h"
 
 #include "../Node_operation.h"
 
@@ -7,6 +6,9 @@
 #include "../../Module/SLAM/Module_slam.h"
 #include "../../Module/SLAM/src/SLAM.h"
 
+#include "../../Interface/File/Directory.h"
+#include "../../Interface/IO/Recorder.h"
+#include "../../Interface/Node_interface.h"
 #include "../../Interface/Network/HTTP/http_command.h"
 
 #include "../../Operation/Node_operation.h"
@@ -25,7 +27,6 @@
 
 #include "../../Specific/fct_math.h"
 #include "../../Specific/fct_transtypage.h"
-#include "../../Interface/File/Directory.h"
 #include "../../Specific/fct_chrono.h"
 
 
@@ -42,7 +43,6 @@ Online::Online(Node_operation* node_ope){
   this->followManager = node_engine->get_followManager();
   this->objectManager = node_engine->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
-  this->savingManager = node_ope->get_savingManager();
   this->httpManager = new http_command();
 
   //---------------------------
@@ -93,7 +93,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   this->compute_visibility(cloud, ID_subset);
 
   //Update dynamic interfaces
-  savingManager->compute_online(cloud, ID_subset);
+  this->compute_recording(cloud, ID_subset);
 
   //Update dynamic glyphs
   objectManager->update_dynamic(cloud);
@@ -104,6 +104,15 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 }
 
 //Subfunctions
+void Online::compute_recording(Cloud* cloud, int& ID_subset){
+  Node_interface* node_interface = node_engine->get_node_interface();
+  Recorder* recordManager = node_interface->get_recordManager();
+  //---------------------------
+
+  recordManager->compute_online(cloud, ID_subset);
+
+  //---------------------------
+}
 void Online::compute_visibility(Cloud* cloud, int& ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   if(subset == nullptr) return;

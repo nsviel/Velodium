@@ -10,6 +10,7 @@ class Node_operation;
 
 class Configuration;
 class Capture;
+class Recorder;
 class HTTP;
 
 class GUI_Capture;
@@ -34,6 +35,7 @@ public:
 
   inline Capture* get_captureManager(){return captureManager;}
   inline Configuration* get_configManager(){return configManager;}
+  inline Recorder* get_recordManager(){return recordManager;}
   inline HTTP* get_httpsManager(){return httpsManager;}
 
 private:
@@ -43,6 +45,7 @@ private:
   Node_gui* node_gui;
 
   HTTP* httpsManager;
+  Recorder* recordManager;
   Capture* captureManager;
   Configuration* configManager;
 };

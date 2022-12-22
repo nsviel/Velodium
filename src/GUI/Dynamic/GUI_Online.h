@@ -15,7 +15,7 @@ class GUI_Color;
 class GUI_Player;
 class Followup;
 class Player;
-class Saving;
+class Recorder;
 class Renderer;
 class Color;
 class Configuration;
@@ -39,7 +39,7 @@ public:
   void parameter_online();
   void parameter_filter();
   void parameter_camera();
-  void parameter_export();
+  void parameter_recorder();
 
   //State function
   void state_time();
@@ -56,7 +56,7 @@ private:
   Online* onlineManager;
   GUI_Color* gui_color;
   GUI_Player* gui_player;
-  Saving* savingManager;
+  Recorder* recordManager;
   Renderer* renderManager;
   Configuration* configManager;
   Color* colorManager;

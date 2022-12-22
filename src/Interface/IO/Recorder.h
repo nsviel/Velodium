@@ -1,5 +1,5 @@
-#ifndef INTERFACE_SAVING_H
-#define INTERFACE_SAVING_H
+#ifndef RECORDER_H
+#define RECORDER_H
 
 #include "../../common.h"
 
@@ -10,18 +10,17 @@ class Node_interface;
 class Node_engine;
 class Node_operation;
 
-class Scene;
 class Renderer;
 class Configuration;
 class Saver;
 
 
-class Saving
+class Recorder
 {
 public:
   //Constructor / Destructor
-  Saving(Node_operation* node_ope);
-  ~Saving();
+  Recorder(Node_interface* node);
+  ~Recorder();
 
 public:
   void update_configuration();
@@ -52,9 +51,7 @@ public:
 
 private:
   Node_interface* node_interface;
-  Node_operation* node_ope;
 
-  Scene* sceneManager;
   Renderer* renderManager;
   Configuration* configManager;
   Saver* saverManager;

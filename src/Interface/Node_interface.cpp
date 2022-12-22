@@ -1,6 +1,7 @@
 #include "Node_interface.h"
 
 #include "Capture/Capture.h"
+#include "IO/Recorder.h"
 #include "Network/HTTP/HTTP.h"
 
 #include "../Engine/Node_engine.h"
@@ -17,6 +18,7 @@ Node_interface::Node_interface(Node_engine* node){
 
   this->configManager = node->get_configManager();
   this->captureManager = new Capture(this);
+  this->recordManager = new Recorder(this);
   this->httpsManager = new HTTP(this);
 
   //---------------------------
@@ -28,6 +30,7 @@ void Node_interface::update(){
 
   captureManager->update_configuration();
   httpsManager->update_configuration();
+  recordManager->update_configuration();
 
   //---------------------------
 }

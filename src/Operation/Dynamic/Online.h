@@ -13,7 +13,6 @@ class Dimension;
 class Scene;
 class Configuration;
 class Followup;
-class Saving;
 class Interface;
 class Object;
 class Renderer;
@@ -33,6 +32,7 @@ public:
   void compute_onlineOpe(Cloud* cloud, int ID_subset);
 
   //Other functions
+  void compute_recording(Cloud* cloud, int& ID_subset);
   void compute_displayStats(Subset* subset);
   void compute_visibility(Cloud* cloud, int& ID_subset);
   void compute_http_command();
@@ -57,7 +57,6 @@ private:
   Object* objectManager;
   Renderer* renderManager;
   http_command* httpManager;
-  Saving* savingManager;
 
   float time_ope;
   int visibility_range;

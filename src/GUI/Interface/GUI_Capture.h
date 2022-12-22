@@ -4,10 +4,11 @@
 #include "../../common.h"
 
 class Node_gui;
-class Scala;
-class Velodyne;
 class Capture;
+class Recorder;
 class GUI_Network;
+class GUI_Scala;
+class GUI_Velodyne;
 
 
 class GUI_Capture
@@ -21,27 +22,16 @@ public:
   //Main function
   void design_interface();
   void design_capture();
+  void design_recorder();
 
   //Specific functions
-  void design_Velodyne();
-  void design_Scala();
   void state_watcher();
 
-  //Velodyn functions
-  void velo_state();
-  void velo_capture();
-  void velo_parameter();
-
-  //Scala functions
-  void scala_state();
-  void scala_file();
-  void scala_capture();
-  void scala_parameter();
-
 private:
-  Scala* scalaManager;
-  Velodyne* veloManager;
   Capture* captureManager;
+  Recorder* recordManager;
+  GUI_Scala* gui_scala;
+  GUI_Velodyne* gui_velodyne;
   GUI_Network* gui_network;
 
   int item_width;

@@ -5,7 +5,6 @@
 
 #include "Dynamic/Online.h"
 #include "Dynamic/Player.h"
-#include "Dynamic/Saving.h"
 #include "Dynamic/Onthefly.h"
 
 #include "Function/Selection.h"
@@ -35,7 +34,6 @@ Node_operation::Node_operation(Node_engine* node){
   this->coordManager = new CoordTransform(this);
   this->selectionManager = new Selection(this);
   this->extractionManager = new Extraction(this);
-  this->savingManager = new Saving(this);
   this->onlineManager = new Online(this);
   this->flyManager = new Onthefly(this);
   this->playerManager = new Player(this);
@@ -52,7 +50,6 @@ void Node_operation::update(){
   filterManager->update_configuration();
   onlineManager->update_configuration();
   playerManager->update_configuration();
-  savingManager->update_configuration();
 
   //---------------------------
 }
