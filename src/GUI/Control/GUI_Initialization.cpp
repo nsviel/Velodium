@@ -104,13 +104,15 @@ void GUI_Initialization::operation_option(){
   //Lidar model
   static int lidar_model_id = 0;
   ImGui::SetNextItemWidth(100);
-  if(ImGui::Combo("Lidar", &lidar_model_id, "vlp16\0vlp64\0hdl32\0")){
+  if(ImGui::Combo("Lidar", &lidar_model_id, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
     if(lidar_model_id == 0){
       this->lidar_model = "velodyne_vlp16";
     }else if(lidar_model_id == 1){
       this->lidar_model = "velodyne_vlp64";
     }else if(lidar_model_id == 2){
       this->lidar_model = "velodyne_hdl32";
+    }else if(lidar_model_id == 3){
+      this->lidar_model = "velodyne_vlp16_reduced";
     }
   }
   ImGui::SameLine();

@@ -111,7 +111,7 @@ void GUI_Slam::parameter_lidar(){
   //Configuration model
   int slam_conf = *slam_param->get_predefined_conf();
   ImGui::SetNextItemWidth(item_width);
-  if(ImGui::Combo("LiDAR", &slam_conf, "vlp_16\0vlp_64\0hdl_32\0train\0")){
+  if(ImGui::Combo("LiDAR", &slam_conf, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
     slam_param->set_predefined_conf(slam_conf);
   }
 
@@ -154,6 +154,7 @@ void GUI_Slam::parameter_glyph(){
     //---------------------------
     ImGui::Columns(1);
     ImGui::Separator();
+    ImGui::TreePop();
   }
 }
 void GUI_Slam::parameter_offline(){

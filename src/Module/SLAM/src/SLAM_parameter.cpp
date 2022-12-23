@@ -46,7 +46,6 @@ void SLAM_parameter::make_config(int conf){
       this->make_config_0();
       break;
     }
-
     case 2:{ //HDL32
       this->make_config_2();
       break;
@@ -74,6 +73,10 @@ void SLAM_parameter::make_config(string conf){
   else if(conf == "velodyne_hdl32"){
     this->make_config_2();
     this->predefined_conf = 2;
+  }
+  else if(conf == "velodyne_vlp16_reduced"){
+    this->make_config_3();
+    this->predefined_conf = 3;
   }
 
   //---------------------------
