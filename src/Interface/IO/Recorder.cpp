@@ -42,18 +42,24 @@ void Recorder::update_configuration(){
   this->save_frame_max = configManager->parse_json_i("dynamic", "nb_save_frame");
   this->save_image_max = configManager->parse_json_i("dynamic", "nb_save_image");
   this->save_image_ID = 0;
+  this->with_save_frame_raw = false;
 
   this->check_directories();
 
   //---------------------------
 }
 void Recorder::compute_online(Cloud* cloud, int ID_subset){
-  Subset* subset = *next(cloud->subset.begin(), ID_subset);
   //---------------------------
 
   //Save subset frame
   if(with_save_frame){
-    this->save_frame(subset);
+    if(with_save_frame_raw){
+      Subset* subset = *next(cloud->subset_init.begin(), ID_subset);
+      this->save_frame(subset);
+    }else{
+      Subset* subset = *next(cloud->subset.begin(), ID_subset);
+      this->save_frame(subset);
+    }
   }
 
   //Save rendered image
@@ -165,7 +171,7 @@ void Recorder::select_path_image(){
   if(path != ""){
     this->path_image = path + "/";
   }
-  
+
   //---------------------------
 }
 void Recorder::select_path_frame(){

@@ -48,12 +48,6 @@ void GUI_Capture::design_capture(){
     if(ImGui::BeginTabBar("##tabs_capture", ImGuiTabBarFlags_None)){
       //---------------------------
 
-      if(ImGui::BeginTabItem("Recorder")){
-        this->state_watcher();
-        gui_recorder->design_recorder();
-        ImGui::EndTabItem();
-      }
-
       if(ImGui::BeginTabItem("Velodyne")){
         gui_velodyne->design_Velodyne();
         ImGui::EndTabItem();
@@ -61,6 +55,12 @@ void GUI_Capture::design_capture(){
 
       if(ImGui::BeginTabItem("Scala")){
         gui_scala->design_Scala();
+        ImGui::EndTabItem();
+      }
+
+      if(ImGui::BeginTabItem("Recorder")){
+        this->state_watcher();
+        gui_recorder->design_recorder();
         ImGui::EndTabItem();
       }
 

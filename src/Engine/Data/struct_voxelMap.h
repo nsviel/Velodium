@@ -30,23 +30,20 @@ struct slamap{
   int voxel_capacity;
   int size;
 
+  //Cloud map
+  double dist_min;
+  double dist_max;
+
   //IDs
   int linked_cloud_ID;
   int linked_subset_ID;
   int current_frame_ID;
 
-  //Current pose
-  Eigen::Matrix3d rotat_b;
-  Eigen::Vector3d trans_b;
-  Eigen::Matrix3d rotat_e;
-  Eigen::Vector3d trans_e;
-
-  //Function
+  //Functions
   int get_signature(int kx, int ky, int kz){
     int key = (kx*2000 + ky)*1000 + kz;
     return key;
   }
-
   void reset(){
     this->map.clear();
     this->cloud.clear();
@@ -54,11 +51,6 @@ struct slamap{
     this->linked_cloud_ID = -1;
     this->linked_subset_ID = -1;
     this->current_frame_ID = 0;
-
-    this->rotat_b = Eigen::Matrix3d::Identity();
-    this->rotat_e = Eigen::Matrix3d::Identity();
-    this->trans_b = Eigen::Vector3d::Zero();
-    this->trans_e = Eigen::Vector3d::Zero();
   }
 
   //---------------------------

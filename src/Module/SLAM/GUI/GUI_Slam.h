@@ -34,6 +34,7 @@ public:
   void parameter_lidar();
   void parameter_glyph();
   void parameter_optimization();
+  void parameter_gridSampling();
   void parameter_localMap();
   void parameter_localCloud();
   void parameter_normal();

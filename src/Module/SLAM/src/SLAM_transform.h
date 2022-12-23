@@ -20,13 +20,17 @@ public:
   //Main function
   void compute_preprocessing(Cloud* cloud, int subset_ID);
 
-  //Specific function
-  void sub_sampling_subset(Subset* subset);
-  void grid_sampling_subset(Subset* subset);
-  void distort_frame(Frame* frame);
+  //Tranformation function
   void transform_frame(Frame* frame);
   void transform_subset(Subset* subset);
   void transform_glyph(Subset* subset);
+
+  //Sampling functions
+  void sub_sampling_subset(Subset* subset);
+  void grid_sampling_subset(Subset* subset);
+
+  //Specific functions
+  void distort_frame(Frame* frame);
   void reset_glyph();
 
   inline double* get_min_root_distance(){return &min_root_distance;}

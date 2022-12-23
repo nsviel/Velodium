@@ -22,6 +22,16 @@ float fct_distance_origin(Eigen::Vector3f pt1){
   //---------------------------
   return dist;
 }
+double fct_distance_origin(Eigen::Vector3d pt1){
+  //Euclidean distance
+  double dist;
+  //---------------------------
+
+  dist = sqrt(pow(pt1(0), 2) + pow(pt1(1), 2) + pow(pt1(2), 2));
+
+  //---------------------------
+  return dist;
+}
 float fct_distance_origin(glm::vec3 pt1){
   //Euclidean distance
   float dist;

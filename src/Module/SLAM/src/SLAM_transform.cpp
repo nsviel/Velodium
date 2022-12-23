@@ -26,7 +26,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->min_root_distance = 3.0f;
   this->max_root_distance = 100.0f;
   this->grid_voxel_width = 0.3;
-  this->max_keypoint = 5000;
+  this->max_keypoint = 2000;
 
   //---------------------------
 }
@@ -45,7 +45,7 @@ void SLAM_transform::compute_preprocessing(Cloud* cloud, int subset_ID){
   //---------------------------
 }
 
-//Specific function
+//Sampling functions
 void SLAM_transform::sub_sampling_subset(Subset* subset){
   /*Frame* frame = &subset->frame;
   float size_voxel = 0.2;
@@ -76,7 +76,6 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   frame->xyz.clear();
   frame->xyz_raw.clear();
   frame->ts_n.clear();
-
   if(grid_voxel_width == 0){
     grid_voxel_width = 0.00001;
   }
@@ -105,14 +104,15 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   for(auto it = grid.begin(); it != grid.end(); it++){
     if(it->second.size() != 0){
 
-      for(int i=0; i<1; i++){
+      for(int i=0; i<100; i++){
         int rdm = rand() % it->second.size();
 
         Eigen::Vector4d point = it->second[rdm];
         Eigen::Vector3d xyz(point(0), point(1), point(2));
+        float ts_n = point(3);
 
         frame->xyz.push_back(xyz);
-        frame->ts_n.push_back(point(3));
+        frame->ts_n.push_back(ts_n);
 
         if(frame->xyz.size() > max_keypoint){
           break;
@@ -140,32 +140,8 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
 
   //---------------------------
 }
-void SLAM_transform::distort_frame(Frame* frame){
-  //---------------------------
 
-  if(with_distorsion && frame->ID > 1){
-    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
-    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
-    Eigen::Vector3d trans_b = frame->trans_b;
-    Eigen::Vector3d trans_e = frame->trans_e;
-
-    //Distorts the frame
-    Eigen::Quaterniond quat_e_inv = quat_e.inverse();
-    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e);
-
-    for(int i=0; i<frame->xyz.size(); i++){
-      float ts_n = frame->ts_n[i];
-
-      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
-      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
-
-      // Distort Raw Keypoints
-      frame->xyz[i] = quat_e_inv * (quat_n * frame->xyz[i] + t) + trans_e_inv;
-    }
-  }
-
-  //---------------------------
-}
+//Transformation functions
 void SLAM_transform::transform_frame(Frame* frame){
   //---------------------------
 
@@ -252,6 +228,34 @@ void SLAM_transform::transform_glyph(Subset* subset){
 
   //---------------------------
   objectManager->update_glyph_subset(subset);
+}
+
+//Specific function
+void SLAM_transform::distort_frame(Frame* frame){
+  //---------------------------
+
+  if(with_distorsion && frame->ID > 1){
+    Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
+    Eigen::Quaterniond quat_e = Eigen::Quaterniond(frame->rotat_e);
+    Eigen::Vector3d trans_b = frame->trans_b;
+    Eigen::Vector3d trans_e = frame->trans_e;
+
+    //Distorts the frame
+    Eigen::Quaterniond quat_e_inv = quat_e.inverse();
+    Eigen::Vector3d trans_e_inv = -1.0 * (quat_e_inv * trans_e);
+
+    for(int i=0; i<frame->xyz.size(); i++){
+      float ts_n = frame->ts_n[i];
+
+      Eigen::Quaterniond quat_n = quat_b.slerp(ts_n, quat_e).normalized();
+      Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
+
+      // Distort Raw Keypoints
+      frame->xyz[i] = quat_e_inv * (quat_n * frame->xyz[i] + t) + trans_e_inv;
+    }
+  }
+
+  //---------------------------
 }
 void SLAM_transform::reset_glyph(){
   //---------------------------

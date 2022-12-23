@@ -13,28 +13,29 @@
  */
 
 
-//Basic functions
+//Distance functions
 float fct_distance(glm::vec3 pt1, glm::vec3 pt2);
 float fct_distance_origin(Eigen::Vector3f pt1);
+double fct_distance_origin(Eigen::Vector3d pt1);
 float fct_distance_origin(glm::vec3 pt1);
 float fct_distance(Eigen::Vector3f pt1, Eigen::Vector3f pt2);
 double fct_distance(Eigen::Vector3d pt1, Eigen::Vector3d pt2);
 double fct_distance(Eigen::Vector4d pt1, Eigen::Vector4d pt2);
 double fct_distance(Eigen::Vector4d pt1, Eigen::Vector3d pt2);
-glm::vec3 fct_centroid(std::vector<glm::vec3>& vec);
-Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ);
-Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d>& XYZ);
-float fct_mean(std::vector<float>& vec);
+
+//Basic function
 std::vector<float> fct_inv(std::vector<float>& vec);
 float fct_sum(std::vector<float>& vec);
-Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f>& vec);
-Eigen::Matrix3d fct_covarianceMat(std::vector<Eigen::Vector3d>& vec);
 std::vector<float> fct_ones(int size);
 bool fct_is_nan(glm::vec3 vec);
 bool fct_is_nan(Eigen::Vector3d vec);
 std::string thousandSeparator(int n);
 
-//Minimum / Maximum
+//Minimum / Mean / Maximum
+glm::vec3 fct_centroid(std::vector<glm::vec3>& vec);
+Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ);
+Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d>& XYZ);
+float fct_mean(std::vector<float>& vec);
 float fct_max(std::vector<float>& vec);
 float fct_max_vec(std::vector<std::vector<float>>& vec);
 glm::vec2 fct_max_vec2(std::vector<glm::vec2> XY);
@@ -60,9 +61,11 @@ float fct_std(std::vector<float>& vec);
 float fct_var(std::vector<float>& vec);
 float fct_cv(std::vector<float>& vec);
 float fct_R2(std::vector<float>& data_X, std::vector<float>& data_Y, std::vector<float>& coeffs);
+Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f>& vec);
+Eigen::Matrix3d fct_covarianceMat(std::vector<Eigen::Vector3d>& vec);
 
-/*Sorting functions
-  --->Sort by order, keeping trace of indices
+//Sorting functions
+/*  --->Sort by order, keeping trace of indices
   Use with for (auto i: fct_sortByIndexes(v)) {
               cout << v[i] << endl;
             }

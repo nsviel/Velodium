@@ -85,6 +85,7 @@ void GUI_Slam::design_parameter(){
     this->parameter_lidar();
     this->parameter_glyph();
     this->parameter_optimization();
+    this->parameter_gridSampling();
     this->parameter_localMap();
     this->parameter_localCloud();
     this->parameter_normal();
@@ -118,40 +119,42 @@ void GUI_Slam::parameter_lidar(){
   ImGui::Separator();
 }
 void GUI_Slam::parameter_glyph(){
-  ImGui::Columns(2);
-  //---------------------------
+  if(ImGui::TreeNode("Glyph##tree")){
+    ImGui::Columns(2);
+    //---------------------------
 
-  //Display ICP line correspondences
-  Slam_keypoint* keyObject = objectManager->get_object_keypoint();
-  bool* keypoint_ON = keyObject->get_visibility();
-  if(ImGui::Checkbox("Keypoint", keypoint_ON)){
-    if(sceneManager->get_is_list_empty() == false){
-      objectManager->set_object_visibility("keypoint", *keypoint_ON);
+    //Display ICP line correspondences
+    Slam_keypoint* keyObject = objectManager->get_object_keypoint();
+    bool* keypoint_ON = keyObject->get_visibility();
+    if(ImGui::Checkbox("Keypoint", keypoint_ON)){
+      if(sceneManager->get_is_list_empty() == false){
+        objectManager->set_object_visibility("keypoint", *keypoint_ON);
+      }
     }
+    ImGui::NextColumn();
+
+    //Car
+    Car* carObject = objectManager->get_object_car();
+    bool* car_visu = carObject->get_visibility();
+    ImGui::Checkbox("Car", car_visu);
+    ImGui::NextColumn();
+
+    //Trajectory
+    Trajectory* trajObject = objectManager->get_object_trajectory();
+    bool* traj_visu = trajObject->get_visibility();
+    ImGui::Checkbox("Trajectory", traj_visu);
+    ImGui::NextColumn();
+
+    //Local map
+    Localmap* mapObject = objectManager->get_object_localmap();
+    Glyph* localmap = mapObject->get_localmap();
+    ImGui::Checkbox("Local map", &localmap->visibility);
+    ImGui::NextColumn();
+
+    //---------------------------
+    ImGui::Columns(1);
+    ImGui::Separator();
   }
-  ImGui::NextColumn();
-
-  //Car
-  Car* carObject = objectManager->get_object_car();
-  bool* car_visu = carObject->get_visibility();
-  ImGui::Checkbox("Car", car_visu);
-  ImGui::NextColumn();
-
-  //Trajectory
-  Trajectory* trajObject = objectManager->get_object_trajectory();
-  bool* traj_visu = trajObject->get_visibility();
-  ImGui::Checkbox("Trajectory", traj_visu);
-  ImGui::NextColumn();
-
-  //Local map
-  Localmap* mapObject = objectManager->get_object_localmap();
-  Glyph* localmap = mapObject->get_localmap();
-  ImGui::Checkbox("Local map", &localmap->visibility);
-  ImGui::NextColumn();
-
-  //---------------------------
-  ImGui::Columns(1);
-  ImGui::Separator();
 }
 void GUI_Slam::parameter_offline(){
   if(ImGui::TreeNode("Offline##tree")){
@@ -191,7 +194,6 @@ void GUI_Slam::parameter_offline(){
 }
 void GUI_Slam::parameter_optimization(){
   if(ImGui::TreeNode("Optimization##tree")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
     //---------------------------
 
     //Number of threads
@@ -231,7 +233,13 @@ void GUI_Slam::parameter_optimization(){
       ImGui::SetTooltip("The minimum number of residuals for a valid ICP problem");
     }
 
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Frame");
+    //---------------------------
+    ImGui::TreePop();
+  }
+}
+void GUI_Slam::parameter_gridSampling(){
+  if(ImGui::TreeNode("Grid sampling##tree")){
+    //---------------------------
 
     //Subset point minimum distance
     double* min_root_distance = slam_transf->get_min_root_distance();
@@ -262,7 +270,7 @@ void GUI_Slam::parameter_optimization(){
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Max keypoint", max_keypoint, 100, 10000);
     if(ImGui::IsItemHovered()){
-      ImGui::SetTooltip("");
+      ImGui::SetTooltip("Max number of keypoint to take into account");
     }
 
     //---------------------------
@@ -271,10 +279,11 @@ void GUI_Slam::parameter_optimization(){
 }
 void GUI_Slam::parameter_localMap(){
   if(ImGui::TreeNode("Local map##tree")){
+    slamap* local_map = slam_map->get_local_map();
     //---------------------------
 
     //Width of the local map voxel
-    double* localMap_width = slam_map->get_voxel_width();
+    double* localMap_width = &local_map->voxel_width;
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -282,7 +291,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Mnimun distance between points inside a voxel
-    double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
+    double* min_dist_point_in_voxel = &local_map->voxel_min_point_dist;
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Min point dist in voxel", min_dist_point_in_voxel, 0.001f, 10.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -290,7 +299,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Distance threshold to supress the voxels on run
-    double* max_voxel_distance = slam_map->get_voxel_max_dist();
+    double* max_voxel_distance = &local_map->voxel_max_dist;
     ImGui::SetNextItemWidth(item_width);
     ImGui::InputDouble("Voxel max dist", max_voxel_distance, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
@@ -298,7 +307,7 @@ void GUI_Slam::parameter_localMap(){
     }
 
     //Number of point per voxel
-    int* nb_points_per_voxel = slam_map->get_voxel_capacity();
+    int* nb_points_per_voxel = &local_map->voxel_capacity;
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 100);
     if(ImGui::IsItemHovered()){
@@ -311,16 +320,18 @@ void GUI_Slam::parameter_localMap(){
 }
 void GUI_Slam::parameter_localCloud(){
   if(ImGui::TreeNode("Local cloud##tree")){
+    slamap* local_cloud = slam_map->get_local_cloud();
     //---------------------------
 
     // With local cloud
     bool* with_local_cloud = slam_map->get_with_local_cloud();
-    ImGui::Checkbox("With local cloud", with_local_cloud);
+    ImGui::Checkbox("Active", with_local_cloud);
+    ImGui::SameLine();
 
     // Visibility
     Localmap* mapObject = objectManager->get_object_localmap();
     Glyph* glyph_localcloud = mapObject->get_localcloud();
-    ImGui::Checkbox("Visibility", &glyph_localcloud->visibility);
+    ImGui::Checkbox("Visible", &glyph_localcloud->visibility);
 
     // Save resulting cloud
     ImGui::PushItemWidth(100);
@@ -329,16 +340,13 @@ void GUI_Slam::parameter_localCloud(){
     }
 
     // Cloud map parameters
-    slamap* local_cloud = slam_map->get_local_cloud();
-    float voxel_width = (float)local_cloud->voxel_width;
+    double* voxel_width = &local_cloud->voxel_width;
+    double* voxel_max_dist = &local_cloud->voxel_max_dist;
     int* voxel_capacity = &local_cloud->voxel_capacity;
     ImGui::PushItemWidth(100);
-    if(ImGui::DragFloat("Voxel width", &voxel_width, 0.001f, 0.01f, 1.0f, "%.4lf")){
-      local_cloud->voxel_width = voxel_width;
-    }
-    if(ImGui::DragInt("Voxel capacity", voxel_capacity, 1, 1, 1000, "%d")){
-      local_cloud->voxel_capacity = *voxel_capacity;
-    }
+    ImGui::InputDouble("Voxel width", voxel_width, 0.1f, 10, "%.2f");
+    ImGui::DragInt("Voxel capacity", voxel_capacity, 1, 1, 1000, "%d");
+    ImGui::InputDouble("Voxel max dist", voxel_max_dist, 1, 1000, "%.2f");
 
     //Local cloud color
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;

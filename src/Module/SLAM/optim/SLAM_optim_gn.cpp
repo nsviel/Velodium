@@ -68,7 +68,6 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
   //---------------------------
 
   //compute residual parameters
-  say(frame->xyz.size());
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d point = frame->xyz[i];

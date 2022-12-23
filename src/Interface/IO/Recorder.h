@@ -45,6 +45,7 @@ public:
   inline string get_path_frame(){return path_frame;}
   inline bool* get_with_save_frame(){return &with_save_frame;}
   inline bool* get_with_save_image(){return &with_save_image;}
+  inline bool* get_with_save_frame_raw(){return &with_save_frame_raw;}
   inline int* get_save_frame_max(){return &save_frame_max;}
   inline int* get_save_image_max(){return &save_image_max;}
 
@@ -64,6 +65,7 @@ private:
   int save_image_max;
   bool with_save_frame;
   bool with_save_image;
+  bool with_save_frame_raw;
 
   queue<string> save_frame_vec;
   queue<string> save_image_vec;

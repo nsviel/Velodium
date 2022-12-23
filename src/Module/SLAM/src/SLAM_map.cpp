@@ -39,37 +39,36 @@ void SLAM_map::update_configuration(){
 
   //Local map for SLAM algo
   local_map->reset();
-  local_map->voxel_width = 0.5f;
-  local_map->voxel_capacity = 100;
+  local_map->voxel_width = 1;
+  local_map->voxel_capacity = 20;
   local_map->voxel_min_point_dist = 0.05;
   local_map->voxel_max_dist = 150;
-  local_map->linked_cloud_ID = -1;
-  local_map->linked_subset_ID = -1;
-  local_map->current_frame_ID = 0;
 
   //Cloud map for voxelized cloud
   local_cloud->reset();
   local_cloud->voxel_width = 0.1;
-  local_cloud->voxel_capacity = 100;
+  local_cloud->voxel_capacity = 200;
+  local_cloud->voxel_min_point_dist = 0.05;
+  local_cloud->voxel_max_dist = 150;
+  local_cloud->dist_min = 3;
+  local_cloud->dist_max = 50;
 
   //---------------------------
 }
 void SLAM_map::update_map(Cloud* cloud, int subset_ID){
   Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m = sceneManager->get_frame_byID(cloud, subset_ID - 5);
   //---------------------------
 
-  if(subset_ID > 5){
-    local_map->rotat_b = frame_m->rotat_b;
-    local_map->trans_b = frame_m->trans_b;
-    local_map->rotat_e = frame_m->rotat_e;
-    local_map->trans_e = frame_m->trans_e;
-  }
-
+  //Local map
   this->add_pointToMap(local_map, frame);
-  if(with_local_cloud) this->add_pointToMap(local_cloud, subset);
   this->end_clearTooFarVoxels(local_map, frame->trans_e);
+
+  //Cloud map
+  if(with_local_cloud){
+    this->add_pointToCloud(local_cloud, subset);
+    this->end_clearTooFarVoxels(local_cloud, frame->trans_e);
+  }
 
   //---------------------------
 }
@@ -89,6 +88,7 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
   for(int i=0; i<frame->xyz.size(); i++){
     Eigen::Vector3d& point = frame->xyz[i];
 
+    //Retrieve corresponding voxel
     int kx = static_cast<int>(point(0) / map->voxel_width);
     int ky = static_cast<int>(point(1) / map->voxel_width);
     int kz = static_cast<int>(point(2) / map->voxel_width);
@@ -102,7 +102,7 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
 
       //If the voxel is not full
       if(voxel_xyz.size() < map->voxel_capacity){
-        //Check if minimal distance with voxel points is respected
+        //Retrieve the minimal distance between the point and the voxel points
         double dist_min = 10000;
         for(int j=0; j<voxel_xyz.size(); j++){
           Eigen::Vector3d& voxel_point = voxel_xyz[j];
@@ -112,13 +112,13 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
           }
         }
 
-        //If all conditions are fullfiled, add the point to local map
+        //If the distance is not too short, add the point to local map
         if(dist_min > map->voxel_min_point_dist){
           voxel_xyz.push_back(point);
         }
       }
     }
-    //else create it
+    //else create a new voxel
     else{
       vector<Eigen::Vector3d> voxel;
       voxel.push_back(point);
@@ -128,12 +128,14 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
 
   //---------------------------
 }
-void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
+void SLAM_map::add_pointToCloud(slamap* map, Subset* subset){
   Eigen::Vector3d point_3d;
   Eigen::Vector4d point_4d;
-  float Is = 0;
   //---------------------------
+
   for(int i=0; i<subset->xyz.size(); i++){
+    //Init data format
+    float Is = 0;
     if(subset->I.size() != 0){
       Is = subset->I[i];
     }
@@ -141,6 +143,7 @@ void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
     point_3d << xyz.x, xyz.y, xyz.z;
     point_4d << xyz.x, xyz.y, xyz.z, Is;
 
+    //Retrieve corresponding voxel
     int kx = static_cast<int>(xyz.x / map->voxel_width);
     int ky = static_cast<int>(xyz.y / map->voxel_width);
     int kz = static_cast<int>(xyz.z / map->voxel_width);
@@ -154,7 +157,7 @@ void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
 
       //If the voxel is not full
       if(voxel_xyz.size() < map->voxel_capacity){
-        //Check if minimal distance with voxel points is respected
+        //Retrieve the minimal distance between the point and the voxel points
         double dist_min = 10000;
         for(int j=0; j<voxel_xyz.size(); j++){
           Eigen::Vector3d voxel_point(voxel_xyz[j](0), voxel_xyz[j](1), voxel_xyz[j](2));
@@ -164,38 +167,21 @@ void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
           }
         }
 
-        //If all conditions are fullfiled, add the point to local map
+        //If the distance is not too short, add the point to local map
         if(dist_min > map->voxel_min_point_dist){
-          voxel_xyz.push_back(point_4d);
+          double dist_origin = fct_distance_origin(point_3d);
+          if(dist_origin > map->dist_min && dist_origin < map->dist_max){
+            voxel_xyz.push_back(point_4d);
+          }
         }
       }
     }
-    //else create it
+    //else create a new voxel
     else{
       vector<Eigen::Vector4d> voxel;
       voxel.push_back(point_4d);
       map->cloud.insert({key, voxel});
     }
-  }
-
-  //---------------------------
-}
-void SLAM_map::end_clearTooFarVoxels(slamap* map, Eigen::Vector3d &pose){
-  vector<int> voxels_to_erase;
-  //---------------------------
-
-  for(auto it = map->map.begin(); it != map->map.end(); ++it){
-    Eigen::Vector3d voxel_point = it->second[0];
-    double dist = fct_distance(voxel_point, pose);
-
-    if(dist > map->voxel_max_dist){
-      voxels_to_erase.push_back(it->first);
-    }
-
-  }
-
-  for(int i=0; i<voxels_to_erase.size(); i++){
-    map->map.erase(voxels_to_erase[i]);
   }
 
   //---------------------------
@@ -220,6 +206,29 @@ void SLAM_map::save_local_cloud(){
 
   //Save the new subset
   patherManager->saving_subset(subset);
+
+  //---------------------------
+}
+
+//Voxel specific functions
+void SLAM_map::end_clearTooFarVoxels(slamap* map, Eigen::Vector3d &pose){
+  vector<int> voxels_to_erase;
+  //---------------------------
+
+  //Retrieve all voxel which are too far from current pose
+  for(auto it = map->map.begin(); it != map->map.end(); ++it){
+    Eigen::Vector3d voxel_point = it->second[0];
+    double dist = fct_distance(voxel_point, pose);
+
+    if(dist > map->voxel_max_dist){
+      voxels_to_erase.push_back(it->first);
+    }
+  }
+
+  //Erase them
+  for(int i=0; i<voxels_to_erase.size(); i++){
+    map->map.erase(voxels_to_erase[i]);
+  }
 
   //---------------------------
 }

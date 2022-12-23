@@ -39,6 +39,11 @@ void GUI_Recorder::recorder_frame(){
   //Save frame in folder for AI module
   bool* with_save_frame = recordManager->get_with_save_frame();
   ImGui::Checkbox("Activated##1", with_save_frame);
+  ImGui::SameLine();
+
+  //Save frame without slam
+  bool* with_save_frame_raw = recordManager->get_with_save_frame_raw();
+  ImGui::Checkbox("Raw", with_save_frame_raw);
 
   // set save image number
   static bool with_number = true;

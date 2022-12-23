@@ -10,6 +10,10 @@
 
 #include "SLAM.h"
 
+//Config 0 -> vlp_16
+//Config 1 -> vlp_64
+//Config 2 -> hdl_32
+
 
 //Constructor / Destructor
 SLAM_parameter::SLAM_parameter(SLAM* slam){
@@ -34,23 +38,20 @@ void SLAM_parameter::make_config(int conf){
   //---------------------------
 
   switch(conf){
-    case 0:{ //Default
-      this->make_config_default();
+    case 0:{ //VLP16
+      this->make_config_1();
       break;
     }
     case 1:{ //VLP64
       this->make_config_0();
       break;
     }
-    case 2:{ //VLP16
-      this->make_config_1();
-      break;
-    }
-    case 3:{ //HDL32
+
+    case 2:{ //HDL32
       this->make_config_2();
       break;
     }
-    case 4:{ //Train
+    case 3:{ //Train
       this->make_config_3();
       break;
     }
@@ -62,21 +63,17 @@ void SLAM_parameter::make_config(int conf){
 void SLAM_parameter::make_config(string conf){
   //---------------------------
 
-  if(conf == "default"){
-    this->make_config_default();
+  if(conf == "velodyne_vlp16" || conf == "scala"){
+    this->make_config_1();
     this->predefined_conf = 0;
   }
   else if(conf == "velodyne_vlp64"){
     this->make_config_0();
     this->predefined_conf = 1;
   }
-  else if(conf == "velodyne_vlp16" || conf == "scala"){
-    this->make_config_1();
-    this->predefined_conf = 2;
-  }
   else if(conf == "velodyne_hdl32"){
     this->make_config_2();
-    this->predefined_conf = 3;
+    this->predefined_conf = 2;
   }
 
   //---------------------------
@@ -87,9 +84,7 @@ void SLAM_parameter::make_config_default(){
   //velodyne_vlp64
   //---------------------------
 
-  //Slam
-  bool* solver_gn = slam_optim->get_solver_gn();
-  bool* solver_ceres = slam_optim->get_solver_ceres();
+  //Assessment
   double* thres_ego_trans = slam_assess->get_thres_ego_trans();
   double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
   double* thres_pose_trans = slam_assess->get_thres_pose_trans();
@@ -104,22 +99,26 @@ void SLAM_parameter::make_config_default(){
   int* max_number_neighbors = slam_normal->get_knn_max_nn();
   int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
-  //Optim gn
+  //Optimization
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
   double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
   int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = slam_map->get_voxel_width();
+  slamap* local_map = slam_map->get_local_map();
+
+  //Transformation
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
-  double* max_voxel_distance = slam_map->get_voxel_max_dist();
-  double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* map_voxel_capacity = slam_map->get_voxel_capacity();
 
-  //Slam
-  *solver_gn = true;
-  *solver_ceres = false;
+  //Transformation
+  *grid_voxel_size = 1.0f;
+  *min_root_distance = 5.0f;
+  *max_root_distance = 100.0f;
+
+  //Assesment
   *thres_ego_trans = 2.0f;
   *thres_ego_rotat = 15.0f;
   *thres_pose_trans = 4.0f;
@@ -134,18 +133,17 @@ void SLAM_parameter::make_config_default(){
   *max_number_neighbors = 20;
   *voxel_searchSize = 1;
 
-  //Optim gn
+  //Optimization
+  *solver_gn = true;
+  *solver_ceres = false;
   *PTP_distance_max = 0.3f;
   *iter_max = 5;
 
   //Local map
-  *map_voxel_size = 1.0f;
-  *min_root_distance = 5.0f;
-  *max_root_distance = 100.0f;
-  *max_voxel_distance = 150.0f;
-  *min_dist_point_in_voxel = 0.1f;
-  *grid_voxel_size = 1.0f;
-  *map_voxel_capacity = 20;
+  local_map->voxel_width = 1.0f;
+  local_map->voxel_max_dist = 150.0f;
+  local_map->voxel_min_point_dist = 0.1;
+  local_map->voxel_capacity = 20;
 
   //Specific
   this->set_nb_thread(1);
@@ -156,9 +154,7 @@ void SLAM_parameter::make_config_0(){
   //velodyne_vlp64
   //---------------------------
 
-  //Slam
-  bool* solver_gn = slam_optim->get_solver_gn();
-  bool* solver_ceres = slam_optim->get_solver_ceres();
+  //Assessment
   double* thres_ego_trans = slam_assess->get_thres_ego_trans();
   double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
   double* thres_pose_trans = slam_assess->get_thres_pose_trans();
@@ -173,22 +169,26 @@ void SLAM_parameter::make_config_0(){
   int* max_number_neighbors = slam_normal->get_knn_max_nn();
   int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
-  //Optim gn
+  //Optimization
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
   double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
   int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = slam_map->get_voxel_width();
+  slamap* local_map = slam_map->get_local_map();
+
+  //Transformation
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
-  double* max_voxel_distance = slam_map->get_voxel_max_dist();
-  double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* map_voxel_capacity = slam_map->get_voxel_capacity();
 
-  //Slam
-  *solver_gn = true;
-  *solver_ceres = false;
+  //Transformation
+  *min_root_distance = 5.0f;
+  *max_root_distance = 100.0f;
+  *grid_voxel_size = 1.0f;
+
+  //Assessment
   *thres_ego_trans = 2.0f;
   *thres_ego_rotat = 15.0f;
   *thres_pose_trans = 4.0f;
@@ -203,18 +203,17 @@ void SLAM_parameter::make_config_0(){
   *max_number_neighbors = 20;
   *voxel_searchSize = 1;
 
-  //Optim gn
+  //Optimization
+  *solver_gn = true;
+  *solver_ceres = false;
   *PTP_distance_max = 0.5f;
   *iter_max = 5;
 
   //Local map
-  *map_voxel_size = 1.0f;
-  *min_root_distance = 5.0f;
-  *max_root_distance = 100.0f;
-  *max_voxel_distance = 150.0f;
-  *min_dist_point_in_voxel = 0.05f;
-  *grid_voxel_size = 1.0f;
-  *map_voxel_capacity = 20;
+  local_map->voxel_width = 1.0f;
+  local_map->voxel_max_dist = 150.0f;
+  local_map->voxel_min_point_dist = 0.05f;
+  local_map->voxel_capacity = 20;
 
   //Specific
   this->set_nb_thread(8);
@@ -225,9 +224,7 @@ void SLAM_parameter::make_config_1(){
   //velodyne_vlp16
   //---------------------------
 
-  //Slam
-  bool* solver_gn = slam_optim->get_solver_gn();
-  bool* solver_ceres = slam_optim->get_solver_ceres();
+  //Assessment
   double* thres_ego_trans = slam_assess->get_thres_ego_trans();
   double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
   double* thres_pose_trans = slam_assess->get_thres_pose_trans();
@@ -242,22 +239,24 @@ void SLAM_parameter::make_config_1(){
   int* max_number_neighbors = slam_normal->get_knn_max_nn();
   int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
-  //Optim gn
+  //Optimization
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
   double*PTP_distance_max = slam_optim_gn->get_dist_residual_max();
   int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = slam_map->get_voxel_width();
+  slamap* local_map = slam_map->get_local_map();
+
+  //Transformation
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
-  double* max_voxel_distance = slam_map->get_voxel_max_dist();
-  double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* map_voxel_capacity = slam_map->get_voxel_capacity();
 
-  //Slam
-  *solver_gn = true;
-  *solver_ceres = false;
+  //Transformation
+  *min_root_distance = 0.0f;
+  *max_root_distance = 100.0f;
+  *grid_voxel_size = 0.06f;
 
   //Assessment
   *thres_ego_trans = 2.0f;
@@ -274,18 +273,17 @@ void SLAM_parameter::make_config_1(){
   *max_number_neighbors = 50;
   *voxel_searchSize = 1;
 
-  //Optim gn
+  //Optimization
+  *solver_gn = true;
+  *solver_ceres = false;
   *PTP_distance_max = 0.7f;
   *iter_max = 5;
 
   //Local map
-  *map_voxel_size = 0.5f;
-  *min_root_distance = 0.0f;
-  *max_root_distance = 100.0f;
-  *max_voxel_distance = 150.0f;
-  *min_dist_point_in_voxel = 0.05f;
-  *grid_voxel_size = 0.06f;
-  *map_voxel_capacity = 20;
+  local_map->voxel_width = 0.5f;
+  local_map->voxel_max_dist = 150.0f;
+  local_map->voxel_min_point_dist = 0.05f;
+  local_map->voxel_capacity = 20;
 
   //Specific
   this->set_nb_thread(8);
@@ -296,9 +294,7 @@ void SLAM_parameter::make_config_2(){
   //velodyne_hdl32
   //---------------------------
 
-  //Slam
-  bool* solver_gn = slam_optim->get_solver_gn();
-  bool* solver_ceres = slam_optim->get_solver_ceres();
+  //Assessment
   double* thres_ego_trans = slam_assess->get_thres_ego_trans();
   double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
   double* thres_pose_trans = slam_assess->get_thres_pose_trans();
@@ -313,22 +309,24 @@ void SLAM_parameter::make_config_2(){
   int* max_number_neighbors = slam_normal->get_knn_max_nn();
   int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
-  //Optim gn
+  //Optimization
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
   double* PTP_distance_max = slam_optim_gn->get_dist_residual_max();
   int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = slam_map->get_voxel_width();
+  slamap* local_map = slam_map->get_local_map();
+
+  //Transformation
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
-  double* max_voxel_distance = slam_map->get_voxel_max_dist();
-  double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* map_voxel_capacity = slam_map->get_voxel_capacity();
 
-  //Slam
-  *solver_gn = true;
-  *solver_ceres = false;
+  //Transformation
+  *min_root_distance = 5.0f;
+  *max_root_distance = 100.0f;
+  *grid_voxel_size = 1.0f;
 
   //Assessment
   *thres_ego_trans = 2.0f;
@@ -345,18 +343,17 @@ void SLAM_parameter::make_config_2(){
   *max_number_neighbors = 20;
   *voxel_searchSize = 1;
 
-  //Optim gn
+  //Optimization
+  *solver_gn = true;
+  *solver_ceres = false;
   *PTP_distance_max = 0.5f;
   *iter_max = 5;
 
   //Local map
-  *map_voxel_size = 1.0f;
-  *min_root_distance = 5.0f;
-  *max_root_distance = 100.0f;
-  *max_voxel_distance = 150.0f;
-  *min_dist_point_in_voxel = 0.05f;
-  *grid_voxel_size = 1.0f;
-  *map_voxel_capacity = 20;
+  local_map->voxel_width = 1;
+  local_map->voxel_max_dist = 150.0f;
+  local_map->voxel_min_point_dist = 0.05f;
+  local_map->voxel_capacity = 20;
 
   //Specific
   this->set_nb_thread(8);
@@ -367,9 +364,7 @@ void SLAM_parameter::make_config_3(){
   //velodyne_hdl32
   //---------------------------
 
-  //Slam
-  bool* solver_gn = slam_optim->get_solver_gn();
-  bool* solver_ceres = slam_optim->get_solver_ceres();
+  //Assessment
   double* thres_ego_trans = slam_assess->get_thres_ego_trans();
   double* thres_ego_rotat = slam_assess->get_thres_ego_rotat();
   double* thres_pose_trans = slam_assess->get_thres_pose_trans();
@@ -384,22 +379,25 @@ void SLAM_parameter::make_config_3(){
   int* max_number_neighbors = slam_normal->get_knn_max_nn();
   int* voxel_searchSize = slam_normal->get_knn_voxel_search();
 
-  //Optim gn
+  //Optimization
+  bool* solver_gn = slam_optim->get_solver_gn();
+  bool* solver_ceres = slam_optim->get_solver_ceres();
   double* PTP_distance_max = slam_optim_gn->get_dist_residual_max();
   int* iter_max = slam_optim_gn->get_iter_max();
 
   //Local map
-  double* map_voxel_size = slam_map->get_voxel_width();
+  slamap* local_map = slam_map->get_local_map();
+
+  //Transformation
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
-  double* max_voxel_distance = slam_map->get_voxel_max_dist();
-  double* min_dist_point_in_voxel = slam_map->get_voxel_min_point_dist();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* map_voxel_capacity = slam_map->get_voxel_capacity();
 
-  //Slam
-  *solver_gn = true;
-  *solver_ceres = false;
+
+  //Transformation
+  *min_root_distance = 3.0f;
+  *max_root_distance = 100.0f;
+  *grid_voxel_size = 0.1;
 
   //Assessment
   *thres_ego_trans = 10.0f;
@@ -416,18 +414,17 @@ void SLAM_parameter::make_config_3(){
   *max_number_neighbors = 30;
   *voxel_searchSize = 2;
 
-  //Optim gn
+  //Optimization
+  *solver_gn = true;
+  *solver_ceres = false;
   *PTP_distance_max = 5;
   *iter_max = 5;
 
   //Local map
-  *map_voxel_size = 0.5f;
-  *min_root_distance = 3.0f;
-  *max_root_distance = 100.0f;
-  *max_voxel_distance = 150.0f;
-  *min_dist_point_in_voxel = 0.001f;
-  *grid_voxel_size = 0.1f;
-  *map_voxel_capacity = 30;
+  local_map->voxel_width = 0.5f;
+  local_map->voxel_max_dist = 150.0f;
+  local_map->voxel_min_point_dist = 0.001;
+  local_map->voxel_capacity = 30;
 
   //Specific
   this->set_nb_thread(8);
@@ -452,7 +449,7 @@ void SLAM_parameter::set_predefined_conf(int conf){
       this->make_config_2();
       break;
     }
-    case 3:{//HDL-32
+    case 3:{//Train
       this->make_config_3();
       break;
     }
