@@ -215,18 +215,18 @@ void Transformation::make_scaling(Subset* subset, float Sxyz){
 }
 
 // Transformation
-void Transformation::make_Transformation(Subset* subset, vec3 COM, mat4 transfMat){
+void Transformation::make_Transformation(Subset* subset, vec3 COM, mat4 M){
   vector<vec3>& XYZ = subset->xyz;
   vector<vec3>& N = subset->N;
   vec3& ROOT = subset->root;
   //---------------------------
 
-  this->make_Transformation_point(ROOT, COM, transfMat);
-  this->make_Transformation_atomic(XYZ, COM, transfMat);
-  //this->make_Transformation_normal(N, transfMat);
+  this->make_Transformation_atomic(XYZ, COM, M);
+  this->make_transformation_attribut(subset, COM, M);
+  this->make_Transformation_point(ROOT, COM, M);
+  //this->make_Transformation_normal(N, M);
 
   //---------------------------
-  this->make_transformation_root(subset, COM, transfMat);
 }
 void Transformation::make_Transformation_atomic(vector<vec3>& XYZ, vec3 COM, mat4 Transformation){
   //---------------------------
@@ -261,20 +261,20 @@ void Transformation::make_Transformation_normal(vector<vec3>& N, mat4 Transforma
 
   //---------------------------
 }
-mat4 Transformation::make_transformation_root(Subset* subset, vec3 COM, mat4 transformation){
-  mat4& transMat = subset->transformation;
+mat4 Transformation::make_transformation_attribut(Subset* subset, vec3 COM, mat4 transformation){
+  mat4& M = subset->transformation;
   //---------------------------
 
-  transMat[0][3] -= COM.x;
-  transMat[1][3] -= COM.y;
-  transMat[2][3] -= COM.z;
+  M[0][3] -= COM.x;
+  M[1][3] -= COM.y;
+  M[2][3] -= COM.z;
 
-  transMat *= transformation;
+  M *= transformation;
 
-  transMat[0][3] += COM.x;
-  transMat[1][3] += COM.y;
-  transMat[2][3] += COM.z;
+  M[0][3] += COM.x;
+  M[1][3] += COM.y;
+  M[2][3] += COM.z;
 
   //---------------------------
-  return transMat;
+  return M;
 }

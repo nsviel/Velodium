@@ -76,8 +76,8 @@ void GUI_Modal::window_Draw(){
   mod_loading->window_loading();
   mod_loading->window_saving();
 
-  mod_cloud->window_cloudInfo();
-  mod_cloud->window_asciiData();
+  mod_cloud->mod_cloud_info();
+  mod_cloud->mod_cloud_data();
 
   mod_transformation->design_transformation();
   mod_filter->design_filter();

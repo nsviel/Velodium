@@ -29,14 +29,14 @@ MOD_cloud::MOD_cloud(Node_operation* node_ope){
 MOD_cloud::~MOD_cloud(){}
 
 //Main function
-void MOD_cloud::window_cloudInfo(){
+void MOD_cloud::mod_cloud_info(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   bool* open = &modal_tab.show_modifyFileInfo;
   //---------------------------
 
   if(*open && cloud != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    //---------------------------
+    Subset* subset = cloud->subset_selected;
 
     //Visibility
     static bool visible = true;
@@ -97,24 +97,17 @@ void MOD_cloud::window_cloudInfo(){
     ImGui::NextColumn();
 
     //Root pos
-    vec3& PCroot = cloud->root;
+    vec3& root = subset->root;
     ImGui::Text("Root ");
     ImGui::NextColumn();
-    ImGui::Text("%.2f  %.2f  %.2f", PCroot.x, PCroot.y, PCroot.z);
+    ImGui::Text("%.2f  %.2f  %.2f", root.x, root.y, root.z);
     ImGui::SameLine();
     if(ImGui::Button("R", ImVec2(15,0))){
-      PCroot = vec3(0,0,0);
+      root = vec3(0,0,0);
     }
-    ImGui::NextColumn();
-
-    //Attributs
-    ImGui::TextWrapped("Attrib ");
-    ImGui::NextColumn();
-    ImGui::TextWrapped("%s", cloud->dataFormat.c_str());
     ImGui::Columns(1);
     ImGui::Separator();
 
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Functions");
     if(ImGui::Button("Transformation", ImVec2(100,0))){
       modal_tab.show_transformation = !modal_tab.show_transformation;
     }
@@ -122,26 +115,7 @@ void MOD_cloud::window_cloudInfo(){
     if(ImGui::Button("Data", ImVec2(100,0))){
       modal_tab.show_asciiData = !modal_tab.show_asciiData;
     }
-    ImGui::Separator();
 
-    //Statistics
-    ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Statistics");
-    if(ImGui::Button("Location", ImVec2(100,0))){
-      this->cloud_stats_location(cloud);
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("Intensity", ImVec2(100,0))){
-      this->cloud_stats_intensity(cloud);
-    }
-    if(ImGui::Button("Distance", ImVec2(100,0))){
-      this->cloud_stats_distance(cloud);
-    }
-    ImGui::SameLine();
-    if(ImGui::Button("cos(It)", ImVec2(100,0))){
-      this->cloud_stats_cosIt(cloud);
-    }
-
-    //---------------------------
     ImGui::Separator();
     if(ImGui::Button("Close")){
       *open = false;
@@ -151,32 +125,37 @@ void MOD_cloud::window_cloudInfo(){
 
   //---------------------------
 }
-void MOD_cloud::window_asciiData(){
+/*void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
+    //---------------------------
 
+    // Data vectors
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->RGB;
     vector<float>& Is = subset->I;
     vector<vec3>& N = subset->N;
     vector<float>& ts = subset->ts;
-    //---------------------------
 
     //Settings
     static int nbLines = 100;
-    ImGui::SliderInt("Number of lines", &nbLines, 1, subset->nb_point);
+    if(ImGui::SliderInt("Number of lines", &nbLines, 1, subset->nb_point)){
+      if(nbLines > XYZ.size()) nbLines = XYZ.size();
+    }
+    ImGui::Separator();
 
+    // Get number of attributs
     int nb = 2;
-    if(nbLines > XYZ.size()) nbLines = XYZ.size();
-    if(subset->I.size() != 0) nb++;
+    if(subset->has_intensity) nb++;
     if(subset->has_color) nb++;
-    if(subset->N.size() != 0) nb++;
+    if(subset->has_normal) nb++;
+    if(subset->has_timestamp) nb++;
 
     //Columns
     ImGui::Columns(nb);
-    ImGui::Separator();
+    ImGui::SetColumnWidth(0, 30);
     ImGui::Text("#");
     ImGui::NextColumn();
     ImGui::Text("XYZ");
@@ -190,7 +169,7 @@ void MOD_cloud::window_asciiData(){
       ImGui::NextColumn();
     }
     if(subset->has_normal){
-      ImGui::Text("N");
+      ImGui::Text("Nxyz");
       ImGui::NextColumn();
     }
     if(subset->has_timestamp){
@@ -202,24 +181,33 @@ void MOD_cloud::window_asciiData(){
     //Data in columns
     static int selected = -1;
     for(int i=0; i<nbLines; i++){
+      // Line number
       ImGui::TextColored(ImVec4(0.4f,0.9f,0.4f,1.0f),"%i", i+1);
       ImGui::NextColumn();
 
+      // XYZ coordinate
       ImGui::Text("%f %f %f", XYZ[i].x, XYZ[i].y, XYZ[i].z);
       ImGui::NextColumn();
 
+      // Intensity
       if(subset->has_intensity){
         ImGui::Text("%f", Is[i]);
         ImGui::NextColumn();
       }
+
+      // Color
       if(subset->has_color){
         ImGui::Text("%f %f %f", RGB[i].x, RGB[i].y, RGB[i].z);
         ImGui::NextColumn();
       }
+
+      //Normal
       if(subset->has_normal){
         ImGui::Text("%f %f %f", N[i].x, N[i].y, N[i].z);
         ImGui::NextColumn();
       }
+
+      // Timestamp
       if(subset->has_timestamp){
         ImGui::Text("%f", ts[i]);
         ImGui::NextColumn();
@@ -231,98 +219,100 @@ void MOD_cloud::window_asciiData(){
     //---------------------------
     ImGui::End();
   }
-}
+}*/
 
-//Sub functions
-void MOD_cloud::cloud_stats_location(Cloud* cloud){
-  Subset* subset = cloud->subset_selected;
-  vector<vec3>& XYZ = subset->xyz;
-  vec3 XYZ_COM = subset->COM;
-  vec3 XYZ_Min = subset->min;
-  vec3 XYZ_Max = subset->max;
-  //---------------------------
+void MOD_cloud::mod_cloud_data(){
+  if(modal_tab.show_asciiData){
+    ImGui::Begin("Data", &modal_tab.show_asciiData);
+    Cloud* cloud = sceneManager->get_selected_cloud();
+    Subset* subset = cloud->subset_selected;
+    //---------------------------
 
-  vector<float> X, Y, Z;
-  for(int i=0; i<XYZ.size(); i++){
-    X.push_back(XYZ[i].x);
-    Y.push_back(XYZ[i].y);
-    Z.push_back(XYZ[i].z);
+    // Data vectors
+    vector<vec3>& XYZ = subset->xyz;
+    vector<vec4>& RGB = subset->RGB;
+    vector<float>& Is = subset->I;
+    vector<vec3>& N = subset->N;
+    vector<float>& ts = subset->ts;
+
+    //Settings
+    static int nbLines = 100;
+    if(ImGui::SliderInt("Number of lines", &nbLines, 1, subset->nb_point)){
+      if(nbLines > XYZ.size()) nbLines = XYZ.size();
+    }
+    ImGui::Separator();
+
+    // Get number of attributs
+    int nb_column = 2;
+    if(subset->has_intensity) nb_column++;
+    if(subset->has_color) nb_column++;
+    if(subset->has_normal) nb_column++;
+    if(subset->has_timestamp) nb_column++;
+
+    ImGuiTableFlags flag = ImGuiTableFlags_Resizable | ImGuiTableColumnFlags_WidthStretch;
+    if (ImGui::BeginTable("table_data", nb_column, flag)){
+      // Header
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+      ImGui::Text("#");
+      ImGui::TableNextColumn();
+      ImGui::Text("XYZ");
+      ImGui::TableNextColumn();
+      if(subset->has_intensity){
+        ImGui::Text("I");
+        ImGui::TableNextColumn();
+      }
+      if(subset->has_color){
+        ImGui::Text("RGB");
+        ImGui::TableNextColumn();
+      }
+      if(subset->has_normal){
+        ImGui::Text("Nxyz");
+        ImGui::TableNextColumn();
+      }
+      if(subset->has_timestamp){
+        ImGui::Text("ts");
+        ImGui::TableNextColumn();
+      }
+
+      // Data
+      for(int i=0; i<nbLines; i++){
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+
+        // Line number
+        ImGui::TextColored(ImVec4(0.4f,0.9f,0.4f,1.0f),"%i", i);
+        ImGui::TableNextColumn();
+
+        // XYZ coordinate
+        ImGui::Text("%f %f %f", XYZ[i].x, XYZ[i].y, XYZ[i].z);
+        ImGui::TableNextColumn();
+
+        // Intensity
+        if(subset->has_intensity){
+          ImGui::Text("%f", Is[i]);
+          ImGui::TableNextColumn();
+        }
+
+        // Color
+        if(subset->has_color){
+          ImGui::Text("%f %f %f", RGB[i].x, RGB[i].y, RGB[i].z);
+          ImGui::TableNextColumn();
+        }
+
+        //Normal
+        if(subset->has_normal){
+          ImGui::Text("%f %f %f", N[i].x, N[i].y, N[i].z);
+          ImGui::TableNextColumn();
+        }
+
+        // Timestamp
+        if(subset->has_timestamp){
+          ImGui::Text("%f", ts[i]);
+          ImGui::TableNextColumn();
+        }
+      }
+      ImGui::EndTable();
+    }
   }
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  if(XYZ.size() != 0){
-    cout<<"___XYZ___"<<endl;
-    cout<<"COM: "<<XYZ_COM.x<<" "<<XYZ_COM.y<<" "<<XYZ_COM.z<<endl;
-    cout<<"Min: "<<XYZ_Min.x<<" "<<XYZ_Min.y<<" "<<XYZ_Min.z<<endl;
-    cout<<"Max: "<<XYZ_Max.x<<" "<<XYZ_Max.y<<" "<<XYZ_Max.z<<endl;
-    cout<<"Xaxis: min "<<fct_min(X)<<" <-> max "<<fct_max(X)<<" <-> mean "<<fct_mean(X)<<endl;
-    cout<<"Yaxis: min "<<fct_min(Y)<<" <-> max "<<fct_max(Y)<<" <-> mean "<<fct_mean(Y)<<endl;
-    cout<<"Zaxis: min "<<fct_min(Z)<<" <-> max "<<fct_max(Z)<<" <-> mean "<<fct_mean(Z)<<endl;
-    cout<<"__________"<<endl;
-  }
-}
-void MOD_cloud::cloud_stats_intensity(Cloud* cloud){
-  Subset* subset = cloud->subset_selected;
-  vector<float>& Is = subset->I;
-  //---------------------------
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  if(Is.size() != 0){
-    cout<<"___Is___"<<endl;
-    cout<<"Min : "<<fct_min(Is)<<endl;
-    cout<<"Max : "<<fct_max(Is)<<endl;
-    cout<<"Mean : "<<fct_mean(Is)<<endl;
-    cout<<"Var : "<<fct_var(Is)<<endl;
-    cout<<"Std : "<<fct_std(Is)<<endl;
-    cout<<"CV : "<<fct_cv(Is)<<endl;
-    cout<<"__________"<<endl;
-  }
-}
-void MOD_cloud::cloud_stats_distance(Cloud* cloud){
-  Subset* subset = cloud->subset_selected;
-  vector<float>& dist = subset->R;
-  //---------------------------
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  //Distance
-  if(dist.size() == 0){
-    attribManager->compute_Distances(subset);
-  }
-  cout<<"___Dist___"<<endl;
-  cout<<"Min : "<<fct_min(dist)<<endl;
-  cout<<"Max : "<<fct_max(dist)<<endl;
-  cout<<"std : "<<fct_std(dist)<<endl;
-  cout<<"Mean : "<<fct_mean(dist)<<endl;
-  cout<<"__________"<<endl;
-}
-void MOD_cloud::cloud_stats_cosIt(Cloud* cloud){
-  Subset* subset = cloud->subset_selected;
-  vector<float>& cosIt =  subset->cosIt;
-  vector<float>& It =  subset->It;
-  //---------------------------
-
-  cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
-
-  //Angle d'incidence
-  if(cosIt.size() == 0 || It.size() == 0){
-    attribManager->compute_cosIt(subset);
-  }
-  cout<<"___cosIt___"<<endl;
-  cout<<"Min : "<<fct_min(cosIt)<<endl;
-  cout<<"Max : "<<fct_max(cosIt)<<endl;
-  cout<<"Mean : "<<fct_mean(cosIt)<<endl;
-
-  cout<<"___It___"<<endl;
-  cout<<"Min : "<<fct_min(It)<<endl;
-  cout<<"Max : "<<fct_max(It)<<endl;
-  cout<<"std : "<<fct_std(It)<<endl;
-  cout<<"Mean : "<<fct_mean(It)<<endl;
-  cout<<"__________"<<endl;
 }

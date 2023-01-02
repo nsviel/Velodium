@@ -1,0 +1,120 @@
+//Statistics
+ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Statistics");
+if(ImGui::Button("Location", ImVec2(100,0))){
+  this->cloud_stats_location(cloud);
+}
+ImGui::SameLine();
+if(ImGui::Button("Intensity", ImVec2(100,0))){
+  this->cloud_stats_intensity(cloud);
+}
+if(ImGui::Button("Distance", ImVec2(100,0))){
+  this->cloud_stats_distance(cloud);
+}
+ImGui::SameLine();
+if(ImGui::Button("cos(It)", ImVec2(100,0))){
+  this->cloud_stats_cosIt(cloud);
+}
+
+
+
+  //Sub functions
+  void cloud_stats_location(Cloud* cloud);
+  void cloud_stats_intensity(Cloud* cloud);
+  void cloud_stats_distance(Cloud* cloud);
+  void cloud_stats_cosIt(Cloud* cloud);
+
+
+
+//Sub functions
+void MOD_cloud::cloud_stats_location(Cloud* cloud){
+  Subset* subset = cloud->subset_selected;
+  vector<vec3>& XYZ = subset->xyz;
+  vec3 XYZ_COM = subset->COM;
+  vec3 XYZ_Min = subset->min;
+  vec3 XYZ_Max = subset->max;
+  //---------------------------
+
+  vector<float> X, Y, Z;
+  for(int i=0; i<XYZ.size(); i++){
+    X.push_back(XYZ[i].x);
+    Y.push_back(XYZ[i].y);
+    Z.push_back(XYZ[i].z);
+  }
+
+  cout<<"---------"<<endl;
+  cout<<"Name : "<<subset->name<<endl;
+
+  if(XYZ.size() != 0){
+    cout<<"___XYZ___"<<endl;
+    cout<<"COM: "<<XYZ_COM.x<<" "<<XYZ_COM.y<<" "<<XYZ_COM.z<<endl;
+    cout<<"Min: "<<XYZ_Min.x<<" "<<XYZ_Min.y<<" "<<XYZ_Min.z<<endl;
+    cout<<"Max: "<<XYZ_Max.x<<" "<<XYZ_Max.y<<" "<<XYZ_Max.z<<endl;
+    cout<<"Xaxis: min "<<fct_min(X)<<" <-> max "<<fct_max(X)<<" <-> mean "<<fct_mean(X)<<endl;
+    cout<<"Yaxis: min "<<fct_min(Y)<<" <-> max "<<fct_max(Y)<<" <-> mean "<<fct_mean(Y)<<endl;
+    cout<<"Zaxis: min "<<fct_min(Z)<<" <-> max "<<fct_max(Z)<<" <-> mean "<<fct_mean(Z)<<endl;
+    cout<<"__________"<<endl;
+  }
+}
+void MOD_cloud::cloud_stats_intensity(Cloud* cloud){
+  Subset* subset = cloud->subset_selected;
+  vector<float>& Is = subset->I;
+  //---------------------------
+
+  cout<<"---------"<<endl;
+  cout<<"Name : "<<subset->name<<endl;
+
+  if(Is.size() != 0){
+    cout<<"___Is___"<<endl;
+    cout<<"Min : "<<fct_min(Is)<<endl;
+    cout<<"Max : "<<fct_max(Is)<<endl;
+    cout<<"Mean : "<<fct_mean(Is)<<endl;
+    cout<<"Var : "<<fct_var(Is)<<endl;
+    cout<<"Std : "<<fct_std(Is)<<endl;
+    cout<<"CV : "<<fct_cv(Is)<<endl;
+    cout<<"__________"<<endl;
+  }
+}
+void MOD_cloud::cloud_stats_distance(Cloud* cloud){
+  Subset* subset = cloud->subset_selected;
+  vector<float>& dist = subset->R;
+  //---------------------------
+
+  cout<<"---------"<<endl;
+  cout<<"Name : "<<subset->name<<endl;
+
+  //Distance
+  if(dist.size() == 0){
+    attribManager->compute_Distances(subset);
+  }
+  cout<<"___Dist___"<<endl;
+  cout<<"Min : "<<fct_min(dist)<<endl;
+  cout<<"Max : "<<fct_max(dist)<<endl;
+  cout<<"std : "<<fct_std(dist)<<endl;
+  cout<<"Mean : "<<fct_mean(dist)<<endl;
+  cout<<"__________"<<endl;
+}
+void MOD_cloud::cloud_stats_cosIt(Cloud* cloud){
+  Subset* subset = cloud->subset_selected;
+  vector<float>& cosIt =  subset->cosIt;
+  vector<float>& It =  subset->It;
+  //---------------------------
+
+  cout<<"---------"<<endl;
+  cout<<"Name : "<<subset->name<<endl;
+
+  //Angle d'incidence
+  if(cosIt.size() == 0 || It.size() == 0){
+    attribManager->compute_cosIt(subset);
+  }
+  cout<<"___cosIt___"<<endl;
+  cout<<"Min : "<<fct_min(cosIt)<<endl;
+  cout<<"Max : "<<fct_max(cosIt)<<endl;
+  cout<<"Mean : "<<fct_mean(cosIt)<<endl;
+
+  cout<<"___It___"<<endl;
+  cout<<"Min : "<<fct_min(It)<<endl;
+  cout<<"Max : "<<fct_max(It)<<endl;
+  cout<<"std : "<<fct_std(It)<<endl;
+  cout<<"Mean : "<<fct_mean(It)<<endl;
+  cout<<"__________"<<endl;
+}

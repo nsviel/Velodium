@@ -33,7 +33,7 @@ public:
   void make_Transformation_atomic(vector<vec3>& XYZ, vec3 COM, mat4 Transformation);
   void make_Transformation_point(vec3& XYZ, vec3 COM, mat4 Transformation);
   void make_Transformation_normal(vector<vec3>& N, mat4 Transformation);
-  mat4 make_transformation_root(Subset* subset, vec3 COM, mat4 transformation);
+  mat4 make_transformation_attribut(Subset* subset, vec3 COM, mat4 transformation);
 
 private:
 };

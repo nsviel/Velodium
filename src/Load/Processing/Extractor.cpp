@@ -300,13 +300,13 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
 void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   //---------------------------
 
-  //Subset VAO
+  // Subset VAO
   uint VAO;
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
   subset->VAO = VAO;
 
-  //Other stuff
+  // Subset info
   subset->ID = ID;
   subset->root = vec3(0.0);
   if(name != ""){
@@ -314,6 +314,12 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   }else{
     subset->name = "frame_" + to_string(ID);
   }
+
+  // Subset attributs
+  subset->has_normal = false;
+  subset->has_color = false;
+  subset->has_timestamp = false;
+  subset->has_intensity = false;
 
   //---------------------------
 }
@@ -370,6 +376,7 @@ void Extractor::extract_intensity(Subset* subset, vector<float>& intensityOBJ){
 
   if(is_intensity){
     subset->I = intensityOBJ;
+    subset->has_intensity = true;
   }
 
   //---------------------------
@@ -385,7 +392,6 @@ void Extractor::extract_timestamp(Subset* subset, vector<float>& timestampOBJ){
     //If not timestamp, set all timestamp at 0
     vector<float> ts (subset->xyz.size(), 0);
     subset->ts = ts;
-    subset->has_timestamp = false;
   }
 
   //---------------------------
@@ -396,6 +402,7 @@ void Extractor::extract_normal(Subset* subset, vector<vec3>& normalOBJ){
 
   if(is_normal){
     subset->N = normalOBJ;
+    subset->has_normal = true;
   }
 
   //---------------------------

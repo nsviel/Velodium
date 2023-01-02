@@ -290,7 +290,7 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   //---------------------------
 
   //Read data
-  int block_size = property_number * point_number * sizeof(float);
+  int block_size = property_number * point_number * sizeof(double);
   char* block_data = new char[block_size];
   file.read(block_data, block_size);
 
@@ -302,6 +302,10 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
     for (int j=0; j<property_number; j++){
       if(property_type[j] == "float32"){
         float value = get_float_from_binary(block_data, offset);
+        block_vec[j][i] = value;
+      }
+      if(property_type[j] == "float64"){
+        float value = get_double_from_binary(block_data, offset);
         block_vec[j][i] = value;
       }
       if(property_type[j] == "uchar"){
@@ -320,7 +324,7 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   data_out->size = point_number;
 
   //Insert data in the adequate vector
-  #pragma omp parallel for
+  //#pragma omp parallel for
   for (int i=0; i<point_number; i++){
     for (int j=0; j<property_number; j++){
       //Location
@@ -655,6 +659,15 @@ float file_PLY::get_float_from_binary(char* block_data, int& offset){
 
   float value =  *((float *) (block_data + offset));
   offset += sizeof(float);
+
+  //---------------------------
+  return value;
+}
+float file_PLY::get_double_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  float value =  (float)*((double *) (block_data + offset));
+  offset += sizeof(double);
 
   //---------------------------
   return value;

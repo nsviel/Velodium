@@ -23,6 +23,7 @@
 #include "../../Operation/Function/Visibility.h"
 #include "../../Operation/Color/Heatmap.h"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include "imgui/imgui.h"
 
 extern struct Modal_tab modal_tab;
@@ -194,7 +195,7 @@ void GUI_Control::control_frame_selection(){
 
   //----------------------------
 }
-#include <glm/gtc/matrix_transform.hpp>
+
 //Keyboard function
 void GUI_Control::control_keyboard_oneAction(){
   Cloud* cloud = sceneManager->get_selected_cloud();

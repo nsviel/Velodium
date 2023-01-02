@@ -18,14 +18,8 @@ public:
 
 public:
   //Main function
-  void window_cloudInfo();
-  void window_asciiData();
-
-  //Sub functions
-  void cloud_stats_location(Cloud* cloud);
-  void cloud_stats_intensity(Cloud* cloud);
-  void cloud_stats_distance(Cloud* cloud);
-  void cloud_stats_cosIt(Cloud* cloud);
+  void mod_cloud_info();
+  void mod_cloud_data();
 
 private:
   Scene* sceneManager;
