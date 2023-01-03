@@ -1,6 +1,6 @@
 #include "Viewport.h"
 
-#include "../OpenGL/Dimension.h"
+#include "../Core/Dimension.h"
 #include "../Scene/Configuration.h"
 
 

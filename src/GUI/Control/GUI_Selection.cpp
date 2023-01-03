@@ -6,7 +6,7 @@
 #include "../../Operation/Function/Selection.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 
 #include <GLFW/glfw3.h>
 

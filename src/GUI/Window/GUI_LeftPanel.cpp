@@ -7,7 +7,7 @@
 #include "../Dynamic/GUI_Online.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 
 #include "../../Module/Node_module.h"
 

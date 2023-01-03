@@ -14,7 +14,7 @@
 #include "../../Engine/Scene/Object/Scene/Mark.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 #include "../../Specific/fct_math.h"
 
 #include <glm/gtc/matrix_transform.hpp>

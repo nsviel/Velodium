@@ -18,7 +18,7 @@
 
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Camera/Followup.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 #include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"

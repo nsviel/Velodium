@@ -62,7 +62,7 @@ void Obstacle::add_obstacle_pred(){
   //---------------------------
 
   //Get prediction file paths
-  vector<string> path_vec = zenity_file_vec("Prediction loading", "");
+  vector<string> path_vec = zenity_file_vec("Prediction loading");
 
   //Parses predictions files
   predManager->compute_prediction(cloud, path_vec);
@@ -92,7 +92,7 @@ void Obstacle::add_obstacle_grTr(){
   //---------------------------
 
   //Get prediction file paths
-  vector<string> path_vec = zenity_file_vec("Ground truth loading", "");
+  vector<string> path_vec = zenity_file_vec("Ground truth loading");
 
   //Parses predictions files
   predManager->compute_groundTruth(cloud, path_vec);

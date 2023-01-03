@@ -22,16 +22,6 @@ float fct_distance_origin(Eigen::Vector3f pt1){
   //---------------------------
   return dist;
 }
-double fct_distance_origin(Eigen::Vector3d pt1){
-  //Euclidean distance
-  double dist;
-  //---------------------------
-
-  dist = sqrt(pow(pt1(0), 2) + pow(pt1(1), 2) + pow(pt1(2), 2));
-
-  //---------------------------
-  return dist;
-}
 float fct_distance_origin(glm::vec3 pt1){
   //Euclidean distance
   float dist;
@@ -51,6 +41,54 @@ float fct_distance(Eigen::Vector3f pt1, Eigen::Vector3f pt2){
   float Z = pt1(2) - pt2(2);
 
   float dist = sqrt(pow(X, 2) + pow(Y, 2) + pow(Z, 2));
+
+  //---------------------------
+  return dist;
+}
+float fct_mean(std::vector<float>& vec){
+  int size = vec.size();
+  float sum = 0;
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    sum += vec[i];
+  }
+  float mean = sum / size;
+
+  //---------------------------
+  return mean;
+}
+float fct_sum(std::vector<float>& vec){
+  //Sum of vector elements
+  float out = 0;
+  int size = vec.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    out = out + vec[i];
+  }
+
+  //---------------------------
+  return out;
+}
+float fct_dotProduct(glm::vec3 vec_A, glm::vec3 vec_B){
+  float product = 0;
+  //---------------------------
+
+  // Loop for calculate cot product
+  for(int i=0; i<3; i++){
+    product = product + vec_A[i] * vec_B[i];
+  }
+
+  //---------------------------
+  return product;
+}
+double fct_distance_origin(Eigen::Vector3d pt1){
+  //Euclidean distance
+  double dist;
+  //---------------------------
+
+  dist = sqrt(pow(pt1(0), 2) + pow(pt1(1), 2) + pow(pt1(2), 2));
 
   //---------------------------
   return dist;
@@ -93,157 +131,6 @@ double fct_distance(Eigen::Vector4d pt1, Eigen::Vector3d pt2){
 
   //---------------------------
   return dist;
-}
-glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
-  glm::vec3 centroid = glm::vec3(0, 0, 0);
-  //---------------------------
-
-  for(int i=0; i<vec.size(); i++){
-    for(int j=0; j<3; j++){
-      centroid[j] += vec[i][j];
-    }
-  }
-
-  for(int j=0;j<3;j++){
-    centroid[j] /= vec.size();
-  }
-
-  //---------------------------
-  return centroid;
-}
-Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ){
-  Eigen::Vector3f centroid = Eigen::Vector3f::Zero();
-  int size = XYZ.size();
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    for(int j=0; j<3; j++){
-      centroid(j) += XYZ[i](j);
-    }
-  }
-
-  for(int i=0; i<3; i++){
-    centroid(i) /= size;
-  }
-
-  //---------------------------
-  return centroid;
-}
-Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d>& XYZ){
-  Eigen::Vector3d centroid = Eigen::Vector3d::Zero();
-  int size = XYZ.size();
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    for(int j=0; j<3; j++){
-      centroid(j) += XYZ[i](j);
-    }
-  }
-
-  for(int i=0; i<3; i++){
-    centroid(i) /= (double) size;
-  }
-
-  //---------------------------
-  return centroid;
-}
-float fct_mean(std::vector<float>& vec){
-  int size = vec.size();
-  float sum = 0;
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    sum += vec[i];
-  }
-  float mean = sum / size;
-
-  //---------------------------
-  return mean;
-}
-std::vector<float> fct_inv(std::vector<float>& vec){
-  //Vector inversion
-  std::vector<float> vec_out;
-  int size = vec.size();
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    vec_out.push_back(vec[size-1-i]);
-  }
-
-  //---------------------------
-  return vec_out;
-}
-float fct_sum(std::vector<float>& vec){
-  //Sum of vector elements
-  float out = 0;
-  int size = vec.size();
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    out = out + vec[i];
-  }
-
-  //---------------------------
-  return out;
-}
-Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f>& vec){
-  //---------------------------
-
-  // Centroide
-  Eigen::Vector3f centroid = fct_centroid(vec);
-
-  //Covariance matrix
-  Eigen::Matrix3f covMat = Eigen::Matrix3f::Zero();
-  for(int i=0; i<vec.size(); i++){
-    for (int j=0; j<3; j++){
-      for (int k=j; k<3; k++){
-        Eigen::Vector3f point = vec[i];
-        covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
-      }
-    }
-  }
-  covMat(1, 0) = covMat(0, 1);
-  covMat(2, 0) = covMat(0, 2);
-  covMat(2, 1) = covMat(1, 2);
-
-  //---------------------------
-  return covMat;
-}
-Eigen::Matrix3d fct_covarianceMat(std::vector<Eigen::Vector3d>& vec){
-  //---------------------------
-
-  // Centroide
-  Eigen::Vector3d centroid = fct_centroid(vec);
-
-  //Covariance matrix
-  Eigen::Matrix3d covMat = Eigen::Matrix3d::Zero();
-  for(int i=0; i<vec.size(); i++){
-    Eigen::Vector3d point = vec[i];
-
-    for (int j=0; j<3; ++j){
-      for (int k=j; k<3; ++k){
-        covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
-      }
-    }
-  }
-  covMat(1, 0) = covMat(0, 1);
-  covMat(2, 0) = covMat(0, 2);
-  covMat(2, 1) = covMat(1, 2);
-
-  //---------------------------
-  return covMat;
-}
-std::vector<float> fct_ones(int size){
-  std::vector<float> vec;
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    double value = 1;
-    vec.push_back(value);
-  }
-
-  //---------------------------
-  return vec;
 }
 bool fct_is_nan(glm::vec3 vec){
   //---------------------------
@@ -303,44 +190,159 @@ std::string thousandSeparator(int n){
 
     return ans;
 }
-
-//Minimum / Maximum
-float fct_max(std::vector<float>& vec){
-  float max = vec[0];
-  int size = vec.size();
+glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
+  glm::vec3 centroid = glm::vec3(0, 0, 0);
   //---------------------------
 
-  for(int i=0; i<size; i++)
-    if(max < vec[i]) max = vec[i];
+  for(int i=0; i<vec.size(); i++){
+    for(int j=0; j<3; j++){
+      centroid[j] += vec[i][j];
+    }
+  }
+
+  for(int j=0;j<3;j++){
+    centroid[j] /= vec.size();
+  }
 
   //---------------------------
-  return max;
+  return centroid;
 }
-float fct_max_vec(std::vector<std::vector<float>>& vec){
-  float max = vec[0].size();
+Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ){
+  Eigen::Vector3f centroid = Eigen::Vector3f::Zero();
+  int size = XYZ.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<3; j++){
+      centroid(j) += XYZ[i](j);
+    }
+  }
+
+  for(int i=0; i<3; i++){
+    centroid(i) /= size;
+  }
+
+  //---------------------------
+  return centroid;
+}
+Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d>& XYZ){
+  Eigen::Vector3d centroid = Eigen::Vector3d::Zero();
+  int size = XYZ.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<3; j++){
+      centroid(j) += XYZ[i](j);
+    }
+  }
+
+  for(int i=0; i<3; i++){
+    centroid(i) /= (double) size;
+  }
+
+  //---------------------------
+  return centroid;
+}
+Eigen::Matrix3f fct_covarianceMat(std::vector<Eigen::Vector3f>& vec){
+  //---------------------------
+
+  // Centroide
+  Eigen::Vector3f centroid = fct_centroid(vec);
+
+  //Covariance matrix
+  Eigen::Matrix3f covMat = Eigen::Matrix3f::Zero();
+  for(int i=0; i<vec.size(); i++){
+    for (int j=0; j<3; j++){
+      for (int k=j; k<3; k++){
+        Eigen::Vector3f point = vec[i];
+        covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
+      }
+    }
+  }
+  covMat(1, 0) = covMat(0, 1);
+  covMat(2, 0) = covMat(0, 2);
+  covMat(2, 1) = covMat(1, 2);
+
+  //---------------------------
+  return covMat;
+}
+Eigen::Matrix3d fct_covarianceMat(std::vector<Eigen::Vector3d>& vec){
+  //---------------------------
+
+  // Centroide
+  Eigen::Vector3d centroid = fct_centroid(vec);
+
+  //Covariance matrix
+  Eigen::Matrix3d covMat = Eigen::Matrix3d::Zero();
+  for(int i=0; i<vec.size(); i++){
+    Eigen::Vector3d point = vec[i];
+
+    for (int j=0; j<3; ++j){
+      for (int k=j; k<3; ++k){
+        covMat(j, k) += (point(j) - centroid(j)) * (point(k) - centroid(k));
+      }
+    }
+  }
+  covMat(1, 0) = covMat(0, 1);
+  covMat(2, 0) = covMat(0, 2);
+  covMat(2, 1) = covMat(1, 2);
+
+  //---------------------------
+  return covMat;
+}
+std::vector<float> fct_inv(std::vector<float>& vec){
+  //Vector inversion
+  std::vector<float> vec_out;
   int size = vec.size();
   //---------------------------
 
   for(int i=0; i<size; i++){
-    if(max < vec[i].size()) max = vec[i].size();
+    vec_out.push_back(vec[size-1-i]);
   }
 
   //---------------------------
-  return max;
+  return vec_out;
 }
-glm::vec2 fct_max_vec2(std::vector<glm::vec2> XY){
-glm::vec2 max = XY[0];
-int size = XY.size();
-//---------------------------
+std::vector<float> fct_ones(int size){
+  std::vector<float> vec;
+  //---------------------------
 
-for(int i=0; i<size; i++){
-  for(int j=0; j<2; j++){
-    if(XY[i][j] >= max[j]) max[j] = XY[i][j];
+  for(int i=0; i<size; i++){
+    double value = 1;
+    vec.push_back(value);
   }
+
+  //---------------------------
+  return vec;
+}
+std::vector<float> fct_crossProduct(std::vector<float>& vec_A, std::vector<float>& vec_B){
+  std::vector<float> vec_cross;
+  //---------------------------
+
+  vec_cross[0] = vec_A[1] * vec_B[2] - vec_A[2] * vec_B[1];
+  vec_cross[1] = vec_A[2] * vec_B[0] - vec_A[0] * vec_B[2];
+  vec_cross[2] = vec_A[0] * vec_B[1] - vec_A[1] * vec_B[0];
+
+  //---------------------------
+  return vec_cross;
 }
 
-//---------------------------
-return max;
+//Minimum / Maximum
+int fct_min_z_id(std::vector<glm::vec3> vec){
+  glm::vec3 min = vec[0];
+  int id = 0;
+  int size = vec.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    if(min.z > vec[i].z){
+      min = vec[i];
+      id = i;
+    }
+  }
+
+  //---------------------------
+  return id;
 }
 float fct_min(std::vector<float>& vec){
   float min = vec[0];
@@ -365,6 +367,57 @@ float fct_min(float in1, float in2){
 
   //---------------------------
 }
+float fct_max(std::vector<float>& vec){
+  float max = vec[0];
+  int size = vec.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++)
+    if(max < vec[i]) max = vec[i];
+
+  //---------------------------
+  return max;
+}
+float fct_max_vec(std::vector<std::vector<float>>& vec){
+  float max = vec[0].size();
+  int size = vec.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    if(max < vec[i].size()) max = vec[i].size();
+  }
+
+  //---------------------------
+  return max;
+}
+glm::vec2 fct_min_vec2(std::vector<glm::vec2> XY){
+  glm::vec2 min = XY[0];
+  int size = XY.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<2; j++){
+      if(XY[i][j] <= min[j]) min[j] = XY[i][j];
+    }
+  }
+
+  //---------------------------
+  return min;
+}
+glm::vec2 fct_max_vec2(std::vector<glm::vec2> XY){
+  glm::vec2 max = XY[0];
+  int size = XY.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<2; j++){
+      if(XY[i][j] >= max[j]) max[j] = XY[i][j];
+    }
+  }
+
+  //---------------------------
+  return max;
+}
 glm::vec3 fct_min_z(std::vector<glm::vec3> vec){
   glm::vec3 min = vec[0];
   int size = vec.size();
@@ -376,36 +429,6 @@ glm::vec3 fct_min_z(std::vector<glm::vec3> vec){
 
   //---------------------------
   return min;
-}
-int fct_min_z_id(std::vector<glm::vec3> vec){
-  glm::vec3 min = vec[0];
-  int id = 0;
-  int size = vec.size();
-  //---------------------------
-
-  for(int i=0; i<size; i++){
-    if(min.z > vec[i].z){
-      min = vec[i];
-      id = i;
-    }
-  }
-
-  //---------------------------
-  return id;
-}
-glm::vec2 fct_min_vec2(std::vector<glm::vec2> XY){
-glm::vec2 min = XY[0];
-int size = XY.size();
-//---------------------------
-
-for(int i=0; i<size; i++){
-  for(int j=0; j<2; j++){
-    if(XY[i][j] <= min[j]) min[j] = XY[i][j];
-  }
-}
-
-//---------------------------
-return min;
 }
 glm::vec3 fct_min_vec3(std::vector<glm::vec3> XYZ){
   glm::vec3 min = XYZ[0];
@@ -420,6 +443,20 @@ glm::vec3 fct_min_vec3(std::vector<glm::vec3> XYZ){
 
   //---------------------------
   return min;
+}
+glm::vec3 fct_max_vec3(std::vector<glm::vec3> XYZ){
+  glm::vec3 max = XYZ[0];
+  int size = XYZ.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    for(int j=0; j<3; j++){
+      if(XYZ[i][j] >= max[j]) max[j] = XYZ[i][j];
+    }
+  }
+
+  //---------------------------
+  return max;
 }
 
 //Normalization
@@ -511,27 +548,7 @@ std::vector<float> fct_normalize_01(std::vector<float>& vec){
 }
 
 //3D functions
-float fct_dotProduct(glm::vec3 vec_A, glm::vec3 vec_B){
-  float product = 0;
-  //---------------------------
 
-  // Loop for calculate cot product
-  for(int i=0; i<3; i++){
-    product = product + vec_A[i] * vec_B[i];
-  }
-
-  //---------------------------
-  return product;
-}
-void fct_crossProduct(std::vector<float>& vec_A, std::vector<float>& vec_B, std::vector<float>& vec_cross){
-  //---------------------------
-
-  vec_cross[0] = vec_A[1] * vec_B[2] - vec_A[2] * vec_B[1];
-  vec_cross[1] = vec_A[2] * vec_B[0] - vec_A[0] * vec_B[2];
-  vec_cross[2] = vec_A[0] * vec_B[1] - vec_A[1] * vec_B[0];
-
-  //---------------------------
-}
 
 //Statistical functions
 float fct_std(std::vector<float>& vec){
@@ -673,16 +690,16 @@ void fct_sort_alpha_num_(std::vector<std::string>& vec){
 }
 
 //Geometric functions
+double fct_angularDistance(const Eigen::Matrix3f &rota, const Eigen::Matrix3f &rotb) {
+  double norm = ((rota * rotb.transpose()).trace() - 1) / 2;
+  norm = std::acos(norm) * 180 / M_PI;
+  return norm;
+}
 float fct_oriented_angle(glm::vec2 A, glm::vec2 B){
   float det = A.x * B.y - A.y * B.x;
   float dot = A.x * B.x + A.y * B.y;
   float angle = atan2(det, dot);
   return angle;
-}
-double fct_angularDistance(const Eigen::Matrix3f &rota, const Eigen::Matrix3f &rotb) {
-  double norm = ((rota * rotb.transpose()).trace() - 1) / 2;
-  norm = std::acos(norm) * 180 / M_PI;
-  return norm;
 }
 float fct_degreeToRadian(float degree){
   float radian;

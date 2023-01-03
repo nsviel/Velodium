@@ -11,7 +11,7 @@
 #include "../Window/struct_consol.h"
 
 #include "../../Engine/Camera/Camera.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/Node_engine.h"
 

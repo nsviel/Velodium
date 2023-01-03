@@ -8,7 +8,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Camera/struct_viewport.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 #include "../../Engine/Scene/Glyphs.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"

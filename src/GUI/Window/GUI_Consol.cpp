@@ -3,7 +3,7 @@
 
 #include "../../GUI/Node_gui.h"
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 #include "../../Engine/Scene/Scene.h"
 
 #include "imgui/imgui.h"

@@ -23,6 +23,8 @@ public:
 
   inline double* get_dist_residual_max(){return &dist_residual_max;}
   inline double get_opti_score(){return X.norm();}
+  inline double* get_lambda_location_consistency(){return &lambda_location_consistency;}
+  inline double* get_lambda_constant_velocity(){return &lambda_constant_velocity;}
   inline int* get_iter_max(){return &iter_max;}
   inline void set_iter_max(int value){iter_max = value;}
   inline void set_nb_thread(int value){this->nb_thread = value;}
@@ -37,14 +39,14 @@ private:
   //Update function
   void update_frame(Frame* frame, Eigen::VectorXd& X);
   void update_keypoints(Frame* frame);
-  
+
 private:
   SLAM_normal* slam_normal;
 
   vector<Eigen::VectorXd> vec_u;
   Eigen::VectorXd X;
-  double lambda_location;
-  double lambda_displace;
+  double lambda_location_consistency;
+  double lambda_constant_velocity;
   double dist_residual_max;
   int iter_max;
   int nb_thread;

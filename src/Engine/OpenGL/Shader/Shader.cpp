@@ -3,7 +3,7 @@
 #include "PP_edl.h"
 #include "ShaderObject.h"
 
-#include "../Dimension.h"
+#include "../../Core/Dimension.h"
 
 
 

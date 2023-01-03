@@ -27,8 +27,8 @@ void SLAM_optim_gn::update_configuration(){
   this->iter_max = 5;
   this->nb_thread = 8;
   this->dist_residual_max = 0.5f;
-  this->lambda_location = 0.001;
-  this->lambda_displace =  0.001;
+  this->lambda_location_consistency = 0.001;
+  this->lambda_constant_velocity =  0.001;
 
   //---------------------------
 }
@@ -113,7 +113,7 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
 
     double cx_e = ts_n * (origin_e[1] * N_nn[2] - origin_e[2] * N_nn[1]);
     double cy_e = ts_n * (origin_e[2] * N_nn[0] - origin_e[0] * N_nn[2]);
-    double cz_e = ts_n * (origin_e[0] * N_nn[1] - origin_e[1] * N_nn[0]) * 0.5;
+    double cz_e = ts_n * (origin_e[0] * N_nn[1] - origin_e[1] * N_nn[0]);
 
     double nx_e = ts_n * N_nn[0];
     double ny_e = ts_n * N_nn[1];
@@ -165,33 +165,20 @@ void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::
   Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
   Eigen::Vector3d diff_traj = trans_b_m0 - trans_e_m1;
-  J(3, 3) += lambda_location;
-  J(4, 4) += lambda_location;
-  J(5, 5) += lambda_location;
-  b(3) -= lambda_location * diff_traj(0);
-  b(4) -= lambda_location * diff_traj(1);
-  b(5) -= lambda_location * diff_traj(2);
+  J(3, 3) += lambda_location_consistency;
+  J(4, 4) += lambda_location_consistency;
+  J(5, 5) += lambda_location_consistency;
+  b(3) -= lambda_location_consistency * diff_traj(0);
+  b(4) -= lambda_location_consistency * diff_traj(1);
+  b(5) -= lambda_location_consistency * diff_traj(2);
 
   Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
-  J(3, 3) += lambda_displace;
-  J(4, 4) += lambda_displace;
-  J(5, 5) += lambda_displace;
-  J(3, 9)  -= lambda_displace;
-  J(4, 10) -= lambda_displace;
-  J(5, 11) -= lambda_displace;
-  J(9, 3)  -= lambda_displace;
-  J(10, 4) -= lambda_displace;
-  J(11, 5) -= lambda_displace;
-  J(9, 9)   += lambda_displace;
-  J(10, 10) += lambda_displace;
-  J(11, 11) += lambda_displace;
-
-  b(3) += lambda_displace * diff_ego(0);
-  b(4) += lambda_displace * diff_ego(1);
-  b(5) += lambda_displace * diff_ego(2);
-  b(9)  -= lambda_displace * diff_ego(0);
-  b(10) -= lambda_displace * diff_ego(1);
-  b(11) -= lambda_displace * diff_ego(2);
+  J(9, 9)   += lambda_constant_velocity;
+  J(10, 10) += lambda_constant_velocity;
+  J(11, 11) += lambda_constant_velocity;
+  b(9)  -= lambda_constant_velocity * diff_ego(0);
+  b(10) -= lambda_constant_velocity * diff_ego(1);
+  b(11) -= lambda_constant_velocity * diff_ego(2);
 
   //---------------------------
 }

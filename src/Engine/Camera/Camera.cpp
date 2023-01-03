@@ -2,7 +2,7 @@
 #include "Viewport.h"
 
 #include "../Node_engine.h"
-#include "../OpenGL/Dimension.h"
+#include "../Core/Dimension.h"
 #include "../Scene/Configuration.h"
 
 #include <glm/gtc/matrix_transform.hpp>

@@ -4,7 +4,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Camera/Camera.h"
-#include "../../Engine/OpenGL/Dimension.h"
+#include "../../Engine/Core/Dimension.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

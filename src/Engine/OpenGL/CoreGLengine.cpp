@@ -1,6 +1,5 @@
 #include "CoreGLengine.h"
 #include "Renderer.h"
-#include "Dimension.h"
 
 #include "Shader/Shader.h"
 #include "Shader/ShaderObject.h"
@@ -9,6 +8,7 @@
 #include "../Camera/Viewport.h"
 #include "../Node_engine.h"
 #include "../Core/Argument.h"
+#include "../Core/Dimension.h"
 #include "../Scene/Configuration.h"
 
 #include "../../GUI/Node_gui.h"

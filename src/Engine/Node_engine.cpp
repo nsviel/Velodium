@@ -7,7 +7,7 @@
 #include "Scene/Glyphs.h"
 #include "Scene/Object.h"
 
-#include "OpenGL/Dimension.h"
+#include "Core/Dimension.h"
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Renderer.h"
 #include "OpenGL/Shader/Shader.h"
