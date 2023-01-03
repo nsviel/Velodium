@@ -1,24 +1,24 @@
 #include "Object.h"
-
 #include "Glyphs.h"
-#include "Configuration.h"
 
-#include "Object/Scene/Grid.h"
-#include "Object/Scene/Axis.h"
-#include "Object/Scene/AABB.h"
-#include "Object/Scene/Mark.h"
-#include "Object/Scene/Box.h"
+#include "Scene/Grid.h"
+#include "Scene/Axis.h"
+#include "Scene/AABB.h"
+#include "Scene/Mark.h"
+#include "Scene/Box.h"
 
-#include "Object/SLAM/Slam_keypoint.h"
-#include "Object/SLAM/Trajectory.h"
-#include "Object/SLAM/Car.h"
-#include "Object/SLAM/Localmap.h"
+#include "SLAM/Slam_keypoint.h"
+#include "SLAM/Trajectory.h"
+#include "SLAM/Car.h"
+#include "SLAM/Localmap.h"
 
-#include "Object/Cloud/OOBB.h"
-#include "Object/Cloud/Normal.h"
+#include "Cloud/OOBB.h"
+#include "Cloud/Normal.h"
 
-#include "../Node_engine.h"
-#include "../Scene/Scene.h"
+#include "../Configuration.h"
+#include "../Scene.h"
+
+#include "../../Node_engine.h"
 
 
 //Constructor / Destructor

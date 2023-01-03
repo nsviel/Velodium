@@ -10,8 +10,8 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Object.h"
-#include "../../Engine/Scene/Object/Scene/Mark.h"
+#include "../../Engine/Scene/Glyph/Object.h"
+#include "../../Engine/Scene/Glyph/Scene/Mark.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Core/Dimension.h"

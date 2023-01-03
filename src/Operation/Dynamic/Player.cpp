@@ -11,7 +11,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Object.h"
+#include "../../Engine/Scene/Glyph/Object.h"
 #include "../../Engine/Scene/Configuration.h"
 
 #include "../../Load/Node_load.h"

@@ -1,19 +1,19 @@
-#include "Octree.h"
+#include "OctreeView.h"
 
 #include "../../Specific/fct_math.h"
 
 
 //Constructor / Destructor
-Octree::Octree(){
+OctreeView::OctreeView(){
   //---------------------------
 
 
   //---------------------------
 }
-Octree::~Octree(){}
+OctreeView::~OctreeView(){}
 
 //Main functions
-void Octree::construct_octree(Subset* subset){
+void OctreeView::construct_octree(Subset* subset){
   //---------------------------
 
   struct Cube{

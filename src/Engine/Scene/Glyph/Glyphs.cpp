@@ -1,12 +1,12 @@
 #include "Glyphs.h"
 
-#include "Scene.h"
+#include "../Scene.h"
+#include "../Configuration.h"
 
-#include "../Node_engine.h"
-#include "../Scene/Configuration.h"
+#include "../../Node_engine.h"
 
-#include "../../Load/Format/file_PTS.h"
-#include "../../Operation/Transformation/Transformation.h"
+#include "../../../Load/Format/file_PTS.h"
+#include "../../../Operation/Transformation/Transformation.h"
 
 
 //Constructor / Destructor

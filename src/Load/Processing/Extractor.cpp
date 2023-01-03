@@ -3,7 +3,7 @@
 #include "../Node_load.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Object.h"
+#include "../../Engine/Scene/Glyph/Object.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Specific/fct_math.h"

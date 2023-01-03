@@ -5,7 +5,7 @@
 #include "../Correspondence/Keypoint.h"
 
 #include "../../../../Operation/Transformation/Transformation.h"
-#include "../../../../Engine/Scene/Glyphs.h"
+#include "../../../../Engine/Scene/Glyph/Glyphs.h"
 #include "../../../../Specific/fct_transtypage.h"
 
 

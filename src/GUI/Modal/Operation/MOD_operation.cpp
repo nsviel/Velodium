@@ -2,7 +2,7 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyphs.h"
+#include "../../../Engine/Scene/Glyph/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Filter.h"
 #include "../../../Operation/Transformation/Pose.h"

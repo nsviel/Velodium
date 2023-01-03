@@ -5,7 +5,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Object.h"
+#include "../../Engine/Scene/Glyph/Object.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 

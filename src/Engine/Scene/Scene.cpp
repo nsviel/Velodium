@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-#include "Object.h"
+#include "Glyph/Object.h"
 
 #include "../Node_engine.h"
 #include "../Scene/Configuration.h"

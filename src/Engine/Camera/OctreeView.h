@@ -4,11 +4,11 @@
 #include "../../common.h"
 
 
-class Octree
+class OctreeView
 {
 public:
-  Octree();
-  ~Octree();
+  OctreeView();
+  ~OctreeView();
 
 public:
   //Main functions

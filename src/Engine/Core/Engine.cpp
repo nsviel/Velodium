@@ -1,8 +1,8 @@
 #include "Engine.h"
 
 #include "../Node_engine.h"
-#include "../Scene/Glyphs.h"
-#include "../Scene/Object.h"
+#include "../Scene/Glyph/Glyphs.h"
+#include "../Scene/Glyph/Object.h"
 #include "../Scene/Scene.h"
 #include "../Scene/Configuration.h"
 #include "../Camera/Camera.h"

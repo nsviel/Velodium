@@ -5,9 +5,9 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Object.h"
-#include "../../Engine/Scene/Glyphs.h"
-#include "../../Engine/Scene/Object/Scene/Box.h"
+#include "../../Engine/Scene/Glyph/Object.h"
+#include "../../Engine/Scene/Glyph/Glyphs.h"
+#include "../../Engine/Scene/Glyph/Scene/Box.h"
 
 
 //Constructor / destructor

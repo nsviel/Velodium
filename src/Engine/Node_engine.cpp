@@ -4,8 +4,8 @@
 
 #include "Scene/Configuration.h"
 #include "Scene/Scene.h"
-#include "Scene/Glyphs.h"
-#include "Scene/Object.h"
+#include "Scene/Glyph/Glyphs.h"
+#include "Scene/Glyph/Object.h"
 
 #include "Core/Dimension.h"
 #include "OpenGL/CoreGLengine.h"

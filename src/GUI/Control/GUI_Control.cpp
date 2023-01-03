@@ -9,7 +9,7 @@
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Camera/struct_viewport.h"
 #include "../../Engine/Core/Dimension.h"
-#include "../../Engine/Scene/Glyphs.h"
+#include "../../Engine/Scene/Glyph/Glyphs.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 

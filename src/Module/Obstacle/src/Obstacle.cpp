@@ -6,8 +6,8 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Object.h"
-#include "../../../Engine/Scene/Object/Cloud/OOBB.h"
+#include "../../../Engine/Scene/Glyph/Object.h"
+#include "../../../Engine/Scene/Glyph/Cloud/OOBB.h"
 #include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/color.h"
 #include "../../../Interface/File/Directory.h"
