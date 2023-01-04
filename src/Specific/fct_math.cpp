@@ -207,6 +207,17 @@ glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
   //---------------------------
   return centroid;
 }
+glm::vec3 fct_centroid(glm::vec3 vec1, glm::vec3 vec2){
+  glm::vec3 centroid = glm::vec3(0, 0, 0);
+  //---------------------------
+
+  centroid.x = (vec1.x + vec2.x) / 2;
+  centroid.y = (vec1.y + vec2.y) / 2;
+  centroid.z = (vec1.z + vec2.z) / 2;
+
+  //---------------------------
+  return centroid;
+}
 Eigen::Vector3f fct_centroid(std::vector<Eigen::Vector3f>& XYZ){
   Eigen::Vector3f centroid = Eigen::Vector3f::Zero();
   int size = XYZ.size();

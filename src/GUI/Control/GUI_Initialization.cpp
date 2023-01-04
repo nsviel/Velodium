@@ -117,7 +117,7 @@ void GUI_Initialization::operation_option(){
   }
   ImGui::SameLine();
 
-  //Remove old clouds
+  //Remove old cloud
   ImGui::Checkbox("On the fly##222", &with_onthefly);
 
   //---------------------------
@@ -136,6 +136,7 @@ void GUI_Initialization::treeview(){
     ImGui::TableHeadersRow();
 
     //Display pre-built trees
+    this->display_node(nodes_path_0[0], nodes_path_0);
     this->display_node(nodes_path_1[0], nodes_path_1);
     this->display_node(nodes_path_2[0], nodes_path_2);
     this->display_node(nodes_path_3[0], nodes_path_3);
@@ -148,6 +149,7 @@ void GUI_Initialization::treeview(){
 void GUI_Initialization::construst_tree(){
   //---------------------------
 
+  this->construct_node("../media/engine/fastScene/buddha.pts", nodes_path_0);
   this->construct_node(path_1, nodes_path_1);
   this->construct_node(path_2, nodes_path_2);
   this->construct_node(path_3, nodes_path_3);
@@ -160,11 +162,13 @@ void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
 
     //Save root
     tree_file* node = new tree_file();
-    node->name = path;
+    node->name = get_filename_from_path(path);
     node->type = get_type_from_path(path);
     node->path = path;
+    node->size = get_file_size(path);
     nodes.push_back(node);
 
+    //Recussively check all child leafs
     this->node_child_scan(path, nodes, node);
 
     //---------------------------

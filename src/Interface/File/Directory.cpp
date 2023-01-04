@@ -78,6 +78,23 @@ bool is_dir_exist(std::string path){
 
   //---------------------------
 }
+std::string is_dir_or_file(std::string path){
+  std::string type;
+  //---------------------------
+
+  struct stat s;
+  if(stat(path.c_str(), &s) == 0){
+    if(s.st_mode & S_IFDIR){
+      type = "directory";
+    }
+    else if(s.st_mode & S_IFREG){
+      type = "file";
+    }
+  }
+
+  //---------------------------
+  return type;
+}
 
 //List files & paths
 std::vector<std::string> list_all_file(std::string path){
@@ -87,7 +104,7 @@ std::vector<std::string> list_all_file(std::string path){
   DIR* directory = opendir(path.c_str());
   std::vector<std::string> path_vec;
 
-  if(is_dir_exist(path) == false){
+  if(is_dir_exist(path) == false || is_dir_or_file(path) == "file"){
     std::cout<<"[error] Directory does not exists: "<<path<<std::endl;
     return path_vec;
   }
@@ -118,7 +135,7 @@ std::vector<std::string> list_all_path(std::string path_dir){
   std::vector<std::string> path_vec;
 
   //Check if directory exists
-  if(is_dir_exist(path_dir) == false){
+  if(is_dir_exist(path_dir) == false || is_dir_or_file(path_dir) == "file"){
     return path_vec;
   }
 
@@ -152,6 +169,11 @@ std::vector<std::string> list_all_dir(std::string path){
   struct dirent* files;
   DIR* directory = opendir(path.c_str());
   std::vector<std::string> list;
+
+  //Check if directory exists
+  if(is_dir_exist(path) == false || is_dir_or_file(path) == "file"){
+    return list;
+  }
 
   //Filtre and store files present in the folder
   while ((files = readdir(directory)) != NULL){

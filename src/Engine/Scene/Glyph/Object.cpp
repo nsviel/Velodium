@@ -6,6 +6,7 @@
 #include "Scene/AABB.h"
 #include "Scene/Mark.h"
 #include "Scene/Box.h"
+#include "Scene/Octree.h"
 
 #include "SLAM/Slam_keypoint.h"
 #include "SLAM/Trajectory.h"
@@ -39,6 +40,7 @@ Object::Object(Node_engine* node){
   this->keyObject = new Slam_keypoint();
   this->mapObject = new Localmap();
   this->boxObject = new Box();
+  this->octreeObject = new Octree();
 
   //---------------------------
   this->create_glyph_scene();
@@ -58,6 +60,7 @@ Object::~Object(){
   delete keyObject;
   delete mapObject;
   delete boxObject;
+  delete octreeObject;
 
   //---------------------------
 }
@@ -77,6 +80,7 @@ void Object::create_glyph_scene(){
   glyphManager->create_glyph_scene(mapObject->get_localmap());
   glyphManager->create_glyph_scene(mapObject->get_localcloud());
   glyphManager->create_glyph_scene(boxObject->get_glyph());
+  glyphManager->create_glyph_scene(octreeObject->get_glyph());
 
   //---------------------------
 }
@@ -262,6 +266,11 @@ void Object::update_glyph_subset(Subset* subset){
   //Subset normal
   normObject->update_normal_subset(subset);
   this->update_object(&subset->normal);
+
+  //Octree
+  Glyph* glyph = octreeObject->get_glyph();
+  octreeObject->update_octree(subset);
+  this->update_object(glyph);
 
   //---------------------------
 }

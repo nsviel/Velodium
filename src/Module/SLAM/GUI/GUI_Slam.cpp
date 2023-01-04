@@ -221,7 +221,11 @@ void GUI_Slam::parameter_optimization(){
     //Maximum point to plane distance for optimization
     double* PTP_distance_max = slam_optim_gn->get_dist_residual_max();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Max PTP distance", PTP_distance_max, 0.01f, 4.0f, "%.3f");
+    if(ImGui::InputDouble("Max PTP distance", PTP_distance_max, 0.1f, 4.0f, "%.3f")){
+      if(*PTP_distance_max < 0){
+        *PTP_distance_max = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Maximum point to plane distance for optimization");
     }
@@ -232,6 +236,23 @@ void GUI_Slam::parameter_optimization(){
     ImGui::SliderInt("Minimal number residual", nb_residual_min, 10, 500);
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The minimum number of residuals for a valid ICP problem");
+    }
+
+    //Lambda
+    double* lambda_location = slam_optim_gn->get_lambda_location_consistency();
+    ImGui::SetNextItemWidth(item_width);
+    if(ImGui::InputDouble("Lambda location consistency", lambda_location, 0.001f, 4.0f, "%.3f")){
+      if(*lambda_location < 0.001){
+        *lambda_location = 0;
+      }
+    }
+
+    double* lambda_velocity = slam_optim_gn->get_lambda_constant_velocity();
+    ImGui::SetNextItemWidth(item_width);
+    if(ImGui::InputDouble("Lambda constant velocity", lambda_velocity, 0.001f, 4.0f, "%.3f")){
+      if(*lambda_velocity < 0.001){
+        *lambda_velocity = 0;
+      }
     }
 
     //---------------------------
@@ -245,7 +266,11 @@ void GUI_Slam::parameter_gridSampling(){
     //Subset point minimum distance
     double* min_root_distance = slam_transf->get_min_root_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f");
+    if(ImGui::InputDouble("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f")){
+      if(*min_root_distance < 0){
+        *min_root_distance = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Suppresses points to close to the center of the sensor");
     }
@@ -253,7 +278,11 @@ void GUI_Slam::parameter_gridSampling(){
     //Subset point maximum distance
     double* max_root_distance = slam_transf->get_max_root_distance();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f");
+    if(ImGui::InputDouble("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f")){
+      if(*max_root_distance < 0){
+        *max_root_distance = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Suppresses points to far from the center of the sensor");
     }
@@ -261,7 +290,11 @@ void GUI_Slam::parameter_gridSampling(){
     //Subsampling voxel width
     double* grid_voxel_size = slam_transf->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f");
+    if(ImGui::InputDouble("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f")){
+      if(*grid_voxel_size < 0){
+        *grid_voxel_size = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The voxel size for the grid sampling of the new frame (before keypoints extraction)");
     }
@@ -286,7 +319,11 @@ void GUI_Slam::parameter_localMap(){
     //Width of the local map voxel
     double* localMap_width = &local_map->voxel_width;
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f");
+    if(ImGui::InputDouble("Voxel width", localMap_width, 0.1f, 1.0f, "%.3f")){
+      if(*localMap_width < 0){
+        *localMap_width = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The size of a voxel for the selection of `keypoints` by grid sampling");
     }
@@ -294,7 +331,11 @@ void GUI_Slam::parameter_localMap(){
     //Mnimun distance between points inside a voxel
     double* min_dist_point_in_voxel = &local_map->voxel_min_point_dist;
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Min point dist in voxel", min_dist_point_in_voxel, 0.001f, 10.0f, "%.3f");
+    if(ImGui::InputDouble("Min point dist in voxel", min_dist_point_in_voxel, 0.01f, 10.0f, "%.3f")){
+      if(*min_dist_point_in_voxel < 0){
+        *min_dist_point_in_voxel = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Mnimun distance between points inside a voxel");
     }
@@ -302,7 +343,11 @@ void GUI_Slam::parameter_localMap(){
     //Distance threshold to supress the voxels on run
     double* max_voxel_distance = &local_map->voxel_max_dist;
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Voxel max dist", max_voxel_distance, 0.1f, 1.0f, "%.3f");
+    if(ImGui::InputDouble("Voxel max dist", max_voxel_distance, 1, 1.0f, "%.3f")){
+      if(*max_voxel_distance < 0){
+        *max_voxel_distance = 0;
+      }
+    }
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Distance threshold to supress the voxels on run");
     }
@@ -345,9 +390,17 @@ void GUI_Slam::parameter_localCloud(){
     double* voxel_max_dist = &local_cloud->voxel_max_dist;
     int* voxel_capacity = &local_cloud->voxel_capacity;
     ImGui::PushItemWidth(100);
-    ImGui::InputDouble("Voxel width", voxel_width, 0.1f, 10, "%.2f");
+    if(ImGui::InputDouble("Voxel width", voxel_width, 0.1f, 10, "%.2f")){
+      if(*voxel_width < 0){
+        *voxel_width = 0;
+      }
+    }
     ImGui::DragInt("Voxel capacity", voxel_capacity, 1, 1, 1000, "%d");
-    ImGui::InputDouble("Voxel max dist", voxel_max_dist, 1, 1000, "%.2f");
+    if(ImGui::InputDouble("Voxel max dist", voxel_max_dist, 1, 1000, "%.2f")){
+      if(*voxel_max_dist < 0){
+        *voxel_max_dist = 0;
+      }
+    }
 
     //Local cloud color
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
@@ -401,7 +454,7 @@ void GUI_Slam::parameter_robustesse(){
     //Minimal optimization score
     double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Minimal threshold", thres_optimMinNorm, 0.001f, 1.0f, "%.3f");
+    ImGui::InputDouble("Minimal threshold", thres_optimMinNorm, 0.1f, 1.0f, "%.3f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Minimal optimization score to obtain to validate ICP");
     }
@@ -409,7 +462,7 @@ void GUI_Slam::parameter_robustesse(){
     //Maximal X and Y axis rotation angle
     double* thres_diff_angle = slam_assess->get_thres_diff_angle();
     ImGui::SetNextItemWidth(item_width);
-    ImGui::InputDouble("Max X and Y axis diff angle", thres_diff_angle, 0.001f, 3.0f, "%.1f");
+    ImGui::InputDouble("Max X and Y axis diff angle", thres_diff_angle, 0.1f, 3.0f, "%.1f");
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("Maximal X and Y axis rotation angle");
     }

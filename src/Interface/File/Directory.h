@@ -28,6 +28,7 @@ int dir_number_file(std::string path);
 //Check existence
 bool is_file_exist(std::string fileName);
 bool is_dir_exist(std::string path);
+std::string is_dir_or_file(std::string path);
 
 //List files & paths
 std::vector<std::string> list_all_file(std::string path);

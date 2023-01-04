@@ -144,6 +144,7 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
   GLuint VAO;
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
+  glyph->VAO = VAO;
 
   //Vertices
   vector<vec3>& XYZ = glyph->location;
@@ -153,6 +154,7 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
   glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
   glEnableVertexAttribArray(0);
+  glyph->VBO_location = locationVBO;
 
   //Color
   vector<vec4>& RGB = glyph->color;
@@ -162,12 +164,9 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
   glBufferData(GL_ARRAY_BUFFER, RGB.size()*sizeof(glm::vec4), &RGB[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
   glEnableVertexAttribArray(1);
-
-  glyph->VAO = VAO;
-  glyph->VBO_location = locationVBO;
   glyph->VBO_color = colorVBO;
 
-
+  //ID
   glyph->ID = ID_glyph++;
 
   //---------------------------
