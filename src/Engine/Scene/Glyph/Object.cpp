@@ -6,7 +6,6 @@
 #include "Scene/AABB.h"
 #include "Scene/Mark.h"
 #include "Scene/Box.h"
-#include "Scene/Tree.h"
 
 #include "SLAM/Slam_keypoint.h"
 #include "SLAM/Trajectory.h"
@@ -15,6 +14,7 @@
 
 #include "Cloud/OOBB.h"
 #include "Cloud/Normal.h"
+#include "Cloud/Tree.h"
 
 #include "../Configuration.h"
 #include "../Scene.h"
@@ -80,7 +80,6 @@ void Object::create_glyph_scene(){
   glyphManager->create_glyph_scene(mapObject->get_localmap());
   glyphManager->create_glyph_scene(mapObject->get_localcloud());
   glyphManager->create_glyph_scene(boxObject->get_glyph());
-  glyphManager->create_glyph_scene(treeObject->get_glyph());
 
   //---------------------------
 }
@@ -98,6 +97,10 @@ void Object::create_glyph_subset(Subset* subset){
   //Keypoint stuff
   keyObject->create_keypoint(subset);
   glyphManager->insert_into_gpu(&subset->keypoint);
+
+  //Tree stuff
+  treeObject->create_tree(subset);
+  glyphManager->insert_into_gpu(&subset->tree);
 
   //---------------------------
 }
@@ -156,6 +159,12 @@ void Object::runtime_glyph_subset_selected(Subset* subset){
     Glyph* normal = &subset->normal;
     if(normal->visibility){
       glyphManager->draw_glyph(normal);
+    }
+
+    //Tree
+    Glyph* tree = &subset->tree;
+    if(tree->visibility){
+      glyphManager->draw_glyph(tree);
     }
   }
 
@@ -268,9 +277,8 @@ void Object::update_glyph_subset(Subset* subset){
   this->update_object(&subset->normal);
 
   //Tree
-  Glyph* glyph = treeObject->get_glyph();
   treeObject->update_tree(subset);
-  this->update_object(glyph);
+  this->update_object(&subset->tree);
 
   //---------------------------
 }

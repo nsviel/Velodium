@@ -16,8 +16,8 @@ struct Cube{
   vector<int> idx_cube;
   vector<int> idx_child;
 };
-struct Tree{
-  Cube* root;
+struct Root{
+  Cube* child;
 
   vector<vec3>* xyz_subset;
   vector<vec3> xyz;
@@ -34,24 +34,24 @@ public:
   ~Octree();
 
 public:
-  void create_octree();
-  void update_octree(Subset* subset);
+  void create_octree(Subset* subset);
+  void remove_octree(Root* root);
 
   //Sub functions
-  void build_octree(Tree& tree, Cube* cube_parent, int level_max);
+  void remove_cube(Cube* cube);
+  void build_root(Subset* subset);
+  void build_octree(Cube* cube_parent);
   vector<vec3> compute_cube_location(vec3 min, vec3 max);
   vector<vec4> compute_cube_color(int size);
   vector<vec4> compute_cube_color(int size, vec4 rgb);
-  void compute_cube_division(Tree& tree, Cube* cube);
-  vector<int> compute_idx_from_point(Tree& tree, vec3 min, vec3 max, Cube* cube_parent);
+  void compute_cube_division(Cube* cube);
+  vector<int> compute_idx_from_point(vec3 min, vec3 max, Cube* cube_parent);
   bool is_at_least_one_value(vector<int> vec);
 
-  inline Glyph* get_glyph(){return octree;}
-
 private:
-  Glyph* octree;
+  Root* root;
   vec4 octree_color;
-  int nb_cell;
+  int nb_level;
 };
 
 #endif

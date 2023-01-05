@@ -5,6 +5,8 @@
 
 #include "../../../../common.h"
 
+class Octree;
+
 
 class Tree
 {
@@ -14,13 +16,11 @@ public:
   ~Tree();
 
 public:
-  void create_tree();
+  void create_tree(Subset* subset);
   void update_tree(Subset* subset);
 
-  inline Glyph* get_glyph(){return tree;}
-
 private:
-  Glyph* tree;
+  Octree* octreeManager;
   vec4 tree_color;
 };
 

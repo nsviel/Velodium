@@ -4,97 +4,98 @@
 
 #include "../../Specific/fct_math.h"
 
-//TODO: Optimization
-// - replace as often as possible list by vector
-// - Manager garbage
-// - put all in a class
-
-
 
 //Constructor / destructor
 Octree::Octree(){
   //---------------------------
 
   this->octree_color = vec4(1, 1, 1, 0.7);
-  this->nb_cell = 4;
-
-  this->create_octree();
+  this->nb_level = 6;
 
   //---------------------------
 }
-Octree::~Octree(){
+Octree::~Octree(){}
+
+//Main function
+void Octree::create_octree(Subset* subset){
+  this->nb_level = 6;
   //---------------------------
 
-  delete octree;
+tic();
+  this->build_root(subset);
+  this->build_octree(root->child);
+toc_ms("octree");
+
+  Glyph* glyph = &subset->tree;
+  glyph->location = root->xyz;
+  glyph->color = root->rgb;
+
+  //---------------------------
+  this->remove_octree(root);
+}
+void Octree::remove_octree(Root* root){
+  //---------------------------
+
+  this->remove_cube(root->child);
+  delete(root);
 
   //---------------------------
 }
 
-void Octree::create_octree(){
-  octree = new Glyph();
+//Subfunctions
+void Octree::remove_cube(Cube* cube){
   //---------------------------
 
-  //Create glyph
-  octree->name = "octree";
-  octree->draw_width = 2;
-  octree->visibility = true;
-  octree->draw_type = "line";
-  octree->permanent = true;
-  octree->color_unique = octree_color;
+  for(int i=0; i<8; i++){
+    if(cube->child[i] != nullptr){
+      this->remove_cube(cube->child[i]);
+    }
+  }
+
+  delete(cube);
 
   //---------------------------
 }
-void Octree::update_octree(Subset* subset){
-  vector<vec3>& XYZ_octree = octree->location;
-  vector<vec4>& RGB_octree = octree->color;
-  vector<vec3>& XYZ_subset = subset->xyz;
-  int max_level = 6;
+void Octree::build_root(Subset* subset){
+  this->root = new Root();
   //---------------------------
 
   // Create a vector of indexes
   vector<int> idx;
-  for(int i=0; i<XYZ_subset.size(); i++){
+  for(int i=0; i<subset->xyz.size(); i++){
     idx.push_back(i);
   }
 
-  //Create octree
-  Tree tree;
+  //Create root cube
   Cube* cube = new Cube();
-  cube->min = fct_min_vec3(XYZ_subset);
-  cube->max = fct_max_vec3(XYZ_subset);
+  cube->min = fct_min_vec3(subset->xyz);
+  cube->max = fct_max_vec3(subset->xyz);
   cube->center = fct_centroid(cube->min, cube->max);
   cube->level = 0;
   cube->idx_cube = idx;
   cube->idx_child = idx;
 
-  for(int i=0; i<max_level; i++){
+  for(int i=0; i<nb_level; i++){
     vec4 rgb = random_color();
-    tree.level_rgb.push_back(rgb);
+    root->level_rgb.push_back(rgb);
   }
 
-  tree.xyz_subset = &subset->xyz;
-  tree.xyz = compute_cube_location(cube->min, cube->max);
-  tree.rgb = compute_cube_color(tree.xyz.size());
-tic();
-  this->build_octree(tree, cube, max_level);
-toc_ms("octree");
-  tree.root = cube;
-
-  XYZ_octree = tree.xyz;
-  RGB_octree = tree.rgb;
-
+  root->xyz_subset = &subset->xyz;
+  root->xyz = compute_cube_location(cube->min, cube->max);
+  root->rgb = compute_cube_color(root->xyz.size());
+  root->child = cube;
 
   //---------------------------
 }
-void Octree::build_octree(Tree& tree, Cube* cube, int level_max){
-  if(cube->level < level_max){
+void Octree::build_octree(Cube* cube){
+  if(cube->level < nb_level){
     //---------------------------
 
-    this->compute_cube_division(tree, cube);
+    this->compute_cube_division(cube);
 
     for(int i=0; i<8; i++){
       if(cube->child[i] != nullptr){
-        this->build_octree(tree, cube->child[i], level_max);
+        this->build_octree(cube->child[i]);
       }
     }
 
@@ -157,7 +158,7 @@ vector<vec4> Octree::compute_cube_color(int size, vec4 rgb){
   //---------------------------
   return RGB;
 }
-void Octree::compute_cube_division(Tree& tree, Cube* cube_parent){
+void Octree::compute_cube_division(Cube* cube_parent){
   vector<Cube> cube_vec;
   //---------------------------
 
@@ -208,7 +209,7 @@ void Octree::compute_cube_division(Tree& tree, Cube* cube_parent){
       max = cube_parent->max;
     }
 
-    vector<int> idx = compute_idx_from_point(tree, min, max, cube_parent);
+    vector<int> idx = compute_idx_from_point(min, max, cube_parent);
 
     if(idx.size() != 0){
       Cube* cube = new Cube();
@@ -221,9 +222,9 @@ void Octree::compute_cube_division(Tree& tree, Cube* cube_parent){
       cube->idx_child = idx;
 
       vector<vec3> cube_xyz = compute_cube_location(cube->min, cube->max);
-      vector<vec4> cube_rgb = compute_cube_color(cube_xyz.size(), tree.level_rgb[cube->level]);
-      tree.xyz.insert(tree.xyz.end(), cube_xyz.begin(), cube_xyz.end());
-      tree.rgb.insert(tree.rgb.end(), cube_rgb.begin(), cube_rgb.end());
+      vector<vec4> cube_rgb = compute_cube_color(cube_xyz.size(), root->level_rgb[cube->level]);
+      root->xyz.insert(root->xyz.end(), cube_xyz.begin(), cube_xyz.end());
+      root->rgb.insert(root->rgb.end(), cube_rgb.begin(), cube_rgb.end());
 
       cube_parent->child[i] = cube;
     }else{
@@ -233,9 +234,9 @@ void Octree::compute_cube_division(Tree& tree, Cube* cube_parent){
 
   //---------------------------
 }
-vector<int> Octree::compute_idx_from_point(Tree& tree, vec3 min, vec3 max, Cube* cube_parent){
+vector<int> Octree::compute_idx_from_point(vec3 min, vec3 max, Cube* cube_parent){
   vector<int>& idx_parent = cube_parent->idx_child;
-  vector<vec3>* xyz = tree.xyz_subset;
+  vector<vec3>* xyz = root->xyz_subset;
   //---------------------------
 
   //Prepare index vectors

@@ -65,6 +65,7 @@ struct Subset{ //Cloud subset / part
   Glyph normal;
   Glyph axis;
   Glyph keypoint;
+  Glyph tree;
 
   //Specific structures
   Frame frame;
