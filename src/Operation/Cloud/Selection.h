@@ -1,5 +1,5 @@
-#ifndef Selection_H
-#define Selection_H
+#ifndef SELECTION_H
+#define SELECTION_H
 
 class Node_operation;
 class Scene;
@@ -9,7 +9,7 @@ class Pose;
 class Attribut;
 class Camera;
 class Dimension;
-class CoordTransform;
+class Coordinate;
 class Renderer;
 class Fitting;
 
@@ -69,7 +69,7 @@ private:
   Attribut* attribManager;
   Object* objectManager;
   Camera* cameraManager;
-  CoordTransform* coordManager;
+  Coordinate* coordManager;
   Renderer* renderManager;
   Fitting* fittingManager;
 

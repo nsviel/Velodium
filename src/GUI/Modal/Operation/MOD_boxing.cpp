@@ -6,8 +6,8 @@
 #include "../../../Engine/Scene/Glyph/Object.h"
 #include "../../../Engine/Scene/Glyph/Scene/Box.h"
 #include "../../../Operation/Node_operation.h"
-#include "../../../Operation/Function/Extraction.h"
-#include "../../../Operation/Function/Visibility.h"
+#include "../../../Operation/Cloud/Extraction.h"
+#include "../../../Operation/Cloud/Visibility.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;

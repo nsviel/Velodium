@@ -1,9 +1,9 @@
-#ifndef OBJECT_OCTREE_H
-#define OBJECT_OCTREE_H
+#ifndef OCTREE_H
+#define OCTREE_H
 
-#include "../../../Data/struct_glyph.h"
+#include "../../Engine/Data/struct_glyph.h"
+#include "../../common.h"
 
-#include "../../../../common.h"
 
 struct Cube{
   int level;
@@ -22,6 +22,7 @@ struct Tree{
   vector<vec3>* xyz_subset;
   vector<vec3> xyz;
   vector<vec4> rgb;
+  vector<vec4> level_rgb;
 };
 
 
@@ -43,6 +44,7 @@ public:
   vector<vec4> compute_cube_color(int size, vec4 rgb);
   void compute_cube_division(Tree& tree, Cube* cube);
   vector<int> compute_idx_from_point(Tree& tree, vec3 min, vec3 max, Cube* cube_parent);
+  bool is_at_least_one_value(vector<int> vec);
 
   inline Glyph* get_glyph(){return octree;}
 

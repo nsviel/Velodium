@@ -1,11 +1,13 @@
 #include "Octree.h"
 
-#include "../../../../Specific/fct_math.h"
-#include "../../../../Operation/Color/Color.h"
+#include "../Color/Color.h"
+
+#include "../../Specific/fct_math.h"
 
 //TODO: Optimization
 // - replace as often as possible list by vector
 // - Manager garbage
+// - put all in a class
 
 
 
@@ -46,6 +48,7 @@ void Octree::update_octree(Subset* subset){
   vector<vec3>& XYZ_octree = octree->location;
   vector<vec4>& RGB_octree = octree->color;
   vector<vec3>& XYZ_subset = subset->xyz;
+  int max_level = 6;
   //---------------------------
 
   // Create a vector of indexes
@@ -64,11 +67,16 @@ void Octree::update_octree(Subset* subset){
   cube->idx_cube = idx;
   cube->idx_child = idx;
 
+  for(int i=0; i<max_level; i++){
+    vec4 rgb = random_color();
+    tree.level_rgb.push_back(rgb);
+  }
+
   tree.xyz_subset = &subset->xyz;
   tree.xyz = compute_cube_location(cube->min, cube->max);
   tree.rgb = compute_cube_color(tree.xyz.size());
 tic();
-  this->build_octree(tree, cube, 6);
+  this->build_octree(tree, cube, max_level);
 toc_ms("octree");
   tree.root = cube;
 
@@ -213,7 +221,7 @@ void Octree::compute_cube_division(Tree& tree, Cube* cube_parent){
       cube->idx_child = idx;
 
       vector<vec3> cube_xyz = compute_cube_location(cube->min, cube->max);
-      vector<vec4> cube_rgb = compute_cube_color(cube_xyz.size());
+      vector<vec4> cube_rgb = compute_cube_color(cube_xyz.size(), tree.level_rgb[cube->level]);
       tree.xyz.insert(tree.xyz.end(), cube_xyz.begin(), cube_xyz.end());
       tree.rgb.insert(tree.rgb.end(), cube_rgb.begin(), cube_rgb.end());
 
@@ -226,12 +234,15 @@ void Octree::compute_cube_division(Tree& tree, Cube* cube_parent){
   //---------------------------
 }
 vector<int> Octree::compute_idx_from_point(Tree& tree, vec3 min, vec3 max, Cube* cube_parent){
-  vector<int> idx_cube;
-  vector<int> idx_parent_new;
-  //---------------------------
-
   vector<int>& idx_parent = cube_parent->idx_child;
   vector<vec3>* xyz = tree.xyz_subset;
+  //---------------------------
+
+  //Prepare index vectors
+  vector<int> idx_cube;
+  vector<int> idx_parent_new;
+  idx_cube.reserve(idx_parent.size());
+  idx_parent_new.reserve(idx_parent.size());
 
   //Get all cube personnal idx
   for(int i=0; i<idx_parent.size(); i++){

@@ -1,4 +1,4 @@
-#include "CoordTransform.h"
+#include "Coordinate.h"
 
 #include "../Node_operation.h"
 
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-CoordTransform::CoordTransform(Node_operation* node_ope){
+Coordinate::Coordinate(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
@@ -20,9 +20,9 @@ CoordTransform::CoordTransform(Node_operation* node_ope){
 
   //---------------------------
 }
-CoordTransform::~CoordTransform(){}
+Coordinate::~Coordinate(){}
 
-vec2 CoordTransform::WorldToScreen(vec3 point){
+vec2 Coordinate::WorldToScreen(vec3 point){
   mat4 projMat = cameraManager->get_projMat();
   mat4 viewMat = cameraManager->get_viewMat();
   vec2 glPos = dimManager->get_gl_pos();
@@ -44,7 +44,7 @@ vec2 CoordTransform::WorldToScreen(vec3 point){
   //---------------------------
   return pt_out;
 }
-vec3 CoordTransform::ScreenToWorld(vec2 cursorPos){
+vec3 Coordinate::ScreenToWorld(vec2 cursorPos){
   vec2 glDim = dimManager->get_gl_dim();
   float gui_X = ImGui::GetWindowSize().x;
   float gui_Y = ImGui::GetWindowSize().y;
@@ -77,7 +77,7 @@ vec3 CoordTransform::ScreenToWorld(vec2 cursorPos){
   //---------------------------
   return X;
 }
-vec3 CoordTransform::CursorToGround(){
+vec3 Coordinate::CursorToGround(){
   vec2 cursorPos = dimManager->get_mouse_pose();
   vec2 glDim = dimManager->get_gl_dim();
   float gui_X = ImGui::GetWindowSize().x;

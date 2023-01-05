@@ -7,10 +7,10 @@
 #include "Dynamic/Player.h"
 #include "Dynamic/Onthefly.h"
 
-#include "Function/Selection.h"
-#include "Function/CoordTransform.h"
-#include "Function/Extraction.h"
-#include "Function/Visibility.h"
+#include "Cloud/Selection.h"
+#include "Transformation/Coordinate.h"
+#include "Cloud/Extraction.h"
+#include "Cloud/Visibility.h"
 
 #include "Transformation/Filter.h"
 #include "Transformation/Attribut.h"
@@ -31,7 +31,7 @@ Node_operation::Node_operation(Node_engine* node){
   this->heatmapManager = new Heatmap(this);
   this->colorManager = new Color(this);
   this->filterManager = new Filter(this);
-  this->coordManager = new CoordTransform(this);
+  this->coordManager = new Coordinate(this);
   this->selectionManager = new Selection(this);
   this->extractionManager = new Extraction(this);
   this->onlineManager = new Online(this);

@@ -3,7 +3,7 @@
 #include "../Node_gui.h"
 
 #include "../../Operation/Node_operation.h"
-#include "../../Operation/Function/Selection.h"
+#include "../../Operation/Cloud/Selection.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Core/Dimension.h"

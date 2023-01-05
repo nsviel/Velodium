@@ -39,7 +39,9 @@ public:
   void treeview();
   void construst_tree();
   void construct_node(string path, vector<tree_file*>& nodes);
+  void construct_node_root(vector<string>& vec_path, vector<tree_file*>& nodes);
   void display_node(tree_file* node, vector<tree_file*>& all_nodes);
+  void display_node_root(vector<tree_file*>& all_nodes);
   void node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent);
   bool check_file_format(string path);
   void open_selection(tree_file* node);
@@ -51,8 +53,7 @@ private:
   Configuration* configManager;
   Capture* captureManager;
 
-  vector<tree_file*> nodes_path_buddha;
-  vector<tree_file*> nodes_path_lapin;
+  vector<tree_file*> nodes_root;
   vector<tree_file*> nodes_path_1;
   vector<tree_file*> nodes_path_2;
   vector<tree_file*> nodes_path_3;

@@ -136,8 +136,7 @@ void GUI_Initialization::treeview(){
     ImGui::TableHeadersRow();
 
     //Display pre-built trees
-    this->display_node(nodes_path_buddha[0], nodes_path_buddha);
-    this->display_node(nodes_path_lapin[0], nodes_path_lapin);
+    this->display_node_root(nodes_root);
     this->display_node(nodes_path_1[0], nodes_path_1);
     this->display_node(nodes_path_2[0], nodes_path_2);
     this->display_node(nodes_path_3[0], nodes_path_3);
@@ -150,8 +149,12 @@ void GUI_Initialization::treeview(){
 void GUI_Initialization::construst_tree(){
   //---------------------------
 
-  this->construct_node("../media/engine/fastScene/buddha.pts", nodes_path_buddha);
-  this->construct_node("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply", nodes_path_lapin);
+  vector<string> vec_path;
+  vec_path.push_back("../media/engine/fastScene/buddha.pts");
+  vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply");
+  vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/xyzrgb_statuette.ply");
+
+  this->construct_node_root(vec_path, nodes_root);
   this->construct_node(path_1, nodes_path_1);
   this->construct_node(path_2, nodes_path_2);
   this->construct_node(path_3, nodes_path_3);
@@ -175,6 +178,28 @@ void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
 
     //---------------------------
   }
+}
+void GUI_Initialization::construct_node_root(vector<string>& vec_path, vector<tree_file*>& nodes){
+  //---------------------------
+
+  for(int i=0; i<vec_path.size(); i++){
+    if(vec_path[i] != ""){
+      tree_file* node = new tree_file();
+
+      node->name = get_filename_from_path(vec_path[i]);
+      node->type = get_type_from_path(vec_path[i]);
+      node->path = vec_path[i];
+      node->size = get_file_size(vec_path[i]);
+      node->leaf_nb = 1;
+      node->leaf_idx = 1;
+      node->already_open = true;
+      node->end_folder = true;
+
+      nodes.push_back(node);
+    }
+  }
+
+  //---------------------------
 }
 void GUI_Initialization::node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent){
   vector<string> list_path = list_all_path(path);
@@ -250,6 +275,30 @@ void GUI_Initialization::display_node(tree_file* node, vector<tree_file*>& all_n
       }
     }
     else if(node->type != "Folder"){
+      ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
+      ImGui::TreeNodeEx(node->name.c_str(), node_flags);
+      if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
+        this->open_selection(node);
+      }
+      ImGui::TableNextColumn();
+      ImGui::Text("%.1f MB", node->size);
+      ImGui::TableNextColumn();
+      ImGui::TextUnformatted(node->type.c_str());
+    }
+
+    //---------------------------
+  }
+}
+void GUI_Initialization::display_node_root(vector<tree_file*>& all_nodes){
+  if(all_nodes.size() != 0){
+    //---------------------------
+
+    for(int i=0; i<all_nodes.size(); i++){
+      tree_file* node = all_nodes[i];
+
+      ImGui::TableNextRow();
+      ImGui::TableNextColumn();
+
       ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
       ImGui::TreeNodeEx(node->name.c_str(), node_flags);
       if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){

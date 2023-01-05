@@ -7,8 +7,8 @@
 #include "../../../Operation/Transformation/Filter.h"
 #include "../../../Operation/Transformation/Pose.h"
 #include "../../../Operation/Optimization/Fitting.h"
-#include "../../../Operation/Function/Extraction.h"
-#include "../../../Operation/Function/Selection.h"
+#include "../../../Operation/Cloud/Extraction.h"
+#include "../../../Operation/Cloud/Selection.h"
 #include "../../../Specific/fct_transtypage.h"
 
 #include "../Modal_tab.h"

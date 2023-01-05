@@ -18,9 +18,9 @@
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Operation/Transformation/Transformation.h"
 #include "../../Operation/Transformation/Pose.h"
-#include "../../Operation/Function/Selection.h"
-#include "../../Operation/Function/Extraction.h"
-#include "../../Operation/Function/Visibility.h"
+#include "../../Operation/Cloud/Selection.h"
+#include "../../Operation/Cloud/Extraction.h"
+#include "../../Operation/Cloud/Visibility.h"
 #include "../../Operation/Color/Heatmap.h"
 
 #include <glm/gtc/matrix_transform.hpp>

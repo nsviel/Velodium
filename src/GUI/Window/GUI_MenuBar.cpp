@@ -18,7 +18,7 @@
 #include "../../Engine/OpenGL/Textures.h"
 
 #include "../../Operation/Node_operation.h"
-#include "../../Operation/Function/Extraction.h"
+#include "../../Operation/Cloud/Extraction.h"
 #include "../../Operation/Transformation/Pose.h"
 
 #include "../../Specific/fct_math.h"

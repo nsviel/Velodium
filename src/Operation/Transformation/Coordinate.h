@@ -1,5 +1,5 @@
-#ifndef CoordTransform_H
-#define CoordTransform_H
+#ifndef COORDINATE_H
+#define COORDINATE_H
 
 #include "../../common.h"
 
@@ -8,12 +8,12 @@ class Dimension;
 class Node_operation;
 
 
-class CoordTransform
+class Coordinate
 {
 public:
   //Constructor / Destructor
-  CoordTransform(Node_operation* node);
-  ~CoordTransform();
+  Coordinate(Node_operation* node);
+  ~Coordinate();
 
 public:
   vec3 ScreenToWorld(vec2 cursorPos);

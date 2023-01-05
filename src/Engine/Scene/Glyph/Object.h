@@ -18,7 +18,7 @@ class Car;
 class Trajectory;
 class Localmap;
 class Box;
-class Octree;
+class Tree;
 
 
 class Object
@@ -69,7 +69,7 @@ public:
   inline Slam_keypoint* get_object_keypoint(){return keyObject;}
   inline Localmap* get_object_localmap(){return mapObject;}
   inline Box* get_object_box(){return boxObject;}
-  inline Octree* get_object_octree(){return octreeObject;}
+  inline Tree* get_object_tree(){return treeObject;}
 
 private:
   Node_engine* node_engine;
@@ -87,7 +87,7 @@ private:
   Mark* markObject;
   Car* carObject;
   Box* boxObject;
-  Octree* octreeObject;
+  Tree* treeObject;
 };
 
 #endif

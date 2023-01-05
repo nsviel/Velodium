@@ -1,9 +1,8 @@
 #include "Selection.h"
 
-#include "CoordTransform.h"
-
 #include "../Node_operation.h"
 #include "../Transformation/Transformation.h"
+#include "../Transformation/Coordinate.h"
 #include "../Transformation/Pose.h"
 #include "../Transformation/Attribut.h"
 #include "../Optimization/Fitting.h"

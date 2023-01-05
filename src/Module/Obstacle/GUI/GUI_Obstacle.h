@@ -6,7 +6,7 @@
 class Module_obstacle;
 class Obstacle;
 class Prediction;
-class CoordTransform;
+class Coordinate;
 class HTTP;
 class Scene;
 
@@ -35,7 +35,7 @@ public:
 
 private:
   Obstacle* obstacleManager;
-  CoordTransform* coordManager;
+  Coordinate* coordManager;
   Prediction* predManager;
   HTTP* httpsManager;
   Scene* sceneManager;

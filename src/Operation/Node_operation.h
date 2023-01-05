@@ -11,7 +11,7 @@ class Attribut;
 class Heatmap;
 class Filter;
 class Selection;
-class CoordTransform;
+class Coordinate;
 class Extraction;
 class Fitting;
 class Color;
@@ -39,7 +39,7 @@ public:
 
   inline Heatmap* get_heatmapManager(){return heatmapManager;}
   inline Filter* get_filterManager(){return filterManager;}
-  inline CoordTransform* get_coordManager(){return coordManager;}
+  inline Coordinate* get_coordManager(){return coordManager;}
   inline Selection* get_selectionManager(){return selectionManager;}
   inline Attribut* get_attribManager(){return attribManager;}
   inline Extraction* get_extractionManager(){return extractionManager;}
@@ -60,7 +60,7 @@ private:
   Heatmap* heatmapManager;
   Filter* filterManager;
   Selection* selectionManager;
-  CoordTransform* coordManager;
+  Coordinate* coordManager;
   Extraction* extractionManager;
   Fitting* fittingManager;
   Color* colorManager;
