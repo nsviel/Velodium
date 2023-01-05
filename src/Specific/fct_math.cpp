@@ -207,7 +207,7 @@ glm::vec3 fct_centroid(std::vector<glm::vec3>& vec){
   //---------------------------
   return centroid;
 }
-glm::vec3 fct_centroid(glm::vec3 vec1, glm::vec3 vec2){
+glm::vec3 fct_centroid(glm::vec3& vec1, glm::vec3& vec2){
   glm::vec3 centroid = glm::vec3(0, 0, 0);
   //---------------------------
 

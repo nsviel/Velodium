@@ -45,7 +45,7 @@ Eigen::Vector3d fct_centroid(std::vector<Eigen::Vector3d>& XYZ);
 glm::vec2 fct_min_vec2(std::vector<glm::vec2> XY);
 glm::vec2 fct_max_vec2(std::vector<glm::vec2> XY);
 glm::vec3 fct_centroid(std::vector<glm::vec3>& vec);
-glm::vec3 fct_centroid(glm::vec3 vec1, glm::vec3 vec2);
+glm::vec3 fct_centroid(glm::vec3& vec1, glm::vec3& vec2);
 glm::vec3 fct_max_vec3(std::vector<glm::vec3> XYZ);
 glm::vec3 fct_min_z(std::vector<glm::vec3> vec);
 glm::vec3 fct_min_vec3(std::vector<glm::vec3> XYZ);

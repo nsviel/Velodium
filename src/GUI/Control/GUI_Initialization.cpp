@@ -136,7 +136,8 @@ void GUI_Initialization::treeview(){
     ImGui::TableHeadersRow();
 
     //Display pre-built trees
-    this->display_node(nodes_path_0[0], nodes_path_0);
+    this->display_node(nodes_path_buddha[0], nodes_path_buddha);
+    this->display_node(nodes_path_lapin[0], nodes_path_lapin);
     this->display_node(nodes_path_1[0], nodes_path_1);
     this->display_node(nodes_path_2[0], nodes_path_2);
     this->display_node(nodes_path_3[0], nodes_path_3);
@@ -149,7 +150,8 @@ void GUI_Initialization::treeview(){
 void GUI_Initialization::construst_tree(){
   //---------------------------
 
-  this->construct_node("../media/engine/fastScene/buddha.pts", nodes_path_0);
+  this->construct_node("../media/engine/fastScene/buddha.pts", nodes_path_buddha);
+  this->construct_node("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply", nodes_path_lapin);
   this->construct_node(path_1, nodes_path_1);
   this->construct_node(path_2, nodes_path_2);
   this->construct_node(path_3, nodes_path_3);

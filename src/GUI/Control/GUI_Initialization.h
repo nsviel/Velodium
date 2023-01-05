@@ -51,7 +51,8 @@ private:
   Configuration* configManager;
   Capture* captureManager;
 
-  vector<tree_file*> nodes_path_0;
+  vector<tree_file*> nodes_path_buddha;
+  vector<tree_file*> nodes_path_lapin;
   vector<tree_file*> nodes_path_1;
   vector<tree_file*> nodes_path_2;
   vector<tree_file*> nodes_path_3;

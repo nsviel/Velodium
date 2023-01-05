@@ -6,21 +6,22 @@
 #include "../../../../common.h"
 
 struct Cube{
-  vector<vec3> xyz;
-  vector<vec4> rgb;
-  vector<Cube*> child;
-  list<int> idx;
   int level;
+  Cube* child[8];
+
   vec3 min;
   vec3 max;
   vec3 center;
+
+  vector<int> idx_cube;
+  vector<int> idx_child;
 };
 struct Tree{
+  Cube* root;
+
+  vector<vec3>* xyz_subset;
   vector<vec3> xyz;
   vector<vec4> rgb;
-  Cube* root;
-  vec3 min;
-  vec3 max;
 };
 
 
@@ -36,9 +37,12 @@ public:
   void update_octree(Subset* subset);
 
   //Sub functions
+  void build_octree(Tree& tree, Cube* cube_parent, int level_max);
   vector<vec3> compute_cube_location(vec3 min, vec3 max);
   vector<vec4> compute_cube_color(int size);
-  void compute_cube_division(Tree& tree, Cube* cube, vector<vec3>& point);
+  vector<vec4> compute_cube_color(int size, vec4 rgb);
+  void compute_cube_division(Tree& tree, Cube* cube);
+  vector<int> compute_idx_from_point(Tree& tree, vec3 min, vec3 max, Cube* cube_parent);
 
   inline Glyph* get_glyph(){return octree;}
 
