@@ -196,7 +196,7 @@ void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
   //Normalization of the input vector
   vector<float> v_norm;
   if(is_normalization){
-    v_norm = fct_normalize(v_in, -1);
+    v_norm = fct_standardize(v_in, -1);
   }else{
     v_norm = v_in;
   }

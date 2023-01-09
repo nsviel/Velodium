@@ -519,14 +519,44 @@ std::vector<float> fct_normalize(std::vector<float>& vec, float value_to_avoid){
   float max = vec[0];
   for(int i=0; i<size; i++){
     if(vec[i] != value_to_avoid){
-      if(vec[i] > max) max = vec[i];
-      if(vec[i] < min) min = vec[i];
+      if(vec[i] > max && vec[i] != value_to_avoid) max = vec[i];
+      else if(vec[i] < min && vec[i] != value_to_avoid) min = vec[i];
     }
   }
 
   //Normalization
   for(int i=0; i<size; i++){
     if(vec[i] != value_to_avoid){
+      vec_out[i] = (vec[i] - min) / (max - min);
+    }else{
+      vec_out[i] = vec[i];
+    }
+  }
+
+  //-----------------------------
+  return vec_out;
+}
+std::vector<float> fct_standardize(std::vector<float>& vec, float value_to_avoid){
+  std::vector<float> vec_out(vec);
+  int size = vec.size();
+  //-----------------------------
+
+  //Retrieve min & max
+  float min = vec[0];
+  float max = vec[0];
+  float std = fct_std(vec);
+  float mean = fct_mean(vec);
+  for(int i=0; i<size; i++){
+    if(vec[i] != value_to_avoid){
+      if(vec[i] > mean + std * 3 || vec[i] < mean - std * 3) vec[i] = value_to_avoid;
+      else if(vec[i] > max && vec[i] != value_to_avoid) max = vec[i];
+      else if(vec[i] < min && vec[i] != value_to_avoid) min = vec[i];
+    }
+  }
+
+  //Normalization
+  for(int i=0; i<size; i++){
+    if(vec[i] != value_to_avoid && vec[i] < mean + std * 3){
       vec_out[i] = (vec[i] - min) / (max - min);
     }else{
       vec_out[i] = vec[i];

@@ -56,6 +56,7 @@ std::vector<float> fct_normalize(std::vector<float>& vec, glm::vec2 range);
 std::vector<float> fct_normalize(std::vector<float>& vec, float value_to_avoid);
 std::vector<float> fct_normalize_01(std::vector<float>& vec);
 std::vector<float> fct_crossProduct(std::vector<float>& vec_A, std::vector<float>& vec_B);
+std::vector<float> fct_standardize(std::vector<float>& vec, float value_to_avoid);
 
 //Statistical functions
 float fct_std(std::vector<float>& vec);
