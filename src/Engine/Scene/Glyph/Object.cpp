@@ -371,6 +371,14 @@ void Object::set_object_visibility(string name, bool val){
         keypoint->visibility = val;
       }
     }
+    //Set tree glyph visibility
+    else if(name == "tree"){
+      for(int i=0; i<cloud->nb_subset; i++){
+        Subset* subset = *next(cloud->subset.begin(), i);
+        Glyph* tree = &subset->tree;
+        tree->visibility = val;
+      }
+    }
   }
 
   //---------------------------

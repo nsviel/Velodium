@@ -14,6 +14,7 @@
 #include "../../Engine/Scene/Glyph/Scene/Grid.h"
 #include "../../Engine/Scene/Glyph/Scene/Axis.h"
 #include "../../Engine/Scene/Glyph/Cloud/Normal.h"
+#include "../../Engine/Scene/Glyph/Cloud/Tree.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Renderer.h"
 
@@ -149,6 +150,26 @@ void GUI_option::option_glyph(){
   ImGui::PushItemWidth(75);
   if(ImGui::DragFloat("##456", &circleRadius, 0.001, 0, 5, "%.3f")){
     //objectManager->obj_axisCircle(circleRadius);
+  }
+  ImGui::NextColumn();
+
+  //Display tree
+  Tree* treeObject = objectManager->get_object_tree();
+  bool* tree_visible = treeObject->get_visibility();
+  if(ImGui::Checkbox("Tree", tree_visible)){
+    if(sceneManager->get_is_list_empty() == false){
+      objectManager->set_object_visibility("tree", *tree_visible);
+    }
+  }
+  ImGui::NextColumn();
+
+  //Tree level
+  int* tree_level = treeObject->get_tree_level();
+  ImGui::PushItemWidth(75);
+  if(ImGui::DragInt("##458", tree_level, 1, 1, 50, "%d")){
+    Subset* subset = cloud->subset_selected;
+    treeObject->update_tree(subset);
+    objectManager->update_object(&subset->tree);
   }
   ImGui::NextColumn();
 

@@ -111,17 +111,21 @@ void file_PLY::Loader_header(std::ifstream& file){
 
     //Retrieve property
     if(h1 == "property" && vertex_ended == false){
-      if (h2 == "float32" | h2 == "float"){
+      if (h2 == "float32" || h2 == "float"){
         property_type.push_back("float32");
         property_size.push_back(4);
       }
-      else if (h2 == "float64" | h2 == "double"){
+      else if (h2 == "float64" || h2 == "double"){
         property_type.push_back("float64");
         property_size.push_back(8);
       }
       else if (h2 == "int"){
         property_type.push_back("int32");
         property_size.push_back(4);
+      }
+      else if (h2 == "uint16"){
+        property_type.push_back("int16");
+        property_size.push_back(2);
       }
       else if (h2 == "uchar"){
         property_type.push_back("uchar");
@@ -306,6 +310,10 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
       }
       if(property_type[j] == "float64"){
         float value = get_double_from_binary(block_data, offset);
+        block_vec[j][i] = value;
+      }
+      if(property_type[j] == "int16"){
+        float value = get_int16_from_binary(block_data, offset);
         block_vec[j][i] = value;
       }
       if(property_type[j] == "uchar"){
@@ -677,6 +685,15 @@ float file_PLY::get_int_from_binary(char* block_data, int& offset){
 
   float value =  (float)*((int *) (block_data + offset));
   offset += sizeof(int);
+
+  //---------------------------
+  return value;
+}
+float file_PLY::get_int16_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  float value =  (float)*((uint16 *) (block_data + offset));
+  offset += sizeof(uint16);
 
   //---------------------------
   return value;

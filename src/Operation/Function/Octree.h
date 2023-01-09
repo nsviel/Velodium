@@ -35,6 +35,7 @@ public:
 
 public:
   void create_octree(Subset* subset);
+  void create_octree(Subset* subset, int level);
   void remove_octree(Root* root);
 
   //Sub functions
@@ -51,6 +52,8 @@ public:
 private:
   Root* root;
   vec4 octree_color;
+  bool with_rdm_color;
+  int octree_time;
   int nb_level;
 };
 

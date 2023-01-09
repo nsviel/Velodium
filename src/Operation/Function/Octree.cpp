@@ -3,6 +3,7 @@
 #include "../Color/Color.h"
 
 #include "../../Specific/fct_math.h"
+#include "../../Specific/color.h"
 
 
 //Constructor / destructor
@@ -10,7 +11,9 @@ Octree::Octree(){
   //---------------------------
 
   this->octree_color = vec4(1, 1, 1, 0.7);
+  this->with_rdm_color = false;
   this->nb_level = 6;
+  this->root = nullptr;
 
   //---------------------------
 }
@@ -25,6 +28,22 @@ tic();
   this->build_root(subset);
   this->build_octree(root->child);
 toc_ms("octree");
+
+  Glyph* glyph = &subset->tree;
+  glyph->location = root->xyz;
+  glyph->color = root->rgb;
+
+  //---------------------------
+  this->remove_octree(root);
+}
+void Octree::create_octree(Subset* subset, int level){
+  this->nb_level = level;
+  //---------------------------
+
+  tic();
+  this->build_root(subset);
+  this->build_octree(root->child);
+  this->octree_time = toc_ms();
 
   Glyph* glyph = &subset->tree;
   glyph->location = root->xyz;
@@ -57,7 +76,6 @@ void Octree::remove_cube(Cube* cube){
   //---------------------------
 }
 void Octree::build_root(Subset* subset){
-  this->root = new Root();
   //---------------------------
 
   // Create a vector of indexes
@@ -75,15 +93,35 @@ void Octree::build_root(Subset* subset){
   cube->idx_cube = idx;
   cube->idx_child = idx;
 
-  for(int i=0; i<nb_level; i++){
-    vec4 rgb = random_color();
-    root->level_rgb.push_back(rgb);
+  //Initiate octree root
+  if(root == nullptr){
+    this->root = new Root();
+  }else{
+    // /this->remove_octree(root);
+    this->root = new Root();
   }
-
   root->xyz_subset = &subset->xyz;
   root->xyz = compute_cube_location(cube->min, cube->max);
   root->rgb = compute_cube_color(root->xyz.size());
   root->child = cube;
+
+  //Apply color to each level
+  if(with_rdm_color){
+    for(int i=0; i<nb_level; i++){
+      vec4 rgb = random_color();
+      root->level_rgb.push_back(rgb);
+    }
+  }else{
+    root->level_rgb.push_back(nord0);
+    root->level_rgb.push_back(nord1);
+    root->level_rgb.push_back(nord2);
+    root->level_rgb.push_back(nord3);
+    root->level_rgb.push_back(nord10);
+    root->level_rgb.push_back(nord9);
+    root->level_rgb.push_back(nord8);
+    root->level_rgb.push_back(nord7);
+    root->level_rgb.push_back(nord11);
+  }
 
   //---------------------------
 }

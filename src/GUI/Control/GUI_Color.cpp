@@ -80,8 +80,6 @@ void GUI_Color::option_heatmap(){
 
   this->heatmap_mode();
   this->heatmap_select_colormap();
-  this->heatmap_mode_height();
-  this->heatmap_mode_intensity();
 
   //---------------------------
 }
@@ -133,9 +131,15 @@ void GUI_Color::heatmap_select_colormap(){
   }
   ImGui::SameLine();
 
-  //Colormap normalization
+  //Automatic normalization
   bool* normalizeON = heatmapManager->get_is_normalization();
   ImGui::Checkbox("fct_normalized", normalizeON);
+
+  //Manual normalization
+  if(*normalizeON){
+    this->heatmap_mode_height();
+    this->heatmap_mode_intensity();
+  }
 
   //---------------------------
 }
