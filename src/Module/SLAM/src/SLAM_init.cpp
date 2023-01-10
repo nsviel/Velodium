@@ -59,16 +59,16 @@ void SLAM_init::init_frame_ts(Cloud* cloud, int subset_ID){
   //If there is timestamp data, normalize it
   if(ts.size() != 0){
     //Retrieve min & max
-    double min = ts[0];
-    double max = ts[0];
+    double ts_min = ts[0];
+    double ts_max = ts[0];
     for(int i=0; i<ts.size(); i++){
-      if(ts[i] > max) max = ts[i];
-      if(ts[i] < min) min = ts[i];
+      if(ts[i] > ts_max) ts_max = ts[i];
+      if(ts[i] < ts_min) ts_min = ts[i];
     }
 
     //Normalization
     for(int i=0; i<ts.size(); i++){
-      double ts_n = (ts[i] - min) / (max - min);
+      double ts_n = (ts[i] - ts_min) / (ts_max - ts_min);
       subset->ts_n.push_back(ts_n);
     }
   }
@@ -107,8 +107,8 @@ void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
     //Which one is better ? I dont know
     frame_m0->rotat_b = frame_m1->rotat_e;
     frame_m0->trans_b = frame_m1->trans_e;
-    frame_m0->rotat_b = rotat_next_b;
-    frame_m0->trans_b = trans_next_b;
+    //frame_m0->rotat_b = rotat_next_b;
+    //frame_m0->trans_b = trans_next_b;
 
     frame_m0->rotat_e = rotat_next_e;
     frame_m0->trans_e = trans_next_e;

@@ -165,20 +165,33 @@ void SLAM_optim_gn::compute_constraint(Frame* frame_m0, Frame* frame_m1, Eigen::
   Eigen::Vector3d trans_e_m1 = frame_m1->trans_e;
 
   Eigen::Vector3d diff_traj = trans_b_m0 - trans_e_m1;
-  J(3, 3) += lambda_location_consistency;
-  J(4, 4) += lambda_location_consistency;
-  J(5, 5) += lambda_location_consistency;
-  b(3) -= lambda_location_consistency * diff_traj(0);
-  b(4) -= lambda_location_consistency * diff_traj(1);
-  b(5) -= lambda_location_consistency * diff_traj(2);
+  J(3, 3) = J(3, 3) + lambda_location_consistency;
+  J(4, 4) = J(4, 4) + lambda_location_consistency;
+  J(5, 5) = J(5, 5) + lambda_location_consistency;
+  b(3) = b(3) - lambda_location_consistency * diff_traj(0);
+  b(4) = b(4) - lambda_location_consistency * diff_traj(1);
+  b(5) = b(5) - lambda_location_consistency * diff_traj(2);
 
   Eigen::Vector3d diff_ego = trans_e_m0 - trans_b_m0 - trans_e_m1 + trans_b_m1;
-  J(9, 9)   += lambda_constant_velocity;
-  J(10, 10) += lambda_constant_velocity;
-  J(11, 11) += lambda_constant_velocity;
-  b(9)  -= lambda_constant_velocity * diff_ego(0);
-  b(10) -= lambda_constant_velocity * diff_ego(1);
-  b(11) -= lambda_constant_velocity * diff_ego(2);
+  J(3, 3) = J(3, 3) + lambda_constant_velocity;
+  J(4, 4) = J(4, 4) + lambda_constant_velocity;
+  J(5, 5) = J(5, 5) + lambda_constant_velocity;
+  J(3, 9) = J(3, 9) - lambda_constant_velocity;
+  J(4, 10) = J(4, 10) - lambda_constant_velocity;
+  J(5, 11) = J(5, 11) - lambda_constant_velocity;
+  J(9, 3) = J(9, 3) - lambda_constant_velocity;
+  J(10, 4) = J(10, 4) - lambda_constant_velocity;
+  J(11, 5) = J(11, 5) - lambda_constant_velocity;
+  J(9, 9)   = J(9, 9)   + lambda_constant_velocity;
+  J(10, 10) = J(10, 10) + lambda_constant_velocity;
+  J(11, 11) = J(11, 11) + lambda_constant_velocity;
+
+  b(3) = b(3) + lambda_constant_velocity * diff_ego(0);
+  b(4) = b(4) + lambda_constant_velocity * diff_ego(1);
+  b(5) = b(5) + lambda_constant_velocity * diff_ego(2);
+  b(9)  = b(9)  - lambda_constant_velocity * diff_ego(0);
+  b(10) = b(10) - lambda_constant_velocity * diff_ego(1);
+  b(11) = b(11) - lambda_constant_velocity * diff_ego(2);
 
   //---------------------------
 }
@@ -205,18 +218,20 @@ void SLAM_optim_gn::update_frame(Frame* frame, Eigen::VectorXd& X){
   //---------------------------
 
   //Retrieve parameters
-  Eigen::Matrix3d rotat_b = compute_rotationMatrix(X(0), X(1), X(2));
+  Eigen::Matrix3d rotat_b; // = compute_rotationMatrix(X(0), X(1), X(2));
+  rotat_b = Eigen::AngleAxisd(X(0), Eigen::Vector3d::UnitX()) * Eigen::AngleAxisd(X(1), Eigen::Vector3d::UnitY()) * Eigen::AngleAxisd(X(2), Eigen::Vector3d::UnitZ());
   Eigen::Vector3d trans_b = Eigen::Vector3d(X(3), X(4), X(5));
 
-  Eigen::Matrix3d rotat_e = compute_rotationMatrix(X(6), X(7), X(8));
+  Eigen::Matrix3d rotat_e; // = compute_rotationMatrix(X(6), X(7), X(8));
+  rotat_e = Eigen::AngleAxisd(X(6), Eigen::Vector3d::UnitX()) * Eigen::AngleAxisd(X(7), Eigen::Vector3d::UnitY()) * Eigen::AngleAxisd(X(8), Eigen::Vector3d::UnitZ());
   Eigen::Vector3d trans_e = Eigen::Vector3d(X(9), X(10), X(11));
 
   //Update parameters
   frame->rotat_b = rotat_b * frame->rotat_b;
-  frame->trans_b += trans_b;
+  frame->trans_b = frame->trans_b + trans_b;
 
   frame->rotat_e = rotat_e * frame->rotat_e;
-  frame->trans_e += trans_e;
+  frame->trans_e = frame->trans_e + trans_e;
 
   frame->opti_score = X.norm();
 

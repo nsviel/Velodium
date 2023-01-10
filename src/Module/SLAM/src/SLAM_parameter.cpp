@@ -399,8 +399,8 @@ void SLAM_parameter::make_config_3(){
 
   //Transformation
   *min_root_distance = 3.0f;
-  *max_root_distance = 100.0f;
-  *grid_voxel_size = 0.1;
+  *max_root_distance = 200.0f;
+  *grid_voxel_size = 0.5;
 
   //Assessment
   *thres_ego_trans = 10.0f;
@@ -414,20 +414,20 @@ void SLAM_parameter::make_config_3(){
 
   //Normal
   *size_voxelMap = 0.5f;
-  *max_number_neighbors = 30;
-  *voxel_searchSize = 2;
+  *max_number_neighbors = 40;
+  *voxel_searchSize = 1;
 
   //Optimization
   *solver_gn = true;
   *solver_ceres = false;
-  *PTP_distance_max = 5;
+  *PTP_distance_max = 10;
   *iter_max = 5;
 
   //Local map
-  local_map->voxel_width = 0.5f;
+  local_map->voxel_width = 1;
   local_map->voxel_max_dist = 150.0f;
   local_map->voxel_min_point_dist = 0.001;
-  local_map->voxel_capacity = 30;
+  local_map->voxel_capacity = 100;
 
   //Specific
   this->set_nb_thread(8);

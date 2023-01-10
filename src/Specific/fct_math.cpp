@@ -541,11 +541,20 @@ std::vector<float> fct_standardize(std::vector<float>& vec, float value_to_avoid
   int size = vec.size();
   //-----------------------------
 
+  //Compute std
+  float sum = 0.0, mean, std = 0.0;
+  for(int i=0; i<vec.size(); i++){
+    sum += vec[i];
+  }
+  mean = sum/vec.size();
+  for(int i=0; i<vec.size(); i++){
+    std += pow(vec[i] - mean, 2);
+  }
+  std = sqrt(std / vec.size());
+
   //Retrieve min & max
   float min = vec[0];
   float max = vec[0];
-  float std = fct_std(vec);
-  float mean = fct_mean(vec);
   for(int i=0; i<size; i++){
     if(vec[i] != value_to_avoid){
       if(vec[i] > mean + std * 3 || vec[i] < mean - std * 3) vec[i] = value_to_avoid;

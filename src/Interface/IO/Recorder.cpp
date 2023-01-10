@@ -35,6 +35,7 @@ void Recorder::update_configuration(){
 
   this->with_save_frame = configManager->parse_json_b("dynamic", "with_save_frame");
   this->with_save_image = configManager->parse_json_b("dynamic", "with_save_image");
+  this->with_save_frame_raw = false;
 
   this->path_dir = configManager->parse_json_s("parameter", "path_data");
   this->path_frame = configManager->parse_json_s("dynamic", "path_save_frame");
@@ -42,7 +43,6 @@ void Recorder::update_configuration(){
   this->save_frame_max = configManager->parse_json_i("dynamic", "nb_save_frame");
   this->save_image_max = configManager->parse_json_i("dynamic", "nb_save_image");
   this->save_image_ID = 0;
-  this->with_save_frame_raw = false;
 
   this->check_directories();
 

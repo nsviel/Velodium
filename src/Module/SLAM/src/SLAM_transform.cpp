@@ -104,10 +104,10 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   for(auto it = grid.begin(); it != grid.end(); it++){
     if(it->second.size() != 0){
 
-      for(int i=0; i<100; i++){
-        int rdm = rand() % it->second.size();
+      for(int i=0; i<1; i++){
+        //int rdm = rand() % it->second.size();
 
-        Eigen::Vector4d point = it->second[rdm];
+        Eigen::Vector4d point = it->second[0];
         Eigen::Vector3d xyz(point(0), point(1), point(2));
         float ts_n = point(3);
 

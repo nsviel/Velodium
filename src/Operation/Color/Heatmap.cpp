@@ -121,6 +121,7 @@ void Heatmap::mode_height(Subset* subset){
 
   //fct_normalize resulting color vector
   vector<float> z_vec_norm = fct_normalize(z_vec, range_height);
+  z_vec_norm = fct_standardize(z_vec_norm, -1);
   vector<float>& color_vec = z_vec_norm;
 
   //---------------------------
@@ -196,7 +197,7 @@ void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
   //Normalization of the input vector
   vector<float> v_norm;
   if(is_normalization){
-    v_norm = fct_standardize(v_in, -1);
+    v_norm = fct_normalize(v_in, -1);
   }else{
     v_norm = v_in;
   }
