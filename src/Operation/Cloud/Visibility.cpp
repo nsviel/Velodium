@@ -7,7 +7,7 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Glyph/Object.h"
 #include "../../Engine/Scene/Glyph/Glyphs.h"
-#include "../../Engine/Scene/Glyph/Scene/Box.h"
+#include "../../Engine/Scene/Glyph/Cloud/Box.h"
 
 
 //Constructor / destructor

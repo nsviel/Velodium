@@ -39,6 +39,7 @@ public:
   inline SLAM_map* get_slam_map(){return slam_map;}
   inline SLAM_parameter* get_slam_param(){return slam_param;}
   inline SLAM_transform* get_slam_transf(){return slam_transf;}
+  inline SLAM_glyph* get_slam_glyph(){return slam_glyph;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
   inline bool* get_with_slam(){return &with_slam;}

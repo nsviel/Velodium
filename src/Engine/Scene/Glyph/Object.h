@@ -19,6 +19,7 @@ class Trajectory;
 class Localmap;
 class Box;
 class Tree;
+class Matching;
 
 
 class Object
@@ -70,6 +71,7 @@ public:
   inline Localmap* get_object_localmap(){return mapObject;}
   inline Box* get_object_box(){return boxObject;}
   inline Tree* get_object_tree(){return treeObject;}
+  inline Matching* get_object_matching(){return matchObject;}
 
 private:
   Node_engine* node_engine;
@@ -88,6 +90,7 @@ private:
   Car* carObject;
   Box* boxObject;
   Tree* treeObject;
+  Matching* matchObject;
 };
 
 #endif

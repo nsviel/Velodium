@@ -5,7 +5,6 @@
 
 class Module_slam;
 class Scene;
-class Object;
 class SLAM;
 
 class SLAM_optim_ceres;
@@ -15,6 +14,8 @@ class SLAM_assessment;
 class SLAM_map;
 class SLAM_parameter;
 class SLAM_transform;
+class SLAM_glyph;
+class SLAM_optim;
 
 
 class GUI_Slam
@@ -50,7 +51,6 @@ public:
 
 private:
   Scene* sceneManager;
-  Object* objectManager;
   SLAM* slamManager;
 
   SLAM_optim_ceres* slam_optim_ceres;
@@ -60,6 +60,8 @@ private:
   SLAM_map* slam_map;
   SLAM_parameter* slam_param;
   SLAM_transform* slam_transf;
+  SLAM_glyph* slam_glyph;
+  SLAM_optim* slam_optim;
 
   int item_width;
 };

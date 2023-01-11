@@ -15,15 +15,13 @@ public:
   ~Matching();
 
 public:
-  void create_matching_subset(Subset* subset);
-  void update_matching_subset(Subset* subset);
+  void create_matching();
+  void update_matching(vector<vec3>& xyz);
 
   inline Glyph* get_glyph(){return matching;}
-  inline bool* get_visibility(){return &visibility;}
 
 private:
   Glyph* matching;
-  bool visibility;
   vec4 color;
 };
 

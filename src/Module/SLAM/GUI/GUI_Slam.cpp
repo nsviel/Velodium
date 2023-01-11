@@ -6,6 +6,8 @@
 #include "../src/SLAM_map.h"
 #include "../src/SLAM_parameter.h"
 #include "../src/SLAM_transform.h"
+#include "../src/SLAM_glyph.h"
+
 #include "../optim/SLAM_optim.h"
 #include "../optim/SLAM_optim_ceres.h"
 #include "../optim/SLAM_optim_gn.h"
@@ -17,11 +19,6 @@
 #include "../../../Engine/Core/Engine.h"
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Car.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Trajectory.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Keypoint.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Localmap.h"
 #include "../../../Specific/fct_transtypage.h"
 
 
@@ -32,18 +29,16 @@ GUI_Slam::GUI_Slam(Module_slam* module){
   Node_module* node_module = module->get_node_module();
   Node_engine* node_engine = node_module->get_node_engine();
 
-  this->slamManager = module->get_slamManager();
-  SLAM_optim* optimManager = slamManager->get_slam_optim();
-
   this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
-
-  this->slam_optim_gn = optimManager->get_optim_gn();
+  this->slamManager = module->get_slamManager();
+  this->slam_optim = slamManager->get_slam_optim();
+  this->slam_optim_gn = slam_optim->get_optim_gn();
   this->slam_normal = slamManager->get_slam_normal();
   this->slam_assess = slamManager->get_slam_assess();
   this->slam_map = slamManager->get_slam_map();
   this->slam_param = slamManager->get_slam_param();
   this->slam_transf = slamManager->get_slam_transf();
+  this->slam_glyph = slamManager->get_slam_glyph();
 
   this->item_width = 100;
 
@@ -154,32 +149,34 @@ void GUI_Slam::parameter_glyph(){
     ImGui::Columns(2);
     //---------------------------
 
-    //Display ICP line correspondences
-    Keypoint* keyObject = objectManager->get_object_keypoint();
-    bool* keypoint_ON = keyObject->get_visibility();
-    if(ImGui::Checkbox("Keypoint", keypoint_ON)){
-      if(sceneManager->get_is_list_empty() == false){
-        objectManager->set_object_visibility("keypoint", *keypoint_ON);
-      }
-    }
+    //Keypoint
+    bool* with_keypoint = slam_glyph->get_with_keypoint();
+    ImGui::Checkbox("Keypoint##3", with_keypoint);
+    ImGui::NextColumn();
+
+    //Neighbor
+    bool* with_neighbor = slam_glyph->get_with_neighbor();
+    ImGui::Checkbox("Neighbor##3", with_neighbor);
+    ImGui::NextColumn();
+
+    //Matching
+    bool* with_matching = slam_glyph->get_with_matching();
+    ImGui::Checkbox("Matching##3", with_matching);
     ImGui::NextColumn();
 
     //Car
-    Car* carObject = objectManager->get_object_car();
-    bool* car_visu = carObject->get_visibility();
-    ImGui::Checkbox("Car", car_visu);
+    bool* with_car = slam_glyph->get_with_car();
+    ImGui::Checkbox("Car", with_car);
     ImGui::NextColumn();
 
     //Trajectory
-    Trajectory* trajObject = objectManager->get_object_trajectory();
-    bool* traj_visu = trajObject->get_visibility();
-    ImGui::Checkbox("Trajectory", traj_visu);
+    bool* with_trajectory = slam_glyph->get_with_trajectory();
+    ImGui::Checkbox("Trajectory", with_trajectory);
     ImGui::NextColumn();
 
     //Local map
-    Localmap* mapObject = objectManager->get_object_localmap();
-    Glyph* localmap = mapObject->get_localmap();
-    ImGui::Checkbox("Local map", &localmap->visibility);
+    bool* with_localmap = slam_glyph->get_with_localmap();
+    ImGui::Checkbox("Local map", with_localmap);
     ImGui::NextColumn();
 
     //---------------------------
@@ -402,13 +399,12 @@ void GUI_Slam::parameter_localCloud(){
 
     // With local cloud
     bool* with_local_cloud = slam_map->get_with_local_cloud();
-    ImGui::Checkbox("Active", with_local_cloud);
+    ImGui::Checkbox("Active##44", with_local_cloud);
     ImGui::SameLine();
 
     // Visibility
-    Localmap* mapObject = objectManager->get_object_localmap();
-    Glyph* glyph_localcloud = mapObject->get_localcloud();
-    ImGui::Checkbox("Visible", &glyph_localcloud->visibility);
+    bool* with_localcloud = slam_glyph->get_with_localcloud();
+    ImGui::Checkbox("Visible##44", with_localcloud);
 
     // Save resulting cloud
     ImGui::PushItemWidth(100);
@@ -434,12 +430,9 @@ void GUI_Slam::parameter_localCloud(){
     }
 
     //Local cloud color
-    ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
-    flags |= ImGuiColorEditFlags_AlphaBar;
-    vec4 rgb = glyph_localcloud->color_unique;
-    if(ImGui::ColorEdit4("Color", (float*)&rgb, flags)){
-      glyph_localcloud->color_unique = rgb;
-    }
+    ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar;
+    vec4* rgb = slam_glyph->get_localcloud_color();
+    ImGui::ColorEdit4("Color", (float*)rgb, flags);
     ImGui::Separator();
 
     //---------------------------

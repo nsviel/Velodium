@@ -3,15 +3,16 @@
 
 #include "Scene/Grid.h"
 #include "Scene/Axis.h"
-#include "Scene/AABB.h"
 #include "Scene/Mark.h"
-#include "Scene/Box.h"
+#include "Scene/Matching.h"
 
 #include "SLAM/Keypoint.h"
 #include "SLAM/Trajectory.h"
 #include "SLAM/Car.h"
 #include "SLAM/Localmap.h"
 
+#include "Cloud/AABB.h"
+#include "Cloud/Box.h"
 #include "Cloud/OOBB.h"
 #include "Cloud/Normal.h"
 #include "Cloud/Tree.h"
@@ -29,6 +30,7 @@ Object::Object(Node_engine* node){
 
   this->glyphManager = node_engine->get_glyphManager();
   this->configManager = node_engine->get_configManager();
+
   this->gridObject = new Grid();
   this->axisObject = new Axis();
   this->aabbObject = new AABB();
@@ -41,6 +43,7 @@ Object::Object(Node_engine* node){
   this->mapObject = new Localmap();
   this->boxObject = new Box();
   this->treeObject = new Tree();
+  this->matchObject = new Matching();
 
   //---------------------------
   this->create_glyph_scene();
@@ -74,12 +77,14 @@ void Object::create_glyph_scene(){
   glyphManager->create_glyph_scene(gridObject->get_grid_sub());
   glyphManager->create_glyph_scene(gridObject->get_grid_plane());
   glyphManager->create_glyph_scene(axisObject->get_axis_scene());
-  glyphManager->create_glyph_scene(trajObject->get_glyph());
   glyphManager->create_glyph_scene(aabbObject->get_glyph());
+  glyphManager->create_glyph_scene(boxObject->get_glyph());
+  glyphManager->create_glyph_scene(matchObject->get_glyph());
+
+  glyphManager->create_glyph_scene(trajObject->get_glyph());
   glyphManager->create_glyph_scene(carObject->get_glyph());
   glyphManager->create_glyph_scene(mapObject->get_localmap());
   glyphManager->create_glyph_scene(mapObject->get_localcloud());
-  glyphManager->create_glyph_scene(boxObject->get_glyph());
 
   //---------------------------
 }
@@ -313,6 +318,9 @@ void Object::reset_scene_object(){
 
   Glyph* box = boxObject->get_glyph();
   box->visibility = false;
+
+  Glyph* matching = matchObject->get_glyph();
+  matching->visibility = false;
 
   mapObject->clear();
 

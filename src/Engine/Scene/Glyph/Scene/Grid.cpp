@@ -26,7 +26,7 @@ Grid::~Grid(){
 }
 
 void Grid::create_grid(){
-  grid = new Glyph();
+  this->grid = new Glyph();
   //---------------------------
 
   //Create glyph
@@ -43,7 +43,7 @@ void Grid::create_grid(){
   //---------------------------
 }
 void Grid::create_grid_sub(){
-  grid_sub = new Glyph();
+  this->grid_sub = new Glyph();
   vector<vec3>& XYZ = grid_sub->xyz;
   vector<vec4>& RGB = grid_sub->rgb;
   //---------------------------
@@ -61,7 +61,7 @@ void Grid::create_grid_sub(){
   //---------------------------
 }
 void Grid::create_grid_plane(){
-  grid_plane = new Glyph();
+  this->grid_plane = new Glyph();
   //---------------------------
 
   //Construct plane grid

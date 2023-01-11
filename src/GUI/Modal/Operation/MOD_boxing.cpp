@@ -4,7 +4,7 @@
 #include "../../../Engine/Scene/Scene.h"
 #include "../../../Engine/Scene/Glyph/Glyphs.h"
 #include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/Scene/Box.h"
+#include "../../../Engine/Scene/Glyph/Cloud/Box.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Cloud/Extraction.h"
 #include "../../../Operation/Cloud/Visibility.h"
