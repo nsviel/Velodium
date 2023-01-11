@@ -575,6 +575,7 @@ void GUI_Slam::state_localmap(){
   int map_size_abs = 0;
   int map_size_rlt = 0;
   int nb_residual = 0;
+  int nb_residual_false = 0;
   int nb_keypoint = 0;
 
   if(sceneManager->get_is_list_empty() == false){
@@ -585,7 +586,8 @@ void GUI_Slam::state_localmap(){
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
     nb_residual = frame->nb_residual;
-    nb_keypoint = subset->keypoint.xyz.size();
+    nb_residual_false = frame->nb_residual_false;
+    nb_keypoint = frame->xyz.size();
   }
 
   //Local map data
@@ -596,6 +598,9 @@ void GUI_Slam::state_localmap(){
   ImGui::Text("Nb residual: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual);
+  ImGui::Text("Nb false residual: ");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", nb_residual_false);
   ImGui::Text("Nb voxel abs: ");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d", map_size_abs);

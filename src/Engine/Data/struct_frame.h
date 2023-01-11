@@ -40,6 +40,7 @@ struct Frame{ //SLAM stuff
   //Informative stats
   bool is_slamed;
   int nb_residual;
+  int nb_residual_false;
   int map_size_abs;
   int map_size_rlt;
   glm::vec3 trans_b_rlt;
@@ -78,6 +79,7 @@ struct Frame{ //SLAM stuff
     this->map_size_rlt = 0;
     this->is_slamed = false;
     this->nb_residual = 0;
+    this->nb_residual_false = 0;
 
     this->trans_b_rlt = glm::vec3(0, 0, 0);
     this->rotat_b_rlt = glm::vec3(0, 0, 0);

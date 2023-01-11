@@ -101,7 +101,7 @@ void SLAM_glyph::update_glyph_nn(Subset* subset){
 
     // Frame keypoint nearest neighbor location and normal
     for(int i=0; i<frame->xyz.size(); i++){
-      if(isnan(frame->nn[i](0)) == false){
+      if(fct_is_nan(frame->nn[i]) == false){
         xyz.push_back(vec3(frame->nn[i](0), frame->nn[i](1), frame->nn[i](2)));
         rgb.push_back(vec4(frame->ts_n[i], 1 - frame->ts_n[i], 1, 1));
       }else{

@@ -17,6 +17,7 @@ public:
 public:
   void create_matching();
   void update_matching(vector<vec3>& xyz);
+  void reset();
 
   inline Glyph* get_glyph(){return matching;}
 

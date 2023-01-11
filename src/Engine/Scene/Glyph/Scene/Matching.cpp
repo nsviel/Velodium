@@ -36,7 +36,13 @@ void Matching::update_matching(vector<vec3>& xyz){
   for(int i=0; i<xyz.size(); i++){
     rgb.push_back(matching->color_unique);
   }
-  
+
   //---------------------------
-  matching->visibility = true;
+}
+void Matching::reset(){
+  //---------------------------
+
+  matching->visibility = false;
+
+  //---------------------------
 }

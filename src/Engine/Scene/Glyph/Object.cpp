@@ -310,17 +310,12 @@ void Object::reset_scene_object(){
   aabb->xyz.clear();
 
   //Reset specific glyphs
-  Glyph* traj = trajObject->get_glyph();
-  traj->visibility = false;
-
-  Glyph* car = carObject->get_glyph();
-  car->visibility = false;
+  trajObject->reset();
+  carObject->reset();
+  matchObject->reset();
 
   Glyph* box = boxObject->get_glyph();
   box->visibility = false;
-
-  Glyph* matching = matchObject->get_glyph();
-  matching->visibility = false;
 
   mapObject->clear();
 

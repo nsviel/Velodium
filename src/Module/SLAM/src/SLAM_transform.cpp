@@ -108,42 +108,23 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   for(auto it = grid.begin(); it != grid.end(); it++){
     if(it->second.size() != 0){
 
-      for(int i=0; i<1; i++){
-        //int rdm = rand() % it->second.size();
-
-        Eigen::Vector4d point = it->second[0];
-        Eigen::Vector3d xyz(point(0), point(1), point(2));
-        float ts_n = point(3);
-
-        frame->xyz.push_back(xyz);
-        frame->ts_n.push_back(ts_n);
-
-        if(frame->xyz.size() > max_keypoint){
-          //say("max keypoint");
-          break;
-        }
-      }
-
-
-      /*//Take one random point
       int rdm = rand() % it->second.size();
-
       Eigen::Vector4d point = it->second[rdm];
       Eigen::Vector3d xyz(point(0), point(1), point(2));
+      float ts_n = point(3);
 
       frame->xyz.push_back(xyz);
-      frame->ts_n.push_back(point(3));
+      frame->ts_n.push_back(ts_n);
 
-      if(frame->xyz.size() > max_keypoint){
+      if(frame->xyz.size() >= max_keypoint){
         break;
-      }*/
+      }
 
     }
   }
 
-  frame->xyz_raw = frame->xyz;
-
   //---------------------------
+  frame->xyz_raw = frame->xyz;
 }
 
 //Transformation functions
@@ -201,8 +182,6 @@ void SLAM_transform::transform_subset(Subset* subset){
   //---------------------------
   sceneManager->update_subset_location(subset);
 }
-
-//Specific function
 void SLAM_transform::distort_frame(Frame* frame){
   //---------------------------
 

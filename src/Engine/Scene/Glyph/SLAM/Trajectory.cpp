@@ -43,11 +43,6 @@ void Trajectory::create(){
 void Trajectory::update(Cloud*cloud){
   //---------------------------
 
-  //Clear old values
-  trajectory->xyz.clear();
-  trajectory->rgb.clear();
-  trajectory->visibility = visibility;
-
   //Compute new trajectory values
   for(int j=1; j<cloud->subset.size(); j++){
     Subset* subset_m0 = *next(cloud->subset.begin(), j);
@@ -71,6 +66,15 @@ void Trajectory::update(Cloud*cloud){
     }
 
   }
+
+  //---------------------------
+}
+void Trajectory::reset(){
+  //---------------------------
+
+  trajectory->xyz.clear();
+  trajectory->rgb.clear();
+  trajectory->visibility = false;
 
   //---------------------------
 }

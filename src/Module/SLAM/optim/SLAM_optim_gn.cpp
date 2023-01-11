@@ -66,6 +66,7 @@ void SLAM_optim_gn::optim_GN(Frame* frame_m0, Frame* frame_m1){
 void SLAM_optim_gn::compute_derivative(Frame* frame){
   vec_u.clear(); vec_u.resize(frame->xyz.size());
   frame->nb_residual = 0;
+  frame->nb_residual_false = 0;
   //---------------------------
 
   //compute residual parameters
@@ -79,9 +80,10 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     double a2D = frame->a2D[i];
 
     //Check for NaN
-    if(isnan(a2D)) continue;
-    if(isnan(nn(0))) continue;
-    if(isnan(normal(0))) continue;
+    if(isnan(a2D) || fct_is_nan(nn) || fct_is_nan(normal)){
+      frame->nb_residual_false++;
+      continue;
+    }
 
     //Compute point-to-plane distance
     double dist_residual = 0;
@@ -89,6 +91,7 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
       dist_residual = dist_residual + normal[j] * (point[j] - nn[j]);
     }
     if(abs(dist_residual) > dist_residual_max){
+      frame->nb_residual_false++;
       continue;
     }
 

@@ -43,7 +43,6 @@ void Car::create(){
   file_OBJ objManager;
   dataFile* data = objManager.Loader("../media/engine/Marks/car.obj");
   car->xyz = data->location;
-  car->xyz_init = data->location;
   for(int i=0; i<car->xyz.size(); i++){
     car->rgb.push_back(color);
   }
@@ -53,16 +52,11 @@ void Car::create(){
 void Car::update(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
   Frame* frame = &subset->frame;
-  //---------------------------
-
-  car->visibility = visibility;
-
   vec3 trans_abs = subset->root;
+  //---------------------------
 
   if(trans_abs != vec3(0, 0, 0)){
     trans_abs.z -= lidar_height;
-    car->xyz = car->xyz_init;
-
     transformManager->make_rotation_origin(car->xyz, subset->rotat);
     transformManager->make_translation(car->xyz, trans_abs);
   }
@@ -72,9 +66,7 @@ void Car::update(Cloud* cloud){
 void Car::reset(){
   //---------------------------
 
-  //Clear previous data
-  car->xyz.clear();
-  car->rgb.clear();
+  car->visibility = false;
 
   //---------------------------
 }
