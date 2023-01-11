@@ -38,33 +38,33 @@ void Glyphs::draw_glyph(Glyph* glyph){
     glBindVertexArray(glyph->VAO);
     if(glyph->draw_type == "point"){
       glPointSize(glyph->draw_size);
-      glDrawArrays(GL_POINTS, 0, glyph->location.size());
+      glDrawArrays(GL_POINTS, 0, glyph->xyz.size());
     }
     else if(glyph->draw_type == "line"){
       glLineWidth(glyph->draw_width);
-      glDrawArrays(GL_LINES, 0, glyph->location.size());
+      glDrawArrays(GL_LINES, 0, glyph->xyz.size());
       glLineWidth(1);
     }
     else if(glyph->draw_type == "triangle"){
-      glDrawArrays(GL_TRIANGLES, 0, glyph->location.size());
+      glDrawArrays(GL_TRIANGLES, 0, glyph->xyz.size());
     }
     else if(glyph->draw_type == "triangle_strip"){
-      glDrawArrays(GL_TRIANGLE_STRIP, 0, glyph->location.size());
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, glyph->xyz.size());
     }
     else if(glyph->draw_type == "triangle_fan"){
-      glDrawArrays(GL_TRIANGLE_FAN, 0, glyph->location.size());
+      glDrawArrays(GL_TRIANGLE_FAN, 0, glyph->xyz.size());
     }
     else if(glyph->draw_type == "quad"){
-      glDrawArrays(GL_QUADS, 0, glyph->location.size());
+      glDrawArrays(GL_QUADS, 0, glyph->xyz.size());
     }
     else if(glyph->draw_type == "quad_strip"){
-      glDrawArrays(GL_QUAD_STRIP, 0, glyph->location.size());
+      glDrawArrays(GL_QUAD_STRIP, 0, glyph->xyz.size());
     }
     else if(glyph->draw_type == "polygon"){
-      glDrawArrays(GL_POLYGON, 0, glyph->location.size());
+      glDrawArrays(GL_POLYGON, 0, glyph->xyz.size());
     }
     else{
-      glDrawArrays(GL_POINTS, 0, glyph->location.size());
+      glDrawArrays(GL_POINTS, 0, glyph->xyz.size());
     }
     glBindVertexArray(0);
   }
@@ -74,27 +74,27 @@ void Glyphs::draw_glyph(Glyph* glyph){
 
 //Glyph update
 void Glyphs::update_glyph_location(Glyph* glyph){
-  vector<vec3>& XYZ = glyph->location;
+  vector<vec3>& XYZ = glyph->xyz;
   //---------------------------
 
   //Reactualise vertex position data
-  glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_location);
+  glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_xyz);
   glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }
 void Glyphs::update_glyph_color(Glyph* glyph){
-  vector<vec4>& RGB = glyph->color;
+  vector<vec4>& RGB = glyph->rgb;
   //---------------------------
 
   //Reactualise vertex color data
-  glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_color);
+  glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_rgb);
   glBufferData(GL_ARRAY_BUFFER, RGB.size() * sizeof(glm::vec4), &RGB[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }
 void Glyphs::update_glyph_color(Glyph* glyph, vec4 RGB_new){
-  vector<vec4>& RGB = glyph->color;
+  vector<vec4>& RGB = glyph->rgb;
   int size = RGB.size();
   //---------------------------
 
@@ -106,13 +106,13 @@ void Glyphs::update_glyph_color(Glyph* glyph, vec4 RGB_new){
   glyph->color_unique = RGB_new;
 
   //Reactualise vertex color data
-  glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_color);
+  glBindBuffer(GL_ARRAY_BUFFER, glyph->VBO_rgb);
   glBufferData(GL_ARRAY_BUFFER, RGB.size() * sizeof(glm::vec4), &RGB[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }
 void Glyphs::update_glyph_MinMax(Glyph* glyph){
-  vector<vec3>& XYZ = glyph->location;
+  vector<vec3>& XYZ = glyph->xyz;
   vec3 min = XYZ[0];
   vec3 max = XYZ[0];
   vec3 centroid = vec3(0, 0, 0);
@@ -147,24 +147,24 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
   glyph->VAO = VAO;
 
   //Vertices
-  vector<vec3>& XYZ = glyph->location;
+  vector<vec3>& XYZ = glyph->xyz;
   GLuint locationVBO;
   glGenBuffers(1, &locationVBO);
   glBindBuffer(GL_ARRAY_BUFFER, locationVBO);
   glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
   glEnableVertexAttribArray(0);
-  glyph->VBO_location = locationVBO;
+  glyph->VBO_xyz = locationVBO;
 
   //Color
-  vector<vec4>& RGB = glyph->color;
+  vector<vec4>& RGB = glyph->rgb;
   GLuint colorVBO;
   glGenBuffers(1, &colorVBO);
   glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
   glBufferData(GL_ARRAY_BUFFER, RGB.size()*sizeof(glm::vec4), &RGB[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
   glEnableVertexAttribArray(1);
-  glyph->VBO_color = colorVBO;
+  glyph->VBO_rgb = colorVBO;
 
   //ID
   glyph->ID = ID_glyph++;
@@ -215,8 +215,8 @@ Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, b
   uint colorVBO, locationVBO;
   //---------------------------
 
-  glyph->location = XYZ;
-  glyph->color = RGB;
+  glyph->xyz = XYZ;
+  glyph->rgb = RGB;
   glyph->name = "...";
   glyph->draw_type = mode;
   glyph->draw_width = 1;

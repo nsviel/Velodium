@@ -1,3 +1,4 @@
+
 #include "SLAM_optim_gn.h"
 
 #include "SLAM_normal.h"
@@ -85,7 +86,7 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     //Compute point-to-plane distance
     double dist_residual = 0;
     for(int j=0; j<3; j++){
-      dist_residual += normal[j] * (point[j] - nn[j]);
+      dist_residual = dist_residual + normal[j] * (point[j] - nn[j]);
     }
     if(abs(dist_residual) > dist_residual_max){
       continue;
@@ -95,7 +96,7 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     Eigen::Vector3d N_nn = a2D * a2D * normal;
     double residual = 0;
     for(int j=0; j<3; j++){
-      residual += N_nn[j] * (point[j] - nn[j]);
+      residual = residual + N_nn[j] * (point[j] - nn[j]);
     }
     frame->nb_residual++;
 
@@ -136,9 +137,9 @@ void SLAM_optim_gn::compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::Ve
 
       for(int j=0; j<12; j++){
         for(int k=0; k<12; k++){
-          J(j, k) += vec_u[i][j] * vec_u[i][k];
+          J(j, k) = J(j, k) + vec_u[i][j] * vec_u[i][k];
         }
-        b(j) -= vec_u[i][j] * vec_u[i][12];
+        b(j) = b(j) - vec_u[i][j] * vec_u[i][12];
       }
 
     }
@@ -148,9 +149,9 @@ void SLAM_optim_gn::compute_matrices(Frame* frame, Eigen::MatrixXd& J, Eigen::Ve
   #pragma omp parallel for num_threads(nb_thread)
   for(int i=0; i<12; i++){
     for(int j=0; j<12; j++){
-      J(i, j) /= frame->nb_residual;
+      J(i, j) = J(i, j) / frame->nb_residual;
     }
-    b(i) /= frame->nb_residual;
+    b(i) = b(i) / frame->nb_residual;
   }
 
   //---------------------------

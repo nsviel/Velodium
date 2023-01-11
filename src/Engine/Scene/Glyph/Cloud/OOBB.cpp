@@ -26,12 +26,12 @@ Glyph* OOBB::create_oobb(){
 
   //Box color
   for(int i=0; i<24; i++){
-    oobb->color.push_back(color);
+    oobb->rgb.push_back(color);
   }
 
   //Arrow color
   for(int i=0; i<6; i++){
-    oobb->color.push_back(vec4(0,0,1,1));
+    oobb->rgb.push_back(vec4(0,0,1,1));
   }
 
   //---------------------------
@@ -50,7 +50,7 @@ void OOBB::update_oobb(Glyph* oobb, mat4 transformation){
     box[i] = vec3(point.x, point.y, point.z);
   }
 
-  oobb->location = box;
+  oobb->xyz = box;
 
   //---------------------------
 }

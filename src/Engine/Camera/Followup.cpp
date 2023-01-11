@@ -26,7 +26,7 @@ Followup::~Followup(){}
 void Followup::update_configuration(){
   //---------------------------
 
-  this->camera_moved_trans = vec2(0, 0);
+  this->camera_moved_trans = vec3(0, 0, 0);
   this->camera_distFromPos = 5;
   this->camera_nb_pose = 5;
   this->camera_top_z = 20;
@@ -131,11 +131,11 @@ void Followup::camera_position(Subset* subset, vec3 E){
 
     float x = camPos.x + pose[0] - camera_moved_trans.x;
     float y = camPos.y + pose[1] - camera_moved_trans.y;
-    float z = camPos.z;
+    float z = camPos.z + pose[2] - camera_moved_trans.z;
 
     vec3 camPos_new = vec3(x, y, z);
 
-    this->camera_moved_trans = vec3(pose[0], pose[1], 0);
+    this->camera_moved_trans = vec3(pose[0], pose[1], pose[2]);
     cameraManager->set_cameraPos(camPos_new);
   }
 

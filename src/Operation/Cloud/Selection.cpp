@@ -315,7 +315,7 @@ void Selection::mark_pointLocation(){
 
         Glyph* glyph = objectManager->get_glyph(ID);
         objectManager->update_glyph_MinMax(glyph);
-        transformManager->make_positionning_glyph(glyph->location, glyph->COM, XYZ[idx_]);
+        transformManager->make_positionning_glyph(glyph->xyz, glyph->COM, XYZ[idx_]);
         objectManager->update_glyph_location(glyph);
 
         cpt++;
@@ -451,7 +451,7 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   //Update frame glyph
   Mark* markObject = objectManager->get_object_mark();
   Glyph* frame = markObject->get_selection_frame();
-  frame->location = xyz;
+  frame->xyz = xyz;
   objectManager->update_object(frame);
 
   //---------------------------
@@ -597,7 +597,7 @@ void Selection::mark_planeLocation(){
     //Plane marks
     if(ID_plane != -1){
       Glyph* glyph = objectManager->get_glyph(ID_plane);
-      vector<vec3>& XYZ_plane = glyph->location;
+      vector<vec3>& XYZ_plane = glyph->xyz;
       if(idx.size() >= 2 && XYZ_plane.size() != 0){
         int i0 = *next(idx.begin(), 0);
         int i1 = *next(idx.begin(), 1);

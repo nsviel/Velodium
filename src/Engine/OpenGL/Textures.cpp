@@ -126,19 +126,19 @@ void Textures::init_skybox(){
 
   glyph = new Glyph();
   unsigned int VAO;
-  uint colorVBO, locationVBO;
+  uint VBO_xyz;
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
 
-  glGenBuffers(1, &locationVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, locationVBO);
+  glGenBuffers(1, &VBO_xyz);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO_xyz);
   glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3 * sizeof(float),(void*)0);
   glEnableVertexAttribArray(0);
 
   glyph->VAO = VAO;
-  glyph->VBO_location = locationVBO;
-  glyph->location = XYZ;
+  glyph->VBO_xyz = VBO_xyz;
+  glyph->xyz = XYZ;
   glyph->name = "skybox";
   glyph->draw_type = "point";
   glyph->draw_width = 1;
@@ -162,7 +162,7 @@ void Textures::skybox(vec3 camPos){
 
   glBindVertexArray(glyph->VAO);
   glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-  glDrawArrays(GL_TRIANGLES, 0, glyph->location.size());
+  glDrawArrays(GL_TRIANGLES, 0, glyph->xyz.size());
   glDepthMask(GL_TRUE);
   */
 }

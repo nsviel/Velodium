@@ -13,11 +13,7 @@
 struct Glyph{
   //---------------------------
 
-  GLuint VAO;
-  GLuint VBO_location;
-  GLuint VBO_color;
-  GLuint VBO_normal;
-
+  // GLyph info & parameters
   int ID;
   float draw_width;
   float draw_size;
@@ -26,15 +22,24 @@ struct Glyph{
   std::string name;
   std::string draw_type;
 
+  // Data indicator
   glm::vec3 COM;
   glm::vec3 max;
   glm::vec3 min;
   glm::vec4 color_unique;
-  std::vector<glm::vec3> location;
-  std::vector<glm::vec3> location_init;
-  std::vector<glm::vec3> normal;
-  std::vector<glm::vec4> color;
-  std::vector<float> timestamp;
+
+  // Data
+  std::vector<glm::vec3> xyz;
+  std::vector<glm::vec3> xyz_init;
+  std::vector<glm::vec4> rgb;
+  std::vector<glm::vec3> Nxyz;
+  std::vector<float> ts;
+
+  // OpenGL stuff
+  GLuint VAO;
+  GLuint VBO_xyz;
+  GLuint VBO_rgb;
+  GLuint VBO_normal;
 
   //---------------------------
 };

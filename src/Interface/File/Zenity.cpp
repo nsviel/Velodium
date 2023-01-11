@@ -9,9 +9,10 @@ std::vector<std::string> zenity_file_vec(std::string title, std::string& path_di
   //Open zenity file manager
   std::string path_current_dir = get_path_abs_build() + '/';
   std::string zenity = "zenity --file-selection --multiple --title=" + title + " --filename=" + path_dir + " 2> /dev/null";
+
   FILE *file = popen(zenity.c_str(), "r");
-  char filename[32768];
-  const char* path_char = fgets(filename, 32768, file);
+  char filename[1000000];
+  const char* path_char = fgets(filename, 1000000, file);
   std::vector<std::string> path_vec;
 
   //Check if not empty

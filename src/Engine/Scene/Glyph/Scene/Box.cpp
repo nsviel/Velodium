@@ -53,7 +53,7 @@ void Box::update_box(){
 
 //Subfunction
 void Box::build_box_location(){
-  vector<vec3>& xyz = box->location;
+  vector<vec3>& xyz = box->xyz;
   vec3 min = box->min;
   vec3 max = box->max;
   //---------------------------
@@ -149,7 +149,7 @@ void Box::build_box_location(){
   //---------------------------
 }
 void Box::build_box_color(){
-  vector<vec4>& rgb = box->color;
+  vector<vec4>& rgb = box->rgb;
   //---------------------------
 
   rgb.clear();

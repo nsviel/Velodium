@@ -35,8 +35,8 @@ void Trajectory::create(){
   trajectory->color_unique = color;
 
   //Add an empty begin point
-  trajectory->location.push_back(vec3(0,0,0));
-  trajectory->color.push_back(color);
+  trajectory->xyz.push_back(vec3(0,0,0));
+  trajectory->rgb.push_back(color);
 
   //---------------------------
 }
@@ -44,8 +44,8 @@ void Trajectory::update(Cloud*cloud){
   //---------------------------
 
   //Clear old values
-  trajectory->location.clear();
-  trajectory->color.clear();
+  trajectory->xyz.clear();
+  trajectory->rgb.clear();
   trajectory->visibility = visibility;
 
   //Compute new trajectory values
@@ -62,12 +62,12 @@ void Trajectory::update(Cloud*cloud){
       vec4 color = trajectory->color_unique;
 
       //Add begin point
-      trajectory->location.push_back(trans_m0);
-      trajectory->color.push_back(color);
+      trajectory->xyz.push_back(trans_m0);
+      trajectory->rgb.push_back(color);
 
       //Add end pose
-      trajectory->location.push_back(trans_m1);
-      trajectory->color.push_back(color);
+      trajectory->xyz.push_back(trans_m1);
+      trajectory->rgb.push_back(color);
     }
 
   }

@@ -38,8 +38,8 @@ void Normal::update_normal_subset(Subset* subset){
   //Get vector values
   vector<vec3>& xyz_s = subset->xyz;
   vector<vec3>& Nxyz_s = subset->N;
-  vector<vec3>& xyz_n = normal->location;
-  vector<vec4>& rgb_n = normal->color;
+  vector<vec3>& xyz_n = normal->xyz;
+  vector<vec4>& rgb_n = normal->rgb;
 
   //Check vector length
   if(xyz_s.size() == 0 || Nxyz_s.size() == 0 || Nxyz_s.size() != xyz_s.size()){

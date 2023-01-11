@@ -49,7 +49,7 @@ void Matching::update_matching_subset(Subset* subset){
 
       //Color
       float Red, Green, Blue;
-      if(key_P.size()*2+1 != glyph->color.size() || upColor){
+      if(key_P.size()*2+1 != glyph->rgb.size() || upColor){
         if(match_rdmColor){
           Red = float(rand()%101)/100;
           Green = float(rand()%101)/100;
@@ -64,13 +64,13 @@ void Matching::update_matching_subset(Subset* subset){
         RGB.push_back(vec4(Red, Green, Blue, 1.0));
 
         this->upColor = false;
-        glyph->color = RGB;
+        glyph->rgb = RGB;
         this->update_color(glyph);
       }
     }
 
     //Update glyph
-    glyph->location = XYZ;
+    glyph->xyz = XYZ;
     glyph->visibility = matchON;
     this->update_location(glyph);
   }*/

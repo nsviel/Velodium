@@ -38,7 +38,7 @@ private:
   Camera* cameraManager;
   Configuration* configManager;
 
-  vec2 camera_moved_trans;
+  vec3 camera_moved_trans;
   float camera_distFromPos;
   float camera_top_z;
   float camera_oblique_z;

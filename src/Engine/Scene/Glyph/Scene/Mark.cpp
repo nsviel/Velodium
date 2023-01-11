@@ -32,7 +32,7 @@ void Mark::create_selection_frame(){
   selection_frame->permanent = true;
 
   for(int i=0; i<8; i++){
-    selection_frame->color.push_back(selection_frame_color);
+    selection_frame->rgb.push_back(selection_frame_color);
   }
 
   //---------------------------
@@ -50,7 +50,7 @@ Glyph* Mark::obj_pointsAtLocation(vector<vec3>& pos){
   ptAtLoc->permanent = false;
 
   //Parameters
-  vector<vec4>& RGB = ptAtLoc->color;
+  vector<vec4>& RGB = ptAtLoc->rgb;
 
   //Construct glyph
   for(int i=0; i<pos.size(); i++){
@@ -72,8 +72,8 @@ Glyph* Mark::obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in
   sphere->permanent = false;
 
   //Parameters
-  vector<vec3>& XYZ = sphere->location;
-  vector<vec4>& RGB = sphere->color;
+  vector<vec3>& XYZ = sphere->xyz;
+  vector<vec4>& RGB = sphere->rgb;
 
   //Create glyph
   int i, j;
@@ -112,7 +112,7 @@ Glyph* Mark::obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in
 void Mark::update_selection_frame(vector<vec3> xyz){
   //---------------------------
 
-  selection_frame->location = xyz;
+  selection_frame->xyz = xyz;
 
   //---------------------------
 }

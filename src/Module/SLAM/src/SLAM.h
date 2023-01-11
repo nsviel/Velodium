@@ -16,6 +16,7 @@ class SLAM_map;
 class SLAM_parameter;
 class SLAM_normal;
 class SLAM_transform;
+class SLAM_glyph;
 
 
 class SLAM
@@ -62,6 +63,7 @@ private:
   SLAM_map* slam_map;
   SLAM_parameter* slam_param;
   SLAM_transform* slam_transf;
+  SLAM_glyph* slam_glyph;
 
   bool with_slam;
   float time_slam;

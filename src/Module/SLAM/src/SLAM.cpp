@@ -12,6 +12,7 @@
 #include "SLAM_map.h"
 #include "SLAM_parameter.h"
 #include "SLAM_transform.h"
+#include "SLAM_glyph.h"
 
 #include "../optim/SLAM_normal.h"
 #include "../optim/SLAM_optim.h"
@@ -32,6 +33,7 @@ SLAM::SLAM(Node_engine* node){
   this->slam_transf = new SLAM_transform(this);
   this->slam_param = new SLAM_parameter(this);
   this->slam_init = new SLAM_init(this);
+  this->slam_glyph = new SLAM_glyph(this);
 
   //---------------------------
   this->update_configuration();
@@ -68,7 +70,7 @@ bool SLAM::compute_slam(Cloud* cloud, int subset_ID){
 void SLAM::reset_slam(){
   //---------------------------
 
-  slam_transf->reset_glyph();
+  slam_glyph->reset_glyph();
   slam_map->reset_map();
 
   //---------------------------
@@ -84,7 +86,7 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
   if(success){
     slam_transf->transform_subset(subset);
     slam_map->update_map(cloud, subset_ID);
-    slam_transf->transform_glyph(subset);
+    slam_glyph->update_glyph(subset);
   //Else reset slam map
   }else{
     frame->reset();

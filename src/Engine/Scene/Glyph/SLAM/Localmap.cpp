@@ -25,11 +25,11 @@ Localmap::~Localmap(){
 void Localmap::clear(){
   //---------------------------
 
-  localmap->location.clear();
-  localmap->color.clear();
+  localmap->xyz.clear();
+  localmap->rgb.clear();
 
-  localcloud->location.clear();
-  localcloud->color.clear();
+  localcloud->xyz.clear();
+  localcloud->rgb.clear();
 
   //---------------------------
 }
@@ -65,8 +65,8 @@ void Localmap::update_localmap(slamap* map){
   if(localmap->visibility){
     //---------------------------
 
-    vector<vec3>& gly_xyz = localmap->location;
-    vector<vec4>& gly_rgb = localmap->color;
+    vector<vec3>& gly_xyz = localmap->xyz;
+    vector<vec4>& gly_rgb = localmap->rgb;
 
     gly_xyz.clear();
     gly_rgb.clear();
@@ -91,8 +91,8 @@ void Localmap::update_localcloud(slamap* map){
   if(localcloud->visibility){
     //---------------------------
 
-    vector<vec3>& gly_xyz = localcloud->location;
-    vector<vec4>& gly_rgb = localcloud->color;
+    vector<vec3>& gly_xyz = localcloud->xyz;
+    vector<vec4>& gly_rgb = localcloud->rgb;
 
     gly_xyz.clear();
     gly_rgb.clear();

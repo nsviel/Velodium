@@ -7,7 +7,7 @@
 #include "Scene/Mark.h"
 #include "Scene/Box.h"
 
-#include "SLAM/Slam_keypoint.h"
+#include "SLAM/Keypoint.h"
 #include "SLAM/Trajectory.h"
 #include "SLAM/Car.h"
 #include "SLAM/Localmap.h"
@@ -37,7 +37,7 @@ Object::Object(Node_engine* node){
   this->markObject = new Mark();
   this->trajObject = new Trajectory();
   this->carObject = new Car();
-  this->keyObject = new Slam_keypoint();
+  this->keyObject = new Keypoint();
   this->mapObject = new Localmap();
   this->boxObject = new Box();
   this->treeObject = new Tree();
@@ -86,19 +86,19 @@ void Object::create_glyph_scene(){
 void Object::create_glyph_subset(Subset* subset){
   //---------------------------
 
-  //Cloud axis stuff
+  //Cloud axis glyph
   axisObject->create_axis_subset(subset);
   glyphManager->insert_into_gpu(&subset->axis);
 
-  //Normal stuff
+  //Normal glyph
   normObject->create_normal_subset(subset);
   glyphManager->insert_into_gpu(&subset->normal);
 
-  //Keypoint stuff
+  //Keypoint glyph
   keyObject->create_keypoint(subset);
   glyphManager->insert_into_gpu(&subset->keypoint);
 
-  //Tree stuff
+  //Tree glyph
   treeObject->create_tree(subset);
   glyphManager->insert_into_gpu(&subset->tree);
 
@@ -267,11 +267,6 @@ void Object::update_glyph_subset(Subset* subset){
     glyphManager->update_glyph_location(&subset->axis);
   }
 
-  //Subset keypoint
-  keyObject->update_keypoint_location(subset);
-  keyObject->update_keypoint_normal(subset);
-  this->update_object(&subset->keypoint);
-
   //Subset normal
   normObject->update_normal_subset(subset);
   this->update_object(&subset->normal);
@@ -307,7 +302,7 @@ void Object::reset_scene_object(){
 
   //Invisibilize all cloud dependant glyphs
   Glyph* aabb = aabbObject->get_glyph();
-  aabb->location.clear();
+  aabb->xyz.clear();
 
   //Reset specific glyphs
   Glyph* traj = trajObject->get_glyph();
@@ -338,8 +333,8 @@ void Object::reset_object(Glyph* glyph){
   //---------------------------
 
   if(glyph != nullptr){
-    glyph->location.clear();
-    glyph->color.clear();
+    glyph->xyz.clear();
+    glyph->rgb.clear();
     glyphManager->update_glyph_location(glyph);
   }
 

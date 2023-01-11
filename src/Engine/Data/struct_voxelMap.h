@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <tsl/robin_map.h>
 #include <queue>
+#include <iostream>
 
 
 //iNN search
@@ -42,6 +43,9 @@ struct slamap{
   //Functions
   int get_signature(int kx, int ky, int kz){
     int key = (kx*2000 + ky)*1000 + kz;
+    if(key >= INT_MAX || key <= INT_MIN){
+      std::cout<<"[error] Int min or max value for key"<<std::endl;
+    }
     return key;
   }
   void reset(){

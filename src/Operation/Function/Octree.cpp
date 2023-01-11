@@ -30,8 +30,8 @@ tic();
 toc_ms("octree");
 
   Glyph* glyph = &subset->tree;
-  glyph->location = root->xyz;
-  glyph->color = root->rgb;
+  glyph->xyz = root->xyz;
+  glyph->rgb = root->rgb;
 
   //---------------------------
   this->remove_octree(root);
@@ -46,8 +46,8 @@ void Octree::create_octree(Subset* subset, int level){
   this->octree_time = toc_ms();
 
   Glyph* glyph = &subset->tree;
-  glyph->location = root->xyz;
-  glyph->color = root->rgb;
+  glyph->xyz = root->xyz;
+  glyph->rgb = root->rgb;
 
   //---------------------------
   this->remove_octree(root);

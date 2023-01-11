@@ -20,7 +20,7 @@
 #include "../../../Engine/Scene/Glyph/Object.h"
 #include "../../../Engine/Scene/Glyph/SLAM/Car.h"
 #include "../../../Engine/Scene/Glyph/SLAM/Trajectory.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Slam_keypoint.h"
+#include "../../../Engine/Scene/Glyph/SLAM/Keypoint.h"
 #include "../../../Engine/Scene/Glyph/SLAM/Localmap.h"
 #include "../../../Specific/fct_transtypage.h"
 
@@ -106,13 +106,44 @@ void GUI_Slam::design_option(){
 }
 
 void GUI_Slam::parameter_lidar(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Configuration model
-  int slam_conf = *slam_param->get_predefined_conf();
+  int slam_conf;
+  if(cloud == nullptr){
+    slam_conf = *slam_param->get_predefined_conf();
+  }else{
+    if(cloud->lidar_model == "velodyne_vlp16"){
+      slam_conf = 0;
+    }
+    else if(cloud->lidar_model == "velodyne_vlp64"){
+      slam_conf = 1;
+    }
+    else if(cloud->lidar_model == "velodyne_hdl32"){
+      slam_conf = 2;
+    }
+    else if(cloud->lidar_model == "velodyne_vlp16_reduced"){
+      slam_conf = 3;
+    }
+  }
+
   ImGui::SetNextItemWidth(item_width);
   if(ImGui::Combo("LiDAR", &slam_conf, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
     slam_param->set_predefined_conf(slam_conf);
+
+    if(slam_conf == 0){
+      cloud->lidar_model = "velodyne_vlp16";
+    }
+    else if(slam_conf == 1){
+      cloud->lidar_model = "velodyne_vlp64";
+    }
+    else if(slam_conf == 2){
+      cloud->lidar_model = "velodyne_hdl32";
+    }
+    else if(slam_conf == 3){
+      cloud->lidar_model = "velodyne_vlp16_reduced";
+    }
   }
 
   //---------------------------
@@ -124,7 +155,7 @@ void GUI_Slam::parameter_glyph(){
     //---------------------------
 
     //Display ICP line correspondences
-    Slam_keypoint* keyObject = objectManager->get_object_keypoint();
+    Keypoint* keyObject = objectManager->get_object_keypoint();
     bool* keypoint_ON = keyObject->get_visibility();
     if(ImGui::Checkbox("Keypoint", keypoint_ON)){
       if(sceneManager->get_is_list_empty() == false){
@@ -355,7 +386,7 @@ void GUI_Slam::parameter_localMap(){
     //Number of point per voxel
     int* nb_points_per_voxel = &local_map->voxel_capacity;
     ImGui::SetNextItemWidth(item_width);
-    ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 100);
+    ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 500);
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The maximum number of points per voxel of the map");
     }
@@ -561,7 +592,7 @@ void GUI_Slam::state_localmap(){
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
     nb_residual = frame->nb_residual;
-    nb_keypoint = subset->keypoint.location.size();
+    nb_keypoint = subset->keypoint.xyz.size();
   }
 
   //Local map data

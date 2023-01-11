@@ -94,6 +94,10 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
       int kz = static_cast<int>(xyz.z / grid_voxel_width);
       int key = (kx*2000 + ky)*1000 + kz;
 
+      if(key >= INT_MAX || key <= INT_MIN){
+        cout<<"[error] Int min or max value for key"<<endl;
+      }
+
       point << xyz.x, xyz.y, xyz.z, ts_n;
       grid[key].push_back(point);
     }
@@ -115,6 +119,7 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
         frame->ts_n.push_back(ts_n);
 
         if(frame->xyz.size() > max_keypoint){
+          //say("max keypoint");
           break;
         }
       }
@@ -196,39 +201,6 @@ void SLAM_transform::transform_subset(Subset* subset){
   //---------------------------
   sceneManager->update_subset_location(subset);
 }
-void SLAM_transform::transform_glyph(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  //Update keypoint
-  if(frame->xyz.size() == frame->nn.size()){
-    vector<vec3> xyz;
-    vector<vec3> Nxy;
-    vector<float> ts;
-
-    for(int i=0; i<frame->xyz.size(); i++){
-      if(isnan(frame->nn[i](0)) == false){
-        xyz.push_back(vec3(frame->nn[i](0), frame->nn[i](1), frame->nn[i](2)));
-        Nxy.push_back(vec3(frame->N_nn[i](0), frame->N_nn[i](1), frame->N_nn[i](2)));
-        ts.push_back(frame->ts_n[i]);
-      }
-    }
-
-    subset->keypoint.location = xyz;
-    subset->keypoint.timestamp = ts;
-    subset->keypoint.normal = Nxy;
-  }
-
-  //Update local map
-  Localmap* mapObject = objectManager->get_object_localmap();
-  mapObject->update_localmap(slam_map->get_local_map());
-  objectManager->update_object(mapObject->get_localmap());
-  mapObject->update_localcloud(slam_map->get_local_cloud());
-  objectManager->update_object(mapObject->get_localcloud());
-
-  //---------------------------
-  objectManager->update_glyph_subset(subset);
-}
 
 //Specific function
 void SLAM_transform::distort_frame(Frame* frame){
@@ -254,13 +226,6 @@ void SLAM_transform::distort_frame(Frame* frame){
       frame->xyz[i] = quat_e_inv * (quat_n * frame->xyz[i] + t) + trans_e_inv;
     }
   }
-
-  //---------------------------
-}
-void SLAM_transform::reset_glyph(){
-  //---------------------------
-
-  objectManager->reset_scene_object();
 
   //---------------------------
 }

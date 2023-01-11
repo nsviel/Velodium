@@ -44,8 +44,8 @@ void Grid::create_grid(){
 }
 void Grid::create_grid_sub(){
   grid_sub = new Glyph();
-  vector<vec3>& XYZ = grid_sub->location;
-  vector<vec4>& RGB = grid_sub->color;
+  vector<vec3>& XYZ = grid_sub->xyz;
+  vector<vec4>& RGB = grid_sub->rgb;
   //---------------------------
 
   //Create glyph
@@ -73,8 +73,8 @@ void Grid::create_grid_plane(){
 
   //Parameters
   vec3 color = vec3(0.15f, 0.15f, 0.15f);
-  vector<vec3>& XYZ = grid_plane->location;
-  vector<vec4>& RGB = grid_plane->color;
+  vector<vec3>& XYZ = grid_plane->xyz;
+  vector<vec4>& RGB = grid_plane->rgb;
 
   //Location
   XYZ.push_back(vec3(-nb_cell, -nb_cell, 0));
@@ -94,8 +94,8 @@ void Grid::create_grid_plane(){
 }
 
 void Grid::update_grid(int value){
-  vector<vec3>& XYZ = grid->location;
-  vector<vec4>& RGB = grid->color;
+  vector<vec3>& XYZ = grid->xyz;
+  vector<vec4>& RGB = grid->rgb;
   this->nb_cell = value;
   //---------------------------
 
@@ -119,8 +119,8 @@ void Grid::update_grid(int value){
   //---------------------------
 }
 void Grid::update_grid_sub(int value){
-  vector<vec3>& XYZ = grid_sub->location;
-  vector<vec4>& RGB = grid_sub->color;
+  vector<vec3>& XYZ = grid_sub->xyz;
+  vector<vec4>& RGB = grid_sub->rgb;
   this->nb_cell = value;
   //---------------------------
 
@@ -151,7 +151,7 @@ void Grid::update_grid_sub(int value){
   //---------------------------
 }
 void Grid::update_grid_plane(int value){
-  vector<vec3>& XYZ = grid_plane->location;
+  vector<vec3>& XYZ = grid_plane->xyz;
   this->nb_cell = value;
   //---------------------------
 

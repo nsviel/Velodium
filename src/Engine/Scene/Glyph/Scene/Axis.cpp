@@ -30,8 +30,8 @@ void Axis::create_axis_scene(){
   axis_scene->permanent = true;
 
   //Parameters
-  vector<vec3>& XYZ = axis_scene->location;
-  vector<vec4>& RGB = axis_scene->color;
+  vector<vec3>& XYZ = axis_scene->xyz;
+  vector<vec4>& RGB = axis_scene->rgb;
 
   //Construct glyph
   //X axis
@@ -67,8 +67,8 @@ void Axis::create_axis_circle(float circleRadius){
 
   //Parameters
   int nb_segm = 100;
-  vector<vec3>& XYZ = axis_circle->location;
-  vector<vec4>& RGB = axis_circle->color;
+  vector<vec3>& XYZ = axis_circle->xyz;
+  vector<vec4>& RGB = axis_circle->rgb;
 
   //Contruct glyph
   int cpt = 0;
@@ -102,7 +102,7 @@ void Axis::create_axis_subset(Subset* subset){
   axis_subset.draw_type = "line";
 
   //Axis colors
-  vector<vec4>& RGB = axis_subset.color;
+  vector<vec4>& RGB = axis_subset.rgb;
   RGB.push_back(vec4(0.9f, 0.2f, 0.2f, 1.0f));
   RGB.push_back(vec4(0.9f, 0.2f, 0.2f, 1.0f));
   RGB.push_back(vec4(0.2f, 0.9f, 0.2f, 1.0f));
@@ -115,7 +115,7 @@ void Axis::create_axis_subset(Subset* subset){
 }
 void Axis::update_axis_subset(Subset* subset){
   Glyph* axis_subset = &subset->axis;
-  vector<vec3>& XYZ = axis_subset->location;
+  vector<vec3>& XYZ = axis_subset->xyz;
   vec3 subset_root = subset->root;
   //---------------------------
 

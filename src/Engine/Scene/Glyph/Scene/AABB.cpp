@@ -34,7 +34,7 @@ void AABB::create_aabb_scene(){
   aabb->color_unique = color;
 
   for(int i=0; i<24; i++){
-    aabb->color.push_back(color);
+    aabb->rgb.push_back(color);
   }
 
   //---------------------------
@@ -45,19 +45,19 @@ void AABB::update_aabb(Cloud* cloud){
   //---------------------------
 
   //location
-  aabb->location = build_box(min, max);
+  aabb->xyz = build_box(min, max);
 
   //---------------------------
 }
 void AABB::update_aabb(Subset* subset){
-  vector<vec3>& XYZ = aabb->location;
-  vector<vec4>& RGB = aabb->color;
+  vector<vec3>& XYZ = aabb->xyz;
+  vector<vec4>& RGB = aabb->rgb;
   vec3 min = subset->min;
   vec3 max = subset->max;
   //---------------------------
 
   //location
-  aabb->location = build_box(min, max);
+  aabb->xyz = build_box(min, max);
 
   //---------------------------
 }

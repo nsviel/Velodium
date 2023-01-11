@@ -1,8 +1,8 @@
-#include "Slam_keypoint.h"
+#include "Keypoint.h"
 
 
 //Constructor / destructor
-Slam_keypoint::Slam_keypoint(){
+Keypoint::Keypoint(){
   //---------------------------
 
   this->color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
@@ -10,15 +10,15 @@ Slam_keypoint::Slam_keypoint(){
 
   //---------------------------
 }
-Slam_keypoint::~Slam_keypoint(){}
+Keypoint::~Keypoint(){}
 
-void Slam_keypoint::create_keypoint(Subset* subset){
+void Keypoint::create_keypoint(Subset* subset){
   Glyph keypoint;
   //---------------------------
 
   //Create glyph
   keypoint.name = "keypoint";
-  keypoint.draw_size = 5;
+  keypoint.draw_size = 10;
   keypoint.draw_type = "point";
   keypoint.color_unique = color;
   keypoint.visibility = visibility;
@@ -26,13 +26,13 @@ void Slam_keypoint::create_keypoint(Subset* subset){
   //---------------------------
   subset->keypoint = keypoint;
 }
-void Slam_keypoint::update_keypoint_location(Subset* subset){
+void Keypoint::update_keypoint_location(Subset* subset){
   Glyph* keypoint = &subset->keypoint;
   //---------------------------
 
-  vector<vec3>& XYZ_key = keypoint->location;
-  vector<vec4>& RGB_key = keypoint->color;
-  vector<float>& ts_key = keypoint->timestamp;
+  vector<vec3>& XYZ_key = keypoint->xyz;
+  vector<vec4>& RGB_key = keypoint->rgb;
+  vector<float>& ts_key = keypoint->ts;
 
   //Construct glyph
   RGB_key.clear();
@@ -43,16 +43,16 @@ void Slam_keypoint::update_keypoint_location(Subset* subset){
 
   //---------------------------
 }
-void Slam_keypoint::update_keypoint_normal(Subset* subset){
+void Keypoint::update_keypoint_normal(Subset* subset){
   Glyph* normal = &subset->normal;
   Glyph* keypoint = &subset->keypoint;
   //---------------------------
 
   //Get vector values
-  vector<vec3>& xyz_k = keypoint->location;
-  vector<vec3>& Nxyz_k = keypoint->normal;
-  vector<vec3>& xyz_n = normal->location;
-  vector<vec4>& rgb_n = normal->color;
+  vector<vec3>& xyz_k = keypoint->xyz;
+  vector<vec3>& Nxyz_k = keypoint->Nxyz;
+  vector<vec3>& xyz_n = normal->xyz;
+  vector<vec4>& rgb_n = normal->rgb;
 
   //Check vector length
   if(xyz_k.size() == 0 || Nxyz_k.size() == 0 || Nxyz_k.size() != xyz_k.size()){
