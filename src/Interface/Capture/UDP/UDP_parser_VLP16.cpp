@@ -50,7 +50,7 @@ udpPacket* UDP_parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
   this->parse_azimuth();
   this->parse_coordinates();
   this->parse_timestamp();
-  this->final_check(packet_udp);
+  this->reorder_by_azimuth(packet_udp);
 
   //---------------------------
   return packet_udp;
@@ -233,30 +233,12 @@ void UDP_parser_VLP16::parse_timestamp(){
 
   //---------------------------
 }
-void UDP_parser_VLP16::final_check(udpPacket* cloud){
+
+//final processing functions
+void UDP_parser_VLP16::reorder_by_azimuth(udpPacket* cloud){
   //---------------------------
 
-  //Supress points when no distance are measured
-  if(supress_emptyElements){
-    vector<int> idx;
-    for(int i=0; i<packet_R.size(); i++){
-      if(packet_R[i] == 0){
-        idx.push_back(i);
-      }
-    }
-
-    this->make_supressElements(packet_I, idx);
-    this->make_supressElements(packet_A, idx);
-    this->make_supressElements(packet_R, idx);
-    this->make_supressElements(packet_t, idx);
-    this->make_supressElements(packet_xyz, idx);
-
-    if(packet_xyz.size() == 0){
-      cout << "No data in the packet" << endl;
-    }
-  }
-
-  //Reorder points in function of their timestamp
+  //Reorder points in function of their azimuth
   vector<vec3> xyz_b;
   vector<float> R_b;
   vector<float> I_b;
@@ -289,6 +271,31 @@ void UDP_parser_VLP16::final_check(udpPacket* cloud){
   }
   if(packet_xyz.size() != packet_I.size()){
     cout<< "Problem packet size I" << endl;
+  }
+
+  //---------------------------
+}
+void UDP_parser_VLP16::supress_empty_data(){
+  //Supress points when no distance are measured
+  //---------------------------
+
+  if(supress_emptyElements){
+    vector<int> idx;
+    for(int i=0; i<packet_R.size(); i++){
+      if(packet_R[i] == 0){
+        idx.push_back(i);
+      }
+    }
+
+    this->make_supressElements(packet_I, idx);
+    this->make_supressElements(packet_A, idx);
+    this->make_supressElements(packet_R, idx);
+    this->make_supressElements(packet_t, idx);
+    this->make_supressElements(packet_xyz, idx);
+
+    if(packet_xyz.size() == 0){
+      cout << "No data in the packet" << endl;
+    }
   }
 
   //---------------------------

@@ -67,6 +67,7 @@ private:
 
   string lidar_model;
   bool with_justOneFrame;
+  bool with_supress_null;
   bool is_capture_finished;
   bool is_capturing;
   bool is_first_run;

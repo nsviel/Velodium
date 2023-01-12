@@ -128,6 +128,52 @@ void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
 
   //---------------------------
 }
+void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
+  //---------------------------
+
+  for(int i=0; i<subset->xyz.size(); i++){
+    Eigen::Vector3d point(subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z);
+
+    //Retrieve corresponding voxel
+    int kx = static_cast<int>(point(0) / map->voxel_width);
+    int ky = static_cast<int>(point(1) / map->voxel_width);
+    int kz = static_cast<int>(point(2) / map->voxel_width);
+    int key = map->get_signature(kx, ky, kz);
+    voxelMap_it it = map->map.find(key);
+
+    //if the voxel already exists
+    if(it != map->map.end()){
+      //Get corresponding voxel
+      vector<Eigen::Vector3d>& voxel_xyz = it.value();
+
+      //If the voxel is not full
+      if(voxel_xyz.size() < map->voxel_capacity){
+        //Retrieve the minimal distance between the point and the voxel points
+        double dist_min = 10000;
+        for(int j=0; j<voxel_xyz.size(); j++){
+          Eigen::Vector3d& voxel_point = voxel_xyz[j];
+          double dist = fct_distance(point, voxel_point);
+          if(dist < dist_min){
+            dist_min = dist;
+          }
+        }
+
+        //If the distance is not too short, add the point to local map
+        if(dist_min > map->voxel_min_point_dist){
+          voxel_xyz.push_back(point);
+        }
+      }
+    }
+    //else create a new voxel
+    else{
+      vector<Eigen::Vector3d> voxel;
+      voxel.push_back(point);
+      map->map.insert({key, voxel});
+    }
+  }
+
+  //---------------------------
+}
 void SLAM_map::add_pointToCloud(slamap* map, Subset* subset){
   Eigen::Vector3d point_3d;
   Eigen::Vector4d point_4d;

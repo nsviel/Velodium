@@ -43,17 +43,20 @@ void Capture::update_configuration(){
 
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
   this->capture_port = configManager->parse_json_i("interface", "capture_port");
-  this->cloud_capture = nullptr;
-  this->ID_capture = 0;
-  this->is_capturing = false;
-  this->is_capture_finished = true;
-  this->capture_nb_point = 0;
-  this->capture_nb_point_raw = 0;
-  this->is_first_run = true;
-  this->with_justOneFrame = false;
-  this->nb_subset_max = 50;
   this->ratio_frame = configManager->parse_json_i("interface", "ratio_frame");
   this->ratio_cpt = ratio_frame;
+
+  this->cloud_capture = nullptr;
+  this->ID_capture = 0;
+  this->capture_nb_point = 0;
+  this->capture_nb_point_raw = 0;
+  this->nb_subset_max = 50;
+
+  this->with_supress_null = false;
+  this->with_justOneFrame = false;
+  this->is_first_run = true;
+  this->is_capturing = false;
+  this->is_capture_finished = true;
 
   if(configManager->parse_json_b("interface", "with_capture")){
     this->start_new_capture(lidar_model);
@@ -228,9 +231,11 @@ void Capture::operation_new_subset(Subset* subset){
     }
 
     //Supress null points
-    this->supress_nullpoints(subset);
-    this->capture_nb_point = subset->xyz.size();
-    if(subset->xyz.size() == 0) return;
+    if(with_supress_null){
+      this->supress_nullpoints(subset);
+      this->capture_nb_point = subset->xyz.size();
+      if(subset->xyz.size() == 0) return;
+    }
 
     //Set new subset identifieurs
     subset->name = "frame_" + to_string(cloud_capture->ID_subset);
@@ -260,20 +265,25 @@ void Capture::supress_nullpoints(Subset* subset){
 
   for(int i=0; i<subset->xyz.size(); i++){
     if(subset->xyz[i].x != 0 && subset->xyz[i].y != 0 && subset->xyz[i].z != 0){
+      //Location
       xyz.push_back(subset->xyz[i]);
 
+      //Color
       if(subset->RGB.size() != 0){
         RGB.push_back(subset->RGB[i]);
       }
 
+      //Normal
       if(subset->N.size() != 0){
         N.push_back(subset->N[i]);
       }
 
+      //Timestamp
       if(subset->ts.size() != 0){
         ts.push_back(subset->ts[i]);
       }
 
+      //Intensity
       if(subset->I.size() != 0){
         I.push_back(subset->I[i]);
       }

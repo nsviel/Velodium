@@ -23,6 +23,7 @@ public:
 
   //Sub-function
   void add_pointToMap(slamap* map, Frame* frame);
+  void add_pointToMap(slamap* map, Subset* subset);
   void add_pointToCloud(slamap* map, Subset* subset);
   void save_local_cloud();
 

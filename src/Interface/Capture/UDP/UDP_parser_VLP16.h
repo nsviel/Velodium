@@ -24,7 +24,10 @@ public:
   void parse_azimuth();
   void parse_coordinates();
   void parse_timestamp();
-  void final_check(udpPacket* cloud);
+
+  //Final processing function
+  void reorder_by_azimuth(udpPacket* cloud);
+  void supress_empty_data();
 
   //Subsubfunctions
   vector<float> calc_timing_offsets();

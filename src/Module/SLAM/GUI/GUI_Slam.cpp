@@ -390,7 +390,7 @@ void GUI_Slam::parameter_localMap(){
     //Number of point per voxel
     int* nb_points_per_voxel = &local_map->voxel_capacity;
     ImGui::SetNextItemWidth(item_width);
-    ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 500);
+    ImGui::SliderInt("Number point per voxel", nb_points_per_voxel, 1, 5000);
     if(ImGui::IsItemHovered()){
       ImGui::SetTooltip("The maximum number of points per voxel of the map");
     }
