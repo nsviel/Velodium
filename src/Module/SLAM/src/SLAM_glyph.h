@@ -17,7 +17,8 @@ public:
 
 public:
   //Main function
-  void update_glyph(Subset* subset);
+  void update_glyph(Cloud* cloud, Subset* subset);
+  void update_visibility(Subset* subset);
   void reset_glyph();
 
   //Subfunctions$
@@ -26,7 +27,8 @@ public:
   void update_glyph_matching(Subset* subset);
   void update_glyph_normal(Subset* subset);
   void update_glyph_map();
-  void update_visibility(Subset* subset);
+  void update_glyph_car(Cloud* cloud);
+  void update_glyph_trajectory(Cloud* cloud);
 
   inline vec4* get_localcloud_color(){return &localcloud->color_unique;}
   inline bool* get_with_keypoint(){return &with_keypoint;}

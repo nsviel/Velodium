@@ -185,11 +185,13 @@ void SLAM_parameter::make_config_0(){
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
+  int* max_keypoint = slam_transf->get_max_keypoint();
 
   //Transformation
   *min_root_distance = 5.0f;
   *max_root_distance = 100.0f;
   *grid_voxel_size = 1.0f;
+  *max_keypoint = 2000;
 
   //Assessment
   *thres_ego_trans = 2.0f;
@@ -395,12 +397,13 @@ void SLAM_parameter::make_config_3(){
   double* min_root_distance = slam_transf->get_min_root_distance();
   double* max_root_distance = slam_transf->get_max_root_distance();
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-
+  int* max_keypoint = slam_transf->get_max_keypoint();
 
   //Transformation
   *min_root_distance = 3.0f;
   *max_root_distance = 200.0f;
-  *grid_voxel_size = 0.5;
+  *grid_voxel_size = 0.3;
+  *max_keypoint = 2500;
 
   //Assessment
   *thres_ego_trans = 10.0f;
@@ -410,7 +413,7 @@ void SLAM_parameter::make_config_3(){
   *thres_optimMinNorm = 0.4f;
   *nb_residual_min = 100;
   *nb_rlt_previous_mean = 10;
-  *nb_rlt_previous_pose = 4;
+  *nb_rlt_previous_pose = 10;
 
   //Normal
   *size_voxelMap = 0.5f;

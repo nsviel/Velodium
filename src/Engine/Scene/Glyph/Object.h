@@ -43,7 +43,6 @@ public:
 
   //Update function
   void update_configuration();
-  void update_dynamic(Cloud* cloud);
   void update_glyph_subset(Subset* subset);
   void update_glyph_cloud(Cloud* cloud);
   void update_object(Glyph* glyph);

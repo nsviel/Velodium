@@ -7,6 +7,7 @@
 #include "../../../Engine/Scene/Glyph/SLAM/Localmap.h"
 #include "../../../Engine/Scene/Glyph/SLAM/Car.h"
 #include "../../../Engine/Scene/Glyph/SLAM/Trajectory.h"
+#include "../../../Engine/Scene/Glyph/Cloud/Normal.h"
 #include "../../../Engine/Scene/Glyph/Scene/Matching.h"
 #include "../../../Specific/fct_math.h"
 
@@ -22,8 +23,8 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
 
   Trajectory* trajObject = objectManager->get_object_trajectory();
   Localmap* mapObject = objectManager->get_object_localmap();
-  Car* carObject = objectManager->get_object_car();
   Matching* matchObject = objectManager->get_object_matching();
+  Car* carObject = objectManager->get_object_car();
 
   this->trajectory = trajObject->get_glyph();
   this->localmap = mapObject->get_localmap();
@@ -44,7 +45,7 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
 SLAM_glyph::~SLAM_glyph(){}
 
 //Main function
-void SLAM_glyph::update_glyph(Subset* subset){
+void SLAM_glyph::update_glyph(Cloud* cloud, Subset* subset){
   //---------------------------
 
   //Clear vectors
@@ -58,10 +59,24 @@ void SLAM_glyph::update_glyph(Subset* subset){
   this->update_glyph_matching(subset);
   this->update_glyph_normal(subset);
   this->update_glyph_map();
+  this->update_glyph_car(cloud);
+  this->update_glyph_trajectory(cloud);
   this->update_visibility(subset);
 
   //---------------------------
   objectManager->update_object(&subset->keypoint);
+}
+void SLAM_glyph::update_visibility(Subset* subset){
+  //---------------------------
+
+  subset->keypoint.visibility = with_keypoint | with_neighbor;
+  trajectory->visibility = with_trajectory;
+  localmap->visibility = with_localmap;
+  localcloud->visibility = with_localcloud;
+  car->visibility = with_car;
+  matching->visibility = with_matching;
+
+  //---------------------------
 }
 void SLAM_glyph::reset_glyph(){
   //---------------------------
@@ -140,18 +155,23 @@ void SLAM_glyph::update_glyph_matching(Subset* subset){
   }
 }
 void SLAM_glyph::update_glyph_normal(Subset* subset){
-  vector<vec3>& Nxy = subset->keypoint.Nxyz;
+  vector<vec3> xyz;
+  vector<vec3> Nxyz;
   Frame* frame = &subset->frame;
   //---------------------------
 
   // Frame keypoint nearest neighbor location and normal
   for(int i=0; i<frame->nn.size(); i++){
-    if(fct_is_nan(frame->nn[i]) == false){
-      Nxy.push_back(vec3(frame->N_nn[i](0), frame->N_nn[i](1), frame->N_nn[i](2)));
+    xyz.push_back(vec3(frame->nn[i](0), frame->nn[i](1), frame->nn[i](2)));
+    if(fct_is_nan(frame->N_nn[i]) == false){
+      Nxyz.push_back(vec3(frame->N_nn[i](0), frame->N_nn[i](1), frame->N_nn[i](2)));
     }else{
-      Nxy.push_back(vec3(0, 0, 0));
+      Nxyz.push_back(vec3(0, 0, 0));
     }
   }
+
+  Normal* normalObject = objectManager->get_object_normal();
+  normalObject->update_normal_subset(subset, xyz, Nxyz);
 
   //---------------------------
 }
@@ -166,15 +186,27 @@ void SLAM_glyph::update_glyph_map(){
 
   //---------------------------
 }
-void SLAM_glyph::update_visibility(Subset* subset){
-  //---------------------------
+void SLAM_glyph::update_glyph_car(Cloud* cloud){
+  if(with_car){
+    //---------------------------
 
-  subset->keypoint.visibility = with_keypoint | with_neighbor;
-  trajectory->visibility = with_trajectory;
-  localmap->visibility = with_localmap;
-  localcloud->visibility = with_localcloud;
-  car->visibility = with_car;
-  matching->visibility = with_matching;
+    Car* carObject = objectManager->get_object_car();
+    Glyph* car = carObject->get_glyph();
+    carObject->update_car_location(cloud);
+    objectManager->update_object(car);
 
-  //---------------------------
+    //---------------------------
+  }
+}
+void SLAM_glyph::update_glyph_trajectory(Cloud* cloud){
+  if(with_trajectory){
+    //---------------------------
+
+    Trajectory* trajObject = objectManager->get_object_trajectory();
+    Glyph* traj = trajObject->get_glyph();
+    trajObject->update(cloud);
+    objectManager->update_object(traj);
+
+    //---------------------------
+  }
 }

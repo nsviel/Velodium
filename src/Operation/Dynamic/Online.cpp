@@ -75,6 +75,9 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   if(subset == nullptr) return;
   cloud->subset_selected = subset;
 
+  //Control subset visibilities
+  this->compute_visibility(cloud, ID_subset);
+
   //Make slam on the current subset
   node_module->online(cloud, ID_subset);
 
@@ -89,14 +92,8 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   //Colorization
   colorManager->make_colorization(cloud, ID_subset);
 
-  //Control subset visibilities
-  this->compute_visibility(cloud, ID_subset);
-
   //Update dynamic interfaces
   this->compute_recording(cloud, ID_subset);
-
-  //Update dynamic glyphs
-  objectManager->update_dynamic(cloud);
 
   //---------------------------
   this->time_ope = stop_chrono(t1);
@@ -122,7 +119,7 @@ void Online::compute_visibility(Cloud* cloud, int& ID_subset){
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
-    if(subset->ID > ID_subset - visibility_range - 1 && subset->ID <= ID_subset){
+    if(subset->ID >= ID_subset - visibility_range + 1 && subset->ID <= ID_subset){
       subset->visibility = true;
     }else{
       subset->visibility = false;

@@ -86,7 +86,7 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
   if(success){
     slam_transf->transform_subset(subset);
     slam_map->update_map(cloud, subset_ID);
-    slam_glyph->update_glyph(subset);
+    slam_glyph->update_glyph(cloud, subset);
   //Else reset slam map
   }else{
     frame->reset();
@@ -101,6 +101,8 @@ void SLAM::compute_finalization(Cloud* cloud, int subset_ID, bool success, float
   //---------------------------
 }
 bool SLAM::check_condition(Cloud* cloud, int subset_ID){
+  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
@@ -120,7 +122,6 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
   }
 
   //Subset number & timestamp
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
   if(subset_ID >= 2 && cloud->subset.size() < 2){
     console.AddLog("error" ,"[SLAM] No enough subsets");
     return false;
@@ -131,8 +132,10 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
   }
 
   //Frame already slam computed
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
-  if(frame->is_slamed == true) return false;
+  if(frame->is_slamed == true){
+    slam_glyph->update_glyph(cloud, subset);
+    return false;
+  }
 
   //Local map
   if(subset_ID < local_map->linked_subset_ID){

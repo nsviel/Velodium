@@ -11,6 +11,8 @@
 #include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_transtypage.h"
 
+#include <algorithm>
+
 
 //Constructor / Destructor
 SLAM_transform::SLAM_transform(SLAM* slam){
@@ -106,22 +108,24 @@ void SLAM_transform::grid_sampling_subset(Subset* subset){
   //Take one point inside each voxel
   cloudMap::iterator it;
   for(auto it = grid.begin(); it != grid.end(); it++){
-    if(it->second.size() != 0){
+    if(it->second.size() == 0){
+      continue;
+    }
 
-      int rdm = rand() % it->second.size();
-      Eigen::Vector4d point = it->second[rdm];
-      Eigen::Vector3d xyz(point(0), point(1), point(2));
-      float ts_n = point(3);
+    int rdm = rand() % it->second.size();
+    Eigen::Vector4d point = it->second[rdm];
+    Eigen::Vector3d xyz(point(0), point(1), point(2));
+    float ts_n = point(3);
 
-      frame->xyz.push_back(xyz);
-      frame->ts_n.push_back(ts_n);
+    frame->xyz.push_back(xyz);
+    frame->ts_n.push_back(ts_n);
 
-      if(frame->xyz.size() >= max_keypoint){
-        break;
-      }
-
+    if(frame->xyz.size() >= max_keypoint){
+      break;
     }
   }
+
+  frame->ts_n = fct_normalize(frame->ts_n);
 
   //---------------------------
   frame->xyz_raw = frame->xyz;

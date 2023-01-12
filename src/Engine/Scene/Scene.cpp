@@ -485,6 +485,7 @@ void Scene::selection_setSubset(Cloud* cloud, int ID){
     Subset* subset = *next(cloud->subset.begin(), i);
 
     if(i == ID){
+      cloud->ID_selected = ID;
       subset->visibility = true;
     }else{
       subset->visibility = false;

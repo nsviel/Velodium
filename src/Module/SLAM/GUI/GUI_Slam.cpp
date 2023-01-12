@@ -247,6 +247,13 @@ void GUI_Slam::parameter_optimization(){
     }
 
     //Maximum point to plane distance for optimization
+    double* PTP_distance_min = slam_optim_gn->get_dist_residual_min();
+    ImGui::SetNextItemWidth(item_width);
+    if(ImGui::InputDouble("Min PTP distance", PTP_distance_min, 0.01f, 4.0f, "%.3f")){
+      if(*PTP_distance_min < 0){
+        *PTP_distance_min = 0;
+      }
+    }
     double* PTP_distance_max = slam_optim_gn->get_dist_residual_max();
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::InputDouble("Max PTP distance", PTP_distance_max, 0.1f, 4.0f, "%.3f")){

@@ -22,6 +22,7 @@ public:
   void optim_GN(Frame* frame, Frame* frame_m1);
 
   inline double* get_dist_residual_max(){return &dist_residual_max;}
+  inline double* get_dist_residual_min(){return &dist_residual_min;}
   inline double get_opti_score(){return X.norm();}
   inline double* get_lambda_location_consistency(){return &lambda_location_consistency;}
   inline double* get_lambda_constant_velocity(){return &lambda_constant_velocity;}
@@ -48,6 +49,7 @@ private:
   double lambda_location_consistency;
   double lambda_constant_velocity;
   double dist_residual_max;
+  double dist_residual_min;
   int iter_max;
   int nb_thread;
   mutex Mutex;

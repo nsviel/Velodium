@@ -28,6 +28,7 @@ void SLAM_optim_gn::update_configuration(){
   this->iter_max = 5;
   this->nb_thread = 8;
   this->dist_residual_max = 0.5f;
+  this->dist_residual_min = 0.01f;
   this->lambda_location_consistency = 0.001;
   this->lambda_constant_velocity =  0.001;
 
@@ -90,7 +91,7 @@ void SLAM_optim_gn::compute_derivative(Frame* frame){
     for(int j=0; j<3; j++){
       dist_residual = dist_residual + normal[j] * (point[j] - nn[j]);
     }
-    if(abs(dist_residual) > dist_residual_max){
+    if(abs(dist_residual) > dist_residual_max || abs(dist_residual) < dist_residual_min){
       frame->nb_residual_false++;
       continue;
     }

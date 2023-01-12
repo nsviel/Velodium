@@ -122,18 +122,18 @@ void Configuration::preconf_default(Json::Value& root){
   param["point_size"] = 2;
   param["clean_directories"] = true;
   param["check_directories"] = true;
-  param["color_mode"] = 0;
+  param["color_mode"] = 2;
   param["color_intensity_min"] = 0;
   param["color_intensity_max"] = 255;
   param["filter_cylinder_rmin"] = 5;
   param["filter_cylinder_rmax"] = 30;
-  param["filter_sphere_rmin"] = 1.5;
+  param["filter_sphere_rmin"] = 4;
   param["filter_sphere_rmax"] = 40;
   root["parameter"] = param;
 
   //Camera
   Json::Value camera;
-  camera["with_camera_follow"] = false;
+  camera["with_camera_follow"] = true;
   camera["with_camera_absolute"] = false;
   camera["with_camera_top"] = false;
   camera["fov"] = 65.0f;

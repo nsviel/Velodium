@@ -221,21 +221,6 @@ void Object::update_configuration(){
 
   //---------------------------
 }
-void Object::update_dynamic(Cloud* cloud){
-  //---------------------------
-
-  //Trajectory
-  Glyph* traj = trajObject->get_glyph();
-  trajObject->update(cloud);
-  this->update_object(traj);
-
-  //Car
-  Glyph* car = carObject->get_glyph();
-  carObject->update(cloud);
-  glyphManager->update_glyph_location(car);
-
-  //---------------------------
-}
 void Object::update_object(Glyph* glyph){
   //---------------------------
 

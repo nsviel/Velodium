@@ -492,6 +492,27 @@ std::vector<float> fct_normalize(std::vector<float>& vec){
   //-----------------------------
   return vec_out;
 }
+std::vector<double> fct_normalize(std::vector<double>& vec){
+  std::vector<double> vec_out(vec);
+  int size = vec.size();
+  //-----------------------------
+
+  //Retrieve min & max
+  double min = vec[0];
+  double max = vec[0];
+  for(int i=0; i<size; i++){
+    if(vec[i] > max) max = vec[i];
+    if(vec[i] < min) min = vec[i];
+  }
+
+  //Normalization
+  for(int i=0; i<size; i++){
+    vec_out[i] = (vec[i] - min) / (max - min);
+  }
+
+  //-----------------------------
+  return vec_out;
+}
 std::vector<float> fct_normalize(std::vector<float>& vec, glm::vec2 range){
   std::vector<float> vec_out(vec);
   int size = vec.size();

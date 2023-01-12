@@ -8,7 +8,7 @@
       "speed_move" : 3.0,
       "speed_zoom" : 0.10000000149011612,
       "with_camera_absolute" : false,
-      "with_camera_follow" : false,
+      "with_camera_follow" : true,
       "with_camera_top" : false
    },
    "dynamic" : {
@@ -46,6 +46,7 @@
       "with_remove_lastSubset" : false
    },
    "module" : {
+      "silent_slam" : false,
       "with_prediction" : false,
       "with_slam" : true
    },
@@ -69,11 +70,11 @@
       "cloud_translation" : 0.01,
       "color_intensity_max" : 255,
       "color_intensity_min" : 0,
-      "color_mode" : 0,
+      "color_mode" : 2,
       "filter_cylinder_rmax" : 30,
       "filter_cylinder_rmin" : 5,
       "filter_sphere_rmax" : 40,
-      "filter_sphere_rmin" : 1.5,
+      "filter_sphere_rmin" : 4,
       "open_mode" : "cloud",
       "path_data" : "../media/data/",
       "path_media" : "../media/",

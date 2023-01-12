@@ -52,7 +52,7 @@ void GUI_Initialization::update_configuration(){
   this->with_remove_cloud = true;
   this->with_onthefly = false;
   this->cloud_scale = 1;
-  this->lidar_model = "velodyne_vlp16";
+  this->lidar_model = "velodyne_vlp64";
   this->accepted_format.push_back("pts");
   this->accepted_format.push_back("obj");
   this->accepted_format.push_back("ply");
@@ -102,7 +102,16 @@ void GUI_Initialization::operation_option(){
   ImGui::Checkbox("Remove##222", &with_remove_cloud);
 
   //Lidar model
-  static int lidar_model_id = 0;
+  static int lidar_model_id;
+  if(lidar_model == "velodyne_vlp16"){
+    lidar_model_id = 0;
+  }else if(lidar_model == "velodyne_vlp64"){
+    lidar_model_id = 1;
+  }else if(lidar_model == "velodyne_hdl32"){
+    lidar_model_id = 2;
+  }else if(lidar_model == "velodyne_vlp16_reduced"){
+    lidar_model_id = 3;
+  }
   ImGui::SetNextItemWidth(100);
   if(ImGui::Combo("Lidar", &lidar_model_id, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
     if(lidar_model_id == 0){

@@ -17,8 +17,8 @@ public:
   ~Car();
 
 public:
-  void create();
-  void update(Cloud* cloud);
+  void create_car();
+  void update_car_location(Cloud* cloud);
   void reset();
 
   inline Glyph* get_glyph(){return car;}
