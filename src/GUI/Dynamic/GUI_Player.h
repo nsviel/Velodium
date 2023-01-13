@@ -29,6 +29,7 @@ public:
   void player_parameter();
   void player_button();
   void player_selection();
+  void player_pause();
 
   //Specific button function
   void button_player_play(Cloud* cloud);

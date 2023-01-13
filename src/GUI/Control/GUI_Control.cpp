@@ -2,6 +2,7 @@
 
 #include "../Node_gui.h"
 #include "../Modal/Modal_tab.h"
+#include "../Dynamic/GUI_Player.h"
 
 #include "../../Load/Node_load.h"
 
@@ -269,7 +270,8 @@ void GUI_Control::control_keyboard_oneAction(){
 
     //space key - Start / Pause player
     if(ImGui::IsKeyPressed(32) && !io.WantCaptureMouse){
-      playerManager->player_start_or_pause();
+      GUI_Player* gui_player = node_gui->get_gui_player();
+      gui_player->player_pause();
       break;
     }
   }

@@ -1,0 +1,69 @@
+{
+   "camera" : {
+      "with_camera_absolute" : true,
+      "with_camera_follow" : true
+   },
+   "dynamic" : {
+      "with_filter_sphere" : true,
+      "with_save_frame" : true,
+      "with_save_image" : true
+   },
+   "glyph" : {
+      "aabb_visibility" : false,
+      "axis_cloud_visibility" : false,
+      "car_visibility" : false
+   },
+   "gui" : {
+      "botPanel_height" : 100,
+      "leftPanel_mid" : 200,
+      "leftPanel_width" : 220,
+      "topPanel_height" : 18
+   },
+   "interface" : {
+      "lidar_model" : "velodyne_vlp16",
+      "ratio_frame" : 2,
+      "with_capture" : true,
+      "with_remove_lastSubset" : true
+   },
+   "module" : {
+      "silent_slam" : true,
+      "with_prediction" : true,
+      "with_slam" : true
+   },
+   "network" : {
+      "http_port" : 8888,
+      "mqtt_local_client" : "velodium",
+      "mqtt_local_dest" : "localhost",
+      "mqtt_local_port" : 1883,
+      "mqtt_local_topic" : "lidar",
+      "mqtt_sncf_client" : "ai_module",
+      "mqtt_sncf_dest" : "mqtt_sncf_broker",
+      "mqtt_sncf_port" : 1883,
+      "mqtt_sncf_topic" : "obstacle",
+      "with_http_demon" : true
+   },
+   "parameter" : {
+      "color_mode" : 2,
+      "filter_cylinder_rmax" : 50,
+      "filter_cylinder_rmin" : 0.5,
+      "path_data" : "../../data/"
+   },
+   "wallet" : {
+      "localhost" : "127.0.0.1",
+      "mine_ordi_louis" : "10.201.20.110",
+      "mine_ordi_nathan" : "10.201.20.106",
+      "mine_server" : "10.201.224.13",
+      "mqtt_sncf_broker" : "127.0.0.1",
+      "portable_nathan_home" : "192.168.1.27",
+      "portable_nathan_mine" : "192.168.153.147"
+   },
+   "window" : {
+      "background_color" : 0.86000001430511475,
+      "forceVersion" : false,
+      "resolution_height" : 500,
+      "resolution_ratio" : 1.3333333730697632,
+      "resolution_width" : 1024,
+      "title" : "Lidium",
+      "visualization" : true
+   }
+}

@@ -221,6 +221,20 @@ void GUI_Player::player_selection(){
 
   //---------------------------
 }
+void GUI_Player::player_pause(){
+  string* player_mode = playerManager->get_player_mode();
+  //---------------------------
+
+  if(*player_mode == "player"){
+    playerManager->player_start_or_pause();
+  }else if(*player_mode == "capture"){
+    Capture* captureManager = node_interface->get_captureManager();
+    bool* capture = captureManager->get_is_capturing();
+    *capture = !*capture;
+  }
+
+  //---------------------------
+}
 
 //Specific button function
 void GUI_Player::button_player_play(Cloud* cloud){

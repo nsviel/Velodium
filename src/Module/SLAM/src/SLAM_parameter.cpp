@@ -259,9 +259,9 @@ void SLAM_parameter::make_config_1(){
   double* grid_voxel_size = slam_transf->get_grid_voxel_size();
 
   //Transformation
-  *min_root_distance = 0.0f;
+  *min_root_distance = 1;
   *max_root_distance = 100.0f;
-  *grid_voxel_size = 0.06f;
+  *grid_voxel_size = 0.1f;
 
   //Assessment
   *thres_ego_trans = 2.0f;
@@ -275,7 +275,7 @@ void SLAM_parameter::make_config_1(){
 
   //Normal
   *size_voxelMap = 0.5f;
-  *max_number_neighbors = 50;
+  *max_number_neighbors = 40;
   *voxel_searchSize = 1;
 
   //Optimization
@@ -366,7 +366,7 @@ void SLAM_parameter::make_config_2(){
   //---------------------------
 }
 void SLAM_parameter::make_config_3(){
-  //velodyne_hdl32
+  //vlp16 with narrow pov
   //---------------------------
 
   //Assessment
@@ -375,6 +375,7 @@ void SLAM_parameter::make_config_3(){
   double* thres_pose_trans = slam_assess->get_thres_pose_trans();
   double* thres_pose_rotat = slam_assess->get_thres_pose_rotat();
   double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
+  double* thres_diff_angle = slam_assess->get_thres_diff_angle();
   int* nb_residual_min = slam_assess->get_nb_residual_min();
   int* nb_rlt_previous_mean = slam_assess->get_nb_rlt_previous_mean();
   int* nb_rlt_previous_pose = slam_assess->get_nb_rlt_previous_pose();
@@ -414,6 +415,7 @@ void SLAM_parameter::make_config_3(){
   *nb_residual_min = 100;
   *nb_rlt_previous_mean = 10;
   *nb_rlt_previous_pose = 10;
+  *thres_diff_angle = 10;
 
   //Normal
   *size_voxelMap = 0.5f;

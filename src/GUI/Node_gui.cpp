@@ -39,10 +39,10 @@ Node_gui::Node_gui(Node_engine* engine){
   this->gui_initialization = new GUI_Initialization(this);
   this->gui_color = new GUI_Color(this);
   this->gui_window = new GUI_Modal(this);
+  this->gui_player = new GUI_Player(this);
   this->gui_control = new GUI_Control(this);
   this->gui_option = new GUI_option(this);
   this->gui_fileManager = new GUI_fileManager(this);
-  this->gui_player = new GUI_Player(this);
   this->gui_menuBar = new GUI_menuBar(this);
   this->gui_consol = new GUI_consol(this);
   this->gui_online = new GUI_Online(this);
