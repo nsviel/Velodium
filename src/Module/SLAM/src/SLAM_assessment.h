@@ -18,9 +18,10 @@ public:
 
 public:
   //Main function
-  bool compute_assessment(Cloud* cloud, int ID);
+  bool compute_assessment(Cloud* cloud, int ID, float time);
 
   //Specific function
+  bool compute_assessment_time(float time);
   bool compute_assessment_abs(Frame* frame, Frame* frame_m1);
   bool compute_assessment_rlt(Cloud* cloud, int i);
   bool compute_assessment_rsd(Frame* frame);
@@ -36,6 +37,7 @@ public:
   inline double* get_thres_pose_rotat(){return &thres_pose_rotat;}
   inline double* get_thres_optimMinNorm(){return &thres_optimMinNorm;}
   inline double* get_thres_diff_angle(){return &thres_diff_angle;}
+  inline int* get_thres_time_ms(){return &thres_time;}
   inline int* get_nb_residual_min(){return &nb_residual_min;}
   inline int* get_nb_rlt_previous_mean(){return &nb_rlt_previous_mean;}
   inline int* get_nb_rlt_previous_pose(){return &nb_rlt_previous_pose;}
@@ -58,6 +60,7 @@ private:
   double sum_diff_rotat;
   double sum_opti_score;
 
+  int thres_time;
   int nb_rlt_previous_mean;
   int nb_rlt_previous_pose;
   int nb_residual_min;

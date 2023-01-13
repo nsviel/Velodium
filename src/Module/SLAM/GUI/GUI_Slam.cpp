@@ -482,6 +482,14 @@ void GUI_Slam::parameter_robustesse(){
   if(ImGui::TreeNode("Robustesse##tree")){
     //---------------------------
 
+    //Maximal computation time
+    int* thres_time = slam_assess->get_thres_time_ms();
+    ImGui::SetNextItemWidth(item_width);
+    ImGui::InputInt("Maximal time [ms]", thres_time, 10);
+    if(ImGui::IsItemHovered()){
+      ImGui::SetTooltip("Maximal computation time");
+    }
+
     //Minimal optimization score
     double* thres_optimMinNorm = slam_assess->get_thres_optimMinNorm();
     ImGui::SetNextItemWidth(item_width);

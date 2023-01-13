@@ -51,6 +51,14 @@ void GUI_Velodyne::velo_state(){
 void GUI_Velodyne::velo_statistique(){
   //---------------------------
 
+  //LiDAR IP
+  string* ip = veloManager->get_lidar_ip();
+  static char str_n[256];
+  strcpy(str_n, (*ip).c_str());
+  if(ImGui::InputText("IP##444", str_n, IM_ARRAYSIZE(str_n), ImGuiInputTextFlags_EnterReturnsTrue)){
+    *ip = str_n;
+  }
+
   //Capture time
   ImGui::Text("Packet ");
   ImGui::SameLine();
@@ -111,28 +119,29 @@ void GUI_Velodyne::velo_capture(){
   ImGui::PopStyleColor(1);
 
   //Start LIDAR motor
-  if(is_capturing && is_rotating == false){
+  if(is_capturing && is_rotating){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 133, 45, 255));
-  }
-  if(ImGui::Button("Start motor", ImVec2(75, 0))){
-    veloManager->lidar_start_motor();
-  }
-  if(is_capturing && is_rotating == false){
+    ImGui::Button("##333", ImVec2(46, 0));
     ImGui::PopStyleColor(1);
+  }else{
+    if(ImGui::Button("Start", ImVec2(46, 0))){
+      veloManager->lidar_start_motor();
+    }
   }
-
 
   //Stop LIDAR motor
   ImGui::SameLine();
-  if(is_capturing && is_rotating){
+  if(is_capturing && is_rotating == false){
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(150, 40, 40, 255));
-  }
-  if(ImGui::Button("Stop motor", ImVec2(75, 0))){
-    veloManager->lidar_stop_motor();
-  }
-  if(is_capturing && is_rotating){
+    ImGui::Button("##334", ImVec2(46, 0));
     ImGui::PopStyleColor(1);
+  }else{
+    if(ImGui::Button("Stop", ImVec2(46, 0))){
+      veloManager->lidar_stop_motor();
+    }
   }
+  ImGui::SameLine();
+  ImGui::Text("Motor");
 
   //Connection port
   int* port = captureManager->get_capture_port();

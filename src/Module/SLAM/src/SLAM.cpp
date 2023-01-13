@@ -60,10 +60,10 @@ bool SLAM::compute_slam(Cloud* cloud, int subset_ID){
   slam_init->compute_initialization(cloud, subset_ID);
   slam_transf->compute_preprocessing(cloud, subset_ID);
   slam_optim->compute_optimization(cloud, subset_ID);
-  bool success = slam_assess->compute_assessment(cloud, subset_ID);
 
   //---------------------------
   time_slam = stop_chrono(t1);
+  bool success = slam_assess->compute_assessment(cloud, subset_ID, time_slam);
   this->compute_finalization(cloud, subset_ID, success, time_slam);
   return success;
 }

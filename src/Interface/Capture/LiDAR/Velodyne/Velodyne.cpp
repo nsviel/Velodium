@@ -139,7 +139,7 @@ void Velodyne::lidar_start_motor(){
 
   //If LiDAR not running, start it
   if(rot_freq <= 0){
-    int err = system("curl -s --connect-timeout 1 --data rpm=600 http://192.168.1.201/cgi/setting");
+    int err = system("curl -s --connect-timeout 1 --data rpm=600 http://" + lidar_ip + "/cgi/setting");
     sleep(1);
 
     rot_freq = 10;

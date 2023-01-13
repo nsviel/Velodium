@@ -26,7 +26,7 @@ bool UDP_frame::build_frame(udpPacket* packet_udp){
     int frame_index = -1;
 
     //Second case: the packet is the first of a frame, but the previousframe should have 10k pts
-    if(frame_onrun->A.size() != 0 && frame_onrun->A.size() > 10000){
+    if(frame_onrun->A.size() > 10000){
       if(packet_udp->A[0] + 350 < frame_onrun->A[frame_onrun->A.size()-1] ){
         frame_index = 0;
       }
@@ -37,11 +37,13 @@ bool UDP_frame::build_frame(udpPacket* packet_udp){
       for(int i=0; i<packet_udp->A.size() - 1; i++){
         if( packet_udp->A[i+1] < packet_udp->A[i] ){
           frame_index = i;
+          say("thats happen !");
           break;
         }
       }
     }
 
+    //say(packet_udp->A[packet_udp->A.size()-1]);
     //Then: first case or no index found
     if(frame_index == -1){
       this->add_cloudsToFrame(packet_udp);

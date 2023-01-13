@@ -53,6 +53,7 @@ public:
   inline int get_fov_max(){return fov_max;}
   inline float get_time_frame(){return time_frame;}
   inline float get_time_packet(){return time_packet;}
+  inline string* get_lidar_ip(){return &lidar_ip;}
 
 private:
   Extractor* extractManager;

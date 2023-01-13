@@ -26,6 +26,7 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
   this->thres_pose_rotat = 15.0f;
   this->thres_optimMinNorm = 0.3f;
   this->thres_diff_angle = 5.0f;
+  this->thres_time = 500;
 
   this->nb_rlt_previous_mean = 10;
   this->nb_rlt_previous_pose = 5;
@@ -36,10 +37,13 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
 SLAM_assessment::~SLAM_assessment(){}
 
 //Main function
-bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID){
+bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID, float time){
   Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
   Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
   //---------------------------
+
+  //Check computation time
+  bool success_time = compute_assessment_time(time);
 
   //Check absolute values
   bool success_abs = compute_assessment_abs(frame_m0, frame_m1);
@@ -51,7 +55,7 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID){
   bool success_rsd = compute_assessment_rsd(frame_m0);
 
   //Check for any error
-  if(!success_abs || !success_rlt || !success_rsd){
+  if(!success_time || !success_abs || !success_rlt || !success_rsd){
     console.AddLog("error", "[SLAM] Computation failed");
     return false;
   }
@@ -61,6 +65,19 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID){
 }
 
 //Specific function
+bool SLAM_assessment::compute_assessment_time(float time){
+  //---------------------------
+
+  if(time > thres_time){
+    string log = "SLAM time too long: " + to_string((int)time) + "/" + to_string(thres_time) + " ms";
+    console.AddLog("error", log);
+    return false;
+  }else{
+    return true;
+  }
+
+  //---------------------------
+}
 bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   bool success = true;
   //---------------------------
