@@ -224,6 +224,11 @@ void UDP_parser_VLP16::parse_timestamp(){
   float packet_ts_s = packet_ts_us / 1000000; //(us to s)
   float packet_ts_min = packet_ts_s / 60;  // (s to min)
 
+  //Check for positive timestamp
+  if(packet_ts_s < 0){
+    cout<<"[error] UDP capture - negative timestamp"<<endl;
+  }
+
   // calculating relative timestamp [microsec] of each firing
   vector<float> timing_offsets = calc_timing_offsets();
   for(int i=0; i<timing_offsets.size(); i++){

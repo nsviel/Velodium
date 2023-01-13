@@ -29,6 +29,7 @@ public:
   bool save_subset(Subset* subset, string format, string dirPath);
   bool save_subset(Subset* subset, string format, string dirPath, string fileName);
   bool save_subset_silent(Subset* subset, string format, string dirPath);
+  bool save_set_silent(Cloud* cloud, int ID, string path, int nb);
 
   inline file_PTS* get_ptsManager(){return ptsManager;}
   inline file_PTX* get_ptxManager(){return ptxManager;}

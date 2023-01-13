@@ -852,6 +852,44 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
   //---------------------------
   return true;
 }
+bool file_PLY::Exporter_set(string path_dir, string ply_format, Cloud* cloud, int ID, int nb){
+  Subset* subset = *next(cloud->subset.begin(), ID);
+  string filePath = path_dir + subset->name + ".tmp";
+  string filePath_end = path_dir + subset->name + ".ply";
+  //---------------------------
+
+  //Check for file format ending
+  if (ply_format == "binary" || ply_format == "binary_little_endian"){
+    ply_format = "binary_little_endian";
+
+    //Open file
+    std::ofstream file(filePath, ios::binary);
+
+    //Save header
+    this->Exporter_header(file, ply_format, subset);
+
+    //Save data
+    for(int i=0; i<nb; i++){
+      if(ID - i >= 0){
+        Subset* subset = *next(cloud->subset.begin(), ID - i);
+        this->Exporter_data_binary(file, subset);
+      }
+    }
+
+    file.close();
+
+  }
+  else{
+    cout << "WARNING: format not compatible for set exporting" << endl;
+    return false;
+  }
+
+  //Rename file in proper format when complete
+  rename(filePath.c_str(), filePath_end.c_str());
+
+  //---------------------------
+  return true;
+}
 
 //Exporter subfunctions
 void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subset){

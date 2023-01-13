@@ -142,3 +142,18 @@ bool Saver::save_subset_silent(Subset* subset, string format, string dirPath){
   //---------------------------
   return true;
 }
+bool Saver::save_set_silent(Cloud* cloud, int ID, string path, int nb){
+  bool success = false;
+  //---------------------------
+
+  success = plyManager->Exporter_set(path, "binary", cloud, ID, nb);
+
+  //Say if save is successfull
+  if(!success){
+    console.AddLog("error", "Failing saving point cloud set");
+    return false;
+  }
+
+  //---------------------------
+  return true;
+}

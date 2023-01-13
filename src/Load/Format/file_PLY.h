@@ -21,6 +21,7 @@ public:
   bool Exporter_cloud(string path_file, string format, Cloud* cloud);
   bool Exporter_subset(string path_dir, string format, Subset* subset);
   bool Exporter_subset(string path_dir, string format, Subset* subset, string fileName);
+  bool Exporter_set(string path_dir, string ply_format, Cloud* cloud, int ID, int nb);
 
 private:
   //Loader data

@@ -45,19 +45,24 @@ void GUI_Recorder::recorder_frame(){
   bool* with_save_frame_raw = recordManager->get_with_save_frame_raw();
   ImGui::Checkbox("Raw", with_save_frame_raw);
 
-  // set save image number
+  // set save frame number
   static bool with_number = true;
   if(ImGui::Checkbox("##12323", &with_number)){
     recordManager->select_frame_unlimited(!with_number);
   }
   ImGui::SameLine();
 
-  // If not set number of image
+  // If not set number of frame
   int* save_frame_max = recordManager->get_save_frame_max();
   ImGui::SetNextItemWidth(100);
   ImGui::InputInt("Number##1", save_frame_max);
 
-  //Path where images are saved
+  // Accumulated frames
+  int* save_frame_accu = recordManager->get_save_frame_accu();
+  ImGui::SetNextItemWidth(120);
+  ImGui::InputInt("Accumulated##1", save_frame_accu);
+
+  //Path where frame are saved
   if(ImGui::Button("...##23")){
     recordManager->select_path_frame();
   }

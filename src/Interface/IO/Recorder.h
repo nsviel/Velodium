@@ -23,17 +23,22 @@ public:
   ~Recorder();
 
 public:
+  //Main functions
   void update_configuration();
   void compute_online(Cloud* cloud, int ID_subset);
   void clean_directories();
   void check_directories();
 
-  //Output: frame & Image saving
+  //Image saving
   void save_image();
   void save_image_unique();
   void save_image_multiple();
   void save_image_path();
-  void save_frame(Subset* subset);
+
+  //Frame saving
+  void save_frame(Cloud* cloud, int ID_subset);
+  void save_frame_subset(Subset* subset);
+  void save_frame_set(Cloud* cloud, int ID_subset);
 
   //Path selection
   void select_path_image();
@@ -48,6 +53,7 @@ public:
   inline bool* get_with_save_frame_raw(){return &with_save_frame_raw;}
   inline int* get_save_frame_max(){return &save_frame_max;}
   inline int* get_save_image_max(){return &save_image_max;}
+  inline int* get_save_frame_accu(){return &save_frame_accu;}
 
 private:
   Node_interface* node_interface;
@@ -61,6 +67,7 @@ private:
   float time_save_image;
   float time_save_frame;
   int save_frame_max;
+  int save_frame_accu;
   int save_image_ID;
   int save_image_max;
   bool with_save_frame;

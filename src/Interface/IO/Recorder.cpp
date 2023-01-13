@@ -30,6 +30,7 @@ Recorder::Recorder(Node_interface* node){
 }
 Recorder::~Recorder(){}
 
+//Main functions
 void Recorder::update_configuration(){
   //---------------------------
 
@@ -43,6 +44,7 @@ void Recorder::update_configuration(){
   this->save_frame_max = configManager->parse_json_i("dynamic", "nb_save_frame");
   this->save_image_max = configManager->parse_json_i("dynamic", "nb_save_image");
   this->save_image_ID = 0;
+  this->save_frame_accu = 1;
 
   this->check_directories();
 
@@ -53,13 +55,7 @@ void Recorder::compute_online(Cloud* cloud, int ID_subset){
 
   //Save subset frame
   if(with_save_frame){
-    if(with_save_frame_raw){
-      Subset* subset = *next(cloud->subset_init.begin(), ID_subset);
-      this->save_frame(subset);
-    }else{
-      Subset* subset = *next(cloud->subset.begin(), ID_subset);
-      this->save_frame(subset);
-    }
+    this->save_frame(cloud, ID_subset);
   }
 
   //Save rendered image
@@ -89,7 +85,7 @@ void Recorder::check_directories(){
   //---------------------------
 }
 
-//Output: frame & Image saving
+// Image saving
 void Recorder::save_image(){
   //---------------------------
 
@@ -140,13 +136,55 @@ void Recorder::save_image_path(){
 
   //---------------------------
 }
-void Recorder::save_frame(Subset* subset){
+
+// Frame saving
+void Recorder::save_frame(Cloud* cloud, int ID_subset){
+  //---------------------------
+
+  if(with_save_frame_raw){
+    Subset* subset = *next(cloud->subset_init.begin(), ID_subset);
+    this->save_frame_subset(subset);
+  }else{
+    if(save_frame_accu == 1){
+      Subset* subset = *next(cloud->subset.begin(), ID_subset);
+      this->save_frame_subset(subset);
+    }else{
+      this->save_frame_set(cloud, ID_subset);
+    }
+  }
+
+  //---------------------------
+}
+void Recorder::save_frame_subset(Subset* subset){
   Frame* frame = &subset->frame;
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
   //Save frame
   saverManager->save_subset_silent(subset, "ply", path_frame);
+
+  //Keep only a certain number of frame
+  string path = path_frame + subset->name + ".ply";
+  if(save_frame_vec.size() < save_frame_max){
+    save_frame_vec.push(path);
+  }else{
+    std::remove (save_frame_vec.front().c_str());
+    save_frame_vec.pop();
+    save_frame_vec.push(path);
+  }
+
+  //---------------------------
+  auto t2 = std::chrono::high_resolution_clock::now();
+  frame->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+}
+void Recorder::save_frame_set(Cloud* cloud, int ID_subset){
+  Subset* subset = *next(cloud->subset.begin(), ID_subset);
+  Frame* frame = &subset->frame;
+  auto t1 = std::chrono::high_resolution_clock::now();
+  //---------------------------
+
+  //Save frame
+  saverManager->save_set_silent(cloud, ID_subset, path_frame, save_frame_accu);
 
   //Keep only a certain number of frame
   string path = path_frame + subset->name + ".ply";
