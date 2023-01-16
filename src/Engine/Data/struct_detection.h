@@ -8,11 +8,15 @@
 #include <glm/glm.hpp>
 
 
-struct Obstac{ //Obstacle detection stuff
+struct Detection{ //Obstacle detection stuff
   //---------------------------
 
-  bool is_predicted = false;
+  // Info
+  std::string path_file;
   glm::vec4 unicolor;
+  bool is_predicted = false;
+
+  // Data
   std::vector<std::string> name;
   std::vector<glm::vec3> position;
   std::vector<glm::vec4> color;

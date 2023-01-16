@@ -182,14 +182,14 @@ void Object::runtime_glyph_pred(Subset* subset){
   if(subset == nullptr) return;
 
   //OOBB - prediction
-  vector<Glyph>& oobb_pr = subset->obstacle_pr.oobb;
+  vector<Glyph>& oobb_pr = subset->detection.oobb;
   for(int i=0; i<oobb_pr.size(); i++){
     Glyph* oobb = &oobb_pr[i];
     glyphManager->draw_glyph(oobb);
   }
 
   //OOBB - ground thruth
-  vector<Glyph>& oobb_gt = subset->obstacle_gt.oobb;
+  vector<Glyph>& oobb_gt = subset->detection_gt.oobb;
   for(int i=0; i<oobb_gt.size(); i++){
     Glyph* oobb = &oobb_gt[i];
     glyphManager->draw_glyph(oobb);

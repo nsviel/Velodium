@@ -27,10 +27,9 @@ Obstacle::Obstacle(Module_obstacle* module){
   this->oobbManager = new OOBB();
   this->poseManager = new Pose();
 
-  this->gt_color = vec4(0, 1, 0, 1.0f);
-  this->pr_color = vec4(0.1, 0.1, 0.1, 1.0f);
-  this->with_warning = true;
-
+  this->with_warning = false;
+  this->with_prediction = true;
+//configManager->parse_json_b("module", "with_prediction")
   //---------------------------
 }
 Obstacle::~Obstacle(){}
@@ -38,18 +37,17 @@ Obstacle::~Obstacle(){}
 //Main functions
 void Obstacle::runtime(){
   Cloud* cloud = sceneManager->get_selected_cloud();
-  if(cloud == nullptr) return;
   //---------------------------
 
-  if(predManager->get_with_prediction()){
+  if(with_prediction && cloud != nullptr){
     //Check for new prediction (ground thruth or prediction)
-    bool* is_prediction = predManager->get_is_prediction();
+    bool* is_new_pred = predManager->runtime_prediction();
 
-    if(*is_prediction){
+    if(*is_new_pred){
       this->build_cloud_obstacle(cloud);
 
       //Reverse flag
-      *is_prediction = false;
+      *is_new_pred = false;
     }
   }
 
@@ -57,7 +55,7 @@ void Obstacle::runtime(){
 }
 
 //Manual obstacle adding
-void Obstacle::add_obstacle_pred(){
+void Obstacle::add_detectioned(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
@@ -72,7 +70,7 @@ void Obstacle::add_obstacle_pred(){
 
   //---------------------------
 }
-void Obstacle::add_obstacle_pred(string path_dir){
+void Obstacle::add_detectioned(string path_dir){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
@@ -111,7 +109,7 @@ void Obstacle::build_cloud_obstacle(Cloud* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
 
-    if(subset->obstacle_pr.is_predicted == false){
+    if(subset->detection.is_predicted == false){
       //Build obstacle glyph
       this->build_obstacleGlyph_pr(subset);
       this->build_obstacleGlyph_gt(subset);
@@ -125,44 +123,44 @@ void Obstacle::build_cloud_obstacle(Cloud* cloud){
 
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_gt(Subset* subset){
-  Obstac* obstacle_gt = &subset->obstacle_gt;
+void Obstacle::build_obstacleGlyph_pr(Subset* subset){
+  Detection* detection = &subset->detection;
   //---------------------------
 
-  for(int j=0; j<obstacle_gt->name.size(); j++){
+  for(int i=0; i<detection->name.size(); i++){
     Glyph* glyph = objectManager->create_glyph_ostacle();
 
-    vec3 To = obstacle_gt->position[j];
-    vec3 Ro = vec3(0, 0, obstacle_gt->heading[j]);
-    vec3 So = obstacle_gt->dimension[j];
+    vec3 To = detection->position[i];
+    vec3 Ro = vec3(0, 0, detection->heading[i]);
+    vec3 So = detection->dimension[i];
     mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
+    vec4 color = AI_color_dic.find(detection->name[i])->second;
 
     oobbManager->update_oobb(glyph, transf);
-    objectManager->update_object(glyph);
-    obstacle_gt->oobb.push_back(*glyph);
+    objectManager->update_object(glyph, color);
+    detection->oobb.push_back(*glyph);
+
+    detection->is_predicted == true;
     delete glyph;
   }
 
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_pr(Subset* subset){
-  Obstac* obstacle_pr = &subset->obstacle_pr;
+void Obstacle::build_obstacleGlyph_gt(Subset* subset){
+  Detection* detection_gt = &subset->detection_gt;
   //---------------------------
 
-  for(int i=0; i<obstacle_pr->name.size(); i++){
+  for(int j=0; j<detection_gt->name.size(); j++){
     Glyph* glyph = objectManager->create_glyph_ostacle();
 
-    vec3 To = obstacle_pr->position[i];
-    vec3 Ro = vec3(0, 0, obstacle_pr->heading[i]);
-    vec3 So = obstacle_pr->dimension[i];
+    vec3 To = detection_gt->position[j];
+    vec3 Ro = vec3(0, 0, detection_gt->heading[j]);
+    vec3 So = detection_gt->dimension[j];
     mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
-    vec4 color = AI_color_dic.find(obstacle_pr->name[i])->second;
 
     oobbManager->update_oobb(glyph, transf);
-    objectManager->update_object(glyph, color);
-    obstacle_pr->oobb.push_back(*glyph);
-
-    obstacle_pr->is_predicted == true;
+    objectManager->update_object(glyph);
+    detection_gt->oobb.push_back(*glyph);
     delete glyph;
   }
 

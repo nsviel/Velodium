@@ -19,12 +19,11 @@ public:
 
 public:
   //Watchers
-  void runtime_prediction();
+  bool* runtime_prediction();
 
   //Subfunctions
   void remove_prediction_file(string path);
-  void compute_prediction(Cloud* cloud, string file_path);
-  void compute_prediction(string path_dir);
+  void compute_prediction(string file_path);
   void compute_prediction(Cloud* cloud, vector<string> path_vec);
   void compute_groundTruth(Cloud* cloud, string path_file);
   void compute_groundTruth(Cloud* cloud, vector<string> path_vec);
@@ -34,15 +33,15 @@ public:
   void parse_json_prediction(Subset* subset, string file_path);
   int parse_frame_ID(string file_path);
 
-  inline bool* get_is_prediction(){return &is_prediction;}
-  inline bool* get_with_prediction(){return &with_prediction;}
+  inline bool* get_is_new_pred(){return &is_new_pred;}
+  inline bool* get_with_delete_pred_file(){return with_delete_pred_file;}
 
 private:
   Scene* sceneManager;
   Filemanager* fileManager;
 
-  bool is_prediction;
-  bool with_prediction;
+  bool is_new_pred;
+  bool with_delete_pred_file;
 };
 
 #endif

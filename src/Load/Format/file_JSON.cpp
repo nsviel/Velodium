@@ -32,8 +32,8 @@ void file_JSON::parse_json_obstacle(Cloud* cloud, vector<string> paths, string d
 
       if(subset->name == json_name){
         //Make stuff
-        Obstac* obstacle_gt = &subset->obstacle_gt;
-        Obstac* obstacle_pr = &subset->obstacle_pr;
+        Detection* detection_gt = &subset->detection_gt;
+        Detection* detection = &subset->detection;
         const Json::Value& json_dete = obj["detections"];
 
         for (int i = 0; i < json_dete.size(); i++){
@@ -60,16 +60,16 @@ void file_JSON::parse_json_obstacle(Cloud* cloud, vector<string> paths, string d
 
           //Store all data
           if(data == "pr"){
-            obstacle_pr->name.push_back(name);
-            obstacle_pr->position.push_back(position);
-            obstacle_pr->dimension.push_back(dimension);
-            obstacle_pr->heading.push_back(heading);
+            detection->name.push_back(name);
+            detection->position.push_back(position);
+            detection->dimension.push_back(dimension);
+            detection->heading.push_back(heading);
           }
           else if(data == "gt"){
-            obstacle_gt->name.push_back(name);
-            obstacle_gt->position.push_back(position);
-            obstacle_gt->dimension.push_back(dimension);
-            obstacle_gt->heading.push_back(heading);
+            detection_gt->name.push_back(name);
+            detection_gt->position.push_back(position);
+            detection_gt->dimension.push_back(dimension);
+            detection_gt->heading.push_back(heading);
           }
         }
         break;

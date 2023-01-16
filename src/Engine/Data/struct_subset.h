@@ -3,7 +3,7 @@
 
 #include "struct_glyph.h"
 #include "struct_frame.h"
-#include "struct_obstacle.h"
+#include "struct_detection.h"
 #include "struct_register.h"
 
 #include <string>
@@ -70,8 +70,8 @@ struct Subset{ //Cloud subset / part
   //Specific structures
   Frame frame;
   Register icp;
-  Obstac obstacle_gt;
-  Obstac obstacle_pr;
+  Detection detection;
+  Detection detection_gt;
 
   //---------------------------
 };

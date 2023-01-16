@@ -32,10 +32,10 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
   this->car = carObject->get_glyph();
   this->matching = matchObject->get_glyph();
 
-  this->with_keypoint = true;
+  this->with_keypoint = false;
   this->with_neighbor = false;
-  this->with_matching = true;
-  this->with_trajectory = false;
+  this->with_matching = false;
+  this->with_trajectory = true;
   this->with_localmap = false;
   this->with_localcloud = false;
   this->with_car = false;

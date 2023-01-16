@@ -62,6 +62,62 @@ void GUI_Obstacle::design_prediction(){
   }
 }
 
+//Prediction
+void GUI_Obstacle::state_prediction(){
+  //---------------------------
+
+  //Runtime AI
+  bool with_prediction = *obstacleManager->get_with_prediction();
+  ImGui::Text("Runtime - AI");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
+
+  //HTTP server daemon
+  bool with_daemon = httpsManager->get_is_https_deamon();
+  ImGui::Text("Daemon - HTTP");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");
+
+  //---------------------------
+  ImGui::Separator();
+}
+void GUI_Obstacle::parameter_prediction(){
+  //---------------------------
+
+  //With prediction
+  bool* with_prediction = obstacleManager->get_with_prediction();
+  ImGui::Checkbox("With prediction", with_prediction);
+
+  if(*with_prediction){
+    bool* with_delete = predManager->get_with_delete_pred_file();
+    ImGui::Checkbox("Delete pred file", with_delete);
+  }
+
+  //With MQTT warning
+  bool* with_warning = obstacleManager->get_with_warning();
+  ImGui::Checkbox("With MQTT warning", with_warning);
+
+  //Prediction directory
+  if(ImGui::Button("...##1")){
+    //node_interface->select_dir_path();
+  }
+  ImGui::SameLine();
+  //string dir_path = node_interface->get_dir_path();
+  //ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
+
+  //Add predictions
+  if(ImGui::Button("Add predictions")){
+    obstacleManager->add_detectioned();
+  }
+
+  //Add ground truth
+  if(ImGui::Button("Add ground truth")){
+    obstacleManager->add_obstacle_grTr();
+  }
+
+  //---------------------------
+}
+
 //Draw label text function
 void GUI_Obstacle::runtime_display_naming(){
   Cloud* cloud = sceneManager->get_selected_cloud();
@@ -69,13 +125,13 @@ void GUI_Obstacle::runtime_display_naming(){
     //---------------------------
 
     Subset* subset = cloud->subset_selected;
-    Obstac* obstacle_pr = &subset->obstacle_pr;
+    Detection* detection = &subset->detection;
 
     this->label_ID = 0;
-    for(int j=0; j<obstacle_pr->name.size(); j++){
-      string name = obstacle_pr->name[j];
-      vec3 position = obstacle_pr->position[j];
-      position.z = obstacle_pr->dimension[j].z;
+    for(int j=0; j<detection->name.size(); j++){
+      string name = detection->name[j];
+      vec3 position = detection->position[j];
+      position.z = detection->dimension[j].z;
 
       this->compute_draw_text(name, position);
 
@@ -123,54 +179,6 @@ void GUI_Obstacle::compute_draw_text(string text, vec3 position){
     ImGui::End();
     ImGui::PopStyleColor();
   }
-
-  //---------------------------
-}
-
-//Parameter function
-void GUI_Obstacle::parameter_prediction(){
-  //---------------------------
-
-  //With MQTT warning
-  bool* with_warning = obstacleManager->get_with_warning();
-  ImGui::Checkbox("With MQTT prediction", with_warning);
-
-  //Prediction directory
-  if(ImGui::Button("...##1")){
-    //node_interface->select_dir_path();
-  }
-  ImGui::SameLine();
-  //string dir_path = node_interface->get_dir_path();
-  //ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%s", dir_path.c_str());
-
-  //Add predictions
-  if(ImGui::Button("Add predictions")){
-    obstacleManager->add_obstacle_pred();
-  }
-
-  //Add ground truth
-  if(ImGui::Button("Add ground truth")){
-    obstacleManager->add_obstacle_grTr();
-  }
-
-  //---------------------------
-}
-
-//State function
-void GUI_Obstacle::state_prediction(){
-  //---------------------------
-
-  //Runtime AI
-  bool with_prediction = *predManager->get_with_prediction();
-  ImGui::Text("Runtime - AI");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_prediction ? "ON" : "OFF");
-
-  //HTTP server daemon
-  bool with_daemon = httpsManager->get_is_https_deamon();
-  ImGui::Text("Daemon - HTTP");
-  ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", with_daemon ? "ON" : "OFF");
 
   //---------------------------
 }
