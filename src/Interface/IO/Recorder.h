@@ -13,6 +13,7 @@ class Node_operation;
 class Renderer;
 class Configuration;
 class Saver;
+class Scene;
 
 
 class Recorder
@@ -60,6 +61,7 @@ private:
   Renderer* renderManager;
   Configuration* configManager;
   Saver* saverManager;
+  Scene* sceneManager;
 
   string path_dir;
   string path_frame;

@@ -96,7 +96,7 @@ void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
   Subset* subset = new Subset();
   //---------------------------
 
-  this->init_random_color();
+  this->color_rdm = cloud->unicolor;
   this->check_data(data);
 
   this->init_subset_parameter(subset, data->name, cloud->ID_subset);

@@ -45,7 +45,7 @@ private:
   float get_uchar_from_binary(char* block_data, int& offset);
 
   //Exporter subfunctions
-  void Exporter_header(std::ofstream& file, string format, Subset* subset);
+  void Exporter_header(std::ofstream& file, string format, Subset* subset, int nb_point);
   void Exporter_data_ascii(std::ofstream& file, Subset* subset);
   void Exporter_data_binary(std::ofstream& file, Subset* subset);
 

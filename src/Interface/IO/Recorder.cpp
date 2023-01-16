@@ -6,6 +6,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/OpenGL/Renderer.h"
+#include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"
@@ -24,6 +25,7 @@ Recorder::Recorder(Node_interface* node){
   this->configManager = node_engine->get_configManager();
   this->renderManager = node_engine->get_renderManager();
   this->saverManager = node_load->get_saverManager();
+  this->sceneManager = node_engine->get_sceneManager();
 
   //---------------------------
   this->update_configuration();
@@ -142,11 +144,11 @@ void Recorder::save_frame(Cloud* cloud, int ID_subset){
   //---------------------------
 
   if(with_save_frame_raw){
-    Subset* subset = *next(cloud->subset_init.begin(), ID_subset);
+    Subset* subset = sceneManager->get_subset_init_byID(cloud, ID_subset);
     this->save_frame_subset(subset);
   }else{
     if(save_frame_accu == 1){
-      Subset* subset = *next(cloud->subset.begin(), ID_subset);
+      Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
       this->save_frame_subset(subset);
     }else{
       this->save_frame_set(cloud, ID_subset);

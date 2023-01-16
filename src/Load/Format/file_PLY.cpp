@@ -725,7 +725,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Cloud* cloud)
       std::ofstream file(path_file);
 
       //Save header
-      this->Exporter_header(file, ply_format, subset);
+      this->Exporter_header(file, ply_format, subset, subset->xyz.size());
 
       //Save data
       this->Exporter_data_ascii(file, subset);
@@ -746,7 +746,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Cloud* cloud)
       std::ofstream file(path_file, ios::binary);
 
       //Save header
-      this->Exporter_header(file, ply_format, subset);
+      this->Exporter_header(file, ply_format, subset, subset->xyz.size());
 
       //Save data
       this->Exporter_data_binary(file, subset);
@@ -774,7 +774,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
     std::ofstream file(filePath);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset);
+    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
 
     //Save data
     this->Exporter_data_ascii(file, subset);
@@ -788,7 +788,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
     std::ofstream file(filePath, ios::binary);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset);
+    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
 
     //Save data
     this->Exporter_data_binary(file, subset);
@@ -818,7 +818,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
     std::ofstream file(filePath);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset);
+    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
 
     //Save data
     this->Exporter_data_ascii(file, subset);
@@ -836,7 +836,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
     std::ofstream file(filePath, ios::binary);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset);
+    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
 
     //Save data
     this->Exporter_data_binary(file, subset);
@@ -865,12 +865,23 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Cloud* cloud, in
     //Open file
     std::ofstream file(filePath, ios::binary);
 
+    //Get total number of point
+    int nb_point = 0;
+    for(int i=0; i<nb; i++){
+      int ID_subset = ID - i;
+      if(ID_subset >= 0){
+        Subset* subset = *next(cloud->subset.begin(), ID - i);
+        nb_point += subset->xyz.size();
+      }
+    }
+
     //Save header
-    this->Exporter_header(file, ply_format, subset);
+    this->Exporter_header(file, ply_format, subset, nb_point);
 
     //Save data
     for(int i=0; i<nb; i++){
-      if(ID - i >= 0){
+      int ID_subset = ID - i;
+      if(ID_subset >= 0){
         Subset* subset = *next(cloud->subset.begin(), ID - i);
         this->Exporter_data_binary(file, subset);
       }
@@ -892,8 +903,8 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Cloud* cloud, in
 }
 
 //Exporter subfunctions
-void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subset){
-  this->point_number = subset->xyz.size();
+void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subset, int nb_point){
+  this->point_number = nb_point;
   this->property_number = 3;
   this->property_name.clear();
   //---------------------------
@@ -913,19 +924,19 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subse
 
     property_number += 3;
   }
-  if(subset->N.size() != 0){
+  if(subset->has_normal != 0){
     file << "property float nx" << endl;
     file << "property float ny" << endl;
     file << "property float nz" << endl;
 
     property_number += 3;
   }
-  if(subset->I.size() != 0){
+  if(subset->has_intensity != 0){
     file << "property float scalar_Scalar_field" << endl;
 
     property_number++;
   }
-  if(subset->ts.size() != 0){
+  if(subset->has_timestamp != 0){
     file << "property float timestamp" << endl;
 
     property_number++;
@@ -974,12 +985,12 @@ void file_PLY::Exporter_data_binary(std::ofstream& file, Subset* subset){
   //---------------------------
 
   //Prepare data writing by blocks
-  int block_size = property_number * point_number * sizeof(float);
+  int block_size = property_number * subset->xyz.size() * sizeof(float);
   char* block_data = new char[block_size];
 
   //Convert decimal data into binary data
   int offset = 0;
-  for (int i=0; i<point_number; i++){
+  for (int i=0; i<subset->xyz.size(); i++){
     //Location
     for(int j=0; j<3; j++){
       memcpy(block_data + offset, &subset->xyz[i][j], sizeof(float));
@@ -987,13 +998,13 @@ void file_PLY::Exporter_data_binary(std::ofstream& file, Subset* subset){
     }
 
     //Intensity
-    if(subset->I.size() != 0){
+    if(subset->has_intensity){
       memcpy(block_data + offset, &subset->I[i], sizeof(float));
       offset += sizeof(float);
     }
 
     //Timestamp
-    if(subset->ts.size() != 0){
+    if(subset->has_timestamp){
       memcpy(block_data + offset, &subset->ts[i], sizeof(float));
       offset += sizeof(float);
     }
