@@ -1,5 +1,5 @@
 #include "SLAM_map.h"
-
+#include "SLAM_sampling.h"
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
@@ -22,6 +22,7 @@ SLAM_map::SLAM_map(SLAM* slam){
 
   this->sceneManager = node_engine->get_sceneManager();
   this->patherManager = node_load->get_patherManager();
+  this->slam_sampling = slam->get_slam_sampling();
 
   this->local_map = new slamap();
   this->local_cloud = new slamap();
@@ -61,7 +62,8 @@ void SLAM_map::update_map(Cloud* cloud, int subset_ID){
   //---------------------------
 
   //Local map
-  this->add_pointToMap(local_map, frame);
+  vector<vec3> xyz_map = slam_sampling->sub_sampling_subset(subset, 0.2);
+  this->add_pointToMap(local_map, xyz_map); //frame->xyz
   this->end_clearTooFarVoxels(local_map, frame->trans_e);
 
   //Cloud map
@@ -82,11 +84,12 @@ void SLAM_map::reset_map(){
 }
 
 //sub-function
-void SLAM_map::add_pointToMap(slamap* map, Frame* frame){
+void SLAM_map::add_pointToMap(slamap* map, vector<vec3>& xyz){
   //---------------------------
 
-  for(int i=0; i<frame->xyz.size(); i++){
-    Eigen::Vector3d& point = frame->xyz[i];
+  for(int i=0; i<xyz.size(); i++){
+    Eigen::Vector3d point;
+    point << xyz[i].x, xyz[i].y, xyz[i].z;
 
     //Retrieve corresponding voxel
     int kx = static_cast<int>(point(0) / map->voxel_width);

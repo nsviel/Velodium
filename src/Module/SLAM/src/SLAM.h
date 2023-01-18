@@ -17,6 +17,7 @@ class SLAM_parameter;
 class SLAM_normal;
 class SLAM_transform;
 class SLAM_glyph;
+class SLAM_sampling;
 
 
 class SLAM
@@ -40,6 +41,7 @@ public:
   inline SLAM_parameter* get_slam_param(){return slam_param;}
   inline SLAM_transform* get_slam_transf(){return slam_transf;}
   inline SLAM_glyph* get_slam_glyph(){return slam_glyph;}
+  inline SLAM_sampling* get_slam_sampling(){return slam_sampling;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
   inline bool* get_with_slam(){return &with_slam;}
@@ -65,6 +67,7 @@ private:
   SLAM_parameter* slam_param;
   SLAM_transform* slam_transf;
   SLAM_glyph* slam_glyph;
+  SLAM_sampling* slam_sampling;
 
   bool with_slam;
   float time_slam;

@@ -1,7 +1,6 @@
 #include "SLAM_transform.h"
-
 #include "SLAM_map.h"
-
+#include "SLAM_sampling.h"
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
@@ -23,12 +22,7 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   this->slam_map = slam->get_slam_map();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
-
-  this->with_distorsion = false;
-  this->min_root_distance = 3.0f;
-  this->max_root_distance = 100.0f;
-  this->grid_voxel_width = 0.3;
-  this->max_keypoint = 2000;
+  this->slam_sampling = slam->get_slam_sampling();
 
   //---------------------------
 }
@@ -40,95 +34,11 @@ void SLAM_transform::compute_preprocessing(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   //---------------------------
 
-  this->grid_sampling_subset(subset);
+  slam_sampling->grid_sampling_subset(subset);
   //this->distort_frame(frame);
   this->transform_frame(frame);
 
   //---------------------------
-}
-
-//Sampling functions
-void SLAM_transform::sub_sampling_subset(Subset* subset){
-  /*Frame* frame = &subset->frame;
-  float size_voxel = 0.2;
-  //---------------------------
-
-
-	std::unordered_map<Voxel, std::vector<Point3D>> grid;
-	for (int i = 0; i < (int)frame.size(); i++) {
-		short kx = static_cast<short>(frame[i].pt[0] / size_voxel);
-		short ky = static_cast<short>(frame[i].pt[1] / size_voxel);
-		short kz = static_cast<short>(frame[i].pt[2] / size_voxel);
-		grid[Voxel(kx, ky, kz)].push_back(frame[i]);
-	}
-	frame.resize(0);
-	for (const auto& n : grid) {
-		if (n.second.size() > 0) {
-			frame.push_back(n.second[0]);
-		}
-	}*/
-
-  //---------------------------
-}
-void SLAM_transform::grid_sampling_subset(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  //Clear vectors
-  frame->xyz.clear();
-  frame->xyz_raw.clear();
-  frame->ts_n.clear();
-  if(grid_voxel_width == 0){
-    grid_voxel_width = 0.00001;
-  }
-
-  //Subsample the scan with voxels
-  cloudMap grid;
-  Eigen::Vector4d point;
-  for(int i=0; i<subset->xyz.size(); i++){
-    vec3 xyz = subset->xyz[i];
-    double ts_n = subset->ts_n[i];
-    double dist = fct_distance_origin(xyz);
-
-    if(dist > min_root_distance && dist < max_root_distance){
-      int kx = static_cast<int>(xyz.x / grid_voxel_width);
-      int ky = static_cast<int>(xyz.y / grid_voxel_width);
-      int kz = static_cast<int>(xyz.z / grid_voxel_width);
-      int key = (kx*2000 + ky)*1000 + kz;
-
-      if(key >= INT_MAX || key <= INT_MIN){
-        cout<<"[error] Int min or max value for key"<<endl;
-      }
-
-      point << xyz.x, xyz.y, xyz.z, ts_n;
-      grid[key].push_back(point);
-    }
-  }
-
-  //Take one point inside each voxel
-  cloudMap::iterator it;
-  for(auto it = grid.begin(); it != grid.end(); it++){
-    if(it->second.size() == 0){
-      continue;
-    }
-
-    int rdm = rand() % it->second.size();
-    Eigen::Vector4d point = it->second[rdm];
-    Eigen::Vector3d xyz(point(0), point(1), point(2));
-    float ts_n = point(3);
-
-    frame->xyz.push_back(xyz);
-    frame->ts_n.push_back(ts_n);
-
-    if(frame->xyz.size() >= max_keypoint){
-      break;
-    }
-  }
-
-  frame->ts_n = fct_normalize(frame->ts_n);
-
-  //---------------------------
-  frame->xyz_raw = frame->xyz;
 }
 
 //Transformation functions

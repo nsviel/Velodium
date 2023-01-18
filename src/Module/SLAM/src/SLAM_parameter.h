@@ -10,6 +10,7 @@ class SLAM_optim_gn;
 class SLAM_assessment;
 class SLAM_map;
 class SLAM_transform;
+class SLAM_sampling;
 
 
 class SLAM_parameter
@@ -45,6 +46,7 @@ private:
   SLAM_assessment* slam_assess;
   SLAM_map* slam_map;
   SLAM_transform* slam_transf;
+  SLAM_sampling* slam_sampling;
 
   int predefined_conf;
 };

@@ -34,7 +34,7 @@ public:
   int parse_frame_ID(string file_path);
 
   inline bool* get_is_new_pred(){return &is_new_pred;}
-  inline bool* get_with_delete_pred_file(){return with_delete_pred_file;}
+  inline bool* get_with_delete_pred_file(){return &with_delete_pred_file;}
 
 private:
   Scene* sceneManager;

@@ -3,6 +3,7 @@
 #include "SLAM_assessment.h"
 #include "SLAM_map.h"
 #include "SLAM_transform.h"
+#include "SLAM_sampling.h"
 
 #include "../optim/SLAM_optim.h"
 #include "../optim/SLAM_optim_gn.h"
@@ -26,6 +27,7 @@ SLAM_parameter::SLAM_parameter(SLAM* slam){
   this->slam_assess = slam->get_slam_assess();
   this->slam_map = slam->get_slam_map();
   this->slam_transf = slam->get_slam_transf();
+  this->slam_sampling = slam->get_slam_sampling();
 
   this->predefined_conf = 0;
 
@@ -112,9 +114,9 @@ void SLAM_parameter::make_config_default(){
   slamap* local_map = slam_map->get_local_map();
 
   //Transformation
-  double* min_root_distance = slam_transf->get_min_root_distance();
-  double* max_root_distance = slam_transf->get_max_root_distance();
-  double* grid_voxel_size = slam_transf->get_grid_voxel_size();
+  double* min_root_distance = slam_sampling->get_min_root_distance();
+  double* max_root_distance = slam_sampling->get_max_root_distance();
+  double* grid_voxel_size = slam_sampling->get_grid_voxel_size();
 
   //Transformation
   *grid_voxel_size = 1.0f;
@@ -182,10 +184,10 @@ void SLAM_parameter::make_config_0(){
   slamap* local_map = slam_map->get_local_map();
 
   //Transformation
-  double* min_root_distance = slam_transf->get_min_root_distance();
-  double* max_root_distance = slam_transf->get_max_root_distance();
-  double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* max_keypoint = slam_transf->get_max_keypoint();
+  double* min_root_distance = slam_sampling->get_min_root_distance();
+  double* max_root_distance = slam_sampling->get_max_root_distance();
+  double* grid_voxel_size = slam_sampling->get_grid_voxel_size();
+  int* max_keypoint = slam_sampling->get_max_keypoint();
 
   //Transformation
   *min_root_distance = 5.0f;
@@ -254,9 +256,9 @@ void SLAM_parameter::make_config_1(){
   slamap* local_map = slam_map->get_local_map();
 
   //Transformation
-  double* min_root_distance = slam_transf->get_min_root_distance();
-  double* max_root_distance = slam_transf->get_max_root_distance();
-  double* grid_voxel_size = slam_transf->get_grid_voxel_size();
+  double* min_root_distance = slam_sampling->get_min_root_distance();
+  double* max_root_distance = slam_sampling->get_max_root_distance();
+  double* grid_voxel_size = slam_sampling->get_grid_voxel_size();
 
   //Transformation
   *min_root_distance = 1;
@@ -324,9 +326,9 @@ void SLAM_parameter::make_config_2(){
   slamap* local_map = slam_map->get_local_map();
 
   //Transformation
-  double* min_root_distance = slam_transf->get_min_root_distance();
-  double* max_root_distance = slam_transf->get_max_root_distance();
-  double* grid_voxel_size = slam_transf->get_grid_voxel_size();
+  double* min_root_distance = slam_sampling->get_min_root_distance();
+  double* max_root_distance = slam_sampling->get_max_root_distance();
+  double* grid_voxel_size = slam_sampling->get_grid_voxel_size();
 
   //Transformation
   *min_root_distance = 5.0f;
@@ -395,10 +397,10 @@ void SLAM_parameter::make_config_3(){
   slamap* local_map = slam_map->get_local_map();
 
   //Transformation
-  double* min_root_distance = slam_transf->get_min_root_distance();
-  double* max_root_distance = slam_transf->get_max_root_distance();
-  double* grid_voxel_size = slam_transf->get_grid_voxel_size();
-  int* max_keypoint = slam_transf->get_max_keypoint();
+  double* min_root_distance = slam_sampling->get_min_root_distance();
+  double* max_root_distance = slam_sampling->get_max_root_distance();
+  double* grid_voxel_size = slam_sampling->get_grid_voxel_size();
+  int* max_keypoint = slam_sampling->get_max_keypoint();
 
   //Transformation
   *min_root_distance = 3.0f;

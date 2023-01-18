@@ -7,6 +7,7 @@ class Scene;
 class SLAM;
 class Object;
 class SLAM_map;
+class SLAM_sampling;
 
 
 class SLAM_transform
@@ -25,25 +26,13 @@ public:
   void transform_subset(Subset* subset);
   void distort_frame(Frame* frame);
 
-  //Sampling functions
-  void sub_sampling_subset(Subset* subset);
-  void grid_sampling_subset(Subset* subset);
-
-  inline double* get_min_root_distance(){return &min_root_distance;}
-  inline double* get_max_root_distance(){return &max_root_distance;}
-  inline double* get_grid_voxel_size(){return &grid_voxel_width;}
-  inline int* get_max_keypoint(){return &max_keypoint;}
-
 private:
   Scene* sceneManager;
   Object* objectManager;
   SLAM_map* slam_map;
+  SLAM_sampling* slam_sampling;
 
-  double min_root_distance;
-  double max_root_distance;
-  double grid_voxel_width;
   bool with_distorsion;
-  int max_keypoint;
 };
 
 

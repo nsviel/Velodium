@@ -6,6 +6,7 @@
 class SLAM;
 class Scene;
 class Pather;
+class SLAM_sampling;
 
 
 class SLAM_map
@@ -22,7 +23,7 @@ public:
   void reset_map();
 
   //Sub-function
-  void add_pointToMap(slamap* map, Frame* frame);
+  void add_pointToMap(slamap* map, vector<vec3>& xyz);
   void add_pointToMap(slamap* map, Subset* subset);
   void add_pointToCloud(slamap* map, Subset* subset);
   void save_local_cloud();
@@ -37,6 +38,7 @@ public:
 private:
   Scene* sceneManager;
   Pather* patherManager;
+  SLAM_sampling* slam_sampling;
 
   slamap* local_map;
   slamap* local_cloud;

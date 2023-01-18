@@ -16,6 +16,7 @@ class SLAM_parameter;
 class SLAM_transform;
 class SLAM_glyph;
 class SLAM_optim;
+class SLAM_sampling;
 
 
 class GUI_Slam
@@ -62,6 +63,7 @@ private:
   SLAM_transform* slam_transf;
   SLAM_glyph* slam_glyph;
   SLAM_optim* slam_optim;
+  SLAM_sampling* slam_sampling;
 
   int item_width;
 };

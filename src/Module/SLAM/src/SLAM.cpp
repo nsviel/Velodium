@@ -7,6 +7,7 @@
 #include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_chrono.h"
 
+#include "SLAM_sampling.h"
 #include "SLAM_init.h"
 #include "SLAM_assessment.h"
 #include "SLAM_map.h"
@@ -26,6 +27,7 @@ SLAM::SLAM(Node_engine* node){
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
 
+  this->slam_sampling = new SLAM_sampling();
   this->slam_map = new SLAM_map(this);
   this->slam_normal = new SLAM_normal(this);
   this->slam_optim = new SLAM_optim(this);

@@ -7,6 +7,7 @@
 #include "../src/SLAM_parameter.h"
 #include "../src/SLAM_transform.h"
 #include "../src/SLAM_glyph.h"
+#include "../src/SLAM_sampling.h"
 
 #include "../optim/SLAM_optim.h"
 #include "../optim/SLAM_optim_ceres.h"
@@ -39,6 +40,7 @@ GUI_Slam::GUI_Slam(Module_slam* module){
   this->slam_param = slamManager->get_slam_param();
   this->slam_transf = slamManager->get_slam_transf();
   this->slam_glyph = slamManager->get_slam_glyph();
+  this->slam_sampling = slamManager->get_slam_sampling();
 
   this->item_width = 100;
 
@@ -295,11 +297,11 @@ void GUI_Slam::parameter_optimization(){
   }
 }
 void GUI_Slam::parameter_gridSampling(){
-  if(ImGui::TreeNode("Grid sampling##tree")){
+  if(ImGui::TreeNode("Sampling##tree")){
     //---------------------------
 
     //Subset point minimum distance
-    double* min_root_distance = slam_transf->get_min_root_distance();
+    double* min_root_distance = slam_sampling->get_min_root_distance();
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::InputDouble("Min point distance from LiDAR", min_root_distance, 0.1f, 1.0f, "%.3f")){
       if(*min_root_distance < 0){
@@ -311,7 +313,7 @@ void GUI_Slam::parameter_gridSampling(){
     }
 
     //Subset point maximum distance
-    double* max_root_distance = slam_transf->get_max_root_distance();
+    double* max_root_distance = slam_sampling->get_max_root_distance();
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::InputDouble("Max point distance from LiDAR", max_root_distance, 0.1f, 1.0f, "%.3f")){
       if(*max_root_distance < 0){
@@ -323,7 +325,7 @@ void GUI_Slam::parameter_gridSampling(){
     }
 
     //Subsampling voxel width
-    double* grid_voxel_size = slam_transf->get_grid_voxel_size();
+    double* grid_voxel_size = slam_sampling->get_grid_voxel_size();
     ImGui::SetNextItemWidth(item_width);
     if(ImGui::InputDouble("Grid sampling voxel size", grid_voxel_size, 0.1f, 1.0f, "%.3f")){
       if(*grid_voxel_size < 0){
@@ -335,7 +337,7 @@ void GUI_Slam::parameter_gridSampling(){
     }
 
     //Max keypoints
-    int* max_keypoint = slam_transf->get_max_keypoint();
+    int* max_keypoint = slam_sampling->get_max_keypoint();
     ImGui::SetNextItemWidth(item_width);
     ImGui::SliderInt("Max keypoint", max_keypoint, 100, 10000);
     if(ImGui::IsItemHovered()){
