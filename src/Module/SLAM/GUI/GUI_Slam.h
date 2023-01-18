@@ -6,6 +6,7 @@
 class Module_slam;
 class Scene;
 class SLAM;
+class CT_ICP;
 
 class SLAM_optim_ceres;
 class SLAM_optim_gn;
@@ -31,6 +32,7 @@ public:
   void design_state();
   void design_parameter();
   void design_option();
+  void design_misc();
 
   void parameter_offline();
   void parameter_lidar();
@@ -53,6 +55,7 @@ public:
 private:
   Scene* sceneManager;
   SLAM* slamManager;
+  CT_ICP* cticpManager;
 
   SLAM_optim_ceres* slam_optim_ceres;
   SLAM_optim_gn* slam_optim_gn;

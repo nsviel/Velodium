@@ -51,7 +51,7 @@ public:
   ~CT_ICP();
 
 public:
-  void algo();
+  void algo(Cloud* cloud);
 
 private:
   void writePoses(string filename, std::vector<TrajectoryFrame> trajectory);

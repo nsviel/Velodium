@@ -1,6 +1,7 @@
 #include "GUI_Slam.h"
 
 #include "../Module_slam.h"
+#include "../ct_icp/CT_ICP.h"
 #include "../src/SLAM.h"
 #include "../src/SLAM_assessment.h"
 #include "../src/SLAM_map.h"
@@ -41,6 +42,7 @@ GUI_Slam::GUI_Slam(Module_slam* module){
   this->slam_transf = slamManager->get_slam_transf();
   this->slam_glyph = slamManager->get_slam_glyph();
   this->slam_sampling = slamManager->get_slam_sampling();
+  this->cticpManager = module->get_cticpManager();
 
   this->item_width = 100;
 
@@ -56,6 +58,7 @@ void GUI_Slam::design_SLAM(){
 
       this->design_parameter();
       this->design_state();
+      this->design_misc();
 
       //---------------------------
       ImGui::EndTabBar();
@@ -70,6 +73,21 @@ void GUI_Slam::design_state(){
     this->state_SLAM();
     this->state_localmap();
     this->state_transformation();
+
+    //---------------------------
+    ImGui::EndTabItem();
+  }
+}
+void GUI_Slam::design_misc(){
+  if(ImGui::BeginTabItem("Misc##123")){
+    Cloud* cloud = sceneManager->get_selected_cloud();
+    //---------------------------
+
+    ImGui::PushItemWidth(100);
+    if(ImGui::Button("CT-ICP", ImVec2(75,0))){
+      cticpManager->algo(cloud);
+      sceneManager->update_cloud_location(cloud);
+    }
 
     //---------------------------
     ImGui::EndTabItem();

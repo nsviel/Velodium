@@ -3,6 +3,7 @@
 #include "src/SLAM.h"
 #include "src/SLAM_parameter.h"
 #include "GUI/GUI_Slam.h"
+#include "ct_icp/CT_ICP.h"
 
 #include "../Node_module.h"
 
@@ -19,6 +20,7 @@ Module_slam::Module_slam(Node_module* node){
   this->node_ope = node_engine->get_node_ope();
 
   this->slamManager = new SLAM(node_engine);
+  this->cticpManager = new CT_ICP();
   this->slam_param = slamManager->get_slam_param();
   this->gui_slam = new GUI_Slam(this);
 

@@ -10,6 +10,7 @@ class Node_module;
 class SLAM;
 class SLAM_parameter;
 class GUI_Slam;
+class CT_ICP;
 
 
 class Module_slam
@@ -36,13 +37,14 @@ public:
   inline SLAM* get_slamManager(){return slamManager;}
   inline SLAM_parameter* get_slam_param(){return slam_param;}
   inline GUI_Slam* get_gui_slam(){return gui_slam;}
-
+  inline CT_ICP* get_cticpManager(){return cticpManager;}
 private:
   Node_engine* node_engine;
   Node_operation* node_ope;
   Node_module* node_module;
 
   SLAM* slamManager;
+  CT_ICP* cticpManager;
   SLAM_parameter* slam_param;
   GUI_Slam* gui_slam;
 };

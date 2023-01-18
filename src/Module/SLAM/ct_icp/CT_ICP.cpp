@@ -50,220 +50,139 @@ const double NORM_X_END_ITERATION_FRAME_TO_MODEL = 0.001;
 const double ALPHA_E = 1.0; //constraint on motion model
 
 
+//Constructor / Destructor
+CT_ICP::CT_ICP(){
+}
+CT_ICP::~CT_ICP(){}
+
 //Main function
-void CT_ICP::algo(){
+void CT_ICP::algo(Cloud* cloud){
+	if(cloud == nullptr) return;
 	//---------------------------
 
-	for (int seq = 3; seq <= 3; seq++){
-		stringstream ss_seq;
-		ss_seq << setw(2) << setfill('0') << seq;
-		string formatedsequence = ss_seq.str();
+	//Creating trajectory
+	std::vector<TrajectoryFrame> trajectory;
+	trajectory.resize(cloud->nb_subset);
 
-		int last_index_frame = LAST_INDEX_FRAME;
+	//Creating voxel_map and keypoint_map
+	std::unordered_map<Voxel, std::list<Eigen::Vector3d>> voxels_map;
+	int index_frame = 0;
 
-		//Creating trajectory
-		std::vector<TrajectoryFrame> trajectory;
-		int first_index_frame = FIRST_INDEX_FRAME;
-		trajectory.resize(last_index_frame + 1 - first_index_frame);
+	for(int i=0; i<cloud->nb_subset; i++){
+		Subset* subset = *next(cloud->subset.begin(), i);
 
-		//Creating voxel_map and keypoint_map
-		std::unordered_map<Voxel, std::list<Eigen::Vector3d>> voxels_map;
+		// subset to local format
+		std::vector<Point3D> frame;
+		for(int j=0; j<subset->xyz.size(); j++){
+			Point3D new_point;
+			new_point.raw_pt[0] = subset->xyz[j].x;
+			new_point.raw_pt[1] = subset->xyz[j].y;
+			new_point.raw_pt[2] = subset->xyz[j].z;
+			new_point.pt = new_point.raw_pt;
+			new_point.timestamp = subset->ts[j];
+			new_point.index_frame = index_frame;
 
-		double max_timer_total_one_loop = 0;
-		int index_frame_max_timer = 0;
-
-		int mean_number_keypoints = 0;
-		int mean_number_keypoints_used = 0;
-		int number_frame_keypoints = 0;
-
-		std::vector<Point3D> point_cloud;
-		int index_point_cloud = 0;
-
-		for (int index_frame = 0; index_frame < last_index_frame + 1 - first_index_frame; index_frame++){
-			std::vector<Point3D> frame;
-			std::vector<Point3D> frame_original;
-
-
-			//read frame ply
-			{
-				//read ply frame file
-				stringstream ss;
-				//ss << setw(5) << setfill('0') << index_frame + first_index_frame;
-				ss << index_frame + first_index_frame;
-				string formatedFileIndex = ss.str();
-				string pointCloudPathIn = VELODYNE_REP_IN_REP + formatedsequence + "/frame_" + formatedFileIndex + ".ply";
-				PlyFile plyFileIn(pointCloudPathIn, fileOpenMode_IN);
-				char* dataIn = nullptr;
-				int sizeOfPointsIn = 0;
-				int numPointsIn = 0;
-				plyFileIn.readFile(dataIn, sizeOfPointsIn, numPointsIn);
-
-				double theta_prev = 0.0;
-				int beam_index = 0;
-				for (int i(0); i < numPointsIn; i++) {
-
-					unsigned long long int offset = (unsigned long long int)i * (unsigned long long int)sizeOfPointsIn;
-					Point3D new_point;
-					new_point.raw_pt[0] = *((float*)(dataIn + offset)); offset += sizeof(float);
-					new_point.raw_pt[1] = *((float*)(dataIn + offset)); offset += sizeof(float);
-					new_point.raw_pt[2] = *((float*)(dataIn + offset)); offset += sizeof(float);
-					new_point.pt = new_point.raw_pt;
-
-					float intensity  = *((float*)(dataIn + offset)); offset += sizeof(float);
-					new_point.timestamp = *((float*)(dataIn + offset)); offset += sizeof(float);
-					new_point.index_frame = index_frame;
-
-					double r = new_point.raw_pt.norm();
-					if ((r > MIN_DIST_LIDAR_CENTER) && (r < MAX_DIST_LIDAR_CENTER)) {
-						frame.push_back(new_point);
-					}
-				}
-
-
-				delete[] dataIn;
+			double r = new_point.raw_pt.norm();
+			if ((r > MIN_DIST_LIDAR_CENTER) && (r < MAX_DIST_LIDAR_CENTER)) {
+				frame.push_back(new_point);
 			}
-
-			PersoTimer timer_total_one_loop;
-			timer_total_one_loop.tic();
-
-
-			//Subsample the scan with voxels taking one random in every voxel
-			sub_sample_frame(frame, SIZE_VOXEL);
-
-			// The first frame is static
-			if (index_frame == 0) {
-				trajectory[index_frame].center_R = Eigen::MatrixXd::Identity(3, 3);
-				trajectory[index_frame].center_t = Eigen::Vector3d(0., 0., 0.);
-
-			}
-			else {
-				if (index_frame == 1) {
-					trajectory[index_frame].center_R = Eigen::MatrixXd::Identity(3, 3);
-					trajectory[index_frame].center_t = Eigen::Vector3d(0., 0., 0.);
-
-				}
-				else {
-					//Init guess of the next position of the trajectory
-					Eigen::Matrix3d R_next_center = trajectory[index_frame - 1].center_R * trajectory[index_frame - 2].center_R.inverse() * trajectory[index_frame - 1].center_R;
-					Eigen::Vector3d t_next_center = trajectory[index_frame - 1].center_t + trajectory[index_frame - 1].center_R * trajectory[index_frame - 2].center_R.inverse() * (trajectory[index_frame - 1].center_t - trajectory[index_frame - 2].center_t);
-					trajectory[index_frame].center_R = R_next_center;
-					trajectory[index_frame].center_t = t_next_center;
-
-
-					Eigen::Vector3d t_diff = trajectory[index_frame].center_t - trajectory[index_frame-1].center_t;
-					if (t_diff.norm() > 5.0) {
-						std::cout << "Error in current motion distance !" << std::endl;
-						system("PAUSE");
-					}
-				}
-
-
-				for (int i = 0; i < (int)frame.size(); ++i) {
-					frame[i].pt = trajectory[index_frame].center_R * frame[i].raw_pt + trajectory[index_frame].center_t;
-				}
-
-
-//NEW
-				// Use new sub_sample frame as keypoints
-				std::list<Point3D> keypoints;
-				keypoints.resize(0);
-				grid_sampling(frame, keypoints, 2.0);
-				if (keypoints.size() < NUMBER_KEYPOINTS) {
-					keypoints.resize(0);
-					grid_sampling(frame, keypoints, 1.0);
-					if (keypoints.size() < NUMBER_KEYPOINTS) {
-						keypoints.resize(0);
-						grid_sampling(frame, keypoints, 0.50);
-						if (keypoints.size() < NUMBER_KEYPOINTS) {
-							keypoints.resize(0);
-							grid_sampling(frame, keypoints, 0.20);
-						}
-					}
-				}
-				if (keypoints.size() > NUMBER_KEYPOINTS) {
-					keypoints.resize(NUMBER_KEYPOINTS);
-				}
-
-
-				mean_number_keypoints = mean_number_keypoints + (int)keypoints.size();
-				number_frame_keypoints++;
-
-				//Remove voxels too far from actual position of the vehicule
-				for (std::unordered_map<Voxel, std::list<Eigen::Vector3d>>::iterator itr_voxel_map = voxels_map.begin(); itr_voxel_map != voxels_map.end(); ++itr_voxel_map) {
-					Eigen::Vector3d pt = (*itr_voxel_map).second.front();
-					if ((pt - trajectory[index_frame].center_t).squaredNorm() > (MAX_DIST_MAP * MAX_DIST_MAP)) {
-						itr_voxel_map = voxels_map.erase(itr_voxel_map);
-					}
-				}
-
-				//Number points in the voxels_map
-				int numPointsVoxelsMap = 0;
-				for (std::unordered_map<Voxel, std::list<Eigen::Vector3d>>::iterator itr_voxel_map = voxels_map.begin(); itr_voxel_map != voxels_map.end(); ++itr_voxel_map) {
-					numPointsVoxelsMap += (int)(itr_voxel_map->second).size();
-				}
-
-
-				int number_keypoints_used = 0;
-
-				{
-					//Frame To Model
-					number_keypoints_used = frame_to_model(voxels_map, keypoints, trajectory, index_frame);
-
-					//Update frame
-					for (int i = 0; i < (int)frame.size(); ++i) {
-						frame[i].pt = trajectory[index_frame].center_R * frame[i].raw_pt + trajectory[index_frame].center_t;
-					}
-
-				}
-
-				mean_number_keypoints_used = mean_number_keypoints_used + number_keypoints_used;
-
-			}
-
-			//Update Voxel Map
-			for (int i = 0; i < (int)frame.size(); i++) {
-				short kx = static_cast<short>(frame[i].pt[0] / SIZE_VOXEL_MAP);
-				short ky = static_cast<short>(frame[i].pt[1] / SIZE_VOXEL_MAP);
-				short kz = static_cast<short>(frame[i].pt[2] / SIZE_VOXEL_MAP);
-
-				auto search = voxels_map.find(Voxel(kx, ky, kz));
-
-				if (search != voxels_map.end()) {
-					std::list<Eigen::Vector3d>* current_list = &(search->second);
-
-					if ((*current_list).size() < MAX_NUMBER_POINTS_IN_VOXEL) {
-						(*current_list).push_back(frame[i].pt);
-					}
-				}
-				else {
-					voxels_map[Voxel(kx, ky, kz)].push_back(frame[i].pt);
-				}
-			}
-
-
-			double timer_total = timer_total_one_loop.toc(false);
-			if (max_timer_total_one_loop < timer_total) {
-				max_timer_total_one_loop = timer_total;
-				index_frame_max_timer = index_frame;
-			}
-
 		}
 
-		//std::cout << std::endl;
-		std::cout << "Sequence : " << seq << std::endl;
+		//Subsample the scan with voxels taking one random in every voxel
+		this->sub_sample_frame(frame, SIZE_VOXEL);
 
-		// Write complete traj in LiDAR reference
-		string traj_complete_result_filename_lidar_ref = POINT_CLOUD_SLAM_RESULTS_REP + formatedsequence + "/" + "_traj_complete_result_lidar_ref.txt";
-		writePoses(traj_complete_result_filename_lidar_ref, trajectory);
+		// The first frame is static
+		if (index_frame == 0) {
+			trajectory[index_frame].center_R = Eigen::MatrixXd::Identity(3, 3);
+			trajectory[index_frame].center_t = Eigen::Vector3d(0., 0., 0.);
+		}
+		else {
+			if (index_frame == 1) {
+				trajectory[index_frame].center_R = Eigen::MatrixXd::Identity(3, 3);
+				trajectory[index_frame].center_t = Eigen::Vector3d(0., 0., 0.);
+			}
+			else {
+				//Init guess of the next position of the trajectory
+				Eigen::Matrix3d R_next_center = trajectory[index_frame - 1].center_R * trajectory[index_frame - 2].center_R.inverse() * trajectory[index_frame - 1].center_R;
+				Eigen::Vector3d t_next_center = trajectory[index_frame - 1].center_t + trajectory[index_frame - 1].center_R * trajectory[index_frame - 2].center_R.inverse() * (trajectory[index_frame - 1].center_t - trajectory[index_frame - 2].center_t);
+				trajectory[index_frame].center_R = R_next_center;
+				trajectory[index_frame].center_t = t_next_center;
 
+				Eigen::Vector3d t_diff = trajectory[index_frame].center_t - trajectory[index_frame-1].center_t;
+				if (t_diff.norm() > 5.0) {
+					std::cout << "Error in current motion distance !" << std::endl;
+				}
+			}
 
-		std::cout << "Mean number keypoints : " << (double)mean_number_keypoints / (double)number_frame_keypoints << std::endl;
-		std::cout << "Mean number keypoints used : " << (double)mean_number_keypoints_used / (double)number_frame_keypoints << std::endl;
-		std::cout << "Perc keypoints used : " << ((double)mean_number_keypoints_used / (double)mean_number_keypoints)*100.0 << std::endl;
-		std::cout << std::endl << std::endl;
-		std::cout << "Max Total Time for one iteration : " << max_timer_total_one_loop << std::endl;
-		std::cout << "Index Frame Max Time : " << index_frame_max_timer + first_index_frame << std::endl;
+			for (int i = 0; i < (int)frame.size(); ++i) {
+				frame[i].pt = trajectory[index_frame].center_R * frame[i].raw_pt + trajectory[index_frame].center_t;
+			}
+
+			// Use new sub_sample frame as keypoints
+			std::list<Point3D> keypoints;
+			keypoints.resize(0);
+			this->grid_sampling(frame, keypoints, 2.0);
+			if (keypoints.size() < NUMBER_KEYPOINTS) {
+				keypoints.resize(0);
+				this->grid_sampling(frame, keypoints, 1.0);
+				if (keypoints.size() < NUMBER_KEYPOINTS) {
+					keypoints.resize(0);
+					grid_sampling(frame, keypoints, 0.50);
+					if (keypoints.size() < NUMBER_KEYPOINTS) {
+						keypoints.resize(0);
+						grid_sampling(frame, keypoints, 0.20);
+					}
+				}
+			}
+			if (keypoints.size() > NUMBER_KEYPOINTS) {
+				keypoints.resize(NUMBER_KEYPOINTS);
+			}
+
+			//Remove voxels too far from actual position of the vehicule
+			for (std::unordered_map<Voxel, std::list<Eigen::Vector3d>>::iterator itr_voxel_map = voxels_map.begin(); itr_voxel_map != voxels_map.end(); ++itr_voxel_map) {
+				Eigen::Vector3d pt = (*itr_voxel_map).second.front();
+				if ((pt - trajectory[index_frame].center_t).squaredNorm() > (MAX_DIST_MAP * MAX_DIST_MAP)) {
+					itr_voxel_map = voxels_map.erase(itr_voxel_map);
+				}
+			}
+
+			//Frame To Model
+			int number_keypoints_used = frame_to_model(voxels_map, keypoints, trajectory, index_frame);
+
+			//Update frame
+			for(int j=0; j<subset->xyz.size(); j++){
+				Eigen::Vector3d point;
+				point << subset->xyz[j].x, subset->xyz[j].y, subset->xyz[j].z;
+				point = trajectory[index_frame].center_R * point + trajectory[index_frame].center_t;
+				subset->xyz[j] = vec3(point(0), point(1), point(2));
+			}
+		}
+
+		//Update Voxel Map
+		for (int j=0; j<(int)frame.size(); j++) {
+			short kx = static_cast<short>(frame[j].pt[0] / SIZE_VOXEL_MAP);
+			short ky = static_cast<short>(frame[j].pt[1] / SIZE_VOXEL_MAP);
+			short kz = static_cast<short>(frame[j].pt[2] / SIZE_VOXEL_MAP);
+
+			auto search = voxels_map.find(Voxel(kx, ky, kz));
+
+			if (search != voxels_map.end()) {
+				std::list<Eigen::Vector3d>* current_list = &(search->second);
+
+				if ((*current_list).size() < MAX_NUMBER_POINTS_IN_VOXEL) {
+					(*current_list).push_back(frame[j].pt);
+				}
+			}
+			else {
+				voxels_map[Voxel(kx, ky, kz)].push_back(frame[j].pt);
+			}
+		}
+
+		index_frame++;
 	}
+
+	// Write complete traj in LiDAR reference
+	this->writePoses("result_cticp.txt", trajectory);
 
 	//---------------------------
 }
@@ -434,7 +353,6 @@ int CT_ICP::frame_to_model(std::unordered_map<Voxel, std::list<Eigen::Vector3d>>
 		if (number_keypoints_used < 200) {
 			std::cout << "Error : not enough keypoints selected in frame to model !" << std::endl;
 			std::cout << "number_keypoints_used : " << number_keypoints_used << std::endl;
-			system("PAUSE");
 		}
 
 		// Normalize equation
