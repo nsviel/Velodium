@@ -52,12 +52,19 @@ public:
 
 public:
   void algo(Cloud* cloud);
+	void algo(Subset* subset);
+	void reset();
 
 private:
   void writePoses(string filename, std::vector<TrajectoryFrame> trajectory);
   int frame_to_model(std::unordered_map<Voxel, std::list<Eigen::Vector3d>>& voxels_map, std::list<Point3D>& keypoints, std::vector<TrajectoryFrame>& trajectory, int index_frame);
   void sub_sample_frame(std::vector<Point3D>& frame, double size_voxel);
   void grid_sampling(std::vector<Point3D>& frame, std::list<Point3D>& keypoints, double size_voxel_subsampling);
+
+private:
+	std::unordered_map<Voxel, std::list<Eigen::Vector3d>> voxels_map;
+	std::vector<TrajectoryFrame> trajectory;
+	int index_frame;
 };
 
 

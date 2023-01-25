@@ -41,7 +41,7 @@ struct Subset{ //Cloud subset / part
 
   std::vector<float> ts;
   std::vector<double> ts_n;
-  float angle;
+  float angle; // A virer
 
   //Various attributs
   std::vector<float> A;
@@ -60,14 +60,18 @@ struct Subset{ //Cloud subset / part
   glm::mat4 trans;
   glm::mat4 scale;
   glm::mat4 transformation;
+  Eigen::Matrix3d pose_R;
+  Eigen::Vector3d pose_T;
 
   //Own glyphs
+  //FAire un vecteur de glyph
   Glyph normal;
   Glyph axis;
   Glyph keypoint;
   Glyph tree;
 
   //Specific structures
+  //A virer par la suite et inclure dans les modules concernés
   Frame frame;
   Register icp;
   Detection detection;

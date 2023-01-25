@@ -80,6 +80,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //Make slam on the current subset
   node_module->online(cloud, ID_subset);
+  sceneManager->update_subset_location(subset);
 
   //Make cleaning on the current subset
   if(with_filter_sphere){
@@ -154,7 +155,7 @@ void Online::compute_http_command(){
     string val = option[i][1];
 
     if(opt == "slam"){
-      bool* module_with_slam = slamManager->get_with_slam();
+      bool* module_with_slam = module_slam->get_with_slam();
       *module_with_slam = string_to_bool(val);
     }
     else if(opt == "view"){

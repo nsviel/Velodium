@@ -22,9 +22,7 @@ public:
 
 public:
   //Main functions
-  void init();
   void update();
-  void runtime();
   void reset();
   void draw();
   void draw_online();
@@ -38,6 +36,10 @@ public:
   inline SLAM_parameter* get_slam_param(){return slam_param;}
   inline GUI_Slam* get_gui_slam(){return gui_slam;}
   inline CT_ICP* get_cticpManager(){return cticpManager;}
+
+  inline bool* get_with_slam(){return &with_slam;}
+  inline int* get_algo(){return &algo;}
+
 private:
   Node_engine* node_engine;
   Node_operation* node_ope;
@@ -47,6 +49,9 @@ private:
   CT_ICP* cticpManager;
   SLAM_parameter* slam_param;
   GUI_Slam* gui_slam;
+
+  bool with_slam;
+  int algo;
 };
 
 #endif

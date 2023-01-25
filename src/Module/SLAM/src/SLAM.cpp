@@ -48,7 +48,6 @@ void SLAM::update_configuration(){
 
   this->nb_thread = 8;
   this->lidar_model = configManager->parse_json_s("interface", "lidar_model");
-  this->with_slam = configManager->parse_json_b("module", "with_slam");
   slam_param->make_config(lidar_model);
 
   //---------------------------
@@ -107,12 +106,6 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
   Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
-
-  if(with_slam == false){
-    this->time_slam = 0;
-    this->print_result();
-    return false;
-  }
 
   //Cloud existence & consistency
   if(cloud == nullptr){

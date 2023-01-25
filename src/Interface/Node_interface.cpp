@@ -2,6 +2,7 @@
 
 #include "Capture/Capture.h"
 #include "IO/Recorder.h"
+#include "IO/PCAP.h"
 #include "Network/HTTP/HTTP.h"
 
 #include "../Engine/Node_engine.h"
@@ -20,6 +21,7 @@ Node_interface::Node_interface(Node_engine* node){
   this->captureManager = new Capture(this);
   this->recordManager = new Recorder(this);
   this->httpsManager = new HTTP(this);
+  this->pcapManager = new PCAP(this);
 
   //---------------------------
 }

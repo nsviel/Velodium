@@ -35,6 +35,7 @@ public:
   void design_misc();
 
   void parameter_offline();
+  void parameter_algo();
   void parameter_lidar();
   void parameter_glyph();
   void parameter_optimization();
@@ -53,6 +54,7 @@ public:
   inline SLAM* get_slamManager(){return slamManager;}
 
 private:
+  Module_slam* module_slam;
   Scene* sceneManager;
   SLAM* slamManager;
   CT_ICP* cticpManager;

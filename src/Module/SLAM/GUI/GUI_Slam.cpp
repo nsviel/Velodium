@@ -26,13 +26,14 @@
 
 //Constructor / Destructor
 GUI_Slam::GUI_Slam(Module_slam* module){
+  this->module_slam = module;
   //---------------------------
 
-  Node_module* node_module = module->get_node_module();
+  Node_module* node_module = module_slam->get_node_module();
   Node_engine* node_engine = node_module->get_node_engine();
 
   this->sceneManager = node_engine->get_sceneManager();
-  this->slamManager = module->get_slamManager();
+  this->slamManager = module_slam->get_slamManager();
   this->slam_optim = slamManager->get_slam_optim();
   this->slam_optim_gn = slam_optim->get_optim_gn();
   this->slam_normal = slamManager->get_slam_normal();
@@ -42,7 +43,7 @@ GUI_Slam::GUI_Slam(Module_slam* module){
   this->slam_transf = slamManager->get_slam_transf();
   this->slam_glyph = slamManager->get_slam_glyph();
   this->slam_sampling = slamManager->get_slam_sampling();
-  this->cticpManager = module->get_cticpManager();
+  this->cticpManager = module_slam->get_cticpManager();
 
   this->item_width = 100;
 
@@ -98,6 +99,8 @@ void GUI_Slam::design_parameter(){
     //---------------------------
 
     this->parameter_lidar();
+    this->parameter_algo();
+
     this->parameter_glyph();
     this->parameter_optimization();
     this->parameter_gridSampling();
@@ -114,7 +117,7 @@ void GUI_Slam::design_parameter(){
 void GUI_Slam::design_option(){
   //---------------------------
 
-  bool* with_slam = slamManager->get_with_slam();
+  bool* with_slam = module_slam->get_with_slam();
   ImGui::Checkbox("SLAM", with_slam);
 
   //---------------------------
@@ -160,6 +163,15 @@ void GUI_Slam::parameter_lidar(){
       cloud->lidar_model = "velodyne_vlp16_reduced";
     }
   }
+
+  //---------------------------
+}
+void GUI_Slam::parameter_algo(){
+  //---------------------------
+
+  int* algo = module_slam->get_algo();
+  ImGui::SetNextItemWidth(item_width);
+  ImGui::Combo("Algo##444", algo, "ct_icp\0custom\0");
 
   //---------------------------
   ImGui::Separator();

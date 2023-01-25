@@ -7,6 +7,7 @@
 
 #include "../Node_module.h"
 
+#include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Operation/Node_operation.h"
 
@@ -24,16 +25,14 @@ Module_slam::Module_slam(Node_module* node){
   this->slam_param = slamManager->get_slam_param();
   this->gui_slam = new GUI_Slam(this);
 
+  Configuration* configManager = node_engine->get_configManager();
+  this->with_slam = configManager->parse_json_b("module", "with_slam");
+  this->algo = 0;
+
   //---------------------------
 }
 Module_slam::~Module_slam(){}
 
-void Module_slam::init(){
-  //---------------------------
-
-
-  //---------------------------
-}
 void Module_slam::update(){
   //---------------------------
 
@@ -41,16 +40,11 @@ void Module_slam::update(){
 
   //---------------------------
 }
-void Module_slam::runtime(){
-  //---------------------------
-
-
-  //---------------------------
-}
 void Module_slam::reset(){
   //---------------------------
 
   slamManager->reset_slam();
+  cticpManager->reset();
 
   //---------------------------
 }
@@ -71,7 +65,15 @@ void Module_slam::draw_online(){
 void Module_slam::online(Cloud* cloud, int subset_ID){
   //---------------------------
 
-  slamManager->compute_slam(cloud, subset_ID);
+  if(with_slam){
+    if(algo == 0){
+      Subset* subset = *next(cloud->subset.begin(), subset_ID);
+      cticpManager->algo(subset);
+    }
+    else if(algo == 1){
+      slamManager->compute_slam(cloud, subset_ID);
+    }
+  }
 
   //---------------------------
 }

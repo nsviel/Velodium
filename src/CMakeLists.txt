@@ -30,6 +30,7 @@ set(ALL_LIBS
   freeimage #Screenchot lib
   microhttpd #HTTP network protocol
   -fopenmp  #Multithreading
+  pcap
 )
 
 # Source files

@@ -41,11 +41,10 @@ void Followup::update_configuration(){
 void Followup::camera_followup(Cloud* cloud, int ID_subset){
   Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
   if(subset == nullptr) return;
-  Frame* frame_m0 = &subset->frame;
-  vec3 empty(0.0);
   //---------------------------
 
-  if(frame_m0->ID >= camera_nb_pose && with_camera_follow){
+  vec3 empty(0.0);
+  if(ID_subset >= camera_nb_pose && with_camera_follow){
     //Camera payload
     vec3 E = camera_payload(cloud, ID_subset);
 
@@ -75,24 +74,24 @@ void Followup::camera_mode(string mode){
 
 //Subfunctions
 vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
-  vec3 E = vec3(0, 0, 0);
+  Subset* subset_m0 = sceneManager->get_subset_byID(cloud, ID_subset);
+  Subset* subset_m1 = sceneManager->get_subset_byID(cloud, ID_subset - 1);
   //---------------------------
 
   //Check if no stationary
-  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, ID_subset);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, ID_subset-1);
-  vec3 pos_m0 = eigen_to_glm_vec3(frame_m0->trans_b);
-  vec3 pos_m1 = eigen_to_glm_vec3(frame_m1->trans_b);
+  vec3 E = vec3(0, 0, 0);
+  vec3 pos_m0 = eigen_to_glm_vec3(subset_m0->pose_T);
+  vec3 pos_m1 = eigen_to_glm_vec3(subset_m1->pose_T);
   float pos_dist = fct_distance(pos_m0, pos_m1);
   if(pos_dist < 0.1) return E;
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){
-    Frame* frame = sceneManager->get_frame_byID(cloud, ID_subset - i);
-    vec3 pos = eigen_to_glm_vec3(frame->trans_b);
+    Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset - i);
+    Eigen::Vector3d pos = subset->pose_T;
 
     for(int j=0; j<3; j++){
-      E[j] += pos[j];
+      E[j] += pos(j);
     }
   }
   for(int j=0; j<3; j++){
@@ -103,11 +102,10 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
   return E;
 }
 void Followup::camera_position(Subset* subset, vec3 E){
-  Frame* frame = &subset->frame;
   //---------------------------
 
   //Camera pose
-  vec3 pose = eigen_to_glm_vec3(frame->trans_b);
+  vec3 pose = eigen_to_glm_vec3(subset->pose_T);
   vec3 C = pose - camera_distFromPos * (pose - E);
 
   //Forced absolute camera pose
@@ -142,12 +140,11 @@ void Followup::camera_position(Subset* subset, vec3 E){
   //---------------------------
 }
 void Followup::camera_orientation(Subset* subset, vec3 E){
-  Frame* frame = &subset->frame;
   //---------------------------
 
   //Forced camera angle
   if(with_camera_absolute){
-    vec3 pose = eigen_to_glm_vec3(frame->trans_b);
+    vec3 pose = eigen_to_glm_vec3(subset->pose_T);
     vec3 C = pose - camera_distFromPos * (pose - E);
     vec3 D = pose - C;
     float angle = atan(D.y, D.x) - atan(0.0f, 1.0f);

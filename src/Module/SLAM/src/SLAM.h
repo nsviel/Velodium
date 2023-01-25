@@ -44,7 +44,6 @@ public:
   inline SLAM_sampling* get_slam_sampling(){return slam_sampling;}
 
   inline void set_nb_thread(int value){this->nb_thread = value;}
-  inline bool* get_with_slam(){return &with_slam;}
 
 private:
   bool check_condition(Cloud* cloud, int subset_ID);
@@ -69,7 +68,6 @@ private:
   SLAM_glyph* slam_glyph;
   SLAM_sampling* slam_sampling;
 
-  bool with_slam;
   float time_slam;
   string lidar_model;
   int nb_thread;
