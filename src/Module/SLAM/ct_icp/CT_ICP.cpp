@@ -198,21 +198,8 @@ void CT_ICP::algo(Subset* subset){
 	TrajectoryFrame traj;
 	trajectory.push_back(traj);
 
-	std::vector<Point3D> frame;
-	for(int j=0; j<subset->xyz.size(); j++){
-		Point3D new_point;
-		new_point.raw_pt[0] = subset->xyz[j].x;
-		new_point.raw_pt[1] = subset->xyz[j].y;
-		new_point.raw_pt[2] = subset->xyz[j].z;
-		new_point.pt = new_point.raw_pt;
-		new_point.timestamp = subset->ts[j];
-		new_point.index_frame = index_frame;
-
-		double r = new_point.raw_pt.norm();
-		if ((r > MIN_DIST_LIDAR_CENTER) && (r < MAX_DIST_LIDAR_CENTER)) {
-			frame.push_back(new_point);
-		}
-	}
+	vector<Point3D> frame;
+	this->do_truc(subset, frame);
 
 	//Subsample the scan with voxels taking one random in every voxel
 	this->sub_sample_frame(frame, SIZE_VOXEL);
@@ -270,7 +257,7 @@ void CT_ICP::algo(Subset* subset){
 			if ((pt - trajectory[index_frame].center_t).squaredNorm() > (MAX_DIST_MAP * MAX_DIST_MAP)) {
 				it = voxels_map.erase(it);
 			}
-		}*/		
+		}*/
 
 		//Frame To Model
 		int number_keypoints_used = frame_to_model(voxels_map, keypoints, trajectory, index_frame);
@@ -288,6 +275,46 @@ void CT_ICP::algo(Subset* subset){
 	}
 
 	//Update Voxel Map
+	this->update_voxelMap(frame);
+
+	this->index_frame++;
+
+	//---------------------------
+}
+void CT_ICP::reset(){
+	//---------------------------
+
+	this->voxels_map.clear();
+	this->trajectory.clear();
+	this->index_frame = 0;
+
+	//---------------------------
+}
+
+// Algo functions
+void CT_ICP::do_truc(Subset* subset, vector<Point3D>& frame){
+	//---------------------------sayHello();
+
+	for(int j=0; j<subset->xyz.size(); j++){
+		Point3D new_point;
+		new_point.raw_pt[0] = subset->xyz[j].x;sayHello();
+		new_point.raw_pt[1] = subset->xyz[j].y;sayHello();
+		new_point.raw_pt[2] = subset->xyz[j].z;sayHello();
+		new_point.pt = new_point.raw_pt;sayHello();
+		new_point.timestamp = subset->ts[j];sayHello();
+		new_point.index_frame = index_frame;
+
+		double r = new_point.raw_pt.norm();
+		if ((r > MIN_DIST_LIDAR_CENTER) && (r < MAX_DIST_LIDAR_CENTER)) {
+			frame.push_back(new_point);
+		}
+	}
+
+	//---------------------------
+}
+void CT_ICP::update_voxelMap(vector<Point3D>& frame){
+	//---------------------------
+
 	for (int j=0; j<(int)frame.size(); j++) {
 		short kx = static_cast<short>(frame[j].pt[0] / SIZE_VOXEL_MAP);
 		short ky = static_cast<short>(frame[j].pt[1] / SIZE_VOXEL_MAP);
@@ -306,17 +333,6 @@ void CT_ICP::algo(Subset* subset){
 			voxels_map[Voxel(kx, ky, kz)].push_back(frame[j].pt);
 		}
 	}
-
-	this->index_frame++;
-
-	//---------------------------
-}
-void CT_ICP::reset(){
-	//---------------------------
-
-	this->voxels_map.clear();
-	this->trajectory.clear();
-	this->index_frame = 0;
 
 	//---------------------------
 }

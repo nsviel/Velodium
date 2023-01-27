@@ -56,6 +56,11 @@ public:
 	void reset();
 
 private:
+	//Algo functions
+	void do_truc(Subset* subset, vector<Point3D>& frame);
+	void update_voxelMap(vector<Point3D>& frame);
+
+	//Subfunctions
   void writePoses(string filename, std::vector<TrajectoryFrame> trajectory);
   int frame_to_model(std::unordered_map<Voxel, std::list<Eigen::Vector3d>>& voxels_map, std::list<Point3D>& keypoints, std::vector<TrajectoryFrame>& trajectory, int index_frame);
   void sub_sample_frame(std::vector<Point3D>& frame, double size_voxel);

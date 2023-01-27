@@ -226,7 +226,7 @@ void UDP_parser_VLP16::parse_timestamp(){
 
   //Check for positive timestamp
   if(packet_ts_s < 0){
-    cout<<"[error] UDP capture - negative timestamp"<<endl;
+    //cout<<"[error] UDP capture - negative timestamp"<<endl;
   }
 
   // calculating relative timestamp [microsec] of each firing
