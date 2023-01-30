@@ -127,13 +127,22 @@ void GUI_option::option_glyph(){
   }
   ImGui::NextColumn();
 
-  //Display Axis
+  //RAJOUTER UN TRUC ICI
+  ImGui::NextColumn();
+
+  //Display Axis world
   Axis* axisObject = objectManager->get_object_axis();
   Glyph* axis_scene = axisObject->get_axis_scene();
   bool& axis_scene_ON = axis_scene->visibility;
-  if(ImGui::Checkbox("Axis", &axis_scene_ON)){
-    bool* axis_subset_visibility = axisObject->get_axis_subset_visibility();
-    *axis_subset_visibility = axis_scene_ON;
+  ImGui::Checkbox("Axis world", &axis_scene_ON);
+  ImGui::NextColumn();
+
+  //Display Axis cloud
+  static bool axis_cloud = true;
+  if(ImGui::Checkbox("Axis cloud", &axis_cloud)){
+    bool* axis_visibility = axisObject->get_axis_subset_visibility();
+    *axis_visibility = axis_cloud;
+    objectManager->update_glyph_cloud(cloud);
   }
   ImGui::NextColumn();
 

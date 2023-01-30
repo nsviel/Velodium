@@ -199,7 +199,21 @@ void CT_ICP::algo(Subset* subset){
 	trajectory.push_back(traj);
 
 	vector<Point3D> frame;
-	this->do_truc(subset, frame);
+	//this->do_truc(subset, frame);
+	for(int j=0; j<subset->xyz.size(); j++){
+		Point3D new_point;
+		new_point.raw_pt[0] = subset->xyz[j].x;
+		new_point.raw_pt[1] = subset->xyz[j].y;
+		new_point.raw_pt[2] = subset->xyz[j].z;
+		new_point.pt = new_point.raw_pt;
+		new_point.timestamp = subset->ts[j];
+		new_point.index_frame = index_frame;
+
+		double r = new_point.raw_pt.norm();
+		if ((r > MIN_DIST_LIDAR_CENTER) && (r < MAX_DIST_LIDAR_CENTER)) {
+			frame.push_back(new_point);
+		}
+	}
 
 	//Subsample the scan with voxels taking one random in every voxel
 	this->sub_sample_frame(frame, SIZE_VOXEL);
@@ -252,12 +266,12 @@ void CT_ICP::algo(Subset* subset){
 		}
 
 		//Remove voxels too far from actual position of the vehicule
-		/*for (std::unordered_map<Voxel, std::list<Eigen::Vector3d>>::iterator it = voxels_map.begin(); it != voxels_map.end(); ++it) {
+		for (std::unordered_map<Voxel, std::list<Eigen::Vector3d>>::iterator it = voxels_map.begin(); it != voxels_map.end(); ++it) {
 			Eigen::Vector3d pt = (*it).second.front();
 			if ((pt - trajectory[index_frame].center_t).squaredNorm() > (MAX_DIST_MAP * MAX_DIST_MAP)) {
 				it = voxels_map.erase(it);
 			}
-		}*/
+		}
 
 		//Frame To Model
 		int number_keypoints_used = frame_to_model(voxels_map, keypoints, trajectory, index_frame);
@@ -275,7 +289,25 @@ void CT_ICP::algo(Subset* subset){
 	}
 
 	//Update Voxel Map
-	this->update_voxelMap(frame);
+	//this->update_voxelMap(frame);
+	for (int j=0; j<(int)frame.size(); j++) {
+		short kx = static_cast<short>(frame[j].pt[0] / SIZE_VOXEL_MAP);
+		short ky = static_cast<short>(frame[j].pt[1] / SIZE_VOXEL_MAP);
+		short kz = static_cast<short>(frame[j].pt[2] / SIZE_VOXEL_MAP);
+
+		auto search = voxels_map.find(Voxel(kx, ky, kz));
+
+		if (search != voxels_map.end()) {
+			std::list<Eigen::Vector3d>* current_list = &(search->second);
+
+			if ((*current_list).size() < MAX_NUMBER_POINTS_IN_VOXEL) {
+				(*current_list).push_back(frame[j].pt);
+			}
+		}
+		else {
+			voxels_map[Voxel(kx, ky, kz)].push_back(frame[j].pt);
+		}
+	}
 
 	this->index_frame++;
 
@@ -293,15 +325,15 @@ void CT_ICP::reset(){
 
 // Algo functions
 void CT_ICP::do_truc(Subset* subset, vector<Point3D>& frame){
-	//---------------------------sayHello();
+	//---------------------------
 
 	for(int j=0; j<subset->xyz.size(); j++){
 		Point3D new_point;
-		new_point.raw_pt[0] = subset->xyz[j].x;sayHello();
-		new_point.raw_pt[1] = subset->xyz[j].y;sayHello();
-		new_point.raw_pt[2] = subset->xyz[j].z;sayHello();
-		new_point.pt = new_point.raw_pt;sayHello();
-		new_point.timestamp = subset->ts[j];sayHello();
+		new_point.raw_pt[0] = subset->xyz[j].x;
+		new_point.raw_pt[1] = subset->xyz[j].y;
+		new_point.raw_pt[2] = subset->xyz[j].z;
+		new_point.pt = new_point.raw_pt;
+		new_point.timestamp = subset->ts[j];
 		new_point.index_frame = index_frame;
 
 		double r = new_point.raw_pt.norm();
