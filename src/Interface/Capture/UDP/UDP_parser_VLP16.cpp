@@ -92,7 +92,9 @@ void UDP_parser_VLP16::parse_blocks(){
 
     // 0xffee is upper block
     if(block_flag != 65518){
-      cout << "[error] Problem block flag "<< block_flag<<" instead of "<<65518 << endl;
+      string log = "Capture - Problem block flag "+to_string(block_flag)+" instead of "+to_string(65518);
+      console.AddLog("error", log);
+      return;
     }
 
     //Get block azimuth

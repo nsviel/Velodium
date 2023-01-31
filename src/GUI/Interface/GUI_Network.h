@@ -4,8 +4,8 @@
 #include "../../common.h"
 
 class Node_gui;
-//class MQTT;
 class HTTP;
+class PCAP_reader;
 
 
 class GUI_Network
@@ -18,16 +18,15 @@ public:
 public:
   void design_Network();
 
-  //MQTT
-  void mqtt_connection();
-  void mqtt_parameter();
+  //PCAP stuff
+  void pcap_connection();
 
   //HTTP
   void http_connection();
   void http_parameter();
 
 private:
-  //MQTT* mqttManager;
+  PCAP_reader* pcapManager;
   HTTP* httpsManager;
 
   int item_width;
