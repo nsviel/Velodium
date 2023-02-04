@@ -56,8 +56,36 @@ void GUI_Network::design_Network(){
 void GUI_Network::pcap_connection(){
   //---------------------------
 
-  pcapManager->retrieve_device();
-  pcapManager->snif_and_save_pcap();
+  //Display list of device
+  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Device list");
+  vector<string> devices_name = pcapManager->get_devices_name();
+  string* device_selected = pcapManager->get_device_selected();
+  static int selected = 0; // Here we store our selection data as an index.
+  if(ImGui::BeginListBox("##434", ImVec2(-FLT_MIN, (devices_name.size()+0.25) * ImGui::GetTextLineHeightWithSpacing()) )){
+    for(int n=0; n<devices_name.size(); n++){
+      bool is_selected;
+      if(devices_name[n] == *device_selected){
+        is_selected = true;
+      }else{
+        is_selected = false;
+      }
+
+      //Selection stuff
+      if(ImGui::Selectable(devices_name[n].c_str(), is_selected)){
+        selected = n;
+        say("hu");
+      }
+      if(is_selected){
+        ImGui::SetItemDefaultFocus();
+        say("hà");
+      }
+    }
+
+    ImGui::EndListBox();
+  }
+
+  //pcapManager->retrieve_device();
+  //pcapManager->snif_and_save_pcap();
 
 
   //---------------------------

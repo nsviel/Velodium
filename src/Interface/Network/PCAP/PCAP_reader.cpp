@@ -10,23 +10,34 @@
 PCAP_reader::PCAP_reader(){
   //---------------------------
 
+  this->device_selected = "wlp2s0";
+
   //---------------------------
+  this->device_get_list();
 }
 PCAP_reader::~PCAP_reader(){}
 
-void PCAP_reader::retrieve_device(){
+bool PCAP_reader::device_get_list(){
+  bool is_dev_selected = false;
+  devices_name.clear();
   //---------------------------
 
   char errbuf[PCAP_ERRBUF_SIZE] = {0};
   pcap_if_t *ift = NULL;
 
   if(pcap_findalldevs(&ift, errbuf) == 0) {
-      pcap_if_t *it = ift;
-      while (it) {
-          printf("%s - %s\n", it->name, it->description);
-          it = it->next;
+    pcap_if_t *it = ift;
+    while (it) {
+      if(device_check_name(it->name)){
+        devices_name.push_back(it->name);
+        if(it->name == device_selected){
+          is_dev_selected = true;
+        }
       }
-      pcap_freealldevs(ift);
+
+      it = it->next;
+    }
+    pcap_freealldevs(ift);
   }
   else {
       printf("error: %s\n", errbuf);
@@ -34,30 +45,42 @@ void PCAP_reader::retrieve_device(){
   }
 
   //---------------------------
+  return is_dev_selected;
+}
+bool PCAP_reader::device_check_name(string name){
+  //---------------------------
+
+  if(name == "any" || name == "lo") return false;
+  else if(name == "bluetooth0" || name == "bluetooth-monitor") return false;
+  else if(name == "nflog" || name == "nfqueue") return false;
+  else if(name == "dbus-system" || name == "dbus-session") return false;
+  else if(name == "docker0") return false;
+
+  //---------------------------
+  return true;
 }
 void PCAP_reader::snif_and_save_pcap(){
   //---------------------------
 
   // Define the device
-  char errbuf[PCAP_ERRBUF_SIZE];
-  char* dev = pcap_lookupdev(errbuf);
-  if (dev == NULL) {
-    fprintf(stderr, "Couldn't find default device: %s\n", errbuf);
+  if(device_get_list() == false) {
+    say("Selected device not available");
     return;
   }
 
   // Open capture session
-  pcap_t* handle = pcap_open_live(dev, BUFSIZ, 0, 1500, errbuf);
+  char errbuf[PCAP_ERRBUF_SIZE];
+  pcap_t* handle = pcap_open_live(device_selected.c_str(), BUFSIZ, 0, 1500, errbuf);
   if (handle == NULL) {
-    fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
+    fprintf(stderr, "Couldn't open device %s: %s\n", device_selected.c_str(), errbuf);
     return;
   }
 
   /* Find the properties for the device */
   bpf_u_int32 mask;		/* Our netmask */
   bpf_u_int32 net;		/* Our IP */
-	if (pcap_lookupnet(dev, &net, &mask, errbuf) == -1) {
-		fprintf(stderr, "Couldn't get netmask for device %s: %s\n", dev, errbuf);
+	if (pcap_lookupnet(device_selected.c_str(), &net, &mask, errbuf) == -1) {
+		fprintf(stderr, "Couldn't get netmask for device %s: %s\n", device_selected.c_str(), errbuf);
 		net = 0;
 		mask = 0;
 	}

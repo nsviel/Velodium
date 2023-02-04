@@ -153,6 +153,10 @@ void CT_ICP::algo(Cloud* cloud){
 
 			//Frame To Model
 			int number_keypoints_used = frame_to_model(voxels_map, keypoints, trajectory, index_frame);
+			if(number_keypoints_used == 0){
+				this->reset();
+				return;
+			}
 
 			//Update frame
 			for(int j=0; j<subset->xyz.size(); j++){
@@ -266,15 +270,25 @@ void CT_ICP::algo(Subset* subset){
 		}
 
 		//Remove voxels too far from actual position of the vehicule
+		vector<Voxel> voxels_to_erase;
 		for (std::unordered_map<Voxel, std::list<Eigen::Vector3d>>::iterator it = voxels_map.begin(); it != voxels_map.end(); ++it) {
 			Eigen::Vector3d pt = (*it).second.front();
 			if ((pt - trajectory[index_frame].center_t).squaredNorm() > (MAX_DIST_MAP * MAX_DIST_MAP)) {
-				it = voxels_map.erase(it);
+				voxels_to_erase.push_back(it->first);
 			}
+		}
+
+		//Erase them
+		for(int i=0; i<voxels_to_erase.size(); i++){
+			voxels_map.erase(voxels_to_erase[i]);
 		}
 
 		//Frame To Model
 		int number_keypoints_used = frame_to_model(voxels_map, keypoints, trajectory, index_frame);
+		if(number_keypoints_used == 0){
+			this->reset();
+			return;
+		}
 
 		//Update frame
 		for(int j=0; j<subset->xyz.size(); j++){
@@ -535,6 +549,7 @@ int CT_ICP::frame_to_model(std::unordered_map<Voxel, std::list<Eigen::Vector3d>>
 		if (number_keypoints_used < 200) {
 			std::cout << "Error : not enough keypoints selected in frame to model !" << std::endl;
 			std::cout << "number_keypoints_used : " << number_keypoints_used << std::endl;
+			return 0;
 		}
 
 		// Normalize equation

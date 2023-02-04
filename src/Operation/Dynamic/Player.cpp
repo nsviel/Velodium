@@ -225,3 +225,19 @@ void Player::player_setFrequency(int value){
 
   //---------------------------
 }
+
+//Visibility function
+int Player::get_visibility_range_max(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  int range_max = 15;
+  //---------------------------
+
+  if(cloud != nullptr && sceneManager->get_is_list_empty() == false){
+    if(cloud->nb_subset > 15){
+      range_max = cloud->nb_subset;
+    }
+  }
+
+  //---------------------------
+  return range_max;
+}

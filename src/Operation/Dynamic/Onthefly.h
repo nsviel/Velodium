@@ -21,6 +21,8 @@ public:
   void compute_onthefly(Cloud* cloud, int ID);
   void reset();
 
+  inline int get_range(){return range;}
+
 private:
   Scene* sceneManager;
   Loader* loaderManager;
