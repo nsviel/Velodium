@@ -2,7 +2,6 @@
 #define OBJECT_CAR_H
 
 #include "../../../Data/struct_glyph.h"
-#include "../../../Data/struct_frame.h"
 
 #include "../../../../common.h"
 

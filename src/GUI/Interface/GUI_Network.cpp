@@ -57,7 +57,8 @@ void GUI_Network::pcap_connection(){
   //---------------------------
 
   //Display list of device
-  ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Device list");
+  ImGui::Text("Device list");
+  ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 255));
   vector<string> devices_name = pcapManager->get_devices_name();
   string* device_selected = pcapManager->get_device_selected();
   static int selected = 0; // Here we store our selection data as an index.
@@ -71,18 +72,26 @@ void GUI_Network::pcap_connection(){
       }
 
       //Selection stuff
-      if(ImGui::Selectable(devices_name[n].c_str(), is_selected)){
-        selected = n;
-        say("hu");
+      string device_name = to_string(n) + ".   " + devices_name[n];
+      if(ImGui::Selectable(device_name.c_str(), is_selected)){
+        *device_selected = devices_name[n];
       }
       if(is_selected){
         ImGui::SetItemDefaultFocus();
-        say("hà");
       }
     }
 
     ImGui::EndListBox();
   }
+  ImGui::PopStyleColor();
+
+  // PCAP capture options
+  bool* with_snif_and_save = pcapManager->get_snif_and_save();
+  ImGui::Checkbox("Save packet to file", with_snif_and_save);
+
+  bool* make_ope = pcapManager->get_snif_and_save();
+  ImGui::Checkbox("Make online ope", make_ope);
+
 
   //pcapManager->retrieve_device();
   //pcapManager->snif_and_save_pcap();

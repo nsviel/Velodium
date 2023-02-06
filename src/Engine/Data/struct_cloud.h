@@ -55,7 +55,7 @@ struct Cloud{ //Global set of the cloud
   std::list<Subset*> subset_buffer;
   std::list<Subset*> subset_init;
 
-  Subset* get_subset_byID(int& ID){
+  Subset* get_subset_byID(int ID){
     for(int i=0; i<subset.size(); i++){
       Subset* sub = *next(subset.begin(), i);
 

@@ -72,6 +72,7 @@ void GUI_Player::player_visibility(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
+  visibilityManager->compute_visibility_range_max(cloud);
   int* visibility_range = visibilityManager->get_visibility_range();
   int visibility_range_max = visibilityManager->get_visibility_range_max();
 

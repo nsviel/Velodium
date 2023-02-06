@@ -32,7 +32,6 @@ private:
   void check_data(udpPacket& data);
   void init_cloud_parameter(Cloud* cloud, vector<dataFile*> data);
   void init_subset_parameter(Subset* subset, string path, int ID);
-  void init_frame_parameter(Subset* subset);
   void init_random_color();
   void define_visibility(Subset* subset, int i);
   void define_buffer_init(Cloud* cloud, Subset* subset);

@@ -55,13 +55,35 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID, float time
   bool success_rsd = compute_assessment_rsd(frame_m0);
 
   //Check for any error
+  bool success = true;
   if(!success_time || !success_abs || !success_rlt || !success_rsd){
     console.AddLog("error", "[SLAM] Computation failed");
-    return false;
+    success = false;
   }
 
   //---------------------------
-  return true;
+  frame_m0->is_slam_done = success;
+  this->compute_visibility(cloud);
+  return success;
+}
+void SLAM_assessment::compute_visibility(Cloud* cloud){
+  bool slam_failed = false;
+  //---------------------------
+
+  for(int i=cloud->nb_subset-1; i=0; i--){
+    Subset* subset = sceneManager->get_subset(cloud, i);
+    Frame* frame = &subset->frame;
+
+    if(frame->is_slam_done == false){
+      slam_failed = true;
+    }
+
+    if(slam_failed == true){
+      subset->visibility = false;
+    }
+  }
+
+  //---------------------------
 }
 
 //Specific function
@@ -284,7 +306,7 @@ void SLAM_assessment::compute_stat_mean(Cloud* cloud, int subset_ID){
   for(int j=1; j<nb_rlt_previous_pose; j++){
     Frame* frame_m = sceneManager->get_frame_byID(cloud, subset_ID-j);
 
-    if(frame_m->is_slamed){
+    if(frame_m->is_slam_made){
       sum_ego_trans += frame_m->ego_trans;
       sum_ego_rotat += frame_m->ego_rotat;
       sum_diff_trans += frame_m->diff_trans;

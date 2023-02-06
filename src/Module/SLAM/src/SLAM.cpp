@@ -127,7 +127,7 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
   }
 
   //Frame already slam computed
-  if(frame->is_slamed == true){
+  if(frame->is_slam_made == true){
     slam_glyph->update_glyph(cloud, subset);
     return false;
   }

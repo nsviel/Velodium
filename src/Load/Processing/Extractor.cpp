@@ -49,7 +49,6 @@ Cloud* Extractor::extract_data(vector<dataFile*> data){
 
     this->check_data(data[i]);
     this->init_subset_parameter(subset, data[i]->name, cloud->ID_subset);
-    this->init_frame_parameter(subset);
     cloud->ID_subset++;
 
     //Subset data
@@ -78,7 +77,6 @@ Subset* Extractor::extract_data(udpPacket& data){
   this->check_data(data);
 
   this->init_subset_parameter(subset, data.name, 0);
-  this->init_frame_parameter(subset);
 
   //Subset data
   this->extract_location(subset, data.xyz);
@@ -100,7 +98,6 @@ void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
   this->check_data(data);
 
   this->init_subset_parameter(subset, data->name, cloud->ID_subset);
-  this->init_frame_parameter(subset);
 
   //Subset data
   this->extract_location(subset, data->location);
@@ -321,13 +318,8 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   subset->has_timestamp = false;
   subset->has_intensity = false;
 
-  //---------------------------
-}
-void Extractor::init_frame_parameter(Subset* subset){
-  Frame* frame = &subset->frame;
-  //---------------------------
-
-  frame->reset();
+  // Structure
+  subset->frame.reset();
 
   //---------------------------
 }

@@ -594,7 +594,7 @@ void GUI_Slam::parameter_robustesse(){
 void GUI_Slam::state_SLAM(){
   //---------------------------
 
-  bool is_slamed = false;
+  bool is_slam_made = false;
   float time = 0;
 
   if(sceneManager->get_is_list_empty() == false){
@@ -602,14 +602,14 @@ void GUI_Slam::state_SLAM(){
     Subset* subset = cloud->subset_selected;
     Frame* frame = &subset->frame;
 
-    is_slamed = frame->is_slamed;
+    is_slam_made = frame->is_slam_made;
     time = frame->time_slam;
   }
 
   //SLAM applied
   ImGui::Text("Applied:");
   ImGui::SameLine();
-  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_slamed ? "Yes" : "No");
+  ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", is_slam_made ? "Yes" : "No");
   ImGui::Text("Computation time:");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%.2f ms", time);

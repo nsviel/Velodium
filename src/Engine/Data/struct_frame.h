@@ -38,7 +38,8 @@ struct Frame{ //SLAM stuff
   float time_slam;
 
   //Informative stats
-  bool is_slamed;
+  bool is_slam_made;
+  bool is_slam_done;
   int nb_residual;
   int nb_residual_false;
   int map_size_abs;
@@ -77,7 +78,8 @@ struct Frame{ //SLAM stuff
 
     this->map_size_abs = 0;
     this->map_size_rlt = 0;
-    this->is_slamed = false;
+    this->is_slam_made = false;
+    this->is_slam_done = false;
     this->nb_residual = 0;
     this->nb_residual_false = 0;
 

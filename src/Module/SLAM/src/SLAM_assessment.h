@@ -19,6 +19,7 @@ public:
 public:
   //Main function
   bool compute_assessment(Cloud* cloud, int ID, float time);
+  void compute_visibility(Cloud* cloud);
 
   //Specific function
   bool compute_assessment_time(float time);

@@ -64,7 +64,7 @@ void PCAP_reader::snif_and_save_pcap(){
 
   // Define the device
   if(device_get_list() == false) {
-    say("Selected device not available");
+    cout << "Selected device not available" << endl;
     return;
   }
 

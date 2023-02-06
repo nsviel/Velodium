@@ -77,7 +77,7 @@ void SLAM_transform::transform_subset(Subset* subset){
   //Update frame root
   subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
   subset->root = eigen_to_glm_vec3(trans_b);
-  frame->is_slamed = true;
+  frame->is_slam_made = true;
 
   //Update subset position
   //#pragma omp parallel for num_threads(nb_thread)

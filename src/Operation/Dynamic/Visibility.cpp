@@ -45,7 +45,7 @@ void Visibility::compute_visibility_range_max(Cloud* cloud){
   if(cloud == nullptr) return;
   //---------------------------
 
-  if(cloud->nb_subset < visibility_range_max){
+  if(cloud->nb_subset < visibility_range_max && visibility_range_max > 15){
     this->visibility_range_max = cloud->nb_subset;
   }
 

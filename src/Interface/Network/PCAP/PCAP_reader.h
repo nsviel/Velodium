@@ -18,11 +18,13 @@ public:
   inline vector<string> get_devices_name(){return devices_name;}
   inline vector<string> get_devices_desc(){return devices_desc;}
   inline string* get_device_selected(){return &device_selected;}
+  inline bool* get_snif_and_save(){return &snif_and_save;}
 
 private:
   vector<string> devices_name;
   vector<string> devices_desc;
   string device_selected;
+  bool snif_and_save;
 };
 
 #endif

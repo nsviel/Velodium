@@ -44,7 +44,7 @@ void Followup::camera_followup(Cloud* cloud, int ID_subset){
   //---------------------------
 
   vec3 empty(0.0);
-  if(ID_subset >= camera_nb_pose && with_camera_follow){
+  if(cloud->nb_subset >= camera_nb_pose && with_camera_follow){
     //Camera payload
     vec3 E = camera_payload(cloud, ID_subset);
 
@@ -74,12 +74,15 @@ void Followup::camera_mode(string mode){
 
 //Subfunctions
 vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
-  Subset* subset_m0 = sceneManager->get_subset_byID(cloud, ID_subset);
-  Subset* subset_m1 = sceneManager->get_subset_byID(cloud, ID_subset - 1);
+  Subset* subset_m0 = cloud->get_subset_byID(ID_subset);
+  Subset* subset_m1 = cloud->get_subset_byID(ID_subset - 1);
   //---------------------------
 
-  //Check if no stationary
+  //Primilarly check
   vec3 E = vec3(0, 0, 0);
+  if(subset_m1 == nullptr) return E;
+
+  //Check if no stationary
   vec3 pos_m0 = eigen_to_glm_vec3(subset_m0->pose_T);
   vec3 pos_m1 = eigen_to_glm_vec3(subset_m1->pose_T);
   float pos_dist = fct_distance(pos_m0, pos_m1);
