@@ -32,7 +32,7 @@ void Tree::create_tree(Subset* subset){
   tree.color_unique = tree_color;
 
   //---------------------------
-  subset->tree = tree;
+  subset->glyphs.insert({"tree", tree});
 }
 void Tree::update_tree(Subset* subset){
   //---------------------------

@@ -1,5 +1,5 @@
-#ifndef VISIBILITY_H
-#define VISIBILITY_H
+#ifndef BOXING_H
+#define BOXING_H
 
 #include "../../common.h"
 
@@ -10,12 +10,12 @@ class Glyphs;
 class Attribut;
 
 
-class Visibility
+class Boxing
 {
 public:
   //Constructor / Destructor
-  Visibility(Node_operation* node_ope);
-  ~Visibility();
+  Boxing(Node_operation* node_ope);
+  ~Boxing();
 
   void compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc);
   void compute_visibility(Cloud* cloud);

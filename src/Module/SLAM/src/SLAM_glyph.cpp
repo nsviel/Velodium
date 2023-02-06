@@ -46,12 +46,13 @@ SLAM_glyph::~SLAM_glyph(){}
 
 //Main function
 void SLAM_glyph::update_glyph(Cloud* cloud, Subset* subset){
+  Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
   //Clear vectors
-  subset->keypoint.xyz.clear();
-  subset->keypoint.rgb.clear();
-  subset->keypoint.Nxyz.clear();
+  keypoint->xyz.clear();
+  keypoint->rgb.clear();
+  keypoint->Nxyz.clear();
 
   //Update glyphs
   this->update_glyph_keypoint(subset);
@@ -64,12 +65,13 @@ void SLAM_glyph::update_glyph(Cloud* cloud, Subset* subset){
   this->update_visibility(subset);
 
   //---------------------------
-  objectManager->update_object(&subset->keypoint);
+  objectManager->update_object(keypoint);
 }
 void SLAM_glyph::update_visibility(Subset* subset){
+  Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
-  subset->keypoint.visibility = with_keypoint | with_neighbor;
+  keypoint->visibility = with_keypoint | with_neighbor;
   trajectory->visibility = with_trajectory;
   localmap->visibility = with_localmap;
   localcloud->visibility = with_localcloud;
@@ -89,8 +91,9 @@ void SLAM_glyph::reset_glyph(){
 //Subfunctions
 void SLAM_glyph::update_glyph_keypoint(Subset* subset){
   if(with_keypoint){
-    vector<vec3>& xyz = subset->keypoint.xyz;
-    vector<vec4>& rgb = subset->keypoint.rgb;
+    Glyph* keypoint = &subset->glyphs["keypoint"];
+    vector<vec3>& xyz = keypoint->xyz;
+    vector<vec4>& rgb = keypoint->rgb;
     Frame* frame = &subset->frame;
     //---------------------------
 
@@ -104,8 +107,9 @@ void SLAM_glyph::update_glyph_keypoint(Subset* subset){
 }
 void SLAM_glyph::update_glyph_nn(Subset* subset){
   if(with_neighbor){
-    vector<vec3>& xyz = subset->keypoint.xyz;
-    vector<vec4>& rgb = subset->keypoint.rgb;
+    Glyph* keypoint = &subset->glyphs["keypoint"];
+    vector<vec3>& xyz = keypoint->xyz;
+    vector<vec4>& rgb = keypoint->rgb;
     Frame* frame = &subset->frame;
     //---------------------------
 

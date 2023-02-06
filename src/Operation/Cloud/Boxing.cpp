@@ -1,4 +1,4 @@
-#include "Visibility.h"
+#include "Boxing.h"
 
 #include "../Node_operation.h"
 #include "../Transformation/Attribut.h"
@@ -11,7 +11,7 @@
 
 
 //Constructor / destructor
-Visibility::Visibility(Node_operation* node_ope){
+Boxing::Boxing(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
@@ -25,9 +25,9 @@ Visibility::Visibility(Node_operation* node_ope){
 
   //---------------------------
 }
-Visibility::~Visibility(){}
+Boxing::~Boxing(){}
 
-void Visibility::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
+void Boxing::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
   Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
@@ -70,7 +70,7 @@ void Visibility::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
 
   //---------------------------
 }
-void Visibility::compute_visibility(Cloud* cloud){
+void Boxing::compute_visibility(Cloud* cloud){
   cloud->boxed = true;
   //---------------------------
 
@@ -80,7 +80,7 @@ void Visibility::compute_visibility(Cloud* cloud){
 
   //---------------------------
 }
-void Visibility::compute_visibility(Cloud* cloud, int ID){
+void Boxing::compute_visibility(Cloud* cloud, int ID){
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
   Subset* subset = sceneManager->get_subset(cloud, ID);
@@ -110,7 +110,7 @@ void Visibility::compute_visibility(Cloud* cloud, int ID){
   //---------------------------
 }
 
-void Visibility::supress_selected_point(Cloud* cloud){
+void Boxing::supress_selected_point(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
@@ -132,7 +132,7 @@ void Visibility::supress_selected_point(Cloud* cloud){
 
   //---------------------------
 }
-void Visibility::stop_boxing(){
+void Boxing::stop_boxing(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 

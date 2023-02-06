@@ -111,10 +111,10 @@ void Axis::create_axis_subset(Subset* subset){
   RGB.push_back(vec4(0.2f, 0.2f, 0.9f, 1.0f));
 
   //---------------------------
-  subset->axis = axis_subset;
+  subset->glyphs.insert({"axis", axis_subset});
 }
 void Axis::update_axis_subset(Subset* subset){
-  Glyph* axis_subset = &subset->axis;
+  Glyph* axis_subset = &subset->glyphs["axis"];
   vector<vec3>& XYZ = axis_subset->xyz;
   vec3 subset_root = subset->root;
   //---------------------------

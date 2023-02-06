@@ -1,4 +1,5 @@
 #include "Online.h"
+#include "Visibility.h"
 
 #include "../Node_operation.h"
 
@@ -43,6 +44,7 @@ Online::Online(Node_operation* node_ope){
   this->followManager = node_engine->get_followManager();
   this->objectManager = node_engine->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
+  this->visibilityManager = node_ope->get_visibilityManager();
   this->httpManager = new http_command();
 
   //---------------------------
@@ -55,7 +57,6 @@ void Online::update_configuration(){
   //---------------------------
 
   this->time_ope = 0;
-  this->visibility_range = 15;
   this->with_subset_specific_color = false;
   this->with_filter_sphere = configManager->parse_json_b("dynamic", "with_filter_sphere");
 
@@ -76,7 +77,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
   cloud->subset_selected = subset;
 
   //Control subset visibilities
-  this->compute_visibility(cloud, ID_subset);
+  visibilityManager->compute_visibility(cloud, ID_subset);
 
   //Make slam on the current subset
   node_module->online(cloud, ID_subset);
@@ -108,24 +109,6 @@ void Online::compute_recording(Cloud* cloud, int& ID_subset){
   //---------------------------
 
   recordManager->compute_online(cloud, ID_subset);
-
-  //---------------------------
-}
-void Online::compute_visibility(Cloud* cloud, int& ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
-  if(subset == nullptr) return;
-  //---------------------------
-
-  //Set visibility just for wanted subsets
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
-
-    if(subset->ID >= ID_subset - visibility_range + 1 && subset->ID <= ID_subset){
-      subset->visibility = true;
-    }else{
-      subset->visibility = false;
-    }
-  }
 
   //---------------------------
 }
@@ -167,28 +150,4 @@ void Online::compute_http_command(){
   }
 
   //---------------------------
-}
-
-//Visibility function
-void Online::set_visibility_range(int value){
-  Cloud* cloud = sceneManager->get_selected_cloud();
-  //---------------------------
-
-  this->visibility_range = value;
-
-  //---------------------------
-}
-int Online::get_visibility_range_max(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
-  int range_max = 15;
-  //---------------------------
-
-  if(cloud != nullptr && sceneManager->get_is_list_empty() == false){
-    if(cloud->nb_subset > 15){
-      range_max = cloud->nb_subset;
-    }
-  }
-
-  //---------------------------
-  return range_max;
 }

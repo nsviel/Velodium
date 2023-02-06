@@ -24,10 +24,10 @@ void Keypoint::create_keypoint(Subset* subset){
   keypoint.visibility = visibility;
 
   //---------------------------
-  subset->keypoint = keypoint;
+  subset->glyphs.insert({"keypoint", keypoint});
 }
 void Keypoint::update_keypoint_location(Subset* subset){
-  Glyph* keypoint = &subset->keypoint;
+  Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
   vector<vec3>& XYZ_key = keypoint->xyz;
@@ -44,8 +44,8 @@ void Keypoint::update_keypoint_location(Subset* subset){
   //---------------------------
 }
 void Keypoint::update_keypoint_normal(Subset* subset){
-  Glyph* normal = &subset->normal;
-  Glyph* keypoint = &subset->keypoint;
+  Glyph* normal = &subset->glyphs["normal"];
+  Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
   //Get vector values

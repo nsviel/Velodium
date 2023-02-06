@@ -7,7 +7,7 @@
 #include "../../../Engine/Scene/Glyph/Cloud/Box.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Cloud/Extraction.h"
-#include "../../../Operation/Cloud/Visibility.h"
+#include "../../../Operation/Cloud/Boxing.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;
@@ -23,7 +23,7 @@ MOD_boxing::MOD_boxing(Node_operation* node_ope){
   this->extractionManager = node_ope->get_extractionManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->glyphManager = node_engine->get_glyphManager();
-  this->visibleManager = node_ope->get_visibleManager();
+  this->boxingManager = node_ope->get_boxingManager();
 
   this->item_width = 150;
 
@@ -44,7 +44,7 @@ void MOD_boxing::design_boxing(){
     ImGui::Separator();
     if(ImGui::Button("Close")){
       modal_tab.show_boxing = false;
-      visibleManager->stop_boxing();
+      boxingManager->stop_boxing();
     }
     ImGui::End();
   }
@@ -110,8 +110,8 @@ void MOD_boxing::change_box(float xmin, float ymin, float zmin, float xmax, floa
   if(cloud != nullptr){
     vec3 min_perc = vec3(xmin, ymin, zmin);
     vec3 max_perc = vec3(xmax, ymax, zmax);
-    visibleManager->compute_box_MinMax(cloud, min_perc, max_perc);
-    visibleManager->compute_visibility(cloud);
+    boxingManager->compute_box_MinMax(cloud, min_perc, max_perc);
+    boxingManager->compute_visibility(cloud);
   }
 
   //---------------------------

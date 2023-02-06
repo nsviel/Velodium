@@ -178,7 +178,7 @@ void GUI_option::option_glyph(){
   if(ImGui::DragInt("##458", tree_level, 1, 1, 50, "%d")){
     Subset* subset = cloud->subset_selected;
     treeObject->update_tree(subset);
-    objectManager->update_object(&subset->tree);
+    objectManager->update_object(&subset->glyphs["tree"]);
   }
   ImGui::NextColumn();
 

@@ -17,6 +17,7 @@ class Interface;
 class Object;
 class Renderer;
 class http_command;
+class Visibility;
 
 
 class Online
@@ -34,16 +35,10 @@ public:
   //Other functions
   void compute_recording(Cloud* cloud, int& ID_subset);
   void compute_displayStats(Subset* subset);
-  void compute_visibility(Cloud* cloud, int& ID_subset);
   void compute_http_command();
-
-  //Visibility function
-  void set_visibility_range(int value);
-  int get_visibility_range_max();
 
   inline bool* get_with_sphere_filter(){return &with_filter_sphere;}
   inline float get_time_operation(){return time_ope;}
-  inline int get_visibility_range(){return visibility_range;}
   inline int* get_filter_mode(){return &filter_mode;}
 
 private:
@@ -57,9 +52,9 @@ private:
   Object* objectManager;
   Renderer* renderManager;
   http_command* httpManager;
+  Visibility* visibilityManager;
 
   float time_ope;
-  int visibility_range;
   int filter_mode;
   bool with_subset_specific_color;
   bool with_filter_sphere;

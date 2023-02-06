@@ -93,19 +93,19 @@ void Object::create_glyph_subset(Subset* subset){
 
   //Cloud axis glyph
   axisObject->create_axis_subset(subset);
-  glyphManager->insert_into_gpu(&subset->axis);
+  glyphManager->insert_into_gpu(&subset->glyphs["axis"]);
 
   //Normal glyph
   normObject->create_normal_subset(subset);
-  glyphManager->insert_into_gpu(&subset->normal);
+  glyphManager->insert_into_gpu(&subset->glyphs["normal"]);
 
   //Keypoint glyph
   keyObject->create_keypoint(subset);
-  glyphManager->insert_into_gpu(&subset->keypoint);
+  glyphManager->insert_into_gpu(&subset->glyphs["keypoint"]);
 
   //Tree glyph
   treeObject->create_tree(subset);
-  glyphManager->insert_into_gpu(&subset->tree);
+  glyphManager->insert_into_gpu(&subset->glyphs["tree"]);
 
   //---------------------------
 }
@@ -141,7 +141,7 @@ void Object::runtime_glyph_subset_all(Cloud* cloud){
     //If the subset is visible
     if(subset->visibility){
       //Subset axis
-      Glyph* axis = &subset->axis;
+      Glyph* axis = &subset->glyphs["axis"];
       glyphManager->draw_glyph(axis);
     }
   }
@@ -155,19 +155,19 @@ void Object::runtime_glyph_subset_selected(Subset* subset){
   //If the subset is visible
   if(subset->visibility){
     //Keypoint
-    Glyph* keypoint = &subset->keypoint;
+    Glyph* keypoint = &subset->glyphs["keypoint"];
     if(keypoint->visibility){
       glyphManager->draw_glyph(keypoint);
     }
 
     //Normal
-    Glyph* normal = &subset->normal;
+    Glyph* normal = &subset->glyphs["normal"];
     if(normal->visibility){
       glyphManager->draw_glyph(normal);
     }
 
     //Tree
-    Glyph* tree = &subset->tree;
+    Glyph* tree = &subset->glyphs["tree"];
     if(tree->visibility){
       glyphManager->draw_glyph(tree);
     }
@@ -254,16 +254,16 @@ void Object::update_glyph_subset(Subset* subset){
   //Subset axis
   if(configManager->parse_json_b("glyph", "axis_cloud_visibility")){
     axisObject->update_axis_subset(subset);
-    glyphManager->update_glyph_location(&subset->axis);
+    glyphManager->update_glyph_location(&subset->glyphs["axis"]);
   }
 
   //Subset normal
   normObject->update_normal_subset(subset);
-  this->update_object(&subset->normal);
+  this->update_object(&subset->glyphs["normal"]);
 
   //Tree
   treeObject->update_tree(subset);
-  this->update_object(&subset->tree);
+  this->update_object(&subset->glyphs["tree"]);
 
   //---------------------------
 }
@@ -342,7 +342,7 @@ void Object::set_object_visibility(string name, bool val){
     if(name == "normal"){
       for(int i=0; i<cloud->nb_subset; i++){
         Subset* subset = *next(cloud->subset.begin(), i);
-        Glyph* normal = &subset->normal;
+        Glyph* normal = &subset->glyphs["normal"];
         normal->visibility = val;
       }
     }
@@ -350,7 +350,7 @@ void Object::set_object_visibility(string name, bool val){
     else if(name == "keypoint"){
       for(int i=0; i<cloud->nb_subset; i++){
         Subset* subset = *next(cloud->subset.begin(), i);
-        Glyph* keypoint = &subset->keypoint;
+        Glyph* keypoint = &subset->glyphs["keypoint"];
         keypoint->visibility = val;
       }
     }
@@ -358,7 +358,7 @@ void Object::set_object_visibility(string name, bool val){
     else if(name == "tree"){
       for(int i=0; i<cloud->nb_subset; i++){
         Subset* subset = *next(cloud->subset.begin(), i);
-        Glyph* tree = &subset->tree;
+        Glyph* tree = &subset->glyphs["tree"];
         tree->visibility = val;
       }
     }

@@ -21,7 +21,7 @@
 #include "../../Operation/Transformation/Pose.h"
 #include "../../Operation/Cloud/Selection.h"
 #include "../../Operation/Cloud/Extraction.h"
-#include "../../Operation/Cloud/Visibility.h"
+#include "../../Operation/Cloud/Boxing.h"
 #include "../../Operation/Color/Heatmap.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -50,7 +50,7 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();
   this->playerManager = node_ope->get_playerManager();
-  this->visibleManager = node_ope->get_visibleManager();
+  this->boxingManager = node_ope->get_boxingManager();
   this->transformManager = new Transformation();
   this->poseManager = new Pose();
 
@@ -452,7 +452,7 @@ void GUI_Control::key_suppr(){
       sceneManager->remove_cloud(cloud);
     }
   }else{
-    visibleManager->supress_selected_point(cloud);
+    boxingManager->supress_selected_point(cloud);
   }
 
   //----------------------------

@@ -6,11 +6,12 @@
 #include "Dynamic/Online.h"
 #include "Dynamic/Player.h"
 #include "Dynamic/Onthefly.h"
+#include "Dynamic/Visibility.h"
 
 #include "Cloud/Selection.h"
 #include "Transformation/Coordinate.h"
 #include "Cloud/Extraction.h"
-#include "Cloud/Visibility.h"
+#include "Cloud/Boxing.h"
 
 #include "Transformation/Filter.h"
 #include "Transformation/Attribut.h"
@@ -34,10 +35,11 @@ Node_operation::Node_operation(Node_engine* node){
   this->coordManager = new Coordinate(this);
   this->selectionManager = new Selection(this);
   this->extractionManager = new Extraction(this);
-  this->onlineManager = new Online(this);
   this->flyManager = new Onthefly(this);
+  this->visibilityManager = new Visibility(this);
+  this->onlineManager = new Online(this);
   this->playerManager = new Player(this);
-  this->visibleManager = new Visibility(this);
+  this->boxingManager = new Boxing(this);
 
   //---------------------------
 }

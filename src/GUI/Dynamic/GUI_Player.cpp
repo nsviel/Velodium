@@ -5,6 +5,7 @@
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Dynamic/Player.h"
 #include "../../Operation/Dynamic/Online.h"
+#include "../../Operation/Dynamic/Visibility.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Scene/Scene.h"
@@ -26,6 +27,7 @@ GUI_Player::GUI_Player(Node_gui* node_gui){
   this->sceneManager = node_engine->get_sceneManager();
   this->playerManager = node_ope->get_playerManager();
   this->onlineManager = node_ope->get_onlineManager();
+  this->visibilityManager = node_ope->get_visibilityManager();
 
   this->item_width = 100;
 
@@ -70,11 +72,11 @@ void GUI_Player::player_visibility(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
-  int visible_range = onlineManager->get_visibility_range();
-  int visible_range_max = onlineManager->get_visibility_range_max();
+  int* visibility_range = visibilityManager->get_visibility_range();
+  int visibility_range_max = visibilityManager->get_visibility_range_max();
+
   ImGui::SetNextItemWidth(140);
-  if(ImGui::DragInt("Display##666", &visible_range, 1, 1, visible_range_max)){
-    onlineManager->set_visibility_range(visible_range);
+  if(ImGui::DragInt("Display##666", visibility_range, 1, 1, visibility_range_max)){
     if(cloud != nullptr){
       playerManager->select_bySubsetID(cloud, cloud->ID_selected);
     }

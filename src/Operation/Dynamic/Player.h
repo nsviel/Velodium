@@ -38,16 +38,13 @@ public:
   void player_save(Cloud* cloud);
   void player_setFrequency(int frequency);
   void player_selectDirSave();
-
-  int get_visibility_range_max();
-
+  
   inline int* get_frequency(){return &player_frequency;}
   inline bool* get_player_isrunning(){return &player_isrunning;}
   inline bool* get_player_ispaused(){return &player_ispaused;}
   inline bool* get_with_restart(){return &player_returnToZero;}
   inline string* get_player_saveas(){return &player_saveas;}
   inline string* get_player_mode(){return &player_mode;}
-  inline int* get_player_visible_rng(){return &player_visible_rng;}
 
 private:
   Scene* sceneManager;
@@ -66,7 +63,6 @@ private:
   bool player_returnToZero;
   bool player_time_flag;
   int player_frequency;
-  int player_visible_rng;
 };
 
 #endif

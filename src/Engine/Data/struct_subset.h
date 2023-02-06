@@ -1,3 +1,4 @@
+
 #ifndef SUBSET_STRUCT_H
 #define SUBSET_STRUCT_H
 
@@ -9,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
 
 
 struct Subset{ //Cloud subset / part
@@ -38,10 +40,8 @@ struct Subset{ //Cloud subset / part
   std::vector<glm::vec4> RGB;
   std::vector<glm::vec3> N;
   std::vector<float> I;
-
   std::vector<float> ts;
   std::vector<double> ts_n;
-  float angle; // A virer
 
   //Various attributs
   std::vector<float> A;
@@ -63,15 +63,8 @@ struct Subset{ //Cloud subset / part
   Eigen::Matrix3d pose_R;
   Eigen::Vector3d pose_T;
 
-  //Own glyphs
-  //FAire un vecteur de glyph
-  Glyph normal;
-  Glyph axis;
-  Glyph keypoint;
-  Glyph tree;
-
-  //Specific structures
-  //A virer par la suite et inclure dans les modules concernés
+  //Own glyphs and structures
+  std::map<std::string, Glyph> glyphs;
   Frame frame;
   Register icp;
   Detection detection;

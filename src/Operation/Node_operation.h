@@ -19,6 +19,7 @@ class Player;
 class Online;
 class Onthefly;
 class Visibility;
+class Boxing;
 
 
 class Node_operation
@@ -48,14 +49,15 @@ public:
   inline Online* get_onlineManager(){return onlineManager;}
   inline Player* get_playerManager(){return playerManager;}
   inline Onthefly* get_flyManager(){return flyManager;}
-  inline Visibility* get_visibleManager(){return visibleManager;}
+  inline Visibility* get_visibilityManager(){return visibilityManager;}
+  inline Boxing* get_boxingManager(){return boxingManager;}
 
 private:
   Node_engine* node_engine;
   Node_load* node_load;
   Node_gui* node_gui;
 
-  Visibility* visibleManager;
+  Visibility* visibilityManager;
   Attribut* attribManager;
   Heatmap* heatmapManager;
   Filter* filterManager;
@@ -67,6 +69,7 @@ private:
   Online* onlineManager;
   Player* playerManager;
   Onthefly* flyManager;
+  Boxing* boxingManager;
 };
 
 #endif

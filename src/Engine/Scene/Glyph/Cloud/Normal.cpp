@@ -28,10 +28,10 @@ void Normal::create_normal_subset(Subset* subset){
   normal.visibility = visibility;
 
   //---------------------------
-  subset->normal = normal;
+  subset->glyphs.insert({"normal", normal});
 }
 void Normal::update_normal_subset(Subset* subset){
-  Glyph* normal = &subset->normal;
+  Glyph* normal = &subset->glyphs["normal"];
   normal->draw_size = size;
   //---------------------------
 
@@ -70,7 +70,7 @@ void Normal::update_normal_subset(Subset* subset){
   //---------------------------
 }
 void Normal::update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s){
-  Glyph* normal = &subset->normal;
+  Glyph* normal = &subset->glyphs["normal"];
   normal->draw_size = size;
   //---------------------------
 

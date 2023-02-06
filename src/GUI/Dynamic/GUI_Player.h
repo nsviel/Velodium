@@ -8,6 +8,7 @@ class Node_interface;
 class Scene;
 class Player;
 class Online;
+class Visibility;
 
 
 class GUI_Player
@@ -46,6 +47,7 @@ private:
   Scene* sceneManager;
   Player* playerManager;
   Online* onlineManager;
+  Visibility* visibilityManager;
 
   int item_width;
 };
