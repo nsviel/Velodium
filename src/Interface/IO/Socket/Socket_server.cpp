@@ -69,7 +69,7 @@ void Socket_server::socket_recv_data(){
   //Thread blocking: MSG_DONTWAIT / MSG_WAITALL
   int udp_size = recvfrom(sock, buffer, packet_size, MSG_WAITALL, reinterpret_cast<sockaddr*>(&addr), &length);
 
-  //Once packet received, process it
+  //Convert buffer of data into a decimal vector
   packet_dec.clear();
   if(udp_size != 0 && udp_size != 512){
     for(int i=0; i<udp_size; i++){
