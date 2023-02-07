@@ -115,13 +115,13 @@ void Followup::camera_position(Subset* subset, vec3 E){
   if(with_camera_absolute){
     //Top view
     if(with_camera_top){
-      vec3 camPos = vec3(pose.x, pose.y, camera_top_z);
+      vec3 camPos = vec3(pose.x, pose.y, pose.z + camera_top_z);
       cameraManager->set_cameraPos(camPos);
       cameraManager->set_mode_angle(0);
     }
     //Oblique view
     else{
-      vec3 camPos = vec3(C.x, C.y, camera_oblique_z);
+      vec3 camPos = vec3(C.x, C.y, pose.z + camera_oblique_z);
       cameraManager->set_cameraPos(camPos);
       cameraManager->set_mode_angle(1);
     }

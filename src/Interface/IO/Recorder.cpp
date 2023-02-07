@@ -158,7 +158,6 @@ void Recorder::save_frame(Cloud* cloud, int ID_subset){
   //---------------------------
 }
 void Recorder::save_frame_subset(Subset* subset){
-  Frame* frame = &subset->frame;
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
@@ -177,11 +176,10 @@ void Recorder::save_frame_subset(Subset* subset){
 
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
-  frame->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+  this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 void Recorder::save_frame_set(Cloud* cloud, int ID_subset){
   Subset* subset = *next(cloud->subset.begin(), ID_subset);
-  Frame* frame = &subset->frame;
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
@@ -200,7 +198,7 @@ void Recorder::save_frame_set(Cloud* cloud, int ID_subset){
 
   //---------------------------
   auto t2 = std::chrono::high_resolution_clock::now();
-  frame->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+  this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 
 //Path selection

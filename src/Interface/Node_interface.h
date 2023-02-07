@@ -12,7 +12,7 @@ class Configuration;
 class Capture;
 class Recorder;
 class HTTP;
-class PCAP;
+class PCAP_reader;
 
 class GUI_Capture;
 class GUI_Network;
@@ -46,7 +46,7 @@ private:
   Node_gui* node_gui;
 
   HTTP* httpsManager;
-  PCAP* pcapManager;
+  PCAP_reader* pcapManager;
   Recorder* recordManager;
   Capture* captureManager;
   Configuration* configManager;

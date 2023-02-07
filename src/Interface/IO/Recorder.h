@@ -66,7 +66,6 @@ private:
   string path_dir;
   string path_frame;
   string path_image;
-  float time_save_image;
   float time_save_frame;
   int save_frame_max;
   int save_frame_accu;

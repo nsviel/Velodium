@@ -93,6 +93,11 @@ void SLAM_transform::transform_subset(Subset* subset){
     subset->xyz[i] = vec3(point(0), point(1), point(2));
   }
 
+  //Update subset pose
+  subset->pose_T = frame->trans_b;
+  subset->pose_R = frame->rotat_b;
+  subset->root = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
+
   //---------------------------
   sceneManager->update_subset_location(subset);
 }

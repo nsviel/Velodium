@@ -1,7 +1,7 @@
 #include "UDP_server.h"
 
-#include "../../Network/Socket/Socket_server.h"
-#include "../../Network/Socket/Socket_client.h"
+#include "../../IO/Socket/Socket_server.h"
+#include "../../IO/Socket/Socket_client.h"
 
 #include <stdio.h>
 #include <stdlib.h>

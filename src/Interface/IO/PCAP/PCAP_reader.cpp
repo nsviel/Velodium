@@ -50,7 +50,7 @@ bool PCAP_reader::device_get_list(){
 bool PCAP_reader::device_check_name(string name){
   //---------------------------
 
-  if(name == "any" || name == "lo") return false;
+  if(name == "any") return false;
   else if(name == "bluetooth0" || name == "bluetooth-monitor") return false;
   else if(name == "nflog" || name == "nfqueue") return false;
   else if(name == "dbus-system" || name == "dbus-session") return false;

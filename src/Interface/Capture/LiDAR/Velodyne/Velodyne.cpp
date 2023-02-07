@@ -5,9 +5,9 @@
 
 #include "Velodyne.h"
 
-#include "../../UDP/UDP_frame.h"
-#include "../../UDP/UDP_server.h"
-#include "../../UDP/UDP_parser_VLP16.h"
+#include "../../../IO/UDP/UDP_frame.h"
+#include "../../../IO/UDP/UDP_server.h"
+#include "../../../IO/UDP/UDP_parser_VLP16.h"
 
 #include "../../../Node_interface.h"
 
