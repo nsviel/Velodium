@@ -12,7 +12,7 @@
  */
  //=========================
 
-struct Data_udp{
+struct Data_cap{
   //Infos
   std::string name;
   int ID; //Permanent cloud ID

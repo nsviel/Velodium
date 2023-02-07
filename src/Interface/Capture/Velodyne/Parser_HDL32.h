@@ -3,7 +3,7 @@
 
 // Server side implementation of UDP client-server model
 
-#include "../../../Engine/Data/struct_data_udp.h"
+#include "../../../Engine/Data/struct_data_cap.h"
 #include "../../../common.h"
 
 
@@ -16,15 +16,15 @@ public:
 
 public:
   //Main functions
-  Data_udp* parse_UDP_packet(vector<int> packet);
+  Data_cap* parse_packet(vector<int> packet);
 
   //Subfunctions
-  void parse_packet(vector<int> packet);
+  void parse_vector(vector<int> packet);
   void parse_blocks();
   void parse_azimuth();
   void parse_coordinates();
   void parse_timestamp();
-  void final_check(Data_udp* cloud);
+  void final_check(Data_cap* cloud);
 
   //Subsubfunctions
   vector<float> calc_timing_offsets();

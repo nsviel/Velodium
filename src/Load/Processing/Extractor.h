@@ -2,7 +2,7 @@
 #define DATA_EXTRACTION_H
 
 #include "../../Engine/Data/struct_data_file.h"
-#include "../../Engine/Data/struct_data_udp.h"
+#include "../../Engine/Data/struct_data_cap.h"
 
 #include "../../common.h"
 
@@ -22,14 +22,14 @@ public:
 public:
   //Main function
   Cloud* extract_data(vector<Data_file*> data);
-  Subset* extract_data(Data_udp& data);
+  Subset* extract_data(Data_cap& data);
   void extract_data_frame(Cloud* cloud, Data_file* data);
   void extract_data_oneFrame(Cloud* cloud, Data_file* data);
 
 private:
   //Subfunctions
   void check_data(Data_file* data);
-  void check_data(Data_udp& data);
+  void check_data(Data_cap& data);
   void init_cloud_parameter(Cloud* cloud, vector<Data_file*> data);
   void init_subset_parameter(Subset* subset, string path, int ID);
   void init_random_color();

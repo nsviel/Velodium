@@ -32,9 +32,9 @@ Velodyne::Velodyne(Node_interface* node_interface){
   Node_load* node_load = node_interface->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
-  this->udpServManager = new Capture_server();
-  this->udp_vlp16Manager = new Parser_VLP16();
+  this->serverManager = new Capture_server();
   this->frameManager = new Capture_frame();
+  this->vlp16Parser = new Parser_VLP16();
   this->subset_capture = new Subset();
 
   this->time_frame = 0;
@@ -69,24 +69,25 @@ void Velodyne::start_watcher(int port){
     int port = capture_port;
     int size_max = 1248;
 
-    udpServManager->capture_init(port, size_max);
+    serverManager->capture_init(port, size_max);
 
     while (run_capture){
       //Get packet in decimal format
       auto start = high_resolution_clock::now();
-      vector<int> packet_dec = udpServManager->capture_packet();
+      vector<int> packet_dec = serverManager->capture_packet();
       auto stop = high_resolution_clock::now();
       this->time_packet = duration_cast<microseconds>(stop - start).count() / 1000;
 
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
-        Data_udp* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);
+        Data_cap* data_cap = vlp16Parser->parse_packet(packet_dec);
 
         //Iteratively build a complete frame
-        bool frame_rev = frameManager->build_frame(packet_udp);
+        bool frame_rev = frameManager->build_frame(data_cap);
 
+        // If frame revolution, make some ope
         if(frame_rev){
-          Data_udp* frame = frameManager->get_endedFrame();
+          Data_cap* frame = frameManager->get_endedFrame();
           this->udp_capture = *frame;
 
           //Time
@@ -105,7 +106,7 @@ void Velodyne::start_watcher(int port){
       }
     }
 
-    udpServManager->capture_stop();
+    serverManager->capture_stop();
   });
   thread_capture.detach();
 

@@ -69,7 +69,7 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractor::extract_data(Data_udp& data){
+Subset* Extractor::extract_data(Data_cap& data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -200,7 +200,7 @@ void Extractor::check_data(Data_file* data){
 
   //---------------------------
 }
-void Extractor::check_data(Data_udp& data){
+void Extractor::check_data(Data_cap& data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;

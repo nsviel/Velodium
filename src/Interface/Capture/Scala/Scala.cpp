@@ -66,7 +66,7 @@ void Scala::stop_watcher(){
 
   //---------------------------
 }
-void Scala::lidar_create_subset(Data_udp* udp_packet){
+void Scala::lidar_create_subset(Data_cap* udp_packet){
   //Asynchroneous function (used by theaded watcher)
   //---------------------------
 

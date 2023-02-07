@@ -24,8 +24,8 @@ Parser_Scala::Parser_Scala(){
 Parser_Scala::~Parser_Scala(){}
 
 //Main function
-Data_udp* Parser_Scala::parse_UDP_packet(vector<int> packet_dec){
-  Data_udp* data_udp = new Data_udp();
+Data_cap* Parser_Scala::parse_packet(vector<int> packet_dec){
+  Data_cap* data_udp = new Data_cap();
   //---------------------------
 
   //Packet timestamp
@@ -37,7 +37,7 @@ Data_udp* Parser_Scala::parse_UDP_packet(vector<int> packet_dec){
   }
 
   //Parse packet data
-  this->parse_packet(packet_dec);
+  this->parse_vector(packet_dec);
   this->parse_blocks();
   this->parse_azimuth();
   this->parse_coordinates();
@@ -49,7 +49,7 @@ Data_udp* Parser_Scala::parse_UDP_packet(vector<int> packet_dec){
 }
 
 //Subfunctions
-void Parser_Scala::parse_packet(vector<int> packet){
+void Parser_Scala::parse_vector(vector<int> packet){
   blocks.clear();
   //---------------------------
 
@@ -224,7 +224,7 @@ void Parser_Scala::parse_timestamp(){
 
   //---------------------------
 }
-void Parser_Scala::final_check(Data_udp* cloud){
+void Parser_Scala::final_check(Data_cap* cloud){
   //---------------------------
 
   //Supress points when no distance are measured

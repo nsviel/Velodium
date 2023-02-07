@@ -26,8 +26,25 @@ Parser_VLP16::Parser_VLP16(){
 Parser_VLP16::~Parser_VLP16(){}
 
 //Main function
-Data_udp* Parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
-  Data_udp* data_udp = new Data_udp();
+Data_cap* Parser_VLP16::parse_packet(vector<int> packet_dec){
+  Data_cap* data_udp = new Data_cap();
+  //---------------------------
+
+  if(parse_header(packet_dec)){
+    this->parse_vector(packet_dec);
+    this->parse_blocks();
+    this->parse_azimuth();
+    this->parse_coordinates();
+    this->parse_timestamp();
+    this->reorder_by_azimuth(data_udp);
+  }
+
+  //---------------------------
+  return data_udp;
+}
+
+//Subfunctions
+bool Parser_VLP16::parse_header(vector<int>& packet_dec){
   //---------------------------
 
   //Check if data is laser or position information
@@ -38,26 +55,16 @@ Data_udp* Parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
   }
   //Check if data is laser or position information
   if(packet_dec.size() != 1206){
-    return data_udp;
+    return false;
   }
 
   //Packet timestamp
-  packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
-
-  //Parse packet data
-  this->parse_packet(packet_dec);
-  this->parse_blocks();
-  this->parse_azimuth();
-  this->parse_coordinates();
-  this->parse_timestamp();
-  this->reorder_by_azimuth(data_udp);
+  this->packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
 
   //---------------------------
-  return data_udp;
+  return true;
 }
-
-//Subfunctions
-void Parser_VLP16::parse_packet(vector<int> packet){
+void Parser_VLP16::parse_vector(vector<int> packet){
   blocks.clear();
   //---------------------------
 
@@ -242,7 +249,7 @@ void Parser_VLP16::parse_timestamp(){
 }
 
 //final processing functions
-void Parser_VLP16::reorder_by_azimuth(Data_udp* cloud){
+void Parser_VLP16::reorder_by_azimuth(Data_cap* cloud){
   //---------------------------
 
   //Reorder points in function of their azimuth

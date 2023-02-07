@@ -1,7 +1,7 @@
 #ifndef CAPTURE_FRAME_H
 #define CAPTURE_FRAME_H
 
-#include "../../../Engine/Data/struct_data_udp.h"
+#include "../../../Engine/Data/struct_data_cap.h"
 #include "../../../common.h"
 
 
@@ -14,18 +14,18 @@ public:
 
 public:
   //Main functions
-  bool build_frame(Data_udp* cloud);
+  bool build_frame(Data_cap* cloud);
   void reset_frame();
 
   //Subfunctions
-  void add_cloudsToFrame(Data_udp* cloud);
-  void end_cloudsToFrame(Data_udp* cloud, int index);
+  void add_cloudsToFrame(Data_cap* cloud);
+  void end_cloudsToFrame(Data_cap* cloud, int index);
 
-  inline Data_udp* get_endedFrame(){return frame_ended;}
+  inline Data_cap* get_endedFrame(){return frame_ended;}
 
 private:
-  Data_udp* frame_onrun;
-  Data_udp* frame_ended;
+  Data_cap* frame_onrun;
+  Data_cap* frame_ended;
 };
 
 #endif

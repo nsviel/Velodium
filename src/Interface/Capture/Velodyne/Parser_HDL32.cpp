@@ -24,8 +24,8 @@ Parser_HDL32::Parser_HDL32(){
 Parser_HDL32::~Parser_HDL32(){}
 
 //Main function
-Data_udp* Parser_HDL32::parse_UDP_packet(vector<int> packet){
-  Data_udp* cloud = new Data_udp();
+Data_cap* Parser_HDL32::parse_packet(vector<int> packet){
+  Data_cap* cloud = new Data_cap();
   //---------------------------
 
   //Packet timestamp
@@ -37,7 +37,7 @@ Data_udp* Parser_HDL32::parse_UDP_packet(vector<int> packet){
   }
 
   //Parse packet data
-  this->parse_packet(packet);
+  this->parse_vector(packet);
   this->parse_blocks();
   this->parse_azimuth();
   this->parse_coordinates();
@@ -49,7 +49,7 @@ Data_udp* Parser_HDL32::parse_UDP_packet(vector<int> packet){
 }
 
 //Subfunctions
-void Parser_HDL32::parse_packet(vector<int> packet){
+void Parser_HDL32::parse_vector(vector<int> packet){
   blocks.clear();
   //---------------------------
 
@@ -215,7 +215,7 @@ void Parser_HDL32::parse_timestamp(){
 
   //---------------------------
 }
-void Parser_HDL32::final_check(Data_udp* cloud){
+void Parser_HDL32::final_check(Data_cap* cloud){
   //---------------------------
 
   //Supress points when no distance are measured

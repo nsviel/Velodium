@@ -109,11 +109,11 @@ void file_PCAP::Loader_vlp16(string pathFile){
   int cpt = 0;
   for(int i=0; i<file_packets.size(); i++){
 
-    Data_udp* cloud = udpManager.parse_UDP_packet(file_packets[i]);
+    Data_cap* cloud = udpManager.parse_packet(file_packets[i]);
     bool frame_rev = frameManager.build_frame(cloud);
 
     if(frame_rev){
-      Data_udp* frame = frameManager.get_endedFrame();
+      Data_cap* frame = frameManager.get_endedFrame();
       Data_file* frame_data = new Data_file();
 
       frame_data->name = "frame_" + to_string(cpt); cpt++;
@@ -140,11 +140,11 @@ void file_PCAP::Loader_hdl32(string pathFile){
   //---------------------------
 
   for(int i=0; i<file_packets.size(); i++){
-    Data_udp* cloud = udpManager.parse_UDP_packet(file_packets[i]);
+    Data_cap* cloud = udpManager.parse_packet(file_packets[i]);
     bool frame_rev = frameManager.build_frame(cloud);
 
     if(frame_rev){
-      Data_udp* frame = frameManager.get_endedFrame();
+      Data_cap* frame = frameManager.get_endedFrame();
       Data_file* frame_data = new Data_file();
 
       frame_data->path = pathFile;
