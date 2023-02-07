@@ -9,9 +9,9 @@ file_OBJ::file_OBJ(){}
 file_OBJ::~file_OBJ(){}
 
 //Main function
-dataFile* file_OBJ::Loader(string filePath){
+Data_file* file_OBJ::Loader(string filePath){
   ifstream infile(filePath);
-  dataFile* data = new dataFile();
+  Data_file* data = new Data_file();
   data->name = get_name_from_path(filePath);
   data->path = filePath;
   //---------------------------

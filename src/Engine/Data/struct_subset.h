@@ -4,8 +4,8 @@
 
 #include "struct_glyph.h"
 #include "struct_frame.h"
-#include "struct_detection.h"
-#include "struct_register.h"
+#include "struct_data_pred.h"
+#include "struct_data_icp.h"
 
 #include <string>
 #include <vector>
@@ -66,9 +66,9 @@ struct Subset{ //Cloud subset / part
   //Own glyphs and structures
   std::map<std::string, Glyph> glyphs;
   Frame frame;
-  Register icp;
-  Detection detection;
-  Detection detection_gt;
+  Data_icp icp;
+  Data_pred detection;
+  Data_pred detection_gt;
 
   //---------------------------
 };

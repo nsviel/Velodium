@@ -1,7 +1,7 @@
 #ifndef FILE_PTS_H
 #define FILE_PTS_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 #include <iomanip>
@@ -17,8 +17,8 @@ public:
 
 public:
   //Main functions
-  dataFile* Loader(string pathFile);
-  dataFile* Loader(string pathFile, int lmin, int lmax);
+  Data_file* Loader(string pathFile);
+  Data_file* Loader(string pathFile, int lmin, int lmax);
 
   bool Exporter(string pathFile, Cloud* cloud);
   bool Exporter(string pathFile, Subset* subset);
@@ -59,7 +59,7 @@ private:
   bool retrieve_I, retrieve_RGB, retrieve_N;
 
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

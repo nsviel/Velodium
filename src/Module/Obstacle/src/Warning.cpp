@@ -30,7 +30,7 @@ void Warning::send_warning(Subset* subset){
   //---------------------------
 }
 string Warning::build_jsonFile(Subset* subset){
-  Detection* obstacle = &subset->detection;
+  Data_pred* obstacle = &subset->detection;
   //---------------------------
 
   //Begin

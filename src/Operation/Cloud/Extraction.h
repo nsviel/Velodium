@@ -1,7 +1,7 @@
 #ifndef EXTRACTION_H
 #define EXTRACTION_H
 
-#include "../../Engine/Data/struct_generic.h"
+#include "../../Engine/Data/struct_misc.h"
 #include "../../common.h"
 
 class Node_operation;

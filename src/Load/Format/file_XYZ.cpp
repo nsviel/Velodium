@@ -8,8 +8,8 @@ file_XYZ::file_XYZ(){}
 file_XYZ::~file_XYZ(){}
 
 //Main function
-dataFile* file_XYZ::Loader(string filePath){
-  dataFile* data = new dataFile();
+Data_file* file_XYZ::Loader(string filePath){
+  Data_file* data = new Data_file();
   //---------------------------
 
   //Open file

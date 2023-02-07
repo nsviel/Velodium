@@ -1,7 +1,7 @@
 #ifndef FILE_LAS_H
 #define FILE_LAS_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 
@@ -14,12 +14,12 @@ public:
 
 public:
   //Main function
-  dataFile* Loader(string filePath);
+  Data_file* Loader(string filePath);
   void read(string path);
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

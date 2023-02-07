@@ -1,7 +1,7 @@
 #ifndef FILE_XYZ_H
 #define FILE_XYZ_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 
@@ -13,11 +13,11 @@ public:
   ~file_XYZ();
 
 public:
-  dataFile* Loader(string filePath);
+  Data_file* Loader(string filePath);
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

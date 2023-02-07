@@ -155,7 +155,7 @@ void Prediction::remove_prediction_file(string path){
 
 //JSON parsers
 void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
-  Detection* detection_gt = &subset->detection;
+  Data_pred* detection_gt = &subset->detection;
   //---------------------------
 
   //Reset all values

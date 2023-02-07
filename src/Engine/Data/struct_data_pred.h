@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 
 
-struct Detection{ //Obstacle detection stuff
+struct Data_pred{ //Obstacle detection stuff
   //---------------------------
 
   // Info

@@ -1,7 +1,7 @@
 #ifndef FILE_PLY_H
 #define FILE_PLY_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 #include <iomanip>
@@ -17,7 +17,7 @@ public:
 
 public:
   //Main functions
-  dataFile* Loader(string path_file);
+  Data_file* Loader(string path_file);
   bool Exporter_cloud(string path_file, string format, Cloud* cloud);
   bool Exporter_subset(string path_dir, string format, Subset* subset);
   bool Exporter_subset(string path_dir, string format, Subset* subset, string fileName);
@@ -50,7 +50,7 @@ private:
   void Exporter_data_binary(std::ofstream& file, Subset* subset);
 
 private:
-  dataFile* data_out;
+  Data_file* data_out;
 
   //Parametrization
   vector<string> property_type;

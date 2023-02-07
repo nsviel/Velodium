@@ -4,16 +4,16 @@
 
 #include "Scala.h"
 
-#include "../../../Node_interface.h"
+#include "../../Node_interface.h"
 
-#include "../../../../Engine/Node_engine.h"
-#include "../../../../Engine/Scene/Configuration.h"
-#include "../../../../Load/Node_load.h"
-#include "../../../../Load/Processing/Extractor.h"
-#include "../../../../Interface/File/Directory.h"
-#include "../../../../Interface/File/Directory.h"
+#include "../../../Engine/Node_engine.h"
+#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Load/Node_load.h"
+#include "../../../Load/Processing/Extractor.h"
+#include "../../../Interface/File/Directory.h"
+#include "../../../Interface/File/Directory.h"
 
-#include "../../../../../extern/cbor/json.hpp"
+#include "../../../../extern/cbor/json.hpp"
 
 #include <fstream>
 
@@ -66,7 +66,7 @@ void Scala::stop_watcher(){
 
   //---------------------------
 }
-void Scala::lidar_create_subset(udpPacket* udp_packet){
+void Scala::lidar_create_subset(Data_udp* udp_packet){
   //Asynchroneous function (used by theaded watcher)
   //---------------------------
 

@@ -5,8 +5,8 @@
 
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/Capture/Capture.h"
-#include "../../Interface/Capture/LiDAR/Scala/Scala.h"
-#include "../../Interface/Capture/LiDAR/Velodyne/Velodyne.h"
+#include "../../Interface/Capture/Scala/Scala.h"
+#include "../../Interface/Capture/Velodyne/Velodyne.h"
 
 
 //Constructor / Destructor

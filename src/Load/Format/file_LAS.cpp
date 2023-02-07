@@ -9,8 +9,8 @@ file_LAS::file_LAS(){}
 file_LAS::~file_LAS(){}
 
 //Main function
-dataFile* file_LAS::Loader(string path){
-  dataFile* data = new dataFile();
+Data_file* file_LAS::Loader(string path){
+  Data_file* data = new Data_file();
   data->name = get_name_from_path(path);
   data->path = path;
   //---------------------------

@@ -1,8 +1,8 @@
 #include "file_PCAP.h"
 
-#include "../../Interface/IO/UDP/UDP_parser_VLP16.h"
-#include "../../Interface/IO/UDP/UDP_parser_HDL32.h"
-#include "../../Interface/IO/UDP/UDP_frame.h"
+#include "../../Interface/Capture/Velodyne/Parser_VLP16.h"
+#include "../../Interface/Capture/Velodyne/Parser_HDL32.h"
+#include "../../Interface/Capture/Processing/Capture_frame.h"
 
 #include <tins/tins.h>
 #include <iostream>
@@ -63,7 +63,7 @@ bool count_packets(const PDU &){
 }
 
 //Main function
-vector<dataFile*> file_PCAP::Loader(string pathFile){
+vector<Data_file*> file_PCAP::Loader(string pathFile){
   data_vec.clear();
   file_packets.clear();
   //---------------------------
@@ -102,19 +102,19 @@ vector<dataFile*> file_PCAP::Loader(string pathFile){
 }
 
 void file_PCAP::Loader_vlp16(string pathFile){
-  UDP_frame frameManager;
-  UDP_parser_VLP16 udpManager;
+  Capture_frame frameManager;
+  Parser_VLP16 udpManager;
   //---------------------------
 
   int cpt = 0;
   for(int i=0; i<file_packets.size(); i++){
 
-    udpPacket* cloud = udpManager.parse_UDP_packet(file_packets[i]);
+    Data_udp* cloud = udpManager.parse_UDP_packet(file_packets[i]);
     bool frame_rev = frameManager.build_frame(cloud);
 
     if(frame_rev){
-      udpPacket* frame = frameManager.get_endedFrame();
-      dataFile* frame_data = new dataFile();
+      Data_udp* frame = frameManager.get_endedFrame();
+      Data_file* frame_data = new Data_file();
 
       frame_data->name = "frame_" + to_string(cpt); cpt++;
       frame_data->path = pathFile;
@@ -135,17 +135,17 @@ void file_PCAP::Loader_vlp16(string pathFile){
   //---------------------------
 }
 void file_PCAP::Loader_hdl32(string pathFile){
-  UDP_frame frameManager;
-  UDP_parser_HDL32 udpManager;
+  Capture_frame frameManager;
+  Parser_HDL32 udpManager;
   //---------------------------
 
   for(int i=0; i<file_packets.size(); i++){
-    udpPacket* cloud = udpManager.parse_UDP_packet(file_packets[i]);
+    Data_udp* cloud = udpManager.parse_UDP_packet(file_packets[i]);
     bool frame_rev = frameManager.build_frame(cloud);
 
     if(frame_rev){
-      udpPacket* frame = frameManager.get_endedFrame();
-      dataFile* frame_data = new dataFile();
+      Data_udp* frame = frameManager.get_endedFrame();
+      Data_file* frame_data = new Data_file();
 
       frame_data->path = pathFile;
       frame_data->size = frame->xyz.size();

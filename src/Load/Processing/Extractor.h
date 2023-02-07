@@ -1,8 +1,8 @@
 #ifndef DATA_EXTRACTION_H
 #define DATA_EXTRACTION_H
 
-#include "../../Engine/Data/struct_dataFile.h"
-#include "../../Engine/Data/struct_UDPpacket.h"
+#include "../../Engine/Data/struct_data_file.h"
+#include "../../Engine/Data/struct_data_udp.h"
 
 #include "../../common.h"
 
@@ -21,16 +21,16 @@ public:
 
 public:
   //Main function
-  Cloud* extract_data(vector<dataFile*> data);
-  Subset* extract_data(udpPacket& data);
-  void extract_data_frame(Cloud* cloud, dataFile* data);
-  void extract_data_oneFrame(Cloud* cloud, dataFile* data);
+  Cloud* extract_data(vector<Data_file*> data);
+  Subset* extract_data(Data_udp& data);
+  void extract_data_frame(Cloud* cloud, Data_file* data);
+  void extract_data_oneFrame(Cloud* cloud, Data_file* data);
 
 private:
   //Subfunctions
-  void check_data(dataFile* data);
-  void check_data(udpPacket& data);
-  void init_cloud_parameter(Cloud* cloud, vector<dataFile*> data);
+  void check_data(Data_file* data);
+  void check_data(Data_udp& data);
+  void init_cloud_parameter(Cloud* cloud, vector<Data_file*> data);
   void init_subset_parameter(Subset* subset, string path, int ID);
   void init_random_color();
   void define_visibility(Subset* subset, int i);

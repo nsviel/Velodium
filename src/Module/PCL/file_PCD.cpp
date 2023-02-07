@@ -7,8 +7,8 @@ filePCD::filePCD(){}
 filePCD::~filePCD(){}
 
 //Main function
-dataFile* filePCD::Loader(string pathFile){
-  data_out = new dataFile();
+Data_file* filePCD::Loader(string pathFile){
+  data_out = new Data_file();
   data_out->path = pathFile;
   //---------------------------
 

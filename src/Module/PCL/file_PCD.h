@@ -3,7 +3,7 @@
 #define FILE_PCD_H
 
 #include "../../common.h"
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 
 #include <pcl/io/pcd_io.h>
 
@@ -15,14 +15,14 @@ public:
   ~filePCD();
 
 public:
-  dataFile* Loader(string pathFile);
+  Data_file* Loader(string pathFile);
   string Loader_header(string pathFile);
   void Loader_XYZ(string pathFile);
   void Loader_XYZI(string pathFile);
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

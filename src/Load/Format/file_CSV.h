@@ -1,7 +1,7 @@
 #ifndef FILE_CSV_H
 #define FILE_CSV_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 
@@ -13,11 +13,11 @@ public:
   ~file_CSV();
 
 public:
-  vector<dataFile*> Loader(string pathFile);
+  vector<Data_file*> Loader(string pathFile);
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

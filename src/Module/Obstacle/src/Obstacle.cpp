@@ -124,7 +124,7 @@ void Obstacle::build_cloud_obstacle(Cloud* cloud){
   //---------------------------
 }
 void Obstacle::build_obstacleGlyph_pr(Subset* subset){
-  Detection* detection = &subset->detection;
+  Data_pred* detection = &subset->detection;
   //---------------------------
 
   for(int i=0; i<detection->name.size(); i++){
@@ -147,7 +147,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   //---------------------------
 }
 void Obstacle::build_obstacleGlyph_gt(Subset* subset){
-  Detection* detection_gt = &subset->detection_gt;
+  Data_pred* detection_gt = &subset->detection_gt;
   //---------------------------
 
   for(int j=0; j<detection_gt->name.size(); j++){

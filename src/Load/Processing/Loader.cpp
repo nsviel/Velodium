@@ -56,7 +56,7 @@ bool Loader::load_cloud(string path){
   }
 
   //Check file format & retrieve data
-  vector<dataFile*> data_vec = load_retrieve_data(path);
+  vector<Data_file*> data_vec = load_retrieve_data(path);
 
   //Insert cloud
   this->load_insertIntoDatabase(data_vec);
@@ -67,13 +67,13 @@ bool Loader::load_cloud(string path){
   return true;
 }
 bool Loader::load_cloud_byFrame(vector<string> path_vec){
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   tic();
   //---------------------------
 
   //Retrieve data
   for(int i=0; i<path_vec.size(); i++){
-    dataFile* data = plyManager->Loader(path_vec[i]);
+    Data_file* data = plyManager->Loader(path_vec[i]);
     data_vec.push_back(data);
   }
 
@@ -87,11 +87,11 @@ bool Loader::load_cloud_byFrame(vector<string> path_vec){
   return true;
 }
 bool Loader::load_cloud_onthefly(vector<string> path_vec){
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   //---------------------------
 
   //Load only the first cloud
-  dataFile* data = plyManager->Loader(path_vec[0]);
+  Data_file* data = plyManager->Loader(path_vec[0]);
   data_vec.push_back(data);
 
   //Insert cloud
@@ -118,7 +118,7 @@ bool Loader::load_cloud_silent(string path){
   }
 
   //Check file format & retrieve data
-  vector<dataFile*> data_vec = load_retrieve_data(path);
+  vector<Data_file*> data_vec = load_retrieve_data(path);
 
   //Extract data and put in the engine
   cloud = extractManager->extract_data(data_vec);
@@ -127,7 +127,7 @@ bool Loader::load_cloud_silent(string path){
   return true;
 }
 bool Loader::load_cloud_part(string path, int lmin, int lmax){
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   //---------------------------
 
   //Check file existence
@@ -139,7 +139,7 @@ bool Loader::load_cloud_part(string path, int lmin, int lmax){
   //Check file format
   string format = get_format_from_path(path);
   if(format == "pts"){
-    dataFile* data = ptsManager->Loader(path);
+    Data_file* data = ptsManager->Loader(path);
     data_vec.push_back(data);
   }
   else{
@@ -154,13 +154,13 @@ bool Loader::load_cloud_part(string path, int lmin, int lmax){
   return true;
 }
 bool Loader::load_cloud_creation(Cloud* cloud_in){
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   //---------------------------
 
   //Take input data
   for(int i=0; i<cloud_in->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud_in, i);
-    dataFile* data = new dataFile();
+    Data_file* data = new Data_file();
     data->path = cloud_in->path;
 
     //Location
@@ -198,11 +198,11 @@ bool Loader::load_cloud_creation(Cloud* cloud_in){
   return true;
 }
 bool Loader::load_cloud_empty(){
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   //---------------------------
 
   //Add NULL points
-  dataFile* data = new dataFile();
+  Data_file* data = new Data_file();
   data->path = "../media/frame.ply";
 
   data->location.push_back(vec3(0.0f,0.0f,0.0f));
@@ -226,7 +226,7 @@ bool Loader::load_cloud_oneFrame(Cloud* cloud, string path){
 
   if(is_file_exist(path)){
     //Retrieve data
-    dataFile* data = plyManager->Loader(path);
+    Data_file* data = plyManager->Loader(path);
 
     //Insert frame
     this->load_insertIntoCloud(data, cloud);
@@ -250,7 +250,7 @@ vector<vec3> Loader::load_vertices(string path){
   }
 
   //Check file format & retrieve data
-  vector<dataFile*> data_vec = load_retrieve_data(path);
+  vector<Data_file*> data_vec = load_retrieve_data(path);
 
   //Extract data
   vector<vec3> xyz = data_vec[0]->location;
@@ -260,17 +260,17 @@ vector<vec3> Loader::load_vertices(string path){
 }
 
 //Sub-functions
-vector<dataFile*> Loader::load_retrieve_data(string path){
+vector<Data_file*> Loader::load_retrieve_data(string path){
   string format = get_format_from_path(path);
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   //---------------------------
 
   if     (format == "pts"){
-    dataFile* data = ptsManager->Loader(path);
+    Data_file* data = ptsManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "ptx"){
-    dataFile* data = ptxManager->Loader(path);
+    Data_file* data = ptxManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "pcap"){
@@ -278,20 +278,20 @@ vector<dataFile*> Loader::load_retrieve_data(string path){
   }
   else if(format == "pcd"){
     #ifdef FILE_PCD_H
-    dataFile* data = pcdManager->Loader(path);
+    Data_file* data = pcdManager->Loader(path);
     data_vec.push_back(data);
     #endif
   }
   else if(format == "ply"){
-    dataFile* data = plyManager->Loader(path);
+    Data_file* data = plyManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "obj"){
-    dataFile* data = objManager->Loader(path);
+    Data_file* data = objManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "xyz"){
-    dataFile* data = xyzManager->Loader(path);
+    Data_file* data = xyzManager->Loader(path);
     data_vec.push_back(data);
   }
   else if(format == "csv"){
@@ -307,7 +307,7 @@ vector<dataFile*> Loader::load_retrieve_data(string path){
   //---------------------------
   return data_vec;
 }
-void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
+void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
@@ -327,7 +327,7 @@ void Loader::load_insertIntoDatabase(vector<dataFile*> data_vec){
 
   //---------------------------
 }
-void Loader::load_insertIntoCloud(dataFile* data, Cloud* cloud){
+void Loader::load_insertIntoCloud(Data_file* data, Cloud* cloud){
   //---------------------------
 
   //Extract data and put in the engine

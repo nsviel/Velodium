@@ -1,7 +1,7 @@
 #ifndef CBOR_H
 #define CBOR_H
 
-#include "../../../../../common.h"
+#include "../../../../common.h"
 
 
 class CBOR

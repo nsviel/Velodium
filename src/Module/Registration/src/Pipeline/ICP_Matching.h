@@ -1,7 +1,7 @@
 #ifndef ICP_MATCHING_H
 #define ICP_MATCHING_H
 
-#include "../../../../Engine/Data/struct_generic.h"
+#include "../../../../Engine/Data/struct_misc.h"
 #include "../../../../common.h"
 
 

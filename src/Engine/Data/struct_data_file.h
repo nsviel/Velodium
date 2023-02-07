@@ -7,7 +7,7 @@
 
 
 //Generique structure to parse file point clouds
-struct dataFile{
+struct Data_file{
   int size;
   std::string name;
   std::string path;

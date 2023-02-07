@@ -12,8 +12,8 @@ file_CBOR::file_CBOR(){}
 file_CBOR::~file_CBOR(){}
 
 //Main function
-vector<dataFile*> file_CBOR::Loader(string path){
-  vector<dataFile*> cloud;
+vector<Data_file*> file_CBOR::Loader(string path){
+  vector<Data_file*> cloud;
   //---------------------------
 
   //std::ifstream file(path, std::ios::binary);

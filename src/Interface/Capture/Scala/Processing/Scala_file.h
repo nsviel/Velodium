@@ -1,7 +1,7 @@
 #ifndef SCALA_FILE_H
 #define SCALA_FILE_H
 
-#include "../../../../../common.h"
+#include "../../../../common.h"
 
 class Node_engine;
 class Scene;

@@ -1,7 +1,7 @@
 #ifndef FILE_PCAP_H
 #define FILE_PCAP_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 
@@ -13,7 +13,7 @@ public:
   ~file_PCAP();
 
 public:
-  vector<dataFile*> Loader(string pathFile);
+  vector<Data_file*> Loader(string pathFile);
 
   void Loader_vlp16(string pathFile);
   void Loader_hdl32(string pathFile);
@@ -25,7 +25,7 @@ public:
   inline int* get_packet_end(){return &packet_end;}
 
 private:
-  vector<dataFile*> data_vec;
+  vector<Data_file*> data_vec;
   string LiDAR_model;
   bool packet_range_on;
   int packet_beg;

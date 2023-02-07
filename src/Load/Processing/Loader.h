@@ -1,7 +1,7 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 class Node_load;
@@ -44,9 +44,9 @@ public:
   inline file_PCAP* get_pcapManager(){return pcapManager;}
 
 private:
-  vector<dataFile*> load_retrieve_data(string path);
-  void load_insertIntoDatabase(vector<dataFile*> data_vec);
-  void load_insertIntoCloud(dataFile* data, Cloud* cloud);
+  vector<Data_file*> load_retrieve_data(string path);
+  void load_insertIntoDatabase(vector<Data_file*> data_vec);
+  void load_insertIntoCloud(Data_file* data, Cloud* cloud);
 
 private:
   Extractor* extractManager;

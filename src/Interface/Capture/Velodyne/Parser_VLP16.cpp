@@ -6,13 +6,15 @@
 *  if data size equal 1206, this is a laser fire data, else about 512, it is a position packet or GPS packet
 */
 
-#include "UDP_parser_Scala.h"
+#include "Parser_VLP16.h"
 
 #include "../../../Specific/fct_math.h"
 
+#include <chrono>
+
 
 //Constructor / Destructor
-UDP_parser_Scala::UDP_parser_Scala(){
+Parser_VLP16::Parser_VLP16(){
   //---------------------------
 
   this->nb_laser = 16;
@@ -21,20 +23,26 @@ UDP_parser_Scala::UDP_parser_Scala(){
 
   //---------------------------
 }
-UDP_parser_Scala::~UDP_parser_Scala(){}
+Parser_VLP16::~Parser_VLP16(){}
 
 //Main function
-udpPacket* UDP_parser_Scala::parse_UDP_packet(vector<int> packet_dec){
-  udpPacket* packet_udp = new udpPacket();
+Data_udp* Parser_VLP16::parse_UDP_packet(vector<int> packet_dec){
+  Data_udp* data_udp = new Data_udp();
   //---------------------------
+
+  //Check if data is laser or position information
+  if(packet_dec.size() == 1248){
+    vector<int> new_packet(1206);
+    copy(packet_dec.begin() + 42, packet_dec.end(), new_packet.begin());
+    packet_dec = new_packet;
+  }
+  //Check if data is laser or position information
+  if(packet_dec.size() != 1206){
+    return data_udp;
+  }
 
   //Packet timestamp
   packet_ts_us = packet_dec[1203]*256*256*256 + packet_dec[1202]*256*256 + packet_dec[1201]*256 + packet_dec[1200];
-
-  //Chekc if data is laser or position information
-  if(packet_dec.size() != 1206){
-    return packet_udp;
-  }
 
   //Parse packet data
   this->parse_packet(packet_dec);
@@ -42,14 +50,14 @@ udpPacket* UDP_parser_Scala::parse_UDP_packet(vector<int> packet_dec){
   this->parse_azimuth();
   this->parse_coordinates();
   this->parse_timestamp();
-  this->final_check(packet_udp);
+  this->reorder_by_azimuth(data_udp);
 
   //---------------------------
-  return packet_udp;
+  return data_udp;
 }
 
 //Subfunctions
-void UDP_parser_Scala::parse_packet(vector<int> packet){
+void Parser_VLP16::parse_packet(vector<int> packet){
   blocks.clear();
   //---------------------------
 
@@ -69,7 +77,7 @@ void UDP_parser_Scala::parse_packet(vector<int> packet){
 
   //---------------------------
 }
-void UDP_parser_Scala::parse_blocks(){
+void Parser_VLP16::parse_blocks(){
   packet_A.clear();
   packet_R.clear();
   packet_I.clear();
@@ -84,7 +92,9 @@ void UDP_parser_Scala::parse_blocks(){
 
     // 0xffee is upper block
     if(block_flag != 65518){
-      cout << "Problem of block flag" << endl;
+      string log = "Capture - Problem block flag "+to_string(block_flag)+" instead of "+to_string(65518);
+      console.AddLog("error", log);
+      return;
     }
 
     //Get block azimuth
@@ -109,7 +119,7 @@ void UDP_parser_Scala::parse_blocks(){
 
   //---------------------------
 }
-void UDP_parser_Scala::parse_azimuth(){
+void Parser_VLP16::parse_azimuth(){
   //---------------------------
 
   //Get the actual azimuth for each data point
@@ -152,7 +162,7 @@ void UDP_parser_Scala::parse_azimuth(){
   //---------------------------
   packet_A = azimuth_points;
 }
-void UDP_parser_Scala::parse_coordinates(){
+void Parser_VLP16::parse_coordinates(){
   packet_xyz.clear();
   //---------------------------
 
@@ -208,7 +218,7 @@ void UDP_parser_Scala::parse_coordinates(){
 
   //---------------------------
 }
-void UDP_parser_Scala::parse_timestamp(){
+void Parser_VLP16::parse_timestamp(){
   packet_t.clear();
   //---------------------------
 
@@ -216,38 +226,26 @@ void UDP_parser_Scala::parse_timestamp(){
   float packet_ts_s = packet_ts_us / 1000000; //(us to s)
   float packet_ts_min = packet_ts_s / 60;  // (s to min)
 
-  // calculating timestamp [microsec] of each firing
+  //Check for positive timestamp
+  if(packet_ts_s < 0){
+    //cout<<"[error] UDP capture - negative timestamp"<<endl;
+  }
+
+  // calculating relative timestamp [microsec] of each firing
   vector<float> timing_offsets = calc_timing_offsets();
   for(int i=0; i<timing_offsets.size(); i++){
-    packet_t.push_back(packet_ts_s + timing_offsets[i] / 1000000);
+    float ts = packet_ts_s + timing_offsets[i] / 1000000;
+    packet_t.push_back(ts);
   }
 
   //---------------------------
 }
-void UDP_parser_Scala::final_check(udpPacket* cloud){
+
+//final processing functions
+void Parser_VLP16::reorder_by_azimuth(Data_udp* cloud){
   //---------------------------
 
-  //Supress points when no distance are measured
-  if(supress_emptyElements){
-    vector<int> idx;
-    for(int i=0; i<packet_R.size(); i++){
-      if(packet_R[i] == 0){
-        idx.push_back(i);
-      }
-    }
-
-    this->make_supressElements(packet_I, idx);
-    this->make_supressElements(packet_A, idx);
-    this->make_supressElements(packet_R, idx);
-    this->make_supressElements(packet_t, idx);
-    this->make_supressElements(packet_xyz, idx);
-
-    if(packet_xyz.size() == 0){
-      cout << "No data in the packet" << endl;
-    }
-  }
-
-  //Reorder points in function of their timestamp
+  //Reorder points in function of their azimuth
   vector<vec3> xyz_b;
   vector<float> R_b;
   vector<float> I_b;
@@ -284,9 +282,34 @@ void UDP_parser_Scala::final_check(udpPacket* cloud){
 
   //---------------------------
 }
+void Parser_VLP16::supress_empty_data(){
+  //Supress points when no distance are measured
+  //---------------------------
+
+  if(supress_emptyElements){
+    vector<int> idx;
+    for(int i=0; i<packet_R.size(); i++){
+      if(packet_R[i] == 0){
+        idx.push_back(i);
+      }
+    }
+
+    this->make_supressElements(packet_I, idx);
+    this->make_supressElements(packet_A, idx);
+    this->make_supressElements(packet_R, idx);
+    this->make_supressElements(packet_t, idx);
+    this->make_supressElements(packet_xyz, idx);
+
+    if(packet_xyz.size() == 0){
+      cout << "No data in the packet" << endl;
+    }
+  }
+
+  //---------------------------
+}
 
 //Subsubfunctions
-vector<float> UDP_parser_Scala::calc_timing_offsets(){
+vector<float> Parser_VLP16::calc_timing_offsets(){
     vector<float> timing_offsets;
     //-----------------------
 
@@ -308,7 +331,7 @@ vector<float> UDP_parser_Scala::calc_timing_offsets(){
     //-----------------------
     return timing_offsets;
 }
-void UDP_parser_Scala::make_supressElements(vector<vec3>& vec, vector<int> idx){
+void Parser_VLP16::make_supressElements(vector<vec3>& vec, vector<int> idx){
   if(idx.size() == 0)return;
   //---------------------------
 
@@ -333,7 +356,7 @@ void UDP_parser_Scala::make_supressElements(vector<vec3>& vec, vector<int> idx){
   //---------------------------
   vec = vec_b;
 }
-void UDP_parser_Scala::make_supressElements(vector<float>& vec, vector<int> idx){
+void Parser_VLP16::make_supressElements(vector<float>& vec, vector<int> idx){
   if(idx.size() == 0)return;
   //---------------------------
 

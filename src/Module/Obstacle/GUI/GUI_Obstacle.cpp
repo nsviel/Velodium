@@ -125,7 +125,7 @@ void GUI_Obstacle::runtime_display_naming(){
     //---------------------------
 
     Subset* subset = cloud->subset_selected;
-    Detection* detection = &subset->detection;
+    Data_pred* detection = &subset->detection;
 
     this->label_ID = 0;
     for(int j=0; j<detection->name.size(); j++){

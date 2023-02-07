@@ -32,8 +32,8 @@ void file_JSON::parse_json_obstacle(Cloud* cloud, vector<string> paths, string d
 
       if(subset->name == json_name){
         //Make stuff
-        Detection* detection_gt = &subset->detection_gt;
-        Detection* detection = &subset->detection;
+        Data_pred* detection_gt = &subset->detection_gt;
+        Data_pred* detection = &subset->detection;
         const Json::Value& json_dete = obj["detections"];
 
         for (int i = 0; i < json_dete.size(); i++){

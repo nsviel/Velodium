@@ -1,7 +1,7 @@
 #ifndef FILE_OBJ_H
 #define FILE_OBJ_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 struct Vertex{
@@ -24,14 +24,14 @@ public:
 
 public:
   //Main function
-  dataFile* Loader(string filePath);
+  Data_file* Loader(string filePath);
 
   //Subfunction
   vector<Vertex> get_data_from_file(istream& in);
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

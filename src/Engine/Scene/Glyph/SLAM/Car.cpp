@@ -41,7 +41,7 @@ void Car::create_car(){
 
   //Load car model
   file_OBJ objManager;
-  dataFile* data = objManager.Loader("../media/engine/Marks/car.obj");
+  Data_file* data = objManager.Loader("../media/engine/Marks/car.obj");
   car->xyz = data->location;
   car->xyz_init = data->location;
   for(int i=0; i<car->xyz.size(); i++){

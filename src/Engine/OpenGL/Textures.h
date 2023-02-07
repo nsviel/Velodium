@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "../Data/struct_generic.h"
+#include "../Data/struct_misc.h"
 
 #include "../../common.h"
 

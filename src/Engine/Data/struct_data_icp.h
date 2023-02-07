@@ -2,7 +2,7 @@
 #define REG_STRUCT_H
 
 
-struct Register{
+struct Data_icp{
   //---------------------------
 
   std::vector<glm::vec3> keypoints;
@@ -11,7 +11,7 @@ struct Register{
   std::vector<glm::vec3> trgpoints;
   std::vector<glm::vec4> XYZI;
   std::vector<glm::vec3> XYZ_groundTruth;
-  
+
   glm::mat4 Scale;
   glm::mat4 Rotation;
   glm::mat4 Translation;

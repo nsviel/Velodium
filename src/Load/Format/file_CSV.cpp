@@ -10,8 +10,8 @@ file_CSV::file_CSV(){}
 file_CSV::~file_CSV(){}
 
 //Main function
-vector<dataFile*> file_CSV::Loader(string pathFile){
-  vector<dataFile*> cloud;
+vector<Data_file*> file_CSV::Loader(string pathFile){
+  vector<Data_file*> cloud;
   //---------------------------
 
   std::ifstream file(pathFile);
@@ -19,7 +19,7 @@ vector<dataFile*> file_CSV::Loader(string pathFile){
 
   //At row level
   for(int i=0; i<csvFile.size(); i++){
-    dataFile* data = new dataFile();
+    Data_file* data = new Data_file();
     data->path = pathFile;
 
     //At field level

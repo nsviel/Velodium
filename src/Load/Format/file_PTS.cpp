@@ -19,8 +19,8 @@ file_PTS::file_PTS(){
 file_PTS::~file_PTS(){}
 
 //Main load functions
-dataFile* file_PTS::Loader(string pathFile){
-  data_out = new dataFile();
+Data_file* file_PTS::Loader(string pathFile){
+  data_out = new Data_file();
   data_out->name = "";
   data_out->path = pathFile;
   //---------------------------
@@ -53,8 +53,8 @@ dataFile* file_PTS::Loader(string pathFile){
   //---------------------------
   return data_out;
 }
-dataFile* file_PTS::Loader(string pathFile, int lmin, int lmax){
-  data_out = new dataFile();
+Data_file* file_PTS::Loader(string pathFile, int lmin, int lmax){
+  data_out = new Data_file();
   //---------------------------
 
   //Initialization

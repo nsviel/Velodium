@@ -31,7 +31,7 @@ Extractor::Extractor(Node_load* node_load){
 Extractor::~Extractor(){}
 
 //Main function
-Cloud* Extractor::extract_data(vector<dataFile*> data){
+Cloud* Extractor::extract_data(vector<Data_file*> data){
   Cloud* cloud = new Cloud();
   //---------------------------
 
@@ -69,7 +69,7 @@ Cloud* Extractor::extract_data(vector<dataFile*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractor::extract_data(udpPacket& data){
+Subset* Extractor::extract_data(Data_udp& data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -90,7 +90,7 @@ Subset* Extractor::extract_data(udpPacket& data){
   //---------------------------
   return subset;
 }
-void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
+void Extractor::extract_data_frame(Cloud* cloud, Data_file* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -115,7 +115,7 @@ void Extractor::extract_data_frame(Cloud* cloud, dataFile* data){
 
   //---------------------------
 }
-void Extractor::extract_data_oneFrame(Cloud* cloud, dataFile* data){
+void Extractor::extract_data_oneFrame(Cloud* cloud, Data_file* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -159,7 +159,7 @@ void Extractor::extract_data_oneFrame(Cloud* cloud, dataFile* data){
 }
 
 //Subfunctions
-void Extractor::check_data(dataFile* data){
+void Extractor::check_data(Data_file* data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -200,7 +200,7 @@ void Extractor::check_data(dataFile* data){
 
   //---------------------------
 }
-void Extractor::check_data(udpPacket& data){
+void Extractor::check_data(Data_udp& data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -255,7 +255,7 @@ void Extractor::define_buffer_init(Cloud* cloud, Subset* subset){
 
   //---------------------------
 }
-void Extractor::init_cloud_parameter(Cloud* cloud, vector<dataFile*> data){
+void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   //---------------------------
 
   //Calculate number of point

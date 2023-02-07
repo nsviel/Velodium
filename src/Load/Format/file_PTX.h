@@ -1,8 +1,8 @@
 #ifndef FILE_PTX_H
 #define FILE_PTX_H
 
-#include "../../Engine/Data/struct_dataFile.h"
-#include "../../Engine/Data/struct_generic.h"
+#include "../../Engine/Data/struct_data_file.h"
+#include "../../Engine/Data/struct_misc.h"
 #include "../../common.h"
 
 #include <iomanip>
@@ -18,7 +18,7 @@ public:
 
 public:
   //Main functions
-  dataFile* Loader(string pathFile);
+  Data_file* Loader(string pathFile);
   bool Exporter(string pathFile);
 
   //Subfunctions
@@ -41,7 +41,7 @@ public:
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 
   list<PTXCloud*>* list_ptxCloud;
   float x, y, z, I, r, g ,b;

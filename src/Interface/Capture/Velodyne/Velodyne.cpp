@@ -4,16 +4,15 @@
 //Output : Subset pointer
 
 #include "Velodyne.h"
+#include "Parser_VLP16.h"
 
-#include "../../../IO/UDP/UDP_frame.h"
-#include "../../../IO/UDP/UDP_server.h"
-#include "../../../IO/UDP/UDP_parser_VLP16.h"
+#include "../Processing/Capture_frame.h"
+#include "../Processing/Capture_server.h"
+#include "../../Node_interface.h"
 
-#include "../../../Node_interface.h"
-
-#include "../../../../Engine/Node_engine.h"
-#include "../../../../Load/Node_load.h"
-#include "../../../../Load/Processing/Extractor.h"
+#include "../../../Engine/Node_engine.h"
+#include "../../../Load/Node_load.h"
+#include "../../../Load/Processing/Extractor.h"
 
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
@@ -33,9 +32,9 @@ Velodyne::Velodyne(Node_interface* node_interface){
   Node_load* node_load = node_interface->get_node_load();
 
   this->extractManager = node_load->get_extractManager();
-  this->udpServManager = new UDP_server();
-  this->udp_vlp16Manager = new UDP_parser_VLP16();
-  this->frameManager = new UDP_frame();
+  this->udpServManager = new Capture_server();
+  this->udp_vlp16Manager = new Parser_VLP16();
+  this->frameManager = new Capture_frame();
   this->subset_capture = new Subset();
 
   this->time_frame = 0;
@@ -81,13 +80,13 @@ void Velodyne::start_watcher(int port){
 
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
-        udpPacket* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);
+        Data_udp* packet_udp = udp_vlp16Manager->parse_UDP_packet(packet_dec);
 
         //Iteratively build a complete frame
         bool frame_rev = frameManager->build_frame(packet_udp);
 
         if(frame_rev){
-          udpPacket* frame = frameManager->get_endedFrame();
+          Data_udp* frame = frameManager->get_endedFrame();
           this->udp_capture = *frame;
 
           //Time

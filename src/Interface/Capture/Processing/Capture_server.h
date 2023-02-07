@@ -1,5 +1,5 @@
-#ifndef UDP_server_H
-#define UDP_server_H
+#ifndef CAPTURE_SERVER_H
+#define CAPTURE_SERVER_H
 
 // Server side implementation of UDP client-server model
 
@@ -9,12 +9,12 @@ class Socket_server;
 class Socket_client;
 
 
-class UDP_server
+class Capture_server
 {
 public:
   //Constructor / Destructor
-  UDP_server();
-  ~UDP_server();
+  Capture_server();
+  ~Capture_server();
 
 public:
   //Main functions

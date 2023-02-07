@@ -12,7 +12,7 @@
  */
  //=========================
 
-struct udpPacket{
+struct Data_udp{
   //Infos
   std::string name;
   int ID; //Permanent cloud ID

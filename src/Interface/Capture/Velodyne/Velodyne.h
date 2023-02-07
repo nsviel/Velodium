@@ -3,17 +3,17 @@
 
 // Server side implementation of UDP client-server model
 
-#include "../../../../Engine/Data/struct_UDPpacket.h"
-#include "../../../../common.h"
+#include "../../../Engine/Data/struct_data_udp.h"
+#include "../../../common.h"
 
 #include <thread>
 
 class Node_interface;
 class Extractor;
 
-class UDP_frame;
-class UDP_server;
-class UDP_parser_VLP16;
+class Capture_frame;
+class Capture_server;
+class Parser_VLP16;
 
 
 class Velodyne
@@ -57,12 +57,12 @@ public:
 
 private:
   Extractor* extractManager;
-  UDP_frame* frameManager;
-  UDP_server* udpServManager;
-  UDP_parser_VLP16* udp_vlp16Manager;
+  Capture_frame* frameManager;
+  Capture_server* udpServManager;
+  Parser_VLP16* udp_vlp16Manager;
 
   Subset* subset_capture;
-  udpPacket udp_capture;
+  Data_udp udp_capture;
 
   float time_frame;
   float time_packet;

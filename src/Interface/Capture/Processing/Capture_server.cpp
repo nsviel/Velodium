@@ -1,4 +1,4 @@
-#include "UDP_server.h"
+#include "Capture_server.h"
 
 #include "../../IO/Socket/Socket_server.h"
 #include "../../IO/Socket/Socket_client.h"
@@ -15,7 +15,7 @@
 
 
 //Constructor / Destructor
-UDP_server::UDP_server(){
+Capture_server::Capture_server(){
   //---------------------------
 
   this->sock_server = new Socket_server();
@@ -23,7 +23,7 @@ UDP_server::UDP_server(){
 
   //---------------------------
 }
-UDP_server::~UDP_server(){
+Capture_server::~Capture_server(){
   //---------------------------
 
   delete sock_server;
@@ -33,7 +33,7 @@ UDP_server::~UDP_server(){
 }
 
 //Main function
-void UDP_server::capture_init(int port, int packet_size){
+void Capture_server::capture_init(int port, int packet_size){
   bool is_binded = sock_server->get_is_binded();
   //---------------------------
 
@@ -45,7 +45,7 @@ void UDP_server::capture_init(int port, int packet_size){
 
   //---------------------------
 }
-void UDP_server::capture_stop(){
+void Capture_server::capture_stop(){
   //---------------------------
 
   if(sock_server->get_is_binded()){
@@ -55,7 +55,7 @@ void UDP_server::capture_stop(){
 
   //---------------------------
 }
-vector<int> UDP_server::capture_packet(){
+vector<int> Capture_server::capture_packet(){
   vector<int> data_dec;
   //---------------------------
 

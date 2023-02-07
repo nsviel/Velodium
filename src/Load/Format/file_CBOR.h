@@ -1,7 +1,7 @@
 #ifndef FILE_CBOR_H
 #define FILE_CBOR_H
 
-#include "../../Engine/Data/struct_dataFile.h"
+#include "../../Engine/Data/struct_data_file.h"
 #include "../../common.h"
 
 
@@ -13,12 +13,12 @@ public:
   ~file_CBOR();
 
 public:
-  vector<dataFile*> Loader(string pathFile);
+  vector<Data_file*> Loader(string pathFile);
   vector<std::uint8_t> readFile(const char* filename);
 
 private:
   //Datatypes
-  dataFile* data_out;
+  Data_file* data_out;
 };
 
 #endif

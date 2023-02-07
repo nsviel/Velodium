@@ -1,7 +1,7 @@
 #include "Capture.h"
 
-#include "LiDAR/Scala/Scala.h"
-#include "LiDAR/Velodyne/Velodyne.h"
+#include "Scala/Scala.h"
+#include "Velodyne/Velodyne.h"
 
 #include "../Node_interface.h"
 

@@ -17,10 +17,10 @@ file_PTX::file_PTX(){
 file_PTX::~file_PTX(){}
 
 //Main functions
-dataFile* file_PTX::Loader(string pathFile){
+Data_file* file_PTX::Loader(string pathFile){
   list_ptxCloud = new list<PTXCloud*>;
   PTXCloud* cloud = new PTXCloud;
-  data_out = new dataFile();
+  data_out = new Data_file();
   data_out->path = pathFile;
   //---------------------------
 

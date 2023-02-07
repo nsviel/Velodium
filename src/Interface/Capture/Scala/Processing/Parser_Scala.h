@@ -1,22 +1,22 @@
-#ifndef UDP_PARSER_HDL32_H
-#define UDP_PARSER_HDL32_H
+#ifndef UDP_PARSER_SCALA_H
+#define UDP_PARSER_SCALA_H
 
 // Server side implementation of UDP client-server model
 
-#include "../../../Engine/Data/struct_UDPpacket.h"
-#include "../../../common.h"
+#include "../../../../Engine/Data/struct_data_udp.h"
+#include "../../../../common.h"
 
 
-class UDP_parser_HDL32
+class Parser_Scala
 {
 public:
   //Constructor / Destructor
-  UDP_parser_HDL32();
-  ~UDP_parser_HDL32();
+  Parser_Scala();
+  ~Parser_Scala();
 
 public:
   //Main functions
-  udpPacket* parse_UDP_packet(vector<int> packet);
+  Data_udp* parse_UDP_packet(vector<int> packet);
 
   //Subfunctions
   void parse_packet(vector<int> packet);
@@ -24,7 +24,7 @@ public:
   void parse_azimuth();
   void parse_coordinates();
   void parse_timestamp();
-  void final_check(udpPacket* cloud);
+  void final_check(Data_udp* cloud);
 
   //Subsubfunctions
   vector<float> calc_timing_offsets();
