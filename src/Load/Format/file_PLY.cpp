@@ -119,13 +119,17 @@ void file_PLY::Loader_header(std::ifstream& file){
         property_type.push_back("float64");
         property_size.push_back(8);
       }
-      else if (h2 == "int"){
-        property_type.push_back("int32");
-        property_size.push_back(4);
+      else if (h2 == "uint8"){
+        property_type.push_back("uint8");
+        property_size.push_back(2);
       }
       else if (h2 == "uint16"){
-        property_type.push_back("int16");
+        property_type.push_back("uint16");
         property_size.push_back(2);
+      }
+      else if (h2 == "int" || h2 == "int32"){
+        property_type.push_back("uint32");
+        property_size.push_back(4);
       }
       else if (h2 == "uchar"){
         property_type.push_back("uchar");
@@ -308,15 +312,23 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
         float value = get_float_from_binary(block_data, offset);
         block_vec[j][i] = value;
       }
-      if(property_type[j] == "float64"){
+      else if(property_type[j] == "float64"){
         float value = get_double_from_binary(block_data, offset);
         block_vec[j][i] = value;
       }
-      if(property_type[j] == "int16"){
-        float value = get_int16_from_binary(block_data, offset);
+      else if(property_type[j] == "uint8"){
+        float value = get_uint8_from_binary(block_data, offset);
         block_vec[j][i] = value;
       }
-      if(property_type[j] == "uchar"){
+      else if(property_type[j] == "uint16"){
+        float value = get_uint16_from_binary(block_data, offset);
+        block_vec[j][i] = value;
+      }
+      else if(property_type[j] == "uint32"){
+        float value = get_uint32_from_binary(block_data, offset);
+        block_vec[j][i] = value;
+      }
+      else if(property_type[j] == "uchar"){
         float value = get_uchar_from_binary(block_data, offset);
         block_vec[j][i] = value;
       }
@@ -330,6 +342,10 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   if(is_normal) data_out->normal.resize(point_number, vec3(0,0,0));
   if(is_color) data_out->color.resize(point_number, vec4(0,0,0,0));
   data_out->size = point_number;
+
+  sayVec(property_name);
+  sayVec(property_type);
+  say(property_number);
 
   //Insert data in the adequate vector
   //#pragma omp parallel for
@@ -689,11 +705,29 @@ float file_PLY::get_int_from_binary(char* block_data, int& offset){
   //---------------------------
   return value;
 }
-float file_PLY::get_int16_from_binary(char* block_data, int& offset){
+float file_PLY::get_uint8_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  float value =  (float)*((uint8 *) (block_data + offset));
+  offset += sizeof(uint8);
+
+  //---------------------------
+  return value;
+}
+float file_PLY::get_uint16_from_binary(char* block_data, int& offset){
   //---------------------------
 
   float value =  (float)*((uint16 *) (block_data + offset));
   offset += sizeof(uint16);
+
+  //---------------------------
+  return value;
+}
+float file_PLY::get_uint32_from_binary(char* block_data, int& offset){
+  //---------------------------
+
+  float value =  (float)*((uint32 *) (block_data + offset));
+  offset += sizeof(uint32);
 
   //---------------------------
   return value;

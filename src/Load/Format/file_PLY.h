@@ -41,7 +41,9 @@ private:
   float get_float_from_binary(char* data, int& offset);
   float get_double_from_binary(char* block_data, int& offset);
   float get_int_from_binary(char* data, int& offset);
-  float get_int16_from_binary(char* block_data, int& offset);
+  float get_uint8_from_binary(char* block_data, int& offset);
+  float get_uint16_from_binary(char* block_data, int& offset);
+  float get_uint32_from_binary(char* block_data, int& offset);
   float get_uchar_from_binary(char* block_data, int& offset);
 
   //Exporter subfunctions
