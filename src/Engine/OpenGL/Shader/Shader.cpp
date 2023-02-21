@@ -19,43 +19,43 @@ Shader::~Shader(){
 	//---------------------------
 
 	delete edlManager;
-	delete shader_scene;
 	delete shader_screen;
+	delete shader_render;
 
 	//---------------------------
 }
 
-void Shader::init(){
+void Shader::init_shader(){
 	//---------------------------
 
-	string path_scene_vs = "../src/Engine/OpenGL/Shader/shader_scene.vs";
-	string path_scene_fs = "../src/Engine/OpenGL/Shader/shader_scene.fs";
+	string path_screen_vs = "../src/Engine/OpenGL/Shader/shader_screen.vs";
+	string path_screen_fs = "../src/Engine/OpenGL/Shader/shader_screen.fs";
 
-	string path_screen_vs = "../src/Engine/OpenGL/Shader/shader_edl.vs";
-	string path_screen_fs = "../src/Engine/OpenGL/Shader/shader_edl.fs";
+	string path_render_vs = "../src/Engine/OpenGL/Shader/shader_edl.vs";
+	string path_render_fs = "../src/Engine/OpenGL/Shader/shader_edl.fs";
 
-	shader_scene = new ShaderObject(path_scene_vs, path_scene_fs);
 	shader_screen = new ShaderObject(path_screen_vs, path_screen_fs);
+	shader_render = new ShaderObject(path_render_vs, path_render_fs);
 
-	edlManager->setup_edl(shader_screen->get_program_ID());
+	edlManager->setup_edl(shader_render->get_program_ID());
 
 	//---------------------------
 }
-void Shader::update(){
+void Shader::update_shader(){
 	//---------------------------
 
-	edlManager->setup_edl(shader_screen->get_program_ID());
+	edlManager->setup_edl(shader_render->get_program_ID());
 
 	//---------------------------
 }
 void Shader::use(string shader_name){
 	//---------------------------
 
-	if(shader_name == "scene"){
-		shader_scene->use();
-	}
-	else if(shader_name == "screen"){
+	if(shader_name == "screen"){
 		shader_screen->use();
+	}
+	else if(shader_name == "render"){
+		shader_render->use();
 	}
 
 	//---------------------------

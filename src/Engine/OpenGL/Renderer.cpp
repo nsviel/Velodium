@@ -10,6 +10,9 @@
 #include <FreeImage.h>
 #include <cstdint>
 
+// Framebuffer 1 is for point cloud rendering
+// Framebuffer 2 is for EDL rendering
+
 
 //Constructor / Destructor
 Renderer::Renderer(Dimension* dim){
@@ -36,88 +39,92 @@ Renderer::~Renderer(){
 }
 
 //Init
-void Renderer::init_rendering_fbo_1(){
+void Renderer::init_create_fbo_1(){
   vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------
 
-  //Init FBO 1
+  //Create framebuffer 1
   glGenFramebuffers(1, &fbo_1_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
 
-  //Init textures
-  glGenTextures(1, &tex_color_ID);
-  glBindTexture(GL_TEXTURE_2D, tex_color_ID);
+  //Create color texture and bind it to the framebuffer
+  glGenTextures(1, &fbo_1_tex_color_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_color_ID, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_1_tex_color_ID, 0);
 
-  glGenTextures(1, &tex_depth_ID);
-  glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
+  //Create depth texture and bind it to the framebuffer
+  glGenTextures(1, &fbo_1_tex_depth_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex_depth_ID, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo_1_tex_depth_ID, 0);
 
-  //Debind objects
+  //Debind framebuffer
   glBindTexture(GL_TEXTURE_2D ,0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
 }
-void Renderer::init_rendering_fbo_2(){
+void Renderer::init_create_fbo_2(){
   vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------
 
-  //Init FBO 2
-  glGenTextures(1, &tex_edl_ID);
+  //Create framebuffer 2
+  glGenTextures(1, &fbo_2_tex_edl_ID);
   glGenFramebuffers(1, &fbo_2_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
 
-  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex_edl_ID);
+  //Create color texture and bind it to the framebuffer
+  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_edl_ID);
   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, gl_dim.x, gl_dim.y, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex_edl_ID, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_edl_ID, 0);
 
-  //Debind objects
+  //Debind framebuffer
   glBindTexture(GL_TEXTURE_2D ,0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
 }
-void Renderer::init_rendering_quad(){
+void Renderer::init_create_canvas(){
   //---------------------------
 
-  vector<vec2> quad_xy;
-  quad_xy.push_back(vec2(-1.0f,  1.0f));
-  quad_xy.push_back(vec2(-1.0f,  -1.0f));
-  quad_xy.push_back(vec2(1.0f,  -1.0f));
-  quad_xy.push_back(vec2(-1.0f,  1.0f));
-  quad_xy.push_back(vec2(1.0f,  -1.0f));
-  quad_xy.push_back(vec2(1.0f,  1.0f));
+  //Generic quad coordinates and UV
+  vector<vec2> canvas_xy;
+  canvas_xy.push_back(vec2(-1.0f,  1.0f));
+  canvas_xy.push_back(vec2(-1.0f,  -1.0f));
+  canvas_xy.push_back(vec2(1.0f,  -1.0f));
+  canvas_xy.push_back(vec2(-1.0f,  1.0f));
+  canvas_xy.push_back(vec2(1.0f,  -1.0f));
+  canvas_xy.push_back(vec2(1.0f,  1.0f));
 
-  vector<vec2> quad_uv;
-  quad_uv.push_back(vec2(0.0f,  1.0f));
-  quad_uv.push_back(vec2(0.0f,  0.0f));
-  quad_uv.push_back(vec2(1.0f,  0.0f));
-  quad_uv.push_back(vec2(0.0f,  1.0f));
-  quad_uv.push_back(vec2(1.0f,  0.0f));
-  quad_uv.push_back(vec2(1.0f,  1.0f));
+  vector<vec2> canvas_uv;
+  canvas_uv.push_back(vec2(0.0f,  1.0f));
+  canvas_uv.push_back(vec2(0.0f,  0.0f));
+  canvas_uv.push_back(vec2(1.0f,  0.0f));
+  canvas_uv.push_back(vec2(0.0f,  1.0f));
+  canvas_uv.push_back(vec2(1.0f,  0.0f));
+  canvas_uv.push_back(vec2(1.0f,  1.0f));
 
-  glGenVertexArrays(1, &quad_vao);
-  glBindVertexArray(quad_vao);
+  //Insert canvas vertices and uv inside gpu
+  glGenVertexArrays(1, &canvas_vao);
+  glBindVertexArray(canvas_vao);
 
-  glGenBuffers(1, &quad_vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-  glBufferData(GL_ARRAY_BUFFER, quad_xy.size()*sizeof(glm::vec2), &quad_xy[0], GL_STATIC_DRAW);
+  glGenBuffers(1, &canvas_vbo_xy);
+  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
+  glBufferData(GL_ARRAY_BUFFER, canvas_xy.size()*sizeof(glm::vec2), &canvas_xy[0], GL_STATIC_DRAW);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
   glEnableVertexAttribArray(0);
 
-  GLuint quad_vbo_uv;
-  glGenBuffers(1, &quad_vbo_uv);
-  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo_uv);
-  glBufferData(GL_ARRAY_BUFFER, quad_uv.size()*sizeof(glm::vec2), &quad_uv[0], GL_STATIC_DRAW);
+  GLuint canvas_vbo_uv;
+  glGenBuffers(1, &canvas_vbo_uv);
+  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_uv);
+  glBufferData(GL_ARRAY_BUFFER, canvas_uv.size()*sizeof(glm::vec2), &canvas_uv[0], GL_STATIC_DRAW);
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
   glEnableVertexAttribArray(2);
 
@@ -125,7 +132,7 @@ void Renderer::init_rendering_quad(){
 }
 
 //Render
-void Renderer::render_fbo_1(){
+void Renderer::render_fbo_screen(){
   //---------------------------
 
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
@@ -144,9 +151,9 @@ void Renderer::render_fbo_2(){
 
   //Set active textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, tex_color_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
   glActiveTexture(GL_TEXTURE0 + 1);
-  glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
 
   //---------------------------
 }
@@ -158,7 +165,7 @@ void Renderer::render_quad(){
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
 
   //Draw quad
-  glBindVertexArray(quad_vao);
+  glBindVertexArray(canvas_vao);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -317,9 +324,9 @@ void Renderer::update_texture(){
   //---------------------------
 
   //Update texture dimensions
-  glBindTexture(GL_TEXTURE_2D, tex_color_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glBindTexture(GL_TEXTURE_2D, tex_depth_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
   //---------------------------
@@ -344,17 +351,17 @@ void Renderer::update_quad(){
   tr.x = 1;
   tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
 
-  vector<vec2> quad_xy;
-  quad_xy.push_back(tl);
-  quad_xy.push_back(bl);
-  quad_xy.push_back(br);
+  vector<vec2> canvas_xy;
+  canvas_xy.push_back(tl);
+  canvas_xy.push_back(bl);
+  canvas_xy.push_back(br);
 
-  quad_xy.push_back(tl);
-  quad_xy.push_back(br);
-  quad_xy.push_back(tr);
+  canvas_xy.push_back(tl);
+  canvas_xy.push_back(br);
+  canvas_xy.push_back(tr);
 
-  glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-  glBufferData(GL_ARRAY_BUFFER, quad_xy.size() * sizeof(glm::vec2), &quad_xy[0],  GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
+  glBufferData(GL_ARRAY_BUFFER, canvas_xy.size() * sizeof(glm::vec2), &canvas_xy[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }

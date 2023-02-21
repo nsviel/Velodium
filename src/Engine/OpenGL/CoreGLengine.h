@@ -35,7 +35,7 @@ public:
   //Init opengl stuff
   void arg(int argc, char* argv[]);
   void init();
-  void init_OGL();
+  void init_opengl();
   void init_object();
   void init_rendering();
 

@@ -14,11 +14,11 @@ public:
   ~Renderer();
 
 public:
-  void init_rendering_fbo_1();
-  void init_rendering_fbo_2();
-  void init_rendering_quad();
+  void init_create_fbo_1();
+  void init_create_fbo_2();
+  void init_create_canvas();
 
-  void render_fbo_1();
+  void render_fbo_screen();
   void render_fbo_2();
   void render_quad();
 
@@ -40,13 +40,13 @@ private:
   Dimension* dimManager;
   Configuration* configManager;
 
-  GLuint quad_vao;
-  GLuint quad_vbo;
+  GLuint canvas_vao;
+  GLuint canvas_vbo_xy;
   GLuint fbo_1_ID;
+  GLuint fbo_1_tex_color_ID;
+  GLuint fbo_1_tex_depth_ID;
   GLuint fbo_2_ID;
-  GLuint tex_color_ID;
-  GLuint tex_depth_ID;
-  GLuint tex_edl_ID;
+  GLuint fbo_2_tex_edl_ID;
   GLuint pbo;
 
   vec4 screen_color;

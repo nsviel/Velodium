@@ -60,14 +60,46 @@ void CoreGLengine::arg(int argc, char* argv[]){
 void CoreGLengine::init(){
   //---------------------------
 
-  this->init_OGL();
+  this->init_opengl();
   this->init_object();
   this->init_rendering();
 
   //---------------------------
   console.AddLog("ok" ,"Program initialized...");
 }
-void CoreGLengine::init_OGL(){
+void CoreGLengine::loop(){
+  //---------------------------
+
+  do{
+    auto t1 = high_resolution_clock::now();
+
+    //First pass
+    //---------------------------
+    this->loop_pass_1();
+    this->loop_drawScene();
+    this->loop_selection();
+
+    //Second pass
+    //---------------------------
+    this->loop_pass_2();
+    this->loop_drawScreen();
+
+    //GUI and end
+    //---------------------------
+    this->loop_gui();
+    this->loop_end();
+
+    //Time loop
+    auto t2 = high_resolution_clock::now();
+    this->time_loop = duration_cast<milliseconds>(t2 - t1).count();
+  }
+  while(openglRunning);
+
+  //---------------------------
+}
+
+// Initialization stuff
+void CoreGLengine::init_opengl(){
   //---------------------------
 
   //Parametrization
@@ -121,44 +153,15 @@ void CoreGLengine::init_object(){
 void CoreGLengine::init_rendering(){
   //---------------------------
 
-  renderManager->init_rendering_fbo_1();
-  renderManager->init_rendering_fbo_2();
-  renderManager->init_rendering_quad();
-  shaderManager->init();
+  renderManager->init_create_fbo_1();
+  renderManager->init_create_fbo_2();
+  renderManager->init_create_canvas();
+  shaderManager->init_shader();
 
   //---------------------------
 }
 
-void CoreGLengine::loop(){
-  //---------------------------
-
-  do{
-    auto t1 = high_resolution_clock::now();
-
-    //First pass
-    //---------------------------
-    this->loop_pass_1();
-    this->loop_drawScene();
-    this->loop_selection();
-
-    //Second pass
-    //---------------------------
-    this->loop_pass_2();
-    this->loop_drawScreen();
-
-    //GUI and end
-    //---------------------------
-    this->loop_gui();
-    this->loop_end();
-
-    //Time loop
-    auto t2 = high_resolution_clock::now();
-    this->time_loop = duration_cast<milliseconds>(t2 - t1).count();
-  }
-  while(openglRunning);
-
-  //---------------------------
-}
+// Loop scene stuff
 void CoreGLengine::loop_gui(){
   //---------------------------
 
@@ -177,6 +180,17 @@ void CoreGLengine::loop_selection(){
 
   //---------------------------
 }
+void CoreGLengine::loop_drawScene(){
+  //---------------------------
+
+  viewportManager->viewport_update(0);
+  cameraManager->input_cam_mouse();
+  node_engine->runtime();
+
+  //---------------------------
+}
+
+// Loop rendering stuff
 void CoreGLengine::loop_pass_1(){
   dimManager->update();
   //---------------------------
@@ -185,17 +199,17 @@ void CoreGLengine::loop_pass_1(){
   this->flag_resized = dimManager->get_is_resized();
   if(flag_resized){
     renderManager->update_texture();
-    shaderManager->update();
+    shaderManager->update_shader();
   }
 
-  //Set FBO
-  renderManager->render_fbo_1();
+  //Set screen space FBO
+  renderManager->render_fbo_screen();
 
   //Set active shader
-  shaderManager->use("scene");
+  shaderManager->use("screen");
   mat4 mvp = cameraManager->compute_cam_mvp();
-  ShaderObject* shader_scene = shaderManager->get_shader_scene();
-  shader_scene->setMat4("MVP", mvp);
+  ShaderObject* shader_screen = shaderManager->get_shader_screen();
+  shader_screen->setMat4("MVP", mvp);
 
   //---------------------------
 }
@@ -206,16 +220,7 @@ void CoreGLengine::loop_pass_2(){
   renderManager->render_fbo_2();
 
   //Set active shader
-  shaderManager->use("screen");
-
-  //---------------------------
-}
-void CoreGLengine::loop_drawScene(){
-  //---------------------------
-
-  viewportManager->viewport_update(0);
-  cameraManager->input_cam_mouse();
-  node_engine->runtime();
+  shaderManager->use("render");
 
   //---------------------------
 }

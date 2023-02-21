@@ -1,12 +1,19 @@
 #version 330 core
 
-layout (location = 0) in vec2 in_position;
-layout (location = 2) in vec2 in_tex_coord;
+layout(location = 0) in vec3 in_position;
+layout(location = 1) in vec4 in_color;
 
-out vec2 tex_coordinate;
+uniform mat4 MVP;
+
+out vec4 color_vertex;
 
 void main()
 {
-  gl_Position = vec4(in_position.x, in_position.y, 0.0, 1.0);
-  tex_coordinate = in_tex_coord;
+  //Location
+  vec4 XYZ = vec4(in_position, 1.0);
+  gl_Position = MVP * XYZ;
+
+
+  //Color
+  color_vertex = in_color;
 }

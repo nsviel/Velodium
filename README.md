@@ -1,9 +1,9 @@
 # Velodium
-**Open Source 3D Point Cloud Software**
+**Open Source 3D Point Cloud Processing Software**
 
 ## Summary
 
-LiDAR (Light Detection and Ranging) sensors give huge amount of data, which generally need a variety of post-processing actions. These data are 3D point cloud containing the spatial coordinates and additional information like color or intensity of a numerous set of measures. Generally, the main use of these point clouds is the construction of a numerical 3D model of a real scene.
+LiDAR (Light Detection and Ranging) sensors give huge amount of data, which generally need a variety of post-processing actions. These data are 3D point cloud containing the spatial coordinates and additional information like color or intensity of a numerous set of measures. Generally, the main use of these point clouds is the construction of a numerical 3D model of a real scene. This software proposes an alternative point cloud processing framework which permits to work on static and dynamic point clouds from different formats.
 
 ## Characteristics
 
@@ -48,7 +48,9 @@ Compile the executable:
  mkdir build && cd build && cmake .. && make -j4
 ```
 
+</details>
 <details><summary>Execution</summary>
+
 To start the program run:
 ```
 ./executable
@@ -62,4 +64,5 @@ Some arguments could be added:
 - load + absolute_path    [Load a cloud at start]
 
 ```
+
 </details>
