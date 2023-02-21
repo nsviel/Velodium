@@ -3,9 +3,9 @@
 #include "IconsFontAwesome5.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/OpenGL/Shader/Shader.h"
-#include "../../../Engine/OpenGL/Shader/ShaderObject.h"
-#include "../../../Engine/OpenGL/Shader/PP_edl.h"
+#include "../../../Engine/Shader/Shader.h"
+#include "../../../Engine/Shader/src/Shader_object.h"
+#include "../../../Engine/Shader/src/Shader_edl.h"
 
 #include <fstream>
 
@@ -51,21 +51,21 @@ void MOD_shader::parameter(){
   ImGui::SetNextItemWidth(item_width);
   bool* with_edl = edlManager->get_with_edl();
   if(ImGui::Checkbox("EDL shader", with_edl)){
-    ShaderObject* shader_render = shaderManager->get_shader_render();
+    Shader_object* shader_render = shaderManager->get_shader_render();
     edlManager->setup_edl(shader_render->get_program_ID());
   }
 
   ImGui::SetNextItemWidth(item_width);
   float* edl_radius = edlManager->get_edl_radius();
   if(ImGui::SliderFloat("EDL radius", edl_radius, 1.0f, 3.0f)){
-    ShaderObject* shader_render = shaderManager->get_shader_render();
+    Shader_object* shader_render = shaderManager->get_shader_render();
     edlManager->setup_edl(shader_render->get_program_ID());
   }
 
   ImGui::SetNextItemWidth(item_width);
   float* edl_strength = edlManager->get_edl_strength();
   if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 5000.0f)){
-    ShaderObject* shader_render = shaderManager->get_shader_render();
+    Shader_object* shader_render = shaderManager->get_shader_render();
     edlManager->setup_edl(shader_render->get_program_ID());
   }
 

@@ -10,7 +10,7 @@
 #include "Core/Dimension.h"
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Renderer.h"
-#include "OpenGL/Shader/Shader.h"
+#include "Shader/Shader.h"
 
 #include "Camera/Camera.h"
 #include "Camera/Followup.h"

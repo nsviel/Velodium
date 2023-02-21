@@ -1,10 +1,10 @@
-#include "PP_edl.h"
+#include "Shader_edl.h"
 
 #include "../../Core/Dimension.h"
 
 
 
-PP_edl::PP_edl(Dimension* dim){
+Shader_edl::Shader_edl(Dimension* dim){
   //---------------------------
 
   this->dimManager = dim;
@@ -18,9 +18,9 @@ PP_edl::PP_edl(Dimension* dim){
 
   //---------------------------
 }
-PP_edl::~PP_edl(){}
+Shader_edl::~Shader_edl(){}
 
-void PP_edl::setup_edl(GLuint program_ID){
+void Shader_edl::setup_edl(GLuint program_ID){
   glUseProgram(program_ID);
   //---------------------------
 
@@ -55,7 +55,7 @@ void PP_edl::setup_edl(GLuint program_ID){
 
   //---------------------------
 }
-void PP_edl::setup_textures(GLuint tex_color, GLuint tex_depth){
+void Shader_edl::setup_textures(GLuint tex_color, GLuint tex_depth){
   this->tex_color_ID = tex_color;
   this->tex_depth_ID = tex_depth;
 }

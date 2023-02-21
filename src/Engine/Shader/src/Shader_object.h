@@ -4,11 +4,11 @@
 #include "../../../common.h"
 
 
-class ShaderObject
+class Shader_object
 {
 public:
-  ShaderObject(string vertex, string fragment);
-  ~ShaderObject();
+  Shader_object(string vertex, string fragment);
+  ~Shader_object();
 
 public:
   void use();

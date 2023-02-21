@@ -5,7 +5,7 @@
 
 class Node_engine;
 class Shader;
-class PP_edl;
+class Shader_edl;
 
 
 class MOD_shader
@@ -24,7 +24,7 @@ public:
 
 private:
   Shader* shaderManager;
-  PP_edl* edlManager;
+  Shader_edl* edlManager;
 
   int item_width;
 };

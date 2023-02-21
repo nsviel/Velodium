@@ -6,11 +6,11 @@
 class Dimension;
 
 
-class PP_edl
+class Shader_edl
 {
 public:
-  PP_edl(Dimension* dim);
-  ~PP_edl();
+  Shader_edl(Dimension* dim);
+  ~Shader_edl();
 
   void setup_edl(GLuint program_ID);
   void setup_textures(GLuint tex_color, GLuint tex_depth);

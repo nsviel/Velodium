@@ -1,10 +1,10 @@
-#include "ShaderObject.h"
+#include "Shader_object.h"
 
 #include <fstream>
 
 
 //Constructor / Destructor
-ShaderObject::ShaderObject(string vertex_path, string fragme_path){
+Shader_object::Shader_object(string vertex_path, string fragme_path){
 	//---------------------------
 
 	// Create the shaders program
@@ -25,7 +25,7 @@ ShaderObject::ShaderObject(string vertex_path, string fragme_path){
 
 	//---------------------------
 }
-ShaderObject::~ShaderObject(){
+Shader_object::~Shader_object(){
 	//---------------------------
 
 	glDeleteProgram(ID_program);
@@ -33,14 +33,14 @@ ShaderObject::~ShaderObject(){
 	//---------------------------
 }
 
-void ShaderObject::use(){
+void Shader_object::use(){
 	//---------------------------
 
 	glUseProgram(ID_program);
 
 	//---------------------------
 }
-void ShaderObject::build_shader(GLuint& ID_program, string path_vs, string path_fs){
+void Shader_object::build_shader(GLuint& ID_program, string path_vs, string path_fs){
 	string path_gs = "../src/Engine/Shader/shader_scene.gs";
 	//---------------------------
 
@@ -65,11 +65,11 @@ void ShaderObject::build_shader(GLuint& ID_program, string path_vs, string path_
 
 	//---------------------------
 }
-GLuint ShaderObject::shader_compilation(string file_path, GLenum shaderType){
+GLuint Shader_object::shader_compilation(string file_path, GLenum shaderType){
 	GLuint shaderID = glCreateShader(shaderType);
 	//---------------------------
 
-	//Read ShaderObject
+	//Read Shader_object
 	std::ifstream shaderStream(file_path.c_str(), std::ios::in);
 	string shaderCode;
 	if(shaderStream.is_open()){
@@ -79,7 +79,7 @@ GLuint ShaderObject::shader_compilation(string file_path, GLenum shaderType){
 		shaderStream.close();
 	}
 
-	//Compile ShaderObject
+	//Compile Shader_object
 	int success, InfoLogLength;
 	char const* sourcePointer = shaderCode.c_str();
 	glShaderSource(shaderID, 1, &sourcePointer , NULL);

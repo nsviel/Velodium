@@ -1,9 +1,8 @@
 #include "CoreGLengine.h"
 #include "Renderer.h"
 
-#include "Shader/Shader.h"
-#include "Shader/ShaderObject.h"
-
+#include "../Shader/Shader.h"
+#include "../Shader/src/Shader_object.h"
 #include "../Camera/Camera.h"
 #include "../Camera/Viewport.h"
 #include "../Node_engine.h"
@@ -208,7 +207,7 @@ void CoreGLengine::loop_pass_1(){
   //Set active shader
   shaderManager->use("screen");
   mat4 mvp = cameraManager->compute_cam_mvp();
-  ShaderObject* shader_screen = shaderManager->get_shader_screen();
+  Shader_object* shader_screen = shaderManager->get_shader_screen();
   shader_screen->setMat4("MVP", mvp);
 
   //---------------------------
