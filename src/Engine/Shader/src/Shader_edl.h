@@ -13,7 +13,6 @@ public:
   ~Shader_edl();
 
   void setup_edl(GLuint program_ID);
-  void setup_textures(GLuint tex_color, GLuint tex_depth);
 
   inline bool* get_with_edl(){return &with_edl;}
   inline float* get_edl_strength(){return &edl_strength;}
@@ -25,15 +24,12 @@ public:
 private:
   Dimension* dimManager;
 
-  GLuint tex_color_ID;
-  GLuint tex_depth_ID;
-
-  bool with_edl;
   float edl_strength;
   float edl_distance;
   float edl_radius;
   float clip_far;
   float clip_near;
+  bool with_edl;
 };
 
 #endif

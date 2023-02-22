@@ -343,10 +343,6 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   if(is_color) data_out->color.resize(point_number, vec4(0,0,0,0));
   data_out->size = point_number;
 
-  sayVec(property_name);
-  sayVec(property_type);
-  say(property_number);
-
   //Insert data in the adequate vector
   //#pragma omp parallel for
   for (int i=0; i<point_number; i++){

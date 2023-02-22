@@ -8,6 +8,7 @@ class Shader_object
 {
 public:
   Shader_object(string vertex, string fragment);
+  Shader_object(string vertex, string fragment, string path_gs);
   ~Shader_object();
 
 public:

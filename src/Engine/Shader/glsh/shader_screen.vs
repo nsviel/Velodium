@@ -13,7 +13,6 @@ void main()
   vec4 XYZ = vec4(in_position, 1.0);
   gl_Position = MVP * XYZ;
 
-
   //Color
   color_vertex = in_color;
 }

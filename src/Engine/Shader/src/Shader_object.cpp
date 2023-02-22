@@ -4,15 +4,15 @@
 
 
 //Constructor / Destructor
-Shader_object::Shader_object(string vertex_path, string fragme_path){
+Shader_object::Shader_object(string path_vs, string path_fs){
 	//---------------------------
 
 	// Create the shaders program
 	ID_program = glCreateProgram();
 
 	// Compile & check Shaders-
-	GLuint vs = shader_compilation(vertex_path, GL_VERTEX_SHADER);
-	GLuint fs = shader_compilation(fragme_path, GL_FRAGMENT_SHADER);
+	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
+	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
 
 	//Link program
 	glLinkProgram(ID_program);
@@ -22,6 +22,30 @@ Shader_object::Shader_object(string vertex_path, string fragme_path){
 	glDeleteShader(vs);
 	glDetachShader(ID_program, fs);
 	glDeleteShader(fs);
+
+	//---------------------------
+}
+Shader_object::Shader_object(string path_vs, string path_fs, string path_gs){
+	//---------------------------
+
+	// Create the shaders program
+	ID_program = glCreateProgram();
+
+	// Compile & check Shaders-
+	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
+	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
+	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER);
+
+	//Link program
+	glLinkProgram(ID_program);
+
+	//Detach shaders for keep memory ressources
+	glDetachShader(ID_program, vs);
+	glDeleteShader(vs);
+	glDetachShader(ID_program, fs);
+	glDeleteShader(fs);
+	glDetachShader(ID_program, gs);
+	glDeleteShader(gs);
 
 	//---------------------------
 }

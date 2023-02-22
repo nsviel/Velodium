@@ -28,7 +28,6 @@ private:
   string shader_dir;
   Shader_object* shader_screen;
   Shader_object* shader_render;
-
 };
 
 #endif

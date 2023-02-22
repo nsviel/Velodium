@@ -20,23 +20,19 @@ uniform int GL_HEIGHT;
 //FUNCTION 1 - Compute normalized depth
 float compute_depth_normalized(float depth){
   // depth: Linear depth, in world units
-  float depth_norm = 0.5 * (-A * depth + B) / depth + 0.5;
+  float depth_norm = 0.5 * (A * depth + B) / depth + 0.5;
   // depth_norm: normalized depth between [0, 1]
   return depth_norm;
 }
 
 //FUNCTION 2 - Compute neighbor influence
 vec2 neighbor_contribution(float depth_norm, vec2 offset) {
-  // get depth at texture specified coordinate
+  // get normalized depth at texture offseted coordinate
   vec2 NN_coord = frag_tex_coord + offset;
-  float depth_NN = texture(tex_depth, NN_coord).r;
-
-  if (depth_NN == 0.0){
-    return vec2(0.0);
-  }
+  vec4 depth_NN_rgba = texture(tex_depth, NN_coord);
+  float depth_NN_norm = compute_depth_normalized(depth_NN_rgba.r);
 
   // interpolate the two adjacent depth values
-  float depth_NN_norm = compute_depth_normalized(depth_NN);
   float NN_contrib = max(0.0, log2(depth_norm) - log2(depth_NN_norm));
 
   return vec2(NN_contrib, 1.0);
@@ -45,13 +41,13 @@ vec2 neighbor_contribution(float depth_norm, vec2 offset) {
 //MAIN FUNCTION
 void main()
 {
-  vec4 color = texture(tex_color, frag_tex_coord);
+  vec4 color_rgba = texture(tex_color, frag_tex_coord);
 
   if(EDL_ON){
 
     // Build the Depth
-    float depth_buffer = texture(tex_depth, frag_tex_coord).r;
-    float depth_norm = compute_depth_normalized(depth_buffer);
+    vec4 depth_rgba = texture(tex_depth, frag_tex_coord);
+    float depth_norm = compute_depth_normalized(depth_rgba.r);
 
     //Check neighborhood influence
     vec2 texel_size = EDL_RADIUS / vec2(GL_WIDTH, GL_HEIGHT);
@@ -61,14 +57,13 @@ void main()
     NN_response += neighbor_contribution(depth_norm, vec2(0.0, -texel_size.y));
     NN_response += neighbor_contribution(depth_norm, vec2(0.0, +texel_size.y));
 
-    // Build the Eye Dome Lighting effect PostProcessing
+    // Build the Eye Dome Lighting effect
     float depth_response = NN_response.x / NN_response.y;
-    float shade = exp(-depth_response * 300.0 * EDL_STRENGTH);
+    float shade = exp(-depth_response * 1500.0 * EDL_STRENGTH);
 
-    color.rgb *= shade;
-
+    color_rgba.rgb *= shade;
   }
 
-  frag_color = vec4(color);
+  frag_color = vec4(color_rgba);
 
 }

@@ -139,6 +139,7 @@ void Renderer::bind_fbo_screen(){
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
 
   //---------------------------
 }

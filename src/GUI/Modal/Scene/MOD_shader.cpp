@@ -64,7 +64,7 @@ void MOD_shader::parameter(){
 
   ImGui::SetNextItemWidth(item_width);
   float* edl_strength = edlManager->get_edl_strength();
-  if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 5000.0f)){
+  if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 1000.0f)){
     Shader_object* shader_render = shaderManager->get_shader_render();
     edlManager->setup_edl(shader_render->get_program_ID());
   }

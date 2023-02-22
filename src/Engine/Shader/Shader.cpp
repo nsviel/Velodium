@@ -34,8 +34,8 @@ void Shader::init_shader(){
 	string path_render_vs = "../src/Engine/Shader/glsh/shader_edl.vs";
 	string path_render_fs = "../src/Engine/Shader/glsh/shader_edl.fs";
 
-	shader_screen = new Shader_object(path_screen_vs, path_screen_fs);
-	shader_render = new Shader_object(path_render_vs, path_render_fs);
+	this->shader_screen = new Shader_object(path_screen_vs, path_screen_fs);
+	this->shader_render = new Shader_object(path_render_vs, path_render_fs);
 
 	edlManager->setup_edl(shader_render->get_program_ID());
 
