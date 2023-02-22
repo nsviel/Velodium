@@ -47,7 +47,7 @@ CoreGLengine::~CoreGLengine(){
   //---------------------------
 }
 
-//Init opengl stuff
+//Opengl stuff
 void CoreGLengine::arg(int argc, char* argv[]){
   Argument argManager(node_engine);
   //---------------------------
@@ -75,13 +75,13 @@ void CoreGLengine::loop(){
     //First pass
     //---------------------------
     this->loop_pass_1();
-    this->loop_drawScene();
+    this->loop_draw_scene();
     this->loop_selection();
 
     //Second pass
     //---------------------------
     this->loop_pass_2();
-    this->loop_drawScreen();
+    this->loop_draw_canvas();
 
     //GUI and end
     //---------------------------
@@ -179,7 +179,7 @@ void CoreGLengine::loop_selection(){
 
   //---------------------------
 }
-void CoreGLengine::loop_drawScene(){
+void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
   viewportManager->viewport_update(0);
@@ -197,15 +197,15 @@ void CoreGLengine::loop_pass_1(){
   //Update things
   this->flag_resized = dimManager->get_is_resized();
   if(flag_resized){
-    renderManager->update_texture();
+    renderManager->update_dim_texture();
     shaderManager->update_shader();
   }
 
   //Set screen space FBO
-  renderManager->render_fbo_screen();
+  renderManager->bind_fbo_screen();
 
   //Set active shader
-  shaderManager->use("screen");
+  shaderManager->use_shader("screen");
   mat4 mvp = cameraManager->compute_cam_mvp();
   Shader_object* shader_screen = shaderManager->get_shader_screen();
   shader_screen->setMat4("MVP", mvp);
@@ -216,28 +216,27 @@ void CoreGLengine::loop_pass_2(){
   //---------------------------
 
   //Framebuffer pass 2
-  renderManager->render_fbo_2();
+  renderManager->bind_fbo_render();
 
   //Set active shader
-  shaderManager->use("render");
+  shaderManager->use_shader("render");
 
   //---------------------------
 }
-void CoreGLengine::loop_drawScreen(){
+void CoreGLengine::loop_draw_canvas(){
   //---------------------------
 
   //Viewport
   vec2 win_dim = dimManager->get_win_dim();
   glViewport(0, 0, win_dim[0], win_dim[1]);
 
-  //Update OpenGL quad window
+  //If window resizing, update canvas size
   if(flag_resized){
-    renderManager->update_quad();
+    renderManager->update_dim_canvas();
   }
+
   //Draw screen quad
-  else{
-    renderManager->render_quad();
-  }
+  renderManager->bind_canvas();
 
   //---------------------------
 }

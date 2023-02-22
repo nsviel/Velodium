@@ -32,21 +32,25 @@ public:
   ~CoreGLengine();
 
 public:
-  //Init opengl stuff
+  //Opengl stuff
   void arg(int argc, char* argv[]);
   void init();
+  void loop();
+
+  // Initialization stuff
   void init_opengl();
   void init_object();
   void init_rendering();
 
-  //GL loop
-  void loop();
+  // Loop scene stuff
   void loop_gui();
   void loop_selection();
+  void loop_draw_scene();
+
+  // Loop rendering stuff
   void loop_pass_1();
   void loop_pass_2();
-  void loop_drawScene();
-  void loop_drawScreen();
+  void loop_draw_canvas();
   void loop_end();
 
   inline GLFWwindow* get_window(){return window;}

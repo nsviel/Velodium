@@ -18,9 +18,12 @@ public:
   void init_create_fbo_2();
   void init_create_canvas();
 
-  void render_fbo_screen();
-  void render_fbo_2();
-  void render_quad();
+  void bind_fbo_screen();
+  void bind_fbo_render();
+  void bind_canvas();
+
+  void update_dim_texture();
+  void update_dim_canvas();
 
   void render_screenshot(string path);
   void render_screenshot_stb_image(string path);
@@ -28,11 +31,8 @@ public:
   void render_screenshot_freeimage(string path);
   void render_screenshot_online();
 
-  void update_texture();
-  void update_quad();
-
   inline vec4* get_screen_color(){return &screen_color;}
-  inline string* get_save_path(){return &save_path;}
+  inline string* get_save_path(){return &save_path_screenshot;}
   inline bool* get_is_screenshot(){return &is_screenshot;}
   inline float get_time_screenshot(){return time_screenshot;}
 
@@ -47,13 +47,12 @@ private:
   GLuint fbo_1_tex_depth_ID;
   GLuint fbo_2_ID;
   GLuint fbo_2_tex_edl_ID;
-  GLuint pbo;
+  GLuint pbo_screenshot;
 
   vec4 screen_color;
   float time_screenshot;
-  string save_path;
+  string save_path_screenshot;
   bool is_screenshot;
-  bool with_fullscreen;
 };
 
 #endif

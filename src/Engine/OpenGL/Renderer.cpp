@@ -24,9 +24,8 @@ Renderer::Renderer(Dimension* dim){
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
-  this->with_fullscreen = true;
   this->is_screenshot = false;
-  glGenBuffers(1 , &pbo);
+  this->save_path_screenshot = "";
 
   //---------------------------
 }
@@ -132,9 +131,10 @@ void Renderer::init_create_canvas(){
 }
 
 //Render
-void Renderer::render_fbo_screen(){
+void Renderer::bind_fbo_screen(){
   //---------------------------
 
+  //Clear framebuffer and enable depth
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,14 +142,14 @@ void Renderer::render_fbo_screen(){
 
   //---------------------------
 }
-void Renderer::render_fbo_2(){
+void Renderer::bind_fbo_render(){
   //---------------------------
 
-  //Set FBO
+  //Bind fbo 2
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
   glDisable(GL_DEPTH_TEST);
 
-  //Set active textures
+  //Bind color and depth textures from fbo 1
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
   glActiveTexture(GL_TEXTURE0 + 1);
@@ -157,10 +157,10 @@ void Renderer::render_fbo_2(){
 
   //---------------------------
 }
-void Renderer::render_quad(){
+void Renderer::bind_canvas(){
   //---------------------------
 
-  //Set FBO
+  //Binf fbo and clear old
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
 
@@ -168,6 +168,54 @@ void Renderer::render_quad(){
   glBindVertexArray(canvas_vao);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  //---------------------------
+}
+
+//Update dimensions
+void Renderer::update_dim_texture(){
+  vec2 gl_dim = dimManager->get_gl_dim();
+  //---------------------------
+
+  //Update texture dimensions
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
+  //---------------------------
+}
+void Renderer::update_dim_canvas(){
+  //---------------------------
+
+  vec2 gl_pos = dimManager->get_gl_pos();
+  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 win_dim = dimManager->get_win_dim();
+
+  vec2 tl, br, tr, bl;
+  bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
+  bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+
+  br.x = 1;
+  br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+
+  tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
+  tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+
+  tr.x = 1;
+  tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+
+  vector<vec2> canvas_xy;
+  canvas_xy.push_back(tl);
+  canvas_xy.push_back(bl);
+  canvas_xy.push_back(br);
+
+  canvas_xy.push_back(tl);
+  canvas_xy.push_back(br);
+  canvas_xy.push_back(tr);
+
+  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
+  glBufferData(GL_ARRAY_BUFFER, canvas_xy.size() * sizeof(glm::vec2), &canvas_xy[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }
@@ -248,9 +296,15 @@ void Renderer::render_screenshot_stb_image(string path){
 }
 void Renderer::render_screenshot_pbo(string path){
   GLFWwindow* window = dimManager->get_window();
+  static bool first_screenshot = true;
   //---------------------------
 
   if(window != nullptr){
+    if(first_screenshot){
+      glGenBuffers(1 , &pbo_screenshot);
+      first_screenshot = false;
+    }
+
     vec2 gl_dim = dimManager->get_gl_dim();
     vec2 gl_pos = dimManager->get_gl_pos();
 
@@ -258,7 +312,7 @@ void Renderer::render_screenshot_pbo(string path){
     uint8_t* pixels = new uint8_t[pbo_size];
 
     glReadBuffer(GL_BACK);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo_screenshot);
     glReadPixels(0, 0, gl_dim.x, gl_dim.y, GL_RGB, GL_UNSIGNED_BYTE, 0);
     void*buffer_ptr = glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, pbo_size, GL_MAP_READ_BIT);
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
@@ -305,63 +359,15 @@ void Renderer::render_screenshot_freeimage(string path){
   //---------------------------
 }
 void Renderer::render_screenshot_online(){
-  if(is_screenshot){
+  if(is_screenshot && save_path_screenshot != ""){
     auto t1 = std::chrono::high_resolution_clock::now();
     //---------------------------
 
-    this->render_screenshot(save_path);
+    this->render_screenshot(save_path_screenshot);
     this->is_screenshot = false;
 
     //---------------------------
     auto t2 = std::chrono::high_resolution_clock::now();
     this->time_screenshot = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
   }
-}
-
-//Update
-void Renderer::update_texture(){
-  vec2 gl_dim = dimManager->get_gl_dim();
-  //---------------------------
-
-  //Update texture dimensions
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-
-  //---------------------------
-}
-void Renderer::update_quad(){
-  //---------------------------
-
-  vec2 gl_pos = dimManager->get_gl_pos();
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 win_dim = dimManager->get_win_dim();
-
-  vec2 tl, br, tr, bl;
-  bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-
-  br.x = 1;
-  br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-
-  tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
-
-  tr.x = 1;
-  tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
-
-  vector<vec2> canvas_xy;
-  canvas_xy.push_back(tl);
-  canvas_xy.push_back(bl);
-  canvas_xy.push_back(br);
-
-  canvas_xy.push_back(tl);
-  canvas_xy.push_back(br);
-  canvas_xy.push_back(tr);
-
-  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
-  glBufferData(GL_ARRAY_BUFFER, canvas_xy.size() * sizeof(glm::vec2), &canvas_xy[0],  GL_DYNAMIC_DRAW);
-
-  //---------------------------
 }

@@ -17,7 +17,7 @@ public:
 public:
   void init_shader();
   void update_shader();
-  void use(string shader_name);
+  void use_shader(string shader_name);
 
   inline Shader_object* get_shader_screen(){return shader_screen;}
   inline Shader_object* get_shader_render(){return shader_render;}

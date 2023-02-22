@@ -48,7 +48,7 @@ void Shader::update_shader(){
 
 	//---------------------------
 }
-void Shader::use(string shader_name){
+void Shader::use_shader(string shader_name){
 	//---------------------------
 
 	if(shader_name == "screen"){
