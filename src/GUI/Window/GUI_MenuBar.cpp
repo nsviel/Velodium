@@ -274,6 +274,9 @@ void GUI_menuBar::MenuBar_Operations(){
   if(ImGui::Button("Transformation", ImVec2(150,0))){
     modal_tab.show_transformation = !modal_tab.show_transformation;
   }
+  if(ImGui::Button("Texture", ImVec2(150,0))){
+    modal_tab.show_texture = !modal_tab.show_texture;
+  }
 
   //---------------------------
 }

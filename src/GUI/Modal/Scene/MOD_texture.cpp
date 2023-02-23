@@ -1,0 +1,52 @@
+#include "MOD_texture.h"
+
+#include "../../../Engine/Node_engine.h"
+#include "../../../Engine/OpenGL/Texture.h"
+#include "../../../Engine/Scene/Scene.h"
+
+#include "../Modal_tab.h"
+extern struct Modal_tab modal_tab;
+
+
+//Constructor / Destructor
+MOD_texture::MOD_texture(Node_engine* node_engine){
+  //---------------------------
+
+  this->texManager = node_engine->get_texManager();
+  this->sceneManager = node_engine->get_sceneManager();
+
+  this->item_width = 150;
+
+  //---------------------------
+}
+MOD_texture::~MOD_texture(){}
+
+//Main function
+void MOD_texture::window_texture(){
+  bool* open = &modal_tab.show_texture;
+  if(*open){
+    ImGui::Begin("Texture manager", open, ImGuiWindowFlags_AlwaysAutoResize);
+    //---------------------------
+
+    this->texture_operation();
+
+    //---------------------------
+    ImGui::Separator();
+    if(ImGui::Button("Close")){
+      *open = false;
+    }
+    ImGui::End();
+  }
+}
+void MOD_texture::texture_operation(){
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  Subset* subset = cloud->subset_selected;
+  //---------------------------
+
+  //Apply texture on selected subset
+  if(ImGui::Button("Apply texture", ImVec2(item_width, 0))){
+    texManager->apply_texture(subset, "");
+  }
+
+  //---------------------------
+}

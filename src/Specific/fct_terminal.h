@@ -31,6 +31,11 @@ namespace{
   void sayVec3(Eigen::Vector3d truc){
     std::cout<< "-> " << truc(0) <<" "<< truc(1) <<" "<< truc(2) <<std::endl;
   }
+  void sayVecVec2(std::vector<glm::vec2> truc){
+    for(int i=0; i<truc.size(); i++){
+      std::cout<<"line."<<i<<" -> "<< truc[i].x <<" "<< truc[i].y <<std::endl;
+    }
+  }
   void sayVecVec3(std::vector<glm::vec3> truc){
     for(int i=0; i<truc.size(); i++){
       std::cout<<"line."<<i<<" -> "<< truc[i].x <<" "<< truc[i].y <<" "<< truc[i].z <<std::endl;

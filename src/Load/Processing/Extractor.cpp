@@ -57,6 +57,7 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
     this->extract_color(subset, data[i]->color);
     this->extract_normal(subset, data[i]->normal);
     this->extract_timestamp(subset, data[i]->timestamp);
+    this->extract_texture(subset, data[i]->texture);
 
     //Create associated glyphs
     objectManager->create_glyph_subset(subset);
@@ -198,9 +199,13 @@ void Extractor::check_data(Data_file* data){
     }
   }
   //---> if no color or intensity data
-  else{
+  else if(data->texture.size() == 0){
     for(int i=0; i<data->location.size(); i++){
       data->color.push_back(color_rdm);
+    }
+  }else{
+    for(int i=0; i<data->location.size(); i++){
+      data->color.push_back(vec4(1, 1, 1, 1));
     }
   }
 
@@ -323,6 +328,7 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   subset->has_color = false;
   subset->has_timestamp = false;
   subset->has_intensity = false;
+  subset->has_texture = false;
 
   // Structure
   subset->frame.reset();
@@ -434,10 +440,11 @@ void Extractor::extract_texture(Subset* subset, vector<vec2>& vec_tex){
     glGenBuffers(1, &vbo_texture);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_texture);
     glBufferData(GL_ARRAY_BUFFER, vec_tex.size()*sizeof(glm::vec2), &vec_tex[0], GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-
-    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
     glEnableVertexAttribArray(2);
+
+    subset->has_texture = true;
+    subset->texture_ID = 1;
   }
 
   //---------------------------

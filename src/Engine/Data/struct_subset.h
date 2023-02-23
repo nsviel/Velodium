@@ -33,6 +33,7 @@ struct Subset{ //Cloud subset / part
   bool has_intensity;
   bool has_normal;
   bool has_timestamp;
+  bool has_texture;
 
   //Main data
   std::vector<glm::vec3> xyz;
@@ -50,6 +51,10 @@ struct Subset{ //Cloud subset / part
   std::vector<float> It;
   std::vector<int> selected;
   std::list<int> highlighted;
+
+  //Texture
+  int texture_ID;
+  std::vector<glm::vec2> uv;
 
   //Pose
   glm::vec3 min;

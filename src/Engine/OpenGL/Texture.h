@@ -27,8 +27,8 @@ public:
 public:
   //Texture management
   bool load_texture(string filePath, string name);
-  void add_texture_to_gpu();
-  
+  void apply_texture(Subset* subset, string tex_path);
+
   //void skybox(vec3 camPos);
   //void init_skybox();
   //unsigned int loadCubemap(vector<string> faces);
@@ -42,6 +42,7 @@ private:
   string Name;
   int width = 0;
   int height = 0;
+  GLuint tex_ID;
 };
 
 #endif

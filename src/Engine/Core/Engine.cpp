@@ -68,6 +68,7 @@ void Engine::runtime_draw_cloud(){
   glBindVertexArray(0);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(2);
 }
 void Engine::runtime_draw_glyph(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -114,7 +115,14 @@ void Engine::draw_mesh(Subset* subset, string draw_type){
   //---------------------------
 
   if(subset->visibility){
-    // Bind the glyph VAO
+    // If any, activate attached texture
+    if(subset->has_texture){
+      glActiveTexture(GL_TEXTURE0);
+      glEnableVertexAttribArray(2);
+      glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
+    }
+
+    // Bind the glyph VAO and draw data
     glBindVertexArray(subset->VAO);
     if(draw_type == "point"){
       glDrawArrays(GL_POINTS, 0, subset->xyz.size());
@@ -144,6 +152,11 @@ void Engine::draw_mesh(Subset* subset, string draw_type){
       glDrawArrays(GL_POINTS, 0, subset->xyz.size());
     }
     glBindVertexArray(0);
+
+    //Desactivate texture
+    if(subset->has_texture){
+      glBindTexture(GL_TEXTURE_2D, 2);
+    }
   }
 
   //---------------------------

@@ -15,21 +15,21 @@ Texture::Texture(){
 Texture::~Texture(){}
 
 //Texture management
-bool Texture::load_texture(string filePath, string name){
+bool Texture::load_texture(string path, string name){
   int tex_w = 0;
   int tex_h = 0;
   int tex_nb_channel = 0;
   //---------------------------
 
   // Load from file
-  unsigned char* tex_data = stbi_load(filePath.c_str(), &tex_w, &tex_h, &tex_nb_channel, 0);
+  unsigned char* tex_data = stbi_load(path.c_str(), &tex_w, &tex_h, &tex_nb_channel, 0);
   if(tex_data == NULL){
     cout<<"Can't load texture file"<<endl;
     return false;
   }
 
   // Create a OpenGL texture identifier
-  GLuint tex_ID;
+  //GLuint tex_ID;
   glGenTextures(1, &tex_ID);
   glBindTexture(GL_TEXTURE_2D, tex_ID);
 
@@ -61,15 +61,15 @@ bool Texture::load_texture(string filePath, string name){
   //---------------------------
   return true;
 }
-void Texture::add_texture_to_gpu(){
+void Texture::apply_texture(Subset* subset, string tex_path){
   //---------------------------
 
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-  glEnableVertexAttribArray(2);
+  this->load_texture(tex_path, "texture");
+  glBindTexture(GL_TEXTURE_2D, tex_ID);
+
 
   //---------------------------
 }
-
 
 /*Texture* Texture::get_TextureByName(string name){
   Texture* texture_out;

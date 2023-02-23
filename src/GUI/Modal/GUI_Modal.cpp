@@ -5,6 +5,7 @@
 #include "Scene/MOD_cloud.h"
 #include "Scene/MOD_camera.h"
 #include "Scene/MOD_shader.h"
+#include "Scene/MOD_texture.h"
 #include "Operation/MOD_operation.h"
 #include "Operation/MOD_attribut.h"
 #include "Operation/MOD_transformation.h"
@@ -39,6 +40,7 @@ GUI_Modal::GUI_Modal(Node_gui* node_gui){
   this->mod_filter = new MOD_filter(node_ope);
   this->mod_extraction = new MOD_extraction(node_ope);
   this->mod_boxing = new MOD_boxing(node_ope);
+  this->mod_texture = new MOD_texture(node_engine);
 
   //---------------------------
   this->window_init();
@@ -64,6 +66,7 @@ void GUI_Modal::window_init(){
   modal_tab.show_fitting = false;
   modal_tab.show_shader = false;
   modal_tab.show_boxing = false;
+  modal_tab.show_texture = false;
 
   //---------------------------
 }
@@ -91,6 +94,8 @@ void GUI_Modal::window_Draw(){
   mod_attribut->window_color();
 
   mod_boxing->design_boxing();
+
+  mod_texture->window_texture();
 
   //---------------------------
 }

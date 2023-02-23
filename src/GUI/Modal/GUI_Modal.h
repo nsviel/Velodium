@@ -14,6 +14,7 @@ class MOD_transformation;
 class MOD_filter;
 class MOD_extraction;
 class MOD_boxing;
+class MOD_texture;
 
 
 class GUI_Modal
@@ -39,6 +40,7 @@ private:
   MOD_filter* mod_filter;
   MOD_extraction* mod_extraction;
   MOD_boxing* mod_boxing;
+  MOD_texture* mod_texture;
 };
 
 #endif

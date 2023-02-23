@@ -56,6 +56,7 @@ public:
   inline CoreGLengine* get_glManager(){return glManager;}
   inline Object* get_objectManager(){return objectManager;}
   inline Followup* get_followManager(){return followManager;}
+  inline Texture* get_texManager(){return texManager;}
 
 private:
   Node_operation* node_ope;
