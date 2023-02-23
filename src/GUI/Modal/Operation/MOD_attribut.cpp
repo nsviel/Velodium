@@ -1,6 +1,6 @@
 #include "MOD_attribut.h"
 
-#include "IconsFontAwesome5.h"
+#include "image/IconsFontAwesome5.h"
 
 #include "../../Node_gui.h"
 #include "../../Control/GUI_Color.h"

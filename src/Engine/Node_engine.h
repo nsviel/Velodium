@@ -21,6 +21,7 @@ class Engine;
 class CoreGLengine;
 class Object;
 class Followup;
+class Texture;
 
 
 class Node_engine
@@ -63,6 +64,7 @@ private:
   Node_interface* node_interface;
   Node_gui* node_gui;
 
+  Texture* texManager;
   Followup* followManager;
   CoreGLengine* glManager;
   Configuration* configManager;

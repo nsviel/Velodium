@@ -15,7 +15,6 @@
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Data/struct_misc.h"
 #include "../../Engine/OpenGL/CoreGLengine.h"
-#include "../../Engine/OpenGL/Textures.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Cloud/Extraction.h"
@@ -24,7 +23,7 @@
 #include "../../Specific/fct_math.h"
 
 #include "imgui/imgui.h"
-#include "IconsFontAwesome5.h"
+#include "image/IconsFontAwesome5.h"
 
 #include <thread>
 #include <sys/sysinfo.h>
@@ -51,7 +50,6 @@ GUI_menuBar::GUI_menuBar(Node_gui* node){
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();
   this->glManager = node_engine->get_glManager();
-  this->texManager = new Textures();
 
   //---------------------------
 }

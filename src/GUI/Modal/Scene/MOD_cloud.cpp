@@ -8,7 +8,7 @@
 #include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_transtypage.h"
 
-#include "IconsFontAwesome5.h"
+#include "image/IconsFontAwesome5.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;

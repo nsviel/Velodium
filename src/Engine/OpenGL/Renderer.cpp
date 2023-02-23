@@ -4,7 +4,7 @@
 #include "../Scene/Configuration.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../../../extern/stb_image_write.h"
+#include "../../../extern/image/stb_image_write.h"
 
 #include <filesystem>
 #include <FreeImage.h>

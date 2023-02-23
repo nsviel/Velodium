@@ -164,6 +164,7 @@ void Extractor::check_data(Data_file* data){
   this->is_normal = false;
   this->is_intensity = false;
   this->is_timestamp = false;
+  this->is_texture = false;
   //---------------------------
 
   //Normals
@@ -179,6 +180,11 @@ void Extractor::check_data(Data_file* data){
   //Timestamp
   if(data->timestamp.size() != 0 && data->timestamp.size() == data->location.size()){
     this->is_timestamp = true;
+  }
+
+  //Texture
+  if(data->texture.size() != 0){
+    this->is_texture = true;
   }
 
   //---> if color data
@@ -363,21 +369,21 @@ void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
 
   //---------------------------
 }
-void Extractor::extract_intensity(Subset* subset, vector<float>& intensityOBJ){
+void Extractor::extract_intensity(Subset* subset, vector<float>& vec_I){
   //---------------------------
 
   if(is_intensity){
-    subset->I = intensityOBJ;
+    subset->I = vec_I;
     subset->has_intensity = true;
   }
 
   //---------------------------
 }
-void Extractor::extract_timestamp(Subset* subset, vector<float>& timestampOBJ){
+void Extractor::extract_timestamp(Subset* subset, vector<float>& vec_ts){
   //---------------------------
 
   if(is_timestamp){
-    subset->ts = timestampOBJ;
+    subset->ts = vec_ts;
     subset->has_timestamp = true;
   }
   else{
@@ -388,34 +394,50 @@ void Extractor::extract_timestamp(Subset* subset, vector<float>& timestampOBJ){
 
   //---------------------------
 }
-void Extractor::extract_normal(Subset* subset, vector<vec3>& normalOBJ){
+void Extractor::extract_normal(Subset* subset, vector<vec3>& vec_Nxyz){
   uint normalVBO;
   //---------------------------
 
   if(is_normal){
-    subset->N = normalOBJ;
+    subset->N = vec_Nxyz;
     subset->has_normal = true;
   }
 
   //---------------------------
 }
-void Extractor::extract_color(Subset* subset, vector<vec4>& colorOBJ){
-  uint colorVBO;
+void Extractor::extract_color(Subset* subset, vector<vec4>& vec_rgb){
   //---------------------------
 
-  //Create OpenGL color object
-  glGenBuffers(1, &colorVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-  glBufferData(GL_ARRAY_BUFFER, colorOBJ.size()*sizeof(glm::vec4), &colorOBJ[0], GL_DYNAMIC_DRAW);
+  //Add color to gpu
+  uint vbo_color;
+  glGenBuffers(1, &vbo_color);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_color);
+  glBufferData(GL_ARRAY_BUFFER, vec_rgb.size()*sizeof(glm::vec4), &vec_rgb[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
   glEnableVertexAttribArray(1);
 
-  subset->VBO_rgb = colorVBO;
-  subset->RGB = colorOBJ;
+  subset->VBO_rgb = vbo_color;
+  subset->RGB = vec_rgb;
   subset->unicolor = color_rdm;
 
   if(is_color){
     subset->has_color = true;
+  }
+
+  //---------------------------
+}
+void Extractor::extract_texture(Subset* subset, vector<vec2>& vec_tex){
+  //---------------------------
+
+  if(is_texture){
+    uint vbo_texture;
+    glGenBuffers(1, &vbo_texture);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_texture);
+    glBufferData(GL_ARRAY_BUFFER, vec_tex.size()*sizeof(glm::vec2), &vec_tex[0], GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+
+    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
   }
 
   //---------------------------

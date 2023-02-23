@@ -18,7 +18,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "IconsFontAwesome5.h"
+#include "image/IconsFontAwesome5.h"
 
 #include <thread>
 

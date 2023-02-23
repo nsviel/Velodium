@@ -8,16 +8,6 @@
 #include <string>
 #include <vector>
 
-struct Texture{
-  //---------------------------
-
-  GLuint ID;
-  std::string Name;
-  int width = 0;
-  int height = 0;
-
-  //---------------------------
-};
 
 struct PTXCloud{
   //---------------------------

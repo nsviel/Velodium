@@ -12,7 +12,6 @@ class GUI_Initialization;
 
 class Scene;
 class Extraction;
-class Textures;
 class Pather;
 class CoreGLengine;
 
@@ -42,7 +41,6 @@ private:
   Scene* sceneManager;
   Pather* pathManager;
   Extraction* extractionManager;
-  Textures* texManager;
   CoreGLengine* glManager;
 
   Node_gui* node_gui;

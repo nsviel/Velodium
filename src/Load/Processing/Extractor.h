@@ -41,6 +41,7 @@ private:
   void extract_normal(Subset* subset, vector<vec3>& normalOBJ);
   void extract_intensity(Subset* subset, vector<float>& intensityOBJ);
   void extract_timestamp(Subset* subset, vector<float>& timestampOBJ);
+  void extract_texture(Subset* subset, vector<vec2>& vec_tex);
 
 private:
   Scene* sceneManager;
@@ -53,6 +54,7 @@ private:
   bool is_normal;
   bool is_timestamp;
   bool is_color;
+  bool is_texture;
 };
 
 #endif

@@ -1,40 +1,37 @@
-#include "Textures.h"
+#include "Texture.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "image/stb_image.h"
 
 
 //Constructor / Destructor
-Textures::Textures(){
+Texture::Texture(){
   //---------------------------
 
-  this->list_Texture = new list<Texture*>;
-
-  //---------------------------
-}
-Textures::~Textures(){
-  //---------------------------
-
-  delete list_Texture;
-  delete glyph;
+  this->list_texture = new list<Texture_obj*>;
 
   //---------------------------
 }
+Texture::~Texture(){}
 
 //Texture management
-bool Textures::load_texture(string filePath, string name){
-  /*int width = 0;
-  int height = 0;
+bool Texture::load_texture(string filePath, string name){
+  int tex_w = 0;
+  int tex_h = 0;
+  int tex_nb_channel = 0;
   //---------------------------
 
   // Load from file
-  unsigned char* texData = stbi_load(filePath.c_str(), &width, &height, NULL, 4);
-  if(texData == NULL){
+  unsigned char* tex_data = stbi_load(filePath.c_str(), &tex_w, &tex_h, &tex_nb_channel, 0);
+  if(tex_data == NULL){
     cout<<"Can't load texture file"<<endl;
     return false;
   }
 
   // Create a OpenGL texture identifier
-  GLuint glID;
-  glGenTextures(1, &glID);
-  glBindTexture(GL_TEXTURE_2D, glID);
+  GLuint tex_ID;
+  glGenTextures(1, &tex_ID);
+  glBindTexture(GL_TEXTURE_2D, tex_ID);
 
   // Setup filtering parameters for display
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -43,22 +40,38 @@ bool Textures::load_texture(string filePath, string name){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   // Upload pixels into texture
-  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
-  stbi_image_free(texData);
+  //glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+  if(tex_nb_channel == 3){
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_w, tex_h, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
+  }else if(tex_nb_channel == 4){
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_w, tex_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
+  }
+  glGenerateMipmap(GL_TEXTURE_2D);
+  stbi_image_free(tex_data);
 
   //Create and store texture
-  Texture* texture_new = new Texture();
-  texture_new->Name = name;
-  texture_new->width = width;
-  texture_new->height = height;
-  texture_new->ID = glID;
-  list_Texture->push_back(texture_new);
+  Texture_obj* texture = new Texture_obj();
+  texture->ID = tex_ID;
+  texture->name = name;
+  texture->width = width;
+  texture->height = height;
+  texture->nb_channel = tex_nb_channel;
+  list_texture->push_back(texture);
 
-  //---------------------------*/
+  //---------------------------
   return true;
 }
-Texture* Textures::get_TextureByName(string name){
+void Texture::add_texture_to_gpu(){
+  //---------------------------
+
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
+
+  //---------------------------
+}
+
+
+/*Texture* Texture::get_TextureByName(string name){
   Texture* texture_out;
   //---------------------------
 
@@ -76,7 +89,7 @@ Texture* Textures::get_TextureByName(string name){
 
 //Skybox stuff
 /* WORK IN PROGRESS */
-void Textures::init_skybox(){
+/*void Texture::init_skybox(){
   //---------------------------
 
   vector<vec3> XYZ = {
@@ -155,7 +168,7 @@ void Textures::init_skybox(){
 
   //---------------------------
 }
-void Textures::skybox(vec3 camPos){
+void Texture::skybox(vec3 camPos){
   /*
   Transformation
   glDepthMask(GL_FALSE);
@@ -164,9 +177,9 @@ void Textures::skybox(vec3 camPos){
   glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
   glDrawArrays(GL_TRIANGLES, 0, glyph->xyz.size());
   glDepthMask(GL_TRUE);
-  */
-}
-unsigned int Textures::loadCubemap(vector<string> faces){
+
+}*/
+/*unsigned int Texture::loadCubemap(vector<string> faces){
   unsigned int textureID;
   //---------------------------
 /*
@@ -194,7 +207,7 @@ unsigned int Textures::loadCubemap(vector<string> faces){
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-*/
+
   //---------------------------
   return textureID;
-}
+}*/

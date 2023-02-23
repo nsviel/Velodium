@@ -13,7 +13,7 @@
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/Capture/Capture.h"
 
-#include "IconsFontAwesome5.h"
+#include "image/IconsFontAwesome5.h"
 
 
 //Constructor / Destructor

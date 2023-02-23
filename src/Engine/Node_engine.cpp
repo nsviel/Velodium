@@ -10,6 +10,7 @@
 #include "Core/Dimension.h"
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Renderer.h"
+#include "OpenGL/Texture.h"
 #include "Shader/Shader.h"
 
 #include "Camera/Camera.h"
@@ -38,6 +39,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->glyphManager = new Glyphs(this);
   this->objectManager = new Object(this);
   this->sceneManager = new Scene(this);
+  this->texManager = new Texture();
 
   this->node_load = new Node_load(this);
   this->node_ope = new Node_operation(this);
@@ -46,6 +48,9 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->node_gui = new Node_gui(this);
 
   this->engineManager = new Engine(this);
+
+
+  texManager->load_texture("/home/aeter/Desktop/container.jpg", "container");
 
   //---------------------------
 }

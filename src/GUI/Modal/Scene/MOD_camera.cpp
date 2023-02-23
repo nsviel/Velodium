@@ -1,6 +1,6 @@
 #include "MOD_camera.h"
 
-#include "IconsFontAwesome5.h"
+#include "image/IconsFontAwesome5.h"
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Scene/Configuration.h"

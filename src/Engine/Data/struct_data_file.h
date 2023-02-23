@@ -16,6 +16,8 @@ struct Data_file{
   std::vector<glm::vec3> location;
   std::vector<glm::vec3> normal;
   std::vector<glm::vec4> color;
+  std::vector<glm::vec2> texture;
+  
   std::vector<float> intensity;
   std::vector<float> timestamp;
   std::vector<float> distance;

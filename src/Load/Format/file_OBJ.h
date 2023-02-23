@@ -5,13 +5,21 @@
 #include "../../common.h"
 
 struct Vertex{
-    glm::vec3 position;
-    glm::vec2 texcoord;
-    glm::vec3 normal;
+  //---------------------------
+
+  glm::vec3 location;
+  glm::vec2 texcoord;
+  glm::vec3 normal;
+
+  //---------------------------
 };
-struct VertRef{
-    VertRef( int v, int vt, int vn ) : v(v), vt(vt), vn(vn) { }
-    int v, vt, vn;
+struct Vertex_ref{
+  //---------------------------
+
+  Vertex_ref( int v, int vt, int vn ) : v(v), vt(vt), vn(vn) { }
+  int v, vt, vn;
+
+  //---------------------------
 };
 
 
@@ -30,7 +38,6 @@ public:
   vector<Vertex> get_data_from_file(istream& in);
 
 private:
-  //Datatypes
   Data_file* data_out;
 };
 
