@@ -1,6 +1,8 @@
 #ifndef GUI_OPION_H
 #define GUI_OPION_H
 
+#include "../../common.h"
+
 class GUI_Control;
 class Node_gui;
 
@@ -12,8 +14,8 @@ class Heatmap;
 class Transformation;
 class Renderer;
 class Configuration;
-
-#include "../../common.h"
+class Engine;
+class Texture;
 
 
 class GUI_option
@@ -48,6 +50,8 @@ private:
   Heatmap* heatmapManager;
   Pather* pathManager;
   Renderer* renderManager;
+  Engine* engineManager;
+  Texture* texManager;
 
   vec3* backgColor;
 };

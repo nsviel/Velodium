@@ -9,6 +9,9 @@ Shader_edl::Shader_edl(Dimension* dim){
 
   this->dimManager = dim;
 
+  this->path_vs = "../src/Engine/Shader/glsh/shader_edl.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/shader_edl.fs";
+
   this->with_edl = true;
   this->edl_strength = 100.0;
   this->edl_distance = 1.0;
@@ -20,9 +23,12 @@ Shader_edl::Shader_edl(Dimension* dim){
 }
 Shader_edl::~Shader_edl(){}
 
-void Shader_edl::setup_edl(GLuint program_ID){
-  glUseProgram(program_ID);
+void Shader_edl::setup_shader(GLuint ID){
+  this->program_ID = ID;
   //---------------------------
+
+  //Use corresponding shader program
+  glUseProgram(program_ID);
 
   //Set parameters to shader
   auto a_loc = glGetUniformLocation(program_ID, "A");
@@ -46,6 +52,38 @@ void Shader_edl::setup_edl(GLuint program_ID){
   auto depth_texture_loc = glGetUniformLocation(program_ID, "tex_depth");
   glUniform1i(color_texture_loc, 0);
   glUniform1i(depth_texture_loc, 1);
+
+  vec2 gl_dim = dimManager->get_gl_dim();
+  auto egl_width_loc = glGetUniformLocation(program_ID, "GL_WIDTH");
+  auto edl_height_loc = glGetUniformLocation(program_ID, "GL_HEIGHT");
+  glUniform1i(egl_width_loc, gl_dim.x);
+  glUniform1i(edl_height_loc, gl_dim.y);
+
+  //---------------------------
+}
+void Shader_edl::update_shader(){
+  //---------------------------
+
+  //Use corresponding shader program
+  glUseProgram(program_ID);
+
+  //Set parameters to shader
+  auto a_loc = glGetUniformLocation(program_ID, "A");
+  auto b_loc = glGetUniformLocation(program_ID, "B");
+  auto a = (clip_far + clip_near) / (clip_far - clip_near);
+  auto b = (-2 * clip_far * clip_near) / (clip_far - clip_near);
+  glUniform1f(a_loc, (float) a);
+  glUniform1f(b_loc, (float) b);
+
+  auto edl_stgh_loc = glGetUniformLocation(program_ID, "EDL_STRENGTH");
+  auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
+  auto edl_radi_loc = glGetUniformLocation(program_ID, "EDL_RADIUS");
+  auto with_edl_loc = glGetUniformLocation(program_ID, "EDL_ON");
+
+  glUniform1f(edl_stgh_loc, (float)edl_strength);
+  glUniform1f(edl_dist_loc, (float)edl_distance);
+  glUniform1f(edl_radi_loc, (float)edl_radius);
+  glUniform1i(with_edl_loc, (int)with_edl);
 
   vec2 gl_dim = dimManager->get_gl_dim();
   auto egl_width_loc = glGetUniformLocation(program_ID, "GL_WIDTH");

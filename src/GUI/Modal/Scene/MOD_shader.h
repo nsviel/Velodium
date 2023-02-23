@@ -6,6 +6,7 @@
 class Node_engine;
 class Shader;
 class Shader_edl;
+class Shader_screen;
 
 
 class MOD_shader
@@ -20,11 +21,13 @@ public:
   void window_shader();
 
   //Sub functions
-  void parameter();
+  void shader_edl();
+  void shader_screen();
 
 private:
   Shader* shaderManager;
   Shader_edl* edlManager;
+  Shader_screen* screenManager;
 
   int item_width;
 };

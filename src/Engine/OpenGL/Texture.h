@@ -35,6 +35,8 @@ public:
   //Texture* get_TextureByName(string name);
   //inline list<Texture*>* get_list_texture(){return list_Texture;}
 
+  inline bool* get_with_texture(){return &with_texture;}
+
 private:
   list<Texture_obj*>* list_texture;
   unsigned int cubemapTexture;
@@ -43,6 +45,7 @@ private:
   int width = 0;
   int height = 0;
   GLuint tex_ID;
+  bool with_texture;
 };
 
 #endif

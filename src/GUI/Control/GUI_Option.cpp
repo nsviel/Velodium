@@ -17,6 +17,7 @@
 #include "../../Engine/Scene/Glyph/Cloud/Tree.h"
 #include "../../Engine/Scene/Configuration.h"
 #include "../../Engine/OpenGL/Renderer.h"
+#include "../../Engine/OpenGL/Texture.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Color/Heatmap.h"
@@ -42,6 +43,8 @@ GUI_option::GUI_option(Node_gui* node_gui){
   this->colorManager = node_ope->get_colorManager();
   this->pathManager = node_load->get_patherManager();
   this->configManager = node_engine->get_configManager();
+  this->engineManager = node_engine->get_engineManager();
+  this->texManager = node_engine->get_texManager();
 
   //---------------------------
 }
@@ -127,7 +130,9 @@ void GUI_option::option_glyph(){
   }
   ImGui::NextColumn();
 
-  //RAJOUTER UN TRUC ICI
+  //Texture
+  bool* with_texture = texManager->get_with_texture();
+  ImGui::Checkbox("Texture##444", with_texture);
   ImGui::NextColumn();
 
   //Display Axis world
@@ -191,12 +196,12 @@ void GUI_option::option_mode(){
     //---------------------------
 
     //Light / Dark mode
-    static bool darkMode = false;
+    static bool mode_dark = false;
     static vec4 color_old;
-    if(ImGui::Checkbox("Dark mode", &darkMode)){
+    if(ImGui::Checkbox("Dark mode", &mode_dark)){
       vec4* screen_color = renderManager->get_screen_color();
 
-      if(darkMode == true){
+      if(mode_dark == true){
         color_old = *screen_color;
         objectManager->update_object("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
         objectManager->update_object("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -209,14 +214,14 @@ void GUI_option::option_mode(){
     }
 
     //Visualization mode
-    static bool visualization = false;
-    if(ImGui::Checkbox("Display mode", &visualization)){
+    static bool mode_visualization = false;
+    if(ImGui::Checkbox("Display mode", &mode_visualization)){
       vec4* screen_color = renderManager->get_screen_color();
       Glyph* axis = objectManager->get_glyph_by_name("axis");
       Glyph* aabb = objectManager->get_glyph_by_name("aabb");
       Glyph* grid = objectManager->get_glyph_by_name("grid");
 
-      if(visualization == true){
+      if(mode_visualization == true){
         axis->visibility = false;
         aabb->visibility = false;
         grid->visibility = false;

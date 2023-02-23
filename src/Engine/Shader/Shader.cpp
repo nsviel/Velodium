@@ -1,7 +1,8 @@
 #include "Shader.h"
 
-#include "src/Shader_edl.h"
 #include "src/Shader_object.h"
+#include "src/Shader_screen.h"
+#include "src/Shader_edl.h"
 
 #include "../Core/Dimension.h"
 
@@ -12,6 +13,7 @@ Shader::Shader(Dimension* dimManager){
 	//---------------------------
 
 	this->edlManager = new Shader_edl(dimManager);
+	this->screenManager = new Shader_screen();
 
 	//---------------------------
 }
@@ -28,23 +30,25 @@ Shader::~Shader(){
 void Shader::init_shader(){
 	//---------------------------
 
-	string path_screen_vs = "../src/Engine/Shader/glsh/shader_screen.vs";
-	string path_screen_fs = "../src/Engine/Shader/glsh/shader_screen.fs";
+	string path_screen_vs = screenManager->get_path_vs();
+	string path_screen_fs = screenManager->get_path_fs();
 
-	string path_render_vs = "../src/Engine/Shader/glsh/shader_edl.vs";
-	string path_render_fs = "../src/Engine/Shader/glsh/shader_edl.fs";
+	string path_render_vs = edlManager->get_path_vs();
+	string path_render_fs = edlManager->get_path_fs();
 
 	this->shader_screen = new Shader_object(path_screen_vs, path_screen_fs);
 	this->shader_render = new Shader_object(path_render_vs, path_render_fs);
 
-	edlManager->setup_edl(shader_render->get_program_ID());
+	screenManager->setup_shader(shader_screen->get_program_ID());
+	edlManager->setup_shader(shader_render->get_program_ID());
 
 	//---------------------------
 }
 void Shader::update_shader(){
 	//---------------------------
 
-	edlManager->setup_edl(shader_render->get_program_ID());
+	screenManager->setup_shader(shader_screen->get_program_ID());
+	edlManager->setup_shader(shader_render->get_program_ID());
 
 	//---------------------------
 }

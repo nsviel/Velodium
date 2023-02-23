@@ -4,6 +4,7 @@
 #include "../../common.h"
 
 class Shader_edl;
+class Shader_screen;
 class Shader_object;
 class Dimension;
 
@@ -22,9 +23,12 @@ public:
   inline Shader_object* get_shader_screen(){return shader_screen;}
   inline Shader_object* get_shader_render(){return shader_render;}
   inline Shader_edl* get_edlManager(){return edlManager;}
+  inline Shader_screen* get_screenManager(){return screenManager;}
 
 private:
+  Shader_screen* screenManager;
   Shader_edl* edlManager;
+
   string shader_dir;
   Shader_object* shader_screen;
   Shader_object* shader_render;

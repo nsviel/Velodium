@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "../Node_engine.h"
+#include "../OpenGL/Texture.h"
 #include "../Scene/Glyph/Glyphs.h"
 #include "../Scene/Glyph/Object.h"
 #include "../Scene/Scene.h"
@@ -24,6 +25,7 @@ Engine::Engine(Node_engine* engine){
   this->guiManager = node_gui->get_guiManager();
   this->objectManager = node_engine->get_objectManager();
   this->cameraManager = node_engine->get_cameraManager();
+  this->texManager = node_engine->get_texManager();
 
   this->is_visualization = configManager->parse_json_b("window", "visualization");
 
@@ -112,11 +114,12 @@ void Engine::runtime_camera(){
 
 //Subfunction
 void Engine::draw_mesh(Subset* subset, string draw_type){
+  bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
   if(subset->visibility){
     // If any, activate attached texture
-    if(subset->has_texture){
+    if(with_texture && subset->has_texture){
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
     }
@@ -153,7 +156,7 @@ void Engine::draw_mesh(Subset* subset, string draw_type){
     glBindVertexArray(0);
 
     //Desactivate texture
-    if(subset->has_texture){
+    if(with_texture && subset->has_texture){
       glBindTexture(GL_TEXTURE_2D, 2);
     }
   }

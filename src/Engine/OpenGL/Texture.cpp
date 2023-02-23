@@ -9,6 +9,7 @@ Texture::Texture(){
   //---------------------------
 
   this->list_texture = new list<Texture_obj*>;
+  this->with_texture = true;
 
   //---------------------------
 }

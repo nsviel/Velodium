@@ -9,6 +9,7 @@ class Glyphs;
 class GUI;
 class Object;
 class Camera;
+class Texture;
 
 
 class Engine
@@ -35,6 +36,7 @@ private:
   GUI* guiManager;
   Object* objectManager;
   Camera* cameraManager;
+  Texture* texManager;
 
   bool is_visualization;
   uint modelID, comID;
