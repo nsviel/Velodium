@@ -54,17 +54,13 @@ private:
   Capture* captureManager;
 
   vector<tree_file*> nodes_root;
-  vector<tree_file*> nodes_path_1;
-  vector<tree_file*> nodes_path_2;
-  vector<tree_file*> nodes_path_3;
+  vector<vector<tree_file*>> nodes_path_vec;
   vector<string> accepted_format;
+  vector<string> path_init_vec;
   bool with_remove_cloud;
   bool with_onthefly;
   int cloud_scale;
   string lidar_model;
-  string path_1;
-  string path_2;
-  string path_3;
 };
 
 #endif

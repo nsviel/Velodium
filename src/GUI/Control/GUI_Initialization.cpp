@@ -64,9 +64,9 @@ void GUI_Initialization::update_configuration(){
   this->accepted_format.push_back("las");
   this->accepted_format.push_back("laz");
 
-  this->path_1 = configManager->parse_json_s("interface", "path_point_cloud_1");
-  this->path_2 = configManager->parse_json_s("interface", "path_point_cloud_2");
-  this->path_3 = configManager->parse_json_s("interface", "path_point_cloud_3");
+  this->path_init_vec.push_back(configManager->parse_json_s("interface", "path_point_cloud_1"));
+  this->path_init_vec.push_back(configManager->parse_json_s("interface", "path_point_cloud_2"));
+  this->path_init_vec.push_back(configManager->parse_json_s("interface", "path_point_cloud_3"));
 
   //---------------------------
   this->construst_tree();
@@ -146,9 +146,9 @@ void GUI_Initialization::treeview(){
 
     //Display pre-built trees
     this->display_node_root(nodes_root);
-    this->display_node(nodes_path_1[0], nodes_path_1);
-    this->display_node(nodes_path_2[0], nodes_path_2);
-    this->display_node(nodes_path_3[0], nodes_path_3);
+    for(int i=0; i<nodes_path_vec.size(); i++){
+      this->display_node(nodes_path_vec[i][0], nodes_path_vec[i]);
+    }
 
     ImGui::EndTable();
   }
@@ -158,15 +158,21 @@ void GUI_Initialization::treeview(){
 void GUI_Initialization::construst_tree(){
   //---------------------------
 
+  //Construct init path nodes for specific cloud locations
   vector<string> vec_path;
   vec_path.push_back("../media/engine/fastScene/buddha.pts");
+  vec_path.push_back("../media/engine/fastScene/cube.obj");
   vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply");
   vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/xyzrgb_statuette.ply");
-
   this->construct_node_root(vec_path, nodes_root);
-  this->construct_node(path_1, nodes_path_1);
-  this->construct_node(path_2, nodes_path_2);
-  this->construct_node(path_3, nodes_path_3);
+
+  //Construct predefined init path nodes
+  this->nodes_path_vec.clear();
+  for(int i=0; i<path_init_vec.size(); i++){
+    vector<tree_file*> nodes_path;
+    this->construct_node(path_init_vec[i], nodes_path);
+    this->nodes_path_vec.push_back(nodes_path);
+  }
 
   //---------------------------
 }
