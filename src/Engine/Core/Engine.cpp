@@ -118,7 +118,6 @@ void Engine::draw_mesh(Subset* subset, string draw_type){
     // If any, activate attached texture
     if(subset->has_texture){
       glActiveTexture(GL_TEXTURE0);
-      glEnableVertexAttribArray(2);
       glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
     }
 

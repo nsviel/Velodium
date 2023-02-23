@@ -153,7 +153,7 @@ void Renderer::bind_fbo_render(){
   //Bind color and depth textures from fbo 1
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
-  glActiveTexture(GL_TEXTURE0 + 1);
+  glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
 
   //---------------------------

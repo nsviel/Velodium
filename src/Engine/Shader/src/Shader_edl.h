@@ -1,5 +1,5 @@
-#ifndef PP_EDL_H
-#define PP_EDL_H
+#ifndef SHADER_EDL_H
+#define SHADER_EDL_H
 
 #include "../../../common.h"
 

@@ -162,8 +162,8 @@ void GUI_Initialization::construst_tree(){
   vector<string> vec_path;
   vec_path.push_back("../media/engine/fastScene/buddha.pts");
   vec_path.push_back("../media/engine/fastScene/cube.obj");
+  vec_path.push_back("../media/engine/fastScene/sphere.obj");
   vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply");
-  vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/xyzrgb_statuette.ply");
   this->construct_node_root(vec_path, nodes_root);
 
   //Construct predefined init path nodes
