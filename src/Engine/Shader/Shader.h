@@ -6,13 +6,13 @@
 class Shader_edl;
 class Shader_screen;
 class Shader_object;
-class Dimension;
+class Node_engine;
 
 
 class Shader
 {
 public:
-  Shader(Dimension* dimManager);
+  Shader(Node_engine* node);
   ~Shader();
 
 public:

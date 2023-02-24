@@ -35,7 +35,7 @@ void MOD_shader::window_shader(){
     //---------------------------
 
     this->shader_screen();
-    this->shader_edl();
+    this->shader_render();
 
     //---------------------------
     ImGui::Separator();
@@ -58,8 +58,14 @@ void MOD_shader::shader_screen(){
 
   //---------------------------
 }
-void MOD_shader::shader_edl(){
+void MOD_shader::shader_render(){
   //---------------------------
+
+  ImGui::SetNextItemWidth(item_width);
+  bool* with_inv = edlManager->get_with_inv();
+  if(ImGui::Checkbox("Color inversion", with_inv)){
+    edlManager->update_shader();
+  }
 
   ImGui::SetNextItemWidth(item_width);
   bool* with_edl = edlManager->get_with_edl();

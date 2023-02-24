@@ -1,7 +1,7 @@
 {
    "camera" : {
-      "clip_far" : 10000.0,
-      "clip_near" : 0.10000000149011612,
+      "clip_far" : 1000.0,
+      "clip_near" : 0.1,
       "fov" : 65.0,
       "initial_pos" : 5.0,
       "speed_mouse" : 0.0030000000260770321,

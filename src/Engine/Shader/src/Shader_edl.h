@@ -3,13 +3,15 @@
 
 #include "../../../common.h"
 
+class Node_engine;
 class Dimension;
+class Configuration;
 
 
 class Shader_edl
 {
 public:
-  Shader_edl(Dimension* dim);
+  Shader_edl(Node_engine* node);
   ~Shader_edl();
 
   void setup_shader(GLuint program_ID);
@@ -23,8 +25,10 @@ public:
   inline float* get_edl_clip_far(){return &clip_far;}
   inline float* get_edl_clip_near(){return &clip_near;}
   inline bool* get_with_edl(){return &with_edl;}
+  inline bool* get_with_inv(){return &with_inv;}
 
 private:
+  Configuration* configManager;
   Dimension* dimManager;
 
   string path_vs;
@@ -35,6 +39,7 @@ private:
   float clip_far;
   float clip_near;
   bool with_edl;
+  bool with_inv;
   int program_ID;
 };
 

@@ -31,7 +31,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
 
   this->configManager = ogl->get_configManager();
   this->dimManager = new Dimension(ogl->get_window(), configManager);
-  this->shaderManager = new Shader(dimManager);
+  this->shaderManager = new Shader(this);
   this->viewportManager = new Viewport(dimManager);
   this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
@@ -54,7 +54,13 @@ Node_engine::Node_engine(CoreGLengine* ogl){
 
   //---------------------------
 }
-Node_engine::~Node_engine(){}
+Node_engine::~Node_engine(){
+  //---------------------------
+
+  delete renderManager;
+
+  //---------------------------
+}
 
 void Node_engine::update(){
   //---------------------------

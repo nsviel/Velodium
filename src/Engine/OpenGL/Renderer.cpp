@@ -34,6 +34,9 @@ Renderer::~Renderer(){
 
   delete configManager;
 
+  glDeleteFramebuffers(1, &fbo_1_ID);
+  glDeleteFramebuffers(1, &fbo_2_ID);
+
   //---------------------------
 }
 
@@ -46,12 +49,12 @@ void Renderer::init_create_fbo_1(){
   glGenFramebuffers(1, &fbo_1_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
 
-  //Create color texture and bind it to the framebuffer
+  //Create (allocate memory) color texture and bind it to the framebuffer
   glGenTextures(1, &fbo_1_tex_color_ID);
   glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_1_tex_color_ID, 0);
 
   //Create depth texture and bind it to the framebuffer
@@ -59,8 +62,8 @@ void Renderer::init_create_fbo_1(){
   glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo_1_tex_depth_ID, 0);
 
@@ -81,6 +84,8 @@ void Renderer::init_create_fbo_2(){
 
   //Create color texture and bind it to the framebuffer
   glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_edl_ID);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, gl_dim.x, gl_dim.y, false);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_edl_ID, 0);
 

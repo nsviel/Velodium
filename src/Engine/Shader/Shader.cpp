@@ -4,16 +4,16 @@
 #include "src/Shader_screen.h"
 #include "src/Shader_edl.h"
 
-#include "../Core/Dimension.h"
+#include "../Node_engine.h"
 
 
 
 //Constructor / Destructor
-Shader::Shader(Dimension* dimManager){
+Shader::Shader(Node_engine* node){
 	//---------------------------
 
-	this->edlManager = new Shader_edl(dimManager);
-	this->screenManager = new Shader_screen();
+	this->edlManager = new Shader_edl(node);
+	this->screenManager = new Shader_screen(node);
 
 	//---------------------------
 }
@@ -47,8 +47,8 @@ void Shader::init_shader(){
 void Shader::update_shader(){
 	//---------------------------
 
-	screenManager->setup_shader(shader_screen->get_program_ID());
-	edlManager->setup_shader(shader_render->get_program_ID());
+	screenManager->update_shader();
+	edlManager->update_shader();
 
 	//---------------------------
 }

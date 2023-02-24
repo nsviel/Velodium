@@ -3,11 +3,14 @@
 
 #include "../../../common.h"
 
+class Node_engine;
+class Configuration;
+
 
 class Shader_screen
 {
 public:
-  Shader_screen();
+  Shader_screen(Node_engine* node);
   ~Shader_screen();
 
   void setup_shader(GLuint program_ID);
@@ -18,8 +21,12 @@ public:
   inline bool* get_with_depth(){return &with_depth;}
 
 private:
+  Configuration* configManager;
+
   string path_vs;
   string path_fs;
+  float clip_far;
+  float clip_near;
   bool with_depth;
   int program_ID;
 };

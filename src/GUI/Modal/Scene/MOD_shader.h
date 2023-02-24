@@ -21,7 +21,7 @@ public:
   void window_shader();
 
   //Sub functions
-  void shader_edl();
+  void shader_render();
   void shader_screen();
 
 private:
