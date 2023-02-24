@@ -71,7 +71,7 @@ private:
   Configuration* configManager;
 
   float time_loop;
-  bool openglRunning;
+  bool loop_run;
   bool flag_resized;
 };
 

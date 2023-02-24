@@ -48,13 +48,11 @@ void Shader_edl::setup_shader(GLuint ID){
   auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
   auto edl_radi_loc = glGetUniformLocation(program_ID, "EDL_RADIUS");
   auto with_edl_loc = glGetUniformLocation(program_ID, "EDL_ON");
-  auto with_inv_loc = glGetUniformLocation(program_ID, "invertion_ON");
 
   glUniform1f(edl_stgh_loc, (float)edl_strength);
   glUniform1f(edl_dist_loc, (float)edl_distance);
   glUniform1f(edl_radi_loc, (float)edl_radius);
   glUniform1i(with_edl_loc, (int)with_edl);
-  glUniform1i(with_inv_loc, (int)with_inv);
 
   auto color_texture_loc = glGetUniformLocation(program_ID, "tex_color");
   auto depth_texture_loc = glGetUniformLocation(program_ID, "tex_depth");

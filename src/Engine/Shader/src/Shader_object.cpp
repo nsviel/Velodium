@@ -8,19 +8,19 @@ Shader_object::Shader_object(string path_vs, string path_fs){
 	//---------------------------
 
 	// Create the shaders program
-	ID_program = glCreateProgram();
+	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
 	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
 	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
 
 	//Link program
-	glLinkProgram(ID_program);
+	glLinkProgram(program_ID);
 
 	//Detach shaders for keep memory ressources
-	glDetachShader(ID_program, vs);
+	glDetachShader(program_ID, vs);
 	glDeleteShader(vs);
-	glDetachShader(ID_program, fs);
+	glDetachShader(program_ID, fs);
 	glDeleteShader(fs);
 
 	//---------------------------
@@ -29,7 +29,7 @@ Shader_object::Shader_object(string path_vs, string path_fs, string path_gs){
 	//---------------------------
 
 	// Create the shaders program
-	ID_program = glCreateProgram();
+	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
 	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
@@ -37,14 +37,14 @@ Shader_object::Shader_object(string path_vs, string path_fs, string path_gs){
 	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER);
 
 	//Link program
-	glLinkProgram(ID_program);
+	glLinkProgram(program_ID);
 
 	//Detach shaders for keep memory ressources
-	glDetachShader(ID_program, vs);
+	glDetachShader(program_ID, vs);
 	glDeleteShader(vs);
-	glDetachShader(ID_program, fs);
+	glDetachShader(program_ID, fs);
 	glDeleteShader(fs);
-	glDetachShader(ID_program, gs);
+	glDetachShader(program_ID, gs);
 	glDeleteShader(gs);
 
 	//---------------------------
@@ -52,7 +52,7 @@ Shader_object::Shader_object(string path_vs, string path_fs, string path_gs){
 Shader_object::~Shader_object(){
 	//---------------------------
 
-	glDeleteProgram(ID_program);
+	glDeleteProgram(program_ID);
 
 	//---------------------------
 }
@@ -60,16 +60,16 @@ Shader_object::~Shader_object(){
 void Shader_object::use(){
 	//---------------------------
 
-	glUseProgram(ID_program);
+	glUseProgram(program_ID);
 
 	//---------------------------
 }
-void Shader_object::build_shader(GLuint& ID_program, string path_vs, string path_fs){
+void Shader_object::build_shader(GLuint& program_ID, string path_vs, string path_fs){
 	string path_gs = "../src/Engine/Shader/shader_scene.gs";
 	//---------------------------
 
 	// Create the shaders program
-	ID_program = glCreateProgram();
+	program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
 	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
@@ -77,14 +77,14 @@ void Shader_object::build_shader(GLuint& ID_program, string path_vs, string path
 	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
 
 	//Link program
-	glLinkProgram(ID_program);
+	glLinkProgram(program_ID);
 
 	//Detach shaders for keep memory ressources
-	glDetachShader(ID_program, vs);
+	glDetachShader(program_ID, vs);
 	glDeleteShader(vs);
-	glDetachShader(ID_program, gs);
+	glDetachShader(program_ID, gs);
 	glDeleteShader(gs);
-	glDetachShader(ID_program, fs);
+	glDetachShader(program_ID, fs);
 	glDeleteShader(fs);
 
 	//---------------------------
@@ -112,7 +112,7 @@ GLuint Shader_object::shader_compilation(string file_path, GLenum shaderType){
 	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 
 	//Bind to program
-	glAttachShader(ID_program, shaderID);
+	glAttachShader(program_ID, shaderID);
 
 	//---------------------------
 	return shaderID;

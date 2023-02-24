@@ -29,7 +29,7 @@ CoreGLengine::CoreGLengine(){
 
   this->configManager = new Configuration();
 
-  this->openglRunning = true;
+  this->loop_run = true;
   this->window = nullptr;
   this->flag_resized = false;
 
@@ -92,7 +92,7 @@ void CoreGLengine::loop(){
     auto t2 = high_resolution_clock::now();
     this->time_loop = duration_cast<milliseconds>(t2 - t1).count();
   }
-  while(openglRunning);
+  while(loop_run);
 
   //---------------------------
 }
@@ -219,7 +219,29 @@ void CoreGLengine::loop_pass_1(){
 void CoreGLengine::loop_pass_2(){
   //---------------------------
 
-  //Framebuffer pass 2
+//Il faut trouver un moye nde faire les deux shaders succesivement
+/* A PRIORI LA REPONSE : 
+It is very simple, really. All you need is to bind the sampler to some texture unit with glUniform1i. So for your code sample, assuming the two uniform samplers:
+
+uniform sampler2D DecalTex;  // The texture  (we'll bind to texture unit 0)
+uniform sampler2D BumpTex;   // The bump-map (we'll bind to texture unit 1)
+
+In your initialization code:
+
+// Get the uniform variables location. You've probably already done that before...
+decalTexLocation = glGetUniformLocation(shader_program, "DecalTex");
+bumpTexLocation  = glGetUniformLocation(shader_program, "BumpTex");
+
+// Then bind the uniform samplers to texture units:
+glUseProgram(shader_program);
+glUniform1i(decalTexLocation, 0);
+glUniform1i(bumpTexLocation,  1);
+/*/
+
+  //Set active shader
+  shaderManager->use_shader("inversion");
+
+    //Framebuffer pass 2
   renderManager->bind_fbo_render();
 
   //Set active shader
@@ -256,7 +278,7 @@ void CoreGLengine::loop_end(){
 
   //Check for window termination
   if(glfwWindowShouldClose(window)){
-    openglRunning = false;
+    loop_run = false;
   }
 
   //---------------------------

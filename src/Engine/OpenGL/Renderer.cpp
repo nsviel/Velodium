@@ -78,19 +78,19 @@ void Renderer::init_create_fbo_2(){
   //---------------------------
 
   //Create framebuffer 2
-  glGenTextures(1, &fbo_2_tex_edl_ID);
+  glGenTextures(1, &fbo_2_tex_color_ID);
   glGenFramebuffers(1, &fbo_2_ID);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
 
   //Create color texture and bind it to the framebuffer
-  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_edl_ID);
+  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_color_ID);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, gl_dim.x, gl_dim.y, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_edl_ID, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_color_ID, 0);
 
   //Debind framebuffer
-  glBindTexture(GL_TEXTURE_2D ,0);
+  glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
@@ -152,7 +152,7 @@ void Renderer::bind_fbo_render(){
   //---------------------------
 
   //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glDisable(GL_DEPTH_TEST);
 
   //Bind color and depth textures from fbo 1
@@ -166,9 +166,14 @@ void Renderer::bind_fbo_render(){
 void Renderer::bind_canvas(){
   //---------------------------
 
-  //Binf fbo and clear old
+  //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  // Current texture
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
 
   //Draw quad
   glBindVertexArray(canvas_vao);

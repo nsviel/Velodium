@@ -1,7 +1,7 @@
 #version 330 core
 
 in vec2 vs_tex_coord;
-out vec4 fs_color;
+out vec4 fs_tex_color;
 
 uniform sampler2D tex_color;
 uniform sampler2D tex_depth;
@@ -12,7 +12,6 @@ uniform float EDL_STRENGTH;
 uniform float EDL_DISTANCE;
 uniform float EDL_RADIUS;
 uniform bool EDL_ON;
-uniform bool invertion_ON;
 uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
 
@@ -41,12 +40,7 @@ vec2 neighbor_contribution(float depth_norm, vec2 offset) {
 //MAIN FUNCTION
 void main()
 {
-  vec4 color_rgba;
-  if(invertion_ON){
-    color_rgba = vec4(vec3(1.0 - texture(tex_color, vs_tex_coord)), 1.0);
-  }else{
-    color_rgba = texture(tex_color, vs_tex_coord);
-  }
+  vec4 tex_color_rgba = texture(tex_color, vs_tex_coord);
 
   if(EDL_ON){
 
@@ -66,8 +60,8 @@ void main()
     float depth_response = NN_response.x / NN_response.y;
     float shade = exp(-depth_response * 1500.0 * EDL_STRENGTH);
 
-    color_rgba.rgb *= shade;
+    tex_color_rgba.rgb *= shade;
   }
 
-  fs_color = vec4(color_rgba);
+  fs_tex_color = vec4(tex_color_rgba);
 }

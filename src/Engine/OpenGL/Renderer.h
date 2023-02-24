@@ -30,7 +30,7 @@ public:
   void render_screenshot_pbo(string path);
   void render_screenshot_freeimage(string path);
   void render_screenshot_online();
-
+  
   inline vec4* get_screen_color(){return &screen_color;}
   inline string* get_save_path(){return &save_path_screenshot;}
   inline bool* get_is_screenshot(){return &is_screenshot;}
@@ -46,7 +46,7 @@ private:
   GLuint fbo_1_tex_color_ID;
   GLuint fbo_1_tex_depth_ID;
   GLuint fbo_2_ID;
-  GLuint fbo_2_tex_edl_ID;
+  GLuint fbo_2_tex_color_ID;
   GLuint pbo_screenshot;
 
   vec4 screen_color;

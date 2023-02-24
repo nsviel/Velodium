@@ -29,9 +29,11 @@ private:
   Shader_screen* screenManager;
   Shader_edl* edlManager;
 
-  string shader_dir;
   Shader_object* shader_screen;
   Shader_object* shader_render;
+  Shader_object* shader_invers;
+
+  string shader_dir;
 };
 
 #endif
