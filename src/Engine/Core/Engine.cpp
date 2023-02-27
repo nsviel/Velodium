@@ -27,8 +27,6 @@ Engine::Engine(Node_engine* engine){
   this->cameraManager = node_engine->get_cameraManager();
   this->texManager = node_engine->get_texManager();
 
-  this->is_visualization = configManager->parse_json_b("window", "visualization");
-
   //---------------------------
 }
 Engine::~Engine(){}

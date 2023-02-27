@@ -26,14 +26,8 @@ public:
 
 public:
   //Texture management
-  bool load_texture(string filePath, string name);
+  int load_texture(string filePath, string name);
   void apply_texture(Subset* subset, string tex_path);
-
-  //void skybox(vec3 camPos);
-  //void init_skybox();
-  //unsigned int loadCubemap(vector<string> faces);
-  //Texture* get_TextureByName(string name);
-  //inline list<Texture*>* get_list_texture(){return list_Texture;}
 
   inline bool* get_with_texture(){return &with_texture;}
 
@@ -44,7 +38,6 @@ private:
   string Name;
   int width = 0;
   int height = 0;
-  GLuint tex_ID;
   bool with_texture;
 };
 

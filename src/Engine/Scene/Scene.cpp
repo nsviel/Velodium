@@ -528,7 +528,7 @@ void Scene::selection_cloudByName(string name){
   //---------------------------
 }
 
-//Assesseurs
+//Getter
 Cloud* Scene::get_cloud_next(){
   Cloud* cloud;
   //---------------------------

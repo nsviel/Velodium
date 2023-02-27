@@ -11,6 +11,7 @@
 #include "OpenGL/CoreGLengine.h"
 #include "OpenGL/Renderer.h"
 #include "OpenGL/Texture.h"
+#include "OpenGL/Light.h"
 #include "Shader/Shader.h"
 
 #include "Camera/Camera.h"
@@ -47,10 +48,10 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->node_module = new Node_module(this);
   this->node_gui = new Node_gui(this);
 
+  this->lightManager = new Light(this);
   this->engineManager = new Engine(this);
 
-
-  texManager->load_texture("/home/aeter/Desktop/container.jpg", "container");
+  lightManager->init();
 
   //---------------------------
 }

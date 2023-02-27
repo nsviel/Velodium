@@ -37,9 +37,6 @@ private:
   Object* objectManager;
   Camera* cameraManager;
   Texture* texManager;
-
-  bool is_visualization;
-  uint modelID, comID;
 };
 
 #endif

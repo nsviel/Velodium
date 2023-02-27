@@ -41,6 +41,17 @@ Renderer::~Renderer(){
 }
 
 //Init
+void Renderer::init_create_fbo_MSAA(){
+  vec2 gl_dim = dimManager->get_gl_dim();
+  //---------------------------
+
+  glGenTextures(1, &fbo_MSAA_ID);
+  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_MSAA_ID);
+  glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 2, GL_RGB, gl_dim.x, gl_dim.y, GL_TRUE);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_MSAA_ID, 0);
+
+  //---------------------------
+}
 void Renderer::init_create_fbo_1(){
   vec2 gl_dim = dimManager->get_gl_dim();
   //---------------------------

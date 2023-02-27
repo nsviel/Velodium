@@ -6,6 +6,7 @@
 #include "../../Engine/Scene/Glyph/Object.h"
 #include "../../Engine/Scene/Scene.h"
 #include "../../Engine/Scene/Configuration.h"
+#include "../../Engine/OpenGL/Texture.h"
 #include "../../Specific/fct_math.h"
 #include "../../Specific/color.h"
 #include "../../Interface/File/Directory.h"
@@ -14,7 +15,7 @@
 #include "../../Operation/Color/Color.h"
 
 
-//Constructor / Destructor
+// Constructor / Destructor
 Extractor::Extractor(Node_load* node_load){
   //---------------------------
 
@@ -23,6 +24,7 @@ Extractor::Extractor(Node_load* node_load){
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_engine->get_sceneManager();
   this->objectManager = node_engine->get_objectManager();
+  this->texManager = node_engine->get_texManager();
 
   this->ID = 0;
 
@@ -30,7 +32,7 @@ Extractor::Extractor(Node_load* node_load){
 }
 Extractor::~Extractor(){}
 
-//Main function
+// Main function
 Cloud* Extractor::extract_data(vector<Data_file*> data){
   Cloud* cloud = new Cloud();
   //---------------------------
@@ -65,6 +67,7 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
     //Set final parametrization
     this->define_visibility(subset, i);
     this->define_buffer_init(cloud, subset);
+    this->compute_texture(subset, data[i]);
   }
 
   //---------------------------
@@ -159,7 +162,7 @@ void Extractor::extract_data_oneFrame(Cloud* cloud, Data_file* data){
   //---------------------------
 }
 
-//Subfunctions
+// Subfunctions
 void Extractor::check_data(Data_file* data){
   this->is_color = false;
   this->is_normal = false;
@@ -203,7 +206,7 @@ void Extractor::check_data(Data_file* data){
     for(int i=0; i<data->location.size(); i++){
       data->color.push_back(color_rdm);
     }
-  }else{
+  }else if(data->texture.size() != 0){
     for(int i=0; i<data->location.size(); i++){
       data->color.push_back(vec4(1, 1, 1, 1));
     }
@@ -352,7 +355,7 @@ void Extractor::init_random_color(){
   //---------------------------
 }
 
-//Data type extraction
+// Data type extraction
 void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------
@@ -442,10 +445,20 @@ void Extractor::extract_texture(Subset* subset, vector<vec2>& vec_tex){
     glBufferData(GL_ARRAY_BUFFER, vec_tex.size()*sizeof(glm::vec2), &vec_tex[0], GL_DYNAMIC_DRAW);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
     glEnableVertexAttribArray(2);
-
-    subset->has_texture = true;
-    subset->texture_ID = 1;
   }
+
+  //---------------------------
+}
+
+// Texture
+void Extractor::compute_texture(Subset* subset, Data_file* data){
+  if(data->path_texture == ""){return;}
+  //---------------------------
+
+  string name = get_name_from_path(data->path_texture);
+  int ID = texManager->load_texture(data->path_texture, name);
+  subset->texture_ID = ID;
+  subset->has_texture = true;
 
   //---------------------------
 }

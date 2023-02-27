@@ -35,10 +35,15 @@ public:
   Data_file* Loader(string filePath);
 
   //Subfunction
+  void init_params();
   vector<Vertex> get_data_from_file(istream& in);
+  void parse_mtl(string path_obj);
+  void fill_data_file(Data_file* data, vector<Vertex>& vertex_vec);
 
 private:
   Data_file* data_out;
+  string file_mtl;
+  string file_texture;
 };
 
 #endif

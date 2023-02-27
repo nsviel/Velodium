@@ -135,6 +135,12 @@ void CoreGLengine::init_opengl(){
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
+  //Enable shader point size setting
+  //glEnable(GL_PROGRAM_POINT_SIZE);
+  //Multisampling
+  //glfwWindowHint(GLFW_SAMPLES, 4);
+  //glEnable(GL_MULTISAMPLE);
+
   //GLEW
   glewInit();
 
@@ -220,7 +226,7 @@ void CoreGLengine::loop_pass_2(){
   //---------------------------
 
 //Il faut trouver un moye nde faire les deux shaders succesivement
-/* A PRIORI LA REPONSE : 
+/* A PRIORI LA REPONSE :
 It is very simple, really. All you need is to bind the sampler to some texture unit with glUniform1i. So for your code sample, assuming the two uniform samplers:
 
 uniform sampler2D DecalTex;  // The texture  (we'll bind to texture unit 0)

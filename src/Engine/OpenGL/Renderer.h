@@ -14,6 +14,7 @@ public:
   ~Renderer();
 
 public:
+  void init_create_fbo_MSAA();
   void init_create_fbo_1();
   void init_create_fbo_2();
   void init_create_canvas();
@@ -30,7 +31,7 @@ public:
   void render_screenshot_pbo(string path);
   void render_screenshot_freeimage(string path);
   void render_screenshot_online();
-  
+
   inline vec4* get_screen_color(){return &screen_color;}
   inline string* get_save_path(){return &save_path_screenshot;}
   inline bool* get_is_screenshot(){return &is_screenshot;}
@@ -42,6 +43,7 @@ private:
 
   GLuint canvas_vao;
   GLuint canvas_vbo_xy;
+  GLuint fbo_MSAA_ID;
   GLuint fbo_1_ID;
   GLuint fbo_1_tex_color_ID;
   GLuint fbo_1_tex_depth_ID;

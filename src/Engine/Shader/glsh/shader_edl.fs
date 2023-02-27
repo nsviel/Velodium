@@ -61,6 +61,7 @@ void main()
     float shade = exp(-depth_response * 1500.0 * EDL_STRENGTH);
 
     tex_color_rgba.rgb *= shade;
+    
   }
 
   fs_tex_color = vec4(tex_color_rgba);

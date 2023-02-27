@@ -22,6 +22,7 @@ class CoreGLengine;
 class Object;
 class Followup;
 class Texture;
+class Light;
 
 
 class Node_engine
@@ -57,6 +58,7 @@ public:
   inline Object* get_objectManager(){return objectManager;}
   inline Followup* get_followManager(){return followManager;}
   inline Texture* get_texManager(){return texManager;}
+  inline Light* get_lightManager(){return lightManager;}
 
 private:
   Node_operation* node_ope;
@@ -78,6 +80,7 @@ private:
   Dimension* dimManager;
   Engine* engineManager;
   Object* objectManager;
+  Light* lightManager;
 };
 
 #endif

@@ -5,6 +5,7 @@
 
 class Node_engine;
 class Configuration;
+class Shader_object;
 
 
 class Shader_screen
@@ -13,7 +14,7 @@ public:
   Shader_screen(Node_engine* node);
   ~Shader_screen();
 
-  void setup_shader(GLuint program_ID);
+  void setup_shader(Shader_object* shader);
   void update_shader();
 
   inline string get_path_vs(){return path_vs;}
@@ -23,12 +24,14 @@ public:
 private:
   Configuration* configManager;
 
+  Shader_object* shader;
+
   string path_vs;
   string path_fs;
   float clip_far;
   float clip_near;
   bool with_depth;
-  int program_ID;
+  int point_size;
 };
 
 #endif

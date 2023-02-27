@@ -13,6 +13,9 @@ Data_file* file_OBJ::Loader(string path){
   Data_file* data = new Data_file();
   //---------------------------
 
+  //Init
+  this->init_params();
+
   // Open file and fill path info
   ifstream file(path);
   data->name = get_name_from_path(path);
@@ -21,33 +24,39 @@ Data_file* file_OBJ::Loader(string path){
   // Retrieve file data
   vector<Vertex> vertex_vec = get_data_from_file(file);
 
+  //Parse MTL file
+  this->parse_mtl(path);
+
   // Fill output format with file data
-  for(int i=0; i<vertex_vec.size(); i++){
-    data->location.push_back(vertex_vec[i].location);
-    data->normal.push_back(vertex_vec[i].normal);
-    data->texture.push_back(vertex_vec[i].texcoord);
-  }
-  data->draw_type = "triangle";
+  this->fill_data_file(data, vertex_vec);
 
   //---------------------------
   return data;
 }
 
 //Subfunction
+void file_OBJ::init_params(){
+  //---------------------------
+
+  this->file_mtl = "";
+  this->file_texture = "";
+
+  //---------------------------
+}
 vector<Vertex> file_OBJ::get_data_from_file(istream& file){
   //---------------------------
 
   //Initiate vectors
-  std::vector<Vertex> vertex_vec;
-  std::vector<glm::vec4> xyz(1, glm::vec4( 0, 0, 0, 0 ));
-  std::vector<glm::vec3> uv(1, glm::vec3( 0, 0, 0 ));
-  std::vector<glm::vec3> Nxyz(1, glm::vec3( 0, 0, 0 ));
+  vector<Vertex> vertex_vec;
+  vector<glm::vec4> xyz(1, glm::vec4( 0, 0, 0, 0 ));
+  vector<glm::vec3> uv(1, glm::vec3( 0, 0, 0 ));
+  vector<glm::vec3> Nxyz(1, glm::vec3( 0, 0, 0 ));
 
   //Read file line by line
-  std::string line;
+  string line;
   while(std::getline(file, line)){
     std::istringstream line_str(line);
-    std::string line_type;
+    string line_type;
     line_str >> line_type;
 
     // location
@@ -56,28 +65,25 @@ vector<Vertex> file_OBJ::get_data_from_file(istream& file){
       line_str >> x >> y >> z >> w;
       xyz.push_back( glm::vec4( x, y, z, w ) );
     }
-
     // texture
-    if(line_type == "vt"){
+    else if(line_type == "vt"){
       float u = 0, v = 0, w = 0;
       line_str >> u >> v >> w;
       uv.push_back( glm::vec3( u, v, w ) );
     }
-
     // normal
-    if(line_type == "vn"){
+    else if(line_type == "vn"){
       float i = 0, j = 0, k = 0;
       line_str >> i >> j >> k;
       Nxyz.push_back( glm::normalize( glm::vec3( i, j, k ) ) );
     }
-
     // polygon
-    if(line_type == "f"){
-      std::vector<Vertex_ref> refs;
-      std::string refStr;
+    else if(line_type == "f"){
+      vector<Vertex_ref> refs;
+      string refStr;
       while( line_str >> refStr){
         std::istringstream ref( refStr );
-        std::string vStr, vtStr, vnStr;
+        string vStr, vtStr, vnStr;
         std::getline( ref, vStr, '/' );
         std::getline( ref, vtStr, '/' );
         std::getline( ref, vnStr, '/' );
@@ -108,8 +114,57 @@ vector<Vertex> file_OBJ::get_data_from_file(istream& file){
         }
       }
     }
+    //header
+    else if(line_type == "mtllib"){
+      string mtl;
+      line_str >> mtl;
+      this->file_mtl = mtl;
+    }
   }
 
   //---------------------------
   return vertex_vec;
+}
+void file_OBJ::parse_mtl(string path_obj){
+  if(file_mtl == ""){return;}
+  //---------------------------
+
+  // Retrieve mtl file path
+  string path = get_path_from_filepath(path_obj);
+  string path_mtl = path + file_mtl;
+
+  //Open mtl file
+  ifstream file(path_mtl);
+
+  //Read mtl data
+  string line;
+  while(std::getline(file, line)){
+    std::istringstream line_str(line);
+    string line_type;
+    line_str >> line_type;
+
+    // texture
+    if(line_type == "map_Kd" || line_type == "map_Bump"){
+      string filename_texture;
+      line_str >> filename_texture;
+      string path_texture = path + filename_texture;
+
+      this->file_texture = path_texture;
+    }
+  }
+
+  //---------------------------
+}
+void file_OBJ::fill_data_file(Data_file* data, vector<Vertex>& vertex_vec){
+  //---------------------------
+
+  for(int i=0; i<vertex_vec.size(); i++){
+    data->location.push_back(vertex_vec[i].location);
+    data->normal.push_back(vertex_vec[i].normal);
+    data->texture.push_back(vertex_vec[i].texcoord);
+  }
+  data->draw_type = "triangle";
+  data->path_texture = file_texture;
+
+  //---------------------------
 }

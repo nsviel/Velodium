@@ -10,6 +10,7 @@ class Node_load;
 class Scene;
 class Object;
 class Configuration;
+class Texture;
 
 
 class Extractor
@@ -43,10 +44,13 @@ private:
   void extract_timestamp(Subset* subset, vector<float>& timestampOBJ);
   void extract_texture(Subset* subset, vector<vec2>& vec_tex);
 
+  void compute_texture(Subset* subset, Data_file* data);
+
 private:
   Scene* sceneManager;
   Object* objectManager;
   Configuration* configManager;
+  Texture* texManager;
 
   int ID;
   vec4 color_rdm;

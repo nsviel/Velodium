@@ -28,6 +28,19 @@ std::string get_filename_from_path(std::string path){
 
   //---------------------------
 }
+std::string get_path_from_filepath(std::string filepath){
+  // Return path abs or relative from file path
+  //---------------------------
+
+  if(filepath != ""){
+    std::string path = filepath.substr(0, filepath.find_last_of("/\\") + 1);
+    return path;
+  }else{
+    return "";
+  }
+
+  //---------------------------
+}
 std::string get_name_and_parent_from_path(std::string path){
   //Return file parent/name
   //---------------------------
