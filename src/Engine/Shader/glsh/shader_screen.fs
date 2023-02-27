@@ -14,5 +14,5 @@ out vec4 fs_color;
 void main()
 {
   vec4 frag_tex = texture(fs_texture, fs_in.tex_coord);
-  fs_color = frag_tex * fs_in.color;
+  fs_color = vec4(lightColor, 1) * frag_tex * fs_in.color;
 }

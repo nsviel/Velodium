@@ -40,7 +40,7 @@ void Shader::init_shader(){
 	string path_render_vs = edlManager->get_path_vs();
 	string path_render_fs = edlManager->get_path_fs();
 	this->shader_render = new Shader_object(path_render_vs, path_render_fs);
-	edlManager->setup_shader(shader_render->get_program_ID());
+	edlManager->setup_shader(shader_render);
 
 	//Inversion shader
 	string path_inv_vs = "../src/Engine/Shader/glsh/shader_inversion.vs";

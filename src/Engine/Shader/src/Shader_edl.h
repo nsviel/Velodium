@@ -6,6 +6,7 @@
 class Node_engine;
 class Dimension;
 class Configuration;
+class Shader_object;
 
 
 class Shader_edl
@@ -14,7 +15,7 @@ public:
   Shader_edl(Node_engine* node);
   ~Shader_edl();
 
-  void setup_shader(GLuint program_ID);
+  void setup_shader(Shader_object* shader);
   void update_shader();
 
   inline string get_path_vs(){return path_vs;}
@@ -30,6 +31,8 @@ public:
 private:
   Configuration* configManager;
   Dimension* dimManager;
+
+  Shader_object* shader;
 
   string path_vs;
   string path_fs;

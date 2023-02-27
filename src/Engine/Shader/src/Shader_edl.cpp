@@ -1,9 +1,9 @@
 #include "Shader_edl.h"
+#include "Shader_object.h"
 
 #include "../../Node_engine.h"
 #include "../../Core/Dimension.h"
 #include "../../Scene/Configuration.h"
-
 
 
 Shader_edl::Shader_edl(Node_engine* node){
@@ -29,75 +29,54 @@ Shader_edl::Shader_edl(Node_engine* node){
 }
 Shader_edl::~Shader_edl(){}
 
-void Shader_edl::setup_shader(GLuint ID){
-  this->program_ID = ID;
+void Shader_edl::setup_shader(Shader_object* shader){
+  this->shader = shader;
+  int program_ID =shader->get_program_ID();
   //---------------------------
 
   //Use corresponding shader program
   glUseProgram(program_ID);
 
-  //Set parameters to shader
-  auto a_loc = glGetUniformLocation(program_ID, "A");
-  auto b_loc = glGetUniformLocation(program_ID, "B");
+  // Setup shader parameters
   auto a = (clip_far + clip_near) / (clip_far - clip_near);
   auto b = (-2 * clip_far * clip_near) / (clip_far - clip_near);
-  glUniform1f(a_loc, (float) a);
-  glUniform1f(b_loc, (float) b);
+  shader->setFloat("A", a);
+  shader->setFloat("B", b);
 
-  auto edl_stgh_loc = glGetUniformLocation(program_ID, "EDL_STRENGTH");
-  auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
-  auto edl_radi_loc = glGetUniformLocation(program_ID, "EDL_RADIUS");
-  auto with_edl_loc = glGetUniformLocation(program_ID, "EDL_ON");
+  shader->setFloat("EDL_STRENGTH", edl_strength);
+  shader->setFloat("EDL_DISTANCE", edl_distance);
+  shader->setFloat("EDL_RADIUS", edl_radius);
+  shader->setInt("EDL_ON", with_edl);
 
-  glUniform1f(edl_stgh_loc, (float)edl_strength);
-  glUniform1f(edl_dist_loc, (float)edl_distance);
-  glUniform1f(edl_radi_loc, (float)edl_radius);
-  glUniform1i(with_edl_loc, (int)with_edl);
-
-  auto color_texture_loc = glGetUniformLocation(program_ID, "tex_color");
-  auto depth_texture_loc = glGetUniformLocation(program_ID, "tex_depth");
-  glUniform1i(color_texture_loc, 0);
-  glUniform1i(depth_texture_loc, 1);
+  shader->setInt("tex_color", 0);
+  shader->setInt("tex_depth", 1);
 
   vec2 gl_dim = dimManager->get_gl_dim();
-  auto egl_width_loc = glGetUniformLocation(program_ID, "GL_WIDTH");
-  auto edl_height_loc = glGetUniformLocation(program_ID, "GL_HEIGHT");
-  glUniform1i(egl_width_loc, gl_dim.x);
-  glUniform1i(edl_height_loc, gl_dim.y);
+  shader->setInt("GL_WIDTH", gl_dim.x);
+  shader->setInt("GL_HEIGHT", gl_dim.y);
 
   //---------------------------
 }
 void Shader_edl::update_shader(){
   //---------------------------
-
+int program_ID =shader->get_program_ID();
   //Use corresponding shader program
   glUseProgram(program_ID);
 
-  //Set parameters to shader
-  auto a_loc = glGetUniformLocation(program_ID, "A");
-  auto b_loc = glGetUniformLocation(program_ID, "B");
+  // Setup shader parameters
   auto a = (clip_far + clip_near) / (clip_far - clip_near);
   auto b = (-2 * clip_far * clip_near) / (clip_far - clip_near);
-  glUniform1f(a_loc, (float) a);
-  glUniform1f(b_loc, (float) b);
+  shader->setFloat("A", a);
+  shader->setFloat("B", b);
 
-  auto edl_stgh_loc = glGetUniformLocation(program_ID, "EDL_STRENGTH");
-  auto edl_dist_loc = glGetUniformLocation(program_ID, "EDL_DISTANCE");
-  auto edl_radi_loc = glGetUniformLocation(program_ID, "EDL_RADIUS");
-  auto with_edl_loc = glGetUniformLocation(program_ID, "EDL_ON");
-  auto with_inv_loc = glGetUniformLocation(program_ID, "invertion_ON");
-
-  glUniform1f(edl_stgh_loc, (float)edl_strength);
-  glUniform1f(edl_dist_loc, (float)edl_distance);
-  glUniform1f(edl_radi_loc, (float)edl_radius);
-  glUniform1i(with_edl_loc, (int)with_edl);
-  glUniform1i(with_inv_loc, (int)with_inv);
+  shader->setFloat("EDL_STRENGTH", edl_strength);
+  shader->setFloat("EDL_DISTANCE", edl_distance);
+  shader->setFloat("EDL_RADIUS", edl_radius);
+  shader->setInt("EDL_ON", with_edl);
 
   vec2 gl_dim = dimManager->get_gl_dim();
-  auto egl_width_loc = glGetUniformLocation(program_ID, "GL_WIDTH");
-  auto edl_height_loc = glGetUniformLocation(program_ID, "GL_HEIGHT");
-  glUniform1i(egl_width_loc, gl_dim.x);
-  glUniform1i(edl_height_loc, gl_dim.y);
+  shader->setInt("GL_WIDTH", gl_dim.x);
+  shader->setInt("GL_HEIGHT", gl_dim.y);
 
   //---------------------------
 }
