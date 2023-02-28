@@ -6,8 +6,8 @@
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
 #include "../../../Operation/Color/Color.h"
-#include "../../../Specific/fct_math.h"
-#include "../../../Specific/fct_transtypage.h"
+#include "../../../Specific/Function/fct_math.h"
+#include "../../../Specific/Function/fct_transtypage.h"
 
 #include "image/IconsFontAwesome5.h"
 

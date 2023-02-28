@@ -5,8 +5,8 @@
 
 #include "../../Operation/Transformation/Attribut.h"
 #include "../../Scene/Cloud/Scene.h"
-#include "../../Specific/fct_math.h"
-#include "../../Specific/fct_terminal.h"
+#include "../../Specific/Function/fct_math.h"
+#include "../../Specific/Function/fct_terminal.h"
 
 
 //Constructor / Destructor

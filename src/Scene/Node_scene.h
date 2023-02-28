@@ -1,7 +1,7 @@
 #ifndef NODE_SCENE_H
 #define NODE_SCENE_H
 
-#include "../common.h"
+#include "../Specific/Node.h"
 
 class Node_engine;
 class Scene;
@@ -9,7 +9,7 @@ class Glyphs;
 class Object;
 
 
-class Node_scene
+class Node_scene : public Node
 {
 public:
   //Constructor / Destructor
@@ -19,7 +19,6 @@ public:
 public:
   //Main functions
   void update();
-  void runtime();
   void reset();
 
   inline Node_engine* get_node_engine(){return node_engine;}

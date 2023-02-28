@@ -15,7 +15,7 @@
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Color/Color.h"
 #include "../../../Operation/Node_operation.h"
-#include "../../../Specific/fct_math.h"
+#include "../../../Specific/Function/fct_math.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;

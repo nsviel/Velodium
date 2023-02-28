@@ -3,7 +3,7 @@
 
 #include "../Optimization/Fitting.h"
 
-#include "../../Specific/fct_math.h"
+#include "../../Specific/Function/fct_math.h"
 
 
 //Constructor / Destructor

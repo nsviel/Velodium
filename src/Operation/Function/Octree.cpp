@@ -2,7 +2,7 @@
 
 #include "../Color/Color.h"
 
-#include "../../Specific/fct_math.h"
+#include "../../Specific/Function/fct_math.h"
 #include "../../Specific/color.h"
 
 

@@ -6,7 +6,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "../common.h"
+#include "../../common.h"
 
 /**
  * \brief Basic math functions

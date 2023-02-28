@@ -4,7 +4,7 @@
 
 #include "../../../../Operation/Function/Plotting.h"
 #include "../../../../Operation/Function/BundleByClass.h"
-#include "../../../../Specific/fct_math.h"
+#include "../../../../Specific/Function/fct_math.h"
 
 
 //Constructor / Destructor

@@ -15,7 +15,7 @@
 #include "../../Scene/Cloud/Scene.h"
 #include "../../Interface/File/Directory.h"
 #include "../../Interface/File/Info.h"
-#include "../../Specific/fct_transtypage.h"
+#include "../../Specific/Function/fct_transtypage.h"
 
 
 //Constructor / Destructor

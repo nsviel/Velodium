@@ -6,8 +6,8 @@
 #include "../../../Scene/Cloud/Scene.h"
 #include "../../../Scene/Glyph/Object.h"
 #include "../../../Scene/Glyph/SLAM/Localmap.h"
-#include "../../../Specific/fct_math.h"
-#include "../../../Specific/fct_transtypage.h"
+#include "../../../Specific/Function/fct_math.h"
+#include "../../../Specific/Function/fct_transtypage.h"
 
 #include <algorithm>
 

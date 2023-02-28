@@ -2,7 +2,7 @@
 
 #include "../../../Load/Format/file_OBJ.h"
 #include "../../../Operation/Transformation/Transformation.h"
-#include "../../../Specific/fct_transtypage.h"
+#include "../../../Specific/Function/fct_transtypage.h"
 
 
 //Constructor / destructor

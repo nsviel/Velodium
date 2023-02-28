@@ -15,7 +15,7 @@
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Saver.h"
 
-#include "../../Specific/fct_terminal.h"
+#include "../../Specific/Function/fct_terminal.h"
 #include "../../Interface/File/Directory.h"
 
 

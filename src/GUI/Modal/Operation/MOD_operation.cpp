@@ -10,7 +10,7 @@
 #include "../../../Operation/Optimization/Fitting.h"
 #include "../../../Operation/Cloud/Extraction.h"
 #include "../../../Operation/Cloud/Selection.h"
-#include "../../../Specific/fct_transtypage.h"
+#include "../../../Specific/Function/fct_transtypage.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;

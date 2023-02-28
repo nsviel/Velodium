@@ -6,7 +6,7 @@
 
 #include "../../../../Operation/Transformation/Transformation.h"
 #include "../../../../Scene/Glyph/Glyphs.h"
-#include "../../../../Specific/fct_transtypage.h"
+#include "../../../../Specific/Function/fct_transtypage.h"
 
 
 //Constructor / Destructor

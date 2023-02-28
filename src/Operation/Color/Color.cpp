@@ -8,7 +8,7 @@
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Cloud/Scene.h"
 #include "../../Engine/Core/Configuration.h"
-#include "../../Specific/fct_math.h"
+#include "../../Specific/Function/fct_math.h"
 
 #include <random>
 

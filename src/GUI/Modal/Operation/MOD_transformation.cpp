@@ -7,8 +7,8 @@
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Transformation.h"
 #include "../../../Operation/Transformation/Pose.h"
-#include "../../../Specific/fct_transtypage.h"
-#include "../../../Specific/fct_math.h"
+#include "../../../Specific/Function/fct_transtypage.h"
+#include "../../../Specific/Function/fct_math.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;

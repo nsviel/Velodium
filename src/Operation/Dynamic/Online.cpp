@@ -27,9 +27,9 @@
 #include "../../Scene/Glyph/Object.h"
 #include "../../Engine/Core/Configuration.h"
 
-#include "../../Specific/fct_math.h"
-#include "../../Specific/fct_transtypage.h"
-#include "../../Specific/fct_chrono.h"
+#include "../../Specific/Function/fct_math.h"
+#include "../../Specific/Function/fct_transtypage.h"
+#include "../../Specific/Function/fct_chrono.h"
 
 
 //Constructor / Destructor

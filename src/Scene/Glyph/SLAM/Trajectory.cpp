@@ -1,6 +1,6 @@
 #include "Trajectory.h"
 
-#include "../../../Specific/fct_transtypage.h"
+#include "../../../Specific/Function/fct_transtypage.h"
 
 
 //Constructor / destructor

@@ -4,9 +4,9 @@
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Cloud/Scene.h"
 #include "../../../Engine/Core/Configuration.h"
-#include "../../../Specific/fct_transtypage.h"
-#include "../../../Specific/fct_math.h"
-#include "../../../Specific/fct_chrono.h"
+#include "../../../Specific/Function/fct_transtypage.h"
+#include "../../../Specific/Function/fct_math.h"
+#include "../../../Specific/Function/fct_chrono.h"
 
 #include "SLAM_sampling.h"
 #include "SLAM_init.h"

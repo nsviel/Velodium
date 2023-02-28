@@ -1,9 +1,9 @@
 #ifdef USE_CERES
 #include "SLAM_optim_ceres.h"
 
-#include "../../../Specific/fct_terminal.h"
-#include "../../../Specific/fct_transtypage.h"
-#include "../../../Specific/fct_math.h"
+#include "../../../Specific/Function/fct_terminal.h"
+#include "../../../Specific/Function/fct_transtypage.h"
+#include "../../../Specific/Function/fct_math.h"
 
 
 //Constructor / Destructor

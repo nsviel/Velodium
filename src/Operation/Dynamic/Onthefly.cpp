@@ -14,7 +14,7 @@
 #include "../../Load/Processing/Loader.h"
 
 #include "../../Operation/Transformation/Transformation.h"
-#include "../../Specific/fct_math.h"
+#include "../../Specific/Function/fct_math.h"
 
 
 //Constructor / Destructor
