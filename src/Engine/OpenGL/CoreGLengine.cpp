@@ -2,7 +2,7 @@
 #include "Renderer.h"
 
 #include "../Shader/Shader.h"
-#include "../Shader/src/Shader_object.h"
+#include "../Shader/Object/Shader_object.h"
 #include "../Camera/Camera.h"
 #include "../Camera/Viewport.h"
 #include "../Node_engine.h"
@@ -217,7 +217,8 @@ void CoreGLengine::loop_pass_1(){
   //Set active shader
   shaderManager->use_shader("screen");
   mat4 mvp = cameraManager->compute_cam_mvp();
-  Shader_object* shader_screen = shaderManager->get_shader_screen();
+  //Supprimer cette appell continue, ne la faire que quand camera move
+  Shader_object* shader_screen = shaderManager->get_shader_byName("screen");
   shader_screen->setMat4("MVP", mvp);
 
   //---------------------------
@@ -245,13 +246,13 @@ glUniform1i(bumpTexLocation,  1);
 /*/
 
   //Set active shader
-  shaderManager->use_shader("inversion");
+  //shaderManager->use_shader("inversion");
 
     //Framebuffer pass 2
   renderManager->bind_fbo_render();
 
   //Set active shader
-  shaderManager->use_shader("render");
+  shaderManager->use_shader("edl");
 
   //---------------------------
 }

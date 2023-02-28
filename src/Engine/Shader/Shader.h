@@ -6,8 +6,14 @@
 class Shader_edl;
 class Shader_screen;
 class Shader_object;
+class Shader_source;
 class Node_engine;
 
+
+//FAire polymophic shader source system et essayé de faire une list des enfants
+//Faire list shader
+//Faire list shader source
+//Asseccesur shader obj et shader source via name
 
 class Shader
 {
@@ -20,8 +26,8 @@ public:
   void update_shader();
   void use_shader(string shader_name);
 
-  inline Shader_object* get_shader_screen(){return shader_screen;}
-  inline Shader_object* get_shader_render(){return shader_render;}
+  Shader_object* get_shader_byName(string querry_name);
+
   inline Shader_edl* get_edlManager(){return edlManager;}
   inline Shader_screen* get_screenManager(){return screenManager;}
 
@@ -29,10 +35,8 @@ private:
   Shader_screen* screenManager;
   Shader_edl* edlManager;
 
-  Shader_object* shader_screen;
-  Shader_object* shader_render;
-  Shader_object* shader_invers;
-
+  list<Shader_object*>* list_shader_obj;
+  list<Shader_source*>* list_shader_src;
   string shader_dir;
 };
 

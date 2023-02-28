@@ -1,6 +1,8 @@
 #ifndef SHADER_EDL_H
 #define SHADER_EDL_H
 
+#include "../Object/Shader_source.h"
+
 #include "../../../common.h"
 
 class Node_engine;
@@ -9,7 +11,7 @@ class Configuration;
 class Shader_object;
 
 
-class Shader_edl
+class Shader_edl : public Shader_source
 {
 public:
   Shader_edl(Node_engine* node);

@@ -7,8 +7,8 @@
 class Shader_object
 {
 public:
-  Shader_object(string vertex, string fragment);
-  Shader_object(string vertex, string fragment, string path_gs);
+  Shader_object(string name, string path_vs, string path_fs);
+  Shader_object(string name, string path_vs, string path_fs, string path_gs);
   ~Shader_object();
 
 public:
@@ -29,12 +29,14 @@ public:
   inline void setMat4(const std::string &name, glm::mat4 &mat){glUniformMatrix4fv(glGetUniformLocation(program_ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);}
 
   inline GLuint get_program_ID(){return program_ID;}
+  inline string get_name(){return name;}
 
 private:
   GLuint shader_compilation(string fileName, GLenum shaderType);
 
 private:
   GLuint program_ID;
+  string name;
 };
 
 #endif

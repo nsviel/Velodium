@@ -1,5 +1,6 @@
 #include "Shader_screen.h"
-#include "Shader_object.h"
+
+#include "../Object/Shader_object.h"
 
 #include "../../Node_engine.h"
 #include "../../Scene/Configuration.h"

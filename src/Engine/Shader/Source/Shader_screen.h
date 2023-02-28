@@ -1,6 +1,8 @@
 #ifndef SHADER_SCREEN_H
 #define SHADER_SCREEN_H
 
+#include "../Object/Shader_source.h"
+
 #include "../../../common.h"
 
 class Node_engine;
@@ -8,7 +10,7 @@ class Configuration;
 class Shader_object;
 
 
-class Shader_screen
+class Shader_screen : public Shader_source
 {
 public:
   Shader_screen(Node_engine* node);

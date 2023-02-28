@@ -1,5 +1,6 @@
 #include "Shader_edl.h"
-#include "Shader_object.h"
+
+#include "../Object/Shader_object.h"
 
 #include "../../Node_engine.h"
 #include "../../Core/Dimension.h"

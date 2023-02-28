@@ -4,8 +4,8 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Engine/Shader/Shader.h"
-#include "../../../Engine/Shader/src/Shader_edl.h"
-#include "../../../Engine/Shader/src/Shader_screen.h"
+#include "../../../Engine/Shader/Source/Shader_edl.h"
+#include "../../../Engine/Shader/Source/Shader_screen.h"
 
 #include <fstream>
 

@@ -4,10 +4,11 @@
 
 
 //Constructor / Destructor
-Shader_object::Shader_object(string path_vs, string path_fs){
+Shader_object::Shader_object(string name, string path_vs, string path_fs){
 	//---------------------------
 
 	// Create the shaders program
+	this->name = name;
 	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
@@ -25,7 +26,7 @@ Shader_object::Shader_object(string path_vs, string path_fs){
 
 	//---------------------------
 }
-Shader_object::Shader_object(string path_vs, string path_fs, string path_gs){
+Shader_object::Shader_object(string name, string path_vs, string path_fs, string path_gs){
 	//---------------------------
 
 	// Create the shaders program
