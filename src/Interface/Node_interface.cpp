@@ -6,7 +6,7 @@
 #include "Network/HTTP/HTTP.h"
 
 #include "../Engine/Node_engine.h"
-#include "../Engine/Scene/Configuration.h"
+#include "../Engine/Core/Configuration.h"
 
 
 //Constructor / Destructor

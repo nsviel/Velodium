@@ -3,6 +3,7 @@
 #include "image/IconsFontAwesome5.h"
 
 #include "../../../Engine/Node_engine.h"
+#include "../../../Scene/Node_scene.h"
 #include "../../../Engine/Shader/Shader.h"
 #include "../../../Engine/Shader/Source/Shader_edl.h"
 #include "../../../Engine/Shader/Source/Shader_screen.h"
@@ -46,7 +47,7 @@ void MOD_shader::window_shader(){
 
 //Sub functions
 void MOD_shader::shader_screen(){
-  Shader_screen* shader_screen = (Shader_screen*)shaderManager->get_shader_src_byName("screen");
+  //Shader_screen* shader_screen = (Shader_screen*)shaderManager->get_shader_src_byName("screen");
   //---------------------------
 
   /*ImGui::SetNextItemWidth(item_width);

@@ -8,9 +8,10 @@
 #include "../Optimization/Fitting.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyph/Object.h"
-#include "../../Engine/Scene/Glyph/Scene/Mark.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Glyph/Object.h"
+#include "../../Scene/Glyph/Scene/Mark.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/Core/Dimension.h"
@@ -25,14 +26,15 @@ Selection::Selection(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->dimManager = node_engine->get_dimManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->renderManager = node_engine->get_renderManager();
   this->coordManager = node_ope->get_coordManager();
   this->attribManager = node_ope->get_attribManager();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->objectManager = node_scene->get_objectManager();
   this->fittingManager = node_ope->get_fittingManager();
   this->poseManager = new Pose();
   this->transformManager = new Transformation();

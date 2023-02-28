@@ -4,7 +4,6 @@
 #include "../../common.h"
 
 class Node_engine;
-class Scene;
 class Camera;
 class Player_node;
 class Configuration;
@@ -34,7 +33,6 @@ public:
   inline bool* get_with_camera_top(){return &with_camera_top;}
 
 private:
-  Scene* sceneManager;
   Camera* cameraManager;
   Configuration* configManager;
 

@@ -6,6 +6,7 @@
 #include "../../Operation/Cloud/Selection.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Engine/Core/Dimension.h"
 
 #include <GLFW/glfw3.h>

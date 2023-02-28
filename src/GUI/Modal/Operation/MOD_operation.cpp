@@ -1,8 +1,9 @@
 #include "MOD_operation.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Glyphs.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Filter.h"
 #include "../../../Operation/Transformation/Pose.h"
@@ -20,13 +21,14 @@ MOD_operation::MOD_operation(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->filterManager = node_ope->get_filterManager();
   this->selectionManager = node_ope->get_selectionManager();
   this->fitManager = node_ope->get_fittingManager();
   this->extractionManager = node_ope->get_extractionManager();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->poseManager = new Pose();
 
   this->item_width = 150;

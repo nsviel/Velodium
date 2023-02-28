@@ -40,6 +40,7 @@ file(GLOB_RECURSE ALL_SOURCES
   Load/*.cpp
   Interface/*.cpp
   Operation/*.cpp
+  Scene/*.cpp
   Specific/*.cpp
   main.cpp
 )
@@ -56,7 +57,7 @@ add_executable(executable
 target_link_libraries(executable
   ${ALL_LIBS}
   LIBRARY_EXTERN
-  LIBRARY_MODULE 
+  LIBRARY_MODULE
   ${CMAKE_DL_LIBS}
 )
 
@@ -65,7 +66,3 @@ target_include_directories(executable PUBLIC
   "${PROJECT_BINARY_DIR}"
   "${PROJECT_SOURCE_DIR}/extern"
 )
-
-
-
-

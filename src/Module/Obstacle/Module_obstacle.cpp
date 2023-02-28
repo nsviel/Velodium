@@ -9,7 +9,8 @@
 #include "../Node_module.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Operation/Node_operation.h"
 #include "../../Interface/Node_interface.h"
 

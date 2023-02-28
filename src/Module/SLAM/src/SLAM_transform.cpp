@@ -4,9 +4,10 @@
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Localmap.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Object.h"
+#include "../../../Scene/Glyph/SLAM/Localmap.h"
 #include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_transtypage.h"
 
@@ -18,10 +19,11 @@ SLAM_transform::SLAM_transform(SLAM* slam){
   //---------------------------
 
   Node_engine* node_engine = slam->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->slam_map = slam->get_slam_map();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->objectManager = node_scene->get_objectManager();
   this->slam_sampling = slam->get_slam_sampling();
 
   //---------------------------

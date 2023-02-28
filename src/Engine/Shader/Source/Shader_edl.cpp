@@ -2,7 +2,7 @@
 
 #include "../../Node_engine.h"
 #include "../../Core/Dimension.h"
-#include "../../Scene/Configuration.h"
+#include "../../Core/Configuration.h"
 
 
 Shader_edl::Shader_edl(Node_engine* node){

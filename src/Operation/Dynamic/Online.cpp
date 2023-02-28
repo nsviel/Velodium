@@ -22,9 +22,10 @@
 #include "../../Engine/Core/Dimension.h"
 #include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyph/Object.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Glyph/Object.h"
+#include "../../Engine/Core/Configuration.h"
 
 #include "../../Specific/fct_math.h"
 #include "../../Specific/fct_transtypage.h"
@@ -36,13 +37,14 @@ Online::Online(Node_operation* node_ope){
   //---------------------------
 
   this->node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
   this->filterManager = node_ope->get_filterManager();
   this->dimManager = node_engine->get_dimManager();
   this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->colorManager = node_ope->get_colorManager();
   this->followManager = node_engine->get_followManager();
-  this->objectManager = node_engine->get_objectManager();
+  this->objectManager = node_scene->get_objectManager();
   this->renderManager = node_engine->get_renderManager();
   this->visibilityManager = node_ope->get_visibilityManager();
   this->httpManager = new http_command();

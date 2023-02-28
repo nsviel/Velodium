@@ -8,14 +8,15 @@
 
 #include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyph/Object.h"
-#include "../../Engine/Scene/Glyph/Cloud/AABB.h"
-#include "../../Engine/Scene/Glyph/Scene/Grid.h"
-#include "../../Engine/Scene/Glyph/Scene/Axis.h"
-#include "../../Engine/Scene/Glyph/Cloud/Normal.h"
-#include "../../Engine/Scene/Glyph/Cloud/Tree.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Glyph/Object.h"
+#include "../../Scene/Glyph/Cloud/AABB.h"
+#include "../../Scene/Glyph/Scene/Grid.h"
+#include "../../Scene/Glyph/Scene/Axis.h"
+#include "../../Scene/Glyph/Cloud/Normal.h"
+#include "../../Scene/Glyph/Cloud/Tree.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Renderer.h"
 #include "../../Engine/OpenGL/Texture.h"
 
@@ -34,11 +35,12 @@ GUI_option::GUI_option(Node_gui* node_gui){
   Node_engine* node_engine = node_gui->get_node_engine();
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_load* node_load = node_engine->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->renderManager = node_engine->get_renderManager();
   this->gui_control = node_gui->get_gui_control();
-  this->objectManager = node_engine->get_objectManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->objectManager = node_scene->get_objectManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->colorManager = node_ope->get_colorManager();
   this->pathManager = node_load->get_patherManager();

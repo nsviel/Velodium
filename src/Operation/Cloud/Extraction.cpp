@@ -4,8 +4,9 @@
 #include "../Transformation/Attribut.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyph/Object.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Glyph/Object.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 
@@ -16,11 +17,12 @@ Extraction::Extraction(Node_operation* node_ope){
 
   Node_engine* node_engine = node_ope->get_node_engine();
   Node_load* node_load = node_engine->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
   this->loaderManager = node_load->get_loaderManager();
-  this->objectManager = node_engine->get_objectManager();
+  this->objectManager = node_scene->get_objectManager();
 
   this->list_part = new list<subpart*>;
   this->highlightON = false;

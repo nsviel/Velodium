@@ -3,9 +3,10 @@
 #include "../Node_load.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Glyph/Object.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Glyph/Object.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Texture.h"
 #include "../../Specific/fct_math.h"
 #include "../../Specific/color.h"
@@ -20,10 +21,11 @@ Extractor::Extractor(Node_load* node_load){
   //---------------------------
 
   Node_engine* node_engine = node_load->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->objectManager = node_scene->get_objectManager();
   this->texManager = node_engine->get_texManager();
 
   this->ID = 0;

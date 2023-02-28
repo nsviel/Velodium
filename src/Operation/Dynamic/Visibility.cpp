@@ -4,7 +4,8 @@
 #include "../Node_operation.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
 
 
 //Constructor / Destructor
@@ -12,7 +13,9 @@ Visibility::Visibility(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
-  this->sceneManager = node_engine->get_sceneManager();
+  Node_scene* node_scene = node_engine->get_node_scene();
+  
+  this->sceneManager = node_scene->get_sceneManager();
   this->flyManager = node_ope->get_flyManager();
 
   this->visibility_range = 15;

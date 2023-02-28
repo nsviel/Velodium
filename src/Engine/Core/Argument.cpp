@@ -1,7 +1,7 @@
 #include "Argument.h"
 
 #include "../Node_engine.h"
-#include "../Scene/Configuration.h"
+#include "../Core/Configuration.h"
 #include "../Camera/Camera.h"
 
 #include "../../Load/Node_load.h"

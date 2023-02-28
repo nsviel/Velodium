@@ -1,7 +1,7 @@
 #include "Renderer.h"
 
 #include "../Core/Dimension.h"
-#include "../Scene/Configuration.h"
+#include "../Core/Configuration.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../../../extern/image/stb_image_write.h"

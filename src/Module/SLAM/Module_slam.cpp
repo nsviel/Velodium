@@ -7,8 +7,9 @@
 
 #include "../Node_module.h"
 
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Operation/Node_operation.h"
 
 

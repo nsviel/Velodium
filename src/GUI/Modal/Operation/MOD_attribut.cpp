@@ -6,8 +6,9 @@
 #include "../../Control/GUI_Color.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Glyphs.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Glyphs.h"
 #include "../../../Operation/Transformation/Attribut.h"
 #include "../../../Operation/Transformation/Transformation.h"
 #include "../../../Operation/Transformation/Pose.h"
@@ -26,13 +27,14 @@ MOD_attribut::MOD_attribut(Node_gui* node_gui){
 
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_engine* node_engine = node_gui->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->gui_color = node_gui->get_gui_color();
   this->heatmapManager = node_ope->get_heatmapManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
   this->colorManager = node_ope->get_colorManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->poseManager = new Pose();
   this->transformManager = new Transformation();
 

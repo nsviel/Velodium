@@ -11,6 +11,7 @@
 #include "../../Node_interface.h"
 
 #include "../../../Engine/Node_engine.h"
+#include "../../../Scene/Node_scene.h"
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Extractor.h"
 

@@ -2,8 +2,7 @@
 #include "Camera.h"
 
 #include "../Node_engine.h"
-#include "../Scene/Scene.h"
-#include "../Scene/Configuration.h"
+#include "../Core/Configuration.h"
 
 #include "../../Specific/fct_math.h"
 #include "../../Specific/fct_transtypage.h"
@@ -14,7 +13,6 @@ Followup::Followup(Node_engine* node){
   //---------------------------
 
   this->configManager = node->get_configManager();
-  this->sceneManager = node->get_sceneManager();
   this->cameraManager = node->get_cameraManager();
 
   //---------------------------
@@ -39,7 +37,7 @@ void Followup::update_configuration(){
   //---------------------------
 }
 void Followup::camera_followup(Cloud* cloud, int ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  Subset* subset = cloud->get_subset_byID(ID_subset);
   if(subset == nullptr) return;
   //---------------------------
 
@@ -90,7 +88,7 @@ vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){
-    Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset - i);
+    Subset* subset = cloud->get_subset_byID(ID_subset - i);
     Eigen::Vector3d pos = subset->pose_T;
 
     for(int j=0; j<3; j++){

@@ -1,7 +1,7 @@
 #include "Viewport.h"
 
 #include "../Core/Dimension.h"
-#include "../Scene/Configuration.h"
+#include "../Core/Configuration.h"
 
 
 

@@ -14,7 +14,8 @@
 #include "../../../GUI/Node_gui.h"
 #include "../../../GUI/Modal/GUI_Modal.h"
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
 #include "../../../Load/Node_load.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
@@ -32,8 +33,9 @@ GUI_radiometry::GUI_radiometry(Module_radiometry* module){
   Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = module->get_node_ope();
   Node_load* node_load = module->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   //this->radioManager = module->get_radioManager();
   this->refManager = radioManager->get_refManager();

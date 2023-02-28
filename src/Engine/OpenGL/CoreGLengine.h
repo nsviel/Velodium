@@ -48,8 +48,8 @@ public:
   void loop_draw_scene();
 
   // Loop rendering stuff
-  void loop_pass_1();
-  void loop_pass_2();
+  void loop_pass_screen();
+  void loop_pass_edl();
   void loop_draw_canvas();
   void loop_end();
 

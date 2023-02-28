@@ -1,8 +1,9 @@
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Engine/Core/Configuration.h"
 #include "../../../Specific/fct_transtypage.h"
 #include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_chrono.h"
@@ -24,8 +25,10 @@ SLAM::SLAM(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 
+  Node_scene* node_scene = node_engine->get_node_scene();
+
   this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
 
   this->slam_sampling = new SLAM_sampling();
   this->slam_map = new SLAM_map(this);

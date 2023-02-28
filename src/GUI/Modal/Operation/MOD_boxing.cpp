@@ -1,10 +1,11 @@
 #include "MOD_boxing.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Glyphs.h"
-#include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/Cloud/Box.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Glyphs.h"
+#include "../../../Scene/Glyph/Object.h"
+#include "../../../Scene/Glyph/Cloud/Box.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Cloud/Extraction.h"
 #include "../../../Operation/Cloud/Boxing.h"
@@ -18,11 +19,13 @@ MOD_boxing::MOD_boxing(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->objectManager = node_engine->get_objectManager();
+  this->objectManager = node_scene->get_objectManager();
+#include "../../../Scene/Node_scene.h"
   this->extractionManager = node_ope->get_extractionManager();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->boxingManager = node_ope->get_boxingManager();
 
   this->item_width = 150;

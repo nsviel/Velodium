@@ -3,7 +3,7 @@
 
 #include "../../Node_interface.h"
 
-#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Engine/Core/Configuration.h"
 
 
 //Constructor / Destructor

@@ -2,9 +2,10 @@
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Localmap.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Object.h"
+#include "../../../Scene/Glyph/SLAM/Localmap.h"
 #include "../../../Specific/fct_math.h"
 #include "../../../Specific/fct_transtypage.h"
 

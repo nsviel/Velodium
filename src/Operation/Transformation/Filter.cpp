@@ -5,8 +5,9 @@
 #include "../Node_operation.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Specific/fct_math.h"
 #include "../../Specific/fct_terminal.h"
 
@@ -16,9 +17,10 @@ Filter::Filter(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
 
   //---------------------------

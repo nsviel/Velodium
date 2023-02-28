@@ -11,10 +11,11 @@
 #include "../../Operation/Transformation/Filter.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Engine/Camera/Followup.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Engine/Core/Configuration.h"
 
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/File/Path.h"
@@ -31,13 +32,14 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
 
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_interface* node_interface = node_gui->get_node_interface();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->node_engine = node_gui->get_node_engine();
   this->node_module = node_engine->get_node_module();
 
   this->filterManager = node_ope->get_filterManager();
   this->onlineManager = node_ope->get_onlineManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->followManager = node_engine->get_followManager();
   this->recordManager = node_interface->get_recordManager();
   this->renderManager = node_engine->get_renderManager();

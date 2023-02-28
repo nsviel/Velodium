@@ -3,6 +3,7 @@
 #include "../Node_operation.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Core/Dimension.h"
 

@@ -4,7 +4,8 @@
 #include "../../../../Load/Node_load.h"
 #include "../../../../Load/Processing/Loader.h"
 #include "../../../../Engine/Node_engine.h"
-#include "../../../../Engine/Scene/Scene.h"
+#include "../../../../Scene/Node_scene.h"
+#include "../../../../Scene/Cloud/Scene.h"
 
 //1 frame = 2 lidar scans = 2046 points
 //1024 points per scan with 25Hz rotation and 3 faisceau up and down
@@ -16,8 +17,9 @@ Scala_file::Scala_file(Node_engine* node_engine){
   //---------------------------
 
   Node_load* node_load = node_engine->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->loaderManager = node_load->get_loaderManager();
 
   //---------------------------

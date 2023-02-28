@@ -4,8 +4,9 @@
 #include "Pipeline/ICP_Matching.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Glyph/Glyphs.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Glyph/Glyphs.h"
+#include "../../../Scene/Cloud/Scene.h"
 #include "../../../Operation/Function/Plotting.h"
 #include "../../../Operation/Transformation/Transformation.h"
 #include "../../../Operation/Transformation/Attribut.h"
@@ -15,8 +16,10 @@
 Registration::Registration(Node_engine* node){
   //---------------------------
 
-  this->sceneManager = node->get_sceneManager();
-  this->glyphManager = node->get_glyphManager();
+  Node_scene* node_scene = node->get_node_scene();
+
+  this->sceneManager = node_scene->get_sceneManager();
+  this->glyphManager = node_scene->get_glyphManager();
   //this->attribManager = new Attribut(sceneManager);
   this->icpManager = new ICP(glyphManager);
   this->plotManager = new Plotting();

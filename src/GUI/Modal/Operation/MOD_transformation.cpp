@@ -1,8 +1,9 @@
 #include "MOD_transformation.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Glyphs.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Transformation.h"
 #include "../../../Operation/Transformation/Pose.h"
@@ -17,8 +18,10 @@ extern struct Modal_tab modal_tab;
 MOD_transformation::MOD_transformation(Node_engine* node_engine){
   //---------------------------
 
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  Node_scene* node_scene = node_engine->get_node_scene();
+
+  this->sceneManager = node_scene->get_sceneManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->poseManager = new Pose();
   this->transformManager = new Transformation();
 

@@ -1,6 +1,6 @@
 #include "Dimension.h"
 
-#include "../Scene/Configuration.h"
+#include "../Core/Configuration.h"
 
 
 //Constructor / Destructor

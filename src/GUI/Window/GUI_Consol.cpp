@@ -3,8 +3,9 @@
 
 #include "../../GUI/Node_gui.h"
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Engine/Core/Dimension.h"
-#include "../../Engine/Scene/Scene.h"
+#include "../../Scene/Cloud/Scene.h"
 
 #include "imgui/imgui.h"
 

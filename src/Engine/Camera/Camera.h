@@ -9,6 +9,7 @@ class Node_engine;
 class Dimension;
 class Configuration;
 class Viewport;
+class Shader;
 
 
 class Camera
@@ -29,6 +30,7 @@ public:
   //Zoom
   void compute_zoom_optic(float value);
   void compute_zoom_position(float value);
+  void update_shader();
 
   //Input commands
   void input_cam_mouse();
@@ -72,8 +74,10 @@ private:
   Configuration* configManager;
   Dimension* dimManager;
   Viewport *viewportManager;
+  Shader* shaderManager;
 
   Viewport_obj* viewport;
+  vec2 mouse_pose_old;
   int nb_viewport;
 };
 

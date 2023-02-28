@@ -7,7 +7,8 @@
 #include "../../Node_interface.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Engine/Core/Configuration.h"
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Extractor.h"
 #include "../../../Interface/File/Directory.h"

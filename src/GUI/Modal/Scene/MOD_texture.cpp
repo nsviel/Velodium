@@ -1,8 +1,9 @@
 #include "MOD_texture.h"
 
 #include "../../../Engine/Node_engine.h"
+#include "../../../Scene/Node_scene.h"
 #include "../../../Engine/OpenGL/Texture.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Cloud/Scene.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;
@@ -12,8 +13,10 @@ extern struct Modal_tab modal_tab;
 MOD_texture::MOD_texture(Node_engine* node_engine){
   //---------------------------
 
+  Node_scene* node_scene = node_engine->get_node_scene();
+
   this->texManager = node_engine->get_texManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
 
   this->item_width = 150;
 

@@ -4,8 +4,9 @@
 #include "../Module_obstacle.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Engine/Core/Configuration.h"
 
 #include "../../../Interface/File/Directory.h"
 #include "../../../Interface/File/Info.h"
@@ -22,9 +23,10 @@ Prediction::Prediction(Module_obstacle* module){
 
   Node_engine* node_engine = module->get_node_engine();
   Configuration* configManager = module->get_configManager();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->fileManager = module->get_fileManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
 
   this->is_new_pred = false;
   this->with_delete_pred_file = false;

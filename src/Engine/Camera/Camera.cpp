@@ -3,7 +3,9 @@
 
 #include "../Node_engine.h"
 #include "../Core/Dimension.h"
-#include "../Scene/Configuration.h"
+#include "../Core/Configuration.h"
+#include "../Shader/Shader.h"
+#include "../Shader/Object/Shader_object.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -15,8 +17,10 @@ Camera::Camera(Node_engine* node_engine){
   this->dimManager = node_engine->get_dimManager();
   this->configManager = node_engine->get_configManager();
   this->viewportManager = node_engine->get_viewportManager();
+  this->shaderManager = node_engine->get_shaderManager();
 
   this->viewport = viewportManager->get_viewport_main();
+  this->mouse_pose_old = vec2(0.0f);
 
   //---------------------------
 }
@@ -158,6 +162,15 @@ void Camera::compute_zoom_position(float yoffset){
 
   //---------------------------
 }
+void Camera::update_shader(){
+  //---------------------------
+
+  mat4 mvp = compute_cam_mvp();
+  Shader_object* shader_screen = shaderManager->get_shader_obj_byName("screen");
+  shader_screen->setMat4("MVP", mvp);
+
+  //---------------------------
+}
 
 //Inputs
 void Camera::input_cam_mouse(){
@@ -181,20 +194,25 @@ void Camera::input_cam_mouse_default(){
 
   //Cursor movement
   vec2 mouse_pose = dimManager->get_mouse_pose();
-  dimManager->set_mouse_pose(dimManager->get_gl_middle());
 
-  // Compute new orientation
-  vec2 gl_mid = dimManager->get_gl_middle();
-  azimuth += viewport->speed_mouse * float(gl_mid.x - mouse_pose.x);
-  elevation += viewport->speed_mouse * float(gl_mid.y - mouse_pose.y);
+  if(mouse_pose != mouse_pose_old){
+    dimManager->set_mouse_pose(dimManager->get_gl_middle());
 
-  //Limites of camera rotation
-  if(elevation > M_PI/2) elevation = M_PI/2;
-  if(elevation < -M_PI/2) elevation = -M_PI/2;
-  if(azimuth > M_PI*2) azimuth = 0;
-  if(azimuth < -M_PI*2) azimuth = 0;
+    // Compute new orientation
+    vec2 gl_mid = dimManager->get_gl_middle();
+    azimuth += viewport->speed_mouse * float(gl_mid.x - mouse_pose.x);
+    elevation += viewport->speed_mouse * float(gl_mid.y - mouse_pose.y);
 
-  glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    //Limites of camera rotation
+    if(elevation > M_PI/2) elevation = M_PI/2;
+    if(elevation < -M_PI/2) elevation = -M_PI/2;
+    if(azimuth > M_PI*2) azimuth = 0;
+    if(azimuth < -M_PI*2) azimuth = 0;
+
+    //Setup mouse
+    glfwSetInputMode(dimManager->get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    mouse_pose_old = mouse_pose;
+  }
 
   //---------------------------
 }

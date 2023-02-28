@@ -5,9 +5,10 @@
 #include "../Module_obstacle.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/Cloud/OOBB.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Object.h"
+#include "../../../Scene/Glyph/Cloud/OOBB.h"
 #include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/color.h"
 #include "../../../Interface/File/Directory.h"
@@ -19,10 +20,12 @@ Obstacle::Obstacle(Module_obstacle* module){
   //---------------------------
 
   Node_engine* node_engine = module->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->predManager = module->get_predManager();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->objectManager = node_scene->get_objectManager();
+#include "../../../Scene/Node_scene.h"
   this->warningManager = module->get_warningManager();
   this->oobbManager = new OOBB();
   this->poseManager = new Pose();

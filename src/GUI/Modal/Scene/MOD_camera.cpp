@@ -3,7 +3,8 @@
 #include "image/IconsFontAwesome5.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Configuration.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Engine/Core/Configuration.h"
 #include "../../../Engine/Camera/Camera.h"
 
 #include <fstream>

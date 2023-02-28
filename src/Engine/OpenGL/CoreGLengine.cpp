@@ -1,14 +1,15 @@
 #include "CoreGLengine.h"
 #include "Renderer.h"
 
+#include "../Node_engine.h"
 #include "../Shader/Shader.h"
 #include "../Shader/Object/Shader_object.h"
 #include "../Camera/Camera.h"
 #include "../Camera/Viewport.h"
-#include "../Node_engine.h"
 #include "../Core/Argument.h"
 #include "../Core/Dimension.h"
-#include "../Scene/Configuration.h"
+#include "../Core/Engine.h"
+#include "../Core/Configuration.h"
 
 #include "../../GUI/Node_gui.h"
 #include "../../GUI/Control/GUI.h"
@@ -74,13 +75,13 @@ void CoreGLengine::loop(){
 
     //First pass
     //---------------------------
-    this->loop_pass_1();
+    this->loop_pass_screen();
     this->loop_draw_scene();
     this->loop_selection();
 
     //Second pass
     //---------------------------
-    this->loop_pass_2();
+    this->loop_pass_edl();
     this->loop_draw_canvas();
 
     //GUI and end
@@ -200,7 +201,7 @@ void CoreGLengine::loop_draw_scene(){
 }
 
 // Loop rendering stuff
-void CoreGLengine::loop_pass_1(){
+void CoreGLengine::loop_pass_screen(){
   dimManager->update();
   //---------------------------
 
@@ -216,43 +217,21 @@ void CoreGLengine::loop_pass_1(){
 
   //Set active shader
   shaderManager->use_shader("screen");
-  mat4 mvp = cameraManager->compute_cam_mvp();
-  //Supprimer cette appell continue, ne la faire que quand camera move
-  Shader_object* shader_screen = shaderManager->get_shader_obj_byName("screen");
-  shader_screen->setMat4("MVP", mvp);
+  cameraManager->update_shader();
 
   //---------------------------
 }
-void CoreGLengine::loop_pass_2(){
+void CoreGLengine::loop_pass_edl(){
   //---------------------------
 
-//Il faut trouver un moye nde faire les deux shaders succesivement
-/* A PRIORI LA REPONSE :
-It is very simple, really. All you need is to bind the sampler to some texture unit with glUniform1i. So for your code sample, assuming the two uniform samplers:
-
-uniform sampler2D DecalTex;  // The texture  (we'll bind to texture unit 0)
-uniform sampler2D BumpTex;   // The bump-map (we'll bind to texture unit 1)
-
-In your initialization code:
-
-// Get the uniform variables location. You've probably already done that before...
-decalTexLocation = glGetUniformLocation(shader_program, "DecalTex");
-bumpTexLocation  = glGetUniformLocation(shader_program, "BumpTex");
-
-// Then bind the uniform samplers to texture units:
-glUseProgram(shader_program);
-glUniform1i(decalTexLocation, 0);
-glUniform1i(bumpTexLocation,  1);
-/*/
-
-  //Set active shader
-  //shaderManager->use_shader("inversion");
-
-    //Framebuffer pass 2
+  //Framebuffer pass 2
   renderManager->bind_fbo_render();
 
   //Set active shader
   shaderManager->use_shader("edl");
+
+
+  //shaderManager->use_shader("inversion");
 
   //---------------------------
 }

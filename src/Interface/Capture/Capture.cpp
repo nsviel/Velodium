@@ -8,8 +8,9 @@
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Dynamic/Online.h"
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Saver.h"
@@ -24,10 +25,11 @@ Capture::Capture(Node_interface* node_interface){
 
   Node_engine* node_engine = node_interface->get_node_engine();
   Node_load* node_load = node_interface->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->configManager = node_engine->get_configManager();
   this->node_ope = node_engine->get_node_ope();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->loaderManager = node_load->get_loaderManager();
   this->scalaManager = new Scala(node_interface);
   this->veloManager = new Velodyne(node_interface);

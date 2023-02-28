@@ -3,6 +3,7 @@
 #include "../Node_module.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Operation/Node_operation.h"
 
 

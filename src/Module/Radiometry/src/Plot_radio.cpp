@@ -4,7 +4,8 @@
 #include "Target/Ref_Operation.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Function/Plotting.h"
 #include "../../../Operation/Function/BundleByClass.h"
@@ -18,8 +19,9 @@ Plot_radio::Plot_radio(Node_engine* node){
   //---------------------------
 
   Node_operation* node_ope = node->get_node_ope();
+  Node_scene* node_scene = node->get_node_scene();
 
-  this->sceneManager = node->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->attribManager = node_ope->get_attribManager();
   this->refManager = new Reference(node);
   this->refopeManager = new Ref_Operation(refManager);

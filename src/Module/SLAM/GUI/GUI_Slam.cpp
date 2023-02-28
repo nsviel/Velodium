@@ -20,7 +20,8 @@
 #include "../../../GUI/Node_gui.h"
 #include "../../../Engine/Core/Engine.h"
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
 #include "../../../Specific/fct_transtypage.h"
 
 
@@ -31,8 +32,9 @@ GUI_Slam::GUI_Slam(Module_slam* module){
 
   Node_module* node_module = module_slam->get_node_module();
   Node_engine* node_engine = node_module->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->slamManager = module_slam->get_slamManager();
   this->slam_optim = slamManager->get_slam_optim();
   this->slam_optim_gn = slam_optim->get_optim_gn();

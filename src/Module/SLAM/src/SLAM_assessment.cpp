@@ -5,7 +5,8 @@
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
 #include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/fct_math.h"
 
@@ -15,8 +16,9 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
   //---------------------------
 
   Node_engine* node_engine = slam->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->slam_map = slam->get_slam_map();
   this->poseManager = new Pose();
 

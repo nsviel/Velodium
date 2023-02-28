@@ -12,7 +12,8 @@
 #include "../../Load/Processing/Pather.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
 #include "../../Engine/Data/struct_misc.h"
 #include "../../Engine/OpenGL/CoreGLengine.h"
 
@@ -40,13 +41,14 @@ GUI_menuBar::GUI_menuBar(Node_gui* node){
   Node_module* node_module = node_gui->get_node_module();
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_load* node_load = node_engine->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->gui_init = node_gui->get_gui_initialization();
   this->optionManager = node_gui->get_gui_option();
   this->gui_window = node_gui->get_gui_window();
   this->gui_leftPanel = node_gui->get_gui_leftPanel();
   this->gui_player = node_gui->get_gui_player();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();
   this->glManager = node_engine->get_glManager();

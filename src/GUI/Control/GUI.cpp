@@ -12,8 +12,9 @@
 
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Core/Dimension.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Engine/Core/Configuration.h"
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"

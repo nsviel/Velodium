@@ -3,12 +3,13 @@
 #include "SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Glyph/Object.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Localmap.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Car.h"
-#include "../../../Engine/Scene/Glyph/SLAM/Trajectory.h"
-#include "../../../Engine/Scene/Glyph/Cloud/Normal.h"
-#include "../../../Engine/Scene/Glyph/Scene/Matching.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Glyph/Object.h"
+#include "../../../Scene/Glyph/SLAM/Localmap.h"
+#include "../../../Scene/Glyph/SLAM/Car.h"
+#include "../../../Scene/Glyph/SLAM/Trajectory.h"
+#include "../../../Scene/Glyph/Cloud/Normal.h"
+#include "../../../Scene/Glyph/Scene/Matching.h"
 #include "../../../Specific/fct_math.h"
 
 
@@ -17,9 +18,10 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
   //---------------------------
 
   Node_engine* node_engine = slam->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->slam_map = slam->get_slam_map();
-  this->objectManager = node_engine->get_objectManager();
+  this->objectManager = node_scene->get_objectManager();
 
   Trajectory* trajObject = objectManager->get_object_trajectory();
   Localmap* mapObject = objectManager->get_object_localmap();

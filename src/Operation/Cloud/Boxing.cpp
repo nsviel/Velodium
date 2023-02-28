@@ -4,10 +4,11 @@
 #include "../Transformation/Attribut.h"
 
 #include "../../Engine/Node_engine.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Glyph/Object.h"
-#include "../../Engine/Scene/Glyph/Glyphs.h"
-#include "../../Engine/Scene/Glyph/Cloud/Box.h"
+#include "../../Scene/Node_scene.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Glyph/Object.h"
+#include "../../Scene/Glyph/Glyphs.h"
+#include "../../Scene/Glyph/Cloud/Box.h"
 
 
 //Constructor / destructor
@@ -15,10 +16,11 @@ Boxing::Boxing(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
-  this->objectManager = node_engine->get_objectManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->objectManager = node_scene->get_objectManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
 
   this->highlightON = false;

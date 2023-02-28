@@ -1,7 +1,8 @@
 #include "MOD_filter.h"
 
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
 
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Filter.h"
@@ -15,9 +16,10 @@ MOD_filter::MOD_filter(Node_operation* node_ope){
   //---------------------------
 
   Node_engine* node_engine = node_ope->get_node_engine();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->filterManager = node_ope->get_filterManager();
-  this->sceneManager = node_engine->get_sceneManager();
+  this->sceneManager = node_scene->get_sceneManager();
 
   this->item_width = 150;
 

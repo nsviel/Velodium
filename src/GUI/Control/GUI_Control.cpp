@@ -7,12 +7,13 @@
 #include "../../Load/Node_load.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Scene/Node_scene.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Camera/struct_viewport.h"
 #include "../../Engine/Core/Dimension.h"
-#include "../../Engine/Scene/Glyph/Glyphs.h"
-#include "../../Engine/Scene/Scene.h"
-#include "../../Engine/Scene/Configuration.h"
+#include "../../Scene/Glyph/Glyphs.h"
+#include "../../Scene/Cloud/Scene.h"
+#include "../../Engine/Core/Configuration.h"
 
 #include "../../Operation/Node_operation.h"
 #include "../../Operation/Dynamic/Player.h"
@@ -39,13 +40,14 @@ GUI_Control::GUI_Control(Node_gui* node){
   Node_engine* node_engine = node_gui->get_node_engine();
   Configuration* configManager = node_engine->get_configManager();
   Node_load* node_load = node_engine->get_node_load();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->selectionManager = node_ope->get_selectionManager();
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();

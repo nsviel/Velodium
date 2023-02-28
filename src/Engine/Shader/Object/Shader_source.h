@@ -14,7 +14,8 @@ public:
 
 public:
   void use();
-  void setup_shader(Shader_object* shader);
+
+  virtual void setup_shader(Shader_object* shader){cout<<"Could not setup shader Base class"<<endl;}
   virtual void update_shader(){cout<<"Could not update shader Base class"<<endl;}
 
   inline string get_name(){return name;}

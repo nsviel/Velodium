@@ -1,7 +1,7 @@
 #include "Shader_screen.h"
 
 #include "../../Node_engine.h"
-#include "../../Scene/Configuration.h"
+#include "../../Core/Configuration.h"
 
 
 Shader_screen::Shader_screen(Node_engine* node){

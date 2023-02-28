@@ -10,8 +10,9 @@
 
 #include "../../../GUI/Modal/GUI_Modal.h"
 #include "../../../Engine/Node_engine.h"
-#include "../../../Engine/Scene/Scene.h"
-#include "../../../Engine/Scene/Glyph/Glyphs.h"
+#include "../../../Scene/Node_scene.h"
+#include "../../../Scene/Cloud/Scene.h"
+#include "../../../Scene/Glyph/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
 
@@ -23,10 +24,10 @@ GUI_matching::GUI_matching(Module_registration* module){
   Node_engine* node_engine = module->get_node_engine();
   Node_module* node_module = module->get_node_module();
   Node_operation* node_ope = module->get_node_ope();
-  //Registration* regisManager = module->get_regisManager();
+  Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->sceneManager = node_engine->get_sceneManager();
-  this->glyphManager = node_engine->get_glyphManager();
+  this->sceneManager = node_scene->get_sceneManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   //this->icpManager = regisManager->get_icpManager();
   //this->keyManager = icpManager->get_keyManager();
