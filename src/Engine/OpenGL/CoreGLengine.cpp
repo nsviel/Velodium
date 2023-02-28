@@ -165,7 +165,7 @@ void CoreGLengine::init_rendering(){
   renderManager->init_create_fbo_1();
   renderManager->init_create_fbo_2();
   renderManager->init_create_canvas();
-  shaderManager->init_shader();
+  shaderManager->init_shader_objects();
 
   //---------------------------
 }
@@ -208,7 +208,7 @@ void CoreGLengine::loop_pass_1(){
   this->flag_resized = dimManager->get_is_resized();
   if(flag_resized){
     renderManager->update_dim_texture();
-    shaderManager->update_shader();
+    shaderManager->update_shader_objects();
   }
 
   //Set screen space FBO

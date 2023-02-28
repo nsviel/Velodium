@@ -1,9 +1,32 @@
 #include "Shader_object.h"
+#include "Shader_source.h"
 
 #include <fstream>
 
 
 //Constructor / Destructor
+Shader_object::Shader_object(Shader_source* shader_src){
+	//---------------------------
+
+	// Create the shaders program
+	this->name = shader_src->get_name();
+	this->program_ID = glCreateProgram();
+
+	// Compile & check Shaders-
+	GLuint vs = shader_compilation(shader_src->get_path_vs(), GL_VERTEX_SHADER);
+	GLuint fs = shader_compilation(shader_src->get_path_fs(), GL_FRAGMENT_SHADER);
+
+	//Link program
+	glLinkProgram(program_ID);
+
+	//Detach shaders for keep memory ressources
+	glDetachShader(program_ID, vs);
+	glDeleteShader(vs);
+	glDetachShader(program_ID, fs);
+	glDeleteShader(fs);
+
+	//---------------------------
+}
 Shader_object::Shader_object(string name, string path_vs, string path_fs){
 	//---------------------------
 

@@ -18,8 +18,6 @@ MOD_shader::MOD_shader(Node_engine* node_engine){
   //---------------------------
 
   this->shaderManager = node_engine->get_shaderManager();
-  this->edlManager = (Shader_edl*)shaderManager->get_shader_src_byName("edl");
-  this->screenManager = (Shader_screen*)shaderManager->get_shader_src_byName("screen");
 
   this->item_width = 150;
 
@@ -48,41 +46,43 @@ void MOD_shader::window_shader(){
 
 //Sub functions
 void MOD_shader::shader_screen(){
+  Shader_screen* shader_screen = (Shader_screen*)shaderManager->get_shader_src_byName("screen");
   //---------------------------
 
-  ImGui::SetNextItemWidth(item_width);
-  bool* with_depth = screenManager->get_with_depth();
+  /*ImGui::SetNextItemWidth(item_width);
+  bool* with_depth = shader_screen->get_with_depth();
   if(ImGui::Checkbox("Depth view", with_depth)){
-    screenManager->update_shader();
-  }
+    shader_screen->update_shader();
+  }*/
 
   //---------------------------
 }
 void MOD_shader::shader_render(){
+  Shader_edl* shader_edl = (Shader_edl*)shaderManager->get_shader_src_byName("edl");
   //---------------------------
 
-  ImGui::SetNextItemWidth(item_width);
-  bool* with_inv = edlManager->get_with_inv();
+  /*ImGui::SetNextItemWidth(item_width);
+  bool* with_inv = shader_edl->get_with_inv();
   if(ImGui::Checkbox("Color inversion", with_inv)){
-    edlManager->update_shader();
-  }
+    shader_edl->update_shader();
+  }*/
 
   ImGui::SetNextItemWidth(item_width);
-  bool* with_edl = edlManager->get_with_edl();
+  bool* with_edl = shader_edl->get_with_edl();
   if(ImGui::Checkbox("EDL shader", with_edl)){
-    edlManager->update_shader();
+    shader_edl->update_shader();
   }
 
   ImGui::SetNextItemWidth(item_width);
-  float* edl_radius = edlManager->get_edl_radius();
+  float* edl_radius = shader_edl->get_edl_radius();
   if(ImGui::SliderFloat("EDL radius", edl_radius, 1.0f, 3.0f)){
-    edlManager->update_shader();
+    shader_edl->update_shader();
   }
 
   ImGui::SetNextItemWidth(item_width);
-  float* edl_strength = edlManager->get_edl_strength();
+  float* edl_strength = shader_edl->get_edl_strength();
   if(ImGui::SliderFloat("EDL strength", edl_strength, 1.0f, 1000.0f)){
-    edlManager->update_shader();
+    shader_edl->update_shader();
   }
 
   //---------------------------

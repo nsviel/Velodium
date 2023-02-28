@@ -5,8 +5,6 @@
 
 class Node_engine;
 class Shader;
-class Shader_edl;
-class Shader_screen;
 
 
 class MOD_shader
@@ -26,8 +24,6 @@ public:
 
 private:
   Shader* shaderManager;
-  Shader_edl* edlManager;
-  Shader_screen* screenManager;
 
   int item_width;
 };

@@ -19,14 +19,11 @@ public:
   void setup_shader(Shader_object* shader);
   void update_shader();
 
-  inline bool* get_with_depth(){return &with_depth;}
-
 private:
   Configuration* configManager;
 
   float clip_far;
   float clip_near;
-  bool with_depth;
   int point_size;
 };
 

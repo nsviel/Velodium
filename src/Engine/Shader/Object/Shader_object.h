@@ -3,10 +3,13 @@
 
 #include "../../../common.h"
 
+class Shader_source;
+
 
 class Shader_object
 {
 public:
+  Shader_object(Shader_source* shader_src);
   Shader_object(string name, string path_vs, string path_fs);
   Shader_object(string name, string path_vs, string path_fs, string path_gs);
   ~Shader_object();

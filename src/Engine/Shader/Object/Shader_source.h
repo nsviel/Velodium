@@ -13,6 +13,9 @@ public:
   ~Shader_source();
 
 public:
+  void use();
+  void setup_shader(Shader_object* shader);
+  virtual void update_shader(){cout<<"Could not update shader Base class"<<endl;}
 
   inline string get_name(){return name;}
   inline string get_path_vs(){return path_vs;}

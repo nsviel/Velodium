@@ -22,23 +22,19 @@ Shader::Shader(Node_engine* node){
 Shader::~Shader(){}
 
 //Main function
-void Shader::init_shader(){
+void Shader::init_shader_objects(){
 	//---------------------------
 
 	// Screen shader
 	Shader_screen* screenManager = new Shader_screen(node_engine);
-	string path_screen_vs = screenManager->get_path_vs();
-	string path_screen_fs = screenManager->get_path_fs();
-	Shader_object* shader_screen = new Shader_object("screen", path_screen_vs, path_screen_fs);
+	Shader_object* shader_screen = new Shader_object(screenManager);
 	screenManager->setup_shader(shader_screen);
 	this->list_shader_obj->push_back(shader_screen);
 	this->list_shader_src->push_back(screenManager);
 
 	//EDL shader
 	Shader_edl* edlManager = new Shader_edl(node_engine);
-	string path_render_vs = edlManager->get_path_vs();
-	string path_render_fs = edlManager->get_path_fs();
-	Shader_object* shader_render = new Shader_object("edl", path_render_vs, path_render_fs);
+	Shader_object* shader_render = new Shader_object(edlManager);
 	edlManager->setup_shader(shader_render);
 	this->list_shader_obj->push_back(shader_render);
 	this->list_shader_src->push_back(edlManager);
@@ -51,14 +47,14 @@ void Shader::init_shader(){
 
 	//---------------------------
 }
-void Shader::update_shader(){
+void Shader::update_shader_objects(){
 	//---------------------------
 
-	Shader_screen* screenManager = (Shader_screen*)get_shader_src_byName("screen");
-	Shader_edl* edlManager = (Shader_edl*)get_shader_src_byName("edl");
+	Shader_source* shader_screen = get_shader_src_byName("screen");
+	Shader_source* shader_edl = get_shader_src_byName("edl");
 
-	screenManager->update_shader();
-	edlManager->update_shader();
+	shader_screen->update_shader();
+	shader_edl->update_shader();
 
 	//---------------------------
 }
@@ -66,11 +62,11 @@ void Shader::use_shader(string shader_name){
 	//---------------------------
 
 	//Retrieve shader object
-	Shader_object* shader = get_shader_obj_byName(shader_name);
+	Shader_object* shader_obj = get_shader_obj_byName(shader_name);
 
 	//Use it
-	if(shader != nullptr){
-		shader->use();
+	if(shader_obj != nullptr){
+		shader_obj->use();
 	}
 
 	//---------------------------

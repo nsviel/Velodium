@@ -16,8 +16,8 @@ public:
 
 public:
   //Main function
-  void init_shader();
-  void update_shader();
+  void init_shader_objects();
+  void update_shader_objects();
   void use_shader(string shader_name);
 
   //Accesseur

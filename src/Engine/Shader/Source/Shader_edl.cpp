@@ -16,14 +16,11 @@ Shader_edl::Shader_edl(Node_engine* node){
   this->path_fs = "../src/Engine/Shader/glsh/standard/shader_edl.fs";
 
   this->with_edl = true;
-  this->with_inv = false;
   this->edl_strength = 100.0;
   this->edl_distance = 1.0;
   this->edl_radius = 1.0;
   this->clip_far = configManager->parse_json_f("camera", "clip_far");
   this->clip_near = configManager->parse_json_f("camera", "clip_near");
-  //this->clip_far = configManager->parse_json_f("camera", "clip_far");
-  //this->clip_near = configManager->parse_json_f("camera", "clip_near");
 
   //---------------------------
 }
@@ -31,11 +28,10 @@ Shader_edl::~Shader_edl(){}
 
 void Shader_edl::setup_shader(Shader_object* shader){
   this->shader = shader;
-  int program_ID =shader->get_program_ID();
   //---------------------------
 
   //Use corresponding shader program
-  glUseProgram(program_ID);
+  this->use();
 
   // Setup shader parameters
   auto a = (clip_far + clip_near) / (clip_far - clip_near);
@@ -59,9 +55,9 @@ void Shader_edl::setup_shader(Shader_object* shader){
 }
 void Shader_edl::update_shader(){
   //---------------------------
-int program_ID =shader->get_program_ID();
+
   //Use corresponding shader program
-  glUseProgram(program_ID);
+  this->use();
 
   // Setup shader parameters
   auto a = (clip_far + clip_near) / (clip_far - clip_near);
