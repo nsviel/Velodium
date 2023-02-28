@@ -1,7 +1,5 @@
 #include "Shader_edl.h"
 
-#include "../Object/Shader_object.h"
-
 #include "../../Node_engine.h"
 #include "../../Core/Dimension.h"
 #include "../../Scene/Configuration.h"
@@ -13,8 +11,9 @@ Shader_edl::Shader_edl(Node_engine* node){
   this->dimManager = node->get_dimManager();
   this->configManager = node->get_configManager();
 
-  this->path_vs = "../src/Engine/Shader/glsh/shader_edl.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/shader_edl.fs";
+  this->name = "edl";
+  this->path_vs = "../src/Engine/Shader/glsh/standard/shader_edl.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/standard/shader_edl.fs";
 
   this->with_edl = true;
   this->with_inv = false;

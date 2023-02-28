@@ -18,8 +18,8 @@ MOD_shader::MOD_shader(Node_engine* node_engine){
   //---------------------------
 
   this->shaderManager = node_engine->get_shaderManager();
-  this->edlManager = shaderManager->get_edlManager();
-  this->screenManager = shaderManager->get_screenManager();
+  this->edlManager = (Shader_edl*)shaderManager->get_shader_src_byName("edl");
+  this->screenManager = (Shader_screen*)shaderManager->get_shader_src_byName("screen");
 
   this->item_width = 150;
 

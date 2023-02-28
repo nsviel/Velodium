@@ -218,7 +218,7 @@ void CoreGLengine::loop_pass_1(){
   shaderManager->use_shader("screen");
   mat4 mvp = cameraManager->compute_cam_mvp();
   //Supprimer cette appell continue, ne la faire que quand camera move
-  Shader_object* shader_screen = shaderManager->get_shader_byName("screen");
+  Shader_object* shader_screen = shaderManager->get_shader_obj_byName("screen");
   shader_screen->setMat4("MVP", mvp);
 
   //---------------------------

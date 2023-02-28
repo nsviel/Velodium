@@ -3,17 +3,10 @@
 
 #include "../../common.h"
 
-class Shader_edl;
-class Shader_screen;
+class Node_engine;
 class Shader_object;
 class Shader_source;
-class Node_engine;
 
-
-//FAire polymophic shader source system et essayé de faire une list des enfants
-//Faire list shader
-//Faire list shader source
-//Asseccesur shader obj et shader source via name
 
 class Shader
 {
@@ -22,21 +15,21 @@ public:
   ~Shader();
 
 public:
+  //Main function
   void init_shader();
   void update_shader();
   void use_shader(string shader_name);
 
-  Shader_object* get_shader_byName(string querry_name);
-
-  inline Shader_edl* get_edlManager(){return edlManager;}
-  inline Shader_screen* get_screenManager(){return screenManager;}
+  //Accesseur
+  Shader_object* get_shader_obj_byName(string querry);
+  Shader_source* get_shader_src_byName(string querry);
 
 private:
-  Shader_screen* screenManager;
-  Shader_edl* edlManager;
+  Node_engine* node_engine;
 
   list<Shader_object*>* list_shader_obj;
   list<Shader_source*>* list_shader_src;
+
   string shader_dir;
 };
 

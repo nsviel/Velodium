@@ -1,7 +1,5 @@
 #include "Shader_screen.h"
 
-#include "../Object/Shader_object.h"
-
 #include "../../Node_engine.h"
 #include "../../Scene/Configuration.h"
 
@@ -11,8 +9,9 @@ Shader_screen::Shader_screen(Node_engine* node){
 
   this->configManager = node->get_configManager();
 
-  this->path_vs = "../src/Engine/Shader/glsh/shader_screen.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/shader_screen.fs";
+  this->name = "screen";
+  this->path_vs = "../src/Engine/Shader/glsh/standard/shader_screen.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/standard/shader_screen.fs";
 
   this->with_depth = false;
   this->clip_far = 100;
