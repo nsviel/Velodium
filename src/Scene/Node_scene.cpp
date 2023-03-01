@@ -16,8 +16,8 @@ Node_scene::Node_scene(Node_engine* node){
 
   this->glyphManager = new Glyphs(this);
   this->objectManager = new Object(this);
-  this->sceneManager = new Scene(this);
   this->graphManager = new Graph(this);
+  this->sceneManager = new Scene(this);
 
   //---------------------------
 }
@@ -35,6 +35,13 @@ void Node_scene::reset(){
 
   objectManager->reset_scene_object();
   sceneManager->reset_cloud_all();
+
+  //---------------------------
+}
+void Node_scene::runtime(){
+  //---------------------------
+
+  graphManager->draw_all();
 
   //---------------------------
 }

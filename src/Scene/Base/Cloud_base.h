@@ -3,6 +3,8 @@
 
 #include "Object_base.h"
 
+#include <list>
+
 
 class Cloud_base : public Object_base
 {
@@ -16,8 +18,8 @@ public:
   void reset_cloud();
   Subset* get_subset_byID(int ID);
 
-//Cloud data
-protected:
+public:
+  //Cloud data
   std::vector<glm::vec3> xyz_voxel;
   std::vector<float> I;
   std::vector<float> ts;
@@ -32,8 +34,7 @@ protected:
   bool has_intensity;
   bool has_timestamp;
 
-//Cloud info
-protected:
+  //Cloud info
   int nb_subset;
   int nb_point;
   int point_size;
@@ -43,8 +44,7 @@ protected:
   bool is_onthefly;
   bool is_boxed;
 
-//Cloud subset
-protected:
+  //Cloud subset
   int ID_sub_selected; //Actual selected subset ID
   int ID_sub_last_given; //Last given subset ID
   int ID_sub_cur_file; //For on-the-fly loading

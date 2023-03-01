@@ -30,7 +30,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
 
   this->configManager = ogl->get_configManager();
   this->node_scene = new Node_scene(this);
-  
+
   this->dimManager = new Dimension(ogl->get_window(), configManager);
   this->shaderManager = new Shader(this);
   this->viewportManager = new Viewport(dimManager);
@@ -76,10 +76,13 @@ void Node_engine::update(){
 void Node_engine::runtime(){
   //---------------------------
 
+  node_scene->runtime();
   engineManager->runtime_scene();
+
   node_module->runtime();
   node_ope->runtime();
   node_interface->runtime();
+
 
   //---------------------------
 }

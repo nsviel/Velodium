@@ -1,7 +1,15 @@
 #ifndef OBJECT_BASE_H
 #define OBJECT_BASE_H
 
-#include "../../common.h"
+#include "../Struct/struct_glyph.h"
+#include "../Struct/struct_subset.h"
+
+#include <string>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <GL/gl.h>
+#include <glm/glm.hpp>
 
 
 class Object_base
@@ -14,13 +22,14 @@ public:
 public:
   void init_object();
   void reset_object();
+  void draw();
 
-//Generic data
-protected:
-  GLuint VAO;
-  GLuint VBO_xyz;
-  GLuint VBO_rgb;
-  GLuint VBO_N;
+public:
+  //Generic data
+  GLuint vao;
+  GLuint vbo_xyz;
+  GLuint vbo_rgb;
+  GLuint vbo_N;
 
   std::vector<glm::vec3> xyz;
   std::vector<glm::vec4> rgb;
@@ -29,9 +38,8 @@ protected:
   bool has_color;
   bool has_normal;
 
-//Generic info
-protected:
-  GLuint ID_perm; //Permanent ID
+  //Generic info
+  GLuint ID_perma; //Permanent ID
   GLuint ID_order; // List order ID
 
   std::string name;
@@ -44,8 +52,7 @@ protected:
   bool visibility;
   int nb_point;
 
-//Generic pose
-protected:
+  //Generic pose
   glm::vec3 min;
   glm::vec3 max;
   glm::vec3 root;
@@ -55,8 +62,7 @@ protected:
   glm::mat4 scale;
   glm::mat4 transformation;
 
-//Attached glyphs
-protected:
+  //Attached glyphs
   std::map<std::string, Glyph> glyphs;
 
 };

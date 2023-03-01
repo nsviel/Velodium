@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Graph.h"
 
 #include "../Node_scene.h"
 #include "../Glyph/Object.h"
@@ -9,6 +10,7 @@ Scene::Scene(Node_scene* node){
   //---------------------------
 
   this->objectManager = node->get_objectManager();
+  this->graphManager = node->get_graphManager();
 
   this->list_cloud = new list<Cloud*>;
   this->cloud_selected = nullptr;

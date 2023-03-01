@@ -16,6 +16,8 @@ public:
   ~Graph();
 
 public:
+  void insert_loaded_cloud(Cloud* cloud);
+  void draw_all();
 
 private:
   list<Object_base*>* list_object;

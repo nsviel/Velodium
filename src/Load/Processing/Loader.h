@@ -7,6 +7,7 @@
 class Node_load;
 class Extractor;
 class Scene;
+class Graph;
 
 class file_PTS;
 class file_PLY;
@@ -52,6 +53,7 @@ private:
   Extractor* extractManager;
   Scene* sceneManager;
   Cloud* cloud;
+  Graph* graphManager;
 
   file_PTS* ptsManager;
   file_PLY* plyManager;

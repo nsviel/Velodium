@@ -8,6 +8,7 @@
 
 class Node_scene;
 class Object;
+class Graph;
 
 
 class Scene
@@ -83,6 +84,7 @@ public:
 
 private:
   Object* objectManager;
+  Graph* graphManager;
 
   list<Cloud*>* list_cloud;
   Cloud* cloud_selected;

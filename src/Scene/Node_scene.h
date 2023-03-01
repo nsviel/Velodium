@@ -21,11 +21,13 @@ public:
   //Main functions
   void update();
   void reset();
+  void runtime();
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Scene* get_sceneManager(){return sceneManager;}
   inline Glyphs* get_glyphManager(){return glyphManager;}
   inline Object* get_objectManager(){return objectManager;}
+  inline Graph* get_graphManager(){return graphManager;}
 
 private:
   Node_engine* node_engine;
