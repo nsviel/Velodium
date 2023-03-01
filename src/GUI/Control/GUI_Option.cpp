@@ -9,7 +9,7 @@
 #include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Object.h"
 #include "../../Scene/Glyph/Cloud/AABB.h"
 #include "../../Scene/Glyph/Scene/Grid.h"
@@ -398,7 +398,7 @@ void GUI_option::option_color(){
     //Bounding box color
     ImGui::SetNextItemWidth(colorEditSize);
     AABB* aabbObject = objectManager->get_object_aabb();
-    vec4* aabb_color = aabbObject->get_glyph_color();
+    vec4* aabb_color = aabbObject->get_color();
     if(ImGui::ColorEdit4("AABB", (float*)aabb_color)){
       objectManager->update_object(aabbObject->get_glyph(), *aabb_color);
     }

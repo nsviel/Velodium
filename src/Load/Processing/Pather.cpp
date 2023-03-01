@@ -7,14 +7,14 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Specific/Function/fct_transtypage.h"
 #include "../../Specific/Function/fct_math.h"
-#include "../../Interface/File/Directory.h"
-#include "../../Interface/File/Zenity.h"
-#include "../../Interface/File/Info.h"
-#include "../../Interface/File/Path.h"
+#include "../../Specific/File/Directory.h"
+#include "../../Specific/File/Zenity.h"
+#include "../../Specific/File/Info.h"
+#include "../../Specific/File/Path.h"
 
 #include <Eigen/Dense>
 #include <set>

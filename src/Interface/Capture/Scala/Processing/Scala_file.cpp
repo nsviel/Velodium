@@ -1,11 +1,11 @@
 #include "Scala_file.h"
 
-#include "../../../../Interface/File/Zenity.h"
+#include "../../../../Specific/File/Zenity.h"
 #include "../../../../Load/Node_load.h"
 #include "../../../../Load/Processing/Loader.h"
 #include "../../../../Engine/Node_engine.h"
 #include "../../../../Scene/Node_scene.h"
-#include "../../../../Scene/Graph/Scene.h"
+#include "../../../../Scene/Data/Scene.h"
 
 //1 frame = 2 lidar scans = 2046 points
 //1024 points per scan with 25Hz rotation and 3 faisceau up and down

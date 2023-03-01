@@ -12,32 +12,31 @@ OOBB::OOBB(){
 }
 OOBB::~OOBB(){}
 
-Glyph* OOBB::create_oobb(){
-  Glyph* oobb = new Glyph();
+void OOBB::create_glyph(){
+  this->glyph = new Glyph();
   //---------------------------
 
   //Create glyph
-  oobb->name = "OOBB";
-  oobb->draw_width = width;
-  oobb->visibility = false;
-  oobb->draw_type = "line";
-  oobb->permanent = false;
-  oobb->color_unique = color;
+  glyph->name = "OOBB";
+  glyph->draw_width = width;
+  glyph->visibility = false;
+  glyph->draw_type = "line";
+  glyph->permanent = false;
+  glyph->color_unique = color;
 
   //Box color
   for(int i=0; i<24; i++){
-    oobb->rgb.push_back(color);
+    glyph->rgb.push_back(color);
   }
 
   //Arrow color
   for(int i=0; i<6; i++){
-    oobb->rgb.push_back(vec4(0,0,1,1));
+    glyph->rgb.push_back(vec4(0,0,1,1));
   }
 
   //---------------------------
-  return oobb;
 }
-void OOBB::update_oobb(Glyph* oobb, mat4 transformation){
+void OOBB::update_glyph(Glyph* glyph, mat4 transformation){
   vec3 min = vec3(-0.5f, -0.5f, -0.5f);
   vec3 max = vec3(0.5f, 0.5f, 0.5f);
   //---------------------------
@@ -50,7 +49,7 @@ void OOBB::update_oobb(Glyph* oobb, mat4 transformation){
     box[i] = vec3(point.x, point.y, point.z);
   }
 
-  oobb->xyz = box;
+  glyph->xyz = box;
 
   //---------------------------
 }

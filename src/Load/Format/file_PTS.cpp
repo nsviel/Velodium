@@ -1,6 +1,6 @@
 #include "file_PTS.h"
 
-#include "../../Interface/File/Info.h"
+#include "../../Specific/File/Info.h"
 
 
 //Constructor / Destructor

@@ -1,14 +1,12 @@
 #ifndef OBJECT_TREE_H
 #define OBJECT_TREE_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 class Octree;
 
 
-class Tree
+class Tree : public Object_base
 {
 public:
   //Constructor / Destructor
@@ -16,7 +14,7 @@ public:
   ~Tree();
 
 public:
-  void create_tree(Subset* subset);
+  void create_glyph(Subset* subset);
   void update_tree(Subset* subset);
 
   inline bool* get_visibility(){return &visibility;}

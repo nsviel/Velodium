@@ -19,7 +19,7 @@ Tree::Tree(){
 }
 Tree::~Tree(){}
 
-void Tree::create_tree(Subset* subset){
+void Tree::create_glyph(Subset* subset){
   Glyph tree;
   //---------------------------
 

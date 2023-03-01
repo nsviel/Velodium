@@ -1,11 +1,10 @@
 #ifndef OBJECT_GRID_H
 #define OBJECT_GRID_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Grid
+class Grid : public Object_base
 {
 public:
   //Constructor / Destructor

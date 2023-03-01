@@ -14,11 +14,11 @@
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/Camera/Followup.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 
 #include "../../Interface/Node_interface.h"
-#include "../../Interface/File/Path.h"
+#include "../../Specific/File/Path.h"
 #include "../../Interface/IO/Recorder.h"
 #include "../../Module/Node_module.h"
 

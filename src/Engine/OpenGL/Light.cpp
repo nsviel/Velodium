@@ -3,7 +3,7 @@
 #include "../Node_engine.h"
 
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Operation/Transformation/Transformation.h"

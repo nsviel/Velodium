@@ -1,12 +1,10 @@
 #ifndef OBJECT_MARK_H
 #define OBJECT_MARK_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Mark
+class Mark : public Object_base
 {
 public:
   //Constructor / Destructor

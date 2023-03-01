@@ -1,34 +1,24 @@
 #ifndef OBJECT_CAR_H
 #define OBJECT_CAR_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 class Transformation;
 
 
-class Car
+class Car : public Object_base
 {
 public:
-  //Constructor / Destructor
   Car();
-  ~Car();
 
 public:
-  void create_car();
-  void update_car_location(Cloud* cloud);
-  void reset();
-
-  inline Glyph* get_glyph(){return car;}
-  inline bool* get_visibility(){return &visibility;}
-  inline void set_visibility(bool value){this->visibility = value;}
+  void create_glyph();
+  void update_glyph(Cloud* cloud);
+  void reset_glyph();
 
 private:
   Transformation* transformManager;
-  Glyph* car;
 
-  vec4 color;
-  bool visibility;
   float lidar_height;
   int width;
 };

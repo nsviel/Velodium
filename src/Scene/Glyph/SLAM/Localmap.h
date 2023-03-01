@@ -1,12 +1,10 @@
 #ifndef OBJECT_LOCALMAP_H
 #define OBJECT_LOCALMAP_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../Engine/Data/struct_voxelMap.h"
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Localmap
+class Localmap : public Object_base
 {
 public:
   //Constructor / Destructor

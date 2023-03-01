@@ -1,6 +1,9 @@
 #include "Shader_object.h"
 #include "Shader_source.h"
 
+#include "../../../Specific/File/Directory.h"
+#include "../../../Specific/Function/fct_error.h"
+
 #include <fstream>
 
 
@@ -114,8 +117,15 @@ void Shader_object::build_shader(GLuint& program_ID, string path_vs, string path
 	//---------------------------
 }
 GLuint Shader_object::shader_compilation(string file_path, GLenum shaderType){
-	GLuint shaderID = glCreateShader(shaderType);
 	//---------------------------
+
+	//First, check if file exists
+	if(is_file_exist(file_path) == false){
+		error_fileDoesNotExists(file_path);
+	}
+
+	//Create shader
+	GLuint shaderID = glCreateShader(shaderType);
 
 	//Read Shader_object
 	std::ifstream shaderStream(file_path.c_str(), std::ios::in);

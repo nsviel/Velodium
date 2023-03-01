@@ -5,13 +5,13 @@
 #include "../Node_operation.h"
 
 #include "../../Specific/Function/fct_timer.h"
-#include "../../Interface/File/Directory.h"
-#include "../../Interface/File/Zenity.h"
-#include "../../Interface/File/Path.h"
+#include "../../Specific/File/Directory.h"
+#include "../../Specific/File/Zenity.h"
+#include "../../Specific/File/Path.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Object.h"
 #include "../../Engine/Core/Configuration.h"
 

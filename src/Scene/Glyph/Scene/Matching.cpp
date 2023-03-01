@@ -10,11 +10,11 @@ Matching::Matching(){
   this->color = vec4(0.11f, 0.35f, 0.69f, 1.0f);
 
   //---------------------------
-  this->create_matching();
+  this->create_glyph();
 }
 Matching::~Matching(){}
 
-void Matching::create_matching(){
+void Matching::create_glyph(){
   this->matching = new Glyph();
   //---------------------------
 

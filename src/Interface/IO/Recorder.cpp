@@ -1,13 +1,13 @@
 #include "Recorder.h"
 
 #include "../Node_interface.h"
-#include "../File/Directory.h"
-#include "../File/Zenity.h"
 
+#include "../../Specific/File/Directory.h"
+#include "../../Specific/File/Zenity.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Saver.h"

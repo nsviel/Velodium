@@ -5,67 +5,58 @@
 #include "../../../Specific/Function/fct_transtypage.h"
 
 
-//Constructor / destructor
 Car::Car(){
   //---------------------------
 
   this->transformManager = new Transformation();
 
-  this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
   this->visibility = false;
   this->width = 2;
   this->lidar_height = 1.3;
 
   //---------------------------
-  this->create_car();
-}
-Car::~Car(){
-  //---------------------------
-
-  delete car;
-
-  //---------------------------
+  this->create_glyph();
 }
 
-void Car::create_car(){
-  this->car = new Glyph();
+void Car::create_glyph(){
+  this->glyph = new Glyph();
   //---------------------------
 
   //Create glyph
-  car->name = "Car";
-  car->draw_width = width;
-  car->visibility = false;
-  car->draw_type = "triangle";
-  car->permanent = true;
-  car->color_unique = color;
+  glyph->name = "Car";
+  glyph->draw_width = width;
+  glyph->visibility = false;
+  glyph->draw_type = "triangle";
+  glyph->permanent = true;
+  glyph->color_unique = color;
 
   //Load car model
   file_OBJ objManager;
   Data_file* data = objManager.Loader("../media/engine/Marks/car.obj");
-  car->xyz = data->location;
-  car->xyz_init = data->location;
-  for(int i=0; i<car->xyz.size(); i++){
-    car->rgb.push_back(color);
+  glyph->xyz = data->location;
+  glyph->xyz_init = data->location;
+  for(int i=0; i<glyph->xyz.size(); i++){
+    glyph->rgb.push_back(color);
   }
 
   //---------------------------
 }
-void Car::update_car_location(Cloud* cloud){
+void Car::update_glyph(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
   vec3 trans_abs = subset->root;
   //---------------------------
 
-  car->xyz = car->xyz_init;
+  glyph->xyz = glyph->xyz_init;
   trans_abs.z -= lidar_height;
-  transformManager->make_rotation_origin(car->xyz, subset->rotat);
-  transformManager->make_translation(car->xyz, trans_abs);
+  transformManager->make_rotation_origin(glyph->xyz, subset->rotat);
+  transformManager->make_translation(glyph->xyz, trans_abs);
 
   //---------------------------
 }
-void Car::reset(){
+void Car::reset_glyph(){
   //---------------------------
 
-  car->visibility = false;
+  glyph->visibility = false;
 
   //---------------------------
 }

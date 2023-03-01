@@ -7,6 +7,7 @@ class Node_engine;
 class Scene;
 class Glyphs;
 class Object;
+class Graph;
 
 
 class Node_scene : public Node
@@ -32,6 +33,7 @@ private:
   Scene* sceneManager;
   Glyphs* glyphManager;
   Object* objectManager;
+  Graph* graphManager;
 };
 
 #endif

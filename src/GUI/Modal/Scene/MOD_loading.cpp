@@ -2,12 +2,12 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
-#include "../../../Scene/Graph/Scene.h"
+#include "../../../Scene/Data/Scene.h"
 
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Pather.h"
 #include "../../../Load/Processing/Loader.h"
-#include "../../../Interface/File/Zenity.h"
+#include "../../../Specific/File/Zenity.h"
 
 #include "../../../Load/Format/file_PTS.h"
 #include "../../../Load/Format/file_PTX.h"

@@ -2,11 +2,11 @@
 
 #include "../Node_operation.h"
 
-#include "../../Interface/File/Directory.h"
+#include "../../Specific/File/Directory.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 
 #include "../../Load/Node_load.h"

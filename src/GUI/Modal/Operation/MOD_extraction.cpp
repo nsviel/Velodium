@@ -2,7 +2,7 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
-#include "../../../Scene/Graph/Scene.h"
+#include "../../../Scene/Data/Scene.h"
 #include "../../../Scene/Glyph/Glyphs.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Cloud/Extraction.h"

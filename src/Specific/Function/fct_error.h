@@ -6,6 +6,7 @@
 
 
 void warning_shaderNotFound(std::string name);
+void error_fileDoesNotExists(std::string path);
 
 
 #endif

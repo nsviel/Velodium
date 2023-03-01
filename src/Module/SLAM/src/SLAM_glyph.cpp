@@ -198,7 +198,7 @@ void SLAM_glyph::update_glyph_car(Cloud* cloud){
 
     Car* carObject = objectManager->get_object_car();
     Glyph* car = carObject->get_glyph();
-    carObject->update_car_location(cloud);
+    carObject->update_glyph(cloud);
     objectManager->update_object(car);
 
     //---------------------------

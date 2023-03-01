@@ -1,5 +1,5 @@
 #include "file_LAS.h"
-#include "../../Interface/File/Info.h"
+#include "../../Specific/File/Info.h"
 
 #include <fstream>
 

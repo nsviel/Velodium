@@ -10,9 +10,8 @@ Keypoint::Keypoint(){
 
   //---------------------------
 }
-Keypoint::~Keypoint(){}
 
-void Keypoint::create_keypoint(Subset* subset){
+void Keypoint::create_glyph(Subset* subset){
   Glyph keypoint;
   //---------------------------
 

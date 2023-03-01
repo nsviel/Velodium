@@ -1,13 +1,10 @@
 #ifndef OBJECT_AXIS_H
 #define OBJECT_AXIS_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../Engine/Data/struct_subset.h"
-
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Axis
+class Axis : public Object_base
 {
 public:
   //Constructor / Destructor

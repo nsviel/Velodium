@@ -3,7 +3,7 @@
 #include "../Target/Ref_Operation.h"
 #include "../Target/Reference.h"
 
-#include "../../../../Scene/Graph/Scene.h"
+#include "../../../../Scene/Data/Scene.h"
 #include "../../../../Operation/Optimization/SpeudoInverse.h"
 
 

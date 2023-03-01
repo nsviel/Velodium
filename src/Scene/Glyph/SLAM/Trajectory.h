@@ -1,12 +1,10 @@
 #ifndef OBJECT_TRAJECTORY_H
 #define OBJECT_TRAJECTORY_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Trajectory
+class Trajectory : public Object_base
 {
 public:
   //Constructor / Destructor

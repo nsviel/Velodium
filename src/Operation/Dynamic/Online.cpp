@@ -7,7 +7,7 @@
 #include "../../Module/SLAM/Module_slam.h"
 #include "../../Module/SLAM/src/SLAM.h"
 
-#include "../../Interface/File/Directory.h"
+#include "../../Specific/File/Directory.h"
 #include "../../Interface/IO/Recorder.h"
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/Network/HTTP/http_command.h"
@@ -23,7 +23,7 @@
 #include "../../Engine/Core/Engine.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Object.h"
 #include "../../Engine/Core/Configuration.h"
 

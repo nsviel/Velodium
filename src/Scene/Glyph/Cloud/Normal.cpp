@@ -16,7 +16,7 @@ Normal::Normal(){
 }
 Normal::~Normal(){}
 
-void Normal::create_normal_subset(Subset* subset){
+void Normal::create_glyph(Subset* subset){
   Glyph normal;
   //---------------------------
 

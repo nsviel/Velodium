@@ -5,7 +5,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/Core/Dimension.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 
 #include "imgui/imgui.h"
 

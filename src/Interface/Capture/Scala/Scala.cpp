@@ -11,8 +11,8 @@
 #include "../../../Engine/Core/Configuration.h"
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Extractor.h"
-#include "../../../Interface/File/Directory.h"
-#include "../../../Interface/File/Directory.h"
+#include "../../../Specific/File/Directory.h"
+#include "../../../Specific/File/Directory.h"
 
 #include "../../../../extern/cbor/json.hpp"
 

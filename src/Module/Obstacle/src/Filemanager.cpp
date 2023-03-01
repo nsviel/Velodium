@@ -5,8 +5,8 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Engine/Core/Configuration.h"
-#include "../../../Interface/File/Directory.h"
-#include "../../../Interface/File/Zenity.h"
+#include "../../../Specific/File/Directory.h"
+#include "../../../Specific/File/Zenity.h"
 
 
 //Constructor / Destructor

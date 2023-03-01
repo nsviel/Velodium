@@ -12,7 +12,7 @@
 #include "../../Engine/Camera/struct_viewport.h"
 #include "../../Engine/Core/Dimension.h"
 #include "../../Scene/Glyph/Glyphs.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 
 #include "../../Operation/Node_operation.h"

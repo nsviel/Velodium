@@ -1,13 +1,10 @@
 #ifndef OBJECT_NORMAL_H
 #define OBJECT_NORMAL_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../Engine/Data/struct_subset.h"
-
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Normal
+class Normal : public Object_base
 {
 public:
   //Constructor / Destructor
@@ -15,7 +12,7 @@ public:
   ~Normal();
 
 public:
-  void create_normal_subset(Subset* subset);
+  void create_glyph(Subset* subset);
   void update_normal_subset(Subset* subset);
   void update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s);
 

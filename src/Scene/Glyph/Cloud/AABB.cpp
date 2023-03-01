@@ -1,63 +1,54 @@
 #include "AABB.h"
 
 
-//Constructor / destructor
 AABB::AABB(){
   //---------------------------
 
   this->color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
   this->width = 1;
 
-  this->create_aabb_scene();
-
   //---------------------------
-}
-AABB::~AABB(){
-  //---------------------------
-
-  delete aabb;
-
-  //---------------------------
+  this->create_glyph();
 }
 
 //Main function
-void AABB::create_aabb_scene(){
-  aabb = new Glyph();
+void AABB::create_glyph(){
+  this->glyph = new Glyph();
   //---------------------------
 
   //Create glyph
-  aabb->name = "aabb";
-  aabb->draw_width = width;
-  aabb->visibility = true;
-  aabb->draw_type = "line";
-  aabb->permanent = true;
-  aabb->color_unique = color;
+  glyph->name = "aabb";
+  glyph->draw_width = width;
+  glyph->visibility = true;
+  glyph->draw_type = "line";
+  glyph->permanent = true;
+  glyph->color_unique = color;
 
   for(int i=0; i<24; i++){
-    aabb->rgb.push_back(color);
+    glyph->rgb.push_back(color);
   }
 
   //---------------------------
 }
-void AABB::update_aabb(Cloud* cloud){
+void AABB::update_glyph(Cloud* cloud){
   vec3 min = cloud->min;
   vec3 max = cloud->max;
   //---------------------------
 
   //location
-  aabb->xyz = build_box(min, max);
+  glyph->xyz = build_box(min, max);
 
   //---------------------------
 }
-void AABB::update_aabb(Subset* subset){
-  vector<vec3>& XYZ = aabb->xyz;
-  vector<vec4>& RGB = aabb->rgb;
+void AABB::update_glyph(Subset* subset){
+  vector<vec3>& XYZ = glyph->xyz;
+  vector<vec4>& RGB = glyph->rgb;
   vec3 min = subset->min;
   vec3 max = subset->max;
   //---------------------------
 
   //location
-  aabb->xyz = build_box(min, max);
+  glyph->xyz = build_box(min, max);
 
   //---------------------------
 }

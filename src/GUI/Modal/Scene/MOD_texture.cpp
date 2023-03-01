@@ -3,7 +3,7 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Engine/OpenGL/Texture.h"
-#include "../../../Scene/Graph/Scene.h"
+#include "../../../Scene/Data/Scene.h"
 
 #include "../Modal_tab.h"
 extern struct Modal_tab modal_tab;

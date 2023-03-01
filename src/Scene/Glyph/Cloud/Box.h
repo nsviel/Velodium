@@ -1,11 +1,10 @@
 #ifndef OBJECT_BOX_H
 #define OBJECT_BOX_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Box
+class Box : public Object_base
 {
 public:
   //Constructor / Destructor
@@ -14,7 +13,7 @@ public:
 
 public:
   //Main function
-  void create_box();
+  void create_glyph();
   void update_box();
 
   //Subfunction

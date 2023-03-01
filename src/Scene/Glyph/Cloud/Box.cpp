@@ -9,7 +9,7 @@ Box::Box(){
   this->width = 3;
 
   //---------------------------
-  this->create_box();
+  this->create_glyph();
 }
 Box::~Box(){
   //---------------------------
@@ -20,7 +20,7 @@ Box::~Box(){
 }
 
 //Main function
-void Box::create_box(){
+void Box::create_glyph(){
   box = new Glyph();
   //---------------------------
 

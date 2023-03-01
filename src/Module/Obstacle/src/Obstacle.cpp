@@ -6,13 +6,13 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
-#include "../../../Scene/Graph/Scene.h"
+#include "../../../Scene/Data/Scene.h"
 #include "../../../Scene/Glyph/Object.h"
 #include "../../../Scene/Glyph/Cloud/OOBB.h"
 #include "../../../Operation/Transformation/Pose.h"
 #include "../../../Specific/color.h"
-#include "../../../Interface/File/Directory.h"
-#include "../../../Interface/File/Zenity.h"
+#include "../../../Specific/File/Directory.h"
+#include "../../../Specific/File/Zenity.h"
 
 
 //Constructor / Destructor
@@ -139,7 +139,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
     mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
     vec4 color = AI_color_dic.find(detection->name[i])->second;
 
-    oobbManager->update_oobb(glyph, transf);
+    oobbManager->update_glyph(glyph, transf);
     objectManager->update_object(glyph, color);
     detection->oobb.push_back(*glyph);
 
@@ -161,7 +161,7 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
     vec3 So = detection_gt->dimension[j];
     mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
 
-    oobbManager->update_oobb(glyph, transf);
+    oobbManager->update_glyph(glyph, transf);
     objectManager->update_object(glyph);
     detection_gt->oobb.push_back(*glyph);
     delete glyph;

@@ -4,15 +4,15 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Load/Node_load.h"
 #include "../../Load/Processing/Loader.h"
 #include "../../Load/Processing/Pather.h"
 #include "../../Operation/Transformation/Transformation.h"
 #include "../../Module/Node_module.h"
-#include "../../Interface/File/Directory.h"
-#include "../../Interface/File/Info.h"
+#include "../../Specific/File/Directory.h"
+#include "../../Specific/File/Info.h"
 #include "../../Interface/Node_interface.h"
 #include "../../Interface/Capture/Capture.h"
 

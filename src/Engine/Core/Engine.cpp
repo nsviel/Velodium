@@ -6,7 +6,7 @@
 #include "../Camera/Camera.h"
 
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Glyph/Object.h"
 #include "../../GUI/Node_gui.h"

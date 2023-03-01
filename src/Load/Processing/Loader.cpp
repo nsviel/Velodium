@@ -16,9 +16,9 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Graph/Scene.h"
-#include "../../Interface/File/Directory.h"
-#include "../../Interface/File/Info.h"
+#include "../../Scene/Data/Scene.h"
+#include "../../Specific/File/Directory.h"
+#include "../../Specific/File/Info.h"
 #include "../../Specific/Function/fct_transtypage.h"
 
 

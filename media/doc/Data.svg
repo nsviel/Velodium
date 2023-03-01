@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="2100mm"
+   height="1000mm"
+   viewBox="0 0 2100 1000"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="Data.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.5656755"
+     inkscape:cx="2070.9753"
+     inkscape:cy="1929.5515"
+     inkscape:window-width="1400"
+     inkscape:window-height="773"
+     inkscape:window-x="450"
+     inkscape:window-y="83"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.757696;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866"
+       width="47.317112"
+       height="22.371803"
+       x="501.51624"
+       y="389.47507" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="505.08548"
+       y="402.85553"
+       id="text3114"><tspan
+         sodipodi:role="line"
+         id="tspan3112"
+         style="stroke-width:0.264583"
+         x="505.08548"
+         y="402.85553">Mesh base</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.757696;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3"
+       width="47.317112"
+       height="22.371803"
+       x="440.58517"
+       y="445.98257" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="452.53009"
+       y="460.02454"
+       id="text3114-6"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7"
+         style="stroke-width:0.264583"
+         x="452.53009"
+         y="460.02454">Cloud</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.757696;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3-5"
+       width="47.317112"
+       height="22.371803"
+       x="398.72806"
+       y="490.07095" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="403.15207"
+       y="503.50809"
+       id="text3114-6-3"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7-5"
+         style="stroke-width:0.264583"
+         x="403.15207"
+         y="503.50809">Cloud_one</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.929685;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3-5-6"
+       width="71.78801"
+       height="22.199814"
+       x="476.14584"
+       y="489.33212" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="480.48389"
+       y="502.68326"
+       id="text3114-6-3-2"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7-5-9"
+         style="stroke-width:0.264583"
+         x="480.48389"
+         y="502.68326">Cloud_composed</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.724787;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3-5-6-1"
+       width="43.232533"
+       height="22.404713"
+       x="578.96307"
+       y="433.31927" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="589.52472"
+       y="447.57895"
+       id="text3114-6-3-2-2"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7-5-9-7"
+         style="stroke-width:0.264583"
+         x="589.52472"
+         y="447.57895">Mesh</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.724787;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3-5-6-1-2"
+       width="43.232533"
+       height="22.404713"
+       x="456.29462"
+       y="545.71832" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="466.85626"
+       y="559.97803"
+       id="text3114-6-3-2-2-6"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7-5-9-7-1"
+         style="stroke-width:0.264583"
+         x="466.85626"
+         y="559.97803">Subset</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.724787;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3-5-6-1-8"
+       width="43.232533"
+       height="22.404713"
+       x="524.35529"
+       y="545.06427" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="534.91693"
+       y="559.32397"
+       id="text3114-6-3-2-2-7"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7-5-9-7-9"
+         style="stroke-width:0.264583"
+         x="534.91693"
+         y="559.32397">Frame</tspan></text>
+    <rect
+       style="opacity:0.75;fill:none;stroke:#000000;stroke-width:0.909408;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect866-3-5-6-1-0"
+       width="68.627991"
+       height="22.220091"
+       x="564.78918"
+       y="484.63248" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.40833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+       x="571.9549"
+       y="497.60431"
+       id="text3114-6-3-2-2-9"><tspan
+         sodipodi:role="line"
+         id="tspan3112-7-5-9-7-3"
+         style="stroke-width:0.264583"
+         x="571.9549"
+         y="497.60431">Mesh_textured</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 527.51598,412.3737 -60.27756,32.88946"
+       id="path30467" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 461.40065,468.65862 -39.14502,21.24057"
+       id="path30469" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 461.40065,468.65862 52.99252,20.01356"
+       id="path30471" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 527.51598,412.3737 74.26356,21.55259"
+       id="path30473" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 602.02807,453.91863 -0.93546,31.49127"
+       id="path30475" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 481.11023,545.22573 30.92413,-33.58176 33.3439,33.45375"
+       id="path30477" />
+  </g>
+</svg>

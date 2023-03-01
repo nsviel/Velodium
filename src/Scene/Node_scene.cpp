@@ -1,6 +1,8 @@
 #include "Node_scene.h"
 
-#include "Graph/Scene.h"
+#include "Data/Scene.h"
+#include "Data/Graph.h"
+
 #include "Glyph/Glyphs.h"
 #include "Glyph/Object.h"
 
@@ -15,6 +17,7 @@ Node_scene::Node_scene(Node_engine* node){
   this->glyphManager = new Glyphs(this);
   this->objectManager = new Object(this);
   this->sceneManager = new Scene(this);
+  this->graphManager = new Graph(this);
 
   //---------------------------
 }

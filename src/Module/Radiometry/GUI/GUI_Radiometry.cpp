@@ -15,14 +15,14 @@
 #include "../../../GUI/Modal/GUI_Modal.h"
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
-#include "../../../Scene/Graph/Scene.h"
+#include "../../../Scene/Data/Scene.h"
 #include "../../../Load/Node_load.h"
 #include "../../../Operation/Node_operation.h"
 #include "../../../Operation/Transformation/Attribut.h"
 #include "../../../Operation/Color/Heatmap.h"
 #include "../../../Operation/Function/Plotting.h"
 #include "../../../Operation/Function/BundleByClass.h"
-#include "../../../Interface/File/Zenity.h"
+#include "../../../Specific/File/Zenity.h"
 
 
 //Constructor / Destructor

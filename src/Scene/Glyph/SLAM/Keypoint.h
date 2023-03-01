@@ -1,29 +1,20 @@
 #ifndef OBJECT_KEYPOINT_H
 #define OBJECT_KEYPOINT_H
 
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../common.h"
+#include "../../Base/Object_base.h"
 
 
-class Keypoint
+class Keypoint : public Object_base
 {
 public:
-  //Constructor / Destructor
   Keypoint();
-  ~Keypoint();
 
 public:
-  void create_keypoint(Subset* subset);
+  void create_glyph(Subset* subset);
   void update_keypoint_location(Subset* subset);
   void update_keypoint_normal(Subset* subset);
 
-  inline void set_visibility(bool value){this->visibility = value;}
-  inline bool* get_visibility(){return &visibility;}
-
 private:
-  Glyph* keypoint;
-  bool visibility;
-  vec4 color;
 };
 
 #endif

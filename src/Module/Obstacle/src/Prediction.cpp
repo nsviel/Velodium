@@ -5,11 +5,11 @@
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
-#include "../../../Scene/Graph/Scene.h"
+#include "../../../Scene/Data/Scene.h"
 #include "../../../Engine/Core/Configuration.h"
 
-#include "../../../Interface/File/Directory.h"
-#include "../../../Interface/File/Info.h"
+#include "../../../Specific/File/Directory.h"
+#include "../../../Specific/File/Info.h"
 
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>

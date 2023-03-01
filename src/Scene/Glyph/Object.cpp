@@ -18,7 +18,7 @@
 #include "Cloud/Tree.h"
 
 #include "../Node_scene.h"
-#include "../Graph/Scene.h"
+#include "../Data/Scene.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Core/Configuration.h"
@@ -96,15 +96,15 @@ void Object::create_glyph_subset(Subset* subset){
   glyphManager->insert_into_gpu(&subset->glyphs["axis"]);
 
   //Normal glyph
-  normObject->create_normal_subset(subset);
+  normObject->create_glyph(subset);
   glyphManager->insert_into_gpu(&subset->glyphs["normal"]);
 
   //Keypoint glyph
-  keyObject->create_keypoint(subset);
+  keyObject->create_glyph(subset);
   glyphManager->insert_into_gpu(&subset->glyphs["keypoint"]);
 
   //Tree glyph
-  treeObject->create_tree(subset);
+  treeObject->create_glyph(subset);
   glyphManager->insert_into_gpu(&subset->glyphs["tree"]);
 
   //---------------------------
@@ -113,7 +113,8 @@ Glyph* Object::create_glyph_ostacle(){
   //---------------------------
 
   //Creat new OOBB object
-  Glyph* oobb = oobbObject->create_oobb();
+  oobbObject->create_glyph();
+  Glyph* oobb = oobbObject->get_glyph();
   glyphManager->insert_into_gpu(oobb);
 
   //---------------------------
@@ -271,7 +272,7 @@ void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 
   //Update cloud AABB
-  aabbObject->update_aabb(cloud);
+  aabbObject->update_glyph(cloud);
   this->update_object(aabbObject->get_glyph());
 
   //Update cloud subset glyphs
@@ -296,7 +297,7 @@ void Object::reset_scene_object(){
 
   //Reset specific glyphs
   trajObject->reset();
-  carObject->reset();
+  carObject->reset_glyph();
   matchObject->reset();
 
   Glyph* box = boxObject->get_glyph();

@@ -5,14 +5,14 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Glyph/Object.h"
-#include "../../Scene/Graph/Scene.h"
+#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Texture.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/color.h"
-#include "../../Interface/File/Directory.h"
-#include "../../Interface/File/Info.h"
-#include "../../Interface/File/Path.h"
+#include "../../Specific/File/Directory.h"
+#include "../../Specific/File/Info.h"
+#include "../../Specific/File/Path.h"
 #include "../../Operation/Color/Color.h"
 
 
