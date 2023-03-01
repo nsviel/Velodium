@@ -11,19 +11,15 @@ public:
   Subset_base();
   ~Subset_base();
 
-public:
-
-
 protected:
   int ID;
+  Eigen::Matrix3d pose_R;
+  Eigen::Vector3d pose_T;
 
-  //Own glyphs and structures
-  std::map<std::string, Glyph> glyphs;
   Frame frame;
   Data_icp icp;
   Data_pred detection;
   Data_pred detection_gt;
-
 };
 
 #endif

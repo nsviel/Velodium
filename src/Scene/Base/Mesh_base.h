@@ -11,10 +11,8 @@ public:
   Mesh_base();
   ~Mesh_base();
 
-public:
-
+//Mesh texture
 private:
-  //Texture
   int texture_ID;
   std::vector<glm::vec2> uv;
   bool has_texture;
