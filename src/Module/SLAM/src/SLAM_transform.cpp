@@ -3,11 +3,13 @@
 #include "SLAM_sampling.h"
 #include "SLAM.h"
 
+
+#include "../Glyph/Localmap.h"
+
+#include "../../../Scene/Glyph/Object.h"
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Data/Scene.h"
-#include "../../../Scene/Glyph/Object.h"
-#include "../../../Scene/Glyph/SLAM/Localmap.h"
 #include "../../../Specific/Function/fct_math.h"
 #include "../../../Specific/Function/fct_transtypage.h"
 

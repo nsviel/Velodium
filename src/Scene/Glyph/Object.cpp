@@ -6,10 +6,10 @@
 #include "Scene/Mark.h"
 #include "Scene/Matching.h"
 
-#include "SLAM/Keypoint.h"
-#include "SLAM/Trajectory.h"
-#include "SLAM/Car.h"
-#include "SLAM/Localmap.h"
+#include "../../Module/SLAM/Glyph/Keypoint.h"
+#include "../../Module/SLAM/Glyph/Trajectory.h"
+#include "../../Module/SLAM/Glyph/Car.h"
+#include "../../Module/SLAM/Glyph/Localmap.h"
 
 #include "Cloud/AABB.h"
 #include "Cloud/Box.h"

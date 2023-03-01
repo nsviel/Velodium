@@ -1,7 +1,7 @@
 #ifndef NODE_GUI_H
 #define NODE_GUI_H
 
-#include "../common.h"
+#include "../Specific/Base/Node.h"
 
 class Node_engine;
 class Node_operation;
@@ -25,7 +25,7 @@ class GUI_Capture;
 class GUI_Selection;
 
 
-class Node_gui
+class Node_gui : public Node
 {
 public:
   //Constructor / Destructor

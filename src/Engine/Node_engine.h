@@ -1,7 +1,7 @@
 #ifndef NODE_ENGINE_H
 #define NODE_ENGINE_H
 
-#include "../common.h"
+#include "../Specific/Base/Node.h"
 
 class Node_operation;
 class Node_load;
@@ -24,7 +24,7 @@ class Light;
 class Drawer;
 
 
-class Node_engine
+class Node_engine : public Node
 {
 public:
   //Constructor / Destructor

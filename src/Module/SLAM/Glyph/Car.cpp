@@ -1,14 +1,11 @@
 #include "Car.h"
 
+#include "../Base/SLAM_utility.h"
 #include "../../../Load/Format/file_OBJ.h"
-#include "../../../Operation/Transformation/Transformation.h"
-#include "../../../Specific/Function/fct_transtypage.h"
 
 
 Car::Car(){
   //---------------------------
-
-  this->transformManager = new Transformation();
 
   this->visibility = false;
   this->width = 2;
@@ -23,7 +20,7 @@ void Car::create_glyph(){
   //---------------------------
 
   //Create glyph
-  glyph->name = "Car";
+  glyph->name = "car";
   glyph->draw_width = width;
   glyph->visibility = false;
   glyph->draw_type = "triangle";
@@ -48,8 +45,8 @@ void Car::update_glyph(Cloud* cloud){
 
   glyph->xyz = glyph->xyz_init;
   trans_abs.z -= lidar_height;
-  transformManager->make_rotation_origin(glyph->xyz, subset->rotat);
-  transformManager->make_translation(glyph->xyz, trans_abs);
+  make_rotation_origin(glyph->xyz, subset->rotat);
+  make_translation(glyph->xyz, trans_abs);
 
   //---------------------------
 }

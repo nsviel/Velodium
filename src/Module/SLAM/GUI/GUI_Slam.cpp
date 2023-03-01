@@ -472,7 +472,8 @@ void GUI_Slam::parameter_localCloud(){
 
     //Local cloud color
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar;
-    vec4* rgb = slam_glyph->get_localcloud_color();
+    Glyph* localcloud = slam_glyph->get_glyph_byName("localcloud");
+    vec4* rgb = &localcloud->color_unique;
     ImGui::ColorEdit4("Color", (float*)rgb, flags);
     ImGui::Separator();
 

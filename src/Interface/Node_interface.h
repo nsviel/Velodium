@@ -1,7 +1,7 @@
 #ifndef NODE_INTERFACE_H
 #define NODE_INTERFACE_H
 
-#include "../common.h"
+#include "../Specific/Base/Node.h"
 
 class Node_engine;
 class Node_load;
@@ -18,7 +18,7 @@ class GUI_Capture;
 class GUI_Network;
 
 
-class Node_interface
+class Node_interface : public Node
 {
 public:
   //Constructor / Destructor

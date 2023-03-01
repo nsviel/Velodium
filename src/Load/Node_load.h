@@ -7,11 +7,10 @@
 #include "Processing/Extractor.h"
 
 #include "../Engine/Node_engine.h"
+#include "../Specific/Base/Node.h"
 
-#include "../common.h"
 
-
-class Node_load
+class Node_load : public Node
 {
 public:
   //Constructor / Destructor

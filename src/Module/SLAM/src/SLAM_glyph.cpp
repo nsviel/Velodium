@@ -2,14 +2,15 @@
 #include "SLAM_map.h"
 #include "SLAM.h"
 
+#include "../Glyph/Localmap.h"
+#include "../Glyph/Car.h"
+#include "../Glyph/Trajectory.h"
+#include "../Glyph/Normal.h"
+#include "../Glyph/Matching.h"
+
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Glyph/Object.h"
-#include "../../../Scene/Glyph/SLAM/Localmap.h"
-#include "../../../Scene/Glyph/SLAM/Car.h"
-#include "../../../Scene/Glyph/SLAM/Trajectory.h"
-#include "../../../Scene/Glyph/Cloud/Normal.h"
-#include "../../../Scene/Glyph/Scene/Matching.h"
 #include "../../../Specific/Function/fct_math.h"
 
 
@@ -28,11 +29,12 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
   Matching* matchObject = objectManager->get_object_matching();
   Car* carObject = objectManager->get_object_car();
 
-  this->trajectory = trajObject->get_glyph();
-  this->localmap = mapObject->get_localmap();
-  this->localcloud = mapObject->get_localcloud();
-  this->car = carObject->get_glyph();
-  this->matching = matchObject->get_glyph();
+  this->list_glyph = new list<Glyph*>();
+  list_glyph->push_back(trajObject->get_glyph());
+  list_glyph->push_back(mapObject->get_localmap());
+  list_glyph->push_back(mapObject->get_localcloud());
+  list_glyph->push_back(carObject->get_glyph());
+  list_glyph->push_back(matchObject->get_glyph());
 
   this->with_keypoint = false;
   this->with_neighbor = false;
@@ -70,8 +72,14 @@ void SLAM_glyph::update_glyph(Cloud* cloud, Subset* subset){
   objectManager->update_object(keypoint);
 }
 void SLAM_glyph::update_visibility(Subset* subset){
-  Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
+
+  Glyph* keypoint = &subset->glyphs["keypoint"];
+  Glyph* trajectory = get_glyph_byName("trajectory");
+  Glyph* localmap = get_glyph_byName("localmap");
+  Glyph* localcloud = get_glyph_byName("localcloud");
+  Glyph* car = get_glyph_byName("car");
+  Glyph* matching = get_glyph_byName("matching");
 
   keypoint->visibility = with_keypoint | with_neighbor;
   trajectory->visibility = with_trajectory;
@@ -215,4 +223,20 @@ void SLAM_glyph::update_glyph_trajectory(Cloud* cloud){
 
     //---------------------------
   }
+}
+
+//Accesseurs
+Glyph* SLAM_glyph::get_glyph_byName(string querry){
+	//---------------------------
+
+	//Search for corresponding shader and out it
+	for(int i=0; i<list_glyph->size(); i++){
+		Glyph* glyph = *next(list_glyph->begin(), i);
+		if(glyph->name == querry){
+			return glyph;
+		}
+	}
+
+	//---------------------------
+	return nullptr;
 }

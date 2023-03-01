@@ -26,7 +26,7 @@ void Trajectory::create(){
   this->trajectory = new Glyph();
   //---------------------------
 
-  trajectory->name = "Trajectory";
+  trajectory->name = "trajectory";
   trajectory->draw_width = width;
   trajectory->visibility = false;
   trajectory->draw_type = "line";

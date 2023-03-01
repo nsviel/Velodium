@@ -1,10 +1,10 @@
-#ifndef OBJECT_KEYPOINT_H
-#define OBJECT_KEYPOINT_H
+#ifndef SLAM_OBJECT_KEYPOINT_H
+#define SLAM_OBJECT_KEYPOINT_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/SLAM_object_base.h"
 
 
-class Keypoint : public Object_base
+class Keypoint : public SLAM_object_base
 {
 public:
   Keypoint();

@@ -1,6 +1,7 @@
 #ifndef SLAM_GLYPH_H
 #define SLAM_GLYPH_H
 
+#include "../Base/SLAM_object_base.h"
 #include "../../../common.h"
 
 class SLAM;
@@ -30,7 +31,9 @@ public:
   void update_glyph_car(Cloud* cloud);
   void update_glyph_trajectory(Cloud* cloud);
 
-  inline vec4* get_localcloud_color(){return &localcloud->color_unique;}
+  //Accesseur
+  Glyph* get_glyph_byName(string querry);
+
   inline bool* get_with_keypoint(){return &with_keypoint;}
   inline bool* get_with_neighbor(){return &with_neighbor;}
   inline bool* get_with_matching(){return &with_matching;}
@@ -43,12 +46,7 @@ private:
   SLAM_map* slam_map;
   Object* objectManager;
 
-  Glyph* trajectory;
-  Glyph* localmap;
-  Glyph* localcloud;
-  Glyph* car;
-  Glyph* matching;
-  Glyph* keypoint;
+  list<Glyph*>* list_glyph;
 
   bool with_keypoint;
   bool with_neighbor;

@@ -1,10 +1,10 @@
-#ifndef OBJECT_TRAJECTORY_H
-#define OBJECT_TRAJECTORY_H
+#ifndef SLAM_OBJECT_TRAJECTORY_H
+#define SLAM_OBJECT_TRAJECTORY_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/SLAM_object_base.h"
 
 
-class Trajectory : public Object_base
+class Trajectory : public SLAM_object_base
 {
 public:
   //Constructor / Destructor
