@@ -18,7 +18,7 @@
 #include "Cloud/Tree.h"
 
 #include "../Node_scene.h"
-#include "../Cloud/Scene.h"
+#include "../Graph/Scene.h"
 
 #include "../../Engine/Node_engine.h"
 #include "../../Engine/Core/Configuration.h"

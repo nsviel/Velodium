@@ -14,7 +14,7 @@
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/Camera/Followup.h"
 #include "../../Engine/OpenGL/Renderer.h"
-#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Graph/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 
 #include "../../Interface/Node_interface.h"

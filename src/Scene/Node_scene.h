@@ -1,7 +1,7 @@
 #ifndef NODE_SCENE_H
 #define NODE_SCENE_H
 
-#include "../Specific/Node.h"
+#include "../Specific/Base/Node.h"
 
 class Node_engine;
 class Scene;

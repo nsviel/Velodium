@@ -5,7 +5,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Glyph/Object.h"
-#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Graph/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Texture.h"
 #include "../../Specific/Function/fct_math.h"

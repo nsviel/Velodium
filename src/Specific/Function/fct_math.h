@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
-
-#include "../../common.h"
+#include <iostream>
+#include <algorithm>
+#include <Eigen/Dense>
+#include <math.h>
 
 /**
  * \brief Basic math functions

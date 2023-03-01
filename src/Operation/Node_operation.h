@@ -1,7 +1,7 @@
 #ifndef NODE_OPERATION_H
 #define NODE_OPERATION_H
 
-#include "../common.h"
+#include "../Specific/Base/Node.h"
 
 class Node_engine;
 class Node_load;
@@ -22,7 +22,7 @@ class Visibility;
 class Boxing;
 
 
-class Node_operation
+class Node_operation : public Node
 {
 public:
   //Constructor / Destructor

@@ -758,6 +758,7 @@ void fct_sort_alpha_num_(std::vector<std::string>& vec){
   });
 
   //---------------------------
+  return;
 }
 
 //Geometric functions

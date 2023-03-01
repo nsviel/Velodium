@@ -13,7 +13,7 @@
 
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Graph/Scene.h"
 #include "../../Engine/Data/struct_misc.h"
 #include "../../Engine/OpenGL/CoreGLengine.h"
 

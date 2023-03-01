@@ -1,6 +1,6 @@
 #include "Node_scene.h"
 
-#include "Cloud/Scene.h"
+#include "Graph/Scene.h"
 #include "Glyph/Glyphs.h"
 #include "Glyph/Object.h"
 

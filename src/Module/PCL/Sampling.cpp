@@ -4,7 +4,7 @@
 #include "pcl_transtypage.h"
 
 #include "../../Operation/Transformation/Attribut.h"
-#include "../../Scene/Cloud/Scene.h"
+#include "../../Scene/Graph/Scene.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/Function/fct_terminal.h"
 
