@@ -5,7 +5,7 @@
 #include "../Core/Dimension.h"
 #include "../Core/Configuration.h"
 #include "../Shader/Shader.h"
-#include "../Shader/Object/Shader_object.h"
+#include "../Shader/Base/Shader_object.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

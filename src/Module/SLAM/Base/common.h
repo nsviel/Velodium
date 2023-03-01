@@ -2,9 +2,9 @@
 #define SLAM_COMMON_H
 
 //Structure
-#include "../../Engine/Data/struct_cloud.h"
-#include "../../Specific/Function/fct_terminal.h"
-#include "../../GUI/Window/struct_consol.h"
+#include "../../../Scene/Struct/struct_cloud.h"
+#include "../../../Specific/Function/fct_terminal.h"
+#include "../../../GUI/Window/struct_consol.h"
 extern struct ConsoleApp console;
 
 //Namespaces

@@ -1,7 +1,7 @@
 #ifndef ICP_REJECTION_H
 #define ICP_REJECTION_H
 
-#include "../../../../Engine/Data/struct_misc.h"
+#include "../../../../Scene/Struct/struct_misc.h"
 #include "../../../../common.h"
 
 

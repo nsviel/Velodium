@@ -3,8 +3,8 @@
 
 #include "Glyph_base.h"
 #include "../../common.h"
-#include "../../Engine/Data/struct_glyph.h"
-#include "../../Engine/Data/struct_subset.h"
+#include "../../Scene/Struct/struct_glyph.h"
+#include "../../Scene/Struct/struct_subset.h"
 
 
 class Object_base

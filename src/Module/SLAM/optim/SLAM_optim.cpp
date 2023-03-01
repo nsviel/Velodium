@@ -7,7 +7,6 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Data/Scene.h"
-#include "../../../Specific/Function/fct_math.h"
 
 
 //Constructor / Destructor

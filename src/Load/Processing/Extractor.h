@@ -1,8 +1,8 @@
 #ifndef DATA_EXTRACTION_H
 #define DATA_EXTRACTION_H
 
-#include "../../Engine/Data/struct_data_file.h"
-#include "../../Engine/Data/struct_data_cap.h"
+#include "../../Scene/Struct/struct_data_file.h"
+#include "../../Scene/Struct/struct_data_cap.h"
 
 #include "../../common.h"
 

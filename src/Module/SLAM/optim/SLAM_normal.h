@@ -1,8 +1,8 @@
 #ifndef SLAM_NORMAL_H
 #define SLAM_NORMAL_H
 
-#include "../../../Engine/Data/struct_voxelMap.h"
-#include "../../../common.h"
+#include "../src/struct_voxelMap.h"
+#include "../Base/common.h"
 
 #include <mutex>
 #include <shared_mutex>

@@ -45,8 +45,8 @@ void Car::update_glyph(Cloud* cloud){
 
   glyph->xyz = glyph->xyz_init;
   trans_abs.z -= lidar_height;
-  make_rotation_origin(glyph->xyz, subset->rotat);
-  make_translation(glyph->xyz, trans_abs);
+  SLAM_utility::make_rotation_origin(glyph->xyz, subset->rotat);
+  SLAM_utility::make_translation(glyph->xyz, trans_abs);
 
   //---------------------------
 }

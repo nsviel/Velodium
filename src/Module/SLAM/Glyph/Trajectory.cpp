@@ -1,7 +1,5 @@
 #include "Trajectory.h"
 
-#include "../../../Specific/Function/fct_transtypage.h"
-
 
 //Constructor / destructor
 Trajectory::Trajectory(){

@@ -1,7 +1,5 @@
 #include "Matching.h"
 
-#include "../../../Specific/Function/fct_math.h"
-
 
 //Constructor / destructor
 Matching::Matching(){

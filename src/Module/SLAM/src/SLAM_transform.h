@@ -1,7 +1,7 @@
 #ifndef SLAM_TRANSFORM_H
 #define SLAM_TRANSFORM_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class Scene;
 class SLAM;

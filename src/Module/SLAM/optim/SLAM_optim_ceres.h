@@ -5,8 +5,7 @@
 #include "SLAM_normal.h"
 
 #include "../Cost_function/Cost_function.h"
-
-#include "../../../common.h"
+#include "../Base/common.h"
 
 #include <ceres/internal/eigen.h>
 #include <ceres/ceres.h>

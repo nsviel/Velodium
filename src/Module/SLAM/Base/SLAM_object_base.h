@@ -1,9 +1,9 @@
 #ifndef SLAM_OBJECT_BASE_H
 #define SLAM_OBJECT_BASE_H
 
-#include "../../../common.h"
-#include "../../../Engine/Data/struct_glyph.h"
-#include "../../../Engine/Data/struct_subset.h"
+#include "common.h"
+#include "../../../Scene/Struct/struct_glyph.h"
+#include "../../../Scene/Struct/struct_subset.h"
 
 
 class SLAM_object_base

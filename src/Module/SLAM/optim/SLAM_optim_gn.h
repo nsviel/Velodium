@@ -1,7 +1,7 @@
 #ifndef SLAM_OPTIM_GN_H
 #define SLAM_OPTIM_GN_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 #include  <mutex>
 

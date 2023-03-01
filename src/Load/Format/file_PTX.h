@@ -1,8 +1,8 @@
 #ifndef FILE_PTX_H
 #define FILE_PTX_H
 
-#include "../../Engine/Data/struct_data_file.h"
-#include "../../Engine/Data/struct_misc.h"
+#include "../../Scene/Struct/struct_data_file.h"
+#include "../../Scene/Struct/struct_misc.h"
 #include "../../common.h"
 
 #include <iomanip>

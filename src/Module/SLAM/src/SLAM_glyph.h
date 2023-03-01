@@ -2,7 +2,7 @@
 #define SLAM_GLYPH_H
 
 #include "../Base/SLAM_object_base.h"
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class SLAM;
 class SLAM_map;

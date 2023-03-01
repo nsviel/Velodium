@@ -3,7 +3,7 @@
 
 #include "struct_voxelMap.h"
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class SLAM;
 class Scene;

@@ -1,8 +1,8 @@
 #ifndef SLAM_H
 #define SLAM_H
 
-#include "../../../Engine/Data/struct_voxelMap.h"
-#include "../../../common.h"
+#include "struct_voxelMap.h"
+#include "../Base/common.h"
 
 class Node_engine;
 class Scene;

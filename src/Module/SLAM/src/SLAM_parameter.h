@@ -1,7 +1,7 @@
 #ifndef SLAM_PARAMETER_H
 #define SLAM_PARAMETER_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class SLAM;
 class SLAM_normal;

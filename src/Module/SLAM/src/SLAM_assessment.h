@@ -1,7 +1,7 @@
 #ifndef SLAM_ASSESSMENT_H
 #define SLAM_ASSESSMENT_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class SLAM;
 class Scene;

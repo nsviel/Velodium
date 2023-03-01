@@ -2,8 +2,7 @@
 
 #include "../src/SLAM_map.h"
 #include "../src/SLAM.h"
-
-#include "../../../Specific/Function/fct_math.h"
+#include "../Base/SLAM_utility.h"
 
 #include <Eigen/Eigenvalues>
 
@@ -127,10 +126,10 @@ void SLAM_normal::compute_knn_normal(Frame* frame, vector<Eigen::Vector3d>& kNN,
   frame->nn[i] = kNN[0];
 
   //Compute normales
-  Eigen::Matrix3d covMat = fct_covarianceMat(kNN);
+  Eigen::Matrix3d covMat = SLAM_utility::fct_covarianceMat(kNN);
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> es(covMat);
   Eigen::Vector3d normal = es.eigenvectors().col(0).normalized();
-  if(fct_is_nan(normal) == false){
+  if(SLAM_utility::fct_is_nan(normal) == false){
     frame->N_nn[i] = normal;
   }else{
     frame->N_nn[i] = Eigen::Vector3d::Zero();

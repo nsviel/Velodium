@@ -1,7 +1,7 @@
 #ifndef SLAM_SAMPLING_H
 #define SLAM_SAMPLING_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 
 class SLAM_sampling

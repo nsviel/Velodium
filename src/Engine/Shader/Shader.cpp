@@ -1,7 +1,7 @@
 #include "Shader.h"
 
-#include "Object/Shader_object.h"
-#include "Object/Shader_source.h"
+#include "Base/Shader_object.h"
+#include "Base/Shader_source.h"
 #include "Source/Shader_screen.h"
 #include "Source/Shader_edl.h"
 

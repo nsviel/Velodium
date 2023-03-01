@@ -1,6 +1,6 @@
 #include "Normal.h"
 
-#include "../../../Specific/Function/fct_math.h"
+#include "../Base/SLAM_utility.h"
 
 
 //Constructor / destructor
@@ -56,7 +56,7 @@ void Normal::update_normal_subset(Subset* subset){
     vec3& xyz = xyz_s[i];
     vec3& nxyz = Nxyz_s[i];
 
-    if(fct_is_nan(nxyz)) continue;
+    if(SLAM_utility::fct_is_nan(nxyz)) continue;
 
     vec3 vec_n = vec3(xyz.x + nxyz.x * lgt, xyz.y + nxyz.y * lgt, xyz.z + nxyz.z * lgt);
 
@@ -93,7 +93,7 @@ void Normal::update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<ve
     vec3& xyz = xyz_s[i];
     vec3& nxyz = Nxyz_s[i];
 
-    if(fct_is_nan(nxyz)) continue;
+    if(SLAM_utility::fct_is_nan(nxyz)) continue;
 
     vec3 vec_n = vec3(xyz.x + nxyz.x * lgt, xyz.y + nxyz.y * lgt, xyz.z + nxyz.z * lgt);
 

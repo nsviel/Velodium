@@ -1,7 +1,7 @@
 #ifndef SLAM_INIT_H
 #define SLAM_INIT_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class SLAM;
 class SLAM_map;

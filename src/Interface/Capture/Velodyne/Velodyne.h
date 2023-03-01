@@ -3,7 +3,7 @@
 
 // Server side implementation of UDP client-server model
 
-#include "../../../Engine/Data/struct_data_cap.h"
+#include "../../../Scene/Struct/struct_data_cap.h"
 #include "../../../common.h"
 
 #include <thread>

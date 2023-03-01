@@ -2,7 +2,7 @@
 #define Newton_H
 
 #include "SpeudoInverse.h"
-#include "../../Engine/Data/struct_misc.h"
+#include "../../Scene/Struct/struct_misc.h"
 #include "../../common.h"
 
 #include <Eigen/Dense>

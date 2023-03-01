@@ -1,7 +1,7 @@
 #ifndef SLAM_OPTIM_H
 #define SLAM_OPTIM_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class Scene;
 class SLAM;

@@ -1,7 +1,7 @@
 #ifndef GUI_SLAM_H
 #define GUI_SLAM_H
 
-#include "../../../common.h"
+#include "../Base/common.h"
 
 class Module_slam;
 class Scene;
