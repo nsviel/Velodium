@@ -11,8 +11,11 @@ public:
   Subset_base();
   ~Subset_base();
 
-protected:
-  int ID;
+public:
+  void init();
+
+public:
+  int ID_subset;
   Eigen::Matrix3d pose_R;
   Eigen::Vector3d pose_T;
 

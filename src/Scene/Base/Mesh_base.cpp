@@ -10,3 +10,11 @@ Mesh_base::Mesh_base(){
   //---------------------------
 }
 Mesh_base::~Mesh_base(){}
+
+void Mesh_base::init(){
+  //---------------------------
+
+  this->object_type = "mesh";
+
+  //---------------------------
+}

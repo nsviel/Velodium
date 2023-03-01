@@ -24,6 +24,7 @@ void Cloud_base::init_cloud(){
   this->nb_point = 0;
   this->point_size = 1;
   this->lidar_model = "";
+  this->object_type = "cloud";
 
   this->is_heatmap = false;
   this->is_onthefly = false;
@@ -47,14 +48,14 @@ void Cloud_base::reset_cloud(){
 Subset* Cloud_base::get_subset_byID(int ID){
   //---------------------------
 
-  for(int i=0; i<subset.size(); i++){
+  /*for(int i=0; i<subset.size(); i++){
     Subset* sub = *next(subset.begin(), i);
 
     if(sub->ID == ID){
       return sub;
     }
-  }
+  }*/
 
   //---------------------------
-  return subset_selected;
+  return nullptr;
 }

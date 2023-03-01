@@ -320,7 +320,8 @@ void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   cloud = extractManager->extract_data(data_vec);
 
   // NEW PART
-  graphManager->insert_loaded_cloud(cloud);
+  //Cloud_base* cloud_base = extractManager->extract_data_(data_vec);
+  //graphManager->insert_loaded_cloud(cloud);
 
   list_cloud->push_back(cloud);
 

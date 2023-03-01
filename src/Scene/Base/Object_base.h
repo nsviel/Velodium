@@ -20,9 +20,17 @@ public:
   ~Object_base();
 
 public:
+  //Main function
   void init_object();
   void reset_object();
+
+  //Draw stuff
   void draw();
+  void set_draw_type(std::string name);
+
+  //Insert data
+  void insert_location(std::vector<glm::vec3>& xyz);
+  void insert_color(std::vector<glm::vec4>& rgb_in);
 
 public:
   //Generic data
@@ -44,13 +52,15 @@ public:
 
   std::string name;
   std::string format;
+  std::string object_type;
   std::string path_file;
   std::string path_save;
-  std::string draw_type;
+  std::string draw_type_name;
   std::string dataFormat;
   glm::vec4 unicolor;
   bool visibility;
   int nb_point;
+  int draw_type;
 
   //Generic pose
   glm::vec3 min;
@@ -64,7 +74,6 @@ public:
 
   //Attached glyphs
   std::map<std::string, Glyph> glyphs;
-
 };
 
 

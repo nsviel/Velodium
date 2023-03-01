@@ -11,6 +11,9 @@ public:
   Mesh_base();
   ~Mesh_base();
 
+public:
+  void init();
+
 //Mesh texture
 private:
   int texture_ID;

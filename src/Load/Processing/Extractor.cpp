@@ -464,3 +464,79 @@ void Extractor::compute_texture(Subset* subset, Data_file* data){
 
   //---------------------------
 }
+
+
+//Base
+Cloud_base* Extractor::extract_data_(vector<Data_file*> data){
+  Cloud_base* cloud = new Cloud_base();
+  //---------------------------
+
+  if(data.size() == 0){
+    cout<<"[error] Data size equal zero"<<endl;
+    exit(0);
+  }
+
+  //Init cloud parameters
+  this->init_random_color();
+  this->init_cloud_parameter(cloud, data);
+
+  for(int i=0; i<data.size(); i++){
+    Subset_base* subset = new Subset_base();
+
+    this->check_data(data[i]);
+  //  this->init_subset_parameter(subset, data[i]->name, cloud->ID_subset);
+    subset->ID_subset = i;
+    cloud->nb_subset++;
+/*
+    //Subset data
+    this->extract_location(subset, data[i]->location);
+    this->extract_intensity(subset, data[i]->intensity);
+    this->extract_color(subset, data[i]->color);
+    this->extract_normal(subset, data[i]->normal);
+    this->extract_timestamp(subset, data[i]->timestamp);
+    this->extract_texture(subset, data[i]->texture);
+
+    //Create associated glyphs
+    objectManager->create_glyph_subset(subset);
+
+    //Set final parametrization
+    this->define_visibility(subset, i);
+    this->define_buffer_init(cloud, subset);
+    this->compute_texture(subset, data[i]);*/
+  }
+
+  //---------------------------
+  return cloud;
+}
+void Extractor::init_cloud_parameter(Cloud_base* cloud, vector<Data_file*> data){
+  //---------------------------
+
+  //Calculate number of point
+  int nb_point = 0;
+  for(int i=0; i<data.size(); i++){
+    nb_point += data[i]->location.size();
+  }
+
+  //General information
+  string path = data[0]->path;
+  cloud->path_file = path;
+  cloud->name = get_name_from_path(path);
+  cloud->format = get_format_from_path(path);
+
+  cloud->set_draw_type(data[0]->draw_type);
+  cloud->visibility = true;
+  cloud->nb_point = nb_point;
+  cloud->nb_subset = data.size();
+
+  cloud->point_size = configManager->parse_json_i("parameter", "point_size");
+  cloud->unicolor = color_rdm;
+  cloud->path_save = get_path_abs_build() + "../media/data/";
+
+  //ID
+  int* ID_cloud = sceneManager->get_new_ID_cloud();
+  cloud->ID_perma = *ID_cloud;
+  cloud->ID_order = sceneManager->get_new_oID_cloud();
+  *ID_cloud += 1;
+
+  //---------------------------
+}

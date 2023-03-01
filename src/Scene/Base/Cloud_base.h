@@ -49,11 +49,11 @@ public:
   int ID_sub_last_given; //Last given subset ID
   int ID_sub_cur_file; //For on-the-fly loading
 
-  Subset* subset_selected;
-  std::list<Subset*> subset;
-  std::list<Subset*> subset_voxel;
-  std::list<Subset*> subset_buffer;
-  std::list<Subset*> subset_init;
+  Cloud_base* subset_selected;
+  std::list<Cloud_base*> subset;
+  std::list<Cloud_base*> subset_voxel;
+  std::list<Cloud_base*> subset_buffer;
+  std::list<Cloud_base*> subset_init;
   std::vector<std::string> list_path;
   std::list<int> list_loaded;
 };

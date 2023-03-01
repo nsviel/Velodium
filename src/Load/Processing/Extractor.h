@@ -6,6 +6,9 @@
 
 #include "../../common.h"
 
+#include "../../Scene/Base/Subset_base.h"
+#include "../../Scene/Base/Mesh_base.h"
+
 class Node_load;
 class Scene;
 class Object;
@@ -27,6 +30,10 @@ public:
   void extract_data_frame(Cloud* cloud, Data_file* data);
   void extract_data_oneFrame(Cloud* cloud, Data_file* data);
 
+  //Base
+  Cloud_base* extract_data_(vector<Data_file*> data);
+  void init_cloud_parameter(Cloud_base* cloud, vector<Data_file*> data);
+
 private:
   //Subfunctions
   void check_data(Data_file* data);
@@ -45,6 +52,9 @@ private:
   void extract_texture(Subset* subset, vector<vec2>& vec_tex);
 
   void compute_texture(Subset* subset, Data_file* data);
+
+
+
 
 private:
   Scene* sceneManager;
