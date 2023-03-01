@@ -4,9 +4,9 @@
 #include "../../common.h"
 
 class Node_scene;
-class Mesh_base;
+class Object_base;
 class Cloud_base;
-
+class Mesh_base;
 
 class Graph
 {
@@ -18,8 +18,10 @@ public:
 public:
 
 private:
-  list<Mesh_base*>* list_mesh;
+  list<Object_base*>* list_object;
   list<Cloud_base*>* list_cloud;
+  list<Mesh_base*>* list_mesh;
+
 };
 
 #endif
