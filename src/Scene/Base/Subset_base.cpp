@@ -1,10 +1,10 @@
-#include "Object_base.h"
+#include "Subset_base.h"
 
 
 //Constructor / Destructor
-Object_base::Object_base(){
+Subset_base::Subset_base(){
   //---------------------------
 
   //---------------------------
 }
-Object_base::~Object_base(){}
+Subset_base::~Subset_base(){}

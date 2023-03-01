@@ -1,10 +1,10 @@
 #ifndef OBJECT_AABB_H
 #define OBJECT_AABB_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class AABB : public Object_base
+class AABB : public Glyph_source
 {
 public:
   AABB();

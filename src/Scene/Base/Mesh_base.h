@@ -1,10 +1,10 @@
 #ifndef MESH_BASE_H
 #define MESH_BASE_H
 
-#include "../../common.h"
+#include "Object_base.h"
 
 
-class Mesh_base
+class Mesh_base : public Object_base
 {
 public:
   //Constructor / Destructor
@@ -14,27 +14,10 @@ public:
 public:
 
 private:
-  //IDs
-  GLuint ID; //Permanent ID
-  GLuint oID; // List order ID
-
-  //Infos
-  std::string path;
-  std::string name;
-  std::string format;
-  std::string saveas;
-  std::string draw_type;
-  std::string dataFormat;
-  bool visibility;
-  int nb_point;
-
-  //Transformation
-  glm::vec3 min;
-  glm::vec3 max;
-  glm::vec3 root;
-  glm::vec3 COM;
-  glm::vec4 unicolor;
-
+  //Texture
+  int texture_ID;
+  std::vector<glm::vec2> uv;
+  bool has_texture;
 };
 
 #endif

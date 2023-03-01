@@ -1,10 +1,10 @@
 #ifndef OBJECT_GRID_H
 #define OBJECT_GRID_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class Grid : public Object_base
+class Grid : public Glyph_source
 {
 public:
   //Constructor / Destructor

@@ -1,10 +1,10 @@
 #ifndef OBJECT_MARK_H
 #define OBJECT_MARK_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class Mark : public Object_base
+class Mark : public Glyph_source
 {
 public:
   //Constructor / Destructor

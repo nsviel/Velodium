@@ -1,10 +1,10 @@
 #ifndef OBJECT_BOX_H
 #define OBJECT_BOX_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class Box : public Object_base
+class Box : public Glyph_source
 {
 public:
   //Constructor / Destructor

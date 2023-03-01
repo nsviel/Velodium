@@ -1,10 +1,10 @@
 #ifndef OBJECT_AXIS_H
 #define OBJECT_AXIS_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class Axis : public Object_base
+class Axis : public Glyph_source
 {
 public:
   //Constructor / Destructor

@@ -1,10 +1,10 @@
 #ifndef OBJECT_OOBB_H
 #define OBJECT_OOBB_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class OOBB : public Object_base
+class OOBB : public Glyph_source
 {
 public:
   //Constructor / Destructor

@@ -1,10 +1,10 @@
 #ifndef OBJECT_NORMAL_H
 #define OBJECT_NORMAL_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class Normal : public Object_base
+class Normal : public Glyph_source
 {
 public:
   //Constructor / Destructor

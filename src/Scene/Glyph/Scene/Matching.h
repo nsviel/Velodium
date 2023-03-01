@@ -1,10 +1,10 @@
 #ifndef OBJECT_MATCHING_H
 #define OBJECT_MATCHING_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 
-class Matching : public Object_base
+class Matching : public Glyph_source
 {
 public:
   //Constructor / Destructor

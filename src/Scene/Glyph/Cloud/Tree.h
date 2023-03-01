@@ -1,12 +1,12 @@
 #ifndef OBJECT_TREE_H
 #define OBJECT_TREE_H
 
-#include "../../Base/Object_base.h"
+#include "../Base/Glyph_source.h"
 
 class Octree;
 
 
-class Tree : public Object_base
+class Tree : public Glyph_source
 {
 public:
   //Constructor / Destructor

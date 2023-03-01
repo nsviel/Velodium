@@ -1,12 +1,10 @@
 #ifndef CLOUD_BASE_H
 #define CLOUD_BASE_H
 
-#include "Mesh_base.h"
-
-#include "../../common.h"
+#include "Object_base.h"
 
 
-class Cloud_base : public Mesh_base
+class Cloud_base : public Object_base
 {
 public:
   //Constructor / Destructor
@@ -24,8 +22,25 @@ private:
 
   //Parameters
   int nb_subset;
+  int nb_point;
   int point_size;
   std::string lidar_model;
+
+  bool has_intensity;
+  bool has_timestamp;
+
+  std::vector<glm::vec3> xyz_voxel;
+  std::vector<float> I;
+  std::vector<float> ts;
+  std::vector<double> ts_n;
+
+  //Various attributs
+  std::vector<float> A;
+  std::vector<float> R;
+  std::vector<float> cosIt;
+  std::vector<float> It;
+  std::vector<int> selected;
+  std::list<int> highlighted;
 
   //Flags
   bool heatmap;
