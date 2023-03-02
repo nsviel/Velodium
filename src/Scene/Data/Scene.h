@@ -9,6 +9,7 @@
 class Node_scene;
 class Object;
 class Graph;
+class GPU_transfert;
 
 
 class Scene
@@ -23,7 +24,6 @@ public:
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
   void remove_subset(Cloud* cloud, int ID);
-  void remove_subset_from_gpu(Subset* subset);
   void remove_subset_last(Cloud* cloud);
   void remove_subset_all(Cloud* cloud);
 
@@ -85,6 +85,7 @@ public:
 private:
   Object* objectManager;
   Graph* graphManager;
+  GPU_transfert* gpuManager;
 
   list<Cloud*>* list_cloud;
   Cloud* cloud_selected;

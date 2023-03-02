@@ -11,6 +11,8 @@
 struct Cloud{ //Global set of the cloud
   //---------------------------
 
+  Cloud();
+
   //IDs
   int ID; //Permanent cloud ID
   int oID; // List order cloud ID
@@ -49,22 +51,13 @@ struct Cloud{ //Global set of the cloud
   glm::vec4 unicolor;
 
   //Data
-  Subset* subset_selected = nullptr;
+  Subset* subset_selected;
   std::list<Subset*> subset;
   std::list<Subset*> subset_voxel;
   std::list<Subset*> subset_buffer;
   std::list<Subset*> subset_init;
 
-  Subset* get_subset_byID(int ID){
-    for(int i=0; i<subset.size(); i++){
-      Subset* sub = *next(subset.begin(), i);
-
-      if(sub->ID == ID){
-        return sub;
-      }
-    }
-    return subset_selected;
-  }
+  Subset* get_subset_byID(int querry_ID);
 
   //---------------------------
 };

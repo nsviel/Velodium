@@ -20,6 +20,9 @@ public:
   void bind_buffer_color(Object_* object);
   void bind_buffer_texture(Object_* object);
 
+  //Buffer unbinding
+  void unbind_object(Object_* object);
+
   //Buffer update
   void update_buffer_location(Object_* object);
   void update_buffer_color(Object_* object);

@@ -63,16 +63,12 @@ void Engine::runtime_draw_cloud(){
     if(cloud->visibility){
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
-        //this->draw_mesh(subset, subset->draw_type_name);
-        if(subset->visibility){
-          gpuManager->draw_object(subset);
-        }
+        this->draw_cloud(subset);
       }
     }
   }
 
   //---------------------------
-  glBindVertexArray(0);
 }
 void Engine::runtime_draw_glyph(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
@@ -115,7 +111,7 @@ void Engine::runtime_camera(){
 }
 
 //Subfunction
-void Engine::draw_mesh(Subset* subset, string draw_type_name){
+void Engine::draw_cloud(Subset* subset){
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
@@ -125,8 +121,10 @@ void Engine::draw_mesh(Subset* subset, string draw_type_name){
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
     }
-    
-    //DRAW HERE
+
+    if(subset->visibility){
+      gpuManager->draw_object(subset);
+    }
 
     //Desactivate texture
     if(with_texture && subset->has_texture){

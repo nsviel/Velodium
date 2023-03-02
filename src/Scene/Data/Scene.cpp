@@ -3,6 +3,7 @@
 
 #include "../Node_scene.h"
 #include "../Glyph/Object.h"
+#include "../../Engine/OpenGL/GPU_transfert.h"
 
 
 //Constructor / Destructor
@@ -11,6 +12,7 @@ Scene::Scene(Node_scene* node){
 
   this->objectManager = node->get_objectManager();
   this->graphManager = node->get_graphManager();
+  this->gpuManager = new GPU_transfert();
 
   this->list_cloud = new list<Cloud*>;
   this->cloud_selected = nullptr;
@@ -106,7 +108,7 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   Subset* subset_ini = get_subset_init(cloud, 0);
 
   //Remove data from GPU
-  this->remove_subset_from_gpu(subset);
+  gpuManager->unbind_object(subset);
 
   //Supress Subset pointer
   cloud->subset.pop_front();
@@ -121,16 +123,6 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
   cloud->nb_subset = cloud->subset.size();
 }
-void Scene::remove_subset_from_gpu(Subset* subset){
-  //---------------------------
-
-  glDeleteBuffers(1, &subset->vbo_xyz);
-  glDeleteBuffers(1, &subset->vbo_rgb);
-  glDeleteBuffers(1, &subset->vbo_Nxyz);
-  glDeleteVertexArrays(1, &subset->vao);
-
-  //---------------------------
-}
 void Scene::remove_subset_last(Cloud* cloud){
   //---------------------------
 
@@ -140,7 +132,7 @@ void Scene::remove_subset_last(Cloud* cloud){
   Subset* subset_ini = get_subset_init(cloud, 0);
 
   //Remove data from GPU
-  this->remove_subset_from_gpu(subset);
+  gpuManager->unbind_object(subset);
 
   //Supress Subset pointer
   cloud->subset.pop_front();

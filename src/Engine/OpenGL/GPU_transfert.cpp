@@ -70,6 +70,18 @@ void GPU_transfert::bind_buffer_texture(Object_* object){
   //---------------------------
 }
 
+//Buffer unbinding
+void GPU_transfert::unbind_object(Object_* object){
+  //---------------------------
+
+  glDeleteBuffers(1, &object->vbo_xyz);
+  glDeleteBuffers(1, &object->vbo_rgb);
+  glDeleteBuffers(1, &object->vbo_tex);
+  glDeleteVertexArrays(1, &object->vao);
+
+  //---------------------------
+}
+
 //Buffer update
 void GPU_transfert::update_buffer_location(Object_* object){
   //---------------------------

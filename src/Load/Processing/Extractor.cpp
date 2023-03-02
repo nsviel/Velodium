@@ -54,25 +54,18 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
   for(int i=0; i<data.size(); i++){
     Subset* subset = new Subset();
 
+    //Init
     this->check_data(data[i]);
-    this->init_subset_parameter(subset, data[i]->name, cloud->ID_subset);
-    cloud->ID_subset++;
-
-    //Subset data
-    this->extract_location(subset, data[i]->location);
-    this->extract_intensity(subset, data[i]->intensity);
-    this->extract_color(subset, data[i]->color);
-    this->extract_normal(subset, data[i]->normal);
-    this->extract_timestamp(subset, data[i]->timestamp);
-    this->extract_texture(subset, data[i]->texture);
-
-    //Create associated glyphs
+    this->init_subset_parameter(subset, data[i], cloud->ID_subset);
     objectManager->create_glyph_subset(subset);
 
-    //Set final parametrization
+    //Set parametrization
+    this->insert_subset_into_gpu(subset);
     this->define_visibility(subset, i);
     this->define_buffer_init(cloud, subset);
     this->compute_texture(subset, data[i]);
+
+    cloud->ID_subset++;
   }
 
   //---------------------------
@@ -98,6 +91,16 @@ Subset* Extractor::extract_data(Data_cap& data){
 
   //---------------------------
   return subset;
+}
+void Extractor::insert_subset_into_gpu(Subset* subset){
+  //---------------------------
+
+  gpuManager->convert_draw_type_byName(subset);
+  gpuManager->bind_buffer_texture(subset);
+  gpuManager->bind_buffer_location(subset);
+  gpuManager->bind_buffer_color(subset);
+
+  //---------------------------
 }
 void Extractor::extract_data_frame(Cloud* cloud, Data_file* data){
   Subset* subset = new Subset();
@@ -289,18 +292,10 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   cloud->name = get_name_from_path(path);
   cloud->format = get_format_from_path(path);
 
-  cloud->dataFormat = "";
-  cloud->draw_type = data[0]->draw_type_name ;
   cloud->visibility = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
-  cloud->ID_selected = 0;
-  cloud->ID_subset = 0;
-  cloud->ID_file = 0;
-  cloud->heatmap = false;
-  cloud->onthefly = false;
-  cloud->boxed = false;
-  cloud->lidar_model = "";
+
   cloud->point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;
   cloud->saveas = get_path_abs_build() + "../media/data/";
@@ -320,19 +315,44 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
 
   // Subset info
   subset->ID = ID;
-  subset->root = vec3(0.0);
   if(name != ""){
     subset->name = name;
   }else{
     subset->name = "frame_" + to_string(ID);
   }
 
-  // Subset attributs
-  subset->has_normal = false;
-  subset->has_color = false;
-  subset->has_timestamp = false;
-  subset->has_intensity = false;
-  subset->has_texture = false;
+  // Structure
+  subset->frame.reset();
+
+  //---------------------------
+}
+void Extractor::init_subset_parameter(Subset* subset, Data_file* data, int ID){
+  //---------------------------
+
+  subset->xyz = data->location;
+  subset->rgb = data->color;
+  subset->Nxyz = data->normal;
+  subset->I = data->intensity;
+  subset->ts = data->timestamp;
+  subset->uv = data->texture;
+
+  subset->draw_type_name = data->draw_type_name ;
+  subset->unicolor = color_rdm;
+  subset->has_color = is_color;
+  subset->has_intensity = is_intensity;
+  subset->has_normal = is_normal;
+  subset->has_timestamp = is_timestamp;
+  subset->has_texture = is_texture;
+
+  gpuManager->gen_vao(subset);
+
+  // Subset info
+  subset->ID = ID;
+  if(data->name != ""){
+    subset->name = data->name;
+  }else{
+    subset->name = "frame_" + to_string(ID);
+  }
 
   // Structure
   subset->frame.reset();
@@ -447,82 +467,6 @@ void Extractor::compute_texture(Subset* subset, Data_file* data){
   int ID = texManager->load_texture(data->path_texture, name);
   subset->texture_ID = ID;
   subset->has_texture = true;
-
-  //---------------------------
-}
-
-
-//Base
-Cloud_base* Extractor::extract_data_(vector<Data_file*> data){
-  Cloud_base* cloud = new Cloud_base();
-  //---------------------------
-
-  if(data.size() == 0){
-    cout<<"[error] Data size equal zero"<<endl;
-    exit(0);
-  }
-
-  //Init cloud parameters
-  this->init_random_color();
-  this->init_cloud_parameter(cloud, data);
-
-  for(int i=0; i<data.size(); i++){
-    Subset_base* subset = new Subset_base();
-
-    this->check_data(data[i]);
-  //  this->init_subset_parameter(subset, data[i]->name, cloud->ID_subset);
-    subset->ID_subset = i;
-    cloud->nb_subset++;
-/*
-    //Subset data
-    this->extract_location(subset, data[i]->location);
-    this->extract_intensity(subset, data[i]->intensity);
-    this->extract_color(subset, data[i]->color);
-    this->extract_normal(subset, data[i]->normal);
-    this->extract_timestamp(subset, data[i]->timestamp);
-    this->extract_texture(subset, data[i]->texture);
-
-    //Create associated glyphs
-    objectManager->create_glyph_subset(subset);
-
-    //Set final parametrization
-    this->define_visibility(subset, i);
-    this->define_buffer_init(cloud, subset);
-    this->compute_texture(subset, data[i]);*/
-  }
-
-  //---------------------------
-  return cloud;
-}
-void Extractor::init_cloud_parameter(Cloud_base* cloud, vector<Data_file*> data){
-  //---------------------------
-
-  //Calculate number of point
-  int nb_point = 0;
-  for(int i=0; i<data.size(); i++){
-    nb_point += data[i]->location.size();
-  }
-
-  //General information
-  string path = data[0]->path;
-  cloud->path_file = path;
-  cloud->name = get_name_from_path(path);
-  cloud->format = get_format_from_path(path);
-
-  cloud->set_draw_type(data[0]->draw_type_name );
-  cloud->visibility = true;
-  cloud->nb_point = nb_point;
-  cloud->nb_subset = data.size();
-
-  cloud->point_size = configManager->parse_json_i("parameter", "point_size");
-  cloud->unicolor = color_rdm;
-  cloud->path_save = get_path_abs_build() + "../media/data/";
-
-  //ID
-  int* ID_cloud = sceneManager->get_new_ID_cloud();
-  cloud->ID_perma = *ID_cloud;
-  cloud->ID_order = sceneManager->get_new_oID_cloud();
-  *ID_cloud += 1;
 
   //---------------------------
 }

@@ -3,11 +3,8 @@
 
 #include "../../common.h"
 
-class Node_scene;
-class Object_base;
-class Cloud_base;
-class Mesh_base;
 class GPU_transfert;
+class Node_scene;
 
 
 class Graph
@@ -21,10 +18,7 @@ public:
   void insert_loaded_cloud(Cloud* cloud);
   void draw_all();
 
-private:
-  list<Object_base*>* list_object;
-  list<Cloud_base*>* list_cloud;
-  list<Mesh_base*>* list_mesh;
+
 
 };
 

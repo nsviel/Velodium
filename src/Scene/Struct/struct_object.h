@@ -12,6 +12,8 @@
 struct Object_{ //Cloud subset / part
   //---------------------------
 
+  Object_();
+
   //OpenGL
   GLuint vao;
   GLuint vbo_xyz;

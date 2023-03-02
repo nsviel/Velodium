@@ -6,9 +6,6 @@
 
 #include "../../common.h"
 
-#include "../../Scene/Base/Subset_base.h"
-#include "../../Scene/Base/Mesh_base.h"
-
 class Node_load;
 class Scene;
 class Object;
@@ -26,14 +23,11 @@ public:
 
 public:
   //Main function
+  void insert_subset_into_gpu(Subset* subset);
   Cloud* extract_data(vector<Data_file*> data);
   Subset* extract_data(Data_cap& data);
   void extract_data_frame(Cloud* cloud, Data_file* data);
   void extract_data_oneFrame(Cloud* cloud, Data_file* data);
-
-  //Base
-  Cloud_base* extract_data_(vector<Data_file*> data);
-  void init_cloud_parameter(Cloud_base* cloud, vector<Data_file*> data);
 
 private:
   //Subfunctions
@@ -41,6 +35,7 @@ private:
   void check_data(Data_cap& data);
   void init_cloud_parameter(Cloud* cloud, vector<Data_file*> data);
   void init_subset_parameter(Subset* subset, string path, int ID);
+  void init_subset_parameter(Subset* subset, Data_file* data, int ID);
   void init_random_color();
   void define_visibility(Subset* subset, int i);
   void define_buffer_init(Cloud* cloud, Subset* subset);

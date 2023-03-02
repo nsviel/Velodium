@@ -28,7 +28,7 @@ public:
   void runtime_camera();
 
   //Subfunctions
-  void draw_mesh(Subset* subset, string draw_type);
+  void draw_cloud(Subset* subset);
 
 private:
   Node_engine* node_engine;
