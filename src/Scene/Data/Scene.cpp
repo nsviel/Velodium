@@ -124,10 +124,10 @@ void Scene::remove_subset(Cloud* cloud, int ID){
 void Scene::remove_subset_from_gpu(Subset* subset){
   //---------------------------
 
-  glDeleteBuffers(1, &subset->VBO_xyz);
-  glDeleteBuffers(1, &subset->VBO_rgb);
-  glDeleteBuffers(1, &subset->VBO_N);
-  glDeleteVertexArrays(1, &subset->VAO);
+  glDeleteBuffers(1, &subset->vbo_xyz);
+  glDeleteBuffers(1, &subset->vbo_rgb);
+  glDeleteBuffers(1, &subset->vbo_Nxyz);
+  glDeleteVertexArrays(1, &subset->vao);
 
   //---------------------------
 }
@@ -192,21 +192,21 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
 void Scene::add_subset_to_gpu(Subset* subset){
   //---------------------------
 
-  glGenVertexArrays(1, &subset->VAO);
-  glBindVertexArray(subset->VAO);
+  glGenVertexArrays(1, &subset->vao);
+  glBindVertexArray(subset->vao);
 
-  glGenBuffers(1, &subset->VBO_xyz);
-  glGenBuffers(1, &subset->VBO_rgb);
+  glGenBuffers(1, &subset->vbo_xyz);
+  glGenBuffers(1, &subset->vbo_rgb);
 
   //Location
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_xyz);
+  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_xyz);
   glBufferData(GL_ARRAY_BUFFER, subset->xyz.size()*sizeof(glm::vec3), &subset->xyz[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
   glEnableVertexAttribArray(0);
 
   //Color
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);
-  glBufferData(GL_ARRAY_BUFFER, subset->RGB.size()*sizeof(glm::vec4), &subset->RGB[0], GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_rgb);
+  glBufferData(GL_ARRAY_BUFFER, subset->rgb.size()*sizeof(glm::vec4), &subset->rgb[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
   glEnableVertexAttribArray(1);
 
@@ -230,8 +230,8 @@ void Scene::reset_cloud(Cloud* cloud){
 
     //Reinitialize main data
     subset->xyz = subset_init->xyz;
-    subset->RGB = subset_init->RGB;
-    subset->N = subset_init->N;
+    subset->rgb = subset_init->rgb;
+    subset->Nxyz = subset_init->Nxyz;
 
     //Reset additional data
     subset->R.clear();
@@ -292,7 +292,7 @@ void Scene::update_cloud_IntensityToColor(Cloud* cloud){
     Subset* subset = *next(cloud->subset.begin(), i);
 
     vector<float>& Is = subset->I;
-    vector<vec4>& RGB = subset->RGB;
+    vector<vec4>& RGB = subset->rgb;
 
     for(int i=0; i<Is.size(); i++){
       RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
@@ -361,8 +361,8 @@ void Scene::update_cloud_dataFormat(Cloud* cloud){
   string df = "XYZ";
 
   if(subset->I.size() != 0) df += " | I";
-  if(subset->RGB.size() != 0) df += " | RGB";
-  if(subset->N.size() != 0) df += " | N";
+  if(subset->rgb.size() != 0) df += " | RGB";
+  if(subset->Nxyz.size() != 0) df += " | N";
   if(subset->ts.size() != 0) df += " | ts";
 
   //---------------------------
@@ -391,7 +391,7 @@ void Scene::update_subset_IntensityToColor(Subset* subset){
   //---------------------------
 
   vector<float>& Is = subset->I;
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   RGB.clear();
 
   for(int i=0; i<Is.size(); i++){
@@ -432,7 +432,7 @@ void Scene::update_subset_location(Subset* subset){
 
   //Reactualise vertex position data
   vector<vec3>& XYZ = subset->xyz;
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_xyz);
+  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_xyz);
   glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
@@ -441,8 +441,8 @@ void Scene::update_subset_color(Subset* subset){
   //---------------------------
 
   //Reactualise vertex color data
-  vector<vec4>& RGB = subset->RGB;
-  glBindBuffer(GL_ARRAY_BUFFER, subset->VBO_rgb);
+  vector<vec4>& RGB = subset->rgb;
+  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_rgb);
   glBufferData(GL_ARRAY_BUFFER, RGB.size() * sizeof(glm::vec4), &RGB[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------

@@ -320,8 +320,8 @@ bool file_PTS::Exporter(string path, Cloud* cloud){
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->RGB;
-    vector<vec3>& N = subset->N;
+    vector<vec4>& RGB = subset->rgb;
+    vector<vec3>& N = subset->Nxyz;
     vector<float>& Is = subset->I;
 
     //Write in the file
@@ -348,7 +348,7 @@ bool file_PTS::Exporter(string path, Cloud* cloud){
       }
 
       //Normal
-      if(subset->N.size() != 0){
+      if(subset->Nxyz.size() != 0){
         file << setprecision(precision) <<" "<< N[i].x <<" "<< N[i].y <<" "<< N[i].z;
       }
 
@@ -377,8 +377,8 @@ bool file_PTS::Exporter(string path, Subset* subset){
 
   //Data : xyz (R) (rgb) (nxnynz)
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec4>& RGB = subset->RGB;
-  vector<vec3>& N = subset->N;
+  vector<vec4>& RGB = subset->rgb;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
 
   //Write in the file
@@ -410,7 +410,7 @@ bool file_PTS::Exporter(string path, Subset* subset){
     }
 
     //Normal
-    if(subset->N.size() != 0){
+    if(subset->Nxyz.size() != 0){
       file << setprecision(precision) <<" "<< N[i].x <<" "<< N[i].y <<" "<< N[i].z;
     }
 

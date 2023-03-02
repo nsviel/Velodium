@@ -17,8 +17,8 @@ void Keypoint::create_glyph(Subset* subset){
 
   //Create glyph
   keypoint.name = "keypoint";
-  keypoint.draw_size = 10;
-  keypoint.draw_type = "point";
+  keypoint.draw_point_size = 10;
+  keypoint.draw_type_name = "point";
   keypoint.color_unique = color;
   keypoint.visibility = visibility;
 
@@ -63,7 +63,7 @@ void Keypoint::update_keypoint_normal(Subset* subset){
   rgb_n.clear();
 
   //Construct normal
-  float lgt = 0.05 * normal->draw_size;
+  float lgt = 0.05 * normal->draw_point_size;
   for(int i=0; i<xyz_k.size(); i++){
     vec3& xyz = xyz_k[i];
     vec3& nxyz = Nxyz_k[i];

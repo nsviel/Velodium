@@ -24,9 +24,9 @@ void Axis::create_axis_scene(){
 
   //Create glyph
   axis_scene->name = "axis";
-  axis_scene->draw_width = 4;
+  axis_scene->draw_line_width = 4;
   axis_scene->visibility = true;
-  axis_scene->draw_type = "line";
+  axis_scene->draw_type_name = "line";
   axis_scene->permanent = true;
 
   //Parameters
@@ -60,9 +60,9 @@ void Axis::create_axis_circle(float circleRadius){
 
   //Create glyph
   axis_circle->name = "axis_circle";
-  axis_circle->draw_width = 1;
+  axis_circle->draw_line_width = 1;
   axis_circle->visibility = false;
-  axis_circle->draw_type = "line";
+  axis_circle->draw_type_name = "line";
   axis_circle->permanent = true;
 
   //Parameters
@@ -97,9 +97,9 @@ void Axis::create_axis_subset(Subset* subset){
 
   //Create glyph
   axis_subset.name = "subset_axis";
-  axis_subset.draw_width = 3;
+  axis_subset.draw_line_width = 3;
   axis_subset.visibility = axis_subset_visibility;
-  axis_subset.draw_type = "line";
+  axis_subset.draw_type_name = "line";
 
   //Axis colors
   vector<vec4>& RGB = axis_subset.rgb;

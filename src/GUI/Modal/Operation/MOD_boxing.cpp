@@ -61,13 +61,13 @@ void MOD_boxing::box_shape(){
 
   static int box_shape = 0;
   if(ImGui::RadioButton("Wire", &box_shape, 0)){
-    glyph->draw_type = "line";
+    glyph->draw_type_name = "line";
     box->build_box_location();
     glyphManager->update_glyph_location(box->get_glyph());
   }
   ImGui::SameLine();
   if(ImGui::RadioButton("Plain", &box_shape, 1)){
-    glyph->draw_type = "triangle";
+    glyph->draw_type_name = "triangle";
     box->build_box_location();
     glyphManager->update_glyph_location(box->get_glyph());
   }

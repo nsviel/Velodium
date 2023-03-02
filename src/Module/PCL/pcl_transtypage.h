@@ -31,7 +31,7 @@ namespace{
   }
   pcl::PointCloud<pcl::Normal>::Ptr glm_to_pcl_N(Subset* subset_in){
     pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal>);
-    const std::vector<glm::vec3>& N = subset_in->N;
+    const std::vector<glm::vec3>& N = subset_in->Nxyz;
     int size = N.size();
     //---------------------------
 
@@ -49,7 +49,7 @@ namespace{
   pcl::PointCloud<pcl::PointNormal>::Ptr glm_to_pcl_XYZN(Subset* subset_in){
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud_out (new pcl::PointCloud<pcl::PointNormal>);
     const std::vector<glm::vec3>& XYZ = subset_in->xyz;
-    const std::vector<glm::vec3>& N = subset_in->N;
+    const std::vector<glm::vec3>& N = subset_in->Nxyz;
     int size = XYZ.size();
     //---------------------------
 
@@ -90,8 +90,8 @@ namespace{
   pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr glm_to_pcl_XYZRGBNormal(Subset* subset_in){
     pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr cloud_out (new pcl::PointCloud<pcl::PointXYZRGBNormal>);
     const std::vector<glm::vec3>& XYZ = subset_in->xyz;
-    const std::vector<glm::vec4>& RGB = subset_in->RGB;
-    const std::vector<glm::vec3>& N = subset_in->N;
+    const std::vector<glm::vec4>& RGB = subset_in->rgb;
+    const std::vector<glm::vec3>& N = subset_in->Nxyz;
     if(RGB.size() == 0) std::cout<<"No color data for conversion"<<std::endl;
     int size = XYZ.size();
     //---------------------------
@@ -168,7 +168,7 @@ namespace{
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr glm_XYZRGBobj_to_pcl_XYZRGB(Subset* subset_in){
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_out (new pcl::PointCloud<pcl::PointXYZRGB>);
     const std::vector<glm::vec3>& XYZ = subset_in->xyz;
-    const std::vector<glm::vec4>& RGB = subset_in->RGB;
+    const std::vector<glm::vec4>& RGB = subset_in->rgb;
     if(RGB.size() == 0) std::cout<<"No color data for conversion"<<std::endl;
     int size = XYZ.size();
     //---------------------------
@@ -190,7 +190,7 @@ namespace{
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr glm_XYZRGBinit_to_pcl_XYZRGB(Subset* subset_in){
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_out (new pcl::PointCloud<pcl::PointXYZRGB>);
     const std::vector<glm::vec3>& XYZ = subset_in->xyz;
-    const std::vector<glm::vec4>& RGB = subset_in->RGB;
+    const std::vector<glm::vec4>& RGB = subset_in->rgb;
     if(RGB.size() == 0) std::cout<<"No color data for conversion"<<std::endl;
     int size = XYZ.size();
     //---------------------------

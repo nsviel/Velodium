@@ -163,7 +163,7 @@ void file_OBJ::fill_data_file(Data_file* data, vector<Vertex>& vertex_vec){
     data->normal.push_back(vertex_vec[i].normal);
     data->texture.push_back(vertex_vec[i].texcoord);
   }
-  data->draw_type = "triangle";
+  data->draw_type_name = "triangle";
   data->path_texture = file_texture;
 
   //---------------------------

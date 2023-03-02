@@ -12,8 +12,8 @@ struct Cloud{ //Global set of the cloud
   //---------------------------
 
   //IDs
-  GLuint ID; //Permanent cloud ID
-  GLuint oID; // List order cloud ID
+  int ID; //Permanent cloud ID
+  int oID; // List order cloud ID
 
   int ID_selected; //Actual selected subset ID
   int ID_subset; //Last given subset ID

@@ -37,9 +37,9 @@ void Graph::insert_loaded_cloud(Cloud* cloud){
   cloud_base->subset_init = cloud->subset_init;*/
 
   //cloud_base->xyz = subset->xyz;
-  //cloud_base->rgb = subset->RGB;
+  //cloud_base->rgb = subset->rgb;
 
-  //cloud_base->vbo_xyz = subset->VBO_xyz;
+  //cloud_base->vbo_xyz = subset->vbo_xyz;
 
 
   glGenVertexArrays(1, &cloud_base->vao);

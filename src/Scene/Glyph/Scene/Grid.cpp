@@ -31,9 +31,9 @@ void Grid::create_grid(){
 
   //Create glyph
   grid->name = "grid";
-  grid->draw_width = 2;
+  grid->draw_line_width = 2;
   grid->visibility = true;
-  grid->draw_type = "line";
+  grid->draw_type_name = "line";
   grid->permanent = true;
   grid->color_unique = grid_color;
 
@@ -50,9 +50,9 @@ void Grid::create_grid_sub(){
 
   //Create glyph
   grid_sub->name = "grid_sub";
-  grid_sub->draw_width = 2;
+  grid_sub->draw_line_width = 2;
   grid_sub->visibility = false;
-  grid_sub->draw_type = "line";
+  grid_sub->draw_type_name = "line";
   grid_sub->permanent = true;
 
   //Construct grid
@@ -66,9 +66,9 @@ void Grid::create_grid_plane(){
 
   //Construct plane grid
   grid_plane->name = "grid_plane";
-  grid_plane->draw_width = 1;
+  grid_plane->draw_line_width = 1;
   grid_plane->visibility = false;
-  grid_plane->draw_type = "triangle";
+  grid_plane->draw_type_name = "triangle";
   grid_plane->permanent = true;
 
   //Parameters

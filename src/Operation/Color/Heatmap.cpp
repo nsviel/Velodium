@@ -65,14 +65,14 @@ void Heatmap::make_cloud_heatmap(Cloud* cloud){
 
     //Apply heatmap
     if(cloud->heatmap == false){
-      subset_buf->RGB = subset->RGB;
+      subset_buf->rgb = subset->rgb;
       this->make_subset_heatmap(subset);
       cloud->heatmap = true;
     }
     //Reverse heatmap
     else{
       //this->heatmap_unset(subset);
-      subset->RGB = subset_buf->RGB;
+      subset->rgb = subset_buf->rgb;
       cloud->heatmap = false;
     }
   }
@@ -193,7 +193,7 @@ void Heatmap::mode_It(Subset* subset){
 
 //Processing functions
 void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
   //Normalization of the input vector
@@ -228,7 +228,7 @@ void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
   //---------------------------
 }
 void Heatmap::heatmap_unset(Subset* subset){
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   vector<float>& Is = subset->I;
   //---------------------------
 

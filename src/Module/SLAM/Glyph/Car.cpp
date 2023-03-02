@@ -21,9 +21,9 @@ void Car::create_glyph(){
 
   //Create glyph
   glyph->name = "car";
-  glyph->draw_width = width;
+  glyph->draw_line_width = width;
   glyph->visibility = false;
-  glyph->draw_type = "triangle";
+  glyph->draw_type_name = "triangle";
   glyph->permanent = true;
   glyph->color_unique = color;
 

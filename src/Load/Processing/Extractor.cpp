@@ -8,6 +8,7 @@
 #include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Texture.h"
+#include "../../Engine/OpenGL/GPU_transfert.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/color.h"
 #include "../../Specific/File/Directory.h"
@@ -22,6 +23,8 @@ Extractor::Extractor(Node_load* node_load){
 
   Node_engine* node_engine = node_load->get_node_engine();
   Node_scene* node_scene = node_engine->get_node_scene();
+
+  this->gpuManager = new GPU_transfert();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_scene->get_sceneManager();
@@ -132,7 +135,7 @@ void Extractor::extract_data_oneFrame(Cloud* cloud, Data_file* data){
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
 
-  subset->VAO = VAO;
+  subset->vao = VAO;
   subset->name = "oneFrame";
   subset->visibility = true;
 
@@ -287,7 +290,7 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   cloud->format = get_format_from_path(path);
 
   cloud->dataFormat = "";
-  cloud->draw_type = data[0]->draw_type;
+  cloud->draw_type = data[0]->draw_type_name ;
   cloud->visibility = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
@@ -313,11 +316,7 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
 void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
   //---------------------------
 
-  // Subset VAO
-  uint VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-  subset->VAO = VAO;
+  gpuManager->gen_vao(subset);
 
   // Subset info
   subset->ID = ID;
@@ -362,14 +361,8 @@ void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
   uint positionVBO;
   //---------------------------
 
-  glGenBuffers(1, &positionVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, positionVBO);
-  glBufferData(GL_ARRAY_BUFFER, locationOBJ.size()*sizeof(glm::vec3), &locationOBJ[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
-
+  //Get data
   subset->nb_point = locationOBJ.size();
-  subset->VBO_xyz = positionVBO;
   subset->xyz = locationOBJ;
 
   //Transformation matrices
@@ -377,6 +370,9 @@ void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
   subset->trans = mat4(1.0);
   subset->rotat = mat4(1.0);
   subset->transformation = mat4(1.0);
+
+  //Bind data
+  gpuManager->bind_buffer_location(subset);
 
   //---------------------------
 }
@@ -410,7 +406,7 @@ void Extractor::extract_normal(Subset* subset, vector<vec3>& vec_Nxyz){
   //---------------------------
 
   if(is_normal){
-    subset->N = vec_Nxyz;
+    subset->Nxyz = vec_Nxyz;
     subset->has_normal = true;
   }
 
@@ -419,35 +415,25 @@ void Extractor::extract_normal(Subset* subset, vector<vec3>& vec_Nxyz){
 void Extractor::extract_color(Subset* subset, vector<vec4>& vec_rgb){
   //---------------------------
 
-  //Add color to gpu
-  uint vbo_color;
-  glGenBuffers(1, &vbo_color);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo_color);
-  glBufferData(GL_ARRAY_BUFFER, vec_rgb.size()*sizeof(glm::vec4), &vec_rgb[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glEnableVertexAttribArray(1);
-
-  subset->VBO_rgb = vbo_color;
-  subset->RGB = vec_rgb;
+  subset->rgb = vec_rgb;
   subset->unicolor = color_rdm;
 
   if(is_color){
     subset->has_color = true;
   }
 
+  //Bind data
+  gpuManager->bind_buffer_color(subset);
+
   //---------------------------
 }
 void Extractor::extract_texture(Subset* subset, vector<vec2>& vec_tex){
   //---------------------------
 
-  if(is_texture){
-    uint vbo_texture;
-    glGenBuffers(1, &vbo_texture);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_texture);
-    glBufferData(GL_ARRAY_BUFFER, vec_tex.size()*sizeof(glm::vec2), &vec_tex[0], GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-    glEnableVertexAttribArray(2);
-  }
+  subset->uv = vec_tex;
+
+  //Bind data
+  gpuManager->bind_buffer_texture(subset);
 
   //---------------------------
 }
@@ -523,7 +509,7 @@ void Extractor::init_cloud_parameter(Cloud_base* cloud, vector<Data_file*> data)
   cloud->name = get_name_from_path(path);
   cloud->format = get_format_from_path(path);
 
-  cloud->set_draw_type(data[0]->draw_type);
+  cloud->set_draw_type(data[0]->draw_type_name );
   cloud->visibility = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();

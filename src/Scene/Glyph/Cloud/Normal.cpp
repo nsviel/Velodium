@@ -22,8 +22,8 @@ void Normal::create_glyph(Subset* subset){
 
   //Create glyph
   normal.name = "normal";
-  normal.draw_width = width;
-  normal.draw_type = "line";
+  normal.draw_line_width = width;
+  normal.draw_type_name = "line";
   normal.color_unique = color;
   normal.visibility = visibility;
 
@@ -32,12 +32,12 @@ void Normal::create_glyph(Subset* subset){
 }
 void Normal::update_normal_subset(Subset* subset){
   Glyph* normal = &subset->glyphs["normal"];
-  normal->draw_size = size;
+  normal->draw_point_size = size;
   //---------------------------
 
   //Get vector values
   vector<vec3>& xyz_s = subset->xyz;
-  vector<vec3>& Nxyz_s = subset->N;
+  vector<vec3>& Nxyz_s = subset->Nxyz;
   vector<vec3>& xyz_n = normal->xyz;
   vector<vec4>& rgb_n = normal->rgb;
 
@@ -51,7 +51,7 @@ void Normal::update_normal_subset(Subset* subset){
   rgb_n.clear();
 
   //Construct normal
-  float lgt = 0.05 * normal->draw_size;
+  float lgt = 0.05 * normal->draw_point_size;
   for(int i=0; i<xyz_s.size(); i++){
     vec3& xyz = xyz_s[i];
     vec3& nxyz = Nxyz_s[i];
@@ -71,7 +71,7 @@ void Normal::update_normal_subset(Subset* subset){
 }
 void Normal::update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s){
   Glyph* normal = &subset->glyphs["normal"];
-  normal->draw_size = size;
+  normal->draw_point_size = size;
   //---------------------------
 
   //Get vector values
@@ -88,7 +88,7 @@ void Normal::update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<ve
   rgb_n.clear();
 
   //Construct normal
-  float lgt = 0.05 * normal->draw_size;
+  float lgt = 0.05 * normal->draw_point_size;
   for(int i=0; i<xyz_s.size(); i++){
     vec3& xyz = xyz_s[i];
     vec3& nxyz = Nxyz_s[i];

@@ -217,7 +217,7 @@ void Transformation::make_scaling(Subset* subset, float Sxyz){
 // Transformation
 void Transformation::make_Transformation(Subset* subset, vec3 COM, mat4 M){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vec3& ROOT = subset->root;
   //---------------------------
 

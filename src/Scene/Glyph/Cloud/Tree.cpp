@@ -25,9 +25,9 @@ void Tree::create_glyph(Subset* subset){
 
   //Create glyph
   tree.name = "tree";
-  tree.draw_width = 2;
+  tree.draw_line_width = 2;
   tree.visibility = visibility;
-  tree.draw_type = "line";
+  tree.draw_type_name = "line";
   tree.permanent = true;
   tree.color_unique = tree_color;
 

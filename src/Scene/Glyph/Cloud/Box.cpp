@@ -26,9 +26,9 @@ void Box::create_glyph(){
 
   //Create glyph
   box->name = "box";
-  box->draw_width = width;
+  box->draw_line_width = width;
   box->visibility = false;
-  box->draw_type = "line";
+  box->draw_type_name = "line";
   box->permanent = true;
   box->color_unique = color;
 
@@ -62,7 +62,7 @@ void Box::build_box_location(){
   xyz.clear();
 
   //Location
-  if(box->draw_type == "triangle"){
+  if(box->draw_type_name == "triangle"){
     xyz.push_back(min);
     xyz.push_back(vec3(max.x, min.y, min.z));
     xyz.push_back(vec3(max.x, max.y, min.z));
@@ -105,7 +105,7 @@ void Box::build_box_location(){
     xyz.push_back(vec3(min.x, min.y, max.z));
     xyz.push_back(max);
   }
-  else if(box->draw_type == "line"){
+  else if(box->draw_type_name == "line"){
     vec3 l1, l2;
     for(int i=0; i<3; i++){
       l1=min;

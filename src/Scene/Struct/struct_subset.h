@@ -1,4 +1,3 @@
-
 #ifndef SUBSET_STRUCT_H
 #define SUBSET_STRUCT_H
 
@@ -6,42 +5,19 @@
 #include "struct_frame.h"
 #include "struct_data_pred.h"
 #include "struct_data_icp.h"
-
-#include <string>
-#include <vector>
-#include <list>
-#include <map>
+#include "struct_object.h"
 
 
-struct Subset{ //Cloud subset / part
+struct Subset : public Object_
+{
   //---------------------------
 
-  GLuint VAO;
-  GLuint VBO_xyz;
-  GLuint VBO_rgb;
-  GLuint VBO_N;
-
-  //Infos
-  int ID;
-  int nb_point;
-  std::string name;
-  std::string path;
-  glm::vec4 unicolor;
-
-  bool visibility;
-  bool has_color;
   bool has_intensity;
-  bool has_normal;
   bool has_timestamp;
-  bool has_texture;
 
   //Main data
-  std::vector<glm::vec3> xyz;
   std::vector<glm::vec3> xyz_voxel;
-  std::vector<glm::vec4> RGB;
-  std::vector<glm::vec3> N;
   std::vector<float> I;
-  std::vector<float> ts;
   std::vector<double> ts_n;
 
   //Various attributs
@@ -52,19 +28,7 @@ struct Subset{ //Cloud subset / part
   std::vector<int> selected;
   std::list<int> highlighted;
 
-  //Texture
-  int texture_ID;
-  std::vector<glm::vec2> uv;
-
   //Pose
-  glm::vec3 min;
-  glm::vec3 max;
-  glm::vec3 root;
-  glm::vec3 COM;
-  glm::mat4 rotat;
-  glm::mat4 trans;
-  glm::mat4 scale;
-  glm::mat4 transformation;
   Eigen::Matrix3d pose_R;
   Eigen::Vector3d pose_T;
 

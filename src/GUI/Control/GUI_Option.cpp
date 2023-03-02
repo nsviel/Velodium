@@ -241,6 +241,7 @@ void GUI_option::option_mode(){
 void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Cloud* cloud = sceneManager->get_selected_cloud();
+    Subset* subset = cloud->subset_selected;
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
 
@@ -275,31 +276,31 @@ void GUI_option::option_parameter(){
     //Draw type
     static int draw_type = 0;
     if(cloud != nullptr){
-      if(cloud->draw_type == "point"){
+      if(subset->draw_type_name == "point"){
         draw_type = 0;
       }
-      if(cloud->draw_type == "line"){
+      if(subset->draw_type_name == "line"){
         draw_type = 1;
       }
-      if(cloud->draw_type == "triangle"){
+      if(subset->draw_type_name == "triangle"){
         draw_type = 2;
       }
-      if(cloud->draw_type == "quad"){
+      if(subset->draw_type_name == "quad"){
         draw_type = 3;
       }
     }
     if(ImGui::Combo("Draw type", &draw_type, "Point\0Line\0Triangle\0Quad\0")){
       if(draw_type == 0){
-        cloud->draw_type = "point";
+        subset->draw_type_name = "point";
       }
       else if(draw_type == 1){
-        cloud->draw_type = "line";
+        subset->draw_type_name = "line";
       }
       else if(draw_type == 2){
-        cloud->draw_type = "triangle";
+        subset->draw_type_name = "triangle";
       }
       else if(draw_type == 3){
-        cloud->draw_type = "quad";
+        subset->draw_type_name = "quad";
       }
     }
 

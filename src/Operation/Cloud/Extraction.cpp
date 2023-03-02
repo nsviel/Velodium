@@ -46,8 +46,8 @@ void Extraction::fct_extractCloud(Cloud* cloud){
 
   //Parameters
   vector<vec3>& XYZ = subset->xyz;
-  const vector<vec4>& RGB = subset_init->RGB;
-  vector<vec3>& N = subset->N;
+  const vector<vec4>& RGB = subset_init->rgb;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
   vec3& max = subset->max;
   vec3& min = subset->min;
@@ -69,12 +69,12 @@ void Extraction::fct_extractCloud(Cloud* cloud){
       }
       //Color
       if(subset->has_color){
-        subset_out->RGB.push_back(vec4(RGB[i].x, RGB[i].y, RGB[i].z, RGB[i].w));
+        subset_out->rgb.push_back(vec4(RGB[i].x, RGB[i].y, RGB[i].z, RGB[i].w));
         subset_out->has_color = true;
       }
       //Normal
-      if(subset->N.size() != 0){
-        subset_out->N.push_back(vec3(N[i].x, N[i].y, N[i].z));
+      if(subset->Nxyz.size() != 0){
+        subset_out->Nxyz.push_back(vec3(N[i].x, N[i].y, N[i].z));
       }
       //Intensity
       if(subset->I.size() != 0){
@@ -103,8 +103,8 @@ void Extraction::fct_extractSelected(Cloud* cloud){
 
   //Parameters
   vector<vec3>& XYZ = subset->xyz;
-  const vector<vec4>& RGB = subset_init->RGB;
-  vector<vec3>& N = subset->N;
+  const vector<vec4>& RGB = subset_init->rgb;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
 
   cloud_out->format = ".pts";
@@ -118,13 +118,13 @@ void Extraction::fct_extractSelected(Cloud* cloud){
 
     //Color
     if(subset->has_color){
-      subset_out->RGB.push_back(vec4(RGB[idx[i]].x, RGB[idx[i]].y, RGB[idx[i]].z, RGB[idx[i]].w));
+      subset_out->rgb.push_back(vec4(RGB[idx[i]].x, RGB[idx[i]].y, RGB[idx[i]].z, RGB[idx[i]].w));
       subset_out->has_color = true;
     }
 
     //Normal
-    if(subset->N.size() != 0){
-      subset_out->N.push_back(vec3(N[idx[i]].x, N[idx[i]].y, N[idx[i]].z));
+    if(subset->Nxyz.size() != 0){
+      subset_out->Nxyz.push_back(vec3(N[idx[i]].x, N[idx[i]].y, N[idx[i]].z));
     }
 
     //Intensity
@@ -249,9 +249,9 @@ void Extraction::fct_merging_list(vector<Cloud*> list_part){
 
     //Color
     if(subset_1->has_color && subset_2->has_color){
-      vector<vec4>& RGB_1 = subset_1->RGB;
-      vector<vec4>& RGB_2 = subset_2->RGB;
-      vector<vec4>& RGB_out = subset_out->RGB;
+      vector<vec4>& RGB_1 = subset_1->rgb;
+      vector<vec4>& RGB_2 = subset_2->rgb;
+      vector<vec4>& RGB_out = subset_out->rgb;
 
       RGB_out.insert( RGB_out.end(), RGB_1.begin(), RGB_1.end());
       RGB_out.insert( RGB_out.end(), RGB_2.begin(), RGB_2.end());
@@ -259,10 +259,10 @@ void Extraction::fct_merging_list(vector<Cloud*> list_part){
       subset_out->has_color = true;
     }
     //Normal
-    if(subset_1->N.size() != 0 && subset_2->N.size() != 0){
-      vector<vec3>& N_1 = subset_1->N;
-      vector<vec3>& N_2 = subset_2->N;
-      vector<vec3>& N_out = subset_out->N;
+    if(subset_1->Nxyz.size() != 0 && subset_2->Nxyz.size() != 0){
+      vector<vec3>& N_1 = subset_1->Nxyz;
+      vector<vec3>& N_2 = subset_2->Nxyz;
+      vector<vec3>& N_out = subset_out->Nxyz;
 
       N_out.insert( N_out.end(), N_1.begin(), N_1.end());
       N_out.insert( N_out.end(), N_2.begin(), N_2.end());
@@ -311,9 +311,9 @@ void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
 
   //Color
   if(subset_1->has_color && subset_2->has_color){
-    vector<vec4>& RGB_1 = subset_1->RGB;
-    vector<vec4>& RGB_2 = subset_2->RGB;
-    vector<vec4>& RGB_out = subset_out->RGB;
+    vector<vec4>& RGB_1 = subset_1->rgb;
+    vector<vec4>& RGB_2 = subset_2->rgb;
+    vector<vec4>& RGB_out = subset_out->rgb;
 
     RGB_out.insert( RGB_out.end(), RGB_1.begin(), RGB_1.end());
     RGB_out.insert( RGB_out.end(), RGB_2.begin(), RGB_2.end());
@@ -321,10 +321,10 @@ void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
     subset_out->has_color = true;
   }
   //Normal
-  if(subset_1->N.size() != 0 && subset_2->N.size() != 0){
-    vector<vec3>& N_1 = subset_1->N;
-    vector<vec3>& N_2 = subset_2->N;
-    vector<vec3>& N_out = subset_out->N;
+  if(subset_1->Nxyz.size() != 0 && subset_2->Nxyz.size() != 0){
+    vector<vec3>& N_1 = subset_1->Nxyz;
+    vector<vec3>& N_2 = subset_2->Nxyz;
+    vector<vec3>& N_out = subset_out->Nxyz;
 
     N_out.insert( N_out.end(), N_1.begin(), N_1.end());
     N_out.insert( N_out.end(), N_2.begin(), N_2.end());
@@ -371,17 +371,17 @@ void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
 
   //Color
   if(subset_1->has_color && subset_2->has_color){
-    vector<vec4>& RGB_1 = subset_1->RGB;
-    vector<vec4>& RGB_2 = subset_2->RGB;
+    vector<vec4>& RGB_1 = subset_1->rgb;
+    vector<vec4>& RGB_2 = subset_2->rgb;
     RGB_1.insert( RGB_1.end(), RGB_2.begin(), RGB_2.end());
-    subset_1_init->RGB = RGB_1;
+    subset_1_init->rgb = RGB_1;
   }
   //Normal
-  if(subset_1->N.size() != 0 && subset_2->N.size() != 0){
-    vector<vec3>& N_1 = subset_1->N;
-    vector<vec3>& N_2 = subset_2->N;
+  if(subset_1->Nxyz.size() != 0 && subset_2->Nxyz.size() != 0){
+    vector<vec3>& N_1 = subset_1->Nxyz;
+    vector<vec3>& N_2 = subset_2->Nxyz;
     N_1.insert( N_1.end(), N_2.begin(), N_2.end());
-    subset_1_init->N = N_1;
+    subset_1_init->Nxyz = N_1;
   }
   //Intensity
   if(subset_1->I.size() != 0 && subset_2->I.size() != 0){
@@ -399,8 +399,8 @@ void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
   vec3 max = subset->max;
   vec3 min = subset->min;
   vector<vec3>& pos = subset->xyz;
-  vector<vec4>& color = subset->RGB;
-  vector<vec4>& RGB = subset_init->RGB;
+  vector<vec4>& color = subset->rgb;
+  vector<vec4>& RGB = subset_init->rgb;
   //---------------------------
 
   if(highlightON == true){
@@ -421,7 +421,7 @@ void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
     }
   }
   else{
-    subset->RGB = RGB;
+    subset->rgb = RGB;
   }
 
   //---------------------------

@@ -75,7 +75,7 @@ void Selection::validate(){
       attribManager->compute_normals(subset);
       vec3 rotation = vec3(0, 0, -angle);
       transformManager->make_rotation(cloud, subset->COM, rotation);
-      subset_init->N = subset->N;
+      subset_init->Nxyz = subset->Nxyz;
       sceneManager->update_cloud_location(cloud);
     }
 
@@ -118,7 +118,7 @@ void Selection::mark_pointCreation(vec3 point){
         vector<float>& It = subset->It;
 
         //Give information about point
-        if(It.size() == 0 && subset->N.size() != 0){
+        if(It.size() == 0 && subset->Nxyz.size() != 0){
           attribManager->compute_cosIt(subset);
         }
         if(Is.size() != 0 && It.size() != 0){
@@ -231,7 +231,7 @@ void Selection::mark_pointColor(Cloud* ptMark, int num){
   }
 
   Subset* subset = *next(ptMark->subset.begin(), 0);
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   for(int i=0; i<RGB.size(); i++){
     RGB[i] = vec4(R, G, B, 1.0f);
   }
@@ -402,9 +402,9 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
 
       if(subset->visibility){
         vector<vec3>& XYZ = subset->xyz;
-        vector<vec4>& RGB = subset->RGB;
+        vector<vec4>& RGB = subset->rgb;
         vector<int>& idx = subset->selected;
-        vector<vec4>& RGB_buf = subset_buf->RGB;
+        vector<vec4>& RGB_buf = subset_buf->rgb;
         idx.clear();
 
         //Make selection

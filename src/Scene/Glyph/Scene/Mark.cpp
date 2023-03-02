@@ -25,8 +25,8 @@ void Mark::create_selection_frame(){
 
   //Create glyph
   selection_frame->name = "selection";
-  selection_frame->draw_width = 1;
-  selection_frame->draw_type = "line";
+  selection_frame->draw_line_width = 1;
+  selection_frame->draw_type_name = "line";
   selection_frame->color_unique = selection_frame_color;
   selection_frame->visibility = true;
   selection_frame->permanent = true;
@@ -44,9 +44,9 @@ Glyph* Mark::obj_pointsAtLocation(vector<vec3>& pos){
 
   //Create glyph object
   ptAtLoc->name = "points";
-  ptAtLoc->draw_width = 1;
+  ptAtLoc->draw_line_width = 1;
   ptAtLoc->visibility = true;
-  ptAtLoc->draw_type = "point";
+  ptAtLoc->draw_type_name = "point";
   ptAtLoc->permanent = false;
 
   //Parameters
@@ -66,9 +66,9 @@ Glyph* Mark::obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in
 
   //Create glyph object
   sphere->name = "sphere";
-  sphere->draw_width = 1;
+  sphere->draw_line_width = 1;
   sphere->visibility = true;
-  sphere->draw_type = "quad_strip";
+  sphere->draw_type_name = "quad_strip";
   sphere->permanent = false;
 
   //Parameters

@@ -25,9 +25,9 @@ void Trajectory::create(){
   //---------------------------
 
   trajectory->name = "trajectory";
-  trajectory->draw_width = width;
+  trajectory->draw_line_width = width;
   trajectory->visibility = false;
-  trajectory->draw_type = "line";
+  trajectory->draw_type_name = "line";
   trajectory->permanent = true;
   trajectory->color_unique = color;
 

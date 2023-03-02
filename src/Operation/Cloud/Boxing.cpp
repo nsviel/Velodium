@@ -91,7 +91,7 @@ void Boxing::compute_visibility(Cloud* cloud, int ID){
 
   subset->xyz = subset_init->xyz;
   subset->I = subset_init->I;
-  subset->RGB = subset_init->RGB;
+  subset->rgb = subset_init->rgb;
 
   vector<vec3>& xyz = subset->xyz;
   vector<int> idx;
@@ -121,7 +121,7 @@ void Boxing::supress_selected_point(Cloud* cloud){
     vector<int>& idx = subset->selected;
 
     subset->xyz = subset_init->xyz;
-    subset->RGB = subset_init->RGB;
+    subset->rgb = subset_init->rgb;
     subset->I = subset_init->I;
 
     if(idx.size() != 0){
@@ -146,7 +146,7 @@ void Boxing::stop_boxing(){
       Subset* subset = sceneManager->get_subset(cloud, j);
       Subset* subset_init = sceneManager->get_subset_init(cloud, j);
       subset->xyz = subset_init->xyz;
-      subset->RGB = subset_init->RGB;
+      subset->rgb = subset_init->rgb;
       subset->I = subset_init->I;
       sceneManager->update_subset_location(subset);
     }

@@ -271,13 +271,13 @@ void Capture::supress_nullpoints(Subset* subset){
       xyz.push_back(subset->xyz[i]);
 
       //Color
-      if(subset->RGB.size() != 0){
-        RGB.push_back(subset->RGB[i]);
+      if(subset->rgb.size() != 0){
+        RGB.push_back(subset->rgb[i]);
       }
 
       //Normal
-      if(subset->N.size() != 0){
-        N.push_back(subset->N[i]);
+      if(subset->Nxyz.size() != 0){
+        N.push_back(subset->Nxyz[i]);
       }
 
       //Timestamp
@@ -294,10 +294,10 @@ void Capture::supress_nullpoints(Subset* subset){
 
   subset->xyz = xyz;
   if(RGB.size() != 0){
-    subset->RGB = RGB;
+    subset->rgb = RGB;
   }
   if(N.size() != 0){
-    subset->N = N;
+    subset->Nxyz = N;
   }
   if(I.size() != 0){
     subset->I = I;

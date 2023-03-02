@@ -108,19 +108,19 @@ void MOD_attribut::window_normal(){
           attribManager->compute_normals_planXaxis(subset);
           vec3 rotation = vec3(0, 0, -angle);
           transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
-          subset_init->N = subset->N;
+          subset_init->Nxyz = subset->Nxyz;
           sceneManager->update_cloud_location(cloud);
         }
 
         if(normalMethod == 5){
           attribManager->compute_normals_planYaxis(subset);
-          subset_init->N = subset->N;
+          subset_init->Nxyz = subset->Nxyz;
           sceneManager->update_subset_location(subset);
         }
 
         if(normalMethod == 6){
           attribManager->compute_normals_planZaxis(subset);
-          subset_init->N = subset->N;
+          subset_init->Nxyz = subset->Nxyz;
           sceneManager->update_cloud_location(cloud);
         }
 
@@ -159,19 +159,19 @@ void MOD_attribut::window_normal(){
             attribManager->compute_normals_planXaxis(subset);
             vec3 rotation = vec3(0, 0, -angle);
             transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
-            subset_init->N = subset->N;
+            subset_init->Nxyz = subset->Nxyz;
             sceneManager->update_subset_location(subset);
           }
 
           if(normalMethod == 5){
             attribManager->compute_normals_planYaxis(subset);
-            subset_init->N = subset->N;
+            subset_init->Nxyz = subset->Nxyz;
             sceneManager->update_subset_location(subset);
           }
 
           if(normalMethod == 6){
             attribManager->compute_normals_planZaxis(subset);
-            subset_init->N = subset->N;
+            subset_init->Nxyz = subset->Nxyz;
             sceneManager->update_subset_location(subset);
           }
 

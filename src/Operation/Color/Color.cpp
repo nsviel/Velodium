@@ -87,7 +87,7 @@ void Color::make_colorization(Cloud* cloud, int ID_subset){
   //---------------------------
 }
 void Color::make_colorization(Subset* subset, vec4 RGB_in){
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
   for(int i=0; i<RGB.size(); i++){
@@ -98,7 +98,7 @@ void Color::make_colorization(Subset* subset, vec4 RGB_in){
   sceneManager->update_subset_color(subset);
 }
 void Color::make_colorization_specific(Subset* subset){
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
   for(int i=0; i<RGB.size(); i++){
@@ -110,7 +110,7 @@ void Color::make_colorization_specific(Subset* subset){
 }
 
 void Color::color_unicolor(Subset* subset, vec4 color){
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
   for(int i=0; i<RGB.size(); i++){
@@ -121,7 +121,7 @@ void Color::color_unicolor(Subset* subset, vec4 color){
   sceneManager->update_subset_color(subset);
 }
 void Color::color_intensity(Subset* subset){
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   vector<float>& Is = subset->I;
   //---------------------------
 
@@ -163,7 +163,7 @@ void Color::set_color_new(Cloud* cloud, vec4 RGBA){
   cloud->unicolor = RGBA;
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    vector<vec4>& RGB = subset->RGB;
+    vector<vec4>& RGB = subset->rgb;
     vector<float>& Is = subset->I;
     //---------------------------
 
@@ -178,8 +178,8 @@ void Color::set_color_new(Cloud* cloud, vec4 RGBA){
 void Color::set_color_RGB(Cloud* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    vector<vec4>& RGB_obj = subset->RGB;
-    vector<vec4>& RGB_ini = subset->RGB;
+    vector<vec4>& RGB_obj = subset->rgb;
+    vector<vec4>& RGB_ini = subset->rgb;
     //---------------------------
 
     RGB_obj = RGB_ini;
@@ -191,7 +191,7 @@ void Color::set_color_RGB(Cloud* cloud){
 void Color::set_color_I(Cloud* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    vector<vec4>& RGB_obj = subset->RGB;
+    vector<vec4>& RGB_obj = subset->rgb;
     vector<float>& Is = subset->I;
     //---------------------------
 
@@ -208,7 +208,7 @@ void Color::set_color_enhanced(Cloud* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     vector<float>& Is = subset->I;
-    const vector<vec4>& RGB = subset->RGB;
+    const vector<vec4>& RGB = subset->rgb;
     //---------------------------
 
     for(int i=0; i<RGB.size(); i++){
@@ -224,7 +224,7 @@ void Color::set_color_enhanced(Cloud* cloud){
 void Color::set_color_random(Cloud* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    vector<vec4>& RGB = subset->RGB;
+    vector<vec4>& RGB = subset->rgb;
     //---------------------------
 
     float Red, Green, Blue;
@@ -245,7 +245,7 @@ void Color::set_color_initial(Cloud* cloud){
     Subset* subset_init = *next(cloud->subset_init.begin(), i);
     //---------------------------
 
-    subset->RGB = subset_init->RGB;
+    subset->rgb = subset_init->rgb;
 
     //---------------------------
     sceneManager->update_subset_color(subset);

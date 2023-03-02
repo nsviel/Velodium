@@ -19,8 +19,8 @@ void Matching::create_glyph(){
   //---------------------------
 
   matching->name = "matching";
-  matching->draw_width = 100;
-  matching->draw_type = "line";
+  matching->draw_line_width = 100;
+  matching->draw_type_name = "line";
   matching->color_unique = color;
   matching->visibility = true;
   matching->permanent = true;

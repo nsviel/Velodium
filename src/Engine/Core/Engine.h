@@ -10,6 +10,7 @@ class GUI;
 class Object;
 class Camera;
 class Texture;
+class GPU_transfert;
 
 
 class Engine
@@ -37,6 +38,7 @@ private:
   Object* objectManager;
   Camera* cameraManager;
   Texture* texManager;
+  GPU_transfert* gpuManager;
 };
 
 #endif

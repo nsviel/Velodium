@@ -7,6 +7,8 @@ class Node_scene;
 class Object_base;
 class Cloud_base;
 class Mesh_base;
+class GPU_transfert;
+
 
 class Graph
 {

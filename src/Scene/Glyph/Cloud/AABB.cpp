@@ -18,9 +18,9 @@ void AABB::create_glyph(){
 
   //Create glyph
   glyph->name = "aabb";
-  glyph->draw_width = width;
+  glyph->draw_line_width = width;
   glyph->visibility = true;
-  glyph->draw_type = "line";
+  glyph->draw_type_name = "line";
   glyph->permanent = true;
   glyph->color_unique = color;
 

@@ -5,6 +5,8 @@
 
 #include "../../common.h"
 
+class GPU_transfert;
+
 struct Texture_obj{
   //---------------------------
 
@@ -16,6 +18,7 @@ struct Texture_obj{
 
   //---------------------------
 };
+
 
 class Texture
 {
@@ -32,6 +35,8 @@ public:
   inline bool* get_with_texture(){return &with_texture;}
 
 private:
+  GPU_transfert* gpuManager;
+  
   list<Texture_obj*>* list_texture;
   unsigned int cubemapTexture;
   GLuint ID;

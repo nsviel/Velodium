@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "GPU_transfert.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "image/stb_image.h"
@@ -7,6 +8,8 @@
 //Constructor / Destructor
 Texture::Texture(){
   //---------------------------
+
+  this->gpuManager = new GPU_transfert();
 
   this->list_texture = new list<Texture_obj*>;
   this->with_texture = true;
@@ -29,25 +32,9 @@ int Texture::load_texture(string path, string name){
     return -1;
   }
 
-  // Create a OpenGL texture identifier
-  GLuint tex_ID;
-  glGenTextures(1, &tex_ID);
-  glBindTexture(GL_TEXTURE_2D, tex_ID);
+  int tex_ID = gpuManager->bind_texture(tex_data, tex_w, tex_h, tex_nb_channel);
 
-  // Setup filtering parameters for display
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-  // Upload pixels into texture
-  //glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  if(tex_nb_channel == 3){
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_w, tex_h, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
-  }else if(tex_nb_channel == 4){
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_w, tex_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
-  }
-  glGenerateMipmap(GL_TEXTURE_2D);
+  //Realease loaded texture
   stbi_image_free(tex_data);
 
   //Create and store texture

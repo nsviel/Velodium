@@ -57,7 +57,7 @@ void Attribut::compute_attribut_subset(Subset* subset){
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   //---------------------------
 
   //Distances
@@ -121,7 +121,7 @@ void Attribut::compute_Distances(Subset* subset){
 }
 void Attribut::compute_cosIt(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
   vector<float>& It = subset->It;
@@ -165,7 +165,7 @@ void Attribut::compute_cosIt(Subset* subset){
 
 void Attribut::compute_subset_cosIt(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
   vector<float>& It = subset->It;
@@ -224,8 +224,8 @@ void Attribut::compute_subset_distance(Subset* subset){
 void Attribut::make_supressPoints(Subset* subset, vector<int>& idx){
   if(idx.size() == 0)return;
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec3>& N = subset->Nxyz;
+  vector<vec4>& RGB = subset->rgb;
   vector<float>& Is = subset->I;
   //---------------------------
 
@@ -259,13 +259,13 @@ void Attribut::make_supressPoints(Subset* subset, vector<int>& idx){
 
   //attributs
   if(RGB.size() != 0){
-    subset->RGB = RGB_b;
+    subset->rgb = RGB_b;
   }
   if(Is.size() != 0){
     subset->I = Is_b;
   }
   if(N.size() != 0){
-    subset->N = N_b;
+    subset->Nxyz = N_b;
   }
 
   if(subset->R.size() != 0){
@@ -282,8 +282,8 @@ void Attribut::make_supressPoints(Subset* subset, vector<int>& idx){
 }
 void Attribut::make_supressPoint(Subset* subset, int id){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec3>& N = subset->Nxyz;
+  vector<vec4>& RGB = subset->rgb;
   vector<float>& Is = subset->I;
   //---------------------------
 
@@ -307,13 +307,13 @@ void Attribut::make_supressPoint(Subset* subset, int id){
 
   //attributs
   if(RGB.size() != 0){
-    subset->RGB = RGB_b;
+    subset->rgb = RGB_b;
   }
   if(Is.size() != 0){
     subset->I = Is_b;
   }
   if(N.size() != 0){
-    subset->N = N_b;
+    subset->Nxyz = N_b;
   }
 
   if(subset->R.size() != 0){
@@ -374,7 +374,7 @@ void Attribut::cloudsData(){
       vector<float>& cosIt = subset_init->cosIt;
       vector<float>& dist = subset_init->R;
 
-      if(cosIt.size() == 0 && subset->N.size() != 0) compute_cosIt(subset);
+      if(cosIt.size() == 0 && subset->Nxyz.size() != 0) compute_cosIt(subset);
 
       myfile << subset->name<< " ";
       myfile << fct_mean(Is_ini)<<" "<<fct_mean(Is)<<" "<<fct_mean(It)<<" "<<fct_mean(cosIt)<<" "<<fct_mean(dist);
@@ -417,7 +417,7 @@ void Attribut::compute_normals(Subset* subset){
 }
 void Attribut::compute_normals_Hough(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
 
   int K = 100;
   int T = 1000;
@@ -493,7 +493,7 @@ void Attribut::compute_normals_sphere(Subset* subset){
       N[i][j] = (XYZ[i][j] - Center[j]) / sphereRadius;
     }
   }
-  subset->N = N;
+  subset->Nxyz = N;
 
 
   //---------------------------
@@ -503,7 +503,7 @@ void Attribut::compute_normals_sphere(Subset* subset){
 }
 void Attribut::compute_normals_planXaxis(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vec3 norm, Point;
   N.clear();
   //-------------------------
@@ -523,7 +523,7 @@ void Attribut::compute_normals_planXaxis(Subset* subset){
 }
 void Attribut::compute_normals_planYaxis(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vec3 norm, Point;
   N.clear();
   //-------------------------
@@ -543,7 +543,7 @@ void Attribut::compute_normals_planYaxis(Subset* subset){
 }
 void Attribut::compute_normals_planZaxis(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vec3 norm, Point;
   N.clear();
   //-------------------------
@@ -563,7 +563,7 @@ void Attribut::compute_normals_planZaxis(Subset* subset){
 }
 void Attribut::compute_normals_planFitting(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   tic();
   //-------------------------
 
@@ -607,7 +607,7 @@ void Attribut::compute_normals_invert(){
     Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     Subset* subset_init = sceneManager->get_subset_selected_init();
-    vector<vec3>& normals = subset->N;
+    vector<vec3>& normals = subset->Nxyz;
     //---------------------------
 
     for(int i=0; i<normals.size(); i++){
@@ -615,14 +615,14 @@ void Attribut::compute_normals_invert(){
         normals[i][j] = -normals[i][j];
       }
     }
-    subset_init->N = normals;
+    subset_init->Nxyz = normals;
 
     //---------------------------
   }
 }
 void Attribut::compute_normals_reorientToOrigin(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   //---------------------------5
 
   float dist_XYZ, dist_N;
@@ -640,7 +640,7 @@ void Attribut::compute_normals_reorientToOrigin(Subset* subset){
   //---------------------------
 }
 void Attribut::compute_checkForNan(Subset* subset){
-  vector<vec3>& N = subset->N;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& cosIt = subset->cosIt;
   vector<int> idx;
   //---------------------------
@@ -679,7 +679,7 @@ void Attribut::compute_intensityInversion(){
 }
 void Attribut::compute_colorToIntensity(Subset* subset){
   vector<float>& Is_obj = subset->I;
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   Is_obj.clear();
   //---------------------------
 
@@ -723,7 +723,7 @@ void Attribut::fct_moins(){
     Subset* subset = cloud->subset_selected;
     vector<float>& Is = subset->I;
     vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->RGB;
+    vector<vec4>& RGB = subset->rgb;
     vector<float>& cosIt = subset->cosIt;
     //-------------------------
 

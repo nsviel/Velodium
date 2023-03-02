@@ -37,14 +37,14 @@ void pcl_functions::compute_normals_PCL(Subset* subset){
 
   //Store computed normals into cloud data
   vec3 normal;
-  subset->N.clear();
+  subset->Nxyz.clear();
   #pragma omp parallel for
   for(int i=0;i<subset->xyz.size();i++){
     normal.x = cloud_normals->points[i].normal_x;
     normal.y = cloud_normals->points[i].normal_y;
     normal.z = cloud_normals->points[i].normal_z;
 
-    subset->N.push_back(normal);
+    subset->Nxyz.push_back(normal);
   }
 
   //---------------------------
@@ -54,7 +54,7 @@ void pcl_functions::compute_normals_PCL(Subset* subset){
 }
 void pcl_functions::Plane_cloud(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec4>& RGB = subset->RGB;
+  vector<vec4>& RGB = subset->rgb;
   int size = subset->nb_point;
   //---------------------------
 

@@ -129,7 +129,6 @@ void Renderer::init_create_canvas(){
   //Insert canvas vertices and uv inside gpu
   glGenVertexArrays(1, &canvas_vao);
   glBindVertexArray(canvas_vao);
-
   glGenBuffers(1, &canvas_vbo_xy);
   glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
   glBufferData(GL_ARRAY_BUFFER, canvas_xy.size()*sizeof(glm::vec2), &canvas_xy[0], GL_STATIC_DRAW);

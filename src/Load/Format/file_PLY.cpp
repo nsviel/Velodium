@@ -284,10 +284,10 @@ void file_PLY::Loader_ascii_withface(std::ifstream& file){
 
     //Deduce drawing type
     if(nb_vertice == 3){
-      data_out->draw_type = "triangle";
+      data_out->draw_type_name = "triangle";
     }
     else if(nb_vertice == 4){
-      data_out->draw_type = "quad";
+      data_out->draw_type_name = "quad";
     }
   }
 
@@ -460,10 +460,10 @@ void file_PLY::Loader_bin_little_endian_withface(std::ifstream& file){
 
   //Deduce drawing type
   if(nb_vertice == 3){
-    data_out->draw_type = "triangle";
+    data_out->draw_type_name = "triangle";
   }
   else if(nb_vertice == 4){
-    data_out->draw_type = "quad";
+    data_out->draw_type_name = "quad";
   }
 
   //---------------------------
@@ -596,10 +596,10 @@ void file_PLY::Loader_bin_big_endian_withface(std::ifstream& file){
 
   //Deduce drawing type
   if(nb_vertice == 3){
-    data_out->draw_type = "triangle";
+    data_out->draw_type_name = "triangle";
   }
   else if(nb_vertice == 4){
-    data_out->draw_type = "quad";
+    data_out->draw_type_name = "quad";
   }
 
   //---------------------------
@@ -977,8 +977,8 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subse
 }
 void file_PLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
-  vector<vec4>& RGB = subset->RGB;
-  vector<vec3>& N = subset->N;
+  vector<vec4>& RGB = subset->rgb;
+  vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
   int precision = 6;
   //---------------------------
@@ -996,7 +996,7 @@ void file_PLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
     }
 
     //Normal
-    if(subset->N.size() != 0){
+    if(subset->Nxyz.size() != 0){
       file << setprecision(precision) << N[i].x <<" "<< N[i].y <<" "<< N[i].z <<" ";
     }
 

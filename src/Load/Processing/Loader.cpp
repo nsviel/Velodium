@@ -173,8 +173,8 @@ bool Loader::load_cloud_creation(Cloud* cloud_in){
     }
 
     //Color
-    if(subset->RGB.size() != 0){
-      data->color = subset->RGB;
+    if(subset->rgb.size() != 0){
+      data->color = subset->rgb;
     }
 
     //Intensity
@@ -188,8 +188,8 @@ bool Loader::load_cloud_creation(Cloud* cloud_in){
     }
 
     //Normal
-    if(subset->N.size() != 0){
-      data->normal = subset->N;
+    if(subset->Nxyz.size() != 0){
+      data->normal = subset->Nxyz;
     }
 
     data_vec.push_back(data);

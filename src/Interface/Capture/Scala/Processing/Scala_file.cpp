@@ -67,8 +67,8 @@ vector<Cloud*> Scala_file::loading_allFile(vector<string> allpath){
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
 
-        for(int k=0; k<subset->RGB.size(); k++){
-          subset->RGB[k] = vec4(Red, Green, Blue, 1.0f);
+        for(int k=0; k<subset->rgb.size(); k++){
+          subset->rgb[k] = vec4(Red, Green, Blue, 1.0f);
         }
 
       }
@@ -101,7 +101,7 @@ Cloud* Scala_file::loading_reoganizeData(vector<Cloud*> clouds){
       //keme points
       for(int k=0; k<subset_scala->xyz.size(); k++){
         subset->xyz.push_back(subset_scala->xyz[k]);
-        subset->RGB.push_back(subset_scala->RGB[k]);
+        subset->rgb.push_back(subset_scala->rgb[k]);
         subset->ts.push_back(subset_scala->ts[k]);
       }
     }

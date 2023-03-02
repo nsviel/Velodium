@@ -68,6 +68,7 @@ void Node_engine::update(){
   node_ope->update();
   node_load->update();
   node_interface->update();
+  node_scene->update();
 
   followManager->update_configuration();
 
@@ -89,6 +90,7 @@ void Node_engine::runtime(){
 void Node_engine::reset(){
   //---------------------------
 
+  node_scene->reset();
   node_ope->reset();
   viewportManager->viewport_reset();
   followManager->camera_reset();

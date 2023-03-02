@@ -39,8 +39,8 @@ void Localmap::create_localmap(){
 
   //Create glyph
   localmap->name = "localmap";
-  localmap->draw_size = 1;
-  localmap->draw_type = "point";
+  localmap->draw_point_size = 1;
+  localmap->draw_type_name = "point";
   localmap->color_unique = color;
   localmap->visibility = false;
   localmap->permanent = true;
@@ -53,8 +53,8 @@ void Localmap::create_localcloud(){
 
   //Create glyph
   localcloud->name = "localcloud";
-  localcloud->draw_size = 1;
-  localcloud->draw_type = "point";
+  localcloud->draw_point_size = 1;
+  localcloud->draw_type_name = "point";
   localcloud->color_unique = color;
   localcloud->visibility = false;
   localcloud->permanent = true;

@@ -136,9 +136,9 @@ void MOD_cloud::mod_cloud_info(){
 
     // Data vectors
     vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->RGB;
+    vector<vec4>& RGB = subset->rgb;
     vector<float>& Is = subset->I;
-    vector<vec3>& N = subset->N;
+    vector<vec3>& N = subset->Nxyz;
     vector<float>& ts = subset->ts;
 
     //Settings
@@ -232,9 +232,9 @@ void MOD_cloud::mod_cloud_data(){
 
     // Data vectors
     vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->RGB;
+    vector<vec4>& RGB = subset->rgb;
     vector<float>& Is = subset->I;
-    vector<vec3>& N = subset->N;
+    vector<vec3>& N = subset->Nxyz;
     vector<float>& ts = subset->ts;
 
     //Settings
