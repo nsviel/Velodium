@@ -209,7 +209,7 @@ void MOD_attribut::window_intensity(){
   if(modal_tab.show_intensity && cloud != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
-    Subset* subset_init = sceneManager->get_subset_selected_init();
+    Subset* subset_init = cloud->get_subset_selected_init();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity functions");

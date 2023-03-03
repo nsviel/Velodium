@@ -96,7 +96,7 @@ Cloud* Scala_file::loading_reoganizeData(vector<Cloud*> clouds){
 
     //jeme cloud
     for(int j=0; j<clouds.size(); j++){
-      Subset* subset_scala = sceneManager->get_subset(clouds[j], i);
+      Subset* subset_scala = clouds[j]->get_subset(i);
 
       //keme points
       for(int k=0; k<subset_scala->xyz.size(); k++){
@@ -127,7 +127,7 @@ void Scala_file::compute_relativeTimestamp(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<1; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
     vector<float>& ts = subset->ts;
 
     float ts_cpt = ts[0];

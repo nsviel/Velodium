@@ -86,11 +86,11 @@ void Engine::runtime_draw_glyph(){
       objectManager->runtime_glyph_subset_all(cloud);
 
       //Selected susbet
-      Subset* subset_sele = sceneManager->get_subset_byID(cloud, cloud->ID_selected);
+      Subset* subset_sele = cloud->get_subset_byID(cloud->ID_selected);
       objectManager->runtime_glyph_subset_selected(subset_sele);
 
       //OOBB
-      Subset* subset_pred = sceneManager->get_subset_byID(cloud, cloud->ID_selected - 2);
+      Subset* subset_pred = cloud->get_subset_byID(cloud->ID_selected - 2);
       objectManager->runtime_glyph_pred(subset_pred);
     }
 
@@ -99,7 +99,8 @@ void Engine::runtime_draw_glyph(){
   //---------------------------
 }
 void Engine::runtime_camera(){
-  Subset* subset = sceneManager->get_subset_selected();
+  Cloud* cloud = sceneManager->get_selected_cloud();
+  Subset* subset = cloud->subset_selected;
   //---------------------------
 
   if(subset != nullptr){

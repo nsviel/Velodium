@@ -59,8 +59,8 @@ void SLAM_map::update_configuration(){
   //---------------------------
 }
 void SLAM_map::update_map(Cloud* cloud, int subset_ID){
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Frame* frame = cloud->get_frame_byID(subset_ID);
   //---------------------------
 
   //Local map

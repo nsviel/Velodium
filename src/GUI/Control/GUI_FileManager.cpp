@@ -7,8 +7,8 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/Core/Dimension.h"
-
 #include "../../Scene/Data/Scene.h"
+#include "../../Scene/Data/Graph.h"
 
 #include "image/IconsFontAwesome5.h"
 
@@ -25,6 +25,7 @@ GUI_fileManager::GUI_fileManager(Node_gui* node_gui){
   this->gui_window = node_gui->get_gui_window();
   this->dimManager = node_engine->get_dimManager();
   this->sceneManager = node_scene->get_sceneManager();
+  this->graphManager = node_scene->get_graphManager();
 
   //-------------------------------
 }
@@ -73,7 +74,7 @@ void GUI_fileManager::fileManager(){
       //Icon: info
       ImGui::TableSetColumnIndex(1);
       if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
-        sceneManager->selection_setCloud(cloud);
+        graphManager->selection_setCloud(cloud);
         modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
       }
 
@@ -113,7 +114,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
 
   //If clicked by mouse
   if(ImGui::IsItemClicked()){
-    sceneManager->selection_setCloud(cloud);
+    graphManager->selection_setCloud(cloud);
   }
 
   //Subset tree node
@@ -137,7 +138,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
 
       //If clicked by mouse
       if(ImGui::IsItemClicked()){
-        sceneManager->selection_setSubset(cloud, j);
+        graphManager->selection_setSubset(cloud, j);
       }
     }
 
@@ -188,7 +189,7 @@ void GUI_fileManager::info_iconAction(Cloud* cloud){
   //Modification window
   ImGui::SameLine(ImGui::GetWindowWidth()-60);
   if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
-    sceneManager->selection_setCloud(cloud);
+    graphManager->selection_setCloud(cloud);
     modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
   }
   ImGui::PopID();

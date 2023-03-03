@@ -14,7 +14,7 @@ Visibility::Visibility(Node_operation* node_ope){
 
   Node_engine* node_engine = node_ope->get_node_engine();
   Node_scene* node_scene = node_engine->get_node_scene();
-  
+
   this->sceneManager = node_scene->get_sceneManager();
   this->flyManager = node_ope->get_flyManager();
 
@@ -27,13 +27,13 @@ Visibility::~Visibility(){}
 
 //Main function
 void Visibility::compute_visibility(Cloud* cloud, int& ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  Subset* subset = cloud->get_subset_byID(ID_subset);
   if(subset == nullptr) return;
   //---------------------------
 
   //Set visibility just for wanted subsets
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
 
     if(subset->ID >= ID_subset - visibility_range + 1 && subset->ID <= ID_subset){
       subset->is_visible = true;

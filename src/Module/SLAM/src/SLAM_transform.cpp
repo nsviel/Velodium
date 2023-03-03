@@ -34,8 +34,8 @@ SLAM_transform::~SLAM_transform(){}
 
 //Main function
 void SLAM_transform::compute_preprocessing(Cloud* cloud, int subset_ID){
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Frame* frame = cloud->get_frame_byID(subset_ID);
   //---------------------------
 
   slam_sampling->grid_sampling_subset(subset);

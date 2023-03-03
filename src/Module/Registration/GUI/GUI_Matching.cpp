@@ -51,7 +51,7 @@ void GUI_matching::design_Matching(){
 
 //Subcategories
 void GUI_matching::match_matching(){
-  Cloud* cloud_P = sceneManager->get_selected_cloud();
+  /*Cloud* cloud_P = sceneManager->get_selected_cloud();
   Cloud* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 
@@ -128,7 +128,7 @@ void GUI_matching::match_dense(){
   }
 }
 void GUI_matching::match_methods(){
-  Cloud* cloud_P = sceneManager->get_selected_cloud();
+  /*Cloud* cloud_P = sceneManager->get_selected_cloud();
   Cloud* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 
@@ -164,7 +164,7 @@ void GUI_matching::match_methods(){
     ImGui::DragFloat("min scale", SIFT_minScale, 0.001, 0.001f, 10.0f, "%.5f");
 
     float* SIFT_minContrast = keyManager->get_SIFT_minContrast();
-    ImGui::PushItemWidth(100);
+    ImGui::PushItemWidth(100get_cloud_next);
     ImGui::DragFloat("min contrast", SIFT_minContrast, 0.1, 0.0f, 20.0f, "%.5f");
 
     int* SIFT_nbOctaves = keyManager->get_SIFT_nbOctaves();

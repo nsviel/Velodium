@@ -7,6 +7,8 @@ class Scene;
 class Dimension;
 class GUI_Modal;
 class Node_gui;
+class Graph;
+
 
 class GUI_fileManager
 {
@@ -27,6 +29,7 @@ private:
   Scene* sceneManager;
   Dimension* dimManager;
   GUI_Modal* gui_window;
+  Graph* graphManager;
 };
 
 #endif

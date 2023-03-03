@@ -59,7 +59,7 @@ void Heatmap::make_cloud_heatmap(Cloud* cloud){
 
   //Apply or reverse heatmap for cloud
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
     Subset* subset_buf = sceneManager->get_subset_buffer(cloud, i);
     Subset* subset_ini = sceneManager->get_subset_init(cloud, i);
 

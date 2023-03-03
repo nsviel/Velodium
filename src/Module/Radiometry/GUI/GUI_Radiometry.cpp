@@ -167,7 +167,7 @@ void GUI_radiometry::correction(){
 void GUI_radiometry::plotting(){
   if(ImGui::CollapsingHeader("Plotting")){
     Cloud* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = sceneManager->get_subset_selected();
+    Subset* subset = cloud->get_subset_selected();
     const char* name_c = subset->name.c_str();
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity");
     Plotting plotManager;

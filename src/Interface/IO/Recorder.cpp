@@ -150,7 +150,7 @@ void Recorder::save_frame(Cloud* cloud, int ID_subset){
     this->save_frame_subset(subset);
   }else{
     if(save_frame_accu == 1){
-      Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+      Subset* subset = cloud->get_subset_byID(ID_subset);
       this->save_frame_subset(subset);
     }else{
       this->save_frame_set(cloud, ID_subset);

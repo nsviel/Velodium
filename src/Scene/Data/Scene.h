@@ -44,47 +44,11 @@ public:
 
   inline int get_nb_cloud(){return list_cloud->size();}
   inline list<Cloud*>* get_list_cloud(){return list_cloud;}
-
-
-
-
-
-
-  // A VIRER DANS GRAPH!!!!!
-
-  //Subfunctions
-  void update_cloud_oID(list<Cloud*>* list);
-  void selection_setNext();
-  void selection_setCloud(int ID);
-  void selection_setSubset(Cloud* cloud, int ID);
-  void selection_cloudByName(string name);
-  void selection_setCloud(Cloud* cloud);
-
-  //Assesseurs
-  Cloud* get_cloud_next();
-  Subset* get_subset_selected_init();
-  Subset* get_subset(Cloud* cloud, int i);
-  Subset* get_subset_byID(Cloud* cloud, int ID);
-  Subset* get_subset_selected();
-  Subset* get_subset_buffer(Cloud* cloud, int i);
-  Subset* get_subset_buffer_byID(Cloud* cloud, int ID);
-  Subset* get_subset_init(Cloud* cloud, int i);
-  Subset* get_subset_init_byID(Cloud* cloud, int ID);
-  Frame* get_frame(Cloud* cloud, int i);
-  Frame* get_frame_selected();
-  Frame* get_frame_byID(Cloud* cloud, int ID);
-  int get_subset_oID(Cloud* cloud, Subset* subset);
-  bool get_is_list_empty();
-
-  inline int* get_new_ID_cloud(){return &ID_cloud;}
-  inline int get_new_oID_cloud(){return list_cloud->size();}
   inline Cloud* get_selected_cloud(){return cloud_selected;}
   inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
-
-
-
-
-
+  inline bool get_is_list_empty(){return list_cloud->empty();}
+  inline int* get_new_ID_cloud(){return &ID_cloud;}
+  inline int get_new_oID_cloud(){return list_cloud->size();}
 
 private:
   Object* objectManager;
@@ -92,7 +56,6 @@ private:
 
   list<Cloud*>* list_cloud;
   Cloud* cloud_selected;
-  Subset* subset_selected;
   int ID_cloud;
 };
 

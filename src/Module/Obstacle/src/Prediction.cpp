@@ -69,7 +69,7 @@ void Prediction::compute_prediction(string path){
 
   //For the subset with same name
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
 
     if(subset->ID == frame_ID){
       this->parse_json_prediction(subset, path);
@@ -96,7 +96,7 @@ void Prediction::compute_prediction(Cloud* cloud, vector<string> path_vec){
 
     //For the subset with same name
     for(int j=0; j<cloud->subset.size(); j++){
-      Subset* subset = sceneManager->get_subset(cloud, j);
+      Subset* subset = cloud->get_subset(j);
 
       if(subset->ID == frame_ID){
         this->parse_json_prediction(subset, path_file);
@@ -116,7 +116,7 @@ void Prediction::compute_groundTruth(Cloud* cloud, string path_file){
 
   //For the subset with same name
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
 
     if(subset->ID == frame_ID){
       this->parse_json_groundTruth(subset, path_file);
@@ -137,7 +137,7 @@ void Prediction::compute_groundTruth(Cloud* cloud, vector<string> path_vec){
 
     //For the subset with same name
     for(int j=0; j<cloud->subset.size(); j++){
-      Subset* subset = sceneManager->get_subset(cloud, j);
+      Subset* subset = cloud->get_subset(j);
 
       if(subset->ID == frame_ID){
         this->parse_json_groundTruth(subset, path_file);

@@ -83,7 +83,7 @@ void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   }
 
   //Update glyphs
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  Subset* subset = cloud->get_subset_byID(ID_subset);
   objectManager->update_glyph_subset(subset);
 
   //---------------------------
@@ -109,12 +109,12 @@ void Player::compute_wheel_selection(string direction){
   //----------------------------
 }
 bool Player::compute_range_limit(Cloud* cloud, int& ID_subset){
-  Subset* subset_first = sceneManager->get_subset(cloud, 0);
-  Subset* subset_last = sceneManager->get_subset(cloud, cloud->nb_subset-1);
+  Subset* subset_first = cloud->get_subset(0);
+  Subset* subset_last = cloud->get_subset(cloud->nb_subset-1);
   //---------------------------
 
   //Check if subset exists
-  Subset* subset = sceneManager->get_subset(cloud, ID_subset);
+  Subset* subset = cloud->get_subset(ID_subset);
   if(subset == nullptr){
     return false;
   }
@@ -206,7 +206,7 @@ void Player::player_save(Cloud* cloud){
 
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
     saverManager->save_subset(subset, "ply", player_saveas);
   }
 

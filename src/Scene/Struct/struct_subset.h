@@ -11,6 +11,7 @@ struct Subset : public Object_
   //---------------------------
 
   Subset();
+  Frame* get_frame();
 
   bool has_intensity;
   bool has_timestamp;

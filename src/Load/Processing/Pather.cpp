@@ -298,7 +298,7 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
     for(int i=frame_b; i<frame_e; i++){
-      Subset* subset = sceneManager->get_subset(cloud, i);
+      Subset* subset = cloud->get_subset(i);
       saverManager->save_subset(subset, ".ply", path_saving);
     }
   }

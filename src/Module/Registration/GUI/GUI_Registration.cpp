@@ -49,7 +49,7 @@ void GUI_registration::design_Registration(){
 
 //Subfunctions
 void GUI_registration::regist_Color(){
-  if(ImGui::CollapsingHeader("Colorization") && !sceneManager->get_is_list_empty()){
+  /*if(ImGui::CollapsingHeader("Colorization") && !sceneManager->get_is_list_empty()){
     int* colorMeth = regisManager->get_colorMethode();
     Cloud* cloud_P = sceneManager->get_selected_cloud();
     Cloud* cloud_Q = sceneManager->get_cloud_next();
@@ -73,7 +73,7 @@ void GUI_registration::regist_Color(){
 
     //---------------------------
     ImGui::Separator();
-  }
+  }*/
 }
 void GUI_registration::regist_DOF(){
   if(ImGui::CollapsingHeader("DoF")){

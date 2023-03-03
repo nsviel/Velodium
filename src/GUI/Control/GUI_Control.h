@@ -19,6 +19,7 @@ class Node_gui;
 class Boxing;
 class Player;
 class Pose;
+class Graph;
 
 
 class GUI_Control
@@ -67,6 +68,7 @@ private:
   Heatmap* heatmapManager;
   Player* playerManager;
   Boxing* boxingManager;
+  Graph* graphManager;
 
   float cloud_trans_speed;
   float cloud_rotat_degree;

@@ -36,7 +36,7 @@ Registration::~Registration(){}
 
 //Main functions
 void Registration::make_Iteration(){
-  Cloud* cloud_P = sceneManager->get_selected_cloud();
+  /*Cloud* cloud_P = sceneManager->get_selected_cloud();
   Cloud* cloud_Q = sceneManager->get_cloud_next();
   //------------------------------
 
@@ -63,7 +63,7 @@ void Registration::make_Iteration(){
   }
 
   //------------------------------
-  //glyphManager->obj_matching(cloud_P, cloud_Q);
+  //glyphManager->obj_matching(cloud_P, cloud_Q);*/
 }
 
 //Subfunctions

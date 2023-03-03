@@ -66,7 +66,7 @@ void Color::update_configuration(){
 
 //Color subset functions
 void Color::make_colorization(Cloud* cloud, int ID_subset){
-  Subset* subset = sceneManager->get_subset_byID(cloud, ID_subset);
+  Subset* subset = cloud->get_subset_byID(ID_subset);
   //---------------------------
 
   switch(color_mode){

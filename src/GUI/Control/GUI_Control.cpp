@@ -13,6 +13,7 @@
 #include "../../Engine/Core/Dimension.h"
 #include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Data/Scene.h"
+#include "../../Scene/Data/Graph.h"
 #include "../../Engine/Core/Configuration.h"
 
 #include "../../Operation/Node_operation.h"
@@ -47,6 +48,7 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->heatmapManager = node_ope->get_heatmapManager();
   this->selectionManager = node_ope->get_selectionManager();
   this->sceneManager = node_scene->get_sceneManager();
+  this->graphManager = node_scene->get_graphManager();
   this->glyphManager = node_scene->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
@@ -218,7 +220,7 @@ void GUI_Control::control_keyboard_oneAction(){
       *highlightON = false;
 
       //Select the next cloud in the list
-      sceneManager->selection_setNext();
+      graphManager->selection_setNext();
       break;
     }
 

@@ -40,8 +40,8 @@ SLAM_assessment::~SLAM_assessment(){}
 
 //Main function
 bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID, float time){
-  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
+  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
   //---------------------------
 
   //Check computation time
@@ -73,7 +73,7 @@ void SLAM_assessment::compute_visibility(Cloud* cloud){
   //---------------------------
 
   for(int i=cloud->nb_subset-1; i=0; i--){
-    Subset* subset = sceneManager->get_subset(cloud, i);
+    Subset* subset = cloud->get_subset(i);
     Frame* frame = &subset->frame;
 
     if(frame->is_slam_done == false){
@@ -156,8 +156,8 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   return success;
 }
 bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
-  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
+  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
   bool success = true;
   //---------------------------
 
@@ -241,9 +241,9 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   return true;
 }
 void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float duration){
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
-  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
+  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
+  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
@@ -306,7 +306,7 @@ void SLAM_assessment::compute_stat_mean(Cloud* cloud, int subset_ID){
   this->sum_diff_rotat = 0;
   this->sum_opti_score = 0;
   for(int j=1; j<nb_rlt_previous_pose; j++){
-    Frame* frame_m = sceneManager->get_frame_byID(cloud, subset_ID-j);
+    Frame* frame_m = cloud->get_frame_byID(subset_ID-j);
 
     if(frame_m->is_slam_made){
       sum_ego_trans += frame_m->ego_trans;

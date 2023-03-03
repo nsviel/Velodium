@@ -59,7 +59,7 @@ void MOD_extraction::extract_with_aabb(){
   if(ImGui::Checkbox("Hightligth", highlightON)){
     if(cloud != nullptr){
       Subset* subset = cloud->subset_selected;
-      Subset* subset_init = sceneManager->get_subset_selected_init();
+      Subset* subset_init = cloud->get_subset_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
     }
   }
@@ -109,7 +109,7 @@ void MOD_extraction::extract_with_aabb(){
       //Reset color
       *highlightON = false;
       Subset* subset = cloud->subset_selected;
-      Subset* subset_init = sceneManager->get_subset_selected_init();
+      Subset* subset_init = cloud->get_subset_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
 
       //Extract cloud
@@ -128,7 +128,7 @@ void MOD_extraction::extract_with_aabb(){
       //Reset color
       *highlightON = false;
       Subset* subset = cloud->subset_selected;
-      Subset* subset_init = sceneManager->get_subset_selected_init();
+      Subset* subset_init = cloud->get_subset_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
 
       //Cut cloud
@@ -141,7 +141,7 @@ void MOD_extraction::extract_with_aabb(){
       //Reset color
       *highlightON = false;
       Subset* subset = cloud->subset_selected;
-      Subset* subset_init = sceneManager->get_subset_selected_init();
+      Subset* subset_init = cloud->get_subset_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
 
       //Cut clouds
@@ -178,8 +178,8 @@ void MOD_extraction::merge_cloud(){
   if(ImGui::Button("Merge clouds", ImVec2(150,0))){
     list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
     if(list_cloud->size() >= 2){
-      Cloud* cloud_2 = sceneManager->get_cloud_next();
-      extractionManager->fct_merging_newCloud(cloud, cloud_2);
+      //Cloud* cloud_2 = sceneManager->get_cloud_next();
+      //extractionManager->fct_merging_newCloud(cloud, cloud_2);
     }
   }
 

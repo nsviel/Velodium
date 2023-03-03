@@ -85,8 +85,8 @@ void Boxing::compute_visibility(Cloud* cloud){
 void Boxing::compute_visibility(Cloud* cloud, int ID){
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
-  Subset* subset = sceneManager->get_subset(cloud, ID);
-  Subset* subset_init = sceneManager->get_subset_init(cloud, ID);
+  Subset* subset = cloud->get_subset(ID);
+  Subset* subset_init = cloud->get_subset_init(ID);
   //---------------------------
 
   subset->xyz = subset_init->xyz;
@@ -116,8 +116,8 @@ void Boxing::supress_selected_point(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = sceneManager->get_subset(cloud, i);
-    Subset* subset_init = sceneManager->get_subset_init(cloud, i);
+    Subset* subset = cloud->get_subset(i);
+    Subset* subset_init = cloud->get_subset_init(i);
     vector<int>& idx = subset->selected;
 
     subset->xyz = subset_init->xyz;
@@ -143,8 +143,8 @@ void Boxing::stop_boxing(){
     Cloud* cloud = *next(list_cloud->begin(), i);
     cloud->is_boxed = false;
     for(int j=0; j<cloud->nb_subset; j++){
-      Subset* subset = sceneManager->get_subset(cloud, j);
-      Subset* subset_init = sceneManager->get_subset_init(cloud, j);
+      Subset* subset = cloud->get_subset(j);
+      Subset* subset_init = cloud->get_subset_init(j);
       subset->xyz = subset_init->xyz;
       subset->rgb = subset_init->rgb;
       subset->I = subset_init->I;

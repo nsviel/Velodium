@@ -37,7 +37,7 @@ Extraction::~Extraction(){}
 //Extract / Cutting function
 void Extraction::fct_extractCloud(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
-  Subset* subset_init = sceneManager->get_subset_selected_init();
+  Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
 
   //New cloud
@@ -94,7 +94,7 @@ void Extraction::fct_extractCloud(Cloud* cloud){
 }
 void Extraction::fct_extractSelected(Cloud* cloud){
   Subset* subset = cloud->subset_selected;
-  Subset* subset_init = sceneManager->get_subset_selected_init();
+  Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
 
   //New cloud
@@ -236,8 +236,8 @@ void Extraction::fct_merging_list(vector<Cloud*> list_part){
     Cloud* part_1 = list_part[i];
     Cloud* part_2 = list_part[i+1];
 
-    Subset* subset_1 = sceneManager->get_subset(part_1, 0);
-    Subset* subset_2 = sceneManager->get_subset(part_2, 0);
+    Subset* subset_1 = part_1->get_subset(0);
+    Subset* subset_2 = part_2->get_subset(0);
 
     //Location
     vector<vec3>& XYZ_1 = subset_1->xyz;
@@ -299,8 +299,8 @@ void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
   Cloud* cloud_out = new Cloud();
   Subset* subset_out = new Subset();
 
-  Subset* subset_1 = sceneManager->get_subset(cloud_1, 0);
-  Subset* subset_2 = sceneManager->get_subset(cloud_2, 0);
+  Subset* subset_1 = cloud_1->get_subset(0);
+  Subset* subset_2 = cloud_2->get_subset(0);
 
   //Location
   vector<vec3>& XYZ_1 = subset_1->xyz;
@@ -358,9 +358,9 @@ void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
 void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
   //---------------------------
 
-  Subset* subset_1 = sceneManager->get_subset(cloud_1, 0);
+  Subset* subset_1 = cloud_1->get_subset(0);
   Subset* subset_1_init = sceneManager->get_subset_init(cloud_1, 0);
-  Subset* subset_2 = sceneManager->get_subset(cloud_2, 0);
+  Subset* subset_2 = cloud_2->get_subset(0);
 
   //Location
   vector<vec3>& XYZ_1 = subset_1->xyz;
@@ -430,7 +430,7 @@ void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
 void Extraction::set_AABB_min(vec3 min_in){
   Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
-  Subset* subset_init = sceneManager->get_subset_selected_init();
+  Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
 
   vec3 max_old = subset->max;
@@ -463,7 +463,7 @@ void Extraction::set_AABB_min(vec3 min_in){
 void Extraction::set_AABB_max(vec3 max_in){
   Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
-  Subset* subset_init = sceneManager->get_subset_selected_init();
+  Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
 
   vec3 max_old = subset->max;

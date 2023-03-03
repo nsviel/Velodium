@@ -237,7 +237,7 @@ void GUI_Online::parameter_recorder(){
 
 //State function
 void GUI_Online::state_time(){
-  Subset* subset = sceneManager->get_subset_selected();
+  Subset* subset = cloud->get_subset_selected();
   Frame* frame = &subset->frame;
   //---------------------------
 

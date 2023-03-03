@@ -365,7 +365,7 @@ void Attribut::cloudsData(){
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
-    Subset* subset_init = sceneManager->get_subset_selected_init();
+    Subset* subset_init = cloud->get_subset_selected_init();
 
     if(subset->name.find("rdm") != std::string::npos){
       vector<float>& Is = subset->I;
@@ -606,7 +606,7 @@ void Attribut::compute_normals_invert(){
   if(!sceneManager->get_is_list_empty()){
     Cloud* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
-    Subset* subset_init = sceneManager->get_subset_selected_init();
+    Subset* subset_init = cloud->get_subset_selected_init();
     vector<vec3>& normals = subset->Nxyz;
     //---------------------------
 
@@ -738,7 +738,7 @@ void Attribut::fct_moins(){
 void Attribut::fct_IsRange(vec2 range){
   Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
-  Subset* subset_init = sceneManager->get_subset_selected_init();
+  Subset* subset_init = cloud->get_subset_selected_init();
   vector<float>& Is = subset->I;
   const vector<float>& Is_ini = subset_init->I;
   //---------------------------

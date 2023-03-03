@@ -36,7 +36,7 @@ void SLAM_init::compute_initialization(Cloud* cloud, int subset_ID){
 
 //Subfunctions
 void SLAM_init::init_frame_ID(Cloud* cloud, int subset_ID){
-  Frame* frame = sceneManager->get_frame_byID(cloud, subset_ID);
+  Frame* frame = cloud->get_frame_byID(subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
@@ -50,7 +50,7 @@ void SLAM_init::init_frame_ID(Cloud* cloud, int subset_ID){
   //---------------------------
 }
 void SLAM_init::init_frame_ts(Cloud* cloud, int subset_ID){
-  Subset* subset = sceneManager->get_subset_byID(cloud, subset_ID);
+  Subset* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame = &subset->frame;
   vector<float>& ts = subset->ts;
   //---------------------------
@@ -86,9 +86,9 @@ void SLAM_init::init_frame_ts(Cloud* cloud, int subset_ID){
   //---------------------------
 }
 void SLAM_init::init_frame_chain(Cloud* cloud, int subset_ID){
-  Frame* frame_m0 = sceneManager->get_frame_byID(cloud, subset_ID);
-  Frame* frame_m1 = sceneManager->get_frame_byID(cloud, subset_ID-1);
-  Frame* frame_m2 = sceneManager->get_frame_byID(cloud, subset_ID-2);
+  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
+  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
+  Frame* frame_m2 = cloud->get_frame_byID(subset_ID-2);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
