@@ -14,6 +14,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
+#include "../../Scene/Data/Graph.h"
 #include "../../Module/Registration/struct_misc.h"
 #include "../../Engine/OpenGL/CoreGLengine.h"
 
@@ -52,6 +53,7 @@ GUI_menuBar::GUI_menuBar(Node_gui* node){
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();
   this->glManager = node_engine->get_glManager();
+  this->graphManager = node_scene->get_graphManager();
 
   //---------------------------
 }
@@ -114,7 +116,7 @@ void GUI_menuBar::MenuBar_menu_file(){
       sceneManager->remove_cloud_all();
     }
     if(ImGui::MenuItem("Next cloud","tab")){
-      sceneManager->selection_setNext();
+      graphManager->selection_setNext();
     }
     if(ImGui::MenuItem("Center cloud", "c")){
       if(!sceneManager->get_is_list_empty()){

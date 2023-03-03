@@ -36,7 +36,7 @@ void Scene::remove_cloud(Cloud* cloud){
     //---------------------------
 
     //Keep trace of the ID order
-    this->selection_setCloud(oID);
+    //this->selection_setCloud(oID);
 
     //Delete subsets
     for(int i=0; i<cloud->nb_subset; i++){
@@ -57,8 +57,9 @@ void Scene::remove_cloud(Cloud* cloud){
       oID = 0;
     }
 
-    this->update_cloud_oID(list_cloud);
-    this->selection_setCloud(oID);
+    this->update_ID_order(list_cloud);
+    //this->selection_setCloud(oID);
+    cloud_selected = *next(list_cloud->begin(), oID);
 
     //---------------------------
     string log = "Cloud "+ name +" removed";
@@ -87,8 +88,8 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   //---------------------------
 
   //Can just remove last or first subset
-  Subset* subset_first = get_subset(cloud, 0);
-  Subset* subset_last = get_subset(cloud, cloud->nb_subset-1);
+  Subset* subset_first = cloud->get_subset(0);
+  Subset* subset_last = cloud->get_subset(cloud->nb_subset-1);
   int oID;
 
   if(ID == subset_first->ID){
@@ -100,9 +101,9 @@ void Scene::remove_subset(Cloud* cloud, int ID){
   }
 
   //Get subset object
-  Subset* subset = get_subset(cloud, 0);
-  Subset* subset_buf = get_subset_buffer(cloud, 0);
-  Subset* subset_ini = get_subset_init(cloud, 0);
+  Subset* subset = cloud->get_subset(0);
+  Subset* subset_buf = cloud->get_subset_buffer(0);
+  Subset* subset_ini = cloud->get_subset_init(0);
 
   //Remove data from GPU
   gpuManager->unbind_object(subset);
@@ -124,9 +125,9 @@ void Scene::remove_subset_last(Cloud* cloud){
   //---------------------------
 
   //Get subset object
-  Subset* subset = get_subset(cloud, 0);
-  Subset* subset_buf = get_subset_buffer(cloud, 0);
-  Subset* subset_ini = get_subset_init(cloud, 0);
+  Subset* subset = cloud->get_subset(0);
+  Subset* subset_buf = cloud->get_subset_buffer(0);
+  Subset* subset_ini = cloud->get_subset_init(0);
 
   //Remove data from GPU
   gpuManager->unbind_object(subset);
@@ -170,8 +171,8 @@ void Scene::reset_cloud(Cloud* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    Subset* subset_init = get_subset_init(cloud, i);
+    Subset* subset = cloud->get_subset(i);
+    Subset* subset_init = cloud->get_subset_init(i);
 
     //Reinitialize visibility
     if(i == 0){
@@ -205,7 +206,7 @@ void Scene::reset_cloud(Cloud* cloud){
     subset->frame.reset();
   }
 
-  cloud->ID_selected = get_subset(cloud, 0)->ID;
+  cloud->ID_selected = cloud->get_subset(0)->ID;
 
   //---------------------------
   this->update_glyph(cloud);
@@ -339,16 +340,6 @@ void Scene::update_cloud_IntensityToColor(Cloud* cloud){
 
   //---------------------------
 }
-void Scene::update_cloud_oID(list<Cloud*>* list){
-  //---------------------------
-
-  for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
-    if(cloud->ID_order != i) cloud->ID_order = i;
-  }
-
-  //---------------------------
-}
 void Scene::update_subset_IntensityToColor(Subset* subset){
   //---------------------------
 
@@ -362,6 +353,16 @@ void Scene::update_subset_IntensityToColor(Subset* subset){
   }
 
   this->update_buffer_color(subset);
+
+  //---------------------------
+}
+void Scene::update_ID_order(list<Cloud*>* list){
+  //---------------------------
+
+  for(int i=0; i<list->size(); i++){
+    Cloud* cloud = *next(list->begin(),i);
+    if(cloud->ID_order != i) cloud->ID_order = i;
+  }
 
   //---------------------------
 }

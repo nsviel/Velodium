@@ -8,6 +8,7 @@
 #include <list>
 
 
+//Cloud are subset containers
 struct Cloud : public Object_
 {
   //---------------------------
@@ -15,9 +16,10 @@ struct Cloud : public Object_
   Cloud();
 
   void add_new_subset(Subset* subset);
-  Frame* get_frame_byID(int querry);
 
-  Subset* get_subset_selected();
+  Frame* get_frame_byID(int querry);
+  Frame* get_frame_selected();
+
   Subset* get_subset_selected_init();
   Subset* get_subset(int querry);
   Subset* get_subset_byID(int querry);

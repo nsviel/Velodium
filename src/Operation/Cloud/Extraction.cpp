@@ -359,7 +359,7 @@ void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
   //---------------------------
 
   Subset* subset_1 = cloud_1->get_subset(0);
-  Subset* subset_1_init = sceneManager->get_subset_init(cloud_1, 0);
+  Subset* subset_1_init = cloud_1->get_subset_init_byID(0);
   Subset* subset_2 = cloud_2->get_subset(0);
 
   //Location

@@ -30,7 +30,7 @@ Boxing::Boxing(Node_operation* node_ope){
 Boxing::~Boxing(){}
 
 void Boxing::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
-  Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
+  Subset* subset_init = cloud->get_subset_selected_init();
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
   //---------------------------

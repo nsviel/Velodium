@@ -22,8 +22,8 @@ void Graph::selection_setCloud(int ID){
   for (int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
     if(cloud->ID_order == ID){
-      cloud_selected = cloud;
-      this->update_glyph(cloud_selected);
+      sceneManager->set_selected_cloud(cloud);
+      sceneManager->update_glyph(cloud);
     }
   }
 
@@ -32,8 +32,8 @@ void Graph::selection_setCloud(int ID){
 void Graph::selection_setCloud(Cloud* cloud){
   //---------------------------
 
-  cloud_selected = cloud;
-  this->update_glyph(cloud_selected);
+  sceneManager->set_selected_cloud(cloud);
+  sceneManager->update_glyph(cloud);
 
   //---------------------------
 }
@@ -56,6 +56,7 @@ void Graph::selection_setSubset(Cloud* cloud, int ID){
 }
 void Graph::selection_setNext(){
   list<Cloud*>* list_cloud= sceneManager->get_list_cloud();
+  Cloud* cloud_selected = sceneManager->get_selected_cloud();;
   if(list_cloud->size() == 0) return;
   //---------------------------
 
@@ -65,8 +66,9 @@ void Graph::selection_setNext(){
   else{
     cloud_selected = *next(list_cloud->begin(),0);
   }
-  this->update_cloud_MinMax(cloud_selected);
-  this->update_glyph(cloud_selected);
+  sceneManager->update_cloud_MinMax(cloud_selected);
+  sceneManager->update_glyph(cloud_selected);
+  sceneManager->set_selected_cloud(cloud_selected);
 
   //---------------------------
 }
@@ -78,8 +80,8 @@ void Graph::selection_cloudByName(string name){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
     if(cloud->name == name){
-      cloud_selected = cloud;
-      this->update_glyph(cloud_selected);
+      sceneManager->set_selected_cloud(cloud);
+      sceneManager->update_glyph(cloud);
     }
   }
 

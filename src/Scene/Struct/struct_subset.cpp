@@ -14,7 +14,7 @@ Subset::Subset(){
 Frame* Subset::get_frame(){
   //---------------------------
 
-  return &subset->frame;
+  return &frame;
 
   //---------------------------
 }

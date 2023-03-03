@@ -16,8 +16,6 @@ public:
   ~Graph();
 
 public:
-  //Subfunctions
-  void update_cloud_oID(list<Cloud*>* list);
   void selection_setNext();
   void selection_setCloud(int ID);
   void selection_setSubset(Cloud* cloud, int ID);

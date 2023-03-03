@@ -51,7 +51,7 @@ void MOD_attribut::window_normal(){
   if(modal_tab.show_normal && cloud != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
     Subset* subset = cloud->subset_selected;
-    Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
+    Subset* subset_init = cloud->get_subset_selected_init();
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -85,7 +85,7 @@ void MOD_attribut::window_normal(){
       if(cloud != nullptr){
         //---------------------------
         Subset* subset = cloud->subset_selected;
-        Subset* subset_init = sceneManager->get_subset_init(cloud, cloud->ID_selected);
+        Subset* subset_init = cloud->get_subset_selected_init();
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);

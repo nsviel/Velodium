@@ -327,7 +327,7 @@ void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
 
   //Update list cloud
   sceneManager->set_selected_cloud(cloud);
-  sceneManager->update_cloud_oID(list_cloud);
+  sceneManager->update_ID_order(list_cloud);
   sceneManager->update_glyph(cloud);
 
   //Delete raw data

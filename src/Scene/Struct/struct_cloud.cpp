@@ -48,6 +48,14 @@ void Cloud::add_new_subset(Subset* subset){
 
   //---------------------------
 }
+
+Frame* Cloud::get_frame_selected(){
+  //---------------------------
+
+  return subset_selected->get_frame();
+
+  //---------------------------
+}
 Frame* Cloud::get_frame_byID(int querry){
   //---------------------------
 
@@ -61,33 +69,14 @@ Frame* Cloud::get_frame_byID(int querry){
   //---------------------------
 }
 
-Subset* Cloud::get_subset_selected(){
-  //---------------------------
-
-  if(cloud_selected != nullptr){
-    int ID_subset = cloud_selected->ID_selected;
-
-    for(int i=0; i<cloud_selected->subset.size(); i++){
-      Subset* subset = *next(cloud_selected->subset.begin(), i);
-      if(ID_subset == subset->ID){
-        return subset;
-      }
-    }
-
-  }
-
-  //---------------------------
-  return nullptr;
-}
 Subset* Cloud::get_subset_selected_init(){
-  Cloud* cloud = cloud_selected;
   //---------------------------
 
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset_init.begin(), i);
+  for(int i=0; i<subset.size(); i++){
+    Subset* sub = *next(subset_init.begin(), i);
 
-    if(subset->ID == cloud->ID_selected){
-      return subset;
+    if(sub->ID == ID_selected){
+      return sub;
     }
   }
 
@@ -97,9 +86,9 @@ Subset* Cloud::get_subset_selected_init(){
 Subset* Cloud::get_subset(int querry){
   //---------------------------
 
-  if(i > subset.size()) return nullptr;
+  if(querry > subset.size()) return nullptr;
   else{
-    return *next(subset.begin(), i);
+    return *next(subset.begin(), querry);
   }
 
   //---------------------------
@@ -118,20 +107,20 @@ Subset* Cloud::get_subset_byID(int querry){
   //---------------------------
   return nullptr;
 }
-Subset* Graph::get_subset_buffer(int querry){
+Subset* Cloud::get_subset_buffer(int querry){
   //---------------------------
 
-  return *next(cloud->subset_buffer.begin(), querry);
+  return *next(subset_buffer.begin(), querry);
 
   //---------------------------
 }
-Subset* Graph::get_subset_buffer_byID(int querry){
+Subset* Cloud::get_subset_buffer_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
     Subset* sub = *next(subset_buffer.begin(), i);
 
-    if(subset->ID == querry){
+    if(sub->ID == querry){
       return sub;
     }
   }
@@ -149,14 +138,14 @@ Subset* Cloud::get_subset_init(int querry){
 
   //---------------------------
 }
-Subset* Graph::get_subset_init_byID(int querry){
+Subset* Cloud::get_subset_init_byID(int querry){
   //---------------------------
 
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* sub = *next(cloud->subset_init.begin(), i);
+  for(int i=0; i<subset.size(); i++){
+    Subset* sub = *next(subset_init.begin(), i);
 
     if(sub->ID == querry){
-      return subset;
+      return sub;
     }
   }
 

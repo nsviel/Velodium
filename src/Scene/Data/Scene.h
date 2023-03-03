@@ -41,6 +41,7 @@ public:
   void update_subset_IntensityToColor(Subset* subset);
   void update_cloud_MinMax(Cloud* cloud);
   void update_subset_MinMax(Subset* subset);
+  void update_ID_order(list<Cloud*>* list);
 
   inline int get_nb_cloud(){return list_cloud->size();}
   inline list<Cloud*>* get_list_cloud(){return list_cloud;}

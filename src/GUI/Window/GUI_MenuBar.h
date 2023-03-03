@@ -14,6 +14,7 @@ class Scene;
 class Extraction;
 class Pather;
 class CoreGLengine;
+class Graph;
 
 
 class GUI_menuBar
@@ -42,6 +43,7 @@ private:
   Pather* pathManager;
   Extraction* extractionManager;
   CoreGLengine* glManager;
+  Graph* graphManager;
 
   Node_gui* node_gui;
   GUI_Modal* gui_window;
