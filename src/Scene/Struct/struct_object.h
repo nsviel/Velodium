@@ -7,6 +7,7 @@
 #include <map>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <iostream>
 
 
 struct Object_{ //Cloud subset / part
@@ -31,11 +32,13 @@ struct Object_{ //Cloud subset / part
   int ID;
   int nb_point;
   std::string name;
-  std::string path;
+  std::string path_file;
+  std::string path_save;
+  std::string file_format;
   glm::vec4 unicolor;
   int texture_ID;
 
-  bool visibility;
+  bool is_visible;
   bool has_color;
   bool has_intensity;
   bool has_normal;

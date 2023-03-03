@@ -36,9 +36,9 @@ void Visibility::compute_visibility(Cloud* cloud, int& ID_subset){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->ID >= ID_subset - visibility_range + 1 && subset->ID <= ID_subset){
-      subset->visibility = true;
+      subset->is_visible = true;
     }else{
-      subset->visibility = false;
+      subset->is_visible = false;
     }
   }
 

@@ -44,7 +44,7 @@ void Onthefly::update_configuration(){
 void Onthefly::compute_onthefly(Cloud* cloud, int ID){
   //---------------------------
 
-  if(cloud->onthefly){
+  if(cloud->is_onthefly){
     vector<string>& list_path = cloud->list_path;
     list<int>& list_id = cloud->list_loaded;
 
@@ -57,7 +57,7 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
     }
 
     //If not, load it
-    if(already_load == false && ID < list_path.size() && ID >= cloud->ID_file){
+    if(already_load == false && ID < list_path.size() && ID >= cloud->ID_onthefly){
       bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[ID]);
       if(ok) list_id.push_back(ID);
     }
@@ -79,14 +79,14 @@ void Onthefly::reset(){
   //Reset all clouds
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    if(cloud->onthefly){
+    if(cloud->is_onthefly){
       vector<string>& list_path = cloud->list_path;
       list<int>& list_id = cloud->list_loaded;
 
       sceneManager->remove_subset_all(cloud);
       cloud->list_loaded.clear();
       cloud->ID_subset = 0;
-      cloud->ID_file = 0;
+      cloud->ID_onthefly = 0;
       cloud->ID_selected = 0;
       cloud->nb_subset = 0;
 

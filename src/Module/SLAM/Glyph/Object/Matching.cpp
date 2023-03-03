@@ -21,7 +21,7 @@ void Matching::create_glyph(){
   matching->draw_line_width = 100;
   matching->draw_type_name = "line";
   matching->unicolor = color;
-  matching->visibility = true;
+  matching->is_visible = true;
   matching->permanent = true;
 
   //---------------------------
@@ -41,7 +41,7 @@ void Matching::update_matching(vector<vec3>& xyz){
 void Matching::reset(){
   //---------------------------
 
-  matching->visibility = false;
+  matching->is_visible = false;
 
   //---------------------------
 }

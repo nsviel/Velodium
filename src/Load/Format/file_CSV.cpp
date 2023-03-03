@@ -20,7 +20,7 @@ vector<Data_file*> file_CSV::Loader(string pathFile){
   //At row level
   for(int i=0; i<csvFile.size(); i++){
     Data_file* data = new Data_file();
-    data->path = pathFile;
+    data->path_file = pathFile;
 
     //At field level
     int cpt_field = -1;

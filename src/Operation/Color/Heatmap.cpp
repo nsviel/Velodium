@@ -48,7 +48,7 @@ void Heatmap::make_heatmap_all(bool is_heatmap){
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
-    cloud->heatmap = is_heatmap;
+    cloud->is_heatmap = is_heatmap;
     this->make_cloud_heatmap(cloud);
   }
 
@@ -64,16 +64,16 @@ void Heatmap::make_cloud_heatmap(Cloud* cloud){
     Subset* subset_ini = sceneManager->get_subset_init(cloud, i);
 
     //Apply heatmap
-    if(cloud->heatmap == false){
+    if(cloud->is_heatmap == false){
       subset_buf->rgb = subset->rgb;
       this->make_subset_heatmap(subset);
-      cloud->heatmap = true;
+      cloud->is_heatmap = true;
     }
     //Reverse heatmap
     else{
       //this->heatmap_unset(subset);
       subset->rgb = subset_buf->rgb;
-      cloud->heatmap = false;
+      cloud->is_heatmap = false;
     }
   }
 

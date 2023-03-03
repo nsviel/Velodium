@@ -19,7 +19,7 @@ void Drawer::draw_mesh(Subset* subset, string draw_type_name){
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
-  if(subset->visibility){
+  if(subset->is_visible){
     // If any, activate attached texture
     if(with_texture && subset->has_texture){
       glActiveTexture(GL_TEXTURE0);

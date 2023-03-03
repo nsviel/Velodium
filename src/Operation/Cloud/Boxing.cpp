@@ -73,7 +73,7 @@ void Boxing::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
   //---------------------------
 }
 void Boxing::compute_visibility(Cloud* cloud){
-  cloud->boxed = true;
+  cloud->is_boxed = true;
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
@@ -141,7 +141,7 @@ void Boxing::stop_boxing(){
   //By cloud
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(), i);
-    cloud->boxed = false;
+    cloud->is_boxed = false;
     for(int j=0; j<cloud->nb_subset; j++){
       Subset* subset = sceneManager->get_subset(cloud, j);
       Subset* subset_init = sceneManager->get_subset_init(cloud, j);
@@ -154,7 +154,7 @@ void Boxing::stop_boxing(){
 
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
-  box->visibility = false;
+  box->is_visible = false;
 
   //---------------------------
 }

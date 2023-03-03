@@ -34,7 +34,7 @@ void Scene::remove_cloud(Cloud* cloud){
   //---------------------------
 
   if(!get_is_list_empty()){
-    int oID = cloud->oID;
+    int oID = cloud->ID_order;
     string name =  cloud->name;
     //---------------------------
 
@@ -163,7 +163,7 @@ void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   //---------------------------
 ;
   //Initialize parameters
-  subset->visibility = true;
+  subset->is_visible = true;
   Subset* subset_buffer = new Subset(*subset);
   Subset* subset_init = new Subset(*subset);
 
@@ -215,9 +215,9 @@ void Scene::reset_cloud(Cloud* cloud){
 
     //Reinitialize visibility
     if(i == 0){
-      subset->visibility = true;
+      subset->is_visible = true;
     }else{
-      subset->visibility = false;
+      subset->is_visible = false;
     }
 
     //Reinitialize main data
@@ -256,7 +256,7 @@ void Scene::reset_cloud_all(){
   //Reset all clouds
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    if(!cloud->onthefly){
+    if(!cloud->is_onthefly){
       this->reset_cloud(cloud);
     }
   }
@@ -300,7 +300,7 @@ void Scene::update_cloud_oID(list<Cloud*>* list){
 
   for(int i=0; i<list->size(); i++){
     Cloud* cloud = *next(list->begin(),i);
-    if(cloud->oID != i) cloud->oID = i;
+    if(cloud->ID_order != i) cloud->ID_order = i;
   }
 
   //---------------------------
@@ -344,21 +344,6 @@ void Scene::update_cloud_color(Cloud* cloud){
   }
 
   //---------------------------
-}
-void Scene::update_cloud_dataFormat(Cloud* cloud){
-  cloud->dataFormat.clear();
-  //---------------------------
-
-  Subset* subset = get_subset(cloud, 0);
-  string df = "XYZ";
-
-  if(subset->I.size() != 0) df += " | I";
-  if(subset->rgb.size() != 0) df += " | RGB";
-  if(subset->Nxyz.size() != 0) df += " | N";
-  if(subset->ts.size() != 0) df += " | ts";
-
-  //---------------------------
-  cloud->dataFormat = df;
 }
 
 //Updating - subset
@@ -446,7 +431,7 @@ void Scene::selection_setCloud(int ID){
 
   for (int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
-    if(cloud->oID == ID){
+    if(cloud->ID_order == ID){
       cloud_selected = cloud;
       this->update_cloud_glyph(cloud_selected);
     }
@@ -470,9 +455,9 @@ void Scene::selection_setSubset(Cloud* cloud, int ID){
 
     if(i == ID){
       cloud->ID_selected = ID;
-      subset->visibility = true;
+      subset->is_visible = true;
     }else{
-      subset->visibility = false;
+      subset->is_visible = false;
     }
 
   }
@@ -483,8 +468,8 @@ void Scene::selection_setNext(){
   //---------------------------
 
   if(list_cloud->size() != 0){
-    if(cloud_selected->oID + 1 < list_cloud->size()){
-      cloud_selected = *next(list_cloud->begin(),cloud_selected->oID + 1);
+    if(cloud_selected->ID_order + 1 < list_cloud->size()){
+      cloud_selected = *next(list_cloud->begin(),cloud_selected->ID_order + 1);
     }
     else{
       cloud_selected = *next(list_cloud->begin(),0);
@@ -518,8 +503,8 @@ Cloud* Scene::get_cloud_next(){
   //---------------------------
 
   if(list_cloud->size() != 0){
-    if(cloud_selected->oID + 1 < list_cloud->size()){
-      cloud = *next(list_cloud->begin(),cloud_selected->oID + 1);
+    if(cloud_selected->ID_order + 1 < list_cloud->size()){
+      cloud = *next(list_cloud->begin(),cloud_selected->ID_order + 1);
     }else{
       cloud = *next(list_cloud->begin(),0);
     }

@@ -17,12 +17,12 @@ public:
   void create_glyph(Subset* subset);
   void update_tree(Subset* subset);
 
-  inline bool* get_visibility(){return &visibility;}
+  inline bool* get_visibility(){return &is_visible;}
   inline int* get_tree_level(){return &tree_level;}
 
 private:
   Octree* octreeManager;
-  bool visibility;
+  bool is_visible;
   vec4 tree_color;
   int tree_level;
 };

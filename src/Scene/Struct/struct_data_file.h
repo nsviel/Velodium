@@ -12,7 +12,7 @@ struct Data_file{
 
   int size;
   std::string name;
-  std::string path;
+  std::string path_file;
   std::string draw_type_name;
 
   std::vector<glm::vec3> xyz;

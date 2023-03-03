@@ -88,7 +88,7 @@ void GUI_option::option_glyph(){
   //Display grid
   Grid* gridObject = objectManager->get_object_grid();
   Glyph* grid = gridObject->get_grid();
-  bool& grid_ON = grid->visibility;
+  bool& grid_ON = grid->is_visible;
   ImGui::Checkbox("Grid", &grid_ON);
   ImGui::NextColumn();
 
@@ -108,17 +108,17 @@ void GUI_option::option_glyph(){
 
   //Subgrid
   Glyph* grid_sub = gridObject->get_grid_sub();
-  bool& grid_sub_ON = grid_sub->visibility;
+  bool& grid_sub_ON = grid_sub->is_visible;
   if(ImGui::Checkbox("Subgrid", &grid_sub_ON)){
     Glyph* grid_plane = gridObject->get_grid_plane();
-    grid_plane->visibility = grid_sub_ON;
+    grid_plane->is_visible = grid_sub_ON;
   }
   ImGui::NextColumn();
 
   //Display Bounding Box
   AABB* aabbObject = objectManager->get_object_aabb();
   Glyph* aabb = aabbObject->get_glyph();
-  bool& aabb_ON = aabb->visibility;
+  bool& aabb_ON = aabb->is_visible;
   ImGui::Checkbox("AABB", &aabb_ON);
   ImGui::NextColumn();
 
@@ -140,7 +140,7 @@ void GUI_option::option_glyph(){
   //Display Axis world
   Axis* axisObject = objectManager->get_object_axis();
   Glyph* axis_scene = axisObject->get_axis_scene();
-  bool& axis_scene_ON = axis_scene->visibility;
+  bool& axis_scene_ON = axis_scene->is_visible;
   ImGui::Checkbox("Axis world", &axis_scene_ON);
   ImGui::NextColumn();
 
@@ -224,13 +224,13 @@ void GUI_option::option_mode(){
       Glyph* grid = objectManager->get_glyph_by_name("grid");
 
       if(mode_visualization == true){
-        axis->visibility = false;
-        aabb->visibility = false;
-        grid->visibility = false;
+        axis->is_visible = false;
+        aabb->is_visible = false;
+        grid->is_visible = false;
       }else{
-        axis->visibility = true;
-        aabb->visibility = true;
-        grid->visibility = true;
+        axis->is_visible = true;
+        aabb->is_visible = true;
+        grid->is_visible = true;
       }
     }
 
@@ -312,20 +312,20 @@ void GUI_option::option_parameter(){
     ImGui::PushButtonRepeat(true);
     static int point_size = 1;
     if(cloud != nullptr){
-      point_size = cloud->point_size;
+      point_size = cloud->draw_point_size;
     }
     if (ImGui::ArrowButton("##left", ImGuiDir_Left) && cloud != nullptr){
-      cloud->point_size--;
+      cloud->draw_point_size--;
 
-      if(cloud->point_size <= 1){
-        cloud->point_size = 1;
+      if(cloud->draw_point_size <= 1){
+        cloud->draw_point_size = 1;
       }
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if (ImGui::ArrowButton("##right", ImGuiDir_Right) && cloud != nullptr){
-      cloud->point_size++;
+      cloud->draw_point_size++;
 
-      point_size = cloud->point_size;
+      point_size = cloud->draw_point_size;
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();

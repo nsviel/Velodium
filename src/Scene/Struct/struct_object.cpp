@@ -14,15 +14,18 @@ Object_::Object_(){
   this->ID = -1;
   this->nb_point = 0;
   this->name = "";
-  this->path = "";
   this->unicolor = glm::vec4(1.0f);
   this->texture_ID = -1;
 
-  this->visibility = true;
+  this->is_visible = true;
   this->has_color = false;
   this->has_intensity = false;
   this->has_normal = false;
   this->has_texture = false;
+
+  this->path_file = "";
+  this->path_save = "";
+  this->file_format = "";
 
   //Pose
   this->min = glm::vec3(0.0f);

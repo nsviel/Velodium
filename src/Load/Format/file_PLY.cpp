@@ -15,7 +15,7 @@ Data_file* file_PLY::Loader(string path_file){
   data_out = new Data_file();
   string nameFormat = path_file.substr(path_file.find_last_of("/\\") + 1);
   data_out->name = nameFormat.substr(0, nameFormat.find_last_of("."));
-  data_out->path = path_file;
+  data_out->path_file = path_file;
   this->face_number = 0;
   //---------------------------
 

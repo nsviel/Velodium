@@ -117,7 +117,7 @@ void file_PCAP::Loader_vlp16(string pathFile){
       Data_file* frame_data = new Data_file();
 
       frame_data->name = "frame_" + to_string(cpt); cpt++;
-      frame_data->path = pathFile;
+      frame_data->path_file = pathFile;
       frame_data->size = frame->xyz.size();
 
       for(int j=0; j<frame->xyz.size(); j++){
@@ -147,7 +147,7 @@ void file_PCAP::Loader_hdl32(string pathFile){
       Data_file* frame = frameManager.get_endedFrame();
       Data_file* frame_data = new Data_file();
 
-      frame_data->path = pathFile;
+      frame_data->path_file = pathFile;
       frame_data->size = frame->xyz.size();
 
       for(int j=0; j<frame->xyz.size(); j++){

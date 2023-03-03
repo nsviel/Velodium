@@ -19,7 +19,7 @@ Data_file* file_OBJ::Loader(string path){
   // Open file and fill path info
   ifstream file(path);
   data->name = get_name_from_path(path);
-  data->path = path;
+  data->path_file = path;
 
   // Retrieve file data
   vector<Vertex> vertex_vec = get_data_from_file(file);

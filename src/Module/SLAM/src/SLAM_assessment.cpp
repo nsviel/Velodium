@@ -81,7 +81,7 @@ void SLAM_assessment::compute_visibility(Cloud* cloud){
     }
 
     if(slam_failed == true){
-      subset->visibility = false;
+      subset->is_visible = false;
     }
   }
 

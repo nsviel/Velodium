@@ -103,8 +103,8 @@ bool Loader::load_cloud_onthefly(vector<string> path_vec){
 
   //Save list of file
   cloud->list_path = path_vec;
-  cloud->onthefly = true;
-  cloud->ID_file++;
+  cloud->is_onthefly = true;
+  cloud->ID_onthefly++;
 
   //---------------------------
   string log = "Loaded on-the-fly cloud";
@@ -165,7 +165,7 @@ bool Loader::load_cloud_creation(Cloud* cloud_in){
   for(int i=0; i<cloud_in->subset.size(); i++){
     Subset* subset = sceneManager->get_subset(cloud_in, i);
     Data_file* data = new Data_file();
-    data->path = cloud_in->path;
+    data->path_file = cloud_in->path_file;
 
     //Location
     if(subset->xyz.size() != 0){
@@ -207,7 +207,7 @@ bool Loader::load_cloud_empty(){
 
   //Add NULL points
   Data_file* data = new Data_file();
-  data->path = "../media/frame.ply";
+  data->path_file = "../media/frame.ply";
 
   data->xyz.push_back(vec3(0.0f,0.0f,0.0f));
   data->xyz.push_back(vec3(1.0f,1.0f,1.0f));
@@ -345,7 +345,7 @@ void Loader::load_insertIntoCloud(Data_file* data, Cloud* cloud){
 
   //Extract data and put in the engine
   extractManager->extract_data_frame(cloud, data);
-  cloud->ID_file++;
+  cloud->ID_onthefly++;
 
   //---------------------------
 }

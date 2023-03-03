@@ -4,41 +4,24 @@
 Cloud::Cloud(){
   //---------------------------
 
-  this->ID = 0;
-  this->oID = 0;
+  //IDs
+  this->ID_perma = 0;
+  this->ID_order = 0;
 
+  //Info
+  this->lidar_model = "";
+  this->is_visible = true;
+  this->is_heatmap = false;
+  this->is_boxed = false;
+
+  //Onthefly
+  this->is_onthefly = false;
+  this->ID_onthefly = 0;
+
+  //Subset
   this->ID_selected = 0;
   this->ID_subset = 0;
-  this->ID_file = 0;
-
-  //Parameters
   this->nb_subset = 0;
-  this->nb_point = 0;
-  this->point_size = 1;
-
-  //Flags
-  this->visibility = true;
-  this->heatmap = false;
-  this->onthefly = false;
-  this->boxed = false;
-
-  //Infos
-  this->path = "";
-  this->name = "";
-  this->format = "";
-  this->saveas = "";
-  this->draw_type = "";
-  this->dataFormat = "";
-  this->lidar_model = "";
-
-  //Transformation
-  this->min = glm::vec3(0.0f);
-  this->max = glm::vec3(0.0f);
-  this->root = glm::vec3(0.0f);
-  this->COM = glm::vec3(0.0f);
-  this->unicolor = glm::vec4(1.0f);
-
-  //Data
   this->subset_selected = nullptr;
 
   //---------------------------

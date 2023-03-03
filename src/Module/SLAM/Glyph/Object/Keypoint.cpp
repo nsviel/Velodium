@@ -7,7 +7,7 @@ Keypoint::Keypoint(){
 
   this->name = "keypoint";
   this->color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
-  this->visibility = false;
+  this->is_visible = false;
 
   //---------------------------
 }
@@ -21,7 +21,7 @@ void Keypoint::create_glyph(Subset* subset){
   keypoint.draw_point_size = 10;
   keypoint.draw_type_name = "point";
   keypoint.unicolor = color;
-  keypoint.visibility = visibility;
+  keypoint.is_visible = is_visible;
 
   //---------------------------
   subset->glyphs.insert({"keypoint", keypoint});

@@ -62,7 +62,7 @@ vector<Cloud*> Scala_file::loading_allFile(vector<string> allpath){
     if(format == "csv"){
       loaderManager->load_cloud_silent(path);
       Cloud* cloud = loaderManager->get_createdcloud();
-      cloud->path = allpath[i] + "/" + "scala" + ".csv";
+      cloud->path_file = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
@@ -82,7 +82,7 @@ vector<Cloud*> Scala_file::loading_allFile(vector<string> allpath){
 }
 Cloud* Scala_file::loading_reoganizeData(vector<Cloud*> clouds){
   Cloud* cloud_scala = new Cloud();
-  cloud_scala->path = clouds[0]->path;
+  cloud_scala->path_file = clouds[0]->path_file;
   Subset* subset;
   //---------------------------
 

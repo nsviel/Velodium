@@ -115,7 +115,7 @@ bool SLAM::check_condition(Cloud* cloud, int subset_ID){
     console.AddLog("error" ,"[SLAM] No cloud");
     return false;
   }
-  if(cloud->ID != local_map->linked_cloud_ID && local_map->linked_cloud_ID != -1){
+  if(cloud->ID_perma != local_map->linked_cloud_ID && local_map->linked_cloud_ID != -1){
     this->reset_slam();
   }
 
@@ -163,9 +163,9 @@ void SLAM::reset_visibility(Cloud* cloud, int subset_ID){
     Subset* subset = sceneManager->get_subset(cloud, i);
 
     if(subset->ID == subset_ID){
-      subset->visibility = true;
+      subset->is_visible = true;
     }else{
-      subset->visibility = false;
+      subset->is_visible = false;
     }
   }
 

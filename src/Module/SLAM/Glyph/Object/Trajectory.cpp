@@ -7,7 +7,7 @@ Trajectory::Trajectory(){
 
   this->name = "trajectory";
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  this->visibility = false;
+  this->is_visible = false;
   this->width = 2;
 
   //---------------------------
@@ -27,7 +27,7 @@ void Trajectory::create(){
 
   trajectory->name = "trajectory";
   trajectory->draw_line_width = width;
-  trajectory->visibility = false;
+  trajectory->is_visible = false;
   trajectory->draw_type_name = "line";
   trajectory->permanent = true;
   trajectory->unicolor = color;
@@ -45,7 +45,7 @@ void Trajectory::update(Cloud*cloud){
     Subset* subset_m0 = *next(cloud->subset.begin(), j);
     Subset* subset_m1 = *next(cloud->subset.begin(), j-1);
 
-    if(subset_m0->visibility && subset_m1->visibility){
+    if(subset_m0->is_visible && subset_m1->is_visible){
       vec3 root_m0 = subset_m0->root;
       vec3 root_m1 = subset_m1->root;
       vec4 color = trajectory->unicolor;
@@ -68,7 +68,7 @@ void Trajectory::reset(){
 
   trajectory->xyz.clear();
   trajectory->rgb.clear();
-  trajectory->visibility = false;
+  trajectory->is_visible = false;
 
   //---------------------------
 }

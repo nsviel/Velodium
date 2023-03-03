@@ -135,7 +135,7 @@ void GUI_Player::player_parameter(){
 
   //Setup cloud point size
   if(cloud != nullptr){
-    int* point_size = &cloud->point_size;
+    int* point_size = &cloud->draw_point_size;
     ImGui::SetNextItemWidth(50);
     ImGui::SliderInt("Point size", point_size, 1, 20);
   }

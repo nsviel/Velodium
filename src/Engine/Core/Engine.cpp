@@ -60,7 +60,7 @@ void Engine::runtime_draw_cloud(){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
     //By subset
-    if(cloud->visibility){
+    if(cloud->is_visible){
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
         this->draw_cloud(subset);
@@ -81,7 +81,7 @@ void Engine::runtime_draw_glyph(){
   for(int i=0; i<list_cloud->size(); i++){
     Cloud* cloud = *next(list_cloud->begin(),i);
 
-    if(cloud->visibility){
+    if(cloud->is_visible){
       //All subset
       objectManager->runtime_glyph_subset_all(cloud);
 
@@ -115,14 +115,14 @@ void Engine::draw_cloud(Subset* subset){
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
-  if(subset->visibility){
+  if(subset->is_visible){
     // If any, activate attached texture
     if(with_texture && subset->has_texture){
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
     }
 
-    if(subset->visibility){
+    if(subset->is_visible){
       gpuManager->draw_object(subset);
     }
 

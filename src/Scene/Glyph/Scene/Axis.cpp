@@ -6,7 +6,7 @@ Axis::Axis(){
   //---------------------------
 
   this->name = "axis";
-  this->axis_subset_visibility = true;
+  this->is_visible = true;
 
   //---------------------------
   this->create_axis_scene();
@@ -26,7 +26,7 @@ void Axis::create_axis_scene(){
   //Create glyph
   axis_scene->name = "axis";
   axis_scene->draw_line_width = 4;
-  axis_scene->visibility = true;
+  axis_scene->is_visible = true;
   axis_scene->draw_type_name = "line";
   axis_scene->permanent = true;
 
@@ -62,7 +62,7 @@ void Axis::create_axis_circle(float circleRadius){
   //Create glyph
   axis_circle->name = "axis_circle";
   axis_circle->draw_line_width = 1;
-  axis_circle->visibility = false;
+  axis_circle->is_visible = false;
   axis_circle->draw_type_name = "line";
   axis_circle->permanent = true;
 
@@ -99,7 +99,7 @@ void Axis::create_axis_subset(Subset* subset){
   //Create glyph
   axis_subset.name = "subset_axis";
   axis_subset.draw_line_width = 3;
-  axis_subset.visibility = axis_subset_visibility;
+  axis_subset.is_visible = is_visible;
   axis_subset.draw_type_name = "line";
 
   //Axis colors
@@ -120,7 +120,7 @@ void Axis::update_axis_subset(Subset* subset){
   vec3 subset_root = subset->root;
   //---------------------------
 
-  axis_subset->visibility = axis_subset_visibility;
+  axis_subset->is_visible = is_visible;
   XYZ.clear();
 
   //Axis rotation

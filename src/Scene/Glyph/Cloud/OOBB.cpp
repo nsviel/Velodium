@@ -21,7 +21,7 @@ void OOBB::create_glyph(){
   //Create glyph
   glyph->name = "OOBB";
   glyph->draw_line_width = width;
-  glyph->visibility = false;
+  glyph->is_visible = false;
   glyph->draw_type_name = "line";
   glyph->permanent = false;
   glyph->unicolor = color;

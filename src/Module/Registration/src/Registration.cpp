@@ -125,8 +125,8 @@ void Registration::colorization(Cloud* cloud_P, Cloud* cloud_Q){
       break;
     }
     case 3:{ //Transparent
-      cloud_P->visibility = false;
-      cloud_Q->visibility = false;
+      cloud_Pis_visible = false;
+      cloud_Qis_visible = false;
       break;
     }
   }

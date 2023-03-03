@@ -9,7 +9,7 @@ filePCD::~filePCD(){}
 //Main function
 Data_file* filePCD::Loader(string pathFile){
   data_out = new Data_file();
-  data_out->path = pathFile;
+  data_out->path_file = pathFile;
   //---------------------------
 
   //HEADER

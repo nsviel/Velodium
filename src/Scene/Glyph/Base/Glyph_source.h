@@ -22,15 +22,15 @@ public:
   inline string get_name(){return name;}
   inline Glyph* get_glyph(){return glyph;}
   inline vec4* get_color(){return &color;}
-  inline bool* get_visibility(){return &visibility;}
-  inline void set_visibility(bool value){this->visibility = value;}
+  inline bool* get_visibility(){return &is_visible;}
+  inline void set_visibility(bool value){this->is_visible = value;}
 
 protected:
   Glyph* glyph;
 
   string name;
   vec4 color;
-  bool visibility;
+  bool is_visible;
 };
 
 #endif

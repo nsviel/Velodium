@@ -43,7 +43,7 @@ void Localmap::create_localmap(){
   localmap->draw_point_size = 1;
   localmap->draw_type_name = "point";
   localmap->unicolor = color;
-  localmap->visibility = false;
+  localmap->is_visible = false;
   localmap->permanent = true;
 
   //---------------------------
@@ -57,13 +57,13 @@ void Localmap::create_localcloud(){
   localcloud->draw_point_size = 1;
   localcloud->draw_type_name = "point";
   localcloud->unicolor = color;
-  localcloud->visibility = false;
+  localcloud->is_visible = false;
   localcloud->permanent = true;
 
   //---------------------------
 }
 void Localmap::update_localmap(slamap* map){
-  if(localmap->visibility){
+  if(localmap->is_visible){
     //---------------------------
 
     vector<vec3>& gly_xyz = localmap->xyz;
@@ -89,7 +89,7 @@ void Localmap::update_localmap(slamap* map){
   }
 }
 void Localmap::update_localcloud(slamap* map){
-  if(localcloud->visibility){
+  if(localcloud->is_visible){
     //---------------------------
 
     vector<vec3>& gly_xyz = localcloud->xyz;

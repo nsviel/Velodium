@@ -8,7 +8,7 @@ Car::Car(){
   //---------------------------
 
   this->name = "car";
-  this->visibility = false;
+  this->is_visible = false;
   this->width = 2;
   this->lidar_height = 1.3;
 
@@ -23,7 +23,7 @@ void Car::create_glyph(){
   //Create glyph
   glyph->name = "car";
   glyph->draw_line_width = width;
-  glyph->visibility = false;
+  glyph->is_visible = false;
   glyph->draw_type_name = "triangle";
   glyph->permanent = true;
   glyph->unicolor = color;
@@ -54,7 +54,7 @@ void Car::update_glyph(Cloud* cloud){
 void Car::reset_glyph(){
   //---------------------------
 
-  glyph->visibility = false;
+  glyph->is_visible = false;
 
   //---------------------------
 }

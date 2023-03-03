@@ -19,13 +19,13 @@ public:
 
   inline Glyph* get_axis_scene(){return axis_scene;}
   inline Glyph* get_axis_circle(){return axis_circle;}
-  inline bool* get_axis_subset_visibility(){return &axis_subset_visibility;}
+  inline bool* get_axis_subset_visibility(){return &is_visible;}
 
 private:
   Glyph* axis_scene;
   Glyph* axis_circle;
 
-  bool axis_subset_visibility;
+  bool is_visible;
 };
 
 #endif

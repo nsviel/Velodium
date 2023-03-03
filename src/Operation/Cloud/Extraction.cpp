@@ -51,7 +51,7 @@ void Extraction::fct_extractCloud(Cloud* cloud){
   vector<float>& Is = subset->I;
   vec3& max = subset->max;
   vec3& min = subset->min;
-  cloud_out->format = ".pts";
+  cloud_out->file_format = ".pts";
   subset_out->name = subset->name + "_" + "part" + to_string(ID_cloud);
   ID_cloud++;
 
@@ -107,7 +107,7 @@ void Extraction::fct_extractSelected(Cloud* cloud){
   vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
 
-  cloud_out->format = ".pts";
+  cloud_out->file_format = ".pts";
   subset_out->name = subset->name + "_" + "part" + to_string(ID_cloud);
   ID_cloud++;
   vector<int>& idx = subset->selected;
@@ -280,7 +280,7 @@ void Extraction::fct_merging_list(vector<Cloud*> list_part){
 
   //Infos
   subset_out->name = "Merged cloud";
-  cloud_out->format = ".pts";
+  cloud_out->file_format = ".pts";
   cloud_out->nb_point = subset_out->xyz.size();
 
   //---------------------------
@@ -341,7 +341,7 @@ void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
 
   //Infos
   subset_out->name = "Merging_" + subset_1->name + "_" + subset_2->name;
-  cloud_out->format = ".pts";
+  cloud_out->file_format = ".pts";
   cloud_out->nb_point = subset_out->xyz.size();
 
   //Create slice if any points

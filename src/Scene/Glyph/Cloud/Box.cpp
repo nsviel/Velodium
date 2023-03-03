@@ -28,7 +28,7 @@ void Box::create_glyph(){
   //Create glyph
   box->name = "box";
   box->draw_line_width = width;
-  box->visibility = false;
+  box->is_visible = false;
   box->draw_type_name = "line";
   box->permanent = true;
   box->unicolor = color;
@@ -44,7 +44,7 @@ void Box::create_glyph(){
 void Box::update_box(){
   //---------------------------
 
-  box->visibility = true;
+  box->is_visible = true;
 
   this->build_box_location();
   this->build_box_color();

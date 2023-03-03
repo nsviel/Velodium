@@ -22,7 +22,7 @@ file_PTS::~file_PTS(){}
 Data_file* file_PTS::Loader(string pathFile){
   data_out = new Data_file();
   data_out->name = "";
-  data_out->path = pathFile;
+  data_out->path_file = pathFile;
   //---------------------------
 
   //Initialization

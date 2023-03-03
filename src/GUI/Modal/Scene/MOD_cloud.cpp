@@ -43,7 +43,7 @@ void MOD_cloud::mod_cloud_info(){
     //Visibility
     static bool visible = true;
     if(ImGui::Checkbox("Visibility", &visible)){
-      cloud->visibility = visible;
+      cloud->is_visible = visible;
     }
     ImGui::SameLine();
 
@@ -78,9 +78,9 @@ void MOD_cloud::mod_cloud_info(){
     ImGui::Text("Format ");
     ImGui::NextColumn();
     static char str_f[256];
-    strcpy(str_f, cloud->format.c_str());
+    strcpy(str_f, cloud->file_format.c_str());
     if(ImGui::InputText("##format", str_f, IM_ARRAYSIZE(str_f), ImGuiInputTextFlags_EnterReturnsTrue)){
-      cloud->format = str_f;
+      cloud->file_format = str_f;
     }
     ImGui::NextColumn();
 

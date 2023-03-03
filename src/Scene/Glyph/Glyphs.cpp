@@ -31,7 +31,7 @@ Glyphs::~Glyphs(){
 void Glyphs::draw_glyph(Glyph* glyph){
   //---------------------------
 
-  if(glyph->visibility){
+  if(glyph->is_visible){
     gpuManager->draw_object(glyph);
   }
 

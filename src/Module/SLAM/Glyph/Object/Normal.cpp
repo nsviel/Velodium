@@ -10,7 +10,7 @@ Normal::Normal(){
   this->name = "normal";
   this->width = 1;
   this->size = 1;
-  this->visibility = false;
+  this->is_visible = false;
   this->color = vec4(0.11f, 0.35f, 0.69f, 1.0f);
 
   //---------------------------
@@ -26,7 +26,7 @@ void Normal::create_glyph(Subset* subset){
   normal.draw_line_width = width;
   normal.draw_type_name = "line";
   normal.unicolor = color;
-  normal.visibility = visibility;
+  normal.is_visible = is_visible;
 
   //---------------------------
   subset->glyphs.insert({"normal", normal});

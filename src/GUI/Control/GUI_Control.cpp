@@ -146,7 +146,7 @@ void GUI_Control::control_mouse_wheel(){
 
     //Subset rotation
     if(sceneManager->get_is_list_empty() == false){
-      if(cloud->nb_subset == 1 && cloud->onthefly == false){
+      if(cloud->nb_subset == 1 && cloud->is_onthefly == false){
         float radian = cloud_rotat_degree*M_PI/180;
         vec3 R;
         if(wheelMode == 0){
@@ -165,7 +165,7 @@ void GUI_Control::control_mouse_wheel(){
         sceneManager->update_cloud_glyph(cloud);
       }
       //Subset selection
-      else if(cloud->nb_subset > 1 || cloud->onthefly){
+      else if(cloud->nb_subset > 1 || cloud->is_onthefly){
         playerManager->compute_wheel_selection(direction);
       }
     }
@@ -447,7 +447,7 @@ void GUI_Control::key_suppr(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
-  if(cloud->boxed == false){
+  if(cloud->is_boxed == false){
     bool is_selected = selectionManager->mark_supressSelectedPoints_all();
 
     if(is_selected == false){

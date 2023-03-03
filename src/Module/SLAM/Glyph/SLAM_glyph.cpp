@@ -82,12 +82,12 @@ void SLAM_glyph::update_visibility(Subset* subset){
   Glyph* car = get_glyph_byName("car");
   Glyph* matching = get_glyph_byName("matching");
 
-  keypoint->visibility = with_keypoint | with_neighbor;
-  trajectory->visibility = with_trajectory;
-  localmap->visibility = with_localmap;
-  localcloud->visibility = with_localcloud;
-  car->visibility = with_car;
-  matching->visibility = with_matching;
+  keypoint->is_visible = with_keypoint | with_neighbor;
+  trajectory->is_visible = with_trajectory;
+  localmap->is_visible = with_localmap;
+  localcloud->is_visible = with_localcloud;
+  car->is_visible = with_car;
+  matching->is_visible = with_matching;
 
   //---------------------------
 }

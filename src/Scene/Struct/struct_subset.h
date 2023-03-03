@@ -10,6 +10,8 @@ struct Subset : public Object_
 {
   //---------------------------
 
+  Subset();
+
   bool has_intensity;
   bool has_timestamp;
 

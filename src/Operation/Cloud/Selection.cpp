@@ -400,7 +400,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
       Subset* subset = *next(cloud->subset.begin(), j);
       Subset* subset_buf = *next(cloud->subset_buffer.begin(), j);
 
-      if(subset->visibility){
+      if(subset->is_visible){
         vector<vec3>& XYZ = subset->xyz;
         vector<vec4>& RGB = subset->rgb;
         vector<int>& idx = subset->selected;

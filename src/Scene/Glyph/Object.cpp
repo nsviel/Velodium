@@ -144,7 +144,7 @@ void Object::runtime_glyph_subset_all(Cloud* cloud){
     Subset* subset = *next(cloud->subset.begin(), j);
 
     //If the subset is visible
-    if(subset->visibility){
+    if(subset->is_visible){
       //Subset axis
       Glyph* axis = &subset->glyphs["axis"];
       glyphManager->draw_glyph(axis);
@@ -158,22 +158,22 @@ void Object::runtime_glyph_subset_selected(Subset* subset){
   //---------------------------
 
   //If the subset is visible
-  if(subset->visibility){
+  if(subset->is_visible){
     //Keypoint
     Glyph* keypoint = &subset->glyphs["keypoint"];
-    if(keypoint->visibility){
+    if(keypoint->is_visible){
       glyphManager->draw_glyph(keypoint);
     }
 
     //Normal
     Glyph* normal = &subset->glyphs["normal"];
-    if(normal->visibility){
+    if(normal->is_visible){
       glyphManager->draw_glyph(normal);
     }
 
     //Tree
     Glyph* tree = &subset->glyphs["tree"];
-    if(tree->visibility){
+    if(tree->is_visible){
       glyphManager->draw_glyph(tree);
     }
   }
@@ -210,14 +210,14 @@ void Object::update_configuration(){
   Glyph* aabb = get_glyph_by_name("aabb");
   Glyph* grid = get_glyph_by_name("grid");
   Glyph* axis = get_glyph_by_name("axis");
-  aabb->visibility = configManager->parse_json_b("glyph", "aabb_visibility");
-  grid->visibility = configManager->parse_json_b("glyph", "grid_visibility");
-  axis->visibility = configManager->parse_json_b("glyph", "axis_visibility");
+  aabb->is_visible = configManager->parse_json_b("glyph", "aabb_visibility");
+  grid->is_visible = configManager->parse_json_b("glyph", "grid_visibility");
+  axis->is_visible = configManager->parse_json_b("glyph", "axis_visibility");
 
   Glyph* car = carObject->get_glyph();
   Glyph* traj = trajObject->get_glyph();
-  car->visibility = false;
-  traj->visibility = false;
+  car->is_visible = false;
+  traj->is_visible = false;
 
   bool* car_visu = carObject->get_visibility();
   bool* traj_visu = trajObject->get_visibility();
@@ -309,7 +309,7 @@ void Object::reset_scene_object(){
   }
 
   Glyph* box = get_glyph_by_name("box");
-  box->visibility = false;
+  box->is_visible = false;
 
   mapObject->clear();
 
@@ -353,7 +353,7 @@ void Object::set_object_visibility(string name, bool val){
       for(int i=0; i<cloud->nb_subset; i++){
         Subset* subset = *next(cloud->subset.begin(), i);
         Glyph* normal = &subset->glyphs["normal"];
-        normal->visibility = val;
+        normal->is_visible = val;
       }
     }
     //Set keypoint glyph visibility
@@ -361,7 +361,7 @@ void Object::set_object_visibility(string name, bool val){
       for(int i=0; i<cloud->nb_subset; i++){
         Subset* subset = *next(cloud->subset.begin(), i);
         Glyph* keypoint = &subset->glyphs["keypoint"];
-        keypoint->visibility = val;
+        keypoint->is_visible = val;
       }
     }
     //Set tree glyph visibility
@@ -369,7 +369,7 @@ void Object::set_object_visibility(string name, bool val){
       for(int i=0; i<cloud->nb_subset; i++){
         Subset* subset = *next(cloud->subset.begin(), i);
         Glyph* tree = &subset->glyphs["tree"];
-        tree->visibility = val;
+        tree->is_visible = val;
       }
     }
   }
@@ -384,10 +384,10 @@ void Object::set_slam_object(bool value){
   keyObject->set_visibility(value);
 
   Glyph* localmap = mapObject->get_localmap();
-  localmap->visibility = value;
+  localmap->is_visible = value;
 
   Glyph* localcloud = mapObject->get_localcloud();
-  localcloud->visibility = value;
+  localcloud->is_visible = value;
 
   //---------------------------
 }

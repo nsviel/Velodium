@@ -140,7 +140,7 @@ void Extractor::extract_data_oneFrame(Cloud* cloud, Data_file* data){
 
   subset->vao = VAO;
   subset->name = "oneFrame";
-  subset->visibility = true;
+  subset->is_visible = true;
 
   //Subset data
   this->extract_location(subset, data->xyz);
@@ -257,9 +257,9 @@ void Extractor::define_visibility(Subset* subset, int i){
   //---------------------------
 
   if(i == 0){
-    subset->visibility = true;
+    subset->is_visible = true;
   }else{
-    subset->visibility = false;
+    subset->is_visible = false;
   }
 
   //---------------------------
@@ -287,23 +287,23 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   }
 
   //General information
-  string path = data[0]->path;
-  cloud->path = path;
+  string path = data[0]->path_file;
+  cloud->path_file = path;
   cloud->name = get_name_from_path(path);
-  cloud->format = get_format_from_path(path);
+  cloud->file_format = get_format_from_path(path);
 
-  cloud->visibility = true;
+  cloud->is_visible = true;
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
 
-  cloud->point_size = configManager->parse_json_i("parameter", "point_size");
+  cloud->draw_point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;
-  cloud->saveas = get_path_abs_build() + "../media/data/";
+  cloud->path_save = get_path_abs_build() + "../media/data/";
 
   //ID
   int* ID_cloud = sceneManager->get_new_ID_cloud();
-  cloud->ID = *ID_cloud;
-  cloud->oID = sceneManager->get_new_oID_cloud();
+  cloud->ID_perma = 0;//*ID_cloud;
+  cloud->ID_order = sceneManager->get_new_oID_cloud();
   *ID_cloud += 1;
 
   //---------------------------

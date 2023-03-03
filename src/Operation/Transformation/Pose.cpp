@@ -226,7 +226,7 @@ void Pose::make_alignSelectionToGround(Cloud* cloud){
   // Get all selected points
   for(int i=0; i<cloud->nb_subset; i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    if(subset->visibility){
+    if(subset->is_visible){
       vector<int>& idx = subset->selected;
       for(int j=0; j<idx.size(); j++){
         xyz.push_back(subset->xyz[idx[j]]);

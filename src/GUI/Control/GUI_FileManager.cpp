@@ -85,7 +85,7 @@ void GUI_fileManager::fileManager(){
 
       //Icon: visualization
       ImGui::TableSetColumnIndex(3);
-      ImGui::Checkbox("", &cloud->visibility);
+      ImGui::Checkbox("", &cloud->is_visible);
 
       //----------
       ImGui::PopItemWidth();
@@ -106,7 +106,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
 
   ImGuiTreeNodeFlags node_flags;
   node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-  if(cloud_selected->oID == cloud->oID){
+  if(cloud_selected->ID_order == cloud->ID_order){
     node_flags |= ImGuiTreeNodeFlags_Selected;
   }
   bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
@@ -117,12 +117,12 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
   }
 
   //Subset tree node
-  if(open_cloud_node && cloud != nullptr && (cloud->nb_subset > 1 || cloud->onthefly)){
+  if(open_cloud_node && cloud != nullptr && (cloud->nb_subset > 1 || cloud->is_onthefly)){
 
     for(int j=0; j<cloud->subset.size(); j++){
       Subset* subset = *next(cloud->subset.begin(), j);
 
-      if(subset->visibility){
+      if(subset->is_visible){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
       }else{
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
@@ -154,7 +154,7 @@ void GUI_fileManager::info_cloud(Cloud* cloud){
   //---------------------------
 
   //Additional info
-  ImGui::Text("Format: %s", cloud->format.c_str());
+  ImGui::Text("Format: %s", cloud->file_format.c_str());
   ImGui::Text("Frames: %d", (int)cloud->subset.size());
   ImGui::Text("Points: %d", cloud->nb_point);
 
@@ -179,7 +179,7 @@ void GUI_fileManager::info_iconAction(Cloud* cloud){
 
   //Removal cross
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 0, 0, 255));
-  ImGui::PushID(cloud->oID);
+  ImGui::PushID(cloud->ID_order);
   //ImGui::SameLine(ImGui::GetWindowWidth()-40);
   if(ImGui::Button(ICON_FA_TRASH)){
     sceneManager->remove_cloud(cloud);

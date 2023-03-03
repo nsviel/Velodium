@@ -6,7 +6,7 @@ Glyph_source::Glyph_source(){
   //---------------------------
 
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  this->visibility = true;
+  this->is_visible = true;
 
   //---------------------------
 }

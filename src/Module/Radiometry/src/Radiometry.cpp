@@ -328,7 +328,7 @@ void Radiometry::set_referenceON(bool value){
 
   for(int i=0; i<list->size(); i++){
     Cloud* cloud = *next(list->begin(),i);
-    cloud->visibility = value;
+    cloud->is_visible = value;
   }
 
   //---------------------------

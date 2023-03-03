@@ -42,7 +42,6 @@ public:
   void update_cloud_MinMax(Cloud* cloud);
   void update_cloud_location(Cloud* cloud);
   void update_cloud_color(Cloud* cloud);
-  void update_cloud_dataFormat(Cloud* cloud);
 
   //Update subset
   void update_subset_glyphs(Subset* subset);

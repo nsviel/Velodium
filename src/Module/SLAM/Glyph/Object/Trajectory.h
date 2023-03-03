@@ -18,7 +18,7 @@ public:
 
   inline Glyph* get_glyph(){return trajectory;}
   inline bool* get_visibility(){return &visibility;}
-  inline void set_visibility(bool value){this->visibility = value;}
+  inline void set_visibility(bool value){this->is_visible = value;}
 
 private:
   Glyph* trajectory;

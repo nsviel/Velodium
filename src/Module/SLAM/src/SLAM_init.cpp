@@ -45,7 +45,7 @@ void SLAM_init::init_frame_ID(Cloud* cloud, int subset_ID){
   local_map->current_frame_ID++;
 
   //Assign the current cloud to the selected one
-  local_map->linked_cloud_ID = cloud->ID;
+  local_map->linked_cloud_ID = cloud->ID_perma;
 
   //---------------------------
 }

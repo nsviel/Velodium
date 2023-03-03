@@ -50,13 +50,13 @@ void MOD_operation::window_selection(){
     if(ImGui::Checkbox("Selection mode", &selectionPtON)){
       if(cloud != nullptr && selectionPtON){
         selectionManager->set_markMode("sphere");
-        cloud->point_size = 10;
+        cloud->draw_point_size = 10;
         //cloud_movement = false;
       }
 
       if(!selectionPtON){
         selectionManager->set_markMode("cube");
-        cloud->point_size = 1;
+        cloud->draw_point_size = 1;
         //cloud_movement = true;
       }
     }

@@ -12,7 +12,7 @@ file_LAS::~file_LAS(){}
 Data_file* file_LAS::Loader(string path){
   Data_file* data = new Data_file();
   data->name = get_name_from_path(path);
-  data->path = path;
+  data->path_file = path;
   //---------------------------
 
   this->read(path);

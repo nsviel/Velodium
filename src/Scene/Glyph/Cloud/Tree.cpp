@@ -12,7 +12,7 @@ Tree::Tree(){
   this->octreeManager = new Octree();
 
   this->name = "tree";
-  this->visibility = false;
+  this->is_visible = false;
   this->tree_color = vec4(1, 1, 1, 0.7);
   this->tree_level = 6;
 
@@ -27,7 +27,7 @@ void Tree::create_glyph(Subset* subset){
   //Create glyph
   tree.name = "tree";
   tree.draw_line_width = 2;
-  tree.visibility = visibility;
+  tree.is_visible = is_visible;
   tree.draw_type_name = "line";
   tree.permanent = true;
   tree.unicolor = tree_color;
@@ -38,7 +38,7 @@ void Tree::create_glyph(Subset* subset){
 void Tree::update_tree(Subset* subset){
   //---------------------------
 
-  if(visibility){
+  if(is_visible){
     octreeManager->create_octree(subset, tree_level);
   }
 
