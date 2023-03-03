@@ -1,8 +1,8 @@
 #ifndef GLYPH_SOURCE_H
 #define GLYPH_SOURCE_H
 
-#include "../../Struct/struct_glyph.h"
-#include "../../Struct/struct_subset.h"
+#include "../../Base/struct_glyph.h"
+#include "../../Base/struct_subset.h"
 #include "../../../common.h"
 
 

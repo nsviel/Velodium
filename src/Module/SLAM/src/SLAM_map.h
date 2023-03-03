@@ -1,8 +1,7 @@
 #ifndef SLAM_MAP_H
 #define SLAM_MAP_H
 
-#include "struct_voxelMap.h"
-
+#include "../Base/struct_voxelMap.h"
 #include "../Base/common.h"
 
 class SLAM;

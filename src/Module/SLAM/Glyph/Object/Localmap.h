@@ -1,7 +1,7 @@
 #ifndef SLAM_OBJECT_LOCALMAP_H
 #define SLAM_OBJECT_LOCALMAP_H
 
-#include "../../src/struct_voxelMap.h"
+#include "../../Base/struct_voxelMap.h"
 #include "../../../../Scene/Glyph/Base/Glyph_source.h"
 
 

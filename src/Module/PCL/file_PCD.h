@@ -3,7 +3,7 @@
 #define FILE_PCD_H
 
 #include "../../common.h"
-#include "../../Scene/Struct/struct_data_file.h"
+#include "../../Scene/Base/struct_data_file.h"
 
 #include <pcl/io/pcd_io.h>
 

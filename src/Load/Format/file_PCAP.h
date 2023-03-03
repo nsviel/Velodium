@@ -1,7 +1,7 @@
 #ifndef FILE_PCAP_H
 #define FILE_PCAP_H
 
-#include "../../Scene/Struct/struct_data_file.h"
+#include "../../Scene/Base/struct_data_file.h"
 #include "../../common.h"
 
 

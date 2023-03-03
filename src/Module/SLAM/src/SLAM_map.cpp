@@ -5,7 +5,6 @@
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Data/Scene.h"
-#include "../../../Scene/Struct/struct_voxelMap.h"
 
 #include "../../../Load/Node_load.h"
 #include "../../../Load/Processing/Pather.h"

@@ -2,8 +2,8 @@
 #define SUBSET_STRUCT_H
 
 #include "struct_glyph.h"
-#include "struct_frame.h"
 #include "struct_object.h"
+#include "../../Module/SLAM/Base/struct_frame.h"
 
 
 struct Subset : public Object_

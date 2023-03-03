@@ -2,7 +2,7 @@
 #define COMMON_H
 
 //Structure
-#include "Scene/Struct/struct_cloud.h"
+#include "Scene/Base/struct_cloud.h"
 #include "Specific/Function/fct_terminal.h"
 #include "GUI/Window/struct_consol.h"
 extern struct ConsoleApp console;

@@ -1,7 +1,7 @@
 #ifndef FILE_PTS_H
 #define FILE_PTS_H
 
-#include "../../Scene/Struct/struct_data_file.h"
+#include "../../Scene/Base/struct_data_file.h"
 #include "../../common.h"
 
 #include <iomanip>

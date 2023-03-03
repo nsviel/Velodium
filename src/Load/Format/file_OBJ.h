@@ -1,7 +1,7 @@
 #ifndef FILE_OBJ_H
 #define FILE_OBJ_H
 
-#include "../../Scene/Struct/struct_data_file.h"
+#include "../../Scene/Base/struct_data_file.h"
 #include "../../common.h"
 
 struct Vertex{

@@ -1,7 +1,7 @@
 #ifndef CAPTURE_FRAME_H
 #define CAPTURE_FRAME_H
 
-#include "../../../Scene/Struct/struct_data_file.h"
+#include "../../../Scene/Base/struct_data_file.h"
 #include "../../../common.h"
 
 

@@ -1,7 +1,7 @@
 #ifndef SLAM_H
 #define SLAM_H
 
-#include "struct_voxelMap.h"
+#include "../Base/struct_voxelMap.h"
 #include "../Base/common.h"
 
 class Node_engine;

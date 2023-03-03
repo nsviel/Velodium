@@ -1,7 +1,7 @@
 #ifndef OCTREE_H
 #define OCTREE_H
 
-#include "../../Scene/Struct/struct_glyph.h"
+#include "../../Scene/Base/struct_glyph.h"
 #include "../../common.h"
 
 
