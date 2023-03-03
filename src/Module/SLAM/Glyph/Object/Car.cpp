@@ -1,12 +1,13 @@
 #include "Car.h"
 
-#include "../Base/SLAM_utility.h"
-#include "../../../Load/Format/file_OBJ.h"
+#include "../../Base/SLAM_utility.h"
+#include "../../../../Load/Format/file_OBJ.h"
 
 
 Car::Car(){
   //---------------------------
 
+  this->name = "car";
   this->visibility = false;
   this->width = 2;
   this->lidar_height = 1.3;
@@ -25,7 +26,7 @@ void Car::create_glyph(){
   glyph->visibility = false;
   glyph->draw_type_name = "triangle";
   glyph->permanent = true;
-  glyph->color_unique = color;
+  glyph->unicolor = color;
 
   //Load car model
   file_OBJ objManager;

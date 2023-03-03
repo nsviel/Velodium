@@ -63,7 +63,7 @@ void Glyphs::update_glyph_color(Glyph* glyph, vec4 RGB_new){
   for(int i=0; i<size; i++){
     RGB.push_back(RGB_new);
   }
-  glyph->color_unique = RGB_new;
+  glyph->unicolor = RGB_new;
 
   //Reactualise vertex color data
   gpuManager->update_buffer_color(glyph);

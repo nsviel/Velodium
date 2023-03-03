@@ -5,6 +5,7 @@
 Trajectory::Trajectory(){
   //---------------------------
 
+  this->name = "trajectory";
   this->color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
   this->visibility = false;
   this->width = 2;
@@ -29,7 +30,7 @@ void Trajectory::create(){
   trajectory->visibility = false;
   trajectory->draw_type_name = "line";
   trajectory->permanent = true;
-  trajectory->color_unique = color;
+  trajectory->unicolor = color;
 
   //---------------------------
 }
@@ -47,7 +48,7 @@ void Trajectory::update(Cloud*cloud){
     if(subset_m0->visibility && subset_m1->visibility){
       vec3 root_m0 = subset_m0->root;
       vec3 root_m1 = subset_m1->root;
-      vec4 color = trajectory->color_unique;
+      vec4 color = trajectory->unicolor;
 
       //Add begin point
       trajectory->xyz.push_back(root_m0);

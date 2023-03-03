@@ -1,10 +1,10 @@
 #ifndef SLAM_OBJECT_CAR_H
 #define SLAM_OBJECT_CAR_H
 
-#include "../Base/SLAM_object_base.h"
+#include "../../../../Scene/Glyph/Base/Glyph_source.h"
 
 
-class Car : public SLAM_object_base
+class Car : public Glyph_source
 {
 public:
   Car();

@@ -11,6 +11,7 @@ Tree::Tree(){
 
   this->octreeManager = new Octree();
 
+  this->name = "tree";
   this->visibility = false;
   this->tree_color = vec4(1, 1, 1, 0.7);
   this->tree_level = 6;
@@ -29,7 +30,7 @@ void Tree::create_glyph(Subset* subset){
   tree.visibility = visibility;
   tree.draw_type_name = "line";
   tree.permanent = true;
-  tree.color_unique = tree_color;
+  tree.unicolor = tree_color;
 
   //---------------------------
   subset->glyphs.insert({"tree", tree});

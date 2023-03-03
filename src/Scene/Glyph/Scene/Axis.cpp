@@ -5,6 +5,7 @@
 Axis::Axis(){
   //---------------------------
 
+  this->name = "axis";
   this->axis_subset_visibility = true;
 
   //---------------------------

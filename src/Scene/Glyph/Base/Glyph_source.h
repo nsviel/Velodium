@@ -17,7 +17,9 @@ public:
   virtual void create_glyph(){}
   virtual void update_glyph(){}
   virtual void reset_glyph(){}
+  virtual void reset(){}
 
+  inline string get_name(){return name;}
   inline Glyph* get_glyph(){return glyph;}
   inline vec4* get_color(){return &color;}
   inline bool* get_visibility(){return &visibility;}
@@ -26,6 +28,7 @@ public:
 protected:
   Glyph* glyph;
 
+  string name;
   vec4 color;
   bool visibility;
 };

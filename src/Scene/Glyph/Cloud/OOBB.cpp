@@ -5,10 +5,12 @@
 OOBB::OOBB(){
   //---------------------------
 
+  this->name = "oobb";
   this->color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
   this->width = 1;
 
   //---------------------------
+  this->create_glyph();
 }
 OOBB::~OOBB(){}
 
@@ -22,7 +24,7 @@ void OOBB::create_glyph(){
   glyph->visibility = false;
   glyph->draw_type_name = "line";
   glyph->permanent = false;
-  glyph->color_unique = color;
+  glyph->unicolor = color;
 
   //Box color
   for(int i=0; i<24; i++){

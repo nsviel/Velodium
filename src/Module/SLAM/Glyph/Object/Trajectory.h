@@ -1,10 +1,10 @@
 #ifndef SLAM_OBJECT_TRAJECTORY_H
 #define SLAM_OBJECT_TRAJECTORY_H
 
-#include "../Base/SLAM_object_base.h"
+#include "../../../../Scene/Glyph/Base/Glyph_source.h"
 
 
-class Trajectory : public SLAM_object_base
+class Trajectory : public Glyph_source
 {
 public:
   //Constructor / Destructor

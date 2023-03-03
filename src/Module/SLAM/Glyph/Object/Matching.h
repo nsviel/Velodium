@@ -1,10 +1,10 @@
 #ifndef SLAM_OBJECT_MATCHING_H
 #define SLAM_OBJECT_MATCHING_H
 
-#include "../Base/SLAM_object_base.h"
+#include "../../../../Scene/Glyph/Base/Glyph_source.h"
 
 
-class Matching : public SLAM_object_base
+class Matching : public Glyph_source
 {
 public:
   //Constructor / Destructor

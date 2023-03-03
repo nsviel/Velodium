@@ -1,5 +1,16 @@
 #include "SLAM.h"
 
+#include "SLAM_sampling.h"
+#include "SLAM_init.h"
+#include "SLAM_assessment.h"
+#include "SLAM_map.h"
+#include "SLAM_parameter.h"
+#include "SLAM_transform.h"
+
+#include "../Glyph/SLAM_glyph.h"
+#include "../optim/SLAM_normal.h"
+#include "../optim/SLAM_optim.h"
+
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Data/Scene.h"
@@ -7,17 +18,6 @@
 #include "../../../Specific/Function/fct_transtypage.h"
 #include "../../../Specific/Function/fct_math.h"
 #include "../../../Specific/Function/fct_chrono.h"
-
-#include "SLAM_sampling.h"
-#include "SLAM_init.h"
-#include "SLAM_assessment.h"
-#include "SLAM_map.h"
-#include "SLAM_parameter.h"
-#include "SLAM_transform.h"
-#include "SLAM_glyph.h"
-
-#include "../optim/SLAM_normal.h"
-#include "../optim/SLAM_optim.h"
 
 
 //Constructor / Destructor

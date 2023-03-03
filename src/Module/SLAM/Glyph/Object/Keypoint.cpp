@@ -5,6 +5,7 @@
 Keypoint::Keypoint(){
   //---------------------------
 
+  this->name = "keypoint";
   this->color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
   this->visibility = false;
 
@@ -19,7 +20,7 @@ void Keypoint::create_glyph(Subset* subset){
   keypoint.name = "keypoint";
   keypoint.draw_point_size = 10;
   keypoint.draw_type_name = "point";
-  keypoint.color_unique = color;
+  keypoint.unicolor = color;
   keypoint.visibility = visibility;
 
   //---------------------------
@@ -73,8 +74,8 @@ void Keypoint::update_keypoint_normal(Subset* subset){
     xyz_n.push_back(xyz);
     xyz_n.push_back(n_vec);
 
-    rgb_n.push_back(normal->color_unique);
-    rgb_n.push_back(normal->color_unique);
+    rgb_n.push_back(normal->unicolor);
+    rgb_n.push_back(normal->unicolor);
   }
 
   //---------------------------

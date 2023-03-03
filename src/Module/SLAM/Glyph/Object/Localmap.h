@@ -1,11 +1,11 @@
 #ifndef SLAM_OBJECT_LOCALMAP_H
 #define SLAM_OBJECT_LOCALMAP_H
 
-#include "../src/struct_voxelMap.h"
-#include "../Base/SLAM_object_base.h"
+#include "../../src/struct_voxelMap.h"
+#include "../../../../Scene/Glyph/Base/Glyph_source.h"
 
 
-class Localmap : public SLAM_object_base
+class Localmap : public Glyph_source
 {
 public:
   //Constructor / Destructor

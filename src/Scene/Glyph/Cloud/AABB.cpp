@@ -4,6 +4,7 @@
 AABB::AABB(){
   //---------------------------
 
+  this->name = "aabb";
   this->color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
   this->width = 1;
 
@@ -22,7 +23,7 @@ void AABB::create_glyph(){
   glyph->visibility = true;
   glyph->draw_type_name = "line";
   glyph->permanent = true;
-  glyph->color_unique = color;
+  glyph->unicolor = color;
 
   for(int i=0; i<24; i++){
     glyph->rgb.push_back(color);

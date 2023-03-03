@@ -5,6 +5,7 @@
 Mark::Mark(){
   //---------------------------
 
+  this->name = "mark";
   this->selection_frame_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
   this->create_selection_frame();
@@ -27,7 +28,7 @@ void Mark::create_selection_frame(){
   selection_frame->name = "selection";
   selection_frame->draw_line_width = 1;
   selection_frame->draw_type_name = "line";
-  selection_frame->color_unique = selection_frame_color;
+  selection_frame->unicolor = selection_frame_color;
   selection_frame->visibility = true;
   selection_frame->permanent = true;
 

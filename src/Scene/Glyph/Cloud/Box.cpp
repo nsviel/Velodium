@@ -5,6 +5,7 @@
 Box::Box(){
   //---------------------------
 
+  this->name = "box";
   this->color = vec4(0.0f, 0.0f, 0.8f, 0.2f);
   this->width = 3;
 
@@ -30,7 +31,7 @@ void Box::create_glyph(){
   box->visibility = false;
   box->draw_type_name = "line";
   box->permanent = true;
-  box->color_unique = color;
+  box->unicolor = color;
 
   box->min = vec3(0,0,0);
   box->max = vec3(1,1,1);
@@ -156,7 +157,7 @@ void Box::build_box_color(){
 
   //Color
   for(int i=0; i<40; i++){
-    rgb.push_back(box->color_unique);
+    rgb.push_back(box->unicolor);
   }
 
   //---------------------------

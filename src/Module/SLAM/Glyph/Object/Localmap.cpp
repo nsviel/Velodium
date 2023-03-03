@@ -7,6 +7,7 @@
 Localmap::Localmap(){
   //---------------------------
 
+  this->name = "localmap";
   this->color = vec4(66.0f/255.0f, 135.0f/255.0f, 245.0f/255.0f, 1.0f);
 
   //---------------------------
@@ -41,7 +42,7 @@ void Localmap::create_localmap(){
   localmap->name = "localmap";
   localmap->draw_point_size = 1;
   localmap->draw_type_name = "point";
-  localmap->color_unique = color;
+  localmap->unicolor = color;
   localmap->visibility = false;
   localmap->permanent = true;
 
@@ -55,7 +56,7 @@ void Localmap::create_localcloud(){
   localcloud->name = "localcloud";
   localcloud->draw_point_size = 1;
   localcloud->draw_type_name = "point";
-  localcloud->color_unique = color;
+  localcloud->unicolor = color;
   localcloud->visibility = false;
   localcloud->permanent = true;
 
@@ -77,7 +78,7 @@ void Localmap::update_localmap(slamap* map){
         Eigen::Vector3d& point = voxel_xyz[i];
 
         vec3 xyz = vec3(point(0), point(1), point(2));
-        vec4 rgb = localmap->color_unique;
+        vec4 rgb = localmap->unicolor;
 
         gly_xyz.push_back(xyz);
         gly_rgb.push_back(rgb);
@@ -103,7 +104,7 @@ void Localmap::update_localcloud(slamap* map){
         Eigen::Vector4d& point = voxel_xyz[i];
 
         vec3 xyz = vec3(point(0), point(1), point(2));
-        vec4 rgb = localcloud->color_unique;
+        vec4 rgb = localcloud->unicolor;
 
         gly_xyz.push_back(xyz);
         gly_rgb.push_back(rgb);

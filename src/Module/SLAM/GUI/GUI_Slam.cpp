@@ -2,12 +2,12 @@
 
 #include "../Module_slam.h"
 #include "../ct_icp/CT_ICP.h"
+#include "../Glyph/SLAM_glyph.h"
 #include "../src/SLAM.h"
 #include "../src/SLAM_assessment.h"
 #include "../src/SLAM_map.h"
 #include "../src/SLAM_parameter.h"
 #include "../src/SLAM_transform.h"
-#include "../src/SLAM_glyph.h"
 #include "../src/SLAM_sampling.h"
 
 #include "../optim/SLAM_optim.h"
@@ -473,7 +473,7 @@ void GUI_Slam::parameter_localCloud(){
     //Local cloud color
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar;
     Glyph* localcloud = slam_glyph->get_glyph_byName("localcloud");
-    vec4* rgb = &localcloud->color_unique;
+    vec4* rgb = &localcloud->unicolor;
     ImGui::ColorEdit4("Color", (float*)rgb, flags);
     ImGui::Separator();
 

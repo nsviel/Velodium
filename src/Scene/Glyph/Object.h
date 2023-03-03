@@ -8,6 +8,8 @@ class Node_engine;
 class Configuration;
 class Glyphs;
 
+class Glyph_source;
+
 class Grid;
 class Axis;
 class AABB;
@@ -59,38 +61,33 @@ public:
   void set_object_visibility(string name, bool val);
   void set_slam_object(bool value);
   Glyph* get_glyph_by_name(string name);
+  Glyph_source* get_glyph_src_byName(string name);
 
-  inline Grid* get_object_grid(){return gridObject;}
-  inline Axis* get_object_axis(){return axisObject;}
-  inline AABB* get_object_aabb(){return aabbObject;}
-  inline Normal* get_object_normal(){return normObject;}
-  inline Mark* get_object_mark(){return markObject;}
+  inline Grid* get_object_grid(){return (Grid*)get_glyph_src_byName("grid");}
+  inline Axis* get_object_axis(){return (Axis*)get_glyph_src_byName("axis");}
+  inline AABB* get_object_aabb(){return (AABB*)get_glyph_src_byName("aabb");}
+  inline Normal* get_object_normal(){return (Normal*)get_glyph_src_byName("normal");}
+  inline Mark* get_object_mark(){return (Mark*)get_glyph_src_byName("mark");}
+  inline Box* get_object_box(){return (Box*)get_glyph_src_byName("box");}
+  inline Tree* get_object_tree(){return (Tree*)get_glyph_src_byName("tree");}
+  inline Matching* get_object_matching(){return (Matching*)get_glyph_src_byName("matching");}
+
   inline Trajectory* get_object_trajectory(){return trajObject;}
   inline Car* get_object_car(){return carObject;}
   inline Keypoint* get_object_keypoint(){return keyObject;}
   inline Localmap* get_object_localmap(){return mapObject;}
-  inline Box* get_object_box(){return boxObject;}
-  inline Tree* get_object_tree(){return treeObject;}
-  inline Matching* get_object_matching(){return matchObject;}
 
 private:
   Node_engine* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
 
-  Grid* gridObject;
-  Axis* axisObject;
-  AABB* aabbObject;
-  Normal* normObject;
-  Keypoint* keyObject;
-  OOBB* oobbObject;
+  vector<Glyph_source*> vec_glyph_src;
+
   Trajectory* trajObject;
   Localmap* mapObject;
-  Mark* markObject;
+  Keypoint* keyObject;
   Car* carObject;
-  Box* boxObject;
-  Tree* treeObject;
-  Matching* matchObject;
 };
 
 #endif

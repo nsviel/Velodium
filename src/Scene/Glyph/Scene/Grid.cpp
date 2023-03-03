@@ -5,6 +5,7 @@
 Grid::Grid(){
   //---------------------------
 
+  this->name = "grid";
   this->grid_color = vec4(0.5f, 0.5f, 0.5f, 1.0f);
   this->grid_sub_color = vec4(0.3f, 0.3f, 0.3f, 1.0f);
   this->nb_cell = 4;
@@ -35,7 +36,7 @@ void Grid::create_grid(){
   grid->visibility = true;
   grid->draw_type_name = "line";
   grid->permanent = true;
-  grid->color_unique = grid_color;
+  grid->unicolor = grid_color;
 
   //Construct grid
   this->update_grid(nb_cell);
@@ -57,7 +58,7 @@ void Grid::create_grid_sub(){
 
   //Construct grid
   this->update_grid_sub(nb_cell);
-
+  
   //---------------------------
 }
 void Grid::create_grid_plane(){

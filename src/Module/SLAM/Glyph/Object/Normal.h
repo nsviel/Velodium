@@ -1,10 +1,10 @@
 #ifndef SLAM_OBJECT_NORMAL_H
 #define SLAM_OBJECT_NORMAL_H
 
-#include "../Base/SLAM_object_base.h"
+#include "../../../../Scene/Glyph/Base/Glyph_source.h"
 
 
-class Normal : public SLAM_object_base
+class Normal : public Glyph_source
 {
 public:
   //Constructor / Destructor

@@ -1,12 +1,13 @@
 #include "Normal.h"
 
-#include "../Base/SLAM_utility.h"
+#include "../../Base/SLAM_utility.h"
 
 
 //Constructor / destructor
 Normal::Normal(){
   //---------------------------
 
+  this->name = "normal";
   this->width = 1;
   this->size = 1;
   this->visibility = false;
@@ -24,7 +25,7 @@ void Normal::create_glyph(Subset* subset){
   normal.name = "normal";
   normal.draw_line_width = width;
   normal.draw_type_name = "line";
-  normal.color_unique = color;
+  normal.unicolor = color;
   normal.visibility = visibility;
 
   //---------------------------
@@ -63,8 +64,8 @@ void Normal::update_normal_subset(Subset* subset){
     xyz_n.push_back(xyz);
     xyz_n.push_back(vec_n);
 
-    rgb_n.push_back(normal->color_unique);
-    rgb_n.push_back(normal->color_unique);
+    rgb_n.push_back(normal->unicolor);
+    rgb_n.push_back(normal->unicolor);
   }
 
   //---------------------------
@@ -100,8 +101,8 @@ void Normal::update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<ve
     xyz_n.push_back(xyz);
     xyz_n.push_back(vec_n);
 
-    rgb_n.push_back(normal->color_unique);
-    rgb_n.push_back(normal->color_unique);
+    rgb_n.push_back(normal->unicolor);
+    rgb_n.push_back(normal->unicolor);
   }
 
   //---------------------------

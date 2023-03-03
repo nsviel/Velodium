@@ -1,7 +1,7 @@
 #include "SLAM_sampling.h"
 #include "SLAM.h"
 
-#include "../Glyph/Localmap.h"
+#include "../Glyph/Object/Localmap.h"
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"

@@ -5,6 +5,7 @@
 Matching::Matching(){
   //---------------------------
 
+  this->name = "matching";
   this->color = vec4(0.11f, 0.35f, 0.69f, 1.0f);
 
   //---------------------------
@@ -19,7 +20,7 @@ void Matching::create_glyph(){
   matching->name = "matching";
   matching->draw_line_width = 100;
   matching->draw_type_name = "line";
-  matching->color_unique = color;
+  matching->unicolor = color;
   matching->visibility = true;
   matching->permanent = true;
 
@@ -32,7 +33,7 @@ void Matching::update_matching(vector<vec3>& xyz){
 
   rgb.clear();
   for(int i=0; i<xyz.size(); i++){
-    rgb.push_back(matching->color_unique);
+    rgb.push_back(matching->unicolor);
   }
 
   //---------------------------

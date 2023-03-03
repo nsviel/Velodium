@@ -1,12 +1,13 @@
 #include "SLAM_glyph.h"
-#include "SLAM_map.h"
-#include "SLAM.h"
 
-#include "../Glyph/Localmap.h"
-#include "../Glyph/Car.h"
-#include "../Glyph/Trajectory.h"
-#include "../Glyph/Normal.h"
-#include "../Glyph/Matching.h"
+#include "Object/Localmap.h"
+#include "Object/Car.h"
+#include "Object/Trajectory.h"
+#include "Object/Normal.h"
+#include "Object/Matching.h"
+
+#include "../src/SLAM_map.h"
+#include "../src/SLAM.h"
 
 #include "../../../Engine/Node_engine.h"
 #include "../../../Scene/Node_scene.h"

@@ -1,7 +1,7 @@
 #ifndef SLAM_GLYPH_H
 #define SLAM_GLYPH_H
 
-#include "../Base/SLAM_object_base.h"
+#include "../../../Scene/Glyph/Base/Glyph_source.h"
 #include "../Base/common.h"
 
 class SLAM;
