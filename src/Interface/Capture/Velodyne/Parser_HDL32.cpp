@@ -24,8 +24,8 @@ Parser_HDL32::Parser_HDL32(){
 Parser_HDL32::~Parser_HDL32(){}
 
 //Main function
-Data_cap* Parser_HDL32::parse_packet(vector<int> packet){
-  Data_cap* cloud = new Data_cap();
+Data_file* Parser_HDL32::parse_packet(vector<int> packet){
+  Data_file* cloud = new Data_file();
   //---------------------------
 
   //Packet timestamp
@@ -215,7 +215,7 @@ void Parser_HDL32::parse_timestamp(){
 
   //---------------------------
 }
-void Parser_HDL32::final_check(Data_cap* cloud){
+void Parser_HDL32::final_check(Data_file* cloud){
   //---------------------------
 
   //Supress points when no distance are measured
@@ -254,7 +254,7 @@ void Parser_HDL32::final_check(Data_cap* cloud){
 
   //Store data into udp cloud structure
   cloud->xyz = xyz_b;
-  cloud->t = t_b;
+  cloud->ts = t_b;
   cloud->R = R_b;
   cloud->A = A_b;
   cloud->I = I_b;

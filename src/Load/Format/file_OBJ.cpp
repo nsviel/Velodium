@@ -159,9 +159,9 @@ void file_OBJ::fill_data_file(Data_file* data, vector<Vertex>& vertex_vec){
   //---------------------------
 
   for(int i=0; i<vertex_vec.size(); i++){
-    data->location.push_back(vertex_vec[i].location);
-    data->normal.push_back(vertex_vec[i].normal);
-    data->texture.push_back(vertex_vec[i].texcoord);
+    data->xyz.push_back(vertex_vec[i].location);
+    data->Nxyz.push_back(vertex_vec[i].normal);
+    data->uv.push_back(vertex_vec[i].texcoord);
   }
   data->draw_type_name = "triangle";
   data->path_texture = file_texture;

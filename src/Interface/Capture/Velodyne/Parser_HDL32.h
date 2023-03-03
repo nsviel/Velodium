@@ -3,7 +3,7 @@
 
 // Server side implementation of UDP client-server model
 
-#include "../../../Scene/Struct/struct_data_cap.h"
+#include "../../../Scene/Struct/struct_data_file.h"
 #include "../../../common.h"
 
 
@@ -16,7 +16,7 @@ public:
 
 public:
   //Main functions
-  Data_cap* parse_packet(vector<int> packet);
+  Data_file* parse_packet(vector<int> packet);
 
   //Subfunctions
   void parse_vector(vector<int> packet);
@@ -24,7 +24,7 @@ public:
   void parse_azimuth();
   void parse_coordinates();
   void parse_timestamp();
-  void final_check(Data_cap* cloud);
+  void final_check(Data_file* cloud);
 
   //Subsubfunctions
   vector<float> calc_timing_offsets();

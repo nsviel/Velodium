@@ -24,8 +24,8 @@ Parser_Scala::Parser_Scala(){
 Parser_Scala::~Parser_Scala(){}
 
 //Main function
-Data_cap* Parser_Scala::parse_packet(vector<int> packet_dec){
-  Data_cap* data_udp = new Data_cap();
+Data_file* Parser_Scala::parse_packet(vector<int> packet_dec){
+  Data_file* data_udp = new Data_file();
   //---------------------------
 
   //Packet timestamp
@@ -224,7 +224,7 @@ void Parser_Scala::parse_timestamp(){
 
   //---------------------------
 }
-void Parser_Scala::final_check(Data_cap* cloud){
+void Parser_Scala::final_check(Data_file* cloud){
   //---------------------------
 
   //Supress points when no distance are measured
@@ -263,7 +263,7 @@ void Parser_Scala::final_check(Data_cap* cloud){
 
   //Store data into udp cloud structure
   cloud->xyz = xyz_b;
-  cloud->t = t_b;
+  cloud->ts = t_b;
   cloud->R = R_b;
   cloud->A = A_b;
   cloud->I = I_b;

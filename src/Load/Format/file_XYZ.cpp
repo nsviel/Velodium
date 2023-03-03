@@ -23,8 +23,8 @@ Data_file* file_XYZ::Loader(string filePath){
     iss >> a >> b >> c >> d >> e >> f;
 
     //Data extraction
-    data->location.push_back(vec3(a, b, c));
-    data->color.push_back(vec4(d, e, f, 1));
+    data->xyz.push_back(vec3(a, b, c));
+    data->rgb.push_back(vec4(d, e, f, 1));
   }
 
   //---------------------------

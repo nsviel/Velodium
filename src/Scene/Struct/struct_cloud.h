@@ -2,7 +2,6 @@
 #define CLOUD_STRUCT_H
 
 #include "struct_subset.h"
-//#include "struct_voxelMap.h"
 
 #include <string>
 #include <list>

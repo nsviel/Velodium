@@ -30,8 +30,8 @@ void Car::create_glyph(){
   //Load car model
   file_OBJ objManager;
   Data_file* data = objManager.Loader("../media/engine/Marks/car.obj");
-  glyph->xyz = data->location;
-  glyph->xyz_init = data->location;
+  glyph->xyz = data->xyz;
+  glyph->xyz_init = data->xyz;
   for(int i=0; i<glyph->xyz.size(); i++){
     glyph->rgb.push_back(color);
   }

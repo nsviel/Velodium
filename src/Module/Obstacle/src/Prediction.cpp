@@ -157,7 +157,7 @@ void Prediction::remove_prediction_file(string path){
 
 //JSON parsers
 void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
-  Data_pred* detection_gt = &subset->detection;
+  /*Data_pred* detection_gt = &subset->detection;
   //---------------------------
 
   //Reset all values
@@ -202,13 +202,13 @@ void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
     detection_gt->position.push_back(position);
     detection_gt->dimension.push_back(dimension);
     detection_gt->heading.push_back(heading);
-  }
+  }*/
 
   //---------------------------
 }
 void Prediction::parse_json_prediction(Subset* subset, string path_file){
   //---------------------------
-
+  /*
   // Clear old data
   subset->detection.name.clear();
   subset->detection.position.clear();
@@ -250,7 +250,7 @@ void Prediction::parse_json_prediction(Subset* subset, string path_file){
     subset->detection.position.push_back(position);
     subset->detection.dimension.push_back(dimension);
     subset->detection.heading.push_back(heading);
-  }
+  }*/
 
   //---------------------------
 }

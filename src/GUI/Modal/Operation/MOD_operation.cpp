@@ -123,7 +123,7 @@ void MOD_operation::window_selection(){
     }
 
     //Table of selected parts
-    list<subpart*>* list = extractionManager->get_listParts();
+    /*list<subpart*>* list = extractionManager->get_listParts();
     ImGui::Columns(5, "part");
     ImGui::Separator();
     ImGui::Text("ID"); ImGui::NextColumn();
@@ -180,7 +180,7 @@ void MOD_operation::window_selection(){
       vec3 maxloc = part->maxloc;
       ImGui::Text("%.1f %.1f %.1f", maxloc.x, maxloc.y, maxloc.z);
       ImGui::NextColumn();
-    }
+    }*/
     ImGui::Columns(1);
     ImGui::Separator();
 

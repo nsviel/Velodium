@@ -107,7 +107,7 @@ void Obstacle::add_obstacle_grTr(){
 //Subfunctions
 void Obstacle::build_cloud_obstacle(Cloud* cloud){
   //---------------------------
-
+  /*
   //Process prediction if the ieme subset are not already processed
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
@@ -122,12 +122,12 @@ void Obstacle::build_cloud_obstacle(Cloud* cloud){
         warningManager->send_warning(subset);
       }
     }
-  }
+  }*/
 
   //---------------------------
 }
 void Obstacle::build_obstacleGlyph_pr(Subset* subset){
-  Data_pred* detection = &subset->detection;
+  /*Data_pred* detection = &subset->detection;
   //---------------------------
 
   for(int i=0; i<detection->name.size(); i++){
@@ -146,11 +146,11 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
     detection->is_predicted == true;
     delete glyph;
   }
-
+  */
   //---------------------------
 }
 void Obstacle::build_obstacleGlyph_gt(Subset* subset){
-  Data_pred* detection_gt = &subset->detection_gt;
+  /*Data_pred* detection_gt = &subset->detection_gt;
   //---------------------------
 
   for(int j=0; j<detection_gt->name.size(); j++){
@@ -165,7 +165,7 @@ void Obstacle::build_obstacleGlyph_gt(Subset* subset){
     objectManager->update_object(glyph);
     detection_gt->oobb.push_back(*glyph);
     delete glyph;
-  }
+  }*/
 
   //---------------------------
 }

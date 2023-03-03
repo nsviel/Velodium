@@ -2,7 +2,7 @@
 #define DATA_EXTRACTION_H
 
 #include "../../Scene/Struct/struct_data_file.h"
-#include "../../Scene/Struct/struct_data_cap.h"
+#include "../../Scene/Struct/struct_data_file.h"
 
 #include "../../common.h"
 
@@ -25,14 +25,14 @@ public:
   //Main function
   void insert_subset_into_gpu(Subset* subset);
   Cloud* extract_data(vector<Data_file*> data);
-  Subset* extract_data(Data_cap& data);
+  Subset* extract_data(Data_file& data);
   void extract_data_frame(Cloud* cloud, Data_file* data);
   void extract_data_oneFrame(Cloud* cloud, Data_file* data);
 
 private:
   //Subfunctions
   void check_data(Data_file* data);
-  void check_data(Data_cap& data);
+  void check_data(Data_file& data);
   void init_cloud_parameter(Cloud* cloud, vector<Data_file*> data);
   void init_subset_parameter(Subset* subset, string path, int ID);
   void init_subset_parameter(Subset* subset, Data_file* data, int ID);

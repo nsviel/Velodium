@@ -14,7 +14,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
-#include "../../Scene/Struct/struct_misc.h"
+#include "../../Module/Registration/struct_misc.h"
 #include "../../Engine/OpenGL/CoreGLengine.h"
 
 #include "../../Operation/Node_operation.h"

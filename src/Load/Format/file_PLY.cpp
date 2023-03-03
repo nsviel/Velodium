@@ -210,12 +210,12 @@ void file_PLY::Loader_ascii(std::ifstream& file){
     }
   }
 
-  data_out->location = vertex;
-  data_out->normal = normal;
-  data_out->intensity = intensity;
+  data_out->xyz = vertex;
+  data_out->Nxyz = normal;
+  data_out->I = intensity;
 
   //---------------------------
-  data_out->size = data_out->location.size();
+  data_out->size = data_out->xyz.size();
 }
 void file_PLY::Loader_ascii_withface(std::ifstream& file){
   vector<vec3> vertex;
@@ -273,12 +273,12 @@ void file_PLY::Loader_ascii_withface(std::ifstream& file){
 
     //Retrieve face data
     for(int i=0; i<nb_vertice; i++){
-      data_out->location.push_back(vertex[idx[i]]);
+      data_out->xyz.push_back(vertex[idx[i]]);
       if(get_id_property("nx") != -1){
-        data_out->normal.push_back(normal[idx[i]]);
+        data_out->Nxyz.push_back(normal[idx[i]]);
       }
       if(get_id_property("intensity") != -1){
-        data_out->intensity.push_back(intensity[idx[i]]);
+        data_out->I.push_back(intensity[idx[i]]);
       }
     }
 
@@ -292,7 +292,7 @@ void file_PLY::Loader_ascii_withface(std::ifstream& file){
   }
 
   //---------------------------
-  data_out->size = data_out->location.size();
+  data_out->size = data_out->xyz.size();
 }
 void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   //---------------------------
@@ -336,11 +336,11 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
   }
 
   //Resize vectors accordingly
-  data_out->location.resize(point_number, vec3(0,0,0));
-  if(is_timestamp) data_out->timestamp.resize(point_number, 0);
-  if(is_intensity) data_out->intensity.resize(point_number, 0);
-  if(is_normal) data_out->normal.resize(point_number, vec3(0,0,0));
-  if(is_color) data_out->color.resize(point_number, vec4(0,0,0,0));
+  data_out->xyz.resize(point_number, vec3(0,0,0));
+  if(is_timestamp) data_out->ts.resize(point_number, 0);
+  if(is_intensity) data_out->I.resize(point_number, 0);
+  if(is_normal) data_out->Nxyz.resize(point_number, vec3(0,0,0));
+  if(is_color) data_out->rgb.resize(point_number, vec4(0,0,0,0));
   data_out->size = point_number;
 
   //Insert data in the adequate vector
@@ -350,13 +350,13 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
       //Location
       if(property_name[j] == "x"){
         vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
-        data_out->location[i] = point;
+        data_out->xyz[i] = point;
       }
 
       //Normal
       if(property_name[j] == "nx"){
         vec3 normal = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
-        data_out->normal[i] = normal;
+        data_out->Nxyz[i] = normal;
       }
 
       //Color
@@ -365,19 +365,19 @@ void file_PLY::Loader_bin_little_endian(std::ifstream& file){
         float green = block_vec[j+1][i] / 255;
         float blue = block_vec[j+2][i] / 255;
         vec4 rgb = vec4(red, green, blue, 1.0f);
-        data_out->color[i] = rgb;
+        data_out->rgb[i] = rgb;
       }
 
       //Intensity
       if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
         float Is = block_vec[j][i];
-        data_out->intensity[i] = Is;
+        data_out->I[i] = Is;
       }
 
       //Timestamp
       if(property_name[j] == "timestamp"){
         float ts = block_vec[j][i];
-        data_out->timestamp[i] = ts;
+        data_out->ts[i] = ts;
       }
     }
   }
@@ -454,7 +454,7 @@ void file_PLY::Loader_bin_little_endian_withface(std::ifstream& file){
 
     //Location
     for(int j=0; j<idx.size(); j++){
-      data_out->location.push_back(vertex[idx[j]]);
+      data_out->xyz.push_back(vertex[idx[j]]);
     }
   }
 
@@ -467,7 +467,7 @@ void file_PLY::Loader_bin_little_endian_withface(std::ifstream& file){
   }
 
   //---------------------------
-  data_out->size = data_out->location.size();
+  data_out->size = data_out->xyz.size();
 }
 void file_PLY::Loader_bin_big_endian(std::ifstream& file){
   //---------------------------
@@ -489,9 +489,9 @@ void file_PLY::Loader_bin_big_endian(std::ifstream& file){
   }
 
   //Resize vectors accordingly
-  data_out->location.resize(point_number, vec3(0,0,0));
-  if(is_timestamp) data_out->timestamp.resize(point_number, 0);
-  if(is_intensity) data_out->intensity.resize(point_number, 0);
+  data_out->xyz.resize(point_number, vec3(0,0,0));
+  if(is_timestamp) data_out->ts.resize(point_number, 0);
+  if(is_intensity) data_out->I.resize(point_number, 0);
   data_out->size = point_number;
 
   //Insert data in the adequate vector
@@ -501,19 +501,19 @@ void file_PLY::Loader_bin_big_endian(std::ifstream& file){
       //Location
       if(property_name[j] == "x"){
         vec3 point = vec3(block_vec[j][i], block_vec[j+1][i], block_vec[j+2][i]);
-        data_out->location[i] = point;
+        data_out->xyz[i] = point;
       }
 
       //Intensity
       if(property_name[j] == "scalar_Scalar_field" || property_name[j] == "intensity"){
         float Is = block_vec[j][i];
-        data_out->intensity[i] = Is;
+        data_out->I[i] = Is;
       }
 
       //Timestamp
       if(property_name[j] == "timestamp"){
         float ts = block_vec[j][i];
-        data_out->timestamp[i] = ts;
+        data_out->ts[i] = ts;
       }
     }
   }
@@ -590,7 +590,7 @@ void file_PLY::Loader_bin_big_endian_withface(std::ifstream& file){
 
     //Location
     for(int j=0; j<idx.size(); j++){
-      data_out->location.push_back(vertex[idx[j]]);
+      data_out->xyz.push_back(vertex[idx[j]]);
     }
   }
 
@@ -603,7 +603,7 @@ void file_PLY::Loader_bin_big_endian_withface(std::ifstream& file){
   }
 
   //---------------------------
-  data_out->size = data_out->location.size();
+  data_out->size = data_out->xyz.size();
 }
 
 //Loader subfunctions
@@ -639,25 +639,25 @@ void file_PLY::reorder_by_timestamp(){
   vector<float> Is;
   //---------------------------
 
-  if(data_out->timestamp.size() != 0){
+  if(data_out->ts.size() != 0){
     //Check for non void and reorder by index
-    for (auto i: fct_sortByIndexes(data_out->timestamp)){
-      if(data_out->location[i] != vec3(0, 0, 0)){
+    for (auto i: fct_sortByIndexes(data_out->ts)){
+      if(data_out->xyz[i] != vec3(0, 0, 0)){
         //Location adn timestamp
-        ts.push_back(data_out->timestamp[i]);
-        pos.push_back(data_out->location[i]);
+        ts.push_back(data_out->ts[i]);
+        pos.push_back(data_out->xyz[i]);
 
         //Intensity
-        if(data_out->intensity.size() != 0){
-          Is.push_back(data_out->intensity[i]);
+        if(data_out->I.size() != 0){
+          Is.push_back(data_out->I[i]);
         }
       }
     }
 
     //Set new vectors
-    data_out->location = pos;
-    data_out->timestamp = ts;
-    data_out->intensity = Is;
+    data_out->xyz = pos;
+    data_out->ts = ts;
+    data_out->I = Is;
   }
 
   //---------------------------

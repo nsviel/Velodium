@@ -181,7 +181,7 @@ void Object::runtime_glyph_pred(Subset* subset){
 
   //Check for conditions
   if(subset == nullptr) return;
-
+  /*
   //OOBB - prediction
   vector<Glyph>& oobb_pr = subset->detection.oobb;
   for(int i=0; i<oobb_pr.size(); i++){
@@ -194,7 +194,7 @@ void Object::runtime_glyph_pred(Subset* subset){
   for(int i=0; i<oobb_gt.size(); i++){
     Glyph* oobb = &oobb_gt[i];
     glyphManager->draw_glyph(oobb);
-  }
+  }*/
 
   //---------------------------
 }

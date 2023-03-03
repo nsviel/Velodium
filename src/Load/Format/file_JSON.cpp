@@ -16,7 +16,7 @@ file_JSON::~file_JSON(){}
 
 void file_JSON::parse_json_obstacle(Cloud* cloud, vector<string> paths, string data){
   //---------------------------
-
+/*
   if(paths.size() != cloud->subset.size()) return;
 
   for(int i=0; i<cloud->subset.size(); i++){
@@ -76,6 +76,6 @@ void file_JSON::parse_json_obstacle(Cloud* cloud, vector<string> paths, string d
       }
     }
   }
-
+*/
   //---------------------------
 }

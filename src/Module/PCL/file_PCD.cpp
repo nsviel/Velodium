@@ -67,7 +67,7 @@ void filePCD::Loader_XYZ(string pathFile){
     Point.y = cloud->points[i].y;
     Point.z = cloud->points[i].z;
 
-    data_out->location.push_back(Point);
+    data_out->xyz.push_back(Point);
   }
 
   //---------------------------
@@ -94,8 +94,8 @@ void filePCD::Loader_XYZI(string pathFile){
     Point.y = cloud->points[i].y;
     Point.z = cloud->points[i].z;
 
-    data_out->location.push_back(Point);
-    data_out->intensity.push_back(cloud->points[i].intensity/255);
+    data_out->xyz.push_back(Point);
+    data_out->I.push_back(cloud->points[i].intensity/255);
   }
 
   //---------------------------

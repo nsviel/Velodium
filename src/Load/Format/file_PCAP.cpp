@@ -109,11 +109,11 @@ void file_PCAP::Loader_vlp16(string pathFile){
   int cpt = 0;
   for(int i=0; i<file_packets.size(); i++){
 
-    Data_cap* cloud = udpManager.parse_packet(file_packets[i]);
+    Data_file* cloud = udpManager.parse_packet(file_packets[i]);
     bool frame_rev = frameManager.build_frame(cloud);
 
     if(frame_rev){
-      Data_cap* frame = frameManager.get_endedFrame();
+      Data_file* frame = frameManager.get_endedFrame();
       Data_file* frame_data = new Data_file();
 
       frame_data->name = "frame_" + to_string(cpt); cpt++;
@@ -121,11 +121,11 @@ void file_PCAP::Loader_vlp16(string pathFile){
       frame_data->size = frame->xyz.size();
 
       for(int j=0; j<frame->xyz.size(); j++){
-        frame_data->location.push_back(frame->xyz[j]);
-        frame_data->intensity.push_back(frame->I[j]);
-        frame_data->timestamp.push_back(frame->t[j]);
-        frame_data->azimuth.push_back(frame->A[j]);
-        frame_data->distance.push_back(frame->R[j]);
+        frame_data->xyz.push_back(frame->xyz[j]);
+        frame_data->I.push_back(frame->I[j]);
+        frame_data->ts.push_back(frame->ts[j]);
+        frame_data->A.push_back(frame->A[j]);
+        frame_data->R.push_back(frame->R[j]);
       }
 
       data_vec.push_back(frame_data);
@@ -140,22 +140,22 @@ void file_PCAP::Loader_hdl32(string pathFile){
   //---------------------------
 
   for(int i=0; i<file_packets.size(); i++){
-    Data_cap* cloud = udpManager.parse_packet(file_packets[i]);
+    Data_file* cloud = udpManager.parse_packet(file_packets[i]);
     bool frame_rev = frameManager.build_frame(cloud);
 
     if(frame_rev){
-      Data_cap* frame = frameManager.get_endedFrame();
+      Data_file* frame = frameManager.get_endedFrame();
       Data_file* frame_data = new Data_file();
 
       frame_data->path = pathFile;
       frame_data->size = frame->xyz.size();
 
       for(int j=0; j<frame->xyz.size(); j++){
-        frame_data->location.push_back(frame->xyz[j]);
-        frame_data->intensity.push_back(frame->I[j] / 255);
-        frame_data->timestamp.push_back(frame->t[j]);
-        frame_data->azimuth.push_back(frame->A[j]);
-        frame_data->distance.push_back(frame->R[j]);
+        frame_data->xyz.push_back(frame->xyz[j]);
+        frame_data->I.push_back(frame->I[j] / 255);
+        frame_data->ts.push_back(frame->ts[j]);
+        frame_data->A.push_back(frame->A[j]);
+        frame_data->R.push_back(frame->R[j]);
       }
 
       data_vec.push_back(frame_data);

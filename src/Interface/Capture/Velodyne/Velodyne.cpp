@@ -81,14 +81,14 @@ void Velodyne::start_watcher(int port){
 
       //Parse decimal packet into point cloud
       if(packet_dec.size() != 0){
-        Data_cap* data_cap = vlp16Parser->parse_packet(packet_dec);
+        Data_file* data_cap = vlp16Parser->parse_packet(packet_dec);
 
         //Iteratively build a complete frame
         bool frame_rev = frameManager->build_frame(data_cap);
 
         // If frame revolution, make some ope
         if(frame_rev){
-          Data_cap* frame = frameManager->get_endedFrame();
+          Data_file* frame = frameManager->get_endedFrame();
           this->udp_capture = *frame;
 
           //Time

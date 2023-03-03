@@ -3,7 +3,7 @@
 
 // Server side implementation of UDP client-server model
 
-#include "../../../Scene/Struct/struct_data_cap.h"
+#include "../../../Scene/Struct/struct_data_file.h"
 #include "../../../common.h"
 
 #include <thread>
@@ -62,7 +62,7 @@ private:
   Parser_VLP16* vlp16Parser;
 
   Subset* subset_capture;
-  Data_cap udp_capture;
+  Data_file udp_capture;
 
   float time_frame;
   float time_packet;

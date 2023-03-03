@@ -2,11 +2,27 @@
 #define FILE_PTX_H
 
 #include "../../Scene/Struct/struct_data_file.h"
-#include "../../Scene/Struct/struct_misc.h"
+#include "../../Module/Registration/struct_misc.h"
 #include "../../common.h"
 
 #include <iomanip>
 #include <fstream>
+
+struct PTXCloud{
+  //---------------------------
+
+  //header
+  glm::vec3 rootTrans;
+  glm::mat3 rootRotat;
+  glm::mat4 transfMat;
+
+  //data
+  std::vector<glm::vec3> location;
+  std::vector<float> intensity;
+  std::vector<glm::vec4> color;
+
+  //---------------------------
+};
 
 
 class file_PTX

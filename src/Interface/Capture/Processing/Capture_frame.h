@@ -1,7 +1,7 @@
 #ifndef CAPTURE_FRAME_H
 #define CAPTURE_FRAME_H
 
-#include "../../../Scene/Struct/struct_data_cap.h"
+#include "../../../Scene/Struct/struct_data_file.h"
 #include "../../../common.h"
 
 
@@ -14,18 +14,18 @@ public:
 
 public:
   //Main functions
-  bool build_frame(Data_cap* cloud);
+  bool build_frame(Data_file* cloud);
   void reset_frame();
 
   //Subfunctions
-  void add_cloudsToFrame(Data_cap* cloud);
-  void end_cloudsToFrame(Data_cap* cloud, int index);
+  void add_cloudsToFrame(Data_file* cloud);
+  void end_cloudsToFrame(Data_file* cloud, int index);
 
-  inline Data_cap* get_endedFrame(){return frame_ended;}
+  inline Data_file* get_endedFrame(){return frame_ended;}
 
 private:
-  Data_cap* frame_onrun;
-  Data_cap* frame_ended;
+  Data_file* frame_onrun;
+  Data_file* frame_ended;
 };
 
 #endif

@@ -71,7 +71,7 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractor::extract_data(Data_cap& data){
+Subset* Extractor::extract_data(Data_file& data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -83,7 +83,7 @@ Subset* Extractor::extract_data(Data_cap& data){
   //Subset data
   this->extract_location(subset, data.xyz);
   this->extract_intensity(subset, data.I);
-  this->extract_timestamp(subset, data.t);
+  this->extract_timestamp(subset, data.ts);
   this->extract_color(subset, data.rgb);
 
   //Create associated glyphs
@@ -112,11 +112,11 @@ void Extractor::extract_data_frame(Cloud* cloud, Data_file* data){
   this->init_subset_parameter(subset, data->name, cloud->ID_subset);
 
   //Subset data
-  this->extract_location(subset, data->location);
-  this->extract_intensity(subset, data->intensity);
-  this->extract_color(subset, data->color);
-  this->extract_normal(subset, data->normal);
-  this->extract_timestamp(subset, data->timestamp);
+  this->extract_location(subset, data->xyz);
+  this->extract_intensity(subset, data->I);
+  this->extract_color(subset, data->rgb);
+  this->extract_normal(subset, data->Nxyz);
+  this->extract_timestamp(subset, data->ts);
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
@@ -143,11 +143,11 @@ void Extractor::extract_data_oneFrame(Cloud* cloud, Data_file* data){
   subset->visibility = true;
 
   //Subset data
-  this->extract_location(subset, data->location);
-  this->extract_intensity(subset, data->intensity);
-  this->extract_color(subset, data->color);
-  this->extract_normal(subset, data->normal);
-  this->extract_timestamp(subset, data->timestamp);
+  this->extract_location(subset, data->xyz);
+  this->extract_intensity(subset, data->I);
+  this->extract_color(subset, data->rgb);
+  this->extract_normal(subset, data->Nxyz);
+  this->extract_timestamp(subset, data->ts);
 
   if(cloud->subset.size() == 0){
     cloud->subset.push_back(subset);
@@ -180,49 +180,49 @@ void Extractor::check_data(Data_file* data){
   //---------------------------
 
   //Normals
-  if(data->normal.size() != 0 && data->normal.size() == data->location.size()){
+  if(data->Nxyz.size() != 0 && data->Nxyz.size() == data->xyz.size()){
     this->is_normal = true;
   }
 
   //Intensities
-  if(data->intensity.size() != 0 && data->intensity.size() == data->location.size()){
+  if(data->I.size() != 0 && data->I.size() == data->xyz.size()){
     this->is_intensity = true;
   }
 
   //Timestamp
-  if(data->timestamp.size() != 0 && data->timestamp.size() == data->location.size()){
+  if(data->ts.size() != 0 && data->ts.size() == data->xyz.size()){
     this->is_timestamp = true;
   }
 
   //Texture
-  if(data->texture.size() != 0){
+  if(data->uv.size() != 0){
     this->is_texture = true;
   }
 
   //---> if color data
-  if(data->color.size() != 0){
+  if(data->rgb.size() != 0){
     this->is_color = true;
   }
   //---> if intensity data
-  else if(data->color.size() == 0 && data->intensity.size() != 0){
-    for(int i=0; i<data->intensity.size(); i++){
-      data->color.push_back(vec4(data->intensity.at(i), data->intensity.at(i), data->intensity.at(i), 1.0f));
+  else if(data->rgb.size() == 0 && data->I.size() != 0){
+    for(int i=0; i<data->I.size(); i++){
+      data->rgb.push_back(vec4(data->I.at(i), data->I.at(i), data->I.at(i), 1.0f));
     }
   }
   //---> if no color or intensity data
-  else if(data->texture.size() == 0){
-    for(int i=0; i<data->location.size(); i++){
-      data->color.push_back(color_rdm);
+  else if(data->uv.size() == 0){
+    for(int i=0; i<data->xyz.size(); i++){
+      data->rgb.push_back(color_rdm);
     }
-  }else if(data->texture.size() != 0){
-    for(int i=0; i<data->location.size(); i++){
-      data->color.push_back(vec4(1, 1, 1, 1));
+  }else if(data->uv.size() != 0){
+    for(int i=0; i<data->xyz.size(); i++){
+      data->rgb.push_back(vec4(1, 1, 1, 1));
     }
   }
 
   //---------------------------
 }
-void Extractor::check_data(Data_cap& data){
+void Extractor::check_data(Data_file& data){
   this->is_color = false;
   this->is_normal = false;
   this->is_intensity = false;
@@ -240,7 +240,7 @@ void Extractor::check_data(Data_cap& data){
   }
 
   //Timestamp
-  if(data.t.size() != 0 && data.t.size() == data.xyz.size()){
+  if(data.ts.size() != 0 && data.ts.size() == data.xyz.size()){
     this->is_timestamp = true;
   }
 
@@ -283,7 +283,7 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   //Calculate number of point
   int nb_point = 0;
   for(int i=0; i<data.size(); i++){
-    nb_point += data[i]->location.size();
+    nb_point += data[i]->xyz.size();
   }
 
   //General information
@@ -329,12 +329,12 @@ void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
 void Extractor::init_subset_parameter(Subset* subset, Data_file* data, int ID){
   //---------------------------
 
-  subset->xyz = data->location;
-  subset->rgb = data->color;
-  subset->Nxyz = data->normal;
-  subset->I = data->intensity;
-  subset->ts = data->timestamp;
-  subset->uv = data->texture;
+  subset->xyz = data->xyz;
+  subset->rgb = data->rgb;
+  subset->Nxyz = data->Nxyz;
+  subset->I = data->I;
+  subset->ts = data->ts;
+  subset->uv = data->uv;
 
   subset->draw_type_name = data->draw_type_name ;
   subset->unicolor = color_rdm;

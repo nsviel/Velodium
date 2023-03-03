@@ -1,7 +1,7 @@
 #ifndef EXTRACTION_H
 #define EXTRACTION_H
 
-#include "../../Scene/Struct/struct_misc.h"
+#include "../../Module/Registration/struct_misc.h"
 #include "../../common.h"
 
 class Node_operation;
@@ -9,6 +9,19 @@ class Scene;
 class Loader;
 class Attribut;
 class Object;
+
+struct subpart{
+  //---------------------------
+
+  int ID;
+  std::string name;
+  std::string namePC;
+  glm::vec3 COM;
+  glm::vec3 minloc;
+  glm::vec3 maxloc;
+
+  //---------------------------
+};
 
 
 class Extraction

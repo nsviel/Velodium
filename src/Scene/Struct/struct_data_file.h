@@ -8,23 +8,28 @@
 
 //Generique structure to parse file point clouds
 struct Data_file{
+  //---------------------------
+
   int size;
   std::string name;
   std::string path;
   std::string draw_type_name;
 
-  std::vector<glm::vec3> location;
-  std::vector<glm::vec3> normal;
-  std::vector<glm::vec4> color;
-  std::vector<glm::vec2> texture;
+  std::vector<glm::vec3> xyz;
+  std::vector<glm::vec3> Nxyz;
+  std::vector<glm::vec4> rgb;
+  std::vector<glm::vec2> uv;
 
-  std::vector<float> intensity;
-  std::vector<float> timestamp;
-  std::vector<float> distance;
-  std::vector<float> azimuth;
+  std::vector<float> I;
+  std::vector<float> ts;
+  std::vector<float> R;
+  std::vector<float> A;
 
   std::string path_texture;
+
+  //---------------------------
 };
+
 
 
 #endif

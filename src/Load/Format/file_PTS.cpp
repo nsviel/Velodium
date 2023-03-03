@@ -266,32 +266,32 @@ void file_PTS::Loader_data(int FILE_config){
   }
 
   //Position data
-  data_out->location.push_back(vec3(x, y, z));
+  data_out->xyz.push_back(vec3(x, y, z));
 
   //Reflectance data
   if(hasIntensity){
     if(IdataFormat == 0){
-      data_out->intensity.push_back(I);
+      data_out->I.push_back(I);
     }else
     if(IdataFormat == 1){
-      data_out->intensity.push_back(I/255);
+      data_out->I.push_back(I/255);
     }else
     if(IdataFormat == 2){
-      data_out->intensity.push_back((I+2048)/4096);
+      data_out->I.push_back((I+2048)/4096);
     }
   }
 
   //Normal data
   if(hasNormal){
-    data_out->normal.push_back(vec3(nx, ny, nz));
+    data_out->Nxyz.push_back(vec3(nx, ny, nz));
   }
 
   //Color data
   if(hasColor){
-    data_out->color.push_back(vec4((r/255), (g/255), (b/255), 1.0f));
+    data_out->rgb.push_back(vec4((r/255), (g/255), (b/255), 1.0f));
     //if reflectance value is coded in RGB format
     if(hasIntensity == false && r == g && g == b){
-        data_out->intensity.push_back(r/255);
+        data_out->I.push_back(r/255);
         hasIntensity = true;
     }
   }

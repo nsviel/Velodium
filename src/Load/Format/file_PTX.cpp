@@ -67,7 +67,7 @@ Data_file* file_PTX::Loader(string pathFile){
   this->Loader_assembling();
 
   //---------------------------
-  data_out->size = data_out->location.size();
+  data_out->size = data_out->xyz.size();
   return data_out;
 }
 bool file_PTX::Exporter(string path){
@@ -217,9 +217,9 @@ void file_PTX::Loader_assembling(){
     PTXCloud* cloud = *next(list_ptxCloud->begin(),i);
 
     for(int j=0; j<cloud->location.size(); j++){
-      data_out->location.push_back(cloud->location[j]);
-      data_out->intensity.push_back(cloud->intensity[j]);
-      data_out->color.push_back(cloud->color[j]);
+      data_out->xyz.push_back(cloud->location[j]);
+      data_out->I.push_back(cloud->intensity[j]);
+      data_out->rgb.push_back(cloud->color[j]);
     }
   }
   //---------------------------

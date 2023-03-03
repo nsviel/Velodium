@@ -56,8 +56,8 @@ vector<Data_file*> file_CSV::Loader(string pathFile){
         vec3 point = vec3(x, y, z);
 
         data->name = "frame_" + to_string(i);
-        data->timestamp.push_back(ts);
-        data->location.push_back(point);
+        data->ts.push_back(ts);
+        data->xyz.push_back(point);
 
         cpt_field = 0;
         cpt_point++;

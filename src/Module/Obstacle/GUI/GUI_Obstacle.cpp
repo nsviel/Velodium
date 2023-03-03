@@ -122,7 +122,7 @@ void GUI_Obstacle::parameter_prediction(){
 
 //Draw label text function
 void GUI_Obstacle::runtime_display_naming(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  /*Cloud* cloud = sceneManager->get_selected_cloud();
   if(cloud != nullptr){
     //---------------------------
 
@@ -141,7 +141,7 @@ void GUI_Obstacle::runtime_display_naming(){
     }
 
     //---------------------------
-  }
+  }*/
 }
 void GUI_Obstacle::compute_draw_text(string text, vec3 position){
   //---------------------------

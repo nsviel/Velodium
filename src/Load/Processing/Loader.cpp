@@ -169,27 +169,27 @@ bool Loader::load_cloud_creation(Cloud* cloud_in){
 
     //Location
     if(subset->xyz.size() != 0){
-      data->location = subset->xyz;
+      data->xyz = subset->xyz;
     }
 
     //Color
     if(subset->rgb.size() != 0){
-      data->color = subset->rgb;
+      data->rgb = subset->rgb;
     }
 
     //Intensity
     if(subset->I.size() != 0){
-      data->intensity = subset->I;
+      data->I = subset->I;
     }
 
     //Timestamp
     if(subset->ts.size() != 0){
-      data->timestamp = subset->ts;
+      data->ts = subset->ts;
     }
 
     //Normal
     if(subset->Nxyz.size() != 0){
-      data->normal = subset->Nxyz;
+      data->Nxyz = subset->Nxyz;
     }
 
     data_vec.push_back(data);
@@ -209,13 +209,13 @@ bool Loader::load_cloud_empty(){
   Data_file* data = new Data_file();
   data->path = "../media/frame.ply";
 
-  data->location.push_back(vec3(0.0f,0.0f,0.0f));
-  data->location.push_back(vec3(1.0f,1.0f,1.0f));
-  data->location.push_back(vec3(0.5f,0.5f,0.5f));
+  data->xyz.push_back(vec3(0.0f,0.0f,0.0f));
+  data->xyz.push_back(vec3(1.0f,1.0f,1.0f));
+  data->xyz.push_back(vec3(0.5f,0.5f,0.5f));
 
-  data->color.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
-  data->color.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
-  data->color.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
+  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
+  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
+  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
 
   data_vec.push_back(data);
 
@@ -257,7 +257,7 @@ vector<vec3> Loader::load_vertices(string path){
   vector<Data_file*> data_vec = load_retrieve_data(path);
 
   //Extract data
-  vector<vec3> xyz = data_vec[0]->location;
+  vector<vec3> xyz = data_vec[0]->xyz;
 
   //---------------------------
   return xyz;
