@@ -83,7 +83,7 @@ void MOD_filter::filter_byAngle(){
       for(int i=0; i<list_cloud->size(); i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
         filterManager->filter_maxAngle(cloud, maxAngle);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
       }
 
     }

@@ -97,7 +97,7 @@ void Onthefly::reset(){
 
   // Reset glyph
   Cloud* cloud_selected = sceneManager->get_selected_cloud();
-  sceneManager->update_cloud_glyph(cloud_selected);
+  sceneManager->update_glyph(cloud_selected);
 
   //---------------------------
 }

@@ -103,7 +103,7 @@ void SLAM_transform::transform_subset(Subset* subset){
   subset->root = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
 
   //---------------------------
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 }
 void SLAM_transform::distort_frame(Frame* frame){
   //---------------------------

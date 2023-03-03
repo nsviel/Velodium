@@ -51,7 +51,7 @@ void Registration::make_Iteration(){
     //ICP algorithm
     tic();
     icpManager->algo(cloud_P, cloud_Q);
-    sceneManager->update_cloud_location(cloud_P);
+    sceneManager->update_buffer_location(cloud_P);
     duration = toc();
 
     //ICP results

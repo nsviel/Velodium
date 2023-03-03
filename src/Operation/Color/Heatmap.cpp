@@ -78,7 +78,7 @@ void Heatmap::make_cloud_heatmap(Cloud* cloud){
   }
 
   //---------------------------
-  sceneManager->update_cloud_color(cloud);
+  sceneManager->update_buffer_color(cloud);
 }
 void Heatmap::make_subset_heatmap(Subset* subset){
   //---------------------------
@@ -107,7 +107,7 @@ void Heatmap::make_subset_heatmap(Subset* subset){
   }
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 
 //Specific mode functions

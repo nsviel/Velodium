@@ -44,7 +44,7 @@ void Localmap::create_localmap(){
   localmap->draw_type_name = "point";
   localmap->unicolor = color;
   localmap->is_visible = false;
-  localmap->permanent = true;
+  localmap->is_permanent = true;
 
   //---------------------------
 }
@@ -58,7 +58,7 @@ void Localmap::create_localcloud(){
   localcloud->draw_type_name = "point";
   localcloud->unicolor = color;
   localcloud->is_visible = false;
-  localcloud->permanent = true;
+  localcloud->is_permanent = true;
 
   //---------------------------
 }

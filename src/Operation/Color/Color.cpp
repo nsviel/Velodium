@@ -95,7 +95,7 @@ void Color::make_colorization(Subset* subset, vec4 RGB_in){
   }
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Color::make_colorization_specific(Subset* subset){
   vector<vec4>& RGB = subset->rgb;
@@ -106,7 +106,7 @@ void Color::make_colorization_specific(Subset* subset){
   }
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 
 void Color::color_unicolor(Subset* subset, vec4 color){
@@ -118,7 +118,7 @@ void Color::color_unicolor(Subset* subset, vec4 color){
   }
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Color::color_intensity(Subset* subset){
   vector<vec4>& RGB = subset->rgb;
@@ -148,7 +148,7 @@ void Color::color_intensity(Subset* subset){
   }
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Color::color_heatmap(Subset* subset){
   //---------------------------
@@ -172,7 +172,7 @@ void Color::set_color_new(Cloud* cloud, vec4 RGBA){
     }
 
     //---------------------------
-    sceneManager->update_subset_color(subset);
+    sceneManager->update_buffer_color(subset);
   }
 }
 void Color::set_color_RGB(Cloud* cloud){
@@ -185,7 +185,7 @@ void Color::set_color_RGB(Cloud* cloud){
     RGB_obj = RGB_ini;
 
     //---------------------------
-    sceneManager->update_subset_color(subset);
+    sceneManager->update_buffer_color(subset);
   }
 }
 void Color::set_color_I(Cloud* cloud){
@@ -201,7 +201,7 @@ void Color::set_color_I(Cloud* cloud){
     }
 
     //---------------------------
-    sceneManager->update_subset_color(subset);
+    sceneManager->update_buffer_color(subset);
   }
 }
 void Color::set_color_enhanced(Cloud* cloud){
@@ -218,7 +218,7 @@ void Color::set_color_enhanced(Cloud* cloud){
     }
 
     //---------------------------
-    sceneManager->update_subset_color(subset);
+    sceneManager->update_buffer_color(subset);
   }
 }
 void Color::set_color_random(Cloud* cloud){
@@ -248,7 +248,7 @@ void Color::set_color_initial(Cloud* cloud){
     subset->rgb = subset_init->rgb;
 
     //---------------------------
-    sceneManager->update_subset_color(subset);
+    sceneManager->update_buffer_color(subset);
   }
 }
 string Color::get_color_mode_name(){

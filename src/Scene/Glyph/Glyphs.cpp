@@ -116,7 +116,7 @@ void Glyphs::remove_temporary_glyph(){
   for(int i=0; i<list_glyph->size(); i++){
     Glyph* glyph = *next(list_glyph->begin(),i);
 
-    if(glyph->permanent == false){
+    if(glyph->is_permanent == false){
       this->remove_glyph_scene(glyph->ID);
       i = 0;
     }
@@ -158,7 +158,7 @@ Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, b
   glyph->name = "...";
   glyph->draw_type_name = mode;
   glyph->draw_line_width = 1;
-  glyph->permanent = perma;
+  glyph->is_permanent = perma;
 
   this->insert_into_gpu(glyph);
   list_glyph->push_back(glyph);

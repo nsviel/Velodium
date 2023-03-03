@@ -24,7 +24,7 @@ void Matching::create_glyph(){
   matching->draw_type_name = "line";
   matching->unicolor = color;
   matching->is_visible = true;
-  matching->permanent = true;
+  matching->is_permanent = true;
 
   //---------------------------
 }

@@ -8,7 +8,6 @@
 
 class Node_scene;
 class Object;
-class Graph;
 class GPU_transfert;
 
 
@@ -29,29 +28,32 @@ public:
 
   //Add functions
   void add_new_subset(Cloud* cloud, Subset* subset);
-  void add_subset_to_gpu(Subset* subset);
 
   //Reset functions
   void reset_cloud(Cloud* cloud);
   void reset_cloud_all();
 
-  //Update cloud
-  void update_cloud_glyph(Cloud* cloud);
+  //Update function
+  void update_buffer_location(Object_* object);
+  void update_buffer_color(Object_* object);
+  void update_glyph(Object_* object);
   void update_cloud_IntensityToColor(Cloud* cloud);
-  void update_cloud_oID(list<Cloud*>* list);
-  void update_cloud_MinMax(Cloud* cloud);
-  void update_cloud_location(Cloud* cloud);
-  void update_cloud_color(Cloud* cloud);
-
-  //Update subset
-  void update_subset_glyphs(Subset* subset);
-  void update_subset(Subset* subset);
   void update_subset_IntensityToColor(Subset* subset);
+  void update_cloud_MinMax(Cloud* cloud);
   void update_subset_MinMax(Subset* subset);
-  void update_subset_location(Subset* subset);
-  void update_subset_color(Subset* subset);
+
+  inline int get_nb_cloud(){return list_cloud->size();}
+  inline list<Cloud*>* get_list_cloud(){return list_cloud;}
+
+
+
+
+
+
+  // A VIRER DANS GRAPH!!!!!
 
   //Subfunctions
+  void update_cloud_oID(list<Cloud*>* list);
   void selection_setNext();
   void selection_setCloud(int ID);
   void selection_setSubset(Cloud* cloud, int ID);
@@ -74,16 +76,18 @@ public:
   int get_subset_oID(Cloud* cloud, Subset* subset);
   bool get_is_list_empty();
 
-  inline int get_nb_cloud(){return list_cloud->size();}
-  inline list<Cloud*>* get_list_cloud(){return list_cloud;}
   inline int* get_new_ID_cloud(){return &ID_cloud;}
   inline int get_new_oID_cloud(){return list_cloud->size();}
   inline Cloud* get_selected_cloud(){return cloud_selected;}
   inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
 
+
+
+
+
+
 private:
   Object* objectManager;
-  Graph* graphManager;
   GPU_transfert* gpuManager;
 
   list<Cloud*>* list_cloud;

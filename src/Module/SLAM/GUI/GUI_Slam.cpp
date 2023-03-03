@@ -89,7 +89,7 @@ void GUI_Slam::design_misc(){
     ImGui::PushItemWidth(100);
     if(ImGui::Button("CT-ICP", ImVec2(75,0))){
       cticpManager->algo(cloud);
-      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_buffer_location(cloud);
     }
 
     //---------------------------
@@ -231,8 +231,8 @@ void GUI_Slam::parameter_offline(){
         sceneManager->reset_cloud(cloud);
         //slamManager->compute_slam_offline(cloud);
 
-        sceneManager->update_cloud_location(cloud);
-        sceneManager->update_cloud_glyph(cloud);
+        sceneManager->update_buffer_location(cloud);
+        sceneManager->update_glyph(cloud);
       }
     }
     ImGui::PopStyleColor(1);

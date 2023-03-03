@@ -30,7 +30,7 @@ void Box::create_glyph(){
   box->draw_line_width = width;
   box->is_visible = false;
   box->draw_type_name = "line";
-  box->permanent = true;
+  box->is_permanent = true;
   box->unicolor = color;
 
   box->min = vec3(0,0,0);

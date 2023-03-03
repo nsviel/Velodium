@@ -15,8 +15,12 @@ public:
   ~Graph();
 
 public:
-  void insert_loaded_cloud(Cloud* cloud);
-  void draw_all();
+  //Subfunctions
+  void selection_setNext();
+  void selection_setCloud(int ID);
+  void selection_setSubset(Cloud* cloud, int ID);
+  void selection_cloudByName(string name);
+  void selection_setCloud(Cloud* cloud);
 
 
 

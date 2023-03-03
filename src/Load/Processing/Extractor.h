@@ -23,34 +23,21 @@ public:
 
 public:
   //Main function
-  void insert_subset_into_gpu(Subset* subset);
   Cloud* extract_data(vector<Data_file*> data);
   Subset* extract_data(Data_file& data);
-  void extract_data_frame(Cloud* cloud, Data_file* data);
-  void extract_data_oneFrame(Cloud* cloud, Data_file* data);
+  void extract_data(Cloud* cloud, Data_file* data);
 
 private:
-  //Subfunctions
+  //Init function
   void check_data(Data_file* data);
-  void check_data(Data_file& data);
   void init_cloud_parameter(Cloud* cloud, vector<Data_file*> data);
-  void init_subset_parameter(Subset* subset, string path, int ID);
   void init_subset_parameter(Subset* subset, Data_file* data, int ID);
   void init_random_color();
+
+  //Param function
   void define_visibility(Subset* subset, int i);
   void define_buffer_init(Cloud* cloud, Subset* subset);
-
-  void extract_location(Subset* subset, vector<vec3>& locationOBJ);
-  void extract_color(Subset* subset, vector<vec4>& colorOBJ);
-  void extract_normal(Subset* subset, vector<vec3>& normalOBJ);
-  void extract_intensity(Subset* subset, vector<float>& intensityOBJ);
-  void extract_timestamp(Subset* subset, vector<float>& timestampOBJ);
-  void extract_texture(Subset* subset, vector<vec2>& vec_tex);
-
   void compute_texture(Subset* subset, Data_file* data);
-
-
-
 
 private:
   Scene* sceneManager;

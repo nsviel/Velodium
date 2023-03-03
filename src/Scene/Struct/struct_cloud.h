@@ -14,6 +14,7 @@ struct Cloud : public Object_
 
   Cloud();
   Subset* get_subset_byID(int querry_ID);
+  void add_new_subset(Subset* subset);
 
   //IDs
   int ID_perma; //Permanent cloud ID

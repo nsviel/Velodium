@@ -32,6 +32,7 @@ struct Object_{ //Cloud subset / part
   int ID;
   int nb_point;
   std::string name;
+  std::string obj_type;
   std::string path_file;
   std::string path_save;
   std::string file_format;

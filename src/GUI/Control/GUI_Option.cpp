@@ -258,7 +258,7 @@ void GUI_option::option_parameter(){
       if(!sceneManager->get_is_list_empty()){
         Transformation transformManager;
         transformManager.make_scaling(cloud, scale);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
       }
     }
 

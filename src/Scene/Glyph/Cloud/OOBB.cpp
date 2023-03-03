@@ -23,7 +23,7 @@ void OOBB::create_glyph(){
   glyph->draw_line_width = width;
   glyph->is_visible = false;
   glyph->draw_type_name = "line";
-  glyph->permanent = false;
+  glyph->is_permanent = false;
   glyph->unicolor = color;
 
   //Box color

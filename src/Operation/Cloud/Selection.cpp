@@ -76,7 +76,7 @@ void Selection::validate(){
       vec3 rotation = vec3(0, 0, -angle);
       transformManager->make_rotation(cloud, subset->COM, rotation);
       subset_init->Nxyz = subset->Nxyz;
-      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_buffer_location(cloud);
     }
 
     //---------------------------
@@ -419,7 +419,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
           }
         }
 
-        sceneManager->update_subset_color(subset);
+        sceneManager->update_buffer_color(subset);
       }
     }
   }
@@ -466,7 +466,7 @@ void Selection::mouse_cloudPicking(){
   poseManager->make_positionning_XY(cloud, point);
 
   //---------------------------
-  sceneManager->update_cloud_location(cloud);
+  sceneManager->update_buffer_location(cloud);
 }
 vec3 Selection::mouse_cameraPt(){
   vec2 cursorPos = dimManager->get_mouse_pose();

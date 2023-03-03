@@ -86,7 +86,7 @@ void GUI_Initialization::operation_cloud(Cloud* cloud){
     if(cloud_scale != 1){
       Transformation transformManager;
       transformManager.make_scaling(cloud, (float)cloud_scale);
-      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_buffer_location(cloud);
     }
   }
 

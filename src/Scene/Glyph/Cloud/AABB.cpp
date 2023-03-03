@@ -22,7 +22,7 @@ void AABB::create_glyph(){
   glyph->draw_line_width = width;
   glyph->is_visible = true;
   glyph->draw_type_name = "line";
-  glyph->permanent = true;
+  glyph->is_permanent = true;
   glyph->unicolor = color;
 
   for(int i=0; i<24; i++){

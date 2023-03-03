@@ -219,7 +219,7 @@ void MOD_operation::window_fitting(){
       if(cloud != nullptr){
         poseManager->make_orientAxis_X(cloud);
         poseManager->make_alignAxis_X(cloud);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
       }
     }
 

@@ -245,7 +245,7 @@ void Capture::operation_new_subset(Subset* subset){
     cloud_capture->ID_subset++;
 
     //Update subset data
-    sceneManager->update_subset_location(subset);
+    sceneManager->update_buffer_location(subset);
 
     //Insert the subset inside the capture cloud
     sceneManager->add_new_subset(cloud_capture, subset);

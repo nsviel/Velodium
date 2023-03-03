@@ -107,7 +107,7 @@ void Boxing::compute_visibility(Cloud* cloud, int ID){
   }
 
   attribManager->make_supressPoints(subset, idx);
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 
   //---------------------------
 }
@@ -148,7 +148,7 @@ void Boxing::stop_boxing(){
       subset->xyz = subset_init->xyz;
       subset->rgb = subset_init->rgb;
       subset->I = subset_init->I;
-      sceneManager->update_subset_location(subset);
+      sceneManager->update_buffer_location(subset);
     }
   }
 

@@ -29,7 +29,7 @@ void Tree::create_glyph(Subset* subset){
   tree.draw_line_width = 2;
   tree.is_visible = is_visible;
   tree.draw_type_name = "line";
-  tree.permanent = true;
+  tree.is_permanent = true;
   tree.unicolor = tree_color;
 
   //---------------------------

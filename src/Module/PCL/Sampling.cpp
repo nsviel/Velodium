@@ -49,7 +49,7 @@ void Sampling::sampling_random(Subset* subset){
   attribManager->make_supressPoints(subset, indices);
 
   //---------------------------
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
   string log = "Random sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
@@ -73,7 +73,7 @@ void Sampling::sampling_spaceRadius_PCL(Subset* subset){
 
   //Update cloud
   sceneManager->update_subset_IntensityToColor(subset);
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 
   //---------------------------
   float duration = toc();
@@ -100,7 +100,7 @@ void Sampling::sampling_outlier(Subset* subset){
 
   //---------------------------
   attribManager->make_supressPoints(subset, indices);
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 
   float duration = toc();
   int size_filtered = subset->xyz.size();
@@ -125,7 +125,7 @@ void Sampling::sampling_statistical(Subset* subset){
 
   //---------------------------
   attribManager->make_supressPoints(subset, indices);
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 
   float duration = toc();
   int size_filtered = subset->xyz.size();
@@ -182,7 +182,7 @@ void Sampling::sampling_spaceRadius(Subset* subset, float radius){
   //---------------------------
   sort(id_supp.begin(), id_supp.end());
   attribManager->make_supressPoints(subset, id_supp);
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 
   float duration = toc();
   int size_filtered = subset->xyz.size();

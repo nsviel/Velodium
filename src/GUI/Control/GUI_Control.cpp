@@ -161,8 +161,8 @@ void GUI_Control::control_mouse_wheel(){
 
         poseManager->compute_COM(cloud);
         transformManager->make_rotation(cloud, R, direction);
-        sceneManager->update_subset_location(cloud->subset_selected);
-        sceneManager->update_cloud_glyph(cloud);
+        sceneManager->update_buffer_location(cloud->subset_selected);
+        sceneManager->update_glyph(cloud);
       }
       //Subset selection
       else if(cloud->nb_subset > 1 || cloud->is_onthefly){
@@ -465,8 +465,8 @@ void GUI_Control::key_c(){
 
   if(!sceneManager->get_is_list_empty()){
     poseManager->make_centering(cloud);
-    sceneManager->update_cloud_location(cloud);
-    sceneManager->update_cloud_glyph(cloud);
+    sceneManager->update_buffer_location(cloud);
+    sceneManager->update_glyph(cloud);
   }
 
   //----------------------------
@@ -476,8 +476,8 @@ void GUI_Control::key_translation(vec3 trans){
   //----------------------------
 
   transformManager->make_translation(cloud->subset_selected, trans);
-  sceneManager->update_subset_location(cloud->subset_selected);
-  sceneManager->update_cloud_glyph(cloud);
+  sceneManager->update_buffer_location(cloud->subset_selected);
+  sceneManager->update_glyph(cloud);
 
   //----------------------------
 }
@@ -486,8 +486,8 @@ void GUI_Control::key_rotation(vec3 rotat){
   //----------------------------
 
   transformManager->make_rotation(cloud->subset_selected, vec3(0,0,0), rotat);
-  sceneManager->update_subset_location(cloud->subset_selected);
-  sceneManager->update_cloud_glyph(cloud);
+  sceneManager->update_buffer_location(cloud->subset_selected);
+  sceneManager->update_glyph(cloud);
 
   //----------------------------
 }

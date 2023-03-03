@@ -33,6 +33,16 @@ void GPU_transfert::draw_object(Object_* object){
 }
 
 //Buffer binding
+void GPU_transfert::bind_object_buffers(Object_* object){
+  //---------------------------
+
+  this->convert_draw_type_byName(object);
+  this->bind_buffer_texture(object);
+  this->bind_buffer_location(object);
+  this->bind_buffer_color(object);
+
+  //---------------------------
+}
 void GPU_transfert::bind_buffer_location(Object_* object){
   //---------------------------
 

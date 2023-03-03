@@ -60,7 +60,7 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
     objectManager->create_glyph_subset(subset);
 
     //Set parametrization
-    this->insert_subset_into_gpu(subset);
+    gpuManager->bind_object_buffers(subset);
     this->define_visibility(subset, i);
     this->define_buffer_init(cloud, subset);
     this->compute_texture(subset, data[i]);
@@ -75,102 +75,40 @@ Subset* Extractor::extract_data(Data_file& data){
   Subset* subset = new Subset();
   //---------------------------
 
+  //Init
+  this->check_data(&data);
   this->init_random_color();
-  this->check_data(data);
+  this->init_subset_parameter(subset, &data, 0);
 
-  this->init_subset_parameter(subset, data.name, 0);
-
-  //Subset data
-  this->extract_location(subset, data.xyz);
-  this->extract_intensity(subset, data.I);
-  this->extract_timestamp(subset, data.ts);
-  this->extract_color(subset, data.rgb);
-
-  //Create associated glyphs
+  //Set parametrization
   objectManager->create_glyph_subset(subset);
+  gpuManager->bind_object_buffers(subset);
 
   //---------------------------
   return subset;
 }
-void Extractor::insert_subset_into_gpu(Subset* subset){
-  //---------------------------
-
-  gpuManager->convert_draw_type_byName(subset);
-  gpuManager->bind_buffer_texture(subset);
-  gpuManager->bind_buffer_location(subset);
-  gpuManager->bind_buffer_color(subset);
-
-  //---------------------------
-}
-void Extractor::extract_data_frame(Cloud* cloud, Data_file* data){
+void Extractor::extract_data(Cloud* cloud, Data_file* data){
   Subset* subset = new Subset();
   //---------------------------
 
+  //Init
   this->color_rdm = cloud->unicolor;
   this->check_data(data);
-
-  this->init_subset_parameter(subset, data->name, cloud->ID_subset);
-
-  //Subset data
-  this->extract_location(subset, data->xyz);
-  this->extract_intensity(subset, data->I);
-  this->extract_color(subset, data->rgb);
-  this->extract_normal(subset, data->Nxyz);
-  this->extract_timestamp(subset, data->ts);
+  this->init_subset_parameter(subset, data, cloud->ID_subset);
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
   this->define_buffer_init(cloud, subset);
+  gpuManager->bind_object_buffers(subset);
 
+  //Update cloud stats
   cloud->nb_subset++;
   cloud->ID_subset++;
 
   //---------------------------
 }
-void Extractor::extract_data_oneFrame(Cloud* cloud, Data_file* data){
-  Subset* subset = new Subset();
-  //---------------------------
 
-  this->init_random_color();
-  this->check_data(data);
-
-  uint VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
-  subset->vao = VAO;
-  subset->name = "oneFrame";
-  subset->is_visible = true;
-
-  //Subset data
-  this->extract_location(subset, data->xyz);
-  this->extract_intensity(subset, data->I);
-  this->extract_color(subset, data->rgb);
-  this->extract_normal(subset, data->Nxyz);
-  this->extract_timestamp(subset, data->ts);
-
-  if(cloud->subset.size() == 0){
-    cloud->subset.push_back(subset);
-    cloud->subset_buffer.push_back(subset);
-    cloud->subset_init.push_back(subset);
-
-    cloud->nb_subset = 1;
-  }else{
-    Subset* subset_m0 = sceneManager->get_subset(cloud, 0);
-    Subset* subset_buffer_m0 = sceneManager->get_subset_buffer(cloud, 0);
-    Subset* subset_init_m0 = sceneManager->get_subset_init(cloud, 0);
-
-    subset_m0 = subset;
-    subset_buffer_m0 = subset;
-    subset_init_m0 = subset;
-
-    cloud->nb_subset = 1;
-  }
-
-  //---------------------------
-}
-
-// Subfunctions
+// Init function
 void Extractor::check_data(Data_file* data){
   this->is_color = false;
   this->is_normal = false;
@@ -187,6 +125,11 @@ void Extractor::check_data(Data_file* data){
   //Intensities
   if(data->I.size() != 0 && data->I.size() == data->xyz.size()){
     this->is_intensity = true;
+  }
+  if(fct_max(data->I) > 1){
+    for(int i=0; i<data->I.size(); i++){
+      data->I[i] = data->I[i] / 255;
+    }
   }
 
   //Timestamp
@@ -222,61 +165,6 @@ void Extractor::check_data(Data_file* data){
 
   //---------------------------
 }
-void Extractor::check_data(Data_file& data){
-  this->is_color = false;
-  this->is_normal = false;
-  this->is_intensity = false;
-  this->is_timestamp = false;
-  //---------------------------
-
-  //Intensities
-  if(data.I.size() != 0 && data.I.size() == data.xyz.size()){
-    this->is_intensity = true;
-  }
-  if(fct_max(data.I) > 1){
-    for(int i=0; i<data.I.size(); i++){
-      data.I[i] = data.I[i] / 255;
-    }
-  }
-
-  //Timestamp
-  if(data.ts.size() != 0 && data.ts.size() == data.xyz.size()){
-    this->is_timestamp = true;
-  }
-
-  //Color
-  if(is_intensity){
-    for(int i=0; i<data.I.size(); i++){
-      data.rgb.push_back(vec4(data.I.at(i), data.I.at(i), data.I.at(i), 1.0f));
-    }
-  }
-
-  //---------------------------
-}
-void Extractor::define_visibility(Subset* subset, int i){
-  //---------------------------
-
-  if(i == 0){
-    subset->is_visible = true;
-  }else{
-    subset->is_visible = false;
-  }
-
-  //---------------------------
-}
-void Extractor::define_buffer_init(Cloud* cloud, Subset* subset){
-  //---------------------------
-
-  Subset* subset_buf = new Subset(*subset);
-  Subset* subset_ini = new Subset(*subset);
-
-  cloud->subset_selected = subset;
-  cloud->subset.push_back(subset);
-  cloud->subset_buffer.push_back(subset_buf);
-  cloud->subset_init.push_back(subset_ini);
-
-  //---------------------------
-}
 void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   //---------------------------
 
@@ -305,24 +193,6 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   cloud->ID_perma = 0;//*ID_cloud;
   cloud->ID_order = sceneManager->get_new_oID_cloud();
   *ID_cloud += 1;
-
-  //---------------------------
-}
-void Extractor::init_subset_parameter(Subset* subset, string name, int ID){
-  //---------------------------
-
-  gpuManager->gen_vao(subset);
-
-  // Subset info
-  subset->ID = ID;
-  if(name != ""){
-    subset->name = name;
-  }else{
-    subset->name = "frame_" + to_string(ID);
-  }
-
-  // Structure
-  subset->frame.reset();
 
   //---------------------------
 }
@@ -376,89 +246,31 @@ void Extractor::init_random_color(){
   //---------------------------
 }
 
-// Data type extraction
-void Extractor::extract_location(Subset* subset, vector<vec3>& locationOBJ){
-  uint positionVBO;
+// Param function
+void Extractor::define_visibility(Subset* subset, int i){
   //---------------------------
 
-  //Get data
-  subset->nb_point = locationOBJ.size();
-  subset->xyz = locationOBJ;
-
-  //Transformation matrices
-  subset->scale = mat4(1.0);
-  subset->trans = mat4(1.0);
-  subset->rotat = mat4(1.0);
-  subset->transformation = mat4(1.0);
-
-  //Bind data
-  gpuManager->bind_buffer_location(subset);
-
-  //---------------------------
-}
-void Extractor::extract_intensity(Subset* subset, vector<float>& vec_I){
-  //---------------------------
-
-  if(is_intensity){
-    subset->I = vec_I;
-    subset->has_intensity = true;
+  if(i == 0){
+    subset->is_visible = true;
+  }else{
+    subset->is_visible = false;
   }
 
   //---------------------------
 }
-void Extractor::extract_timestamp(Subset* subset, vector<float>& vec_ts){
+void Extractor::define_buffer_init(Cloud* cloud, Subset* subset){
   //---------------------------
 
-  if(is_timestamp){
-    subset->ts = vec_ts;
-    subset->has_timestamp = true;
-  }
-  else{
-    //If not timestamp, set all timestamp at 0
-    vector<float> ts (subset->xyz.size(), 0);
-    subset->ts = ts;
-  }
+  Subset* subset_buf = new Subset(*subset);
+  Subset* subset_ini = new Subset(*subset);
+
+  cloud->subset_selected = subset;
+  cloud->subset.push_back(subset);
+  cloud->subset_buffer.push_back(subset_buf);
+  cloud->subset_init.push_back(subset_ini);
 
   //---------------------------
 }
-void Extractor::extract_normal(Subset* subset, vector<vec3>& vec_Nxyz){
-  uint normalVBO;
-  //---------------------------
-
-  if(is_normal){
-    subset->Nxyz = vec_Nxyz;
-    subset->has_normal = true;
-  }
-
-  //---------------------------
-}
-void Extractor::extract_color(Subset* subset, vector<vec4>& vec_rgb){
-  //---------------------------
-
-  subset->rgb = vec_rgb;
-  subset->unicolor = color_rdm;
-
-  if(is_color){
-    subset->has_color = true;
-  }
-
-  //Bind data
-  gpuManager->bind_buffer_color(subset);
-
-  //---------------------------
-}
-void Extractor::extract_texture(Subset* subset, vector<vec2>& vec_tex){
-  //---------------------------
-
-  subset->uv = vec_tex;
-
-  //Bind data
-  gpuManager->bind_buffer_texture(subset);
-
-  //---------------------------
-}
-
-// Texture
 void Extractor::compute_texture(Subset* subset, Data_file* data){
   if(data->path_texture == ""){return;}
   //---------------------------

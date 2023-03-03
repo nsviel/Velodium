@@ -33,8 +33,8 @@ void Light::init(){
   Cloud* light = loaderManager->get_createdcloud();
   light->name = "Light";
   transformManager->make_scaling(light, 0.1);
-  sceneManager->update_cloud_location(light);
-  sceneManager->update_cloud_glyph(light);
+  sceneManager->update_buffer_location(light);
+  sceneManager->update_glyph(light);
 
   //---------------------------
 }

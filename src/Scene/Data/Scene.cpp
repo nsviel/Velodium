@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "Graph.h"
 
 #include "../Node_scene.h"
 #include "../Glyph/Object.h"
@@ -11,7 +10,6 @@ Scene::Scene(Node_scene* node){
   //---------------------------
 
   this->objectManager = node->get_objectManager();
-  this->graphManager = node->get_graphManager();
   this->gpuManager = new GPU_transfert();
 
   this->list_cloud = new list<Cloud*>;
@@ -161,46 +159,9 @@ void Scene::remove_subset_all(Cloud* cloud){
 //Adding functions
 void Scene::add_new_subset(Cloud* cloud, Subset* subset){
   //---------------------------
-;
-  //Initialize parameters
-  subset->is_visible = true;
-  Subset* subset_buffer = new Subset(*subset);
-  Subset* subset_init = new Subset(*subset);
 
-  //Insert new subset into cloud lists
-  cloud->subset.push_back(subset);
-  cloud->subset_buffer.push_back(subset_buffer);
-  cloud->subset_init.push_back(subset_init);
-
-  //Update number of cloud subset
-  cloud->nb_subset = cloud->subset.size();
-  cloud->ID_selected = subset->ID;
-  cloud->subset_selected = subset;
-
+  cloud->add_new_subset(subset);
   objectManager->update_glyph_subset(subset);
-
-  //---------------------------
-}
-void Scene::add_subset_to_gpu(Subset* subset){
-  //---------------------------
-
-  glGenVertexArrays(1, &subset->vao);
-  glBindVertexArray(subset->vao);
-
-  glGenBuffers(1, &subset->vbo_xyz);
-  glGenBuffers(1, &subset->vbo_rgb);
-
-  //Location
-  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_xyz);
-  glBufferData(GL_ARRAY_BUFFER, subset->xyz.size()*sizeof(glm::vec3), &subset->xyz[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
-
-  //Color
-  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_rgb);
-  glBufferData(GL_ARRAY_BUFFER, subset->rgb.size()*sizeof(glm::vec4), &subset->rgb[0], GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
-  glEnableVertexAttribArray(1);
 
   //---------------------------
 }
@@ -238,8 +199,8 @@ void Scene::reset_cloud(Cloud* cloud){
 
     //Update
     this->update_subset_MinMax(subset);
-    this->update_subset_location(subset);
-    this->update_subset_color(subset);
+    this->update_buffer_location(subset);
+    this->update_buffer_color(subset);
 
     //Reset frame
     subset->frame.reset();
@@ -248,7 +209,7 @@ void Scene::reset_cloud(Cloud* cloud){
   cloud->ID_selected = get_subset(cloud, 0)->ID;
 
   //---------------------------
-  this->update_cloud_glyph(cloud);
+  this->update_glyph(cloud);
 }
 void Scene::reset_cloud_all(){
   //---------------------------
@@ -261,46 +222,58 @@ void Scene::reset_cloud_all(){
     }
   }
 
-  this->update_cloud_glyph(cloud_selected);
+  this->update_glyph(cloud_selected);
 
   //---------------------------
   console.AddLog("#", "Reset scene...");
 }
 
-//Updating - cloud
-void Scene::update_cloud_glyph(Cloud* cloud){
-  if(cloud == nullptr) return;
+//Update function
+void Scene::update_buffer_location(Object_* object){
   //---------------------------
 
-  this->update_cloud_MinMax(cloud);
-  objectManager->update_glyph_cloud(cloud);
-
-  //---------------------------
-}
-void Scene::update_cloud_IntensityToColor(Cloud* cloud){
-  //---------------------------
-
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-
-    vector<float>& Is = subset->I;
-    vector<vec4>& RGB = subset->rgb;
-
-    for(int i=0; i<Is.size(); i++){
-      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
+  if(object->obj_type == "cloud"){
+    Cloud* cloud = (Cloud*)object;
+    for(int i=0; i<cloud->subset.size(); i++){
+      Subset* subset = *next(cloud->subset.begin(), i);
+      gpuManager->update_buffer_location(subset);
     }
-
-    this->update_subset_color(subset);
+  }else if(object->obj_type == "subset"){
+    gpuManager->update_buffer_location(object);
   }
 
   //---------------------------
 }
-void Scene::update_cloud_oID(list<Cloud*>* list){
+void Scene::update_buffer_color(Object_* object){
   //---------------------------
 
-  for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
-    if(cloud->ID_order != i) cloud->ID_order = i;
+  if(object->obj_type == "cloud"){
+    Cloud* cloud = (Cloud*)object;
+    for(int i=0; i<cloud->subset.size(); i++){
+      Subset* subset = *next(cloud->subset.begin(), i);
+      gpuManager->update_buffer_color(subset);
+    }
+  }else if(object->obj_type == "subset"){
+    gpuManager->update_buffer_color(object);
+  }
+
+  //---------------------------
+}
+void Scene::update_glyph(Object_* object){
+  if(object == nullptr) return;
+  //---------------------------
+
+  if(object->obj_type == "cloud"){
+    /*Cloud* cloud = (Cloud*)object;
+    for(int i=0; i<cloud->subset.size(); i++){
+      Subset* subset = *next(cloud->subset.begin(), i);
+      gpuManager->update_buffer_color(subset);
+    }*/
+    this->update_cloud_MinMax((Cloud*)object);
+    objectManager->update_glyph_cloud((Cloud*)object);
+  }else if(object->obj_type == "subset"){
+    this->update_subset_MinMax((Subset*)object);
+    objectManager->update_glyph_subset((Subset*)object);
   }
 
   //---------------------------
@@ -324,61 +297,6 @@ void Scene::update_cloud_MinMax(Cloud* cloud){
   //---------------------------
   cloud->min = min_cloud;
   cloud->max = max_cloud;
-}
-void Scene::update_cloud_location(Cloud* cloud){
-  //---------------------------
-
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    this->update_subset_location(subset);
-  }
-
-  //---------------------------
-}
-void Scene::update_cloud_color(Cloud* cloud){
-  //---------------------------
-
-  for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    this->update_subset_color(subset);
-  }
-
-  //---------------------------
-}
-
-//Updating - subset
-void Scene::update_subset_glyphs(Subset* subset){
-  //---------------------------
-
-  this->update_subset_MinMax(subset);
-  objectManager->update_glyph_subset(subset);
-
-  //---------------------------
-}
-void Scene::update_subset(Subset* subset){
-  if(subset == nullptr)return;
-  //---------------------------
-
-  this->update_subset_MinMax(subset);
-  objectManager->update_glyph_subset(subset);
-
-  //---------------------------
-}
-void Scene::update_subset_IntensityToColor(Subset* subset){
-  //---------------------------
-
-  vector<float>& Is = subset->I;
-  vector<vec4>& RGB = subset->rgb;
-  RGB.clear();
-
-  for(int i=0; i<Is.size(); i++){
-    vec4 new_color = vec4(Is[i], Is[i], Is[i], 1.0f);
-    RGB.push_back(new_color);
-  }
-
-  this->update_subset_color(subset);
-
-  //---------------------------
 }
 void Scene::update_subset_MinMax(Subset* subset){
   vector<vec3>& XYZ = subset->xyz;
@@ -404,26 +322,55 @@ void Scene::update_subset_MinMax(Subset* subset){
   subset->max = max;
   subset->COM = centroid;
 }
-void Scene::update_subset_location(Subset* subset){
+void Scene::update_cloud_IntensityToColor(Cloud* cloud){
   //---------------------------
 
-  //Reactualise vertex position data
-  vector<vec3>& XYZ = subset->xyz;
-  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_xyz);
-  glBufferData(GL_ARRAY_BUFFER, XYZ.size() * sizeof(glm::vec3), &XYZ[0],  GL_DYNAMIC_DRAW);
+  for(int i=0; i<cloud->subset.size(); i++){
+    Subset* subset = *next(cloud->subset.begin(), i);
+
+    vector<float>& Is = subset->I;
+    vector<vec4>& RGB = subset->rgb;
+
+    for(int i=0; i<Is.size(); i++){
+      RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
+    }
+
+    this->update_buffer_color(subset);
+  }
 
   //---------------------------
 }
-void Scene::update_subset_color(Subset* subset){
+void Scene::update_cloud_oID(list<Cloud*>* list){
   //---------------------------
 
-  //Reactualise vertex color data
+  for(int i=0; i<list->size(); i++){
+    Cloud* cloud = *next(list->begin(),i);
+    if(cloud->ID_order != i) cloud->ID_order = i;
+  }
+
+  //---------------------------
+}
+void Scene::update_subset_IntensityToColor(Subset* subset){
+  //---------------------------
+
+  vector<float>& Is = subset->I;
   vector<vec4>& RGB = subset->rgb;
-  glBindBuffer(GL_ARRAY_BUFFER, subset->vbo_rgb);
-  glBufferData(GL_ARRAY_BUFFER, RGB.size() * sizeof(glm::vec4), &RGB[0],  GL_DYNAMIC_DRAW);
+  RGB.clear();
+
+  for(int i=0; i<Is.size(); i++){
+    vec4 new_color = vec4(Is[i], Is[i], Is[i], 1.0f);
+    RGB.push_back(new_color);
+  }
+
+  this->update_buffer_color(subset);
 
   //---------------------------
 }
+
+
+
+
+
 
 //Selection
 void Scene::selection_setCloud(int ID){
@@ -433,7 +380,7 @@ void Scene::selection_setCloud(int ID){
     Cloud* cloud = *next(list_cloud->begin(),i);
     if(cloud->ID_order == ID){
       cloud_selected = cloud;
-      this->update_cloud_glyph(cloud_selected);
+      this->update_glyph(cloud_selected);
     }
   }
 
@@ -443,7 +390,7 @@ void Scene::selection_setCloud(Cloud* cloud){
   //---------------------------
 
   cloud_selected = cloud;
-  this->update_cloud_glyph(cloud_selected);
+  this->update_glyph(cloud_selected);
 
   //---------------------------
 }
@@ -465,20 +412,17 @@ void Scene::selection_setSubset(Cloud* cloud, int ID){
   //---------------------------
 }
 void Scene::selection_setNext(){
+  if(list_cloud->size() == 0) return;
   //---------------------------
 
-  if(list_cloud->size() != 0){
-    if(cloud_selected->ID_order + 1 < list_cloud->size()){
-      cloud_selected = *next(list_cloud->begin(),cloud_selected->ID_order + 1);
-    }
-    else{
-      cloud_selected = *next(list_cloud->begin(),0);
-    }
-    this->update_cloud_MinMax(cloud_selected);
-    objectManager->update_glyph_cloud(cloud_selected);
-  }else{
-    objectManager->reset_scene_object();
+  if(cloud_selected->ID_order + 1 < list_cloud->size()){
+    cloud_selected = *next(list_cloud->begin(),cloud_selected->ID_order + 1);
   }
+  else{
+    cloud_selected = *next(list_cloud->begin(),0);
+  }
+  this->update_cloud_MinMax(cloud_selected);
+  this->update_glyph(cloud_selected);
 
   //---------------------------
 }
@@ -490,7 +434,7 @@ void Scene::selection_cloudByName(string name){
 
     if(cloud->name == name){
       cloud_selected = cloud;
-      this->update_cloud_glyph(cloud_selected);
+      this->update_glyph(cloud_selected);
     }
   }
 

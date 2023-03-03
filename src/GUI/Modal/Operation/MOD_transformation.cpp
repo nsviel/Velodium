@@ -134,7 +134,7 @@ void MOD_transformation::manual_transformation_mat(){
 
         sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
@@ -144,7 +144,7 @@ void MOD_transformation::manual_transformation_mat(){
 
         //------------------
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        //sceneManager->update_cloud_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
       }
     }
     if(ImGui::Button("Reverse from initial pos", ImVec2(150,0))){
@@ -157,7 +157,7 @@ void MOD_transformation::manual_transformation_mat(){
 
         sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
@@ -167,7 +167,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat2 = inverse(mat);
 
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        //sceneManager->update_cloud_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
       }
     }
 
@@ -190,7 +190,7 @@ void MOD_transformation::cloud_translation(){
       if(cloud != nullptr){
         vec3 translation = vec3(trans[0], trans[1], trans[2]);
         transformManager->make_translation(cloud, translation);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
         trans[0] = 0;
         trans[1] = 0;
         trans[2] = 0;
@@ -212,7 +212,7 @@ void MOD_transformation::cloud_rotation(){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(90, 0, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_subset_location(subset);
+        sceneManager->update_buffer_location(subset);
       }
     }
     ImGui::SameLine();
@@ -220,7 +220,7 @@ void MOD_transformation::cloud_rotation(){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(-90, 0, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_subset_location(subset);
+        sceneManager->update_buffer_location(subset);
       }
     }
     ImGui::SameLine();
@@ -228,7 +228,7 @@ void MOD_transformation::cloud_rotation(){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 90, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_subset_location(subset);
+        sceneManager->update_buffer_location(subset);
       }
     }
     ImGui::SameLine();
@@ -236,7 +236,7 @@ void MOD_transformation::cloud_rotation(){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, -90, 0));
         transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_subset_location(subset);
+        sceneManager->update_buffer_location(subset);
       }
     }
     ImGui::SameLine();
@@ -244,7 +244,7 @@ void MOD_transformation::cloud_rotation(){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, 90));
         transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_subset_location(subset);
+        sceneManager->update_buffer_location(subset);
       }
     }
     ImGui::SameLine();
@@ -252,7 +252,7 @@ void MOD_transformation::cloud_rotation(){
       if(cloud != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, -90));
         transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_subset_location(subset);
+        sceneManager->update_buffer_location(subset);
       }
     }
 
@@ -295,7 +295,7 @@ void MOD_transformation::elevation_ground(){
   if(ImGui::DragFloat("Manual setting", &Zpos, 0.01f)){
     if(cloud != nullptr){
       poseManager->make_elevation(cloud, Zpos);
-      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_buffer_location(cloud);
       ground = poseManager->make_soilDetermination(cloud);
     }
   }
@@ -329,13 +329,13 @@ void MOD_transformation::elevation_height(){
       for(int i=0;i<list_cloud->size();i++){
         Cloud* cloud = *next(list_cloud->begin(),i);
         poseManager->make_adjustPosToScanner(cloud, Z_scan);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     else{
       if(cloud != nullptr){
         poseManager->make_adjustPosToScanner(cloud, Z_scan);
-        sceneManager->update_cloud_location(cloud);
+        sceneManager->update_buffer_location(cloud);
         ground = poseManager->make_soilDetermination(cloud);
       }
     }
@@ -353,7 +353,7 @@ void MOD_transformation::elevation_redressment(){
   if(ImGui::Button("Plane fitting on selected points")){
     if(cloud != nullptr){
       poseManager->make_alignSelectionToGround(cloud);
-      sceneManager->update_cloud_location(cloud);
+      sceneManager->update_buffer_location(cloud);
     }
   }
 

@@ -83,7 +83,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 
   //Make slam on the current subset
   node_module->online(cloud, ID_subset);
-  sceneManager->update_subset_location(subset);
+  sceneManager->update_buffer_location(subset);
 
   //Make cleaning on the current subset
   if(with_filter_sphere){

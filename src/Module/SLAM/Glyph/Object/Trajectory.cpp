@@ -29,7 +29,7 @@ void Trajectory::create(){
   trajectory->draw_line_width = width;
   trajectory->is_visible = false;
   trajectory->draw_type_name = "line";
-  trajectory->permanent = true;
+  trajectory->is_permanent = true;
   trajectory->unicolor = color;
 
   //---------------------------

@@ -277,8 +277,8 @@ void Attribut::make_supressPoints(Subset* subset, vector<int>& idx){
   idx.clear();
 
   //---------------------------
-  sceneManager->update_subset_location(subset);
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_location(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Attribut::make_supressPoint(Subset* subset, int id){
   vector<vec3>& XYZ = subset->xyz;
@@ -326,8 +326,8 @@ void Attribut::make_supressPoint(Subset* subset, int id){
   subset->selected.clear();
 
   //---------------------------
-  sceneManager->update_subset_location(subset);
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_location(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Attribut::make_supressPoints(vector<vec3>& vec, vector<int>& idx){
   if(idx.size() == 0)return;
@@ -702,7 +702,7 @@ void Attribut::fct_convert255to2048(Subset* subset){
 
   //-------------------------
   sceneManager->update_subset_IntensityToColor(subset);
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Attribut::fct_convert2048to255(Subset* subset){
   static bool I_2048 = false;
@@ -715,7 +715,7 @@ void Attribut::fct_convert2048to255(Subset* subset){
 
   //-------------------------
   sceneManager->update_subset_IntensityToColor(subset);
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Attribut::fct_moins(){
   if(!sceneManager->get_is_list_empty()){
@@ -732,7 +732,7 @@ void Attribut::fct_moins(){
 
     //-------------------------
     sceneManager->update_subset_IntensityToColor(subset);
-    sceneManager->update_subset_color(subset);
+    sceneManager->update_buffer_color(subset);
   }
 }
 void Attribut::fct_IsRange(vec2 range){
@@ -753,7 +753,7 @@ void Attribut::fct_IsRange(vec2 range){
 
   //-------------------------
   sceneManager->update_subset_IntensityToColor(subset);
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 vec2 Attribut::get_IsRange(){
   Cloud* cloud = sceneManager->get_selected_cloud();

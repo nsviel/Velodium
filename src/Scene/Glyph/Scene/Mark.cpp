@@ -30,7 +30,7 @@ void Mark::create_selection_frame(){
   selection_frame->draw_type_name = "line";
   selection_frame->unicolor = selection_frame_color;
   selection_frame->is_visible = true;
-  selection_frame->permanent = true;
+  selection_frame->is_permanent = true;
 
   for(int i=0; i<8; i++){
     selection_frame->rgb.push_back(selection_frame_color);
@@ -48,7 +48,7 @@ Glyph* Mark::obj_pointsAtLocation(vector<vec3>& pos){
   ptAtLoc->draw_line_width = 1;
   ptAtLoc->is_visible = true;
   ptAtLoc->draw_type_name = "point";
-  ptAtLoc->permanent = false;
+  ptAtLoc->is_permanent = false;
 
   //Parameters
   vector<vec4>& RGB = ptAtLoc->rgb;
@@ -70,7 +70,7 @@ Glyph* Mark::obj_sphere_RGB(double r, int lats, int longs, vec3 pos, vec3 RGB_in
   sphere->draw_line_width = 1;
   sphere->is_visible = true;
   sphere->draw_type_name = "quad_strip";
-  sphere->permanent = false;
+  sphere->is_permanent = false;
 
   //Parameters
   vector<vec3>& XYZ = sphere->xyz;

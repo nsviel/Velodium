@@ -25,7 +25,7 @@ void Car::create_glyph(){
   glyph->draw_line_width = width;
   glyph->is_visible = false;
   glyph->draw_type_name = "triangle";
-  glyph->permanent = true;
+  glyph->is_permanent = true;
   glyph->unicolor = color;
 
   //Load car model

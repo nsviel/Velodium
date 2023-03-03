@@ -28,7 +28,7 @@ void Axis::create_axis_scene(){
   axis_scene->draw_line_width = 4;
   axis_scene->is_visible = true;
   axis_scene->draw_type_name = "line";
-  axis_scene->permanent = true;
+  axis_scene->is_permanent = true;
 
   //Parameters
   vector<vec3>& XYZ = axis_scene->xyz;
@@ -64,7 +64,7 @@ void Axis::create_axis_circle(float circleRadius){
   axis_circle->draw_line_width = 1;
   axis_circle->is_visible = false;
   axis_circle->draw_type_name = "line";
-  axis_circle->permanent = true;
+  axis_circle->is_permanent = true;
 
   //Parameters
   int nb_segm = 100;

@@ -425,7 +425,7 @@ void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
   }
 
   //---------------------------
-  sceneManager->update_subset_color(subset);
+  sceneManager->update_buffer_color(subset);
 }
 void Extraction::set_AABB_min(vec3 min_in){
   Cloud* cloud = sceneManager->get_selected_cloud();

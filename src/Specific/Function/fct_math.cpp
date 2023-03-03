@@ -379,12 +379,14 @@ float fct_min(float in1, float in2){
   //---------------------------
 }
 float fct_max(std::vector<float>& vec){
-  float max = vec[0];
   int size = vec.size();
+  if(size == 0) return 0;
   //---------------------------
 
-  for(int i=0; i<size; i++)
+  float max = vec[0];
+  for(int i=0; i<size; i++){
     if(max < vec[i]) max = vec[i];
+  }
 
   //---------------------------
   return max;

@@ -328,7 +328,7 @@ void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   //Update list cloud
   sceneManager->set_selected_cloud(cloud);
   sceneManager->update_cloud_oID(list_cloud);
-  sceneManager->update_cloud_glyph(cloud);
+  sceneManager->update_glyph(cloud);
 
   //Delete raw data
   for(int i=0; i<data_vec.size(); i++){
@@ -344,7 +344,7 @@ void Loader::load_insertIntoCloud(Data_file* data, Cloud* cloud){
   //---------------------------
 
   //Extract data and put in the engine
-  extractManager->extract_data_frame(cloud, data);
+  extractManager->extract_data(cloud, data);
   cloud->ID_onthefly++;
 
   //---------------------------

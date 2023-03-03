@@ -35,7 +35,7 @@ void Grid::create_grid(){
   grid->draw_line_width = 2;
   grid->is_visible = true;
   grid->draw_type_name = "line";
-  grid->permanent = true;
+  grid->is_permanent = true;
   grid->unicolor = grid_color;
 
   //Construct grid
@@ -54,7 +54,7 @@ void Grid::create_grid_sub(){
   grid_sub->draw_line_width = 2;
   grid_sub->is_visible = false;
   grid_sub->draw_type_name = "line";
-  grid_sub->permanent = true;
+  grid_sub->is_permanent = true;
 
   //Construct grid
   this->update_grid_sub(nb_cell);
@@ -70,7 +70,7 @@ void Grid::create_grid_plane(){
   grid_plane->draw_line_width = 1;
   grid_plane->is_visible = false;
   grid_plane->draw_type_name = "triangle";
-  grid_plane->permanent = true;
+  grid_plane->is_permanent = true;
 
   //Parameters
   vec3 color = vec3(0.15f, 0.15f, 0.15f);

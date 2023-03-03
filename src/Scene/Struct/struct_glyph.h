@@ -8,7 +8,9 @@ struct Glyph : public Object_
 {
   //---------------------------
 
-  bool permanent;
+  Glyph();
+
+  bool is_permanent;
   std::vector<glm::vec3> xyz_init;
 
   //---------------------------
