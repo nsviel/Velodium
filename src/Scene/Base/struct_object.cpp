@@ -16,7 +16,6 @@ Object_::Object_(){
   this->name = "";
   this->obj_type = "object";
   this->unicolor = glm::vec4(1.0f);
-  this->texture_ID = -1;
 
   this->is_visible = true;
   this->has_color = false;

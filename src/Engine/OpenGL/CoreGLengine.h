@@ -23,6 +23,7 @@ class GUI;
 class Viewport;
 class Renderer;
 class Configuration;
+class Engine;
 
 
 class CoreGLengine
@@ -69,6 +70,7 @@ private:
   Shader* shaderManager;
   Viewport* viewportManager;
   Configuration* configManager;
+  Engine* engineManager;
 
   float time_loop;
   bool loop_run;

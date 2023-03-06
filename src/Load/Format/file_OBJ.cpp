@@ -29,7 +29,7 @@ Data_file* file_OBJ::Loader(string path){
 
   // Fill output format with file data
   this->fill_data_file(data, vertex_vec);
-
+  
   //---------------------------
   return data;
 }

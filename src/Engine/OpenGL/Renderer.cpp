@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "GPU_transfert.h"
 
 #include "../Core/Dimension.h"
 #include "../Core/Configuration.h"
@@ -20,6 +21,7 @@ Renderer::Renderer(Dimension* dim){
 
   this->dimManager = dim;
   this->configManager = new Configuration();
+  this->gpuManager = new GPU_transfert();
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
@@ -107,40 +109,28 @@ void Renderer::init_create_fbo_2(){
   //---------------------------
 }
 void Renderer::init_create_canvas(){
+  this->canvas = new Object_();
   //---------------------------
 
   //Generic quad coordinates and UV
-  vector<vec2> canvas_xy;
-  canvas_xy.push_back(vec2(-1.0f,  1.0f));
-  canvas_xy.push_back(vec2(-1.0f,  -1.0f));
-  canvas_xy.push_back(vec2(1.0f,  -1.0f));
-  canvas_xy.push_back(vec2(-1.0f,  1.0f));
-  canvas_xy.push_back(vec2(1.0f,  -1.0f));
-  canvas_xy.push_back(vec2(1.0f,  1.0f));
+  canvas->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
+  canvas->xyz.push_back(vec3(-1.0f, -1.0f, 0.0f));
+  canvas->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
+  canvas->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
+  canvas->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
+  canvas->xyz.push_back(vec3(1.0f, 1.0f, 0.0f));
 
-  vector<vec2> canvas_uv;
-  canvas_uv.push_back(vec2(0.0f,  1.0f));
-  canvas_uv.push_back(vec2(0.0f,  0.0f));
-  canvas_uv.push_back(vec2(1.0f,  0.0f));
-  canvas_uv.push_back(vec2(0.0f,  1.0f));
-  canvas_uv.push_back(vec2(1.0f,  0.0f));
-  canvas_uv.push_back(vec2(1.0f,  1.0f));
+  canvas->uv.push_back(vec2(0.0f,  1.0f));
+  canvas->uv.push_back(vec2(0.0f,  0.0f));
+  canvas->uv.push_back(vec2(1.0f,  0.0f));
+  canvas->uv.push_back(vec2(0.0f,  1.0f));
+  canvas->uv.push_back(vec2(1.0f,  0.0f));
+  canvas->uv.push_back(vec2(1.0f,  1.0f));
 
-  //Insert canvas vertices and uv inside gpu
-  glGenVertexArrays(1, &canvas_vao);
-  glBindVertexArray(canvas_vao);
-  glGenBuffers(1, &canvas_vbo_xy);
-  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
-  glBufferData(GL_ARRAY_BUFFER, canvas_xy.size()*sizeof(glm::vec2), &canvas_xy[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-  glEnableVertexAttribArray(0);
-
-  GLuint canvas_vbo_uv;
-  glGenBuffers(1, &canvas_vbo_uv);
-  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_uv);
-  glBufferData(GL_ARRAY_BUFFER, canvas_uv.size()*sizeof(glm::vec2), &canvas_uv[0], GL_STATIC_DRAW);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
-  glEnableVertexAttribArray(2);
+  gpuManager->gen_vao(canvas);
+  gpuManager->bind_buffer_location(canvas);
+  gpuManager->bind_buffer_texture(canvas);
+  canvas->draw_type = GL_TRIANGLES;
 
   //---------------------------
 }
@@ -186,9 +176,7 @@ void Renderer::bind_canvas(){
   glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
 
   //Draw quad
-  glBindVertexArray(canvas_vao);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  gpuManager->draw_object(canvas);
 
   //---------------------------
 }
@@ -209,34 +197,39 @@ void Renderer::update_dim_texture(){
 void Renderer::update_dim_canvas(){
   //---------------------------
 
+  //Compute canvas coordinates
   vec2 gl_pos = dimManager->get_gl_pos();
   vec2 gl_dim = dimManager->get_gl_dim();
   vec2 win_dim = dimManager->get_win_dim();
 
-  vec2 tl, br, tr, bl;
+  vec3 tl, br, tr, bl;
   bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
   bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+  bl.z = 0.0f;
 
   br.x = 1;
   br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
+  br.z = 0.0f;
 
   tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
   tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+  tl.z = 0.0f;
 
   tr.x = 1;
   tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+  tr.z = 0.0f;
 
-  vector<vec2> canvas_xy;
-  canvas_xy.push_back(tl);
-  canvas_xy.push_back(bl);
-  canvas_xy.push_back(br);
+  //Update canvas location buffer
+  canvas->xyz.clear();
+  canvas->xyz.push_back(tl);
+  canvas->xyz.push_back(bl);
+  canvas->xyz.push_back(br);
 
-  canvas_xy.push_back(tl);
-  canvas_xy.push_back(br);
-  canvas_xy.push_back(tr);
+  canvas->xyz.push_back(tl);
+  canvas->xyz.push_back(br);
+  canvas->xyz.push_back(tr);
 
-  glBindBuffer(GL_ARRAY_BUFFER, canvas_vbo_xy);
-  glBufferData(GL_ARRAY_BUFFER, canvas_xy.size() * sizeof(glm::vec2), &canvas_xy[0],  GL_DYNAMIC_DRAW);
+  gpuManager->update_buffer_location(canvas);
 
   //---------------------------
 }

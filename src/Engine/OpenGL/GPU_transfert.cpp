@@ -71,8 +71,8 @@ void GPU_transfert::bind_buffer_texture(Object_* object){
   //---------------------------
 
   glBindVertexArray(object->vao);
-  glGenBuffers(1, &object->vbo_tex);
-  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_tex);
+  glGenBuffers(1, &object->vbo_uv);
+  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_uv);
   glBufferData(GL_ARRAY_BUFFER, object->uv.size()*sizeof(glm::vec2), &object->uv[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
   glEnableVertexAttribArray(2);
@@ -86,7 +86,7 @@ void GPU_transfert::unbind_object(Object_* object){
 
   glDeleteBuffers(1, &object->vbo_xyz);
   glDeleteBuffers(1, &object->vbo_rgb);
-  glDeleteBuffers(1, &object->vbo_tex);
+  glDeleteBuffers(1, &object->vbo_uv);
   glDeleteVertexArrays(1, &object->vao);
 
   //---------------------------
@@ -129,6 +129,8 @@ int GPU_transfert::bind_texture(unsigned char* tex_data, int w, int h, int nb){
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
   }else if(nb == 4){
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
+  }else{
+    std::cout<<"[error] gpu transfert nbchannel not taking into account"<<std::endl;
   }
   glGenerateMipmap(GL_TEXTURE_2D);
 

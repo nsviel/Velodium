@@ -77,13 +77,9 @@ void Node_engine::update(){
 void Node_engine::runtime(){
   //---------------------------
 
-  node_scene->runtime();
-  engineManager->runtime_scene();
-
   node_module->runtime();
   node_ope->runtime();
   node_interface->runtime();
-
 
   //---------------------------
 }

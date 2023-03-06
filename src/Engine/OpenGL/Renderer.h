@@ -5,6 +5,7 @@
 
 class Dimension;
 class Configuration;
+class GPU_transfert;
 
 
 class Renderer
@@ -40,6 +41,9 @@ public:
 private:
   Dimension* dimManager;
   Configuration* configManager;
+  GPU_transfert* gpuManager;
+
+  Object_* canvas;
 
   GLuint canvas_vao;
   GLuint canvas_vbo_xy;

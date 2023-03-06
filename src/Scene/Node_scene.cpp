@@ -38,10 +38,3 @@ void Node_scene::reset(){
 
   //---------------------------
 }
-void Node_scene::runtime(){
-  //---------------------------
-
-  //graphManager->draw_all();
-
-  //---------------------------
-}

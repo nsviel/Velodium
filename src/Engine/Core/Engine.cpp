@@ -37,40 +37,7 @@ Engine::Engine(Node_engine* engine){
 Engine::~Engine(){}
 
 //Program functions
-void Engine::runtime_scene(){
-  //---------------------------
-
-  //Runtime cloud
-  this->runtime_draw_cloud();
-
-  //Runtime glyph
-  this->runtime_draw_glyph();
-
-  //Runtime camera
-  this->runtime_camera();
-
-  //---------------------------
-}
-void Engine::runtime_draw_cloud(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-  //---------------------------
-
-  //By cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
-
-    //By subset
-    if(cloud->is_visible){
-      for(int j=0; j<cloud->subset.size(); j++){
-        Subset* subset = *next(cloud->subset.begin(), j);
-        this->draw_cloud(subset);
-      }
-    }
-  }
-
-  //---------------------------
-}
-void Engine::runtime_draw_glyph(){
+void Engine::draw_untextured_glyph(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
@@ -98,11 +65,12 @@ void Engine::runtime_draw_glyph(){
 
   //---------------------------
 }
-void Engine::runtime_camera(){
+void Engine::arcball_cam_lookat(){
   Cloud* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 
+  //Pour arcball camera view, center cam F to subset com
   if(subset != nullptr){
     vec3* cam_COM = cameraManager->get_cam_COM();
     *cam_COM = subset->COM;
@@ -111,26 +79,67 @@ void Engine::runtime_camera(){
   //---------------------------
 }
 
-//Subfunction
-void Engine::draw_cloud(Subset* subset){
+//Cloud drawing function
+void Engine::draw_untextured_cloud(){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  //---------------------------
+
+  //By cloud
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
+
+    //By subset
+    if(cloud->is_visible){
+      for(int j=0; j<cloud->subset.size(); j++){
+        Subset* subset = *next(cloud->subset.begin(), j);
+        this->draw_untextured_subset(subset);
+      }
+    }
+  }
+
+  //---------------------------
+}
+void Engine::draw_textured_cloud(){
+  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  //---------------------------
+
+  //By cloud
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
+
+    //By subset
+    if(cloud->is_visible){
+      for(int j=0; j<cloud->subset.size(); j++){
+        Subset* subset = *next(cloud->subset.begin(), j);
+        this->draw_textured_subset(subset);
+      }
+    }
+  }
+
+  //---------------------------
+}
+
+//Susbet drawing function
+void Engine::draw_untextured_subset(Subset* subset){
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
-  if(subset->is_visible){
-    // If any, activate attached texture
-    if(with_texture && subset->has_texture){
-      glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
-    }
+  if(subset->is_visible && subset->has_texture == false && with_texture){
+    gpuManager->draw_object(subset);
+  }
 
-    if(subset->is_visible){
-      gpuManager->draw_object(subset);
-    }
+  //---------------------------
+}
+void Engine::draw_textured_subset(Subset* subset){
+  bool with_texture = *texManager->get_with_texture();
+  //---------------------------
 
-    //Desactivate texture
-    if(with_texture && subset->has_texture){
-      glBindTexture(GL_TEXTURE_2D, 2);
-    }
+  if(subset->is_visible && subset->has_texture && with_texture){
+    glBindTexture(GL_TEXTURE_2D, subset->tex_ID[0]);
+
+    gpuManager->draw_object(subset);
+
+    glBindTexture(GL_TEXTURE_2D, 2);
   }
 
   //---------------------------

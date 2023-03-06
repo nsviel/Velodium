@@ -20,7 +20,7 @@ struct Object_{ //Cloud subset / part
   GLuint vbo_xyz;
   GLuint vbo_rgb;
   GLuint vbo_Nxyz;
-  GLuint vbo_tex;
+  GLuint vbo_uv;
 
   //Drawing
   int draw_type;
@@ -37,7 +37,6 @@ struct Object_{ //Cloud subset / part
   std::string path_save;
   std::string file_format;
   glm::vec4 unicolor;
-  int texture_ID;
 
   bool is_visible;
   bool has_color;
@@ -51,6 +50,7 @@ struct Object_{ //Cloud subset / part
   std::vector<glm::vec3> Nxyz;
   std::vector<glm::vec2> uv;
   std::vector<float> ts;
+  std::vector<int> tex_ID;
 
   //Pose
   glm::vec3 min;

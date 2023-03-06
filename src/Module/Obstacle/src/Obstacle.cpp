@@ -25,14 +25,13 @@ Obstacle::Obstacle(Module_obstacle* module){
   this->predManager = module->get_predManager();
   this->sceneManager = node_scene->get_sceneManager();
   this->objectManager = node_scene->get_objectManager();
-#include "../../../Scene/Node_scene.h"
   this->warningManager = module->get_warningManager();
   this->oobbManager = new OOBB();
   this->poseManager = new Pose();
 
   this->with_warning = false;
   this->with_prediction = true;
-//configManager->parse_json_b("module", "with_prediction")
+
   //---------------------------
 }
 Obstacle::~Obstacle(){}

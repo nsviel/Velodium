@@ -21,7 +21,6 @@ public:
   //Main functions
   void update();
   void reset();
-  void runtime();
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Scene* get_sceneManager(){return sceneManager;}

@@ -34,6 +34,11 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   this->configManager = node_engine->get_configManager();
   this->captureManager = node_interface->get_captureManager();
 
+  path_init_file.push_back("../media/engine/fastScene/buddha.pts");
+  path_init_file.push_back("../media/engine/fastScene/cube.obj");
+  path_init_file.push_back("../media/engine/fastScene/sphere.obj");
+  path_init_file.push_back("/home/aeter/Desktop/Point_cloud/obj/planet/planet.obj");
+
   //---------------------------
   this->update_configuration();
 }
@@ -55,6 +60,8 @@ void GUI_Initialization::update_configuration(){
   this->with_onthefly = false;
   this->cloud_scale = 1;
   this->lidar_model = "velodyne_vlp64";
+
+  //Open accepted formats
   this->accepted_format.push_back("pts");
   this->accepted_format.push_back("obj");
   this->accepted_format.push_back("ply");
@@ -66,6 +73,7 @@ void GUI_Initialization::update_configuration(){
   this->accepted_format.push_back("las");
   this->accepted_format.push_back("laz");
 
+  //Tree file pathes
   this->path_init_vec.push_back(configManager->parse_json_s("interface", "path_point_cloud_1"));
   this->path_init_vec.push_back(configManager->parse_json_s("interface", "path_point_cloud_2"));
   this->path_init_vec.push_back(configManager->parse_json_s("interface", "path_point_cloud_3"));
@@ -161,12 +169,7 @@ void GUI_Initialization::construst_tree(){
   //---------------------------
 
   //Construct init path nodes for specific cloud locations
-  vector<string> vec_path;
-  vec_path.push_back("../media/engine/fastScene/buddha.pts");
-  vec_path.push_back("../media/engine/fastScene/cube.obj");
-  vec_path.push_back("../media/engine/fastScene/sphere.obj");
-  vec_path.push_back("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply");
-  this->construct_node_root(vec_path, nodes_root);
+  this->construct_node_root(path_init_file, nodes_root);
 
   //Construct predefined init path nodes
   this->nodes_path_vec.clear();

@@ -212,7 +212,6 @@ void Extractor::init_subset_parameter(Subset* subset, Data_file* data, int ID){
   subset->has_intensity = is_intensity;
   subset->has_normal = is_normal;
   subset->has_timestamp = is_timestamp;
-  subset->has_texture = is_texture;
 
   gpuManager->gen_vao(subset);
 
@@ -277,7 +276,7 @@ void Extractor::compute_texture(Subset* subset, Data_file* data){
 
   string name = get_name_from_path(data->path_texture);
   int ID = texManager->load_texture(data->path_texture, name);
-  subset->texture_ID = ID;
+  subset->tex_ID.push_back(ID);
   subset->has_texture = true;
 
   //---------------------------

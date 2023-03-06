@@ -23,7 +23,7 @@ void Drawer::draw_mesh(Subset* subset, string draw_type_name){
     // If any, activate attached texture
     if(with_texture && subset->has_texture){
       glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_2D, subset->texture_ID);
+      glBindTexture(GL_TEXTURE_2D, subset->tex_ID[0]);
     }
 
     // Bind the glyph VAO and draw data

@@ -21,14 +21,17 @@ public:
   ~Engine();
 
 public:
-  //Program functions
-  void runtime_scene();
-  void runtime_draw_glyph();
-  void runtime_draw_cloud();
-  void runtime_camera();
+  //Misc drawing function
+  void draw_untextured_glyph();
+  void arcball_cam_lookat();
 
-  //Subfunctions
-  void draw_cloud(Subset* subset);
+  //Cloud drawing function
+  void draw_untextured_cloud();
+  void draw_textured_cloud();
+
+  //Subset drawing function
+  void draw_textured_subset(Subset* subset);
+  void draw_untextured_subset(Subset* subset);
 
 private:
   Node_engine* node_engine;

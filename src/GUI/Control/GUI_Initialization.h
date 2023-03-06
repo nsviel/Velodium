@@ -57,6 +57,7 @@ private:
   vector<vector<tree_file*>> nodes_path_vec;
   vector<string> accepted_format;
   vector<string> path_init_vec;
+  vector<string> path_init_file;
   bool with_remove_cloud;
   bool with_onthefly;
   int cloud_scale;

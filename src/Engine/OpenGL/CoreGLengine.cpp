@@ -157,6 +157,7 @@ void CoreGLengine::init_object(){
   this->cameraManager = node_engine->get_cameraManager();
   this->viewportManager = node_engine->get_viewportManager();
   this->renderManager = node_engine->get_renderManager();
+  this->engineManager = node_engine->get_engineManager();
 
   //---------------------------
 }
@@ -193,9 +194,23 @@ void CoreGLengine::loop_selection(){
 void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
+  //Camera & scene runtime
   viewportManager->viewport_update(0);
   cameraManager->input_cam_mouse();
   node_engine->runtime();
+
+  //Untextured cloud & glyph drawing
+  shaderManager->use_shader("screen");
+  cameraManager->update_shader();
+
+  engineManager->draw_untextured_cloud();
+  engineManager->draw_untextured_glyph();
+
+  //Textured cloud drawing
+  shaderManager->use_shader("texture");
+  cameraManager->update_shader();
+
+  engineManager->draw_textured_cloud();
 
   //---------------------------
 }
@@ -214,10 +229,6 @@ void CoreGLengine::loop_pass_screen(){
 
   //Set screen space FBO
   renderManager->bind_fbo_screen();
-
-  //Set active shader
-  shaderManager->use_shader("screen");
-  cameraManager->update_shader();
 
   //---------------------------
 }
