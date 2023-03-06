@@ -1,6 +1,7 @@
 #include "CoreGLengine.h"
-#include "Renderer.h"
 
+#include "../GPU/GPU_render.h"
+#include "../GPU/GPU_screenshot.h"
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"
 #include "../Shader/Base/Shader_object.h"
@@ -267,7 +268,8 @@ void CoreGLengine::loop_end(){
   //---------------------------
 
   //End, if needed, by a screenshot
-  renderManager->render_screenshot_online();
+  GPU_screenshot screenshotManager(dimManager);
+  screenshotManager.render_screenshot_online();
 
   //Window display stuff
   glfwSwapBuffers(window);

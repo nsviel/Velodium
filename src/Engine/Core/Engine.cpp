@@ -2,7 +2,7 @@
 
 #include "../Node_engine.h"
 #include "../OpenGL/Texture.h"
-#include "../OpenGL/GPU_transfert.h"
+#include "../GPU/GPU_data.h"
 #include "../Core/Configuration.h"
 #include "../Camera/Camera.h"
 
@@ -23,7 +23,7 @@ Engine::Engine(Node_engine* engine){
   Node_gui* node_gui = node_engine->get_node_gui();
   Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->gpuManager = new GPU_transfert();
+  this->gpuManager = new GPU_data();
   this->sceneManager = node_scene->get_sceneManager();
   this->glyphManager = node_scene->get_glyphManager();
   this->guiManager = node_gui->get_guiManager();
@@ -92,7 +92,11 @@ void Engine::draw_untextured_cloud(){
     if(cloud->is_visible){
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
-        this->draw_untextured_subset(subset);
+
+        if(subset->is_visible && subset->has_texture == false){
+          gpuManager->draw_object(subset);
+        }
+
       }
     }
   }
@@ -101,6 +105,7 @@ void Engine::draw_untextured_cloud(){
 }
 void Engine::draw_textured_cloud(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
   //By cloud
@@ -111,35 +116,14 @@ void Engine::draw_textured_cloud(){
     if(cloud->is_visible){
       for(int j=0; j<cloud->subset.size(); j++){
         Subset* subset = *next(cloud->subset.begin(), j);
-        this->draw_textured_subset(subset);
+
+        if(subset->is_visible && subset->has_texture && with_texture){
+          glBindTexture(GL_TEXTURE_2D, subset->tex_ID[0]);
+          gpuManager->draw_object(subset);
+        }
+
       }
     }
-  }
-
-  //---------------------------
-}
-
-//Susbet drawing function
-void Engine::draw_untextured_subset(Subset* subset){
-  bool with_texture = *texManager->get_with_texture();
-  //---------------------------
-
-  if(subset->is_visible && subset->has_texture == false && with_texture){
-    gpuManager->draw_object(subset);
-  }
-
-  //---------------------------
-}
-void Engine::draw_textured_subset(Subset* subset){
-  bool with_texture = *texManager->get_with_texture();
-  //---------------------------
-
-  if(subset->is_visible && subset->has_texture && with_texture){
-    glBindTexture(GL_TEXTURE_2D, subset->tex_ID[0]);
-
-    gpuManager->draw_object(subset);
-
-    glBindTexture(GL_TEXTURE_2D, 2);
   }
 
   //---------------------------

@@ -8,7 +8,7 @@
 
 class Node_scene;
 class Object;
-class GPU_transfert;
+class GPU_data;
 
 
 class Scene
@@ -53,7 +53,7 @@ public:
 
 private:
   Object* objectManager;
-  GPU_transfert* gpuManager;
+  GPU_data* gpuManager;
 
   list<Cloud*>* list_cloud;
   Cloud* cloud_selected;

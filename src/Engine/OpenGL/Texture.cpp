@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "GPU_transfert.h"
+#include "../GPU/GPU_data.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "image/stb_image.h"
@@ -9,7 +9,7 @@
 Texture::Texture(){
   //---------------------------
 
-  this->gpuManager = new GPU_transfert();
+  this->gpuManager = new GPU_data();
 
   this->list_texture = new list<Texture_obj*>;
   this->with_texture = true;

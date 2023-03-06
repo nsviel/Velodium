@@ -2,7 +2,7 @@
 
 #include "../Node_scene.h"
 #include "../Glyph/Object.h"
-#include "../../Engine/OpenGL/GPU_transfert.h"
+#include "../../Engine/GPU/GPU_data.h"
 
 
 //Constructor / Destructor
@@ -10,7 +10,7 @@ Scene::Scene(Node_scene* node){
   //---------------------------
 
   this->objectManager = node->get_objectManager();
-  this->gpuManager = new GPU_transfert();
+  this->gpuManager = new GPU_data();
 
   this->list_cloud = new list<Cloud*>;
   this->cloud_selected = nullptr;

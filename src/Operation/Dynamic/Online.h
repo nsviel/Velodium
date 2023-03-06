@@ -15,7 +15,7 @@ class Configuration;
 class Followup;
 class Interface;
 class Object;
-class Renderer;
+class GPU_render;
 class http_command;
 class Visibility;
 
@@ -50,7 +50,7 @@ private:
   Configuration* configManager;
   Followup* followManager;
   Object* objectManager;
-  Renderer* renderManager;
+  GPU_render* renderManager;
   http_command* httpManager;
   Visibility* visibilityManager;
 

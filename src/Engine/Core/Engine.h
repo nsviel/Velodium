@@ -10,7 +10,7 @@ class GUI;
 class Object;
 class Camera;
 class Texture;
-class GPU_transfert;
+class GPU_data;
 
 
 class Engine
@@ -29,10 +29,6 @@ public:
   void draw_untextured_cloud();
   void draw_textured_cloud();
 
-  //Subset drawing function
-  void draw_textured_subset(Subset* subset);
-  void draw_untextured_subset(Subset* subset);
-
 private:
   Node_engine* node_engine;
   Scene* sceneManager;
@@ -41,7 +37,7 @@ private:
   Object* objectManager;
   Camera* cameraManager;
   Texture* texManager;
-  GPU_transfert* gpuManager;
+  GPU_data* gpuManager;
 };
 
 #endif

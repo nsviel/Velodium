@@ -1,26 +1,26 @@
-#include "GPU_transfert.h"
+#include "../GPU/GPU_data.h"
 
 #include <GL/glew.h>
 
 
 //Constructor / Destructor
-GPU_transfert::GPU_transfert(){
+GPU_data::GPU_data(){
   //---------------------------
 
 
   //---------------------------
 }
-GPU_transfert::~GPU_transfert(){}
+GPU_data::~GPU_data(){}
 
 //Generic functions
-void GPU_transfert::gen_vao(Object_* object){
+void GPU_data::gen_vao(Object_* object){
   //---------------------------
 
   glGenVertexArrays(1, &object->vao);
 
   //---------------------------
 }
-void GPU_transfert::draw_object(Object_* object){
+void GPU_data::draw_object(Object_* object){
   //---------------------------
 
   glBindVertexArray(object->vao);
@@ -33,7 +33,7 @@ void GPU_transfert::draw_object(Object_* object){
 }
 
 //Buffer binding
-void GPU_transfert::bind_object_buffers(Object_* object){
+void GPU_data::bind_object_buffers(Object_* object){
   //---------------------------
 
   this->convert_draw_type_byName(object);
@@ -43,7 +43,7 @@ void GPU_transfert::bind_object_buffers(Object_* object){
 
   //---------------------------
 }
-void GPU_transfert::bind_buffer_location(Object_* object){
+void GPU_data::bind_buffer_location(Object_* object){
   //---------------------------
 
   glBindVertexArray(object->vao);
@@ -55,7 +55,7 @@ void GPU_transfert::bind_buffer_location(Object_* object){
 
   //---------------------------
 }
-void GPU_transfert::bind_buffer_color(Object_* object){
+void GPU_data::bind_buffer_color(Object_* object){
   //---------------------------
 
   glBindVertexArray(object->vao);
@@ -67,7 +67,7 @@ void GPU_transfert::bind_buffer_color(Object_* object){
 
   //---------------------------
 }
-void GPU_transfert::bind_buffer_texture(Object_* object){
+void GPU_data::bind_buffer_texture(Object_* object){
   //---------------------------
 
   glBindVertexArray(object->vao);
@@ -80,8 +80,24 @@ void GPU_transfert::bind_buffer_texture(Object_* object){
   //---------------------------
 }
 
-//Buffer unbinding
-void GPU_transfert::unbind_object(Object_* object){
+//Buffer update & unbind
+void GPU_data::update_buffer_location(Object_* object){
+  //---------------------------
+
+  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_xyz);
+  glBufferData(GL_ARRAY_BUFFER, object->xyz.size() * sizeof(glm::vec3), &object->xyz[0],  GL_DYNAMIC_DRAW);
+
+  //---------------------------
+}
+void GPU_data::update_buffer_color(Object_* object){
+  //---------------------------
+
+  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_rgb);
+  glBufferData(GL_ARRAY_BUFFER, object->rgb.size() * sizeof(glm::vec4), &object->rgb[0],  GL_DYNAMIC_DRAW);
+
+  //---------------------------
+}
+void GPU_data::unbind_object(Object_* object){
   //---------------------------
 
   glDeleteBuffers(1, &object->vbo_xyz);
@@ -92,26 +108,8 @@ void GPU_transfert::unbind_object(Object_* object){
   //---------------------------
 }
 
-//Buffer update
-void GPU_transfert::update_buffer_location(Object_* object){
-  //---------------------------
-
-  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_xyz);
-  glBufferData(GL_ARRAY_BUFFER, object->xyz.size() * sizeof(glm::vec3), &object->xyz[0],  GL_DYNAMIC_DRAW);
-
-  //---------------------------
-}
-void GPU_transfert::update_buffer_color(Object_* object){
-  //---------------------------
-
-  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_rgb);
-  glBufferData(GL_ARRAY_BUFFER, object->rgb.size() * sizeof(glm::vec4), &object->rgb[0],  GL_DYNAMIC_DRAW);
-
-  //---------------------------
-}
-
 //Misc functions
-int GPU_transfert::bind_texture(unsigned char* tex_data, int w, int h, int nb){
+int GPU_data::bind_texture(unsigned char* tex_data, int w, int h, int nb){
   //---------------------------
 
   GLuint tex_ID;
@@ -137,7 +135,7 @@ int GPU_transfert::bind_texture(unsigned char* tex_data, int w, int h, int nb){
   //---------------------------
   return tex_ID;
 }
-void GPU_transfert::convert_draw_type_byName(Object_* object){
+void GPU_data::convert_draw_type_byName(Object_* object){
   //---------------------------
 
   if(object->draw_type_name == "point"){

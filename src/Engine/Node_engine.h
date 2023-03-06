@@ -13,7 +13,7 @@ class Node_interface;
 class Configuration;
 class Camera;
 class Shader;
-class Renderer;
+class GPU_render;
 class Viewport;
 class Dimension;
 class Engine;
@@ -21,7 +21,6 @@ class CoreGLengine;
 class Followup;
 class Texture;
 class Light;
-class Drawer;
 
 
 class Node_engine : public Node
@@ -49,14 +48,13 @@ public:
   inline Dimension* get_dimManager(){return dimManager;}
   inline Camera* get_cameraManager(){return cameraManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
-  inline Renderer* get_renderManager(){return renderManager;}
+  inline GPU_render* get_renderManager(){return renderManager;}
   inline Viewport* get_viewportManager(){return viewportManager;}
   inline Engine* get_engineManager(){return engineManager;}
   inline CoreGLengine* get_glManager(){return glManager;}
   inline Followup* get_followManager(){return followManager;}
   inline Texture* get_texManager(){return texManager;}
   inline Light* get_lightManager(){return lightManager;}
-  inline Drawer* get_drawManager(){return drawManager;}
 
 private:
   Node_operation* node_ope;
@@ -72,12 +70,11 @@ private:
   Configuration* configManager;
   Camera* cameraManager;
   Shader* shaderManager;
-  Renderer* renderManager;
+  GPU_render* renderManager;
   Viewport* viewportManager;
   Dimension* dimManager;
   Engine* engineManager;
   Light* lightManager;
-  Drawer* drawManager;
 };
 
 #endif

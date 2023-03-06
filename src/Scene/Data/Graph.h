@@ -3,7 +3,7 @@
 
 #include "../../common.h"
 
-class GPU_transfert;
+class GPU_data;
 class Node_scene;
 class Scene;
 

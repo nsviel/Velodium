@@ -8,7 +8,7 @@
 #include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Texture.h"
-#include "../../Engine/OpenGL/GPU_transfert.h"
+#include "../../Engine/GPU/GPU_data.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/color.h"
 #include "../../Specific/File/Directory.h"
@@ -24,7 +24,7 @@ Extractor::Extractor(Node_load* node_load){
   Node_engine* node_engine = node_load->get_node_engine();
   Node_scene* node_scene = node_engine->get_node_scene();
 
-  this->gpuManager = new GPU_transfert();
+  this->gpuManager = new GPU_data();
 
   this->configManager = node_engine->get_configManager();
   this->sceneManager = node_scene->get_sceneManager();

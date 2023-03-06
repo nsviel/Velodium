@@ -4,9 +4,8 @@
 #include "Core/Dimension.h"
 #include "Core/Configuration.h"
 
-#include "OpenGL/Drawer.h"
 #include "OpenGL/CoreGLengine.h"
-#include "OpenGL/Renderer.h"
+#include "GPU/GPU_render.h"
 #include "OpenGL/Texture.h"
 #include "OpenGL/Light.h"
 #include "Shader/Shader.h"
@@ -36,9 +35,8 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->viewportManager = new Viewport(dimManager);
   this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
-  this->renderManager = new Renderer(dimManager);
+  this->renderManager = new GPU_render(dimManager);
   this->texManager = new Texture();
-  this->drawManager = new Drawer(this);
 
   this->node_load = new Node_load(this);
   this->node_ope = new Node_operation(this);

@@ -11,7 +11,7 @@ class Scene;
 class Object;
 class Configuration;
 class Texture;
-class GPU_transfert;
+class GPU_data;
 
 
 class Extractor
@@ -44,7 +44,7 @@ private:
   Object* objectManager;
   Configuration* configManager;
   Texture* texManager;
-  GPU_transfert* gpuManager;
+  GPU_data* gpuManager;
 
   int ID;
   vec4 color_rdm;

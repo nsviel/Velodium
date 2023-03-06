@@ -5,14 +5,14 @@
 
 #include "../../Load/Format/file_PTS.h"
 #include "../../Operation/Transformation/Transformation.h"
-#include "../../Engine/OpenGL/GPU_transfert.h"
+#include "../../Engine/GPU/GPU_data.h"
 
 
 //Constructor / Destructor
 Glyphs::Glyphs(Node_scene* node){
   //---------------------------
 
-  this->gpuManager = new GPU_transfert();
+  this->gpuManager = new GPU_data();
 
   this->list_glyph = new list<Glyph*>;
   this->ID_glyph = 0;

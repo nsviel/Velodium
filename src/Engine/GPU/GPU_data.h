@@ -1,14 +1,14 @@
-#ifndef GPU_TRANSFERT_H
-#define GPU_TRANSFERT_H
+#ifndef GPU_DATA_H
+#define GPU_DATA_H
 
 #include "../../common.h"
 
 
-class GPU_transfert
+class GPU_data
 {
 public:
-  GPU_transfert();
-  ~GPU_transfert();
+  GPU_data();
+  ~GPU_data();
 
 public:
   //Generic function
@@ -21,12 +21,10 @@ public:
   void bind_buffer_color(Object_* object);
   void bind_buffer_texture(Object_* object);
 
-  //Buffer unbinding
-  void unbind_object(Object_* object);
-
-  //Buffer update
+  //Buffer update & unbind
   void update_buffer_location(Object_* object);
   void update_buffer_color(Object_* object);
+  void unbind_object(Object_* object);
 
   //Misc function
   int bind_texture(unsigned char* tex_data, int w, int h, int nb);

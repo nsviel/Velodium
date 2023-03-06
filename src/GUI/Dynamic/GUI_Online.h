@@ -16,7 +16,7 @@ class GUI_Player;
 class Followup;
 class Player;
 class Recorder;
-class Renderer;
+class GPU_render;
 class Color;
 class Configuration;
 
@@ -57,7 +57,7 @@ private:
   GUI_Color* gui_color;
   GUI_Player* gui_player;
   Recorder* recordManager;
-  Renderer* renderManager;
+  GPU_render* renderManager;
   Configuration* configManager;
   Color* colorManager;
   Player* playerManager;

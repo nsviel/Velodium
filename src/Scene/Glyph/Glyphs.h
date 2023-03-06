@@ -4,7 +4,7 @@
 #include "../../common.h"
 
 class Node_scene;
-class GPU_transfert;
+class GPU_data;
 
 
 class Glyphs
@@ -36,7 +36,7 @@ public:
   inline list<Glyph*>* get_list_glyph(){return list_glyph;}
 
 private:
-  GPU_transfert* gpuManager;
+  GPU_data* gpuManager;
 
   list<Glyph*>* list_glyph;
   int ID_glyph;

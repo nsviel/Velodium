@@ -13,7 +13,7 @@
 #include "../../Scene/Glyph/Object.h"
 #include "../../Scene/Glyph/Scene/Mark.h"
 #include "../../Engine/Camera/Camera.h"
-#include "../../Engine/OpenGL/Renderer.h"
+#include "../../Engine/GPU/GPU_render.h"
 #include "../../Engine/Core/Dimension.h"
 #include "../../Specific/Function/fct_math.h"
 
