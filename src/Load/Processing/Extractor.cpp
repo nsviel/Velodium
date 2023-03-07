@@ -60,7 +60,7 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
     objectManager->create_glyph_subset(subset);
 
     //Set parametrization
-    gpuManager->bind_object_buffers(subset);
+    gpuManager->gen_object_buffers(subset);
     this->define_visibility(subset, i);
     this->define_buffer_init(cloud, subset);
     this->compute_texture(subset, data[i]);
@@ -82,7 +82,7 @@ Subset* Extractor::extract_data(Data_file& data){
 
   //Set parametrization
   objectManager->create_glyph_subset(subset);
-  gpuManager->bind_object_buffers(subset);
+  gpuManager->gen_object_buffers(subset);
 
   //---------------------------
   return subset;
@@ -99,7 +99,7 @@ void Extractor::extract_data(Cloud* cloud, Data_file* data){
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
   this->define_buffer_init(cloud, subset);
-  gpuManager->bind_object_buffers(subset);
+  gpuManager->gen_object_buffers(subset);
 
   //Update cloud stats
   cloud->nb_subset++;

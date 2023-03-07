@@ -100,8 +100,8 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
   //---------------------------
 
   gpuManager->gen_vao(glyph);
-  gpuManager->bind_buffer_location(glyph);
-  gpuManager->bind_buffer_color(glyph);
+  gpuManager->gen_buffer_location(glyph);
+  gpuManager->gen_buffer_color(glyph);
   gpuManager->convert_draw_type_byName(glyph);
 
   //ID

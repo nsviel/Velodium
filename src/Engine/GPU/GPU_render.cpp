@@ -122,8 +122,8 @@ void GPU_render::init_create_canvas(){
   canvas->uv.push_back(vec2(1.0f,  1.0f));
 
   gpuManager->gen_vao(canvas);
-  gpuManager->bind_buffer_location(canvas);
-  gpuManager->bind_buffer_uvmapping(canvas);
+  gpuManager->gen_buffer_location(canvas);
+  gpuManager->gen_buffer_uv(canvas);
   canvas->draw_type = GL_TRIANGLES;
 
   //---------------------------
