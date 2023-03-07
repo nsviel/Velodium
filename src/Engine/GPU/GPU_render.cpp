@@ -29,76 +29,98 @@ GPU_render::~GPU_render(){
   //---------------------------
 
   delete configManager;
+  this->delete_fbo_all();
 
-  glDeleteFramebuffers(1, &fbo_1_ID);
-  glDeleteFramebuffers(1, &fbo_2_ID);
+  //---------------------------
+}
+
+//Framebuffer generation stuf
+void GPU_render::gen_fbo(FBO* fbo){
+  //---------------------------
+
+  glGenFramebuffers(1, &fbo->ID_fbo);
+
+  //---------------------------
+}
+void GPU_render::gen_fbo_tex_color(FBO* fbo){
+  vec2 dim = dimManager->get_gl_dim();
+  //---------------------------
+
+  //Bind fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
+
+  //Create texture
+  glGenTextures(1, &fbo->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_color);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo->ID_tex_color, 0);
+
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //---------------------------
+}
+void GPU_render::gen_fbo_tex_color_multisample(FBO* fbo){
+  vec2 dim = dimManager->get_gl_dim();
+  //---------------------------
+
+  //Bind fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
+
+  //Create texture
+  glGenTextures(1, &fbo->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo->ID_tex_color);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, dim.x, dim.y, false);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo->ID_tex_color, 0);
+
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //---------------------------
+}
+void GPU_render::gen_fbo_tex_depth(FBO* fbo){
+  vec2 dim = dimManager->get_gl_dim();
+  //---------------------------
+
+  //Bind fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
+
+  //Creat texture
+  glGenTextures(1, &fbo->ID_tex_depth);
+  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_depth);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo->ID_tex_depth, 0);
+
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
 }
 
 //Init
-void GPU_render::init_create_fbo_MSAA(){
-  vec2 gl_dim = dimManager->get_gl_dim();
+void GPU_render::init_create_fbo(){
+  nb_fbo = 3;
   //---------------------------
 
-  glGenTextures(1, &fbo_MSAA_ID);
-  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_MSAA_ID);
-  glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 2, GL_RGB, gl_dim.x, gl_dim.y, GL_TRUE);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_MSAA_ID, 0);
-
-  //---------------------------
-}
-void GPU_render::init_create_fbo_1(){
-  vec2 gl_dim = dimManager->get_gl_dim();
-  //---------------------------
-
-  //Create framebuffer 1
-  glGenFramebuffers(1, &fbo_1_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
-
-  //Create (allocate memory) color texture and bind it to the framebuffer
-  glGenTextures(1, &fbo_1_tex_color_ID);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gl_dim.x, gl_dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_1_tex_color_ID, 0);
-
-  //Create depth texture and bind it to the framebuffer
-  glGenTextures(1, &fbo_1_tex_depth_ID);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo_1_tex_depth_ID, 0);
-
-  //Debind framebuffer
-  glBindTexture(GL_TEXTURE_2D ,0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //---------------------------
-}
-void GPU_render::init_create_fbo_2(){
-  vec2 gl_dim = dimManager->get_gl_dim();
-  //---------------------------
-
-  //Create framebuffer 2
-  glGenTextures(1, &fbo_2_tex_color_ID);
-  glGenFramebuffers(1, &fbo_2_ID);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
-
-  //Create color texture and bind it to the framebuffer
-  glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_color_ID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, gl_dim.x, gl_dim.y, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, fbo_2_tex_color_ID, 0);
-
-  //Debind framebuffer
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  for(int i=0; i<nb_fbo; i++){
+    FBO* fbo = new FBO();
+    fbo->name = "fbo_" + to_string(i);
+    this->gen_fbo(fbo);
+    this->gen_fbo_tex_color(fbo);
+    this->gen_fbo_tex_depth(fbo);
+    this->fbo_vec.push_back(fbo);
+  }
 
   //---------------------------
 }
@@ -131,10 +153,17 @@ void GPU_render::init_create_canvas(){
 
 //Render
 void GPU_render::bind_fbo_screen(){
+  FBO* fbo_1 = fbo_vec[0];
   //---------------------------
 
+  //Binf first fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1->ID_fbo);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_depth);
+
   //Clear framebuffer and enable depth
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_1_ID);
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
@@ -143,31 +172,54 @@ void GPU_render::bind_fbo_screen(){
   //---------------------------
 }
 void GPU_render::bind_fbo_render(){
+  FBO* fbo_1 = fbo_vec[0];
+  FBO* fbo_2 = fbo_vec[1];
   //---------------------------
 
   //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2_ID);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2->ID_fbo);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_depth);
+
+  //Disable depth test
   glDisable(GL_DEPTH_TEST);
 
-  //Bind color and depth textures from fbo 1
+  //---------------------------
+}
+void GPU_render::truc(){
+  FBO* fbo_2 = fbo_vec[1];
+  FBO* fbo_3 = fbo_vec[2];
+  //---------------------------
+
+  //Bind fbo 2
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_3->ID_fbo);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_2->ID_tex_color);
+
+  //Clear old screen
+  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  //Disable depth test
+  glDisable(GL_DEPTH_TEST);
 
   //---------------------------
 }
 void GPU_render::bind_canvas(){
+  FBO* fbo_1 = fbo_vec[0];
+  FBO* fbo_2 = fbo_vec[1];
+  FBO* fbo_3 = fbo_vec[2];
   //---------------------------
+
+  //LE PROBLEME CEST QUE IL FAUT REDESSINER LE CANVAS APRES CHAQUE POST PROCESSING effect
+  // ESSAYER DE D2M2LER LE CANVAS DE BIND CANVAS !!!!
 
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  // Current texture
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
 
   //Draw quad
   gpuManager->draw_object(canvas);
@@ -178,12 +230,13 @@ void GPU_render::bind_canvas(){
 //Update dimensions
 void GPU_render::update_dim_texture(){
   vec2 gl_dim = dimManager->get_gl_dim();
+  FBO* fbo_1 = fbo_vec[0];
   //---------------------------
 
   //Update texture dimensions
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_color_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gl_dim.x, gl_dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glBindTexture(GL_TEXTURE_2D, fbo_1_tex_depth_ID);
+  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_depth);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gl_dim.x, gl_dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
   //---------------------------
@@ -224,6 +277,17 @@ void GPU_render::update_dim_canvas(){
   canvas->xyz.push_back(tr);
 
   gpuManager->update_buffer_location(canvas);
+
+  //---------------------------
+}
+void GPU_render::delete_fbo_all(){
+  int nb = fbo_vec.size();
+  //---------------------------
+
+  for(int i=0; i<nb; i++){
+    glDeleteFramebuffers(1, &fbo_vec[i]->ID_fbo);
+    delete fbo_vec[i];
+  }
 
   //---------------------------
 }

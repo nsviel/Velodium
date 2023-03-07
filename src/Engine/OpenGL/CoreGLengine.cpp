@@ -165,8 +165,7 @@ void CoreGLengine::init_object(){
 void CoreGLengine::init_rendering(){
   //---------------------------
 
-  renderManager->init_create_fbo_1();
-  renderManager->init_create_fbo_2();
+  renderManager->init_create_fbo();
   renderManager->init_create_canvas();
   shaderManager->init_shader_objects();
 
@@ -236,12 +235,15 @@ void CoreGLengine::loop_pass_screen(){
 void CoreGLengine::loop_pass_edl(){
   //---------------------------
 
+  //Set active shader
+  shaderManager->use_shader("edl");
+  
   //Framebuffer pass 2
   renderManager->bind_fbo_render();
 
-  //Set active shader
-  shaderManager->use_shader("edl");
 
+
+  //renderManager->truc();
 
   //shaderManager->use_shader("inversion");
 

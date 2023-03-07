@@ -32,7 +32,7 @@ int Texture::load_texture(string path, string name){
     return -1;
   }
 
-  int tex_ID = gpuManager->bind_texture(tex_data, tex_w, tex_h, tex_nb_channel);
+  int tex_ID = gpuManager->gen_texture(tex_data, tex_w, tex_h, tex_nb_channel);
 
   //Realease loaded texture
   stbi_image_free(tex_data);
