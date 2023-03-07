@@ -48,7 +48,7 @@ void MOD_texture::texture_operation(){
 
   //Apply texture on selected subset
   if(ImGui::Button("Apply texture", ImVec2(item_width, 0))){
-    texManager->apply_texture(subset, "");
+
   }
 
   //---------------------------

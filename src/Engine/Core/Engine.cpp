@@ -118,7 +118,7 @@ void Engine::draw_textured_cloud(){
         Subset* subset = *next(cloud->subset.begin(), j);
 
         if(subset->is_visible && subset->has_texture && with_texture){
-          glBindTexture(GL_TEXTURE_2D, subset->tex_ID[0]);
+          gpuManager->bind_texture(subset->tex_ID[0]);
           gpuManager->draw_object(subset);
         }
 

@@ -13,7 +13,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/Camera/Followup.h"
-#include "../../Engine/GPU/GPU_render.h"
+#include "../../Engine/GPU/GPU_screenshot.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 
@@ -42,7 +42,7 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
   this->sceneManager = node_scene->get_sceneManager();
   this->followManager = node_engine->get_followManager();
   this->recordManager = node_interface->get_recordManager();
-  this->renderManager = node_engine->get_renderManager();
+  this->screenshotManager = node_engine->get_screenshotManager();
   this->colorManager = node_ope->get_colorManager();
   this->configManager = node_engine->get_configManager();
   this->playerManager = node_ope->get_playerManager();
@@ -267,7 +267,7 @@ void GUI_Online::state_time(){
 
   bool with_save_image = *recordManager->get_with_save_frame();
   if(with_save_image){
-    float time_screenshot = renderManager->get_time_screenshot();
+    float time_screenshot = screenshotManager->get_time_screenshot();
     ImGui::Text("Save image");
     ImGui::SameLine();
     ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_screenshot);

@@ -37,7 +37,7 @@ void GPU_data::bind_object_buffers(Object_* object){
   //---------------------------
 
   this->convert_draw_type_byName(object);
-  this->bind_buffer_texture(object);
+  this->bind_buffer_uvmapping(object);
   this->bind_buffer_location(object);
   this->bind_buffer_color(object);
 
@@ -67,7 +67,7 @@ void GPU_data::bind_buffer_color(Object_* object){
 
   //---------------------------
 }
-void GPU_data::bind_buffer_texture(Object_* object){
+void GPU_data::bind_buffer_uvmapping(Object_* object){
   //---------------------------
 
   glBindVertexArray(object->vao);
@@ -76,6 +76,13 @@ void GPU_data::bind_buffer_texture(Object_* object){
   glBufferData(GL_ARRAY_BUFFER, object->uv.size()*sizeof(glm::vec2), &object->uv[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
   glEnableVertexAttribArray(2);
+
+  //---------------------------
+}
+void GPU_data::bind_texture(int ID){
+  //---------------------------
+
+  glBindTexture(GL_TEXTURE_2D, ID);
 
   //---------------------------
 }

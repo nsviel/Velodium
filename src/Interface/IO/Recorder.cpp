@@ -7,6 +7,7 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Engine/GPU/GPU_render.h"
+#include "../../Engine/GPU/GPU_screenshot.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Load/Node_load.h"
@@ -28,6 +29,7 @@ Recorder::Recorder(Node_interface* node){
   this->renderManager = node_engine->get_renderManager();
   this->saverManager = node_load->get_saverManager();
   this->sceneManager = node_scene->get_sceneManager();
+  this->screenshotManager = node_engine->get_screenshotManager();
 
   //---------------------------
   this->update_configuration();
@@ -108,8 +110,8 @@ void Recorder::save_image_unique(){
 
   //Put screenshot flag on
   string path = path_image + "image";
-  *renderManager->get_save_path() = path;
-  *renderManager->get_is_screenshot() = true;
+  *screenshotManager->get_save_path() = path;
+  *screenshotManager->get_is_screenshot() = true;
 
   //---------------------------
 }
@@ -118,8 +120,8 @@ void Recorder::save_image_multiple(){
 
   //Put screenshot flag on
   string path = path_image + "image_" + to_string(save_image_ID);
-  *renderManager->get_save_path() = path;
-  *renderManager->get_is_screenshot() = true;
+  *screenshotManager->get_save_path() = path;
+  *screenshotManager->get_is_screenshot() = true;
   save_image_ID++;
 
   //Keep only a certain number of image

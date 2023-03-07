@@ -30,13 +30,12 @@ public:
 public:
   //Texture management
   int load_texture(string filePath, string name);
-  void apply_texture(Subset* subset, string tex_path);
 
   inline bool* get_with_texture(){return &with_texture;}
 
 private:
   GPU_data* gpuManager;
-  
+
   list<Texture_obj*>* list_texture;
   unsigned int cubemapTexture;
   GLuint ID;

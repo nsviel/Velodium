@@ -14,6 +14,7 @@ class Configuration;
 class Camera;
 class Shader;
 class GPU_render;
+class GPU_screenshot;
 class Viewport;
 class Dimension;
 class Engine;
@@ -55,6 +56,7 @@ public:
   inline Followup* get_followManager(){return followManager;}
   inline Texture* get_texManager(){return texManager;}
   inline Light* get_lightManager(){return lightManager;}
+  inline GPU_screenshot* get_screenshotManager(){return screenshotManager;}
 
 private:
   Node_operation* node_ope;
@@ -71,6 +73,7 @@ private:
   Camera* cameraManager;
   Shader* shaderManager;
   GPU_render* renderManager;
+  GPU_screenshot* screenshotManager;
   Viewport* viewportManager;
   Dimension* dimManager;
   Engine* engineManager;

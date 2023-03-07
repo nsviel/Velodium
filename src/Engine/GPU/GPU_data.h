@@ -19,7 +19,8 @@ public:
   void bind_object_buffers(Object_* object);
   void bind_buffer_location(Object_* object);
   void bind_buffer_color(Object_* object);
-  void bind_buffer_texture(Object_* object);
+  void bind_buffer_uvmapping(Object_* object);
+  void bind_texture(int ID);
 
   //Buffer update & unbind
   void update_buffer_location(Object_* object);

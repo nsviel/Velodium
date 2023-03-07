@@ -44,6 +44,7 @@ void Shader_edl::setup_shader(Shader_object* shader){
   shader->setFloat("EDL_RADIUS", edl_radius);
   shader->setInt("EDL_ON", with_edl);
 
+  //A AUTOMATISER ICI !!!!
   shader->setInt("tex_color", 0);
   shader->setInt("tex_depth", 1);
 

@@ -49,12 +49,3 @@ int Texture::load_texture(string path, string name){
   //---------------------------
   return tex_ID;
 }
-void Texture::apply_texture(Subset* subset, string tex_path){
-  //---------------------------
-
-  this->load_texture(tex_path, "texture");
-  glBindTexture(GL_TEXTURE_2D, subset->tex_ID[0]);
-
-
-  //---------------------------
-}
