@@ -5,7 +5,7 @@
 #include "Core/Dimension.h"
 
 #include "OpenGL/CoreGLengine.h"
-#include "GPU/GPU_render.h"
+#include "GPU/GPU_rendering.h"
 #include "GPU/GPU_screenshot.h"
 #include "OpenGL/Texture.h"
 #include "OpenGL/Light.h"
@@ -36,7 +36,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
   this->screenshotManager = new GPU_screenshot(this);
-  this->renderManager = new GPU_render(this);
+  this->renderManager = new GPU_rendering(this);
   this->texManager = new Texture();
 
   this->node_load = new Node_load(this);

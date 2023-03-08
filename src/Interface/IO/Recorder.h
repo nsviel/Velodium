@@ -10,7 +10,7 @@ class Node_interface;
 class Node_engine;
 class Node_operation;
 
-class GPU_render;
+class GPU_rendering;
 class GPU_screenshot;
 class Configuration;
 class Saver;
@@ -59,7 +59,7 @@ public:
 
 private:
   Node_interface* node_interface;
-  GPU_render* renderManager;
+  GPU_rendering* renderManager;
   GPU_screenshot* screenshotManager;
   Configuration* configManager;
   Saver* saverManager;

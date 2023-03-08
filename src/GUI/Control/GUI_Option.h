@@ -12,7 +12,7 @@ class Object;
 class Color;
 class Heatmap;
 class Transformation;
-class GPU_render;
+class GPU_rendering;
 class Configuration;
 class Engine;
 class Texture;
@@ -49,7 +49,7 @@ private:
   Object* objectManager;
   Heatmap* heatmapManager;
   Pather* pathManager;
-  GPU_render* renderManager;
+  GPU_rendering* renderManager;
   Engine* engineManager;
   Texture* texManager;
 

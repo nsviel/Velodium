@@ -6,7 +6,7 @@
 #include "../../Specific/File/Zenity.h"
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Engine/GPU/GPU_render.h"
+#include "../../Engine/GPU/GPU_rendering.h"
 #include "../../Engine/GPU/GPU_screenshot.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
