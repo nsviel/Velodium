@@ -76,14 +76,14 @@ void CoreGLengine::loop(){
 
     //First pass
     //---------------------------
-    this->loop_pass_1();
+    this->loop_resizing();
+    renderManager->loop_pass_1();
     this->loop_draw_scene();
     this->loop_selection();
 
     //Second pass
     //---------------------------
-    this->loop_pass_2();
-    this->loop_draw_canvas();
+    renderManager->loop_pass_2();
 
     //GUI and end
     //---------------------------
@@ -167,7 +167,7 @@ void CoreGLengine::init_rendering(){
   //---------------------------
 
   dimManager->update();
-  shaderManager->init_shader_objects();
+  shaderManager->init_shader();
   renderManager->init_create_fbo(shaderManager->get_nb_shader());
   renderManager->init_create_canvas();
 
@@ -203,14 +203,14 @@ void CoreGLengine::loop_draw_scene(){
   node_engine->runtime();
 
   //Untextured cloud & glyph drawing
-  shaderManager->use_shader("screen");
+  shaderManager->use_shader("mesh_untextured");
   cameraManager->update_shader();
 
   engineManager->draw_untextured_cloud();
   engineManager->draw_untextured_glyph();
 
   //Textured cloud drawing
-  shaderManager->use_shader("texture");
+  shaderManager->use_shader("mesh_textured");
   cameraManager->update_shader();
 
   engineManager->draw_textured_cloud();
@@ -219,54 +219,17 @@ void CoreGLengine::loop_draw_scene(){
 }
 
 // Loop rendering stuff
-void CoreGLengine::loop_pass_1(){
-  dimManager->update();
+void CoreGLengine::loop_resizing(){
   //---------------------------
 
   //Update things
+  dimManager->update();
   this->flag_resized = dimManager->get_is_resized();
   if(flag_resized){
     renderManager->update_dim_texture();
-    shaderManager->update_shader_objects();
-  }
-
-  //Set screen space FBO
-  renderManager->bind_fbo_pass_1();
-
-  //---------------------------
-}
-void CoreGLengine::loop_pass_2(){
-  //---------------------------
-
-  //Viewport
-  vec2 win_dim = dimManager->get_win_dim();
-  glViewport(0, 0, win_dim[0], win_dim[1]);
-
-  //Framebuffer pass 2
-  //Set EDL shader
-  shaderManager->use_shader("edl");
-  renderManager->bind_fbo_pass_2_edl();
-
-
-
-  shaderManager->use_shader("inversion");
-  renderManager->bind_fbo_pass_2_inv();
-
-  //---------------------------
-}
-void CoreGLengine::loop_draw_canvas(){
-  //---------------------------
-
-
-
-  //If window resizing, update canvas size
-  if(flag_resized){
+    shaderManager->update_shader();
     renderManager->update_dim_canvas();
   }
-
-  //Draw screen quad
-  shaderManager->use_shader("last");
-  renderManager->bind_canvas();
 
   //---------------------------
 }

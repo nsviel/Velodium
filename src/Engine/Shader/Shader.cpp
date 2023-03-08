@@ -38,21 +38,21 @@ Shader::~Shader(){
 }
 
 //Main function
-void Shader::init_shader_objects(){
+void Shader::init_shader(){
 	Shader_object* shader;
 	string path_vs, path_fs;
 	//---------------------------
 
 	// Screen shader
-	path_vs = shader_dir + "standard/shader_screen.vs";
-	path_fs = shader_dir + "standard/shader_screen.fs";
-	shader = new Shader_object("screen", path_vs, path_fs);
+	path_vs = shader_dir + "pass_1/shader_mesh_untextured.vs";
+	path_fs = shader_dir + "pass_1/shader_mesh_untextured.fs";
+	shader = new Shader_object("mesh_untextured", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	// Texture shader
-	path_vs = shader_dir + "standard/shader_texture.vs";
-	path_fs = shader_dir + "standard/shader_texture.fs";
-	shader = new Shader_object("texture", path_vs, path_fs);
+	path_vs = shader_dir + "pass_1/shader_mesh_textured.vs";
+	path_fs = shader_dir + "pass_1/shader_mesh_textured.fs";
+	shader = new Shader_object("mesh_textured", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//EDL shader
@@ -63,27 +63,27 @@ void Shader::init_shader_objects(){
 	this->list_shader_src->push_back(edlManager);
 
 	//Inversion shader
-	path_vs = shader_dir + "experimental/shader_inversion.vs";
-	path_fs = shader_dir + "experimental/shader_inversion.fs";
-	shader = new Shader_object("inversion", path_vs, path_fs);
+	path_vs = shader_dir + "pass_2/shader_inversion.vs";
+	path_fs = shader_dir + "pass_2/shader_inversion.fs";
+	shader = new Shader_object("render_color_inv", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//Inversion shader
-	path_vs = shader_dir + "standard/shader_texdirect.vs";
-	path_fs = shader_dir + "standard/shader_texdirect.fs";
-	shader = new Shader_object("last", path_vs, path_fs);
+	path_vs = shader_dir + "pass_3/shader_canvas.vs";
+	path_fs = shader_dir + "pass_3/shader_canvas.fs";
+	shader = new Shader_object("canvas", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//---------------------------
 }
-void Shader::update_shader_objects(){
+void Shader::update_shader(){
 	//---------------------------
 
-	//Shader_source* shader_screen = get_shader_src_byName("screen");
-	//shader_screen->update_shader();
-
-	Shader_source* shader_edl = get_shader_src_byName("edl");
+	//EDL update
+	Shader_source* shader_edl = get_shader_src_byName("render_edl");
 	shader_edl->update_shader();
+
+	//...
 
 	//---------------------------
 }

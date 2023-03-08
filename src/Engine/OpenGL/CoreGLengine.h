@@ -50,9 +50,7 @@ public:
   void loop_draw_scene();
 
   // Loop rendering stuff
-  void loop_pass_1();
-  void loop_pass_2();
-  void loop_draw_canvas();
+  void loop_resizing();
   void loop_end();
 
   inline GLFWwindow* get_window(){return window;}

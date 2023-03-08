@@ -10,8 +10,8 @@ Shader_screen::Shader_screen(Node_engine* node){
   this->configManager = node->get_configManager();
 
   this->name = "screen";
-  this->path_vs = "../src/Engine/Shader/glsh/standard/shader_screen.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/standard/shader_screen.fs";
+  this->path_vs = "../src/Engine/Shader/glsh/pass_1/mesh_untextured.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/pass_1/mesh_untextured.fs";
 
   this->clip_far = configManager->parse_json_f("camera", "clip_far");
   this->clip_near = configManager->parse_json_f("camera", "clip_near");

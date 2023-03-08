@@ -4,6 +4,7 @@
 #include "../Node_engine.h"
 #include "../Core/Dimension.h"
 #include "../Core/Configuration.h"
+#include "../Shader/Shader.h"
 
 #include <filesystem>
 #include <FreeImage.h>
@@ -15,6 +16,7 @@ GPU_render::GPU_render(Node_engine* node_engine){
   //---------------------------
 
   this->dimManager = node_engine->get_dimManager();
+  this->shaderManager = node_engine->get_shaderManager();
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
 
@@ -30,6 +32,40 @@ GPU_render::~GPU_render(){
   delete dimManager;
   delete gpuManager;
   this->delete_fbo_all();
+
+  //---------------------------
+}
+
+//Loop function
+void GPU_render::loop_pass_1(){
+  //---------------------------
+
+  //Bind first fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_vec[0]->ID_fbo);
+
+  //Clear framebuffer and enable depth
+  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+
+  //---------------------------
+}
+void GPU_render::loop_pass_2(){
+  //---------------------------
+
+  //Framebuffer pass 2
+  //Set EDL shader
+  shaderManager->use_shader("render_edl");
+  this->bind_fbo_pass_2_edl();
+
+
+  shaderManager->use_shader("render_color_inv");
+  this->bind_fbo_pass_2_inv();
+
+  //Draw screen quad
+  shaderManager->use_shader("canvas");
+  this->bind_canvas();
 
   //---------------------------
 }
@@ -79,7 +115,7 @@ void GPU_render::gen_fbo_tex_color(FBO* fbo){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, dim.x, dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo->ID_tex_color, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -187,46 +223,27 @@ Object_* GPU_render::gen_canvas(){
 }
 
 //Rendering
-void GPU_render::bind_fbo_pass_1(){
-  //---------------------------
-
-  //Bind first fbo
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_vec[0]->ID_fbo);
-  glBindTexture(GL_TEXTURE_2D, fbo_vec[0]->ID_tex_color);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_vec[0]->ID_tex_color, 0);
-
-  //Clear framebuffer and enable depth
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
-
-  //---------------------------
-}
 void GPU_render::bind_fbo_pass_2_edl(){
   FBO* fbo_1 = fbo_vec[0];
   FBO* fbo_2 = fbo_vec[1];
   vec2 dim = dimManager->get_win_dim();
   //---------------------------
 
+  //Disable depth test
+  glDisable(GL_DEPTH_TEST);
+
   //Bind fbo 2
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_2->ID_fbo);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_2->ID_tex_color, 0);
 
-  //Input: read these textures
+  //Input: read textures
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_vec[0]->ID_tex_depth);
 
-  //Disable depth test
-  glDisable(GL_DEPTH_TEST);
-
-  glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
-
   gpuManager->draw_object(canvas_render);
 
+  //Unbind
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, 0);
   glActiveTexture(GL_TEXTURE1);
@@ -243,19 +260,14 @@ void GPU_render::bind_fbo_pass_2_inv(){
 
   //Bind fbo 2
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_3->ID_fbo);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_3->ID_tex_color, 0);
 
   //input
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_2->ID_tex_color);
 
-  //Clear old screen
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT);
-  glDisable(GL_DEPTH_TEST);
-
   gpuManager->draw_object(canvas_render);
 
+  //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -274,6 +286,9 @@ void GPU_render::bind_canvas(){
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);
+
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   //---------------------------
 }

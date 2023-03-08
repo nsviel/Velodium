@@ -7,11 +7,17 @@ class Node_engine;
 class Dimension;
 class Configuration;
 class GPU_data;
+class Shader;
 
 struct FBO{
   GLuint ID_fbo;
   GLuint ID_tex_color;
   GLuint ID_tex_depth;
+};
+
+struct FBOManager{
+  vector<FBO*> fbo_vec;
+  int id_current;
 };
 
 
@@ -22,6 +28,10 @@ public:
   ~GPU_render();
 
 public:
+  //Loop function
+  void loop_pass_1();
+  void loop_pass_2();
+  
   //Init function
   void init_create_fbo(int nb_shader);
   void init_create_canvas();
@@ -35,7 +45,6 @@ public:
   Object_* gen_canvas();
 
   //Rendering
-  void bind_fbo_pass_1();
   void bind_fbo_pass_2_edl();
   void bind_fbo_pass_2_inv();
   void bind_canvas();
@@ -51,6 +60,7 @@ private:
   Dimension* dimManager;
   Configuration* configManager;
   GPU_data* gpuManager;
+  Shader* shaderManager;
 
   Object_* canvas_render;
   Object_* canvas_screen;

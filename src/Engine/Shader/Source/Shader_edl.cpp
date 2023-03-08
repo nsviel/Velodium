@@ -11,9 +11,9 @@ Shader_edl::Shader_edl(Node_engine* node){
   this->dimManager = node->get_dimManager();
   this->configManager = node->get_configManager();
 
-  this->name = "edl";
-  this->path_vs = "../src/Engine/Shader/glsh/standard/shader_edl.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/standard/shader_edl.fs";
+  this->name = "render_edl";
+  this->path_vs = "../src/Engine/Shader/glsh/pass_2/shader_edl.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/pass_2/shader_edl.fs";
 
   this->with_edl = true;
   this->edl_strength = 100.0;
