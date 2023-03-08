@@ -6,6 +6,9 @@
 
 
 struct Viewport_obj{
+
+  Viewport_obj();
+
   glm::vec2 pos;
   glm::vec2 dim;
 

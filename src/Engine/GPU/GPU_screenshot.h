@@ -3,6 +3,7 @@
 
 #include "../../common.h"
 
+class Node_engine;
 class Dimension;
 class Configuration;
 class GPU_data;
@@ -11,7 +12,7 @@ class GPU_data;
 class GPU_screenshot
 {
 public:
-  GPU_screenshot(Dimension* dim);
+  GPU_screenshot(Node_engine* node_engine);
   ~GPU_screenshot();
 
 public:

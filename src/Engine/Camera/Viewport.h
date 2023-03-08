@@ -5,6 +5,7 @@
 
 #include "../../common.h"
 
+class Node_engine;
 class Dimension;
 class Configuration;
 
@@ -13,7 +14,7 @@ class Viewport
 {
 public:
   //Constructor / Destructor
-  Viewport(Dimension* dimension);
+  Viewport(Node_engine* node_engine);
   ~Viewport();
 
 public:

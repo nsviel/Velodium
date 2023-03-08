@@ -4,36 +4,17 @@
 
 
 //Constructor / Destructor
-Dimension::Dimension(GLFWwindow* win, Configuration* config){
-  this->window = win;
-  this->configManager = config;
+Dimension::Dimension(){
   //---------------------------
 
-  int win_h = configManager->parse_json_i("window", "resolution_height");
-  int win_w = configManager->parse_json_i("window", "resolution_width");
-  int lp_w = configManager->parse_json_i("gui", "leftPanel_width");
-  int tp_h = configManager->parse_json_i("gui", "topPanel_height");
-  int bp_h = configManager->parse_json_i("gui", "botPanel_height");
-  int lp_m = configManager->parse_json_i("gui", "leftPanel_mid");
-  this->is_visualization = configManager->parse_json_b("window", "visualization");
-
-  this->gl_dim.x = win_w - lp_w;
-  this->gl_dim.y = win_h - tp_h - bp_h;
-  this->gl_pos = vec2(lp_w, bp_h);
-
-  this->gui_ltp_dim = vec2(lp_w, lp_m - tp_h);
-  this->gui_ltp_pos = vec2(0, tp_h);
-  this->gui_lbp_dim = vec2(lp_w, win_h - lp_m);
-  this->gui_lbp_pos = vec2(0, lp_m);
-  this->gui_lp_mid = lp_m;
-  this->gui_tp_dim = vec2(win_w, tp_h);
-  this->gui_bp_pos = vec2(lp_w, win_h - bp_h);
-  this->gui_bp_dim = vec2(win_w - lp_w, bp_h);
+  this->configManager = new Configuration();
 
   this->is_resized = true;
   this->with_custom_gl_dim = false;
+  this->window = glfwGetCurrentContext();
 
   //---------------------------
+  this->update_configuration();
   this->update();
 }
 Dimension::~Dimension(){}
@@ -110,7 +91,34 @@ void Dimension::update_gui_consol(){
 
   //---------------------------
 }
+
 void Dimension::update_configuration(){
+  //---------------------------
+
+  int win_h = configManager->parse_json_i("window", "resolution_height");
+  int win_w = configManager->parse_json_i("window", "resolution_width");
+  int lp_w = configManager->parse_json_i("gui", "leftPanel_width");
+  int tp_h = configManager->parse_json_i("gui", "topPanel_height");
+  int bp_h = configManager->parse_json_i("gui", "botPanel_height");
+  int lp_m = configManager->parse_json_i("gui", "leftPanel_mid");
+  this->is_visualization = configManager->parse_json_b("window", "visualization");
+
+  this->gl_dim.x = win_w - lp_w;
+  this->gl_dim.y = win_h - tp_h - bp_h;
+  this->gl_pos = vec2(lp_w, bp_h);
+
+  this->gui_ltp_dim = vec2(lp_w, lp_m - tp_h);
+  this->gui_ltp_pos = vec2(0, tp_h);
+  this->gui_lbp_dim = vec2(lp_w, win_h - lp_m);
+  this->gui_lbp_pos = vec2(0, lp_m);
+  this->gui_lp_mid = lp_m;
+  this->gui_tp_dim = vec2(win_w, tp_h);
+  this->gui_bp_pos = vec2(lp_w, win_h - bp_h);
+  this->gui_bp_dim = vec2(win_w - lp_w, bp_h);
+
+  //---------------------------
+}
+void Dimension::upload_configuration(){
   //---------------------------
 
   configManager->update_jsonfile("gui", "leftPanel_width", to_string(gui_ltp_dim.x));

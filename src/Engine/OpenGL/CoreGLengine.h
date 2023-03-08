@@ -22,6 +22,7 @@ class Camera;
 class GUI;
 class Viewport;
 class GPU_render;
+class GPU_screenshot;
 class Configuration;
 class Engine;
 
@@ -49,8 +50,8 @@ public:
   void loop_draw_scene();
 
   // Loop rendering stuff
-  void loop_pass_screen();
-  void loop_pass_edl();
+  void loop_pass_1();
+  void loop_pass_2();
   void loop_draw_canvas();
   void loop_end();
 
@@ -66,6 +67,7 @@ private:
   Camera* cameraManager;
   Dimension* dimManager;
   GPU_render* renderManager;
+  GPU_screenshot* screenshotManager;
   GUI* guiManager;
   Shader* shaderManager;
   Viewport* viewportManager;

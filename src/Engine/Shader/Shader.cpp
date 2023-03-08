@@ -21,7 +21,21 @@ Shader::Shader(Node_engine* node){
 
 	//---------------------------
 }
-Shader::~Shader(){}
+Shader::~Shader(){
+	//---------------------------
+
+	for(int i=0; i<list_shader_obj->size(); i++){
+		Shader_object* obj = *next(list_shader_obj->begin(), i);
+		delete obj;
+	}
+
+	for(int i=0; i<list_shader_src->size(); i++){
+		Shader_source* obj = *next(list_shader_src->begin(), i);
+		delete obj;
+	}
+
+	//---------------------------
+}
 
 //Main function
 void Shader::init_shader_objects(){
@@ -52,6 +66,12 @@ void Shader::init_shader_objects(){
 	path_vs = shader_dir + "experimental/shader_inversion.vs";
 	path_fs = shader_dir + "experimental/shader_inversion.fs";
 	shader = new Shader_object("inversion", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader);
+
+	//Inversion shader
+	path_vs = shader_dir + "standard/shader_texdirect.vs";
+	path_fs = shader_dir + "standard/shader_texdirect.fs";
+	shader = new Shader_object("last", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//---------------------------

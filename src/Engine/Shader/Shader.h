@@ -24,6 +24,8 @@ public:
   Shader_object* get_shader_obj_byName(string querry);
   Shader_source* get_shader_src_byName(string querry);
 
+  inline int get_nb_shader(){return list_shader_obj->size();}
+
 private:
   Node_engine* node_engine;
 

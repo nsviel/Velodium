@@ -3,12 +3,12 @@
 
 #include "../../common.h"
 
+class Node_engine;
 class Dimension;
 class Configuration;
 class GPU_data;
 
 struct FBO{
-  string name;
   GLuint ID_fbo;
   GLuint ID_tex_color;
   GLuint ID_tex_depth;
@@ -18,28 +18,32 @@ struct FBO{
 class GPU_render
 {
 public:
-  GPU_render(Dimension* dim);
+  GPU_render(Node_engine* node_engine);
   ~GPU_render();
 
 public:
+  //Init function
+  void init_create_fbo(int nb_shader);
+  void init_create_canvas();
+
   //Framebuffer generation stuff
   void gen_fbo(FBO* fbo);
   void gen_fbo_tex_color(FBO* fbo);
   void gen_fbo_tex_color_multisample(FBO* fbo);
   void gen_fbo_tex_depth(FBO* fbo);
+  void gen_fbo_check(FBO* fbo);
+  Object_* gen_canvas();
 
-  void init_create_fbo();
-  void init_create_canvas();
-
-  void bind_fbo_screen();
-  void bind_fbo_render();
+  //Rendering
+  void bind_fbo_pass_1();
+  void bind_fbo_pass_2_edl();
+  void bind_fbo_pass_2_inv();
   void bind_canvas();
 
+  //Update
   void update_dim_texture();
   void update_dim_canvas();
   void delete_fbo_all();
-
-  void truc();
 
   inline vec4* get_screen_color(){return &screen_color;}
 
@@ -48,10 +52,11 @@ private:
   Configuration* configManager;
   GPU_data* gpuManager;
 
+  Object_* canvas_render;
+  Object_* canvas_screen;
+
   vector<FBO*> fbo_vec;
-  Object_* canvas;
   vec4 screen_color;
-  int nb_fbo;
 };
 
 #endif

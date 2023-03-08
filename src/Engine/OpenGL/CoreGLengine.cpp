@@ -76,13 +76,13 @@ void CoreGLengine::loop(){
 
     //First pass
     //---------------------------
-    this->loop_pass_screen();
+    this->loop_pass_1();
     this->loop_draw_scene();
     this->loop_selection();
 
     //Second pass
     //---------------------------
-    this->loop_pass_edl();
+    this->loop_pass_2();
     this->loop_draw_canvas();
 
     //GUI and end
@@ -153,21 +153,23 @@ void CoreGLengine::init_object(){
 
   this->node_engine = new Node_engine(this);
   this->node_gui = node_engine->get_node_gui();
-  this->dimManager = node_engine->get_dimManager();
+  this->dimManager = node_engine->get_dimManager();;
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->viewportManager = node_engine->get_viewportManager();
   this->renderManager = node_engine->get_renderManager();
   this->engineManager = node_engine->get_engineManager();
+  this->screenshotManager = node_engine->get_screenshotManager();
 
   //---------------------------
 }
 void CoreGLengine::init_rendering(){
   //---------------------------
 
-  renderManager->init_create_fbo();
-  renderManager->init_create_canvas();
+  dimManager->update();
   shaderManager->init_shader_objects();
+  renderManager->init_create_fbo(shaderManager->get_nb_shader());
+  renderManager->init_create_canvas();
 
   //---------------------------
 }
@@ -195,7 +197,8 @@ void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
   //Camera & scene runtime
-  viewportManager->viewport_update(0);
+  vec2 win_dim = dimManager->get_win_dim();
+  glViewport(0, 0, win_dim[0], win_dim[1]);
   cameraManager->input_cam_mouse();
   node_engine->runtime();
 
@@ -216,7 +219,7 @@ void CoreGLengine::loop_draw_scene(){
 }
 
 // Loop rendering stuff
-void CoreGLengine::loop_pass_screen(){
+void CoreGLengine::loop_pass_1(){
   dimManager->update();
   //---------------------------
 
@@ -228,33 +231,33 @@ void CoreGLengine::loop_pass_screen(){
   }
 
   //Set screen space FBO
-  renderManager->bind_fbo_screen();
+  renderManager->bind_fbo_pass_1();
 
   //---------------------------
 }
-void CoreGLengine::loop_pass_edl(){
+void CoreGLengine::loop_pass_2(){
   //---------------------------
 
-  //Set active shader
-  shaderManager->use_shader("edl");
-  
+  //Viewport
+  vec2 win_dim = dimManager->get_win_dim();
+  glViewport(0, 0, win_dim[0], win_dim[1]);
+
   //Framebuffer pass 2
-  renderManager->bind_fbo_render();
+  //Set EDL shader
+  shaderManager->use_shader("edl");
+  renderManager->bind_fbo_pass_2_edl();
 
 
 
-  //renderManager->truc();
-
-  //shaderManager->use_shader("inversion");
+  shaderManager->use_shader("inversion");
+  renderManager->bind_fbo_pass_2_inv();
 
   //---------------------------
 }
 void CoreGLengine::loop_draw_canvas(){
   //---------------------------
 
-  //Viewport
-  vec2 win_dim = dimManager->get_win_dim();
-  glViewport(0, 0, win_dim[0], win_dim[1]);
+
 
   //If window resizing, update canvas size
   if(flag_resized){
@@ -262,6 +265,7 @@ void CoreGLengine::loop_draw_canvas(){
   }
 
   //Draw screen quad
+  shaderManager->use_shader("last");
   renderManager->bind_canvas();
 
   //---------------------------
@@ -270,8 +274,7 @@ void CoreGLengine::loop_end(){
   //---------------------------
 
   //End, if needed, by a screenshot
-  GPU_screenshot screenshotManager(dimManager);
-  screenshotManager.render_screenshot_online();
+  screenshotManager->render_screenshot_online();
 
   //Window display stuff
   glfwSwapBuffers(window);

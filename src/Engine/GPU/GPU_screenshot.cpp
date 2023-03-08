@@ -1,6 +1,7 @@
 #include "GPU_screenshot.h"
 #include "GPU_data.h"
 
+#include "../Node_engine.h"
 #include "../Core/Dimension.h"
 #include "../Core/Configuration.h"
 
@@ -13,10 +14,10 @@
 
 
 //Constructor / Destructor
-GPU_screenshot::GPU_screenshot(Dimension* dim){
+GPU_screenshot::GPU_screenshot(Node_engine* node_engine){
   //---------------------------
 
-  this->dimManager = dim;
+  this->dimManager = node_engine->get_dimManager();
   this->is_screenshot = false;
   this->save_path_screenshot = "";
 

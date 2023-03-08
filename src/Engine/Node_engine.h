@@ -16,12 +16,12 @@ class Shader;
 class GPU_render;
 class GPU_screenshot;
 class Viewport;
-class Dimension;
 class Engine;
 class CoreGLengine;
 class Followup;
 class Texture;
 class Light;
+class Dimension;
 
 
 class Node_engine : public Node
@@ -46,7 +46,6 @@ public:
   inline Node_interface* get_node_interface(){return node_interface;}
 
   inline Configuration* get_configManager(){return configManager;}
-  inline Dimension* get_dimManager(){return dimManager;}
   inline Camera* get_cameraManager(){return cameraManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
   inline GPU_render* get_renderManager(){return renderManager;}
@@ -57,6 +56,7 @@ public:
   inline Texture* get_texManager(){return texManager;}
   inline Light* get_lightManager(){return lightManager;}
   inline GPU_screenshot* get_screenshotManager(){return screenshotManager;}
+  inline Dimension* get_dimManager(){return dimManager;}
 
 private:
   Node_operation* node_ope;
@@ -72,10 +72,10 @@ private:
   Configuration* configManager;
   Camera* cameraManager;
   Shader* shaderManager;
-  GPU_render* renderManager;
   GPU_screenshot* screenshotManager;
-  Viewport* viewportManager;
+  GPU_render* renderManager;
   Dimension* dimManager;
+  Viewport* viewportManager;
   Engine* engineManager;
   Light* lightManager;
 };

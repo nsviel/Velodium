@@ -22,7 +22,7 @@ class Configuration;
 class Dimension
 {
 public:
-  Dimension(GLFWwindow* win, Configuration* config);
+  Dimension();
   ~Dimension();
 
 public:
@@ -31,7 +31,10 @@ public:
   void update_window_dim();
   void update_opengl_dim();
   void update_gui_consol();
+
+  //Configuration function
   void update_configuration();
+  void upload_configuration();
 
   //Subfunctions
   vec2 get_gl_middle();
@@ -40,18 +43,18 @@ public:
   void set_mouse_pose(vec2 pos);
 
   inline GLFWwindow* get_window(){return window;}
-  inline vec2* get_gui_ltp_dim(){return &gui_ltp_dim;}
-  inline vec2* get_gui_ltp_pos(){return &gui_ltp_pos;}
-  inline vec2* get_gui_lbp_dim(){return &gui_lbp_dim;}
-  inline vec2* get_gui_lbp_pos(){return &gui_lbp_pos;}
-  inline vec2* get_gui_bp_pos(){return &gui_bp_pos;}
-  inline vec2* get_gui_bp_dim(){return &gui_bp_dim;}
-  inline vec2* get_gui_tp_dim(){return &gui_tp_dim;}
+  inline vec2* get_gui_ltp_dim(){update();return &gui_ltp_dim;}
+  inline vec2* get_gui_ltp_pos(){update();return &gui_ltp_pos;}
+  inline vec2* get_gui_lbp_dim(){update();return &gui_lbp_dim;}
+  inline vec2* get_gui_lbp_pos(){update();return &gui_lbp_pos;}
+  inline vec2* get_gui_bp_pos(){update();return &gui_bp_pos;}
+  inline vec2* get_gui_bp_dim(){update();return &gui_bp_dim;}
+  inline vec2* get_gui_tp_dim(){update();return &gui_tp_dim;}
 
   inline void set_gl_dim(vec2 value){this->gl_dim = value;}
-  inline vec2 get_gl_dim(){return gl_dim;}
-  inline vec2 get_gl_pos(){return gl_pos;}
-  inline vec2 get_win_dim(){return win_dim;}
+  inline vec2 get_gl_dim(){update();return gl_dim;}
+  inline vec2 get_gl_pos(){update();return gl_pos;}
+  inline vec2 get_win_dim(){update();return win_dim;}
   inline void set_is_resized(bool value){this->is_resized = value;}
   inline bool get_is_resized(){return is_resized;}
   inline bool* get_with_custom_gl_dim(){return &with_custom_gl_dim;}

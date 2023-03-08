@@ -1,8 +1,8 @@
 #include "Node_engine.h"
 
 #include "Core/Engine.h"
-#include "Core/Dimension.h"
 #include "Core/Configuration.h"
+#include "Core/Dimension.h"
 
 #include "OpenGL/CoreGLengine.h"
 #include "GPU/GPU_render.h"
@@ -28,16 +28,15 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->glManager = ogl;
   //---------------------------
 
-  this->configManager = ogl->get_configManager();
+  this->dimManager = new Dimension();
+  this->configManager = new Configuration();
   this->node_scene = new Node_scene(this);
-
-  this->dimManager = new Dimension(ogl->get_window(), configManager);
   this->shaderManager = new Shader(this);
-  this->viewportManager = new Viewport(dimManager);
+  this->viewportManager = new Viewport(this);
   this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
-  this->renderManager = new GPU_render(dimManager);
-  this->screenshotManager = new GPU_screenshot(dimManager);
+  this->screenshotManager = new GPU_screenshot(this);
+  this->renderManager = new GPU_render(this);
   this->texManager = new Texture();
 
   this->node_load = new Node_load(this);

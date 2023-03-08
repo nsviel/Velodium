@@ -1,15 +1,17 @@
 #include "Viewport.h"
 
+#include "../Node_engine.h"
 #include "../Core/Dimension.h"
 #include "../Core/Configuration.h"
 
 
 
 //Constructor / Destructor
-Viewport::Viewport(Dimension* dimension){
-  this->dimManager = dimension;
+Viewport::Viewport(Node_engine* node_engine){
+
   //---------------------------
 
+  this->dimManager = node_engine->get_dimManager();
   this->configManager = new Configuration();
 
   this->nb_viewport = 2;
@@ -38,13 +40,9 @@ void Viewport::viewport_init_main(){
   view_main.angle_elevation = - M_PI/6;// Initial vertical angle
   view_main.cam_R = normalize(vec3(cos(view_main.angle_azimuth - M_PI/2.0f), sin(view_main.angle_azimuth - M_PI/2.0f), 0));
   view_main.fov = configManager->parse_json_f("camera", "fov");
-  view_main.cam_move = false;
-  view_main.cam_pose = false;
   view_main.view = "oblique";
   view_main.projection = "perspective";
   view_main.mode = "default";
-  view_main.cam_COM = vec3(0, 0, 0);
-  view_main.zoom = 0;
   view_main.clip_near = configManager->parse_json_f("camera", "clip_near");
   view_main.clip_far = configManager->parse_json_f("camera", "clip_far");
 
@@ -56,13 +54,9 @@ void Viewport::viewport_init_map(){
 
   view_map.pos = vec2(800,400);
   view_map.dim = vec2(100,100);
-  view_map.cam_P = vec3(0, 0, 0);
-  view_map.angle_azimuth = 0;
-  view_map.angle_elevation = 0;
   view_map.fov = configManager->parse_json_f("camera", "fov");
   view_map.projection = "perspective";
   view_map.view = "oblique";
-  view_map.zoom = 0;
   view_map.clip_near = configManager->parse_json_f("camera", "clip_near");
   view_map.clip_far = configManager->parse_json_f("camera", "clip_far");
 
