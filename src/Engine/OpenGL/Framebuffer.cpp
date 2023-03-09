@@ -15,6 +15,22 @@ Framebuffer::~Framebuffer(){
   //---------------------------
 }
 
+void Framebuffer::init_create_fbo(int nb_fbo){
+  //---------------------------
+
+  for(int i=0; i<nb_fbo; i++){
+    FBO* fbo = new FBO();
+    this->gen_fbo(fbo);
+    this->gen_fbo_tex_color(fbo);
+    this->gen_fbo_tex_depth(fbo);
+    this->gen_fbo_check(fbo);
+    this->fbo_vec.push_back(fbo);
+  }
+
+  fbo_vec[0]->name = "pass_2";
+
+  //---------------------------
+}
 void Framebuffer::delete_fbo_all(){
   int nb = fbo_vec.size();
   //---------------------------
@@ -28,6 +44,19 @@ void Framebuffer::delete_fbo_all(){
   fbo_vec.clear();
 
   //---------------------------
+}
+FBO* Framebuffer::get_fbo_byName(string querry){
+  //---------------------------
+
+  for(int i=0; i<fbo_vec.size(); i++){
+    FBO* fbo = fbo_vec[i];
+    if(fbo->name == querry){
+      return fbo;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
 }
 
 //Framebuffer generation

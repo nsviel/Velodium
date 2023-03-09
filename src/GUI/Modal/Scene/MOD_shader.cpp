@@ -59,7 +59,7 @@ void MOD_shader::shader_screen(){
   //---------------------------
 }
 void MOD_shader::shader_render(){
-  Shader_edl* shader_edl = (Shader_edl*)shaderManager->get_shader_src_byName("edl");
+  Shader_edl* shader_edl = (Shader_edl*)shaderManager->get_shader_src_byName("render_edl");
   //---------------------------
 
   /*ImGui::SetNextItemWidth(item_width);

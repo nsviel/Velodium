@@ -19,12 +19,9 @@ public:
 
 public:
   //Loop function
+  void init_renderer();
   void loop_pass_1();
   void loop_pass_2();
-
-  //Init function
-  void init_create_fbo(int nb_shader);
-  void init_create_canvas();
 
   //Rendering
   void bind_fbo_pass_2_edl();
@@ -47,9 +44,8 @@ private:
 
   Object_* canvas_render;
   Object_* canvas_screen;
-
-  vector<FBO*> fbo_vec;
   vec4 screen_color;
+  int nb_fbo;
 };
 
 #endif

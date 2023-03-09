@@ -168,8 +168,7 @@ void CoreGLengine::init_rendering(){
 
   dimManager->update();
   shaderManager->init_shader();
-  renderManager->init_create_fbo(shaderManager->get_nb_shader());
-  renderManager->init_create_canvas();
+  renderManager->init_renderer();
 
   //---------------------------
 }
