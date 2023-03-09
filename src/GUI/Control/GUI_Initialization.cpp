@@ -355,9 +355,9 @@ void GUI_Initialization::open_selection(tree_file* node){
   }
 
   if(node->type == "File"){
-    bool ok = loaderManager->load_cloud(node->path);
+    bool ok = loaderManager->load_object(node->path);
     if(ok){
-      this->operation_cloud(loaderManager->get_createdcloud());
+      this->operation_cloud((Cloud*)loaderManager->get_created_object());
     }
   }
   else if(node->type == "Folder" && node->end_folder){
@@ -369,7 +369,7 @@ void GUI_Initialization::open_selection(tree_file* node){
         ok = pathManager->loading_onthefly(node->path);
       }
       if(ok){
-        this->operation_cloud(loaderManager->get_createdcloud());
+        this->operation_cloud((Cloud*)loaderManager->get_created_object());
       }
     }
   }

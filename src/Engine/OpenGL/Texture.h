@@ -37,11 +37,6 @@ private:
   GPU_data* gpuManager;
 
   list<Texture_obj*>* list_texture;
-  unsigned int cubemapTexture;
-  GLuint ID;
-  string Name;
-  int width = 0;
-  int height = 0;
   bool with_texture;
 };
 

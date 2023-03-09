@@ -17,7 +17,6 @@
 #include "../../Engine/Node_engine.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
-#include "../../Scene/Data/Graph.h"
 #include "../../Specific/File/Directory.h"
 #include "../../Specific/File/Info.h"
 #include "../../Specific/Function/fct_transtypage.h"
@@ -31,7 +30,6 @@ Loader::Loader(Node_load* node_load){
   Node_scene* node_scene = node_engine->get_node_scene();
 
   this->sceneManager = node_scene->get_sceneManager();
-  this->graphManager = node_scene->get_graphManager();
   this->extractManager = node_load->get_extractManager();
 
   this->ptsManager = new file_PTS();
@@ -49,7 +47,7 @@ Loader::Loader(Node_load* node_load){
 Loader::~Loader(){}
 
 //Main functions
-bool Loader::load_cloud(string path){
+bool Loader::load_object(string path){
   //---------------------------
 
   //Check file existence
@@ -315,14 +313,8 @@ void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
-  // OLD PART
   //Extract data and put in the engine
   cloud = extractManager->extract_data(data_vec);
-
-  // NEW PART
-  //Cloud_base* cloud_base = extractManager->extract_data_(data_vec);
-  //graphManager->insert_loaded_cloud(cloud);
-
   list_cloud->push_back(cloud);
 
   //Update list cloud
@@ -334,9 +326,6 @@ void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   for(int i=0; i<data_vec.size(); i++){
     delete data_vec[i];
   }
-
-
-
 
   //---------------------------
 }

@@ -179,7 +179,7 @@ bool Reference::load_calibrationTargets(list<Cloud*>* list, string path_str){
     //Load all files
     for(int i=0; i<list_path.size(); i++){
       loaderManager->load_cloud_silent(list_path[i]);
-      Cloud* cloud = loaderManager->get_createdcloud();
+      Cloud* cloud = (Cloud*)loaderManager->get_created_object();
       list->push_back(cloud);
     }
   }

@@ -35,7 +35,7 @@ void Boxing::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
   Glyph* box = boxObject->get_glyph();
   //---------------------------
 
-  sceneManager->update_subset_MinMax(subset_init);
+  sceneManager->update_MinMax(subset_init);
 
   //Get Z extremums
   vec3 min = subset_init->min;

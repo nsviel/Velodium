@@ -444,7 +444,7 @@ glm::vec3 fct_min_z(std::vector<glm::vec3> vec){
   return min;
 }
 glm::vec3 fct_min_vec3(std::vector<glm::vec3> XYZ){
-  glm::vec3 min = XYZ[0];
+  glm::vec3 min = glm::vec3(100000000.0f);
   int size = XYZ.size();
   //---------------------------
 

@@ -41,8 +41,8 @@ int Texture::load_texture(string path, string name){
   Texture_obj* texture = new Texture_obj();
   texture->ID = tex_ID;
   texture->name = name;
-  texture->width = width;
-  texture->height = height;
+  texture->width = tex_w;
+  texture->height = tex_h;
   texture->nb_channel = tex_nb_channel;
   list_texture->push_back(texture);
 

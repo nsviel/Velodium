@@ -199,17 +199,17 @@ void Transformation::make_scaling(Cloud* cloud, float Sxyz){
 
   //---------------------------
 }
-void Transformation::make_scaling(Subset* subset, float Sxyz){
+void Transformation::make_scaling(Object_* object, float Sxyz){
   //---------------------------
 
   //Reverso old scaling
-  mat4 scaling_reverse(1/subset->scale[0][0]);
-  this->make_Transformation_atomic(subset->xyz, subset->COM, scaling_reverse);
+  mat4 scaling_reverse(1/object->scale[0][0]);
+  this->make_Transformation_atomic(object->xyz, object->COM, scaling_reverse);
 
   //Scale to new value
   mat4 scaling(Sxyz);
-  subset->scale = scaling;
-  this->make_Transformation_atomic(subset->xyz, subset->COM, scaling);
+  object->scale = scaling;
+  this->make_Transformation_atomic(object->xyz, object->COM, scaling);
 
   //---------------------------
 }

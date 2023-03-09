@@ -7,7 +7,6 @@
 #include "../Camera/Camera.h"
 
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Data/Data.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Glyph/Object.h"
@@ -29,9 +28,9 @@ Engine::Engine(Node_engine* engine){
   this->glyphManager = node_scene->get_glyphManager();
   this->guiManager = node_gui->get_guiManager();
   this->objectManager = node_scene->get_objectManager();
-
   this->cameraManager = node_engine->get_cameraManager();
   this->texManager = node_engine->get_texManager();
+  this->data = Data::get_instance();
 
   //---------------------------
 }
@@ -82,11 +81,11 @@ void Engine::arcball_cam_lookat(){
 
 //Cloud drawing function
 void Engine::draw_light(){
-  Data* data = sceneManager->get_data();
+  std::list<Light_*>* list_light = data->get_list_light();
   //---------------------------
 
-  for(int i=0; i<data->list_light->size(); i++){
-    Light_* light = *next(data->list_light->begin(),i);
+  for(int i=0; i<list_light->size(); i++){
+    Light_* light = *next(list_light->begin(),i);
     gpuManager->draw_object(light);
   }
 

@@ -26,7 +26,7 @@ public:
 
   // Scaling
   void make_scaling(Cloud* cloud, float scaling);
-  void make_scaling(Subset* subset, float scaling);
+  void make_scaling(Object_* object, float scaling);
 
   // Transformation
   void make_Transformation(Subset* subset, vec3 COM, mat4 transfMat);

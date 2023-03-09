@@ -1,6 +1,7 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#include "../../Scene/Data/Data.h"
 #include "../../common.h"
 
 class Node_engine;
@@ -25,6 +26,7 @@ private:
   Transformation* transformManager;
   Pose* poseManager;
   Scene* sceneManager;
+  Data* data;
 };
 
 #endif

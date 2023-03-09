@@ -47,6 +47,7 @@ private:
   GPU_data* gpuManager;
 
   int ID;
+  int ID_cloud;
   vec4 color_rdm;
   bool is_intensity;
   bool is_normal;

@@ -1,6 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#include "../../Scene/Data/Data.h"
 #include "../../common.h"
 
 class Node_engine;
@@ -39,6 +40,7 @@ private:
   Camera* cameraManager;
   Texture* texManager;
   GPU_data* gpuManager;
+  Data* data;
 };
 
 #endif

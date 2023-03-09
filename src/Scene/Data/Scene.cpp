@@ -11,23 +11,23 @@ Scene::Scene(Node_scene* node){
 
   this->objectManager = node->get_objectManager();
   this->gpuManager = new GPU_data();
-  this->data = new Data();
 
   this->cloud_selected = nullptr;
-  this->ID_cloud = 0;
+  this->data = Data::get_instance();
 
   //---------------------------
 }
 Scene::~Scene(){
   //---------------------------
 
-  delete data->list_cloud;
+
 
   //---------------------------
 }
 
 //Remove functions
 void Scene::remove_cloud(Cloud* cloud){
+  std::list<Cloud*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
   if(!get_is_list_empty()){
@@ -46,17 +46,17 @@ void Scene::remove_cloud(Cloud* cloud){
     cloud = nullptr;
 
     //Delete cloud iterator in list
-    list<Cloud*>::iterator it = next(data->list_cloud->begin(), oID);
-    data->list_cloud->erase(it);
+    list<Cloud*>::iterator it = next(list_cloud->begin(), oID);
+    list_cloud->erase(it);
 
     //Check for end list new selected cloud
-    if(oID >= data->list_cloud->size()){
+    if(oID >= list_cloud->size()){
       oID = 0;
     }
 
-    this->update_ID_order(data->list_cloud);
+    this->update_ID_order(list_cloud);
     //this->selection_setCloud(oID);
-    cloud_selected = *next(data->list_cloud->begin(), oID);
+    cloud_selected = *next(list_cloud->begin(), oID);
 
     //---------------------------
     string log = "Cloud "+ name +" removed";
@@ -64,7 +64,7 @@ void Scene::remove_cloud(Cloud* cloud){
   }
 
   //If cloud list empty
-  if(data->list_cloud->size() == 0){
+  if(list_cloud->size() == 0){
     objectManager->reset_scene_object();
     this->cloud_selected = nullptr;
   }
@@ -72,10 +72,11 @@ void Scene::remove_cloud(Cloud* cloud){
   //---------------------------
 }
 void Scene::remove_cloud_all(){
+  std::list<Cloud*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
-  while(data->list_cloud->size() != 0){
-    Cloud* cloud = *data->list_cloud->begin();
+  while(list_cloud->size() != 0){
+    Cloud* cloud = *list_cloud->begin();
     this->remove_cloud(cloud);
   }
 
@@ -114,7 +115,7 @@ void Scene::reset_cloud(Cloud* cloud){
     subset->rotat = mat4(1.0);
 
     //Update
-    this->update_subset_MinMax(subset);
+    this->update_MinMax(subset);
     this->update_buffer_location(subset);
     this->update_buffer_color(subset);
 
@@ -128,11 +129,12 @@ void Scene::reset_cloud(Cloud* cloud){
   this->update_glyph(cloud);
 }
 void Scene::reset_cloud_all(){
+  std::list<Cloud*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
   //Reset all clouds
-  for(int i=0; i<data->list_cloud->size(); i++){
-    Cloud* cloud = *next(data->list_cloud->begin(),i);
+  for(int i=0; i<list_cloud->size(); i++){
+    Cloud* cloud = *next(list_cloud->begin(),i);
     if(!cloud->is_onthefly){
       this->reset_cloud(cloud);
     }
@@ -154,7 +156,7 @@ void Scene::update_buffer_location(Object_* object){
       Subset* subset = *next(cloud->subset.begin(), i);
       gpuManager->update_buffer_location(subset);
     }
-  }else if(object->obj_type == "subset"){
+  }else{
     gpuManager->update_buffer_location(object);
   }
 
@@ -169,7 +171,7 @@ void Scene::update_buffer_color(Object_* object){
       Subset* subset = *next(cloud->subset.begin(), i);
       gpuManager->update_buffer_color(subset);
     }
-  }else if(object->obj_type == "subset"){
+  }else{
     gpuManager->update_buffer_color(object);
   }
 
@@ -188,7 +190,7 @@ void Scene::update_glyph(Object_* object){
     this->update_cloud_MinMax((Cloud*)object);
     objectManager->update_glyph_cloud((Cloud*)object);
   }else if(object->obj_type == "subset"){
-    this->update_subset_MinMax((Subset*)object);
+    this->update_MinMax(object);
     objectManager->update_glyph_subset((Subset*)object);
   }
 
@@ -201,7 +203,7 @@ void Scene::update_cloud_MinMax(Cloud* cloud){
 
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
-    this->update_subset_MinMax(subset);
+    this->update_MinMax(subset);
 
     //Cloud
     for(int j=0; j<3; j++){
@@ -214,8 +216,8 @@ void Scene::update_cloud_MinMax(Cloud* cloud){
   cloud->min = min_cloud;
   cloud->max = max_cloud;
 }
-void Scene::update_subset_MinMax(Subset* subset){
-  vector<vec3>& XYZ = subset->xyz;
+void Scene::update_MinMax(Object_* object){
+  vector<vec3>& XYZ = object->xyz;
   vec3 centroid = vec3(0, 0, 0);
   vec3 min = XYZ[0];
   vec3 max = XYZ[0];
@@ -234,9 +236,9 @@ void Scene::update_subset_MinMax(Subset* subset){
   }
 
   //---------------------------
-  subset->min = min;
-  subset->max = max;
-  subset->COM = centroid;
+  object->min = min;
+  object->max = max;
+  object->COM = centroid;
 }
 void Scene::update_cloud_IntensityToColor(Cloud* cloud){
   //---------------------------

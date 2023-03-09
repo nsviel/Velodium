@@ -7,7 +7,6 @@
 class Node_load;
 class Extractor;
 class Scene;
-class Graph;
 
 class file_PTS;
 class file_PLY;
@@ -29,7 +28,7 @@ public:
 
 public:
   //Main functions
-  bool load_cloud(string pathFile);
+  bool load_object(string pathFile);
   bool load_cloud_byFrame(vector<string> path_vec);
   bool load_cloud_onthefly(vector<string> path_vec);
   bool load_cloud_silent(string pathFile);
@@ -39,7 +38,7 @@ public:
   bool load_cloud_oneFrame(Cloud* cloud, string path);
   vector<vec3> load_vertices(string path);
 
-  inline Cloud* get_createdcloud(){return cloud;}
+  inline Object_* get_created_object(){return cloud;}
   inline file_PTS* get_ptsManager(){return ptsManager;}
   inline file_PTX* get_ptxManager(){return ptxManager;}
   inline file_PCAP* get_pcapManager(){return pcapManager;}
@@ -53,7 +52,7 @@ private:
   Extractor* extractManager;
   Scene* sceneManager;
   Cloud* cloud;
-  Graph* graphManager;
+  Object_ object;
 
   file_PTS* ptsManager;
   file_PLY* plyManager;

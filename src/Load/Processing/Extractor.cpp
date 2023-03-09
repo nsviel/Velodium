@@ -24,13 +24,11 @@ Extractor::Extractor(Node_load* node_load){
   Node_engine* node_engine = node_load->get_node_engine();
   Node_scene* node_scene = node_engine->get_node_scene();
 
+  this->objectManager = node_scene->get_objectManager();
+  this->texManager = new Texture();
   this->gpuManager = new GPU_data();
 
-  this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_scene->get_sceneManager();
-  this->objectManager = node_scene->get_objectManager();
-  this->texManager = node_engine->get_texManager();
-
+  this->ID_cloud = 0;
   this->ID = 0;
 
   //---------------------------
@@ -184,15 +182,8 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
   cloud->nb_point = nb_point;
   cloud->nb_subset = data.size();
 
-  cloud->draw_point_size = configManager->parse_json_i("parameter", "point_size");
   cloud->unicolor = color_rdm;
   cloud->path_save = get_path_abs_build() + "../media/data/";
-
-  //ID
-  int* ID_cloud = sceneManager->get_new_ID_cloud();
-  cloud->ID_perma = 0;//*ID_cloud;
-  cloud->ID_order = sceneManager->get_new_oID_cloud();
-  *ID_cloud += 1;
 
   //---------------------------
 }

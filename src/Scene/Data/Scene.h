@@ -35,16 +35,15 @@ public:
   void update_cloud_IntensityToColor(Cloud* cloud);
   void update_subset_IntensityToColor(Subset* subset);
   void update_cloud_MinMax(Cloud* cloud);
-  void update_subset_MinMax(Subset* subset);
+  void update_MinMax(Object_* object);
   void update_ID_order(list<Cloud*>* list);
 
-  inline int get_nb_cloud(){return data->list_cloud->size();}
-  inline list<Cloud*>* get_list_cloud(){return data->list_cloud;}
+  inline int get_nb_cloud(){return data->get_list_cloud()->size();}
+  inline list<Cloud*>* get_list_cloud(){return data->get_list_cloud();}
   inline Cloud* get_selected_cloud(){return cloud_selected;}
   inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
-  inline bool get_is_list_empty(){return data->list_cloud->empty();}
-  inline int* get_new_ID_cloud(){return &ID_cloud;}
-  inline int get_new_oID_cloud(){return data->list_cloud->size();}
+  inline bool get_is_list_empty(){return data->get_list_cloud()->empty();}
+  inline int get_new_oID_cloud(){return data->get_list_cloud()->size();}
   inline Data* get_data(){return data;}
 
 private:
@@ -52,9 +51,7 @@ private:
   GPU_data* gpuManager;
   Data* data;
 
-//  list<Cloud*>* data->list_cloud;
   Cloud* cloud_selected;
-  int ID_cloud;
 };
 
 #endif
