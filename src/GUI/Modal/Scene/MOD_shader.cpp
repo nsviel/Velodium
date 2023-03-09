@@ -6,7 +6,7 @@
 #include "../../../Scene/Node_scene.h"
 #include "../../../Engine/Shader/Shader.h"
 #include "../../../Engine/Shader/Source/Shader_edl.h"
-#include "../../../Engine/Shader/Source/Shader_screen.h"
+#include "../../../Engine/Shader/Source/Shader_lighting.h"
 
 #include <fstream>
 
@@ -33,7 +33,7 @@ void MOD_shader::window_shader(){
     ImGui::Begin("Shader manager", open, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
 
-    this->shader_screen();
+    this->shader_lighting();
     this->shader_render();
 
     //---------------------------
@@ -46,15 +46,16 @@ void MOD_shader::window_shader(){
 }
 
 //Sub functions
-void MOD_shader::shader_screen(){
-  //Shader_screen* shader_screen = (Shader_screen*)shaderManager->get_shader_src_byName("screen");
+void MOD_shader::shader_lighting(){
+  Shader_lighting* shader_lighting = (Shader_lighting*)shaderManager->get_shader_src_byName("lighting");
   //---------------------------
 
-  /*ImGui::SetNextItemWidth(item_width);
-  bool* with_depth = shader_screen->get_with_depth();
-  if(ImGui::Checkbox("Depth view", with_depth)){
-    shader_screen->update_shader();
-  }*/
+  vec3 color = shader_lighting->get_light_color();
+  ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
+  if(ImGui::ColorEdit3("Color##43", (float*)&color, flags)){
+    shader_lighting->set_light_color(color);
+    shader_lighting->update_shader();
+  }
 
   //---------------------------
 }

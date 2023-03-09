@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Data.h"
 #include "../../common.h"
 
 #include <list>
@@ -22,12 +23,6 @@ public:
   //Remove functions
   void remove_cloud(Cloud* cloud);
   void remove_cloud_all();
-  void remove_subset(Cloud* cloud, int ID);
-  void remove_subset_last(Cloud* cloud);
-  void remove_subset_all(Cloud* cloud);
-
-  //Add functions
-  void add_new_subset(Cloud* cloud, Subset* subset);
 
   //Reset functions
   void reset_cloud(Cloud* cloud);
@@ -43,19 +38,21 @@ public:
   void update_subset_MinMax(Subset* subset);
   void update_ID_order(list<Cloud*>* list);
 
-  inline int get_nb_cloud(){return list_cloud->size();}
-  inline list<Cloud*>* get_list_cloud(){return list_cloud;}
+  inline int get_nb_cloud(){return data->list_cloud->size();}
+  inline list<Cloud*>* get_list_cloud(){return data->list_cloud;}
   inline Cloud* get_selected_cloud(){return cloud_selected;}
   inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
-  inline bool get_is_list_empty(){return list_cloud->empty();}
+  inline bool get_is_list_empty(){return data->list_cloud->empty();}
   inline int* get_new_ID_cloud(){return &ID_cloud;}
-  inline int get_new_oID_cloud(){return list_cloud->size();}
+  inline int get_new_oID_cloud(){return data->list_cloud->size();}
+  inline Data* get_data(){return data;}
 
 private:
   Object* objectManager;
   GPU_data* gpuManager;
+  Data* data;
 
-  list<Cloud*>* list_cloud;
+//  list<Cloud*>* data->list_cloud;
   Cloud* cloud_selected;
   int ID_cloud;
 };

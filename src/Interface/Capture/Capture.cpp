@@ -227,7 +227,7 @@ void Capture::operation_new_subset(Subset* subset){
 
     //Do not record the first run
     if(is_first_run){
-      sceneManager->remove_subset_last(cloud_capture);
+      cloud_capture->remove_subset_last();
       cloud_capture->nb_subset = 0;
       is_first_run = false;
     }
@@ -248,7 +248,7 @@ void Capture::operation_new_subset(Subset* subset){
     sceneManager->update_buffer_location(subset);
 
     //Insert the subset inside the capture cloud
-    sceneManager->add_new_subset(cloud_capture, subset);
+    cloud_capture->add_new_subset(subset);
 
     //Compute online stuff
     Online* onlineManager = node_ope->get_onlineManager();
@@ -313,12 +313,12 @@ void Capture::control_nb_subset(Cloud* cloud){
 
   //If option, remove all other subset
   if(with_justOneFrame){
-    sceneManager->remove_subset_last(cloud);
+    cloud->remove_subset_last();
   }
   //Remove old frame if option is activated
   else{
     if(cloud->subset.size() > nb_subset_max){
-      sceneManager->remove_subset_last(cloud);
+      cloud->remove_subset_last();
     }
   }
 

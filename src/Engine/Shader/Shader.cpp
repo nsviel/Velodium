@@ -2,7 +2,7 @@
 
 #include "Base/Shader_object.h"
 #include "Base/Shader_source.h"
-#include "Source/Shader_screen.h"
+#include "Source/Shader_lighting.h"
 #include "Source/Shader_edl.h"
 
 #include "../Node_engine.h"
@@ -43,16 +43,22 @@ void Shader::init_shader(){
 	string path_vs, path_fs;
 	//---------------------------
 
-	// Screen shader
+	// Untextured mesh shader
 	path_vs = shader_dir + "pass_1/shader_mesh_untextured.vs";
 	path_fs = shader_dir + "pass_1/shader_mesh_untextured.fs";
 	shader = new Shader_object("mesh_untextured", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
-	// Texture shader
+	// Textured mesh shader
 	path_vs = shader_dir + "pass_1/shader_mesh_textured.vs";
 	path_fs = shader_dir + "pass_1/shader_mesh_textured.fs";
 	shader = new Shader_object("mesh_textured", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader);
+
+	// Light mesh shader
+	path_vs = shader_dir + "pass_1/shader_mesh_light.vs";
+	path_fs = shader_dir + "pass_1/shader_mesh_light.fs";
+	shader = new Shader_object("mesh_light", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//EDL shader
@@ -68,11 +74,24 @@ void Shader::init_shader(){
 	shader = new Shader_object("render_color_inv", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
-	//Inversion shader
+	//Canvas shader
 	path_vs = shader_dir + "pass_3/shader_canvas.vs";
 	path_fs = shader_dir + "pass_3/shader_canvas.fs";
 	shader = new Shader_object("canvas", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
+
+	//Geometric shader
+	path_vs = shader_dir + "experimental/shader_geometric.vs";
+	path_fs = shader_dir + "experimental/shader_geometric.fs";
+	shader = new Shader_object("geometric", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader);
+
+	//Lighting shader
+	Shader_lighting* lightManager = new Shader_lighting();
+	shader = new Shader_object(lightManager);
+	lightManager->setup_shader(shader);
+	this->list_shader_obj->push_back(shader);
+	this->list_shader_src->push_back(lightManager);
 
 	//---------------------------
 }

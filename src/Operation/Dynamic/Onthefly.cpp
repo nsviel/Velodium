@@ -66,7 +66,7 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
     if(cloud->subset.size() > range){
       Subset* subset = *next(cloud->subset.begin(), 0);
       list_id.remove(subset->ID);
-      sceneManager->remove_subset_last(cloud);
+      cloud->remove_subset_last();
     }
   }
 
@@ -83,7 +83,7 @@ void Onthefly::reset(){
       vector<string>& list_path = cloud->list_path;
       list<int>& list_id = cloud->list_loaded;
 
-      sceneManager->remove_subset_all(cloud);
+      cloud->remove_subset_all();
       cloud->list_loaded.clear();
       cloud->ID_subset = 0;
       cloud->ID_onthefly = 0;

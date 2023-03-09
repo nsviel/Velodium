@@ -79,7 +79,6 @@ void CoreGLengine::loop(){
     this->loop_resizing();
     renderManager->loop_pass_1();
     this->loop_draw_scene();
-    this->loop_selection();
 
     //Second pass
     //---------------------------
@@ -185,27 +184,24 @@ void CoreGLengine::loop_gui(){
 
   //---------------------------
 }
-void CoreGLengine::loop_selection(){
-  //---------------------------
-
-  node_gui->loop_selection();
-
-  //---------------------------
-}
 void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
-  //Camera & scene runtime
-  vec2 win_dim = dimManager->get_win_dim();
-  glViewport(0, 0, win_dim[0], win_dim[1]);
-  cameraManager->input_cam_mouse();
-  node_engine->runtime();
+  //Light
+  shaderManager->use_shader("mesh_light");
+  cameraManager->update_shader();
+
+  engineManager->draw_light();
 
   //Untextured cloud & glyph drawing
-  shaderManager->use_shader("mesh_untextured");
+  shaderManager->use_shader("lighting");
   cameraManager->update_shader();
 
   engineManager->draw_untextured_cloud();
+
+  //GUI stuff
+  shaderManager->use_shader("mesh_untextured");
+  cameraManager->update_shader();
   engineManager->draw_untextured_glyph();
 
   //Textured cloud drawing
@@ -229,6 +225,13 @@ void CoreGLengine::loop_resizing(){
     shaderManager->update_shader();
     renderManager->update_dim_canvas();
   }
+
+  //Camera & scene runtime
+  vec2 win_dim = dimManager->get_win_dim();
+  glViewport(0, 0, win_dim[0], win_dim[1]);
+  cameraManager->input_cam_mouse();
+  node_engine->runtime();
+  node_gui->loop_selection();
 
   //---------------------------
 }

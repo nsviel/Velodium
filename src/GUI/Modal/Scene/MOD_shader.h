@@ -20,7 +20,7 @@ public:
 
   //Sub functions
   void shader_render();
-  void shader_screen();
+  void shader_lighting();
 
 private:
   Shader* shaderManager;

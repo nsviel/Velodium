@@ -28,6 +28,7 @@ Cloud::Cloud(){
   //---------------------------
 }
 
+//Add / remove subset
 void Cloud::add_new_subset(Subset* subset){
   //---------------------------
 
@@ -48,7 +49,45 @@ void Cloud::add_new_subset(Subset* subset){
 
   //---------------------------
 }
+void Cloud::remove_subset_last(){
+  //---------------------------
 
+  //Get subset object
+  Subset* sub = this->get_subset(0);
+  Subset* sub_buf = this->get_subset_buffer(0);
+  Subset* sub_ini = this->get_subset_init(0);
+
+  //Remove data from GPU
+  glDeleteBuffers(1, &sub->vbo_xyz);
+  glDeleteBuffers(1, &sub->vbo_rgb);
+  glDeleteBuffers(1, &sub->vbo_uv);
+  glDeleteVertexArrays(1, &sub->vao);
+
+  //Supress Subset pointer
+  subset.pop_front();
+  subset_buffer.pop_front();
+  subset_init.pop_front();
+
+  //Delete Subset object
+  delete sub;
+  delete sub_buf;
+  delete sub_ini;
+
+  //---------------------------
+  this->nb_subset = subset.size();
+}
+void Cloud::remove_subset_all(){
+  int size = subset.size();
+  //---------------------------
+
+  for(int i=0; i<size; i++){
+    this->remove_subset_last();
+  }
+
+  //---------------------------
+}
+
+// Get subset frame
 Frame* Cloud::get_frame_selected(){
   //---------------------------
 
@@ -69,6 +108,7 @@ Frame* Cloud::get_frame_byID(int querry){
   //---------------------------
 }
 
+//Retrieve subset
 Subset* Cloud::get_subset_selected_init(){
   //---------------------------
 

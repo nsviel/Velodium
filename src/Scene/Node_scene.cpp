@@ -16,8 +16,8 @@ Node_scene::Node_scene(Node_engine* node){
 
   this->glyphManager = new Glyphs(this);
   this->objectManager = new Object(this);
-  this->graphManager = new Graph(this);
   this->sceneManager = new Scene(this);
+  this->graphManager = new Graph(this);
 
   //---------------------------
 }

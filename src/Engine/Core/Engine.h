@@ -25,7 +25,8 @@ public:
   void draw_untextured_glyph();
   void arcball_cam_lookat();
 
-  //Cloud drawing function
+  //Drawing function
+  void draw_light();
   void draw_untextured_cloud();
   void draw_textured_cloud();
 

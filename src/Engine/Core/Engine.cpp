@@ -7,6 +7,7 @@
 #include "../Camera/Camera.h"
 
 #include "../../Scene/Node_scene.h"
+#include "../../Scene/Data/Data.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Glyph/Object.h"
@@ -80,6 +81,17 @@ void Engine::arcball_cam_lookat(){
 }
 
 //Cloud drawing function
+void Engine::draw_light(){
+  Data* data = sceneManager->get_data();
+  //---------------------------
+
+  for(int i=0; i<data->list_light->size(); i++){
+    Light_* light = *next(data->list_light->begin(),i);
+    gpuManager->draw_object(light);
+  }
+
+  //---------------------------
+}
 void Engine::draw_untextured_cloud(){
   list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------

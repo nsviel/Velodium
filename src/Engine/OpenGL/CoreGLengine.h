@@ -46,7 +46,6 @@ public:
 
   // Loop scene stuff
   void loop_gui();
-  void loop_selection();
   void loop_draw_scene();
 
   // Loop rendering stuff

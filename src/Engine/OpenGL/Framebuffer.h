@@ -8,6 +8,8 @@ struct FBO{
   GLuint ID_fbo;
   GLuint ID_tex_color;
   GLuint ID_tex_depth;
+  GLuint ID_tex_position;
+  GLuint ID_tex_normal;
 };
 
 
@@ -24,10 +26,16 @@ public:
 
   //Framebuffer generation stuff
   void gen_fbo(FBO* fbo);
-  void gen_fbo_tex_color(FBO* fbo);
-  void gen_fbo_tex_color_multisample(FBO* fbo);
+  void gen_fbo_tex_color(FBO* fbo, int color_id);
+  void gen_fbo_tex_color_multisample(FBO* fbo, int color_id);
   void gen_fbo_tex_depth(FBO* fbo);
+  void gen_fbo_tex_position(FBO* fbo, int color_id);
+  void gen_fbo_tex_normal(FBO* fbo, int color_id);
   void gen_fbo_check(FBO* fbo);
+
+  //GBuffer stuff
+  void create_gbuffer();
+  void draw_buffer(FBO* fbo, int nb_attachment);
 
   inline vector<FBO*> get_fbo_vec(){return fbo_vec;}
 

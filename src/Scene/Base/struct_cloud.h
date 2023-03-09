@@ -16,6 +16,8 @@ struct Cloud : public Object_
   Cloud();
 
   void add_new_subset(Subset* subset);
+  void remove_subset_all();
+  void remove_subset_last();
 
   Frame* get_frame_byID(int querry);
   Frame* get_frame_selected();
