@@ -41,7 +41,7 @@ MOD_operation::~MOD_operation(){}
 void MOD_operation::window_selection(){
   if(modal_tab.show_selection){
     ImGui::Begin("Selection part", &modal_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
-    Collection* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_collection();
     Cloud* subset = cloud->subset_selected;
     //---------------------------
 
@@ -194,7 +194,7 @@ void MOD_operation::window_selection(){
 void MOD_operation::window_fitting(){
   if(modal_tab.show_fitting){
     ImGui::Begin("Fitting", &modal_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
-    Collection* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_collection();
     Cloud* subset = cloud->subset_selected;
     int sizeButton = 150;
     //---------------------------
@@ -202,8 +202,8 @@ void MOD_operation::window_fitting(){
     //Sphere fitting
     if(ImGui::Button("Sphere fitting", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        list<Collection*>* list_cloud = sceneManager->get_list_cloud();
-        fitManager->Sphere_cloudToCenter_all(list_cloud);
+        list<Collection*>* list_collection = sceneManager->get_list_collection();
+        fitManager->Sphere_cloudToCenter_all(list_collection);
       }
     }
 
@@ -219,7 +219,7 @@ void MOD_operation::window_fitting(){
       if(cloud != nullptr){
         poseManager->make_orientAxis_X(cloud);
         poseManager->make_alignAxis_X(cloud);
-        sceneManager->update_buffer_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
       }
     }
 

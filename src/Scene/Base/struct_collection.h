@@ -9,7 +9,7 @@
 
 
 //Collection are subset containers
-struct Collection : public Object_
+struct Collection
 {
   //---------------------------
 
@@ -36,14 +36,26 @@ struct Collection : public Object_
 
   //Infos
   std::string lidar_model;
+  std::string name;
+  std::string path_file;
+  std::string path_save;
+  int nb_point;
+  std::string file_format;
   bool is_heatmap;
   bool is_boxed;
+  bool is_visible;
+  int draw_point_size;
+  glm::vec4 unicolor;
+  std::string obj_type;
 
   //On the fly
   bool is_onthefly;
   int ID_onthefly;
   std::vector<std::string> list_path;
   std::list<int> list_loaded;
+  glm::vec3 COM;
+  glm::vec3 min;
+  glm::vec3 max;
 
   //Subset stuff
   int ID_selected; //Actual selected subset ID

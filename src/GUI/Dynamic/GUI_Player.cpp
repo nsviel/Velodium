@@ -71,7 +71,7 @@ void GUI_Player::design_run(){
 
 //Player action
 void GUI_Player::player_visibility(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   visibilityManager->compute_visibility_range_max(cloud);
@@ -88,7 +88,7 @@ void GUI_Player::player_visibility(){
   //---------------------------
 }
 void GUI_Player::player_recording(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //Recording button
@@ -111,7 +111,7 @@ void GUI_Player::player_recording(){
   //---------------------------
 }
 void GUI_Player::player_onthefly(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "On the fly");
@@ -121,7 +121,7 @@ void GUI_Player::player_onthefly(){
   ImGui::Separator();
 }
 void GUI_Player::player_parameter(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   string* player_mode = playerManager->get_player_mode();
   //---------------------------
 
@@ -144,7 +144,7 @@ void GUI_Player::player_parameter(){
   ImGui::Separator();
 }
 void GUI_Player::player_button(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   string* player_mode = playerManager->get_player_mode();
   //---------------------------
 
@@ -202,7 +202,7 @@ void GUI_Player::player_button(){
   //---------------------------
 }
 void GUI_Player::player_selection(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   if(cloud != nullptr && cloud->nb_subset > 2){

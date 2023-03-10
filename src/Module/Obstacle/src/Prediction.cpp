@@ -58,7 +58,7 @@ bool* Prediction::runtime_prediction(){
 
 //Subfunctions
 void Prediction::compute_prediction(string path){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   if(cloud == nullptr){
     return;
   }

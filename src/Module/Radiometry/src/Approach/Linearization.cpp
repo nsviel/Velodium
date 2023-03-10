@@ -43,7 +43,7 @@ void Linearization::algo_linearization(Collection* cloud, int method){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(cloud);
+  //sceneManager->update_buffer_color(cloud);
   console.AddLog("ok", "linearized");
 }
 void Linearization::algo_reverse(Collection* cloud, int method){
@@ -61,7 +61,7 @@ void Linearization::algo_reverse(Collection* cloud, int method){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(cloud);
+  //sceneManager->update_buffer_color(cloud);
   console.AddLog("ok", "linearization reversed");
 }
 

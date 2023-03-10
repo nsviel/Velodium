@@ -55,7 +55,7 @@ Loader::~Loader(){
 }
 
 //Main functions
-Object_* Loader::load_cloud(string path){
+Collection* Loader::load_cloud(string path){
   //---------------------------
 
   //Check file existence
@@ -68,12 +68,12 @@ Object_* Loader::load_cloud(string path){
   vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
 
   //Insert cloud
-  Object_* object = load_insertIntoDatabase(data_vec);
+  Collection* collection = load_insertIntoDatabase(data_vec);
 
   //---------------------------
   string log = "Loaded "+ path;
   console.AddLog("ok", log);
-  return object;
+  return collection;
 }
 Object_* Loader::load_object(string path){
   //---------------------------
@@ -127,9 +127,9 @@ bool Loader::load_cloud_onthefly(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //Save list of file
-  cloud->list_path = path_vec;
-  cloud->is_onthefly = true;
-  cloud->ID_onthefly++;
+  collection->list_path = path_vec;
+  collection->is_onthefly = true;
+  collection->ID_onthefly++;
 
   //---------------------------
   string log = "Loaded on-the-fly cloud";
@@ -150,7 +150,7 @@ bool Loader::load_cloud_silent(string path){
   vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
 
   //Extract data and put in the engine
-  cloud = extractManager->extract_data(data_vec);
+  this->collection = extractManager->extract_data(data_vec);
 
   //---------------------------
   return true;
@@ -250,7 +250,7 @@ bool Loader::load_cloud_empty(){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_oneFrame(Collection* cloud, string path){
+bool Loader::load_cloud_oneFrame(Collection* collection, string path){
   //---------------------------
 
   if(is_file_exist(path)){
@@ -258,7 +258,7 @@ bool Loader::load_cloud_oneFrame(Collection* cloud, string path){
     Data_file* data = plyManager->Loader(path);
 
     //Insert frame
-    this->load_insertIntoCloud(data, cloud);
+    this->load_insertIntoCloud(data, collection);
 
     //Delete raw data
     delete data;
@@ -368,21 +368,21 @@ vector<Data_file*> Loader::load_retrieve_cloud_data(string path){
   //---------------------------
   return data_vec;
 }
-Object_* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
-  list<Collection*>* list_cloud = data->get_list_cloud();
+Collection* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
+  list<Collection*>* list_collection = data->get_list_collection();
   //---------------------------
 
   //Extract data and put in the engine
-  cloud = extractManager->extract_data(data_vec);
-  list_cloud->push_back(cloud);
+  this->collection = extractManager->extract_data(data_vec);
+  list_collection->push_back(collection);
 
 
 
-  //Update list cloud
-//  cloud_selected = cloud;
-  data->set_cloud_selected(cloud);
-  sceneManager->update_ID_order(list_cloud);
-  sceneManager->update_glyph(cloud);
+  //Update list collection
+//  cloud_selected = collection;
+  data->set_cloud_selected(collection);
+  sceneManager->update_ID_order(list_collection);
+  ////sceneManager->update_glyph(collection);
 
   //Delete raw data
   for(int i=0; i<data_vec.size(); i++){
@@ -390,7 +390,7 @@ Object_* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   }
 
   //---------------------------
-  return cloud;
+  return collection;
 }
 Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
   //---------------------------
@@ -400,8 +400,8 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
 
   //Update list cloud
   //data->set_cloud_selected(object);
-  //sceneManager->update_ID_order(list_cloud);
-  //sceneManager->update_glyph(cloud);
+  //sceneManager->update_ID_order(list_collection);
+  ////sceneManager->update_glyph(cloud);
 
   //Delete raw data
   delete data_file;
@@ -409,12 +409,12 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
   //---------------------------
   return object;
 }
-void Loader::load_insertIntoCloud(Data_file* data, Collection* cloud){
+void Loader::load_insertIntoCloud(Data_file* data, Collection* collection){
   //---------------------------
 
   //Extract data and put in the engine
-  extractManager->extract_data(cloud, data);
-  cloud->ID_onthefly++;
+  extractManager->extract_data(collection, data);
+  collection->ID_onthefly++;
 
   //---------------------------
 }

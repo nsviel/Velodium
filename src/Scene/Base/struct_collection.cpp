@@ -9,7 +9,7 @@ Collection::Collection(){
   this->ID_order = 0;
 
   //Info
-  this->obj_type = "cloud";
+  this->obj_type = "collection";
   this->lidar_model = "";
   this->is_visible = true;
   this->is_heatmap = false;

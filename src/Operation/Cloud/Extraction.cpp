@@ -165,15 +165,15 @@ void Extraction::fct_cutCloud(Cloud* subset){
   //---------------------------
 }
 void Extraction::fct_cutCloud_all(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
-  Collection* cloud_selected = sceneManager->get_selected_cloud();
-  vec3& max = cloud_selected->max;
-  vec3& min = cloud_selected->min;
+  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  Collection* collection_selected = sceneManager->get_selected_collection();
+  vec3& max = collection_selected->max;
+  vec3& min = collection_selected->min;
   //---------------------------
 
-  for(int i=0;i<list_cloud->size();i++){
+  for(int i=0;i<list_collection->size();i++){
     //Select ieme Point Cloud
-    Collection* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_collection->begin(),i);
     Cloud* subset = cloud->subset_selected;
 
     vector<vec3>& XYZ = subset->xyz;
@@ -192,7 +192,7 @@ void Extraction::fct_cutCloud_all(){
     attribManager->make_supressPoints(subset, idx);
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void Extraction::supress_selectedpart(subpart* part){
   //---------------------------
@@ -428,7 +428,7 @@ void Extraction::fct_highlighting(Cloud* subset, Cloud* subset_init){
   sceneManager->update_buffer_color(subset);
 }
 void Extraction::set_AABB_min(vec3 min_in){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   Cloud* subset_init = cloud->get_subset_selected_init();
   //---------------------------
@@ -461,7 +461,7 @@ void Extraction::set_AABB_min(vec3 min_in){
   objectManager->update_glyph_cloud(cloud);
 }
 void Extraction::set_AABB_max(vec3 max_in){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   Cloud* subset_init = cloud->get_subset_selected_init();
   //---------------------------

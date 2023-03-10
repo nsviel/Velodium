@@ -57,7 +57,7 @@ void Player::update_configuration(){
 }
 void Player::runtime(){
   //Continually running, wait for flag to proceed
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   if(player_time_flag && cloud != nullptr){
@@ -89,7 +89,7 @@ void Player::select_bySubsetID(Collection* cloud, int ID_subset){
   //---------------------------
 }
 void Player::compute_wheel_selection(string direction){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //----------------------------
 
   //Wheel - rolling stone
@@ -191,7 +191,7 @@ void Player::player_start_or_pause(){
   //---------------------------
 }
 void Player::player_stop(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   this->player_isrunning = false;
   this->player_ispaused = false;
   //---------------------------

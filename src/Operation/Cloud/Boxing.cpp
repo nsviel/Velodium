@@ -135,12 +135,12 @@ void Boxing::supress_selected_point(Collection* cloud){
   //---------------------------
 }
 void Boxing::stop_boxing(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
   //---------------------------
 
   //By cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(), i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(), i);
     cloud->is_boxed = false;
     for(int j=0; j<cloud->nb_subset; j++){
       Cloud* subset = cloud->get_subset(j);

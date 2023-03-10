@@ -333,9 +333,9 @@ void Pather::saving_cloud_all(){
   string path_dir = zenity_directory("Save clouds", path_current_dir);
 
   //Save all scene clouds
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     string pathFile = path_dir + "/" + cloud->name + ".pts";
     saverManager->save_cloud(cloud, pathFile);

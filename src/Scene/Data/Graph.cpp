@@ -16,14 +16,14 @@ Graph::~Graph(){}
 
 //Selection
 void Graph::selection_setCloud(int ID){
-  list<Collection*>* list_cloud= sceneManager->get_list_cloud();
+  list<Collection*>* list_collection= sceneManager->get_list_collection();
   //---------------------------
 
-  for (int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for (int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
     if(cloud->ID_order == ID){
       sceneManager->set_selected_cloud(cloud);
-      sceneManager->update_glyph(cloud);
+      //sceneManager->update_glyph(cloud);
     }
   }
 
@@ -33,7 +33,7 @@ void Graph::selection_setCloud(Collection* cloud){
   //---------------------------
 
   sceneManager->set_selected_cloud(cloud);
-  sceneManager->update_glyph(cloud);
+  //sceneManager->update_glyph(cloud);
 
   //---------------------------
 }
@@ -55,33 +55,33 @@ void Graph::selection_setSubset(Collection* cloud, int ID){
   //---------------------------
 }
 void Graph::selection_setNext(){
-  list<Collection*>* list_cloud= sceneManager->get_list_cloud();
-  Collection* cloud_selected = sceneManager->get_selected_cloud();;
-  if(list_cloud->size() == 0) return;
+  list<Collection*>* list_collection= sceneManager->get_list_collection();
+  Collection* cloud_selected = sceneManager->get_selected_collection();;
+  if(list_collection->size() == 0) return;
   //---------------------------
 
-  if(cloud_selected->ID_order + 1 < list_cloud->size()){
-    cloud_selected = *next(list_cloud->begin(),cloud_selected->ID_order + 1);
+  if(cloud_selected->ID_order + 1 < list_collection->size()){
+    cloud_selected = *next(list_collection->begin(),cloud_selected->ID_order + 1);
   }
   else{
-    cloud_selected = *next(list_cloud->begin(),0);
+    cloud_selected = *next(list_collection->begin(),0);
   }
   sceneManager->update_cloud_MinMax(cloud_selected);
-  sceneManager->update_glyph(cloud_selected);
+  //sceneManager->update_glyph(cloud_selected);
   sceneManager->set_selected_cloud(cloud_selected);
 
   //---------------------------
 }
 void Graph::selection_cloudByName(string name){
-  list<Collection*>* list_cloud= sceneManager->get_list_cloud();
+  list<Collection*>* list_collection= sceneManager->get_list_collection();
   //---------------------------
 
-  for (int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for (int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     if(cloud->name == name){
       sceneManager->set_selected_cloud(cloud);
-      sceneManager->update_glyph(cloud);
+      //sceneManager->update_glyph(cloud);
     }
   }
 

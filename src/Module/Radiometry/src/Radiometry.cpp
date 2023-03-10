@@ -55,7 +55,7 @@ Radiometry::~Radiometry(){}
 
 //Correction Methods
 void Radiometry::algo_RadarEquation(int num){
-  /*Collection* cloud = sceneManager->get_selected_cloud();
+  /*Collection* cloud = sceneManager->get_selected_collection();
   attribManager->compute_attribut_cloud(cloud);
   //---------------------------
 
@@ -146,12 +146,12 @@ void Radiometry::algo_separationGlobal(Collection* cloud){
 
 //Correction functions
 void Radiometry::correction_allClouds(){
-  /*list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
   //---------------------------
 
   //Correct all cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     //Correction
     this->compute_RadioCorrection(cloud);
@@ -166,12 +166,12 @@ void Radiometry::correction_allClouds(){
   //---------------------------
 }
 void Radiometry::correction_allClouds_Iini(){
-  /*list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
   //---------------------------
 
   //Correct all cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     cloud->location.Buffer = cloud->location.OBJ;
     cloud->normal.Buffer = cloud->normal.OBJ;
@@ -183,8 +183,8 @@ void Radiometry::correction_allClouds_Iini(){
   }
 
   //Update all cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     cloud->location.OBJ = cloud->location.Buffer;
     cloud->normal.OBJ = cloud->normal.Buffer;
@@ -199,12 +199,12 @@ void Radiometry::correction_allClouds_Iini(){
   //---------------------------
 }
 void Radiometry::correction_allClouds_WtRefs(){
-  /*list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
   Is_std.clear(); Is_CV.clear(); Ic_std.clear(); Ic_CV.clear();
   //---------------------------
 
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
     if(cloud->name.find("Sphere") == std::string::npos && cloud->name.find("Spectralon") == std::string::npos){
       this->correction_oneCloud(cloud);
     }
@@ -321,7 +321,7 @@ void Radiometry::compute_SpectralonAjustement(){
 }
 void Radiometry::set_referenceON(bool value){
   if(refManager->is_listsCompiled() == false){
-    refManager->compute_list(sceneManager->get_list_cloud());
+    refManager->compute_list(sceneManager->get_list_collection());
   }
   list<Collection*>* list = refManager->get_listReference();
   //---------------------------
@@ -350,7 +350,7 @@ void Radiometry::wrt_results(){
 }
 void Radiometry::remove_References(){
   if(refManager->is_listsCompiled() == false){
-    refManager->compute_list(sceneManager->get_list_cloud());
+    refManager->compute_list(sceneManager->get_list_collection());
   }
   list<Collection*>* list = refManager->get_listReference();
   //---------------------------

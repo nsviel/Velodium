@@ -34,7 +34,7 @@ MOD_transformation::~MOD_transformation(){}
 
 //Main function
 void MOD_transformation::design_transformation(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   if(modal_tab.show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &modal_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
@@ -55,7 +55,7 @@ void MOD_transformation::design_transformation(){
 
 //Specific function
 void MOD_transformation::actual_transformation_mat(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   //---------------------------
 
@@ -72,7 +72,7 @@ void MOD_transformation::actual_transformation_mat(){
   //---------------------------
 }
 void MOD_transformation::manual_transformation_mat(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Manual transformation matrix")){
@@ -129,12 +129,12 @@ void MOD_transformation::manual_transformation_mat(){
       if(cloud != nullptr){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
-        Collection* cloud = sceneManager->get_selected_cloud();
+        Collection* cloud = sceneManager->get_selected_collection();
         Cloud* subset = cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        sceneManager->update_buffer_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
@@ -144,7 +144,7 @@ void MOD_transformation::manual_transformation_mat(){
 
         //------------------
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        //sceneManager->update_buffer_location(cloud);
+        ////sceneManager->update_buffer_location(cloud);
       }
     }
     if(ImGui::Button("Reverse from initial pos", ImVec2(150,0))){
@@ -152,12 +152,12 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        Collection* cloud = sceneManager->get_selected_cloud();
+        Collection* cloud = sceneManager->get_selected_collection();
         Cloud* subset = cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        sceneManager->update_buffer_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
@@ -167,7 +167,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat2 = inverse(mat);
 
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
-        //sceneManager->update_buffer_location(cloud);
+        ////sceneManager->update_buffer_location(cloud);
       }
     }
 
@@ -176,7 +176,7 @@ void MOD_transformation::manual_transformation_mat(){
   }
 }
 void MOD_transformation::cloud_translation(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Collection translation")){
@@ -190,7 +190,7 @@ void MOD_transformation::cloud_translation(){
       if(cloud != nullptr){
         vec3 translation = vec3(trans[0], trans[1], trans[2]);
         transformManager->make_translation(cloud, translation);
-        sceneManager->update_buffer_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
         trans[0] = 0;
         trans[1] = 0;
         trans[2] = 0;
@@ -202,7 +202,7 @@ void MOD_transformation::cloud_translation(){
   }
 }
 void MOD_transformation::cloud_rotation(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Collection rotation")){
@@ -275,7 +275,7 @@ void MOD_transformation::cloud_elevation(){
 
 //Elevation function
 void MOD_transformation::elevation_ground(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Ground");
@@ -295,7 +295,7 @@ void MOD_transformation::elevation_ground(){
   if(ImGui::DragFloat("Manual setting", &Zpos, 0.01f)){
     if(cloud != nullptr){
       poseManager->make_elevation(cloud, Zpos);
-      sceneManager->update_buffer_location(cloud);
+      //sceneManager->update_buffer_location(cloud);
       ground = poseManager->make_soilDetermination(cloud);
     }
   }
@@ -304,7 +304,7 @@ void MOD_transformation::elevation_ground(){
   ImGui::Separator();
 }
 void MOD_transformation::elevation_height(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Elevation");
@@ -325,17 +325,17 @@ void MOD_transformation::elevation_height(){
 
   if(ImGui::Button("Apply##0")){
     if(allClouds){
-      list<Collection*>* list_cloud = sceneManager->get_list_cloud();
-      for(int i=0;i<list_cloud->size();i++){
-        Collection* cloud = *next(list_cloud->begin(),i);
+      list<Collection*>* list_collection = sceneManager->get_list_collection();
+      for(int i=0;i<list_collection->size();i++){
+        Collection* cloud = *next(list_collection->begin(),i);
         poseManager->make_adjustPosToScanner(cloud, Z_scan);
-        sceneManager->update_buffer_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
       }
     }
     else{
       if(cloud != nullptr){
         poseManager->make_adjustPosToScanner(cloud, Z_scan);
-        sceneManager->update_buffer_location(cloud);
+        //sceneManager->update_buffer_location(cloud);
         ground = poseManager->make_soilDetermination(cloud);
       }
     }
@@ -345,7 +345,7 @@ void MOD_transformation::elevation_height(){
   ImGui::Separator();
 }
 void MOD_transformation::elevation_redressment(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Redressment");
@@ -353,7 +353,7 @@ void MOD_transformation::elevation_redressment(){
   if(ImGui::Button("Plane fitting on selected points")){
     if(cloud != nullptr){
       poseManager->make_alignSelectionToGround(cloud);
-      sceneManager->update_buffer_location(cloud);
+      //sceneManager->update_buffer_location(cloud);
     }
   }
 

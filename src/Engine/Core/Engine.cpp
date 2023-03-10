@@ -38,15 +38,15 @@ Engine::~Engine(){}
 
 //Program functions
 void Engine::draw_untextured_glyph(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
   //---------------------------
 
   //Draw glyph scene
   objectManager->runtime_glyph_scene();
 
   //Draw glyph subset
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     if(cloud->is_visible){
       //All subset
@@ -92,12 +92,12 @@ void Engine::draw_light(){
   //---------------------------
 }
 void Engine::draw_untextured_cloud(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
   //---------------------------
 
   //By cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     //By subset
     if(cloud->is_visible){
@@ -115,13 +115,13 @@ void Engine::draw_untextured_cloud(){
   //---------------------------
 }
 void Engine::draw_textured_cloud(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
   //By cloud
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
 
     //By subset
     if(cloud->is_visible){

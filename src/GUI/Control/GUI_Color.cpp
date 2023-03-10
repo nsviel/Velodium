@@ -87,7 +87,7 @@ void GUI_Color::option_heatmap(){
 }
 void GUI_Color::heatmap_application(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Heatmap");
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //Apply heatMap on one cloud

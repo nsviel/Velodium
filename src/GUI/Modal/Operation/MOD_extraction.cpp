@@ -49,7 +49,7 @@ void MOD_extraction::design_extractCloud(){
 
 //Specific function
 void MOD_extraction::extract_with_aabb(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   //---------------------------
 
@@ -153,7 +153,7 @@ void MOD_extraction::extract_with_aabb(){
   ImGui::Separator();
 }
 void MOD_extraction::extract_with_mouse(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   //---------------------------
 
@@ -169,15 +169,15 @@ void MOD_extraction::extract_with_mouse(){
   ImGui::Separator();
 }
 void MOD_extraction::merge_cloud(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   //---------------------------
 
   //Merge and extract two clouds
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Merge and extract two clouds");
   if(ImGui::Button("Merge clouds", ImVec2(150,0))){
-    list<Collection*>* list_cloud = sceneManager->get_list_cloud();
-    if(list_cloud->size() >= 2){
+    list<Collection*>* list_collection = sceneManager->get_list_collection();
+    if(list_collection->size() >= 2){
       //Collection* cloud_2 = sceneManager->get_cloud_next();
       //extractionManager->fct_merging_newCloud(cloud, cloud_2);
     }

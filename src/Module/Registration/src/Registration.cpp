@@ -36,7 +36,7 @@ Registration::~Registration(){}
 
 //Main functions
 void Registration::make_Iteration(){
-  /*Collection* cloud_P = sceneManager->get_selected_cloud();
+  /*Collection* cloud_P = sceneManager->get_selected_collection();
   Collection* cloud_Q = sceneManager->get_cloud_next();
   //------------------------------
 

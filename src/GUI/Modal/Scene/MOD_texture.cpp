@@ -42,7 +42,7 @@ void MOD_texture::window_texture(){
   }
 }
 void MOD_texture::texture_operation(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = cloud->subset_selected;
   //---------------------------
 

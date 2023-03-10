@@ -81,7 +81,7 @@ void GUI_Control::make_control(){
 
 //Mouse function
 void GUI_Control::control_mouse(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
   Viewport_obj* view = cameraManager->get_current_viewport();
@@ -120,7 +120,7 @@ void GUI_Control::control_mouse(){
   //---------------------------
 }
 void GUI_Control::control_mouse_wheel(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   static int wheelMode = 0;
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
@@ -148,7 +148,7 @@ void GUI_Control::control_mouse_wheel(){
 
     //Subset rotation
     if(sceneManager->get_is_list_empty() == false){
-      if(cloud->nb_subset == 1 && cloud->is_onthefly == false){
+      if(collection->nb_subset == 1 && collection->is_onthefly == false){
         float radian = cloud_rotat_degree*M_PI/180;
         vec3 R;
         if(wheelMode == 0){
@@ -161,13 +161,13 @@ void GUI_Control::control_mouse_wheel(){
           R = vec3(radian, 0, 0);
         }
 
-        poseManager->compute_COM(cloud);
-        transformManager->make_rotation(cloud, R, direction);
-        sceneManager->update_buffer_location(cloud->subset_selected);
-        sceneManager->update_glyph(cloud);
+        poseManager->compute_COM(collection);
+        transformManager->make_rotation(collection, R, direction);
+        sceneManager->update_buffer_location(collection->subset_selected);
+        //sceneManager->update_glyph(collection);
       }
       //Subset selection
-      else if(cloud->nb_subset > 1 || cloud->is_onthefly){
+      else if(collection->nb_subset > 1 || collection->is_onthefly){
         playerManager->compute_wheel_selection(direction);
       }
     }
@@ -176,7 +176,7 @@ void GUI_Control::control_mouse_wheel(){
   //----------------------------
 }
 void GUI_Control::control_frame_selection(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
@@ -203,7 +203,7 @@ void GUI_Control::control_frame_selection(){
 
 //Keyboard function
 void GUI_Control::control_keyboard_oneAction(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   ImGuiIO io = ImGui::GetIO();
   GLFWwindow* window = glfwGetCurrentContext();
   //----------------------------
@@ -219,7 +219,7 @@ void GUI_Control::control_keyboard_oneAction(){
       bool* highlightON = extractionManager->get_highlightON();
       *highlightON = false;
 
-      //Select the next cloud in the list
+      //Select the next collection in the list
       graphManager->selection_setNext();
       break;
     }
@@ -244,7 +244,7 @@ void GUI_Control::control_keyboard_oneAction(){
 
     //H key - Heatmap
     if (ImGui::IsKeyPressed(72) && !io.WantCaptureMouse){
-      heatmapManager->make_cloud_heatmap(cloud);
+      heatmapManager->make_cloud_heatmap(collection);
       break;
     }
 
@@ -283,13 +283,13 @@ void GUI_Control::control_keyboard_oneAction(){
   //----------------------------
 }
 void GUI_Control::control_keyboard_translation(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   Viewport_obj* view = cameraManager->get_current_viewport();
   ImGuiIO io = ImGui::GetIO();
   //----------------------------
 
   for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++){
-    if(!io.MouseDown[1] && !io.WantCaptureMouse && cloud != nullptr){
+    if(!io.MouseDown[1] && !io.WantCaptureMouse && collection != nullptr){
       float transCoef = cloud_trans_speed;
 
       //Shift speed up
@@ -368,8 +368,8 @@ void GUI_Control::control_keyboard_ctrlAction(){
   if(ImGui::IsKeyPressed(341)){
     //ctrl+s - Save as
     if(ImGui::IsKeyPressed(83)){
-      Collection* cloud = sceneManager->get_selected_cloud();
-      pathManager->saving_cloud(cloud);
+      Collection* collection = sceneManager->get_selected_collection();
+      pathManager->saving_cloud(collection);
     }
     //ctrl+w - Open
     if(ImGui::IsKeyPressed(90)){
@@ -446,50 +446,50 @@ void GUI_Control::control_keyboard_camMove(){
 
 //Specific function
 void GUI_Control::key_suppr(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
-  if(cloud->is_boxed == false){
+  if(collection->is_boxed == false){
     bool is_selected = selectionManager->mark_supressSelectedPoints_all();
 
     if(is_selected == false){
-      sceneManager->remove_cloud(cloud);
+      sceneManager->remove_cloud(collection);
     }
   }else{
-    boxingManager->supress_selected_point(cloud);
+    boxingManager->supress_selected_point(collection);
   }
 
   //----------------------------
 }
 void GUI_Control::key_c(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
   if(!sceneManager->get_is_list_empty()){
-    poseManager->make_centering(cloud);
-    sceneManager->update_buffer_location(cloud);
-    sceneManager->update_glyph(cloud);
+    poseManager->make_centering(collection);
+    //sceneManager->update_buffer_location(collection);
+    //sceneManager->update_glyph(collection);
   }
 
   //----------------------------
 }
 void GUI_Control::key_translation(vec3 trans){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
-  transformManager->make_translation(cloud->subset_selected, trans);
-  sceneManager->update_buffer_location(cloud->subset_selected);
-  sceneManager->update_glyph(cloud);
+  transformManager->make_translation(collection->subset_selected, trans);
+  sceneManager->update_buffer_location(collection->subset_selected);
+  //sceneManager->update_glyph(collection);
 
   //----------------------------
 }
 void GUI_Control::key_rotation(vec3 rotat){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
-  transformManager->make_rotation(cloud->subset_selected, vec3(0,0,0), rotat);
-  sceneManager->update_buffer_location(cloud->subset_selected);
-  sceneManager->update_glyph(cloud);
+  transformManager->make_rotation(collection->subset_selected, vec3(0,0,0), rotat);
+  sceneManager->update_buffer_location(collection->subset_selected);
+  //sceneManager->update_glyph(collection);
 
   //----------------------------
 }

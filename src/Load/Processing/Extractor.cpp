@@ -29,7 +29,7 @@ Extractor::~Extractor(){}
 
 // Main function
 Collection* Extractor::extract_data(vector<Data_file*> data){
-  Collection* cloud = new Collection();
+  Collection* collection = new Collection();
   //---------------------------
 
   if(data.size() == 0){
@@ -37,29 +37,29 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
     exit(0);
   }
 
-  //Init cloud parameters
+  //Init collection parameters
   this->init_random_color();
-  this->init_cloud_parameter(cloud, data);
+  this->init_cloud_parameter(collection, data);
 
   for(int i=0; i<data.size(); i++){
-    Cloud* subset = new Cloud();
+    Cloud* cloud = new Cloud();
 
     //Init
     this->check_data(data[i]);
-    this->init_subset_parameter(subset, data[i], cloud->ID_subset);
-    objectManager->create_glyph_subset(subset);
+    this->init_subset_parameter(cloud, data[i], collection->ID_subset);
+    objectManager->create_glyph_subset(cloud);
 
     //Set parametrization
-    gpuManager->gen_object_buffers(subset);
-    this->define_visibility(subset, i);
-    this->define_buffer_init(cloud, subset);
-    this->compute_texture(subset, data[i]);
+    gpuManager->gen_object_buffers(cloud);
+    this->define_visibility(cloud, i);
+    this->define_buffer_init(collection, cloud);
+    this->compute_texture(cloud, data[i]);
 
-    cloud->ID_subset++;
+    collection->ID_subset++;
   }
 
   //---------------------------
-  return cloud;
+  return collection;
 }
 Cloud* Extractor::extract_data(Data_file& data_file){
   Cloud* object = new Cloud();
@@ -170,7 +170,7 @@ void Extractor::check_data(Data_file* data){
 
   //---------------------------
 }
-void Extractor::init_cloud_parameter(Collection* cloud, vector<Data_file*> data){
+void Extractor::init_cloud_parameter(Collection* collection, vector<Data_file*> data){
   //---------------------------
 
   //Calculate number of point
@@ -181,16 +181,16 @@ void Extractor::init_cloud_parameter(Collection* cloud, vector<Data_file*> data)
 
   //General information
   string path = data[0]->path_file;
-  cloud->path_file = path;
-  cloud->name = get_name_from_path(path);
-  cloud->file_format = get_format_from_path(path);
+  collection->path_file = path;
+  collection->name = get_name_from_path(path);
+  collection->file_format = get_format_from_path(path);
 
-  cloud->is_visible = true;
-  cloud->nb_point = nb_point;
-  cloud->nb_subset = data.size();
+  collection->is_visible = true;
+  collection->nb_point = nb_point;
+  collection->nb_subset = data.size();
 
-  cloud->unicolor = color_rdm;
-  cloud->path_save = get_path_abs_build() + "../media/data/";
+  collection->unicolor = color_rdm;
+  collection->path_save = get_path_abs_build() + "../media/data/";
 
   //---------------------------
 }
@@ -219,35 +219,35 @@ void Extractor::init_object_parameter(Object_* object, Data_file* data, int ID){
 
   //---------------------------
 }
-void Extractor::init_subset_parameter(Cloud* subset, Data_file* data, int ID){
+void Extractor::init_subset_parameter(Cloud* cloud, Data_file* data, int ID){
   //---------------------------
 
-  subset->xyz = data->xyz;
-  subset->rgb = data->rgb;
-  subset->Nxyz = data->Nxyz;
-  subset->I = data->I;
-  subset->ts = data->ts;
-  subset->uv = data->uv;
+  cloud->xyz = data->xyz;
+  cloud->rgb = data->rgb;
+  cloud->Nxyz = data->Nxyz;
+  cloud->I = data->I;
+  cloud->ts = data->ts;
+  cloud->uv = data->uv;
 
-  subset->draw_type_name = data->draw_type_name ;
-  subset->unicolor = color_rdm;
-  subset->has_color = is_color;
-  subset->has_intensity = is_intensity;
-  subset->has_normal = is_normal;
-  subset->has_timestamp = is_timestamp;
+  cloud->draw_type_name = data->draw_type_name ;
+  cloud->unicolor = color_rdm;
+  cloud->has_color = is_color;
+  cloud->has_intensity = is_intensity;
+  cloud->has_normal = is_normal;
+  cloud->has_timestamp = is_timestamp;
 
-  gpuManager->gen_vao(subset);
+  gpuManager->gen_vao(cloud);
 
   // Subset info
-  subset->ID = ID;
+  cloud->ID = ID;
   if(data->name != ""){
-    subset->name = data->name;
+    cloud->name = data->name;
   }else{
-    subset->name = "frame_" + to_string(ID);
+    cloud->name = "frame_" + to_string(ID);
   }
 
   // Structure
-  subset->frame.reset();
+  cloud->frame.reset();
 
   //---------------------------
 }
@@ -269,38 +269,38 @@ void Extractor::init_random_color(){
 }
 
 // Param function
-void Extractor::define_visibility(Cloud* subset, int i){
+void Extractor::define_visibility(Cloud* cloud, int i){
   //---------------------------
 
   if(i == 0){
-    subset->is_visible = true;
+    cloud->is_visible = true;
   }else{
-    subset->is_visible = false;
+    cloud->is_visible = false;
   }
 
   //---------------------------
 }
-void Extractor::define_buffer_init(Collection* cloud, Cloud* subset){
+void Extractor::define_buffer_init(Collection* collection, Cloud* cloud){
   //---------------------------
 
-  Cloud* subset_buf = new Cloud(*subset);
-  Cloud* subset_ini = new Cloud(*subset);
+  Cloud* cloud_buf = new Cloud(*cloud);
+  Cloud* cloud_ini = new Cloud(*cloud);
 
-  cloud->subset_selected = subset;
-  cloud->subset.push_back(subset);
-  cloud->subset_buffer.push_back(subset_buf);
-  cloud->subset_init.push_back(subset_ini);
+  collection->subset_selected = cloud;
+  collection->subset.push_back(cloud);
+  collection->subset_buffer.push_back(cloud_buf);
+  collection->subset_init.push_back(cloud_ini);
 
   //---------------------------
 }
-void Extractor::compute_texture(Cloud* subset, Data_file* data){
+void Extractor::compute_texture(Cloud* cloud, Data_file* data){
   if(data->path_texture == ""){return;}
   //---------------------------
 
   string name = get_name_from_path(data->path_texture);
   int ID = texManager->load_texture(data->path_texture, name);
-  subset->tex_ID.push_back(ID);
-  subset->has_texture = true;
+  cloud->tex_ID.push_back(ID);
+  cloud->has_texture = true;
 
   //---------------------------
 }

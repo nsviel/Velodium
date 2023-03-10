@@ -107,7 +107,7 @@ void MOD_boxing::control_box(){
   //---------------------------
 }
 void MOD_boxing::change_box(float xmin, float ymin, float zmin, float xmax, float ymax, float zmax){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   if(cloud != nullptr){

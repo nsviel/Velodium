@@ -70,13 +70,13 @@ void Filter::filter_maxAngle(Collection* cloud, float angleMax){
   }
 }
 void Filter::filter_sphere(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
   float r = sphere_D/2;
   float err = r/20;
   //---------------------------
 
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
     Cloud* subset = cloud->subset_selected;
 
     if(subset->name.find("Sphere") != std::string::npos){
@@ -109,7 +109,7 @@ void Filter::filter_sphere(){
       }
 
       attribManager->make_supressPoints(subset, idx);
-      sceneManager->update_glyph(cloud);
+      //sceneManager->update_glyph(cloud);
     }
   }
 

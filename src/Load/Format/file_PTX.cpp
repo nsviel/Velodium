@@ -84,10 +84,10 @@ bool file_PTX::Exporter(string path){
     return 0;
   }
   /*
-  for(int i=0; i<list_cloud->size(); i++)
+  for(int i=0; i<list_collection->size(); i++)
   {
     //Select clouds one by one
-    Collection* cloud = &*next(list_cloud->begin(),i);
+    Collection* cloud = &*next(list_collection->begin(),i);
 
     //----->HEADER
     //***********************************

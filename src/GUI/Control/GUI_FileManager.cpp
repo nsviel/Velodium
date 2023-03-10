@@ -33,7 +33,7 @@ GUI_fileManager::~GUI_fileManager(){}
 
 //Subfunctions
 void GUI_fileManager::fileManager(){
-  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_collection = sceneManager->get_list_collection();
   //-------------------------------
 
   static ImVector<int> selection;
@@ -58,8 +58,8 @@ void GUI_fileManager::fileManager(){
     ImGui::TableSetupColumn("Info", ImGuiTableColumnFlags_WidthFixed, 20);
     ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 20);
 
-    for (int row_i=0; row_i<list_cloud->size(); row_i++){
-      Collection* cloud = *next(list_cloud->begin(), row_i);
+    for (int row_i=0; row_i<list_collection->size(); row_i++){
+      Collection* cloud = *next(list_collection->begin(), row_i);
       ImGui::TableNextRow(ImGuiTableRowFlags_None, 0.5);
       ImGui::PushItemWidth(-FLT_MIN);flags |= ImGuiTreeNodeFlags_OpenOnArrow;
       ImGui::PushID(row_i);
@@ -102,7 +102,7 @@ void GUI_fileManager::fileManager(){
   //-------------------------------
 }
 void GUI_fileManager::cloudManager(Collection* cloud){
-  Collection* cloud_selected = sceneManager->get_selected_cloud();
+  Collection* cloud_selected = sceneManager->get_selected_collection();
   if(cloud_selected == nullptr) {}
   //-------------------------------
 

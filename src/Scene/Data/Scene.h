@@ -37,11 +37,11 @@ public:
   void update_MinMax(Object_* object);
   void update_ID_order(list<Collection*>* list);
 
-  inline int get_nb_cloud(){return data->get_list_cloud()->size();}
-  inline list<Collection*>* get_list_cloud(){return data->get_list_cloud();}
-  inline Collection* get_selected_cloud(){return data->get_cloud_selected();}
+  inline int get_nb_cloud(){return data->get_list_collection()->size();}
+  inline list<Collection*>* get_list_collection(){return data->get_list_collection();}
+  inline Collection* get_selected_collection(){return data->get_cloud_selected();}
   inline void set_selected_cloud(Collection* cloud){Collection* cl = data->get_cloud_selected(); cl = cloud;}
-  inline bool get_is_list_empty(){return data->get_list_cloud()->empty();}
+  inline bool get_is_list_empty(){return data->get_list_collection()->empty();}
 
 private:
   Object* objectManager;

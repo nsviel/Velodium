@@ -76,7 +76,7 @@ void GUI_menuBar::design_MenuBar(){
 
 //Subfunctions
 void GUI_menuBar::MenuBar_menu(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //-------------------------
 
   this->MenuBar_menu_file();
@@ -104,7 +104,7 @@ void GUI_menuBar::MenuBar_menu(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_menu_file(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //File menu
@@ -141,7 +141,7 @@ void GUI_menuBar::MenuBar_menu_file(){
   //---------------------------
 }
 void GUI_menuBar::MenuBar_menu_load(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
@@ -164,7 +164,7 @@ void GUI_menuBar::MenuBar_menu_load(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_menu_save(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_BOOK " Save")){
@@ -253,7 +253,7 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_Operations(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //Functions

@@ -46,12 +46,12 @@ MOD_attribut::~MOD_attribut(){}
 
 //Main function
 void MOD_attribut::window_normal(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
 
-  if(modal_tab.show_normal && cloud != nullptr){
+  if(modal_tab.show_normal && collection != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = cloud->subset_selected;
-    Cloud* subset_init = cloud->get_subset_selected_init();
+    Cloud* subset = collection->subset_selected;
+    Cloud* subset_init = collection->get_subset_selected_init();
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -82,10 +82,10 @@ void MOD_attribut::window_normal(){
     }
 
     if(ImGui::Button("Compute", ImVec2(200,0))){
-      if(cloud != nullptr){
+      if(collection != nullptr){
         //---------------------------
-        Cloud* subset = cloud->subset_selected;
-        Cloud* subset_init = cloud->get_subset_selected_init();
+        Cloud* subset = collection->subset_selected;
+        Cloud* subset_init = collection->get_subset_selected_init();
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);
@@ -104,12 +104,12 @@ void MOD_attribut::window_normal(){
         }
 
         if(normalMethod == 4){
-          float angle = poseManager->make_orientAxis_X(cloud);
+          float angle = poseManager->make_orientAxis_X(collection);
           attribManager->compute_normals_planXaxis(subset);
           vec3 rotation = vec3(0, 0, -angle);
-          transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
+          transformManager->make_rotation(collection, vec3(0,0,0), rotation);
           subset_init->Nxyz = subset->Nxyz;
-          sceneManager->update_buffer_location(cloud);
+          //sceneManager->update_buffer_location(collection);
         }
 
         if(normalMethod == 5){
@@ -121,22 +121,22 @@ void MOD_attribut::window_normal(){
         if(normalMethod == 6){
           attribManager->compute_normals_planZaxis(subset);
           subset_init->Nxyz = subset->Nxyz;
-          sceneManager->update_buffer_location(cloud);
+          //sceneManager->update_buffer_location(collection);
         }
 
-        //glyphManager->update_glyph_object("normal", cloud);
+        //glyphManager->update_glyph_object("normal", collection);
 
         //---------------------------
       }
     }
     if(ImGui::Button("Compute all clouds", ImVec2(200,0))){
-      if(cloud != nullptr){
+      if(collection != nullptr){
         //---------------------------
 
 
-        list<Collection*>* list_cloud = sceneManager->get_list_cloud();
-        for(int i=0;i<list_cloud->size();i++){
-          Collection* cloud = *next(list_cloud->begin(),i);
+        list<Collection*>* list_collection = sceneManager->get_list_collection();
+        for(int i=0;i<list_collection->size();i++){
+          Collection* collection = *next(list_collection->begin(),i);
 
           if(normalMethod == 0){
             attribManager->compute_normals(subset);
@@ -155,10 +155,10 @@ void MOD_attribut::window_normal(){
           }
 
           if(normalMethod == 4){
-            float angle = poseManager->make_orientAxis_X(cloud);
+            float angle = poseManager->make_orientAxis_X(collection);
             attribManager->compute_normals_planXaxis(subset);
             vec3 rotation = vec3(0, 0, -angle);
-            transformManager->make_rotation(cloud, vec3(0,0,0), rotation);
+            transformManager->make_rotation(collection, vec3(0,0,0), rotation);
             subset_init->Nxyz = subset->Nxyz;
             sceneManager->update_buffer_location(subset);
           }
@@ -175,7 +175,7 @@ void MOD_attribut::window_normal(){
             sceneManager->update_buffer_location(subset);
           }
 
-          //glyphManager->update_glyph_object("normal", cloud);
+          //glyphManager->update_glyph_object("normal", collection);
         }
 
         //---------------------------
@@ -183,15 +183,15 @@ void MOD_attribut::window_normal(){
     }
 
     if(ImGui::Button("Reoriente to origin", ImVec2(200,0))){
-      if(cloud != nullptr){
+      if(collection != nullptr){
         attribManager->compute_normals_reorientToOrigin(subset);
-        //glyphManager->update_glyph_object("normal", cloud);
+        //glyphManager->update_glyph_object("normal", collection);
       }
     }
     if(ImGui::Button("Invert", ImVec2(200,0))){
-      if(cloud != nullptr){
+      if(collection != nullptr){
         attribManager->compute_normals_invert();
-        //glyphManager->update_glyph_object("normal", cloud);
+        //glyphManager->update_glyph_object("normal", collection);
       }
     }
 
@@ -204,12 +204,12 @@ void MOD_attribut::window_normal(){
   }
 }
 void MOD_attribut::window_intensity(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
 
-  if(modal_tab.show_intensity && cloud != nullptr){
+  if(modal_tab.show_intensity && collection != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = cloud->subset_selected;
-    Cloud* subset_init = cloud->get_subset_selected_init();
+    Cloud* subset = collection->subset_selected;
+    Cloud* subset_init = collection->get_subset_selected_init();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity functions");
@@ -219,15 +219,15 @@ void MOD_attribut::window_intensity(){
     if(ImGui::Button("Intensity / Color all", ImVec2(200,0))){
       colorON = !colorON;
       if(colorON){
-        colorManager->set_color_RGB(cloud);
+        colorManager->set_color_RGB(collection);
       }else{
-        colorManager->set_color_I(cloud);
+        colorManager->set_color_I(collection);
       }
     }
 
     //Invert the intensity values
     if(ImGui::Button("Inversion Is", ImVec2(200,0))){
-      if(cloud != nullptr){
+      if(collection != nullptr){
         attribManager->compute_intensityInversion();
         sceneManager->update_subset_IntensityToColor(subset);
       }
@@ -317,11 +317,11 @@ void MOD_attribut::window_intensity(){
   }
 }
 void MOD_attribut::window_color(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* collection = sceneManager->get_selected_collection();
 
-  if(modal_tab.show_color && cloud != nullptr){
+  if(modal_tab.show_color && collection != nullptr){
     ImGui::Begin("Colorization", &modal_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = collection->subset_selected;
     //---------------------------
 
     gui_color->colorization_choice();

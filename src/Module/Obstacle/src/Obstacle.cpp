@@ -38,7 +38,7 @@ Obstacle::~Obstacle(){}
 
 //Main functions
 void Obstacle::runtime(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   if(with_prediction && cloud != nullptr){
@@ -58,7 +58,7 @@ void Obstacle::runtime(){
 
 //Manual obstacle adding
 void Obstacle::add_detectioned(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //Get prediction file paths
@@ -73,7 +73,7 @@ void Obstacle::add_detectioned(){
   //---------------------------
 }
 void Obstacle::add_detectioned(string path_dir){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //Get prediction file paths
@@ -88,7 +88,7 @@ void Obstacle::add_detectioned(string path_dir){
   //---------------------------
 }
 void Obstacle::add_obstacle_grTr(){
-  Collection* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
   //Get prediction file paths

@@ -9,11 +9,11 @@ Fitting::Fitting(){}
 Fitting::~Fitting(){}
 
 //Sphere fitting
-void Fitting::Sphere_cloudToCenter_all(list<Collection*>* list_cloud){
+void Fitting::Sphere_cloudToCenter_all(list<Collection*>* list_collection){
   //--------------------------
 
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
     Cloud* subset = cloud->subset_selected;
     this->Sphere_cloudToCenter(subset);
   }

@@ -24,7 +24,7 @@ Scene::~Scene(){
 
 //Remove functions
 void Scene::remove_cloud(Collection* cloud){
-  std::list<Collection*>* list_cloud = data->get_list_cloud();
+  std::list<Collection*>* list_collection = data->get_list_collection();
   Collection* cloud_selected = data->get_cloud_selected();
   //---------------------------
 
@@ -44,17 +44,17 @@ void Scene::remove_cloud(Collection* cloud){
     cloud = nullptr;
 
     //Delete cloud iterator in list
-    list<Collection*>::iterator it = next(list_cloud->begin(), oID);
-    list_cloud->erase(it);
+    list<Collection*>::iterator it = next(list_collection->begin(), oID);
+    list_collection->erase(it);
 
     //Check for end list new selected cloud
-    if(oID >= list_cloud->size()){
+    if(oID >= list_collection->size()){
       oID = 0;
     }
 
-    this->update_ID_order(list_cloud);
+    this->update_ID_order(list_collection);
     //this->selection_setCloud(oID);
-    cloud_selected = *next(list_cloud->begin(), oID);
+    cloud_selected = *next(list_collection->begin(), oID);
 
     //---------------------------
     string log = "Collection "+ name +" removed";
@@ -62,7 +62,7 @@ void Scene::remove_cloud(Collection* cloud){
   }
 
   //If cloud list empty
-  if(list_cloud->size() == 0){
+  if(list_collection->size() == 0){
     objectManager->reset_scene_object();
     cloud_selected = nullptr;
   }
@@ -70,11 +70,11 @@ void Scene::remove_cloud(Collection* cloud){
   //---------------------------
 }
 void Scene::remove_cloud_all(){
-  std::list<Collection*>* list_cloud = data->get_list_cloud();
+  std::list<Collection*>* list_collection = data->get_list_collection();
   //---------------------------
 
-  while(list_cloud->size() != 0){
-    Collection* cloud = *list_cloud->begin();
+  while(list_collection->size() != 0){
+    Collection* cloud = *list_collection->begin();
     this->remove_cloud(cloud);
   }
 
@@ -124,22 +124,22 @@ void Scene::reset_cloud(Collection* cloud){
   cloud->ID_selected = cloud->get_subset(0)->ID;
 
   //---------------------------
-  this->update_glyph(cloud);
+  //this->update_glyph(cloud);
 }
 void Scene::reset_cloud_all(){
-  std::list<Collection*>* list_cloud = data->get_list_cloud();
+  std::list<Collection*>* list_collection = data->get_list_collection();
   Collection* cloud_selected = data->get_cloud_selected();
   //---------------------------
 
   //Reset all clouds
-  for(int i=0; i<list_cloud->size(); i++){
-    Collection* cloud = *next(list_cloud->begin(),i);
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* cloud = *next(list_collection->begin(),i);
     if(!cloud->is_onthefly){
       this->reset_cloud(cloud);
     }
   }
 
-  this->update_glyph(cloud_selected);
+  //this->update_glyph(cloud_selected);
 
   //---------------------------
   console.AddLog("#", "Reset scene...");
@@ -149,7 +149,7 @@ void Scene::reset_cloud_all(){
 void Scene::update_buffer_location(Object_* object){
   //---------------------------
 
-  if(object->obj_type == "cloud"){
+  if(object->obj_type == "collection"){
     Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->subset.size(); i++){
       Cloud* subset = *next(cloud->subset.begin(), i);
@@ -164,7 +164,7 @@ void Scene::update_buffer_location(Object_* object){
 void Scene::update_buffer_color(Object_* object){
   //---------------------------
 
-  if(object->obj_type == "cloud"){
+  if(object->obj_type == "collection"){
     Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->subset.size(); i++){
       Cloud* subset = *next(cloud->subset.begin(), i);
@@ -180,7 +180,7 @@ void Scene::update_glyph(Object_* object){
   if(object == nullptr) return;
   //---------------------------
 
-  if(object->obj_type == "cloud"){
+  if(object->obj_type == "collection"){
     /*Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->subset.size(); i++){
       Cloud* subset = *next(cloud->subset.begin(), i);
