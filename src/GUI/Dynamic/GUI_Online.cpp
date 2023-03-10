@@ -101,7 +101,7 @@ void GUI_Online::design_online(){
 //Parameter function
 void GUI_Online::parameter_online(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->subset_selected;
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Module online stuff
@@ -239,7 +239,7 @@ void GUI_Online::parameter_recorder(){
 void GUI_Online::state_time(){
   /*Collection* collection = sceneManager->get_selected_collection();
   Cloud* cloud = collection->get_sele
-  subset_selected->get_frame();
+  selected_obj->get_frame();
   Frame* frame = collection->get_frame_selected();
   //---------------------------
 

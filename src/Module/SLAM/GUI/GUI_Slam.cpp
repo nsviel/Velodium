@@ -239,9 +239,9 @@ void GUI_Slam::parameter_offline(){
 
     //Number of frame to compute
     if(cloud != nullptr){
-      static int frame_max = cloud->nb_object;
+      static int frame_max = cloud->nb_obj;
       ImGui::SetNextItemWidth(item_width);
-      if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_object)){
+      if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_obj)){
         //slamManager->set_offline_ID_max(frame_max);
       }
     }else{
@@ -602,7 +602,7 @@ void GUI_Slam::state_SLAM(){
 
   if(sceneManager->get_is_list_empty() == false){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->selected_obj;
     Frame* frame = &subset->frame;
 
     is_slam_made = frame->is_slam_made;
@@ -630,7 +630,7 @@ void GUI_Slam::state_localmap(){
 
   if(sceneManager->get_is_list_empty() == false){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->selected_obj;
     Frame* frame = &subset->frame;
 
     map_size_abs = frame->map_size_abs;
@@ -675,7 +675,7 @@ void GUI_Slam::state_transformation(){
 
   if(sceneManager->get_is_list_empty() == false){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->selected_obj;
     Frame* frame = &subset->frame;
 
     trans_b_rlt = frame->trans_b_rlt;

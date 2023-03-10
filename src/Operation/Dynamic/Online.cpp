@@ -76,7 +76,7 @@ void Online::compute_onlineOpe(Collection* cloud, int ID_subset){
 
   //Some init operation
   if(subset == nullptr) return;
-  cloud->subset_selected = subset;
+  cloud->selected_obj = subset;
 
   //Control subset visibilities
   visibilityManager->compute_visibility(cloud, ID_subset);

@@ -88,7 +88,7 @@ void Onthefly::reset(){
       cloud->ID_obj_last = 0;
       cloud->ID_onthefly = 0;
       cloud->ID_obj_selected = 0;
-      cloud->nb_object = 0;
+      cloud->nb_obj = 0;
 
       bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[0]);
       if(ok) list_id.push_back(0);

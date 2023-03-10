@@ -50,7 +50,7 @@ void MOD_attribut::window_normal(){
 
   if(modal_tab.show_normal && collection != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = (Cloud*)collection->subset_selected;
+    Cloud* subset = (Cloud*)collection->selected_obj;
     Cloud* subset_init = (Cloud*)collection->get_obj_selected_init();
     //---------------------------
 
@@ -84,7 +84,7 @@ void MOD_attribut::window_normal(){
     if(ImGui::Button("Compute", ImVec2(200,0))){
       if(collection != nullptr){
         //---------------------------
-        Cloud* subset = (Cloud*)collection->subset_selected;
+        Cloud* subset = (Cloud*)collection->selected_obj;
         Cloud* subset_init = (Cloud*)collection->get_obj_selected_init();
 
         if(normalMethod == 0){
@@ -208,7 +208,7 @@ void MOD_attribut::window_intensity(){
 
   if(modal_tab.show_intensity && collection != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = (Cloud*)collection->subset_selected;
+    Cloud* subset = (Cloud*)collection->selected_obj;
     Cloud* subset_init = (Cloud*)collection->get_obj_selected_init();
     //---------------------------
 
@@ -321,7 +321,7 @@ void MOD_attribut::window_color(){
 
   if(modal_tab.show_color && collection != nullptr){
     ImGui::Begin("Colorization", &modal_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = (Cloud*)collection->subset_selected;
+    Cloud* subset = (Cloud*)collection->selected_obj;
     //---------------------------
 
     gui_color->colorization_choice();

@@ -148,7 +148,7 @@ void GUI_Control::control_mouse_wheel(){
 
     //Subset rotation
     if(sceneManager->get_is_list_empty() == false){
-      if(collection->nb_object == 1 && collection->is_onthefly == false){
+      if(collection->nb_obj == 1 && collection->is_onthefly == false){
         float radian = cloud_rotat_degree*M_PI/180;
         vec3 R;
         if(wheelMode == 0){
@@ -163,11 +163,11 @@ void GUI_Control::control_mouse_wheel(){
 
         poseManager->compute_COM(collection);
         transformManager->make_rotation(collection, R, direction);
-        sceneManager->update_buffer_location(collection->subset_selected);
+        sceneManager->update_buffer_location(collection->selected_obj);
         //sceneManager->update_glyph(collection);
       }
       //Subset selection
-      else if(collection->nb_object > 1 || collection->is_onthefly){
+      else if(collection->nb_obj > 1 || collection->is_onthefly){
         playerManager->compute_wheel_selection(direction);
       }
     }
@@ -477,8 +477,8 @@ void GUI_Control::key_translation(vec3 trans){
   Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
-  transformManager->make_translation(collection->subset_selected, trans);
-  sceneManager->update_buffer_location(collection->subset_selected);
+  transformManager->make_translation(collection->selected_obj, trans);
+  sceneManager->update_buffer_location(collection->selected_obj);
   //sceneManager->update_glyph(collection);
 
   //----------------------------
@@ -487,8 +487,8 @@ void GUI_Control::key_rotation(vec3 rotat){
   Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
-  transformManager->make_rotation(collection->subset_selected, vec3(0,0,0), rotat);
-  sceneManager->update_buffer_location(collection->subset_selected);
+  transformManager->make_rotation(collection->selected_obj, vec3(0,0,0), rotat);
+  sceneManager->update_buffer_location(collection->selected_obj);
   //sceneManager->update_glyph(collection);
 
   //----------------------------

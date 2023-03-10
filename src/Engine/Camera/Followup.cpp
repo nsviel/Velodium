@@ -42,7 +42,7 @@ void Followup::camera_followup(Collection* cloud, int ID_subset){
   //---------------------------
 
   vec3 empty(0.0);
-  if(cloud->nb_object >= camera_nb_pose && with_camera_follow){
+  if(cloud->nb_obj >= camera_nb_pose && with_camera_follow){
     //Camera payload
     vec3 E = camera_payload(cloud, ID_subset);
 

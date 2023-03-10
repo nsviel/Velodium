@@ -38,7 +38,7 @@ void MOD_cloud::mod_cloud_info(){
 
   if(*open && cloud != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->selected_obj;
 
     //Visibility
     static bool visible = true;
@@ -87,8 +87,8 @@ void MOD_cloud::mod_cloud_info(){
     //Number of subset
     ImGui::Text("Nb subset ");
     ImGui::NextColumn();
-    string nb_object = to_string(cloud->nb_object);
-    ImGui::Text("%s", nb_object.c_str());
+    string nb_obj = to_string(cloud->nb_obj);
+    ImGui::Text("%s", nb_obj.c_str());
     ImGui::NextColumn();
 
     //Number of points
@@ -131,7 +131,7 @@ void MOD_cloud::mod_cloud_info(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->selected_obj;
     //---------------------------
 
     // Data vectors
@@ -227,7 +227,7 @@ void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->selected_obj;
     //---------------------------
 
     // Data vectors

@@ -110,7 +110,7 @@ void Player::compute_wheel_selection(string direction){
 }
 bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
   Cloud* subset_first = (Cloud*)cloud->get_obj(0);
-  Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_object-1);
+  Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_obj-1);
   //---------------------------
 //PROBLEM DE ID ICI JE PENSE
   //Check if subset exists
@@ -205,7 +205,7 @@ void Player::player_save(Collection* cloud){
   //---------------------------
 
   //Save each subset
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
     saverManager->save_subset(subset, "ply", player_saveas);
   }

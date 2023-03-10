@@ -50,7 +50,7 @@ void MOD_extraction::design_extractCloud(){
 //Specific function
 void MOD_extraction::extract_with_aabb(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->selected_obj;
   //---------------------------
 
   //Extraction functions
@@ -58,7 +58,7 @@ void MOD_extraction::extract_with_aabb(){
   bool* highlightON = extractionManager->get_highlightON();
   if(ImGui::Checkbox("Hightligth", highlightON)){
     if(cloud != nullptr){
-      Cloud* subset = (Cloud*)cloud->subset_selected;
+      Cloud* subset = (Cloud*)cloud->selected_obj;
       Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
     }
@@ -108,7 +108,7 @@ void MOD_extraction::extract_with_aabb(){
     if(cloud != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)cloud->subset_selected;
+      Cloud* subset = (Cloud*)cloud->selected_obj;
       Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
 
@@ -127,7 +127,7 @@ void MOD_extraction::extract_with_aabb(){
     if(cloud != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)cloud->subset_selected;
+      Cloud* subset = (Cloud*)cloud->selected_obj;
       Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
 
@@ -140,7 +140,7 @@ void MOD_extraction::extract_with_aabb(){
     if(cloud != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)cloud->subset_selected;
+      Cloud* subset = (Cloud*)cloud->selected_obj;
       Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, subset_init);
 
@@ -154,7 +154,7 @@ void MOD_extraction::extract_with_aabb(){
 }
 void MOD_extraction::extract_with_mouse(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->selected_obj;
   //---------------------------
 
   //Extract points selected with the mouse frame
@@ -170,7 +170,7 @@ void MOD_extraction::extract_with_mouse(){
 }
 void MOD_extraction::merge_cloud(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->selected_obj;
   //---------------------------
 
   //Merge and extract two clouds

@@ -748,7 +748,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
   }
 
   if (ply_format == "ascii"){
-    for(int i=0; i<cloud->nb_object; i++){
+    for(int i=0; i<cloud->nb_obj; i++){
       Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
 
       //Open file
@@ -764,7 +764,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
     }
   }
   else if (format == "binary" || format == "binary_little_endian"){
-    for(int i=0; i<cloud->nb_object; i++){
+    for(int i=0; i<cloud->nb_obj; i++){
       Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
       format = "binary_little_endian";
 

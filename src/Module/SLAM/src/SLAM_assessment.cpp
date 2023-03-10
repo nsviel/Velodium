@@ -72,7 +72,7 @@ void SLAM_assessment::compute_visibility(Collection* cloud){
   bool slam_failed = false;
   //---------------------------
 
-  for(int i=cloud->nb_object-1; i=0; i--){
+  for(int i=cloud->nb_obj-1; i=0; i--){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
     Frame* frame = &subset->frame;
 

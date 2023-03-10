@@ -44,20 +44,20 @@ void Engine::draw_untextured_glyph(){
   //Draw glyph scene
   objectManager->runtime_glyph_scene();
 
-  //Draw glyph subset
+  //Draw glyph cloud
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
+    Collection* collection = *next(list_collection->begin(),i);
 
-    if(cloud->is_visible){
-      //All subset
-      objectManager->runtime_glyph_subset_all(cloud);
+    if(collection->is_visible){
+      //All cloud
+      objectManager->runtime_glyph_subset_all(collection);
 
       //Selected susbet
-      Cloud* subset_sele = (Cloud*)cloud->get_obj_byID(cloud->ID_obj_selected);
+      Cloud* subset_sele = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected);
       objectManager->runtime_glyph_subset_selected(subset_sele);
 
       //OOBB
-      Cloud* subset_pred = (Cloud*)cloud->get_obj_byID(cloud->ID_obj_selected - 2);
+      Cloud* subset_pred = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected - 2);
       objectManager->runtime_glyph_pred(subset_pred);
     }
 
@@ -66,14 +66,14 @@ void Engine::draw_untextured_glyph(){
   //---------------------------
 }
 void Engine::arcball_cam_lookat(){
-  Collection* cloud = data->get_cloud_selected();
-  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Collection* collection = data->get_cloud_selected();
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
-  //Pour arcball camera view, center cam F to subset com
-  if(subset != nullptr){
+  //Pour arcball camera view, center cam F to cloud com
+  if(cloud != nullptr){
     vec3* cam_COM = cameraManager->get_cam_COM();
-    *cam_COM = subset->COM;
+    *cam_COM = cloud->COM;
   }
 
   //---------------------------
@@ -95,17 +95,17 @@ void Engine::draw_untextured_cloud(){
   list<Collection*>* list_collection = sceneManager->get_list_collection();
   //---------------------------
 
-  //By cloud
+  //By collection
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
+    Collection* collection = *next(list_collection->begin(),i);
 
-    //By subset
-    if(cloud->is_visible){
-      for(int j=0; j<cloud->subset.size(); j++){
-        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
+    //By cloud
+    if(collection->is_visible){
+      for(int j=0; j<collection->subset.size(); j++){
+        Cloud* cloud = (Cloud*)*next(collection->subset.begin(), j);
 
-        if(subset->is_visible && subset->has_texture == false){
-          gpuManager->draw_object(subset);
+        if(cloud->is_visible && cloud->has_texture == false){
+          gpuManager->draw_object(cloud);
         }
 
       }
@@ -119,18 +119,18 @@ void Engine::draw_textured_cloud(){
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 
-  //By cloud
+  //By collection
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
+    Collection* collection = *next(list_collection->begin(),i);
 
-    //By subset
-    if(cloud->is_visible){
-      for(int j=0; j<cloud->subset.size(); j++){
-        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
+    //By cloud
+    if(collection->is_visible){
+      for(int j=0; j<collection->subset.size(); j++){
+        Cloud* cloud = (Cloud*)*next(collection->subset.begin(), j);
 
-        if(subset->is_visible && subset->has_texture && with_texture){
-          gpuManager->bind_texture(subset->tex_ID);
-          gpuManager->draw_object(subset);
+        if(cloud->is_visible && cloud->has_texture && with_texture){
+          gpuManager->bind_texture(cloud->tex_ID);
+          gpuManager->draw_object(cloud);
         }
 
       }

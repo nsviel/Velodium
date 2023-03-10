@@ -159,7 +159,7 @@ void SLAM::reset_visibility(Collection* cloud, int subset_ID){
   //---------------------------
 
   //Set visibility just for last subset
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
 
     if(subset->ID == subset_ID){

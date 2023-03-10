@@ -205,10 +205,10 @@ void GUI_Player::player_selection(){
   Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
-  if(cloud != nullptr && cloud->nb_object > 2){
-    Cloud* subset = (Cloud*)cloud->subset_selected;
+  if(cloud != nullptr && cloud->nb_obj > 2){
+    Cloud* subset = (Cloud*)cloud->selected_obj;
     Cloud* subset_first = (Cloud*)cloud->get_obj(0);
-    Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_object-1);
+    Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_obj-1);
     int subset_selected_ID = cloud->ID_obj_selected;
 
     ImGui::SetNextItemWidth(140);

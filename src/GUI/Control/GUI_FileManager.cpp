@@ -119,7 +119,7 @@ void GUI_fileManager::cloudManager(Collection* cloud){
   }
 
   //Subset tree node
-  if(open_cloud_node && cloud != nullptr && (cloud->nb_object > 1 || cloud->is_onthefly)){
+  if(open_cloud_node && cloud != nullptr && (cloud->nb_obj > 1 || cloud->is_onthefly)){
 
     for(int j=0; j<cloud->subset.size(); j++){
       Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
@@ -144,7 +144,7 @@ void GUI_fileManager::cloudManager(Collection* cloud){
     }
 
     ImGui::TreePop();
-  }/*else if(open_cloud_node && cloud != nullptr && cloud->nb_object == 1){
+  }/*else if(open_cloud_node && cloud != nullptr && cloud->nb_obj == 1){
     ImGui::TreePop();
   }*/
 

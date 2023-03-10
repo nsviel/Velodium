@@ -40,18 +40,19 @@ struct Collection
   std::string name;
   std::string path_file;
   std::string path_save;
-  int nb_point;
   std::string file_format;
+  std::string obj_type;
+
+  int nb_point;
   bool is_heatmap;
   bool is_boxed;
   bool is_visible;
   int draw_point_size;
   glm::vec4 unicolor;
-  std::string obj_type;
 
   //Stored Objects  A REVOIR
-  int nb_object;
-  Object_* subset_selected;
+  int nb_obj;
+  Object_* selected_obj;
   std::list<Object_*> subset;
   std::list<Object_*> subset_voxel;
   std::list<Object_*> subset_buffer;

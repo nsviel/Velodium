@@ -224,7 +224,7 @@ void Pose::make_alignSelectionToGround(Collection* cloud){
   //---------------------------
 
   // Get all selected points
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     if(subset->is_visible){
       vector<int>& idx = subset->selected;
@@ -460,7 +460,7 @@ void Pose::compute_COM(Collection* cloud){
   vec3 COM = vec3(0, 0, 0);
   //---------------------------
 
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     COM += fct_centroid(subset->xyz);
   }
@@ -472,7 +472,7 @@ void Pose::compute_min(Collection* cloud){
   vec3 min = vec3(0, 0, 0);
   //---------------------------
 
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     vec3 subset_min = fct_min_vec3(subset->xyz);
 

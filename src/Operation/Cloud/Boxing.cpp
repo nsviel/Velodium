@@ -76,7 +76,7 @@ void Boxing::compute_visibility(Collection* cloud){
   cloud->is_boxed = true;
   //---------------------------
 
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     this->compute_visibility(cloud, i);
   }
 
@@ -115,7 +115,7 @@ void Boxing::compute_visibility(Collection* cloud, int ID){
 void Boxing::supress_selected_point(Collection* cloud){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
     Cloud* subset_init = (Cloud*)cloud->get_obj_init(i);
     vector<int>& idx = subset->selected;
@@ -142,7 +142,7 @@ void Boxing::stop_boxing(){
   for(int i=0; i<list_collection->size(); i++){
     Collection* cloud = *next(list_collection->begin(), i);
     cloud->is_boxed = false;
-    for(int j=0; j<cloud->nb_object; j++){
+    for(int j=0; j<cloud->nb_obj; j++){
       Cloud* subset = (Cloud*)cloud->get_obj(j);
       Cloud* subset_init = (Cloud*)cloud->get_obj_init(j);
       subset->xyz = subset_init->xyz;

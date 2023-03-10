@@ -107,7 +107,7 @@ void Extractor::extract_data(Collection* cloud, Data_file* data){
   gpuManager->gen_object_buffers(subset);
 
   //Update cloud stats
-  cloud->nb_object++;
+  cloud->nb_obj++;
   cloud->ID_obj_last++;
 
   //---------------------------
@@ -187,7 +187,7 @@ void Extractor::init_cloud_parameter(Collection* collection, vector<Data_file*> 
 
   collection->is_visible = true;
   collection->nb_point = nb_point;
-  collection->nb_object = data.size();
+  collection->nb_obj = data.size();
 
   collection->unicolor = color_rdm;
   collection->path_save = get_path_abs_build() + "../media/data/";
@@ -286,7 +286,7 @@ void Extractor::define_buffer_init(Collection* collection, Cloud* cloud){
   Cloud* cloud_buf = new Cloud(*cloud);
   Cloud* cloud_ini = new Cloud(*cloud);
 
-  collection->subset_selected = cloud;
+  collection->selected_obj = cloud;
   collection->subset.push_back(cloud);
   collection->subset_buffer.push_back(cloud_buf);
   collection->subset_init.push_back(cloud_ini);

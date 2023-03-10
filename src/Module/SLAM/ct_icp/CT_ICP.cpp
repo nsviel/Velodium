@@ -67,13 +67,13 @@ void CT_ICP::algo(Collection* cloud){
 
 	//Creating trajectory
 	std::vector<TrajectoryFrame> trajectory;
-	trajectory.resize(cloud->nb_object);
+	trajectory.resize(cloud->nb_obj);
 
 	//Creating voxel_map and keypoint_map
 	std::unordered_map<Voxel, std::list<Eigen::Vector3d>> voxels_map;
 	int index_frame = 0;
 
-	for(int i=0; i<cloud->nb_object; i++){
+	for(int i=0; i<cloud->nb_obj; i++){
 		Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
 
 		// subset to local format

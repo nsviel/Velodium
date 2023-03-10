@@ -228,7 +228,7 @@ void Capture::operation_new_subset(Cloud* subset){
     //Do not record the first run
     if(is_first_run){
       cloud_capture->remove_subset_last();
-      cloud_capture->nb_object = 0;
+      cloud_capture->nb_obj = 0;
       is_first_run = false;
     }
 

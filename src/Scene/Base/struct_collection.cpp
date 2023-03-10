@@ -22,8 +22,8 @@ Collection::Collection(){
   //Subset
   this->ID_obj_selected = 0;
   this->ID_obj_last = 0;
-  this->nb_object = 0;
-  this->subset_selected = nullptr;
+  this->nb_obj = 0;
+  this->selected_obj = nullptr;
 
   //---------------------------
 }
@@ -43,9 +43,9 @@ void Collection::add_new_subset(Object_* subset){
   this->subset_init.push_back(subset_init);
 
   //Update number of cloud subset
-  this->nb_object = this->subset.size();
+  this->nb_obj = this->subset.size();
   this->ID_obj_selected = subset->ID;
-  this->subset_selected = subset;
+  this->selected_obj = subset;
 
   //---------------------------
 }
@@ -74,7 +74,7 @@ void Collection::remove_subset_last(){
   delete sub_ini;
 
   //---------------------------
-  this->nb_object = subset.size();
+  this->nb_obj = subset.size();
 }
 void Collection::remove_subset_all(){
   int size = subset.size();

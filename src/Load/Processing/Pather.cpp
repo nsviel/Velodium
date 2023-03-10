@@ -262,7 +262,7 @@ void Pather::saving_cloud_frame(Collection* cloud){
   string path_saving = zenity_directory("Save frame", path_current_dir);
 
   //Save current cloud
-  for(int i=0; i<cloud->nb_object; i++){
+  for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     string path = path_saving + subset->name;
 
