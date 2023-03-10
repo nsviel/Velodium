@@ -56,7 +56,7 @@ void MOD_transformation::design_transformation(){
 //Specific function
 void MOD_transformation::actual_transformation_mat(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Actual transformation from initial position");
@@ -73,7 +73,7 @@ void MOD_transformation::actual_transformation_mat(){
 }
 void MOD_transformation::manual_transformation_mat(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Manual transformation matrix")){
     //---------------------------
@@ -130,7 +130,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
         Collection* cloud = sceneManager->get_selected_collection();
-        Cloud* subset = cloud->subset_selected;
+        Cloud* subset = (Cloud*)cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
@@ -153,7 +153,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat2 = inverse(mat);
 
         Collection* cloud = sceneManager->get_selected_collection();
-        Cloud* subset = cloud->subset_selected;
+        Cloud* subset = (Cloud*)cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
         transformManager->make_Transformation(subset, vec3(0,0,0), mat);
@@ -177,7 +177,7 @@ void MOD_transformation::manual_transformation_mat(){
 }
 void MOD_transformation::cloud_translation(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Collection translation")){
     //---------------------------
@@ -203,7 +203,7 @@ void MOD_transformation::cloud_translation(){
 }
 void MOD_transformation::cloud_rotation(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Collection rotation")){
     //---------------------------

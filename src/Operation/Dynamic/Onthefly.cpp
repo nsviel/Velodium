@@ -64,7 +64,7 @@ void Onthefly::compute_onthefly(Collection* cloud, int ID){
 
     //If too mush subset, remove the last one
     if(cloud->subset.size() > range){
-      Cloud* subset = cloud->get_subset(0);
+      Cloud* subset = (Cloud*)cloud->get_obj(0);
       list_id.remove(subset->ID);
       cloud->remove_subset_last();
     }
@@ -85,10 +85,10 @@ void Onthefly::reset(){
 
       cloud->remove_subset_all();
       cloud->list_loaded.clear();
-      cloud->ID_subset = 0;
+      cloud->ID_obj_last = 0;
       cloud->ID_onthefly = 0;
-      cloud->ID_selected = 0;
-      cloud->nb_subset = 0;
+      cloud->ID_obj_selected = 0;
+      cloud->nb_object = 0;
 
       bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[0]);
       if(ok) list_id.push_back(0);

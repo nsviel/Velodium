@@ -183,7 +183,7 @@ void GUI_option::option_glyph(){
   int* tree_level = treeObject->get_tree_level();
   ImGui::PushItemWidth(75);
   if(ImGui::DragInt("##458", tree_level, 1, 1, 50, "%d")){
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     treeObject->update_tree(subset);
     objectManager->update_object(&subset->glyphs["tree"]);
   }
@@ -241,7 +241,7 @@ void GUI_option::option_mode(){
 void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
 
@@ -258,7 +258,7 @@ void GUI_option::option_parameter(){
       if(!sceneManager->get_is_list_empty()){
         Transformation transformManager;
         for(int i=0; i<cloud->subset.size(); i++){
-          Cloud* subset = cloud->get_subset(i);
+          Cloud* subset = (Cloud*)cloud->get_obj(i);
           transformManager.make_scaling(subset, scale);
           sceneManager->update_buffer_location(subset);
         }

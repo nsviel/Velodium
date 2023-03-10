@@ -343,7 +343,7 @@ void MOD_loading::saving_configuration(){
       subset_max = 0;
     }else{
       Collection* cloud = sceneManager->get_selected_collection();
-      subset_max = cloud->nb_subset - 1;
+      subset_max = cloud->nb_object - 1;
     }
 
     //Drag range
@@ -412,7 +412,7 @@ void MOD_loading::saving_action(){
 
   //Save selected subset
   if(save_mode == 1 && subset_mode == 0 && !sceneManager->get_is_list_empty()){
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     pathManager->saving_subset(subset);
   }
 

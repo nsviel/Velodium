@@ -45,12 +45,12 @@ void SLAM_init::init_frame_ID(Collection* cloud, int subset_ID){
   local_map->current_frame_ID++;
 
   //Assign the current cloud to the selected one
-  local_map->linked_cloud_ID = cloud->ID_perma;
+  local_map->linked_cloud_ID = cloud->ID_col_perma;
 
   //---------------------------
 }
 void SLAM_init::init_frame_ts(Collection* cloud, int subset_ID){
-  Cloud* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
   Frame* frame = &subset->frame;
   vector<float>& ts = subset->ts;
   //---------------------------

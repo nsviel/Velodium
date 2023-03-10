@@ -61,7 +61,7 @@ void Player::runtime(){
   //---------------------------
 
   if(player_time_flag && cloud != nullptr){
-    this->select_bySubsetID(cloud, cloud->ID_selected + 1);
+    this->select_bySubsetID(cloud, cloud->ID_obj_selected + 1);
 
     player_time_flag = false;
   }
@@ -83,7 +83,7 @@ void Player::select_bySubsetID(Collection* cloud, int ID_subset){
   }
 
   //Update glyphs
-  Cloud* subset = cloud->get_subset_byID(ID_subset);
+  Cloud* subset = (Cloud*)cloud->get_obj_byID(ID_subset);
   objectManager->update_glyph_subset(subset);
 
   //---------------------------
@@ -94,7 +94,7 @@ void Player::compute_wheel_selection(string direction){
 
   //Wheel - rolling stone
   if(cloud != nullptr){
-    int subset_selected_ID = cloud->ID_selected;
+    int subset_selected_ID = cloud->ID_obj_selected;
 
     if(direction == "up"){
       subset_selected_ID++;
@@ -109,12 +109,12 @@ void Player::compute_wheel_selection(string direction){
   //----------------------------
 }
 bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
-  Cloud* subset_first = cloud->get_subset(0);
-  Cloud* subset_last = cloud->get_subset(cloud->nb_subset-1);
+  Cloud* subset_first = (Cloud*)cloud->get_obj(0);
+  Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_object-1);
   //---------------------------
 //PROBLEM DE ID ICI JE PENSE
   //Check if subset exists
-  Cloud* subset = cloud->get_subset(ID_subset);
+  Cloud* subset = (Cloud*)cloud->get_obj(ID_subset);
   if(subset == nullptr){
     return false;
   }
@@ -140,7 +140,7 @@ bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
   }
 
   //Set visibility parameter for each cloud subset
-  cloud->ID_selected = ID_subset;
+  cloud->ID_obj_selected = ID_subset;
 
   //---------------------------
   return true;
@@ -205,8 +205,8 @@ void Player::player_save(Collection* cloud){
   //---------------------------
 
   //Save each subset
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = cloud->get_subset(i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)cloud->get_obj(i);
     saverManager->save_subset(subset, "ply", player_saveas);
   }
 

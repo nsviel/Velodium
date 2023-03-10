@@ -18,7 +18,7 @@ RadarEquation::RadarEquation(){
 RadarEquation::~RadarEquation(){}
 
 void RadarEquation::compute_RadarEquation(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -36,7 +36,7 @@ void RadarEquation::compute_RadarEquation(Collection* cloud){
   this->plot_intensityCorrected(cloud);
 }
 void RadarEquation::compute_IR2bycosIt(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -54,7 +54,7 @@ void RadarEquation::compute_IR2bycosIt(Collection* cloud){
   this->plot_intensityCorrected(cloud);
 }
 void RadarEquation::compute_IbyR2(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
 
@@ -73,7 +73,7 @@ void RadarEquation::compute_IbyR2(Collection* cloud){
   this->plot_intensityCorrected(cloud);
 }
 void RadarEquation::compute_IbyCosIt(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& cosIt = subset->cosIt;
   int size = Is.size();
@@ -92,7 +92,7 @@ void RadarEquation::compute_IbyCosIt(Collection* cloud){
 
 //Plotting functions
 void RadarEquation::plot_intensityCorrected(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   //---------------------------
 

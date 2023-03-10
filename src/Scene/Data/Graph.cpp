@@ -21,7 +21,7 @@ void Graph::selection_setCloud(int ID){
 
   for (int i=0; i<list_collection->size(); i++){
     Collection* cloud = *next(list_collection->begin(),i);
-    if(cloud->ID_order == ID){
+    if(cloud->ID_col_order == ID){
       sceneManager->set_selected_cloud(cloud);
       //sceneManager->update_glyph(cloud);
     }
@@ -40,11 +40,11 @@ void Graph::selection_setCloud(Collection* cloud){
 void Graph::selection_setSubset(Collection* cloud, int ID){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
 
     if(i == ID){
-      cloud->ID_selected = ID;
+      cloud->ID_obj_selected = ID;
       subset->is_visible = true;
     }else{
       subset->is_visible = false;
@@ -60,8 +60,8 @@ void Graph::selection_setNext(){
   if(list_collection->size() == 0) return;
   //---------------------------
 
-  if(cloud_selected->ID_order + 1 < list_collection->size()){
-    cloud_selected = *next(list_collection->begin(),cloud_selected->ID_order + 1);
+  if(cloud_selected->ID_col_order + 1 < list_collection->size()){
+    cloud_selected = *next(list_collection->begin(),cloud_selected->ID_col_order + 1);
   }
   else{
     cloud_selected = *next(list_collection->begin(),0);

@@ -18,8 +18,8 @@ void Transformation::make_translation(Collection* cloud, vec3 trans){
   translation[2][3] = trans.z;
 
   //Apply
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     subset->trans *= translation;
     this->make_Transformation(subset, subset->root, translation);
   }
@@ -84,8 +84,8 @@ mat4 Transformation::make_rotation(Collection* cloud, vec3 COM, vec3 radian){
   glm::mat4 rotation = Rx * Ry * Rz;
 
   //Apply
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     subset->rotat *= rotation;
     this->make_Transformation(subset, COM, rotation);
   }

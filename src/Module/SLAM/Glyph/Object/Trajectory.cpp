@@ -42,8 +42,8 @@ void Trajectory::update(Collection* cloud){
 
   //Compute new trajectory values
   for(int j=1; j<cloud->subset.size(); j++){
-    Cloud* subset_m0 = *next(cloud->subset.begin(), j);
-    Cloud* subset_m1 = *next(cloud->subset.begin(), j-1);
+    Cloud* subset_m0 = (Cloud*)*next(cloud->subset.begin(), j);
+    Cloud* subset_m1 = (Cloud*)*next(cloud->subset.begin(), j-1);
 
     if(subset_m0->is_visible && subset_m1->is_visible){
       vec3 root_m0 = subset_m0->root;

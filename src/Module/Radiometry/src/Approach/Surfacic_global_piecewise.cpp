@@ -141,7 +141,7 @@ bool Surfacic_global_piecewise::algo_fitting(){
   return true;
 }
 bool Surfacic_global_piecewise::algo_correction(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -405,7 +405,7 @@ void Surfacic_global_piecewise::plot_SpaceParameter(){
 }
 void Surfacic_global_piecewise::plot_intensityCorrection(Collection* cloud){
   Plotting plotManager;
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   this->algo(cloud);
   //--------------------------------

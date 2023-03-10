@@ -100,8 +100,8 @@ void GUI_Online::design_online(){
 
 //Parameter function
 void GUI_Online::parameter_online(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->subset_selected;
   //---------------------------
 
   //Module online stuff
@@ -237,8 +237,10 @@ void GUI_Online::parameter_recorder(){
 
 //State function
 void GUI_Online::state_time(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Frame* frame = cloud->get_frame_selected();
+  /*Collection* collection = sceneManager->get_selected_collection();
+  Cloud* cloud = collection->get_sele
+  subset_selected->get_frame();
+  Frame* frame = collection->get_frame_selected();
   //---------------------------
 
   float time_operation = onlineManager->get_time_operation();
@@ -272,7 +274,7 @@ void GUI_Online::state_time(){
     ImGui::SameLine();
     ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%d ms", (int)time_screenshot);
   }
-
+*/
   //---------------------------
 }
 void GUI_Online::state_configuration(){

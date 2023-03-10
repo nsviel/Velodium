@@ -44,7 +44,7 @@ void Filter::update_configuration(){
 
 //Functions
 void Filter::filter_maxAngle(Collection* cloud, float angleMax){
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
   attribManager->compute_attribut_subset(subset);
   vector<float>& It = subset->It;
   int size_before = subset->nb_point;
@@ -77,7 +77,7 @@ void Filter::filter_sphere(){
 
   for(int i=0; i<list_collection->size(); i++){
     Collection* cloud = *next(list_collection->begin(),i);
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
 
     if(subset->name.find("Sphere") != std::string::npos){
       vector<vec3>& XYZ = subset->xyz;
@@ -118,8 +118,8 @@ void Filter::filter_sphere(){
 void Filter::filter_sphere_cloud(Collection* cloud){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     this->filter_sphere_subset(subset);
   }
 
@@ -146,8 +146,8 @@ void Filter::filter_sphere_subset(Cloud* subset){
 void Filter::filter_cylinder_cloud(Collection* cloud){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     this->filter_cylinder_subset(subset);
   }
 

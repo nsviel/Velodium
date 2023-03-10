@@ -65,7 +65,7 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
       cloud->path_file = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
-        Cloud* subset = *next(cloud->subset.begin(), j);
+        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
 
         for(int k=0; k<subset->rgb.size(); k++){
           subset->rgb[k] = vec4(Red, Green, Blue, 1.0f);
@@ -96,7 +96,7 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
 
     //jeme cloud
     for(int j=0; j<clouds.size(); j++){
-      Cloud* subset_scala = clouds[j]->get_subset(i);
+      Cloud* subset_scala = (Cloud*)clouds[j]->get_obj(i);
 
       //keme points
       for(int k=0; k<subset_scala->xyz.size(); k++){
@@ -127,7 +127,7 @@ void Scala_file::compute_relativeTimestamp(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<1; i++){
-    Cloud* subset = cloud->get_subset(i);
+    Cloud* subset = (Cloud*)cloud->get_obj(i);
     vector<float>& ts = subset->ts;
 
     float ts_cpt = ts[0];

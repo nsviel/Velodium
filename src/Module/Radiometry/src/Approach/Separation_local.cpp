@@ -45,7 +45,7 @@ bool Separation_local::algo(Collection* cloud){
 
 //Sub-functions
 bool Separation_local::algo_checking(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -86,7 +86,7 @@ bool Separation_local::algo_ParameterSpace(){
   return true;
 }
 bool Separation_local::algo_interpolation(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -137,7 +137,7 @@ bool Separation_local::algo_interpolation(Collection* cloud){
   return true;
 }
 bool Separation_local::algo_correction(Collection* cloud){
-  Cloud* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   Ic.clear();
   //---------------------------

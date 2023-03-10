@@ -37,7 +37,7 @@ void Attribut::compute_attribut_all(){
 
   for(int i=0;i<list_collection->size();i++){
     Collection* cloud = *next(list_collection->begin(),i);
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     this->compute_attribut_subset(subset);
   }
 
@@ -48,7 +48,7 @@ void Attribut::compute_attribut_list(list<Collection*>* list){
 
   for(int i=0;i<list->size();i++){
     Collection* cloud = *next(list->begin(),i);
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     this->compute_attribut_subset(subset);
   }
 
@@ -89,7 +89,7 @@ void Attribut::compute_attribut_subset(Cloud* subset){
 void Attribut::compute_attribut_cloud(Collection* cloud){
   //---------------------------
 
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
   this->compute_attribut_subset(subset);
 
   //---------------------------
@@ -366,8 +366,8 @@ void Attribut::cloudsData(){
   myfile << "\n";
   for(int i=0; i<list_collection->size(); i++){
     Collection* cloud = *next(list_collection->begin(),i);
-    Cloud* subset = cloud->subset_selected;
-    Cloud* subset_init = cloud->get_subset_selected_init();
+    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
 
     if(subset->name.find("rdm") != std::string::npos){
       vector<float>& Is = subset->I;
@@ -607,8 +607,8 @@ void Attribut::compute_normals_planFitting(Cloud* subset){
 void Attribut::compute_normals_invert(){
   if(!sceneManager->get_is_list_empty()){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = cloud->subset_selected;
-    Cloud* subset_init = cloud->get_subset_selected_init();
+    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
     vector<vec3>& normals = subset->Nxyz;
     //---------------------------
 
@@ -665,7 +665,7 @@ void Attribut::compute_checkForNan(Cloud* subset){
 void Attribut::compute_intensityInversion(){
   if(!sceneManager->get_is_list_empty()){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     //---------------------------
 
     if(subset->I.size() != 0){
@@ -722,7 +722,7 @@ void Attribut::fct_convert2048to255(Cloud* subset){
 void Attribut::fct_moins(){
   if(!sceneManager->get_is_list_empty()){
     Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
     vector<float>& Is = subset->I;
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->rgb;
@@ -739,8 +739,8 @@ void Attribut::fct_moins(){
 }
 void Attribut::fct_IsRange(vec2 range){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
-  Cloud* subset_init = cloud->get_subset_selected_init();
+  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
   vector<float>& Is = subset->I;
   const vector<float>& Is_ini = subset_init->I;
   //---------------------------
@@ -759,7 +759,7 @@ void Attribut::fct_IsRange(vec2 range){
 }
 vec2 Attribut::get_IsRange(){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
   vector<float>& Is = subset->I;
   //---------------------------
 

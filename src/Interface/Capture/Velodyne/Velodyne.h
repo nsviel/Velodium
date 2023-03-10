@@ -27,7 +27,7 @@ public:
   //Recording functions
   void start_watcher(int port);
   void stop_watcher();
-  Cloud* get_subset_capture();
+  Cloud* get_obj_capture();
 
   //LiDAR function
   void lidar_start_motor();

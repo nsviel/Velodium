@@ -148,11 +148,11 @@ void Recorder::save_frame(Collection* cloud, int ID_subset){
   //---------------------------
 
   if(with_save_frame_raw){
-    Cloud* subset = cloud->get_subset_init_byID(ID_subset);
+    Cloud* subset = (Cloud*)cloud->get_obj_init_byID(ID_subset);
     this->save_frame_subset(subset);
   }else{
     if(save_frame_accu == 1){
-      Cloud* subset = cloud->get_subset_byID(ID_subset);
+      Cloud* subset = (Cloud*)cloud->get_obj_byID(ID_subset);
       this->save_frame_subset(subset);
     }else{
       this->save_frame_set(cloud, ID_subset);
@@ -183,7 +183,7 @@ void Recorder::save_frame_subset(Cloud* subset){
   this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 void Recorder::save_frame_set(Collection* cloud, int ID_subset){
-  Cloud* subset = *next(cloud->subset.begin(), ID_subset);
+  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), ID_subset);
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 

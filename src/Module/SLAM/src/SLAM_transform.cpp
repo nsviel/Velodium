@@ -34,7 +34,7 @@ SLAM_transform::~SLAM_transform(){}
 
 //Main function
 void SLAM_transform::compute_preprocessing(Collection* cloud, int subset_ID){
-  Cloud* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
   Frame* frame = cloud->get_frame_byID(subset_ID);
   //---------------------------
 

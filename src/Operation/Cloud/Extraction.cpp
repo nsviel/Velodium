@@ -36,8 +36,8 @@ Extraction::~Extraction(){}
 
 //Extract / Cutting function
 void Extraction::fct_extractCloud(Collection* cloud){
-  Cloud* subset = cloud->subset_selected;
-  Cloud* subset_init = cloud->get_subset_selected_init();
+  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   //New cloud
@@ -93,8 +93,8 @@ void Extraction::fct_extractCloud(Collection* cloud){
   }
 }
 void Extraction::fct_extractSelected(Collection* cloud){
-  Cloud* subset = cloud->subset_selected;
-  Cloud* subset_init = cloud->get_subset_selected_init();
+  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   //New cloud
@@ -174,7 +174,7 @@ void Extraction::fct_cutCloud_all(){
   for(int i=0;i<list_collection->size();i++){
     //Select ieme Point Cloud
     Collection* cloud = *next(list_collection->begin(),i);
-    Cloud* subset = cloud->subset_selected;
+    Cloud* subset = (Cloud*)cloud->subset_selected;
 
     vector<vec3>& XYZ = subset->xyz;
     vector<int> idx;
@@ -236,8 +236,8 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
     Collection* part_1 = list_part[i];
     Collection* part_2 = list_part[i+1];
 
-    Cloud* subset_1 = part_1->get_subset(0);
-    Cloud* subset_2 = part_2->get_subset(0);
+    Cloud* subset_1 = (Cloud*)part_1->get_obj(0);
+    Cloud* subset_2 = (Cloud*)part_2->get_obj(0);
 
     //Location
     vector<vec3>& XYZ_1 = subset_1->xyz;
@@ -299,8 +299,8 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   Collection* cloud_out = new Collection();
   Cloud* subset_out = new Cloud();
 
-  Cloud* subset_1 = cloud_1->get_subset(0);
-  Cloud* subset_2 = cloud_2->get_subset(0);
+  Cloud* subset_1 = (Cloud*)cloud_1->get_obj(0);
+  Cloud* subset_2 = (Cloud*)cloud_2->get_obj(0);
 
   //Location
   vector<vec3>& XYZ_1 = subset_1->xyz;
@@ -358,9 +358,9 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
 void Extraction::fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2){
   //---------------------------
 
-  Cloud* subset_1 = cloud_1->get_subset(0);
-  Cloud* subset_1_init = cloud_1->get_subset_init_byID(0);
-  Cloud* subset_2 = cloud_2->get_subset(0);
+  Cloud* subset_1 = (Cloud*)cloud_1->get_obj(0);
+  Cloud* subset_1_init = (Cloud*)cloud_1->get_obj_init_byID(0);
+  Cloud* subset_2 = (Cloud*)cloud_2->get_obj(0);
 
   //Location
   vector<vec3>& XYZ_1 = subset_1->xyz;
@@ -429,8 +429,8 @@ void Extraction::fct_highlighting(Cloud* subset, Cloud* subset_init){
 }
 void Extraction::set_AABB_min(vec3 min_in){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
-  Cloud* subset_init = cloud->get_subset_selected_init();
+  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   vec3 max_old = subset->max;
@@ -462,8 +462,8 @@ void Extraction::set_AABB_min(vec3 min_in){
 }
 void Extraction::set_AABB_max(vec3 max_in){
   Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = cloud->subset_selected;
-  Cloud* subset_init = cloud->get_subset_selected_init();
+  Cloud* subset = (Cloud*)cloud->subset_selected;
+  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   vec3 max_old = subset->max;

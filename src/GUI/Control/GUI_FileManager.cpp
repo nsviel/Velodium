@@ -108,7 +108,7 @@ void GUI_fileManager::cloudManager(Collection* cloud){
 
   ImGuiTreeNodeFlags node_flags;
   node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-  if(cloud_selected->ID_order == cloud->ID_order){
+  if(cloud_selected->ID_col_order == cloud->ID_col_order){
     node_flags |= ImGuiTreeNodeFlags_Selected;
   }
   bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
@@ -119,10 +119,10 @@ void GUI_fileManager::cloudManager(Collection* cloud){
   }
 
   //Subset tree node
-  if(open_cloud_node && cloud != nullptr && (cloud->nb_subset > 1 || cloud->is_onthefly)){
+  if(open_cloud_node && cloud != nullptr && (cloud->nb_object > 1 || cloud->is_onthefly)){
 
     for(int j=0; j<cloud->subset.size(); j++){
-      Cloud* subset = *next(cloud->subset.begin(), j);
+      Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
 
       if(subset->is_visible){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
@@ -144,7 +144,7 @@ void GUI_fileManager::cloudManager(Collection* cloud){
     }
 
     ImGui::TreePop();
-  }/*else if(open_cloud_node && cloud != nullptr && cloud->nb_subset == 1){
+  }/*else if(open_cloud_node && cloud != nullptr && cloud->nb_object == 1){
     ImGui::TreePop();
   }*/
 
@@ -181,7 +181,7 @@ void GUI_fileManager::info_iconAction(Collection* cloud){
 
   //Removal cross
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 0, 0, 255));
-  ImGui::PushID(cloud->ID_order);
+  ImGui::PushID(cloud->ID_col_order);
   //ImGui::SameLine(ImGui::GetWindowWidth()-40);
   if(ImGui::Button(ICON_FA_TRASH)){
     sceneManager->remove_cloud(cloud);

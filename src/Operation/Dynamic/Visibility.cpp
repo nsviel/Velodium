@@ -27,13 +27,13 @@ Visibility::~Visibility(){}
 
 //Main function
 void Visibility::compute_visibility(Collection* cloud, int& ID_subset){
-  Cloud* subset = cloud->get_subset_byID(ID_subset);
+  Cloud* subset = (Cloud*)cloud->get_obj_byID(ID_subset);
   if(subset == nullptr) return;
   //---------------------------
 
   //Set visibility just for wanted subsets
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = cloud->get_subset(i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)cloud->get_obj(i);
 
     if(subset->ID >= ID_subset - visibility_range + 1 && subset->ID <= ID_subset){
       subset->is_visible = true;
@@ -48,8 +48,8 @@ void Visibility::compute_visibility_range_max(Collection* cloud){
   if(cloud == nullptr) return;
   //---------------------------
 
-  if(cloud->nb_subset < visibility_range_max && visibility_range_max > 15){
-    this->visibility_range_max = cloud->nb_subset;
+  if(cloud->nb_object < visibility_range_max && visibility_range_max > 15){
+    this->visibility_range_max = cloud->nb_object;
   }
 
   //---------------------------

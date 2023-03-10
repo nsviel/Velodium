@@ -148,7 +148,7 @@ void GUI_Control::control_mouse_wheel(){
 
     //Subset rotation
     if(sceneManager->get_is_list_empty() == false){
-      if(collection->nb_subset == 1 && collection->is_onthefly == false){
+      if(collection->nb_object == 1 && collection->is_onthefly == false){
         float radian = cloud_rotat_degree*M_PI/180;
         vec3 R;
         if(wheelMode == 0){
@@ -167,7 +167,7 @@ void GUI_Control::control_mouse_wheel(){
         //sceneManager->update_glyph(collection);
       }
       //Subset selection
-      else if(collection->nb_subset > 1 || collection->is_onthefly){
+      else if(collection->nb_object > 1 || collection->is_onthefly){
         playerManager->compute_wheel_selection(direction);
       }
     }

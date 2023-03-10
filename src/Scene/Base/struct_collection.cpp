@@ -5,8 +5,8 @@ Collection::Collection(){
   //---------------------------
 
   //IDs
-  this->ID_perma = 0;
-  this->ID_order = 0;
+  this->ID_col_perma = 0;
+  this->ID_col_order = 0;
 
   //Info
   this->obj_type = "collection";
@@ -20,22 +20,22 @@ Collection::Collection(){
   this->ID_onthefly = 0;
 
   //Subset
-  this->ID_selected = 0;
-  this->ID_subset = 0;
-  this->nb_subset = 0;
+  this->ID_obj_selected = 0;
+  this->ID_obj_last = 0;
+  this->nb_object = 0;
   this->subset_selected = nullptr;
 
   //---------------------------
 }
 
 //Add / remove subset
-void Collection::add_new_subset(Cloud* subset){
+void Collection::add_new_subset(Object_* subset){
   //---------------------------
 
   //Initialize parameters
   subset->is_visible = true;
-  Cloud* subset_buffer = new Cloud(*subset);
-  Cloud* subset_init = new Cloud(*subset);
+  Object_* subset_buffer = new Object_(*subset);
+  Object_* subset_init = new Object_(*subset);
 
   //Insert new subset into cloud lists
   this->subset.push_back(subset);
@@ -43,8 +43,8 @@ void Collection::add_new_subset(Cloud* subset){
   this->subset_init.push_back(subset_init);
 
   //Update number of cloud subset
-  this->nb_subset = this->subset.size();
-  this->ID_selected = subset->ID;
+  this->nb_object = this->subset.size();
+  this->ID_obj_selected = subset->ID;
   this->subset_selected = subset;
 
   //---------------------------
@@ -53,9 +53,9 @@ void Collection::remove_subset_last(){
   //---------------------------
 
   //Get subset object
-  Cloud* sub = this->get_subset(0);
-  Cloud* sub_buf = this->get_subset_buffer(0);
-  Cloud* sub_ini = this->get_subset_init(0);
+  Object_* sub = this->get_obj(0);
+  Object_* sub_buf = this->get_obj_buffer(0);
+  Object_* sub_ini = this->get_obj_init(0);
 
   //Remove data from GPU
   glDeleteBuffers(1, &sub->vbo_xyz);
@@ -74,7 +74,7 @@ void Collection::remove_subset_last(){
   delete sub_ini;
 
   //---------------------------
-  this->nb_subset = subset.size();
+  this->nb_object = subset.size();
 }
 void Collection::remove_subset_all(){
   int size = subset.size();
@@ -88,19 +88,12 @@ void Collection::remove_subset_all(){
 }
 
 // Get subset frame
-Frame* Collection::get_frame_selected(){
-  //---------------------------
-
-  return subset_selected->get_frame();
-
-  //---------------------------
-}
 Frame* Collection::get_frame_byID(int querry){
   //---------------------------
 
-  Cloud* subset = get_subset_byID(querry);
+  Object_* subset = get_obj_byID(querry);
   if(subset != nullptr){
-    return subset->get_frame();
+    //return subset->get_frame();
   }else{
     return nullptr;
   }
@@ -109,13 +102,13 @@ Frame* Collection::get_frame_byID(int querry){
 }
 
 //Retrieve subset
-Cloud* Collection::get_subset_selected_init(){
+Object_* Collection::get_obj_selected_init(){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
-    Cloud* sub = *next(subset_init.begin(), i);
+    Object_* sub = *next(subset_init.begin(), i);
 
-    if(sub->ID == ID_selected){
+    if(sub->ID == ID_obj_selected){
       return sub;
     }
   }
@@ -123,7 +116,7 @@ Cloud* Collection::get_subset_selected_init(){
   //---------------------------
   return nullptr;
 }
-Cloud* Collection::get_subset(int querry){
+Object_* Collection::get_obj(int querry){
   //---------------------------
 
   if(querry > subset.size()) return nullptr;
@@ -133,11 +126,11 @@ Cloud* Collection::get_subset(int querry){
 
   //---------------------------
 }
-Cloud* Collection::get_subset_byID(int querry){
+Object_* Collection::get_obj_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
-    Cloud* sub = *next(subset.begin(), i);
+    Object_* sub = *next(subset.begin(), i);
 
     if(sub->ID == querry){
       return sub;
@@ -147,18 +140,18 @@ Cloud* Collection::get_subset_byID(int querry){
   //---------------------------
   return nullptr;
 }
-Cloud* Collection::get_subset_buffer(int querry){
+Object_* Collection::get_obj_buffer(int querry){
   //---------------------------
 
   return *next(subset_buffer.begin(), querry);
 
   //---------------------------
 }
-Cloud* Collection::get_subset_buffer_byID(int querry){
+Object_* Collection::get_obj_buffer_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
-    Cloud* sub = *next(subset_buffer.begin(), i);
+    Object_* sub = *next(subset_buffer.begin(), i);
 
     if(sub->ID == querry){
       return sub;
@@ -168,7 +161,7 @@ Cloud* Collection::get_subset_buffer_byID(int querry){
   //---------------------------
   return nullptr;
 }
-Cloud* Collection::get_subset_init(int querry){
+Object_* Collection::get_obj_init(int querry){
   //---------------------------
 
   if(querry > subset_init.size()) return nullptr;
@@ -178,11 +171,11 @@ Cloud* Collection::get_subset_init(int querry){
 
   //---------------------------
 }
-Cloud* Collection::get_subset_init_byID(int querry){
+Object_* Collection::get_obj_init_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
-    Cloud* sub = *next(subset_init.begin(), i);
+    Object_* sub = *next(subset_init.begin(), i);
 
     if(sub->ID == querry){
       return sub;

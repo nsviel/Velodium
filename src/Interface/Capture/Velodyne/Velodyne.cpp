@@ -121,7 +121,7 @@ void Velodyne::stop_watcher(){
 
   //---------------------------
 }
-Cloud* Velodyne::get_subset_capture(){
+Cloud* Velodyne::get_obj_capture(){
   //---------------------------
 
   //Free the memory to get synchroneous data

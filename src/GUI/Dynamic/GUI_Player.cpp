@@ -81,7 +81,7 @@ void GUI_Player::player_visibility(){
   ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Display##666", visibility_range, 1, 1, visibility_range_max)){
     if(cloud != nullptr){
-      playerManager->select_bySubsetID(cloud, cloud->ID_selected);
+      playerManager->select_bySubsetID(cloud, cloud->ID_obj_selected);
     }
   }
 
@@ -205,11 +205,11 @@ void GUI_Player::player_selection(){
   Collection* cloud = sceneManager->get_selected_collection();
   //---------------------------
 
-  if(cloud != nullptr && cloud->nb_subset > 2){
-    Cloud* subset = cloud->subset_selected;
-    Cloud* subset_first = cloud->get_subset(0);
-    Cloud* subset_last = cloud->get_subset(cloud->nb_subset-1);
-    int subset_selected_ID = cloud->ID_selected;
+  if(cloud != nullptr && cloud->nb_object > 2){
+    Cloud* subset = (Cloud*)cloud->subset_selected;
+    Cloud* subset_first = (Cloud*)cloud->get_obj(0);
+    Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_object-1);
+    int subset_selected_ID = cloud->ID_obj_selected;
 
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){

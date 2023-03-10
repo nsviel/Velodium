@@ -262,8 +262,8 @@ void Pather::saving_cloud_frame(Collection* cloud){
   string path_saving = zenity_directory("Save frame", path_current_dir);
 
   //Save current cloud
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     string path = path_saving + subset->name;
 
     if(subset != nullptr && path_saving != ""){
@@ -296,7 +296,7 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
     for(int i=frame_b; i<frame_e; i++){
-      Cloud* subset = cloud->get_subset(i);
+      Cloud* subset = (Cloud*)cloud->get_obj(i);
       saverManager->save_subset(subset, ".ply", path_saving);
     }
   }

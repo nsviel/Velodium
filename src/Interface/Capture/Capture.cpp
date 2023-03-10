@@ -144,7 +144,7 @@ void Capture::runtime_velodyne(){
 
   if(*new_capture){
     //Pick new subset
-    new_subset = veloManager->get_subset_capture();
+    new_subset = veloManager->get_obj_capture();
 
     //Unset new Cloud flag
     *new_capture = false;
@@ -165,7 +165,7 @@ void Capture::runtime_scala(){
   bool* new_capture = scalaManager->get_is_newSubset();
   if(*new_capture){
     //Pick new subset
-    new_subset = new Cloud(*scalaManager->get_subset_capture());
+    new_subset = new Cloud(*scalaManager->get_obj_capture());
 
     //Unset new Cloud flag
     *new_capture = false;
@@ -228,7 +228,7 @@ void Capture::operation_new_subset(Cloud* subset){
     //Do not record the first run
     if(is_first_run){
       cloud_capture->remove_subset_last();
-      cloud_capture->nb_subset = 0;
+      cloud_capture->nb_object = 0;
       is_first_run = false;
     }
 
@@ -240,9 +240,9 @@ void Capture::operation_new_subset(Cloud* subset){
     }
 
     //Set new subset identifieurs
-    subset->name = "frame_" + to_string(cloud_capture->ID_subset);
-    subset->ID = cloud_capture->ID_subset;
-    cloud_capture->ID_subset++;
+    subset->name = "frame_" + to_string(cloud_capture->ID_obj_last);
+    subset->ID = cloud_capture->ID_obj_last;
+    cloud_capture->ID_obj_last++;
 
     //Update subset data
     sceneManager->update_buffer_location(subset);
@@ -329,7 +329,7 @@ void Capture::create_empty_cloud(){
 
   loaderManager->load_cloud_empty();
   cloud_capture = (Collection*)loaderManager->get_created_object();
-  cloud_capture->ID_subset = 0;
+  cloud_capture->ID_obj_last = 0;
   cloud_capture->name = "Capture_" + to_string(ID_capture);
   this->ID_capture++;
 

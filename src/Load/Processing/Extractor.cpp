@@ -46,7 +46,7 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
 
     //Init
     this->check_data(data[i]);
-    this->init_subset_parameter(cloud, data[i], collection->ID_subset);
+    this->init_subset_parameter(cloud, data[i], collection->ID_obj_last);
     objectManager->create_glyph_subset(cloud);
 
     //Set parametrization
@@ -55,7 +55,7 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
     this->define_buffer_init(collection, cloud);
     this->compute_texture(cloud, data[i]);
 
-    collection->ID_subset++;
+    collection->ID_obj_last++;
   }
 
   //---------------------------
@@ -99,7 +99,7 @@ void Extractor::extract_data(Collection* cloud, Data_file* data){
   //Init
   this->color_rdm = cloud->unicolor;
   this->check_data(data);
-  this->init_subset_parameter(subset, data, cloud->ID_subset);
+  this->init_subset_parameter(subset, data, cloud->ID_obj_last);
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
@@ -107,8 +107,8 @@ void Extractor::extract_data(Collection* cloud, Data_file* data){
   gpuManager->gen_object_buffers(subset);
 
   //Update cloud stats
-  cloud->nb_subset++;
-  cloud->ID_subset++;
+  cloud->nb_object++;
+  cloud->ID_obj_last++;
 
   //---------------------------
 }
@@ -187,7 +187,7 @@ void Extractor::init_cloud_parameter(Collection* collection, vector<Data_file*> 
 
   collection->is_visible = true;
   collection->nb_point = nb_point;
-  collection->nb_subset = data.size();
+  collection->nb_object = data.size();
 
   collection->unicolor = color_rdm;
   collection->path_save = get_path_abs_build() + "../media/data/";

@@ -29,7 +29,7 @@ void Scene::remove_cloud(Collection* cloud){
   //---------------------------
 
   if(!get_is_list_empty()){
-    int oID = cloud->ID_order;
+    int oID = cloud->ID_col_order;
     string name =  cloud->name;
     //---------------------------
 
@@ -86,8 +86,8 @@ void Scene::reset_cloud(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = cloud->get_subset(i);
-    Cloud* subset_init = cloud->get_subset_init(i);
+    Cloud* subset = (Cloud*)cloud->get_obj(i);
+    Cloud* subset_init = (Cloud*)cloud->get_obj_init(i);
 
     //Reinitialize visibility
     if(i == 0){
@@ -121,7 +121,7 @@ void Scene::reset_cloud(Collection* cloud){
     subset->frame.reset();
   }
 
-  cloud->ID_selected = cloud->get_subset(0)->ID;
+  //cloud->ID_obj_selected = (Cloud*)cloud->get_obj(0)->ID;
 
   //---------------------------
   //this->update_glyph(cloud);
@@ -152,7 +152,7 @@ void Scene::update_buffer_location(Object_* object){
   if(object->obj_type == "collection"){
     Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->subset.size(); i++){
-      Cloud* subset = *next(cloud->subset.begin(), i);
+      Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
       gpuManager->update_buffer_location(subset);
     }
   }else{
@@ -167,7 +167,7 @@ void Scene::update_buffer_color(Object_* object){
   if(object->obj_type == "collection"){
     Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->subset.size(); i++){
-      Cloud* subset = *next(cloud->subset.begin(), i);
+      Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
       gpuManager->update_buffer_color(subset);
     }
   }else{
@@ -183,7 +183,7 @@ void Scene::update_glyph(Object_* object){
   if(object->obj_type == "collection"){
     /*Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->subset.size(); i++){
-      Cloud* subset = *next(cloud->subset.begin(), i);
+      Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
       gpuManager->update_buffer_color(subset);
     }*/
     this->update_cloud_MinMax((Collection*)object);
@@ -201,7 +201,7 @@ void Scene::update_cloud_MinMax(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
     this->update_MinMax(subset);
 
     //Collection
@@ -243,7 +243,7 @@ void Scene::update_cloud_IntensityToColor(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
 
     vector<float>& Is = subset->I;
     vector<vec4>& RGB = subset->rgb;
@@ -278,7 +278,7 @@ void Scene::update_ID_order(list<Collection*>* list){
 
   for(int i=0; i<list->size(); i++){
     Collection* cloud = *next(list->begin(),i);
-    if(cloud->ID_order != i) cloud->ID_order = i;
+    if(cloud->ID_col_order != i) cloud->ID_col_order = i;
   }
 
   //---------------------------

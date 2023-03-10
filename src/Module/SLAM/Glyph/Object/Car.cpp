@@ -40,7 +40,7 @@ void Car::create_glyph(){
   //---------------------------
 }
 void Car::update_glyph(Collection* cloud){
-  Cloud* subset = cloud->subset_selected;
+  Cloud* subset = (Cloud*)cloud->subset_selected;
   vec3 trans_abs = subset->root;
   //---------------------------
 

@@ -30,7 +30,7 @@ Boxing::Boxing(Node_operation* node_ope){
 Boxing::~Boxing(){}
 
 void Boxing::compute_box_MinMax(Collection* cloud, vec3 min_perc, vec3 max_perc){
-  Cloud* subset_init = cloud->get_subset_selected_init();
+  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
   //---------------------------
@@ -76,7 +76,7 @@ void Boxing::compute_visibility(Collection* cloud){
   cloud->is_boxed = true;
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
+  for(int i=0; i<cloud->nb_object; i++){
     this->compute_visibility(cloud, i);
   }
 
@@ -85,8 +85,8 @@ void Boxing::compute_visibility(Collection* cloud){
 void Boxing::compute_visibility(Collection* cloud, int ID){
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
-  Cloud* subset = cloud->get_subset(ID);
-  Cloud* subset_init = cloud->get_subset_init(ID);
+  Cloud* subset = (Cloud*)cloud->get_obj(ID);
+  Cloud* subset_init = (Cloud*)cloud->get_obj_init(ID);
   //---------------------------
 
   subset->xyz = subset_init->xyz;
@@ -115,9 +115,9 @@ void Boxing::compute_visibility(Collection* cloud, int ID){
 void Boxing::supress_selected_point(Collection* cloud){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_subset; i++){
-    Cloud* subset = cloud->get_subset(i);
-    Cloud* subset_init = cloud->get_subset_init(i);
+  for(int i=0; i<cloud->nb_object; i++){
+    Cloud* subset = (Cloud*)cloud->get_obj(i);
+    Cloud* subset_init = (Cloud*)cloud->get_obj_init(i);
     vector<int>& idx = subset->selected;
 
     subset->xyz = subset_init->xyz;
@@ -142,9 +142,9 @@ void Boxing::stop_boxing(){
   for(int i=0; i<list_collection->size(); i++){
     Collection* cloud = *next(list_collection->begin(), i);
     cloud->is_boxed = false;
-    for(int j=0; j<cloud->nb_subset; j++){
-      Cloud* subset = cloud->get_subset(j);
-      Cloud* subset_init = cloud->get_subset_init(j);
+    for(int j=0; j<cloud->nb_object; j++){
+      Cloud* subset = (Cloud*)cloud->get_obj(j);
+      Cloud* subset_init = (Cloud*)cloud->get_obj_init(j);
       subset->xyz = subset_init->xyz;
       subset->rgb = subset_init->rgb;
       subset->I = subset_init->I;
