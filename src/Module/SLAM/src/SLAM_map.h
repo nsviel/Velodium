@@ -25,8 +25,8 @@ public:
 
   //Sub-function
   void add_pointToMap(slamap* map, vector<vec3>& xyz);
-  void add_pointToMap(slamap* map, Subset* subset);
-  void add_pointToCloud(slamap* map, Subset* subset);
+  void add_pointToMap(slamap* map, Cloud* subset);
+  void add_pointToCloud(slamap* map, Cloud* subset);
   void save_local_cloud();
 
   //Voxel specific function

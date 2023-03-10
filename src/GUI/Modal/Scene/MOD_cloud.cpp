@@ -38,7 +38,7 @@ void MOD_cloud::mod_cloud_info(){
 
   if(*open && cloud != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
 
     //Visibility
     static bool visible = true;
@@ -131,7 +131,7 @@ void MOD_cloud::mod_cloud_info(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Collection* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     //---------------------------
 
     // Data vectors
@@ -227,7 +227,7 @@ void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Collection* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     //---------------------------
 
     // Data vectors

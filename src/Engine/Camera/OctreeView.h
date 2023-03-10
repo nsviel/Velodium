@@ -12,7 +12,7 @@ public:
 
 public:
   //Main functions
-  void construct_octree(Subset* subset);
+  void construct_octree(Cloud* subset);
 
 private:
   vector<vec3> xyz;

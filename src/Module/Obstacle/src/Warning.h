@@ -15,8 +15,8 @@ public:
   ~Warning();
 
 public:
-  void send_warning(Subset* subset);
-  string build_jsonFile(Subset* subset);
+  void send_warning(Cloud* subset);
+  string build_jsonFile(Cloud* subset);
 
 private:
   //MQTT* mqttManager;

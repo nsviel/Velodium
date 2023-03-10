@@ -162,7 +162,7 @@ void Box::build_box_color(){
 
   //---------------------------
 }
-void Box::compute_box_MinMax(Subset* subset, vec3 min_perc, vec3 max_perc){
+void Box::compute_box_MinMax(Cloud* subset, vec3 min_perc, vec3 max_perc){
   //---------------------------
 
   //Get Z extremums

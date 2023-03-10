@@ -92,7 +92,7 @@ void Axis::create_axis_circle(float circleRadius){
 
   //---------------------------
 }
-void Axis::create_axis_subset(Subset* subset){
+void Axis::create_axis_subset(Cloud* subset){
   Glyph axis_subset;
   //---------------------------
 
@@ -114,7 +114,7 @@ void Axis::create_axis_subset(Subset* subset){
   //---------------------------
   subset->glyphs.insert({"axis", axis_subset});
 }
-void Axis::update_axis_subset(Subset* subset){
+void Axis::update_axis_subset(Cloud* subset){
   Glyph* axis_subset = &subset->glyphs["axis"];
   vector<vec3>& XYZ = axis_subset->xyz;
   vec3 subset_root = subset->root;

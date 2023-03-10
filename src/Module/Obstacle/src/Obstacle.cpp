@@ -109,7 +109,7 @@ void Obstacle::build_cloud_obstacle(Collection* cloud){
   /*
   //Process prediction if the ieme subset are not already processed
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
 
     if(subset->detection.is_predicted == false){
       //Build obstacle glyph
@@ -125,7 +125,7 @@ void Obstacle::build_cloud_obstacle(Collection* cloud){
 
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_pr(Subset* subset){
+void Obstacle::build_obstacleGlyph_pr(Cloud* subset){
   /*Data_pred* detection = &subset->detection;
   //---------------------------
 
@@ -148,7 +148,7 @@ void Obstacle::build_obstacleGlyph_pr(Subset* subset){
   */
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_gt(Subset* subset){
+void Obstacle::build_obstacleGlyph_gt(Cloud* subset){
   /*Data_pred* detection_gt = &subset->detection_gt;
   //---------------------------
 

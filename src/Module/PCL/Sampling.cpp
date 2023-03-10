@@ -26,7 +26,7 @@ Sampling::Sampling(){
 Sampling::~Sampling(){}
 
 //Functions
-void Sampling::sampling_random(Subset* subset){
+void Sampling::sampling_random(Cloud* subset){
   int size_before = subset->nb_point;
   tic();
   //---------------------------
@@ -53,7 +53,7 @@ void Sampling::sampling_random(Subset* subset){
   string log = "Random sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_spaceRadius_PCL(Subset* subset){
+void Sampling::sampling_spaceRadius_PCL(Cloud* subset){
   int size_before = subset->nb_point;
   tic();
   //---------------------------
@@ -81,7 +81,7 @@ void Sampling::sampling_spaceRadius_PCL(Subset* subset){
   string log = "Space sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_outlier(Subset* subset){
+void Sampling::sampling_outlier(Cloud* subset){
   int size_before = subset->nb_point;
   tic();
   //---------------------------
@@ -107,7 +107,7 @@ void Sampling::sampling_outlier(Subset* subset){
   string log = "Filter outliers " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_statistical(Subset* subset){
+void Sampling::sampling_statistical(Cloud* subset){
   //http://pointclouds.org/documentation/tutorials/statistical_outlier.php
   int size_before = subset->nb_point;
   tic();
@@ -132,7 +132,7 @@ void Sampling::sampling_statistical(Subset* subset){
   string log = "Statistical sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_spaceRadius(Subset* subset, float radius){
+void Sampling::sampling_spaceRadius(Cloud* subset, float radius){
   tic();
   //---------------------------
 

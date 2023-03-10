@@ -67,7 +67,7 @@ void Linearization::algo_reverse(Collection* cloud, int method){
 
 //Linearization
 void Linearization::lin_SurfacicGlobal(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   //---------------------------
 
@@ -92,7 +92,7 @@ void Linearization::lin_SurfacicGlobal(Collection* cloud){
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::lin_SeparationGlobal(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   int size = Is.size();
   float D = 0.24;
@@ -114,7 +114,7 @@ void Linearization::lin_SeparationGlobal(Collection* cloud){
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::lin_SurfacicLocal(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   int size = Is.size();
   float D = 0.1513;
@@ -138,7 +138,7 @@ void Linearization::lin_SurfacicLocal(Collection* cloud){
 
 //Reverse
 void Linearization::rev_SurfacicGlobal(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   int size = Is.size();
@@ -154,7 +154,7 @@ void Linearization::rev_SurfacicGlobal(Collection* cloud){
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::rev_SeparationGlobal(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), 0);
+  Cloud* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   int size = Is.size();
   float A = 1.30;

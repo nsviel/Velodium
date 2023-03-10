@@ -122,7 +122,7 @@ void GUI_fileManager::cloudManager(Collection* cloud){
   if(open_cloud_node && cloud != nullptr && (cloud->nb_subset > 1 || cloud->is_onthefly)){
 
     for(int j=0; j<cloud->subset.size(); j++){
-      Subset* subset = *next(cloud->subset.begin(), j);
+      Cloud* subset = *next(cloud->subset.begin(), j);
 
       if(subset->is_visible){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
@@ -162,7 +162,7 @@ void GUI_fileManager::info_cloud(Collection* cloud){
 
   //---------------------------
 }
-void GUI_fileManager::info_subset(Subset* subset){
+void GUI_fileManager::info_subset(Cloud* subset){
   vec3& COM = subset->COM;
   vec3& PCroot = subset->root;
   ImGui::Separator();

@@ -1,16 +1,16 @@
-#ifndef SUBSET_STRUCT_H
-#define SUBSET_STRUCT_H
+#ifndef CLOUD_STRUCT_H
+#define CLOUD_STRUCT_H
 
 #include "struct_glyph.h"
 #include "struct_object.h"
 #include "../../Module/SLAM/Base/struct_frame.h"
 
 
-struct Subset : public Object_
+struct Cloud : public Object_
 {
   //---------------------------
 
-  Subset();
+  Cloud();
   Frame* get_frame();
 
   bool has_intensity;

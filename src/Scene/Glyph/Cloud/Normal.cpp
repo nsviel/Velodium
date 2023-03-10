@@ -17,7 +17,7 @@ Normal::Normal(){
 }
 Normal::~Normal(){}
 
-void Normal::create_glyph(Subset* subset){
+void Normal::create_glyph(Cloud* subset){
   Glyph normal;
   //---------------------------
 
@@ -31,7 +31,7 @@ void Normal::create_glyph(Subset* subset){
   //---------------------------
   subset->glyphs.insert({"normal", normal});
 }
-void Normal::update_normal_subset(Subset* subset){
+void Normal::update_normal_subset(Cloud* subset){
   Glyph* normal = &subset->glyphs["normal"];
   normal->draw_point_size = size;
   //---------------------------
@@ -70,7 +70,7 @@ void Normal::update_normal_subset(Subset* subset){
 
   //---------------------------
 }
-void Normal::update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s){
+void Normal::update_normal_subset(Cloud* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s){
   Glyph* normal = &subset->glyphs["normal"];
   normal->draw_point_size = size;
   //---------------------------

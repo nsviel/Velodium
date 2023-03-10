@@ -263,7 +263,7 @@ void Pather::saving_cloud_frame(Collection* cloud){
 
   //Save current cloud
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     string path = path_saving + subset->name;
 
     if(subset != nullptr && path_saving != ""){
@@ -273,7 +273,7 @@ void Pather::saving_cloud_frame(Collection* cloud){
 
   //---------------------------
 }
-void Pather::saving_subset(Subset* subset){
+void Pather::saving_subset(Cloud* subset){
   //---------------------------
 
   //Select saving path
@@ -296,7 +296,7 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //Save current cloud
   if(cloud != nullptr && path_saving != ""){
     for(int i=frame_b; i<frame_e; i++){
-      Subset* subset = cloud->get_subset(i);
+      Cloud* subset = cloud->get_subset(i);
       saverManager->save_subset(subset, ".ply", path_saving);
     }
   }

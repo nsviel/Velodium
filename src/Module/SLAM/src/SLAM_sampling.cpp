@@ -27,7 +27,7 @@ SLAM_sampling::SLAM_sampling(){
 SLAM_sampling::~SLAM_sampling(){}
 
 //Sampling functions
-vector<vec3> SLAM_sampling::sub_sampling_subset(Subset* subset, float voxel_size){
+vector<vec3> SLAM_sampling::sub_sampling_subset(Cloud* subset, float voxel_size){
   vector<vec3> xyz_sampled;
   float size_voxel = 0.2;
   //---------------------------
@@ -55,7 +55,7 @@ vector<vec3> SLAM_sampling::sub_sampling_subset(Subset* subset, float voxel_size
   //---------------------------
   return xyz_sampled;
 }
-void SLAM_sampling::grid_sampling_subset(Subset* subset){
+void SLAM_sampling::grid_sampling_subset(Cloud* subset){
   Frame* frame = &subset->frame;
   //---------------------------
 

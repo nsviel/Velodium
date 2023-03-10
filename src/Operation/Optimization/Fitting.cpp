@@ -14,13 +14,13 @@ void Fitting::Sphere_cloudToCenter_all(list<Collection*>* list_cloud){
 
   for(int i=0; i<list_cloud->size(); i++){
     Collection* cloud = *next(list_cloud->begin(),i);
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     this->Sphere_cloudToCenter(subset);
   }
 
   //--------------------------
 }
-void Fitting::Sphere_cloudToCenter(Subset* subset){
+void Fitting::Sphere_cloudToCenter(Cloud* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<float>& dist = subset->R;
   //---------------------------
@@ -51,7 +51,7 @@ void Fitting::Sphere_cloudToCenter(Subset* subset){
 
   //---------------------------
 }
-vec3 Fitting::Sphere_FindCenter(Subset* subset){
+vec3 Fitting::Sphere_FindCenter(Cloud* subset){
   /* The return value is 'true' when the linear system of the algorithm
    is solvable, 'false' otherwise. If 'false' is returned, the sphere
    center and radius are set to zero values.*/

@@ -41,7 +41,7 @@ void Graph::selection_setSubset(Collection* cloud, int ID){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
 
     if(i == ID){
       cloud->ID_selected = ID;

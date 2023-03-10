@@ -24,8 +24,8 @@ public:
 
   //Subfunctions
   vec3 camera_payload(Collection* cloud, int ID_subset);
-  void camera_position(Subset* subset, vec3 E);
-  void camera_orientation(Subset* subset, vec3 E);
+  void camera_position(Cloud* subset, vec3 E);
+  void camera_orientation(Cloud* subset, vec3 E);
   void camera_reset();
 
   inline bool* get_with_camera_follow(){return &with_camera_follow;}

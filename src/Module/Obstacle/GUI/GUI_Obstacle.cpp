@@ -126,7 +126,7 @@ void GUI_Obstacle::runtime_display_naming(){
   if(cloud != nullptr){
     //---------------------------
 
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     Data_pred* detection = &subset->detection;
 
     this->label_ID = 0;

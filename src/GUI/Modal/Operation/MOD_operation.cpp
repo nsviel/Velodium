@@ -42,7 +42,7 @@ void MOD_operation::window_selection(){
   if(modal_tab.show_selection){
     ImGui::Begin("Selection part", &modal_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
     Collection* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     //---------------------------
 
     ImGui::Text("Point");
@@ -83,8 +83,8 @@ void MOD_operation::window_selection(){
     bool* highlightON = extractionManager->get_highlightON();
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(cloud != nullptr){
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = cloud->get_subset_selected_init();
+        Cloud* subset = cloud->subset_selected;
+        Cloud* subset_init = cloud->get_subset_selected_init();
         extractionManager->fct_highlighting(subset, subset_init);
       }
     }
@@ -195,7 +195,7 @@ void MOD_operation::window_fitting(){
   if(modal_tab.show_fitting){
     ImGui::Begin("Fitting", &modal_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
     Collection* cloud = sceneManager->get_selected_cloud();
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     int sizeButton = 150;
     //---------------------------
 

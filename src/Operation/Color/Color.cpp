@@ -66,7 +66,7 @@ void Color::update_configuration(){
 
 //Color subset functions
 void Color::make_colorization(Collection* cloud, int ID_subset){
-  Subset* subset = cloud->get_subset_byID(ID_subset);
+  Cloud* subset = cloud->get_subset_byID(ID_subset);
   //---------------------------
 
   switch(color_mode){
@@ -86,7 +86,7 @@ void Color::make_colorization(Collection* cloud, int ID_subset){
 
   //---------------------------
 }
-void Color::make_colorization(Subset* subset, vec4 RGB_in){
+void Color::make_colorization(Cloud* subset, vec4 RGB_in){
   vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
@@ -97,7 +97,7 @@ void Color::make_colorization(Subset* subset, vec4 RGB_in){
   //---------------------------
   sceneManager->update_buffer_color(subset);
 }
-void Color::make_colorization_specific(Subset* subset){
+void Color::make_colorization_specific(Cloud* subset){
   vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
@@ -109,7 +109,7 @@ void Color::make_colorization_specific(Subset* subset){
   sceneManager->update_buffer_color(subset);
 }
 
-void Color::color_unicolor(Subset* subset, vec4 color){
+void Color::color_unicolor(Cloud* subset, vec4 color){
   vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
@@ -120,7 +120,7 @@ void Color::color_unicolor(Subset* subset, vec4 color){
   //---------------------------
   sceneManager->update_buffer_color(subset);
 }
-void Color::color_intensity(Subset* subset){
+void Color::color_intensity(Cloud* subset){
   vector<vec4>& RGB = subset->rgb;
   vector<float>& Is = subset->I;
   //---------------------------
@@ -150,7 +150,7 @@ void Color::color_intensity(Subset* subset){
   //---------------------------
   sceneManager->update_buffer_color(subset);
 }
-void Color::color_heatmap(Subset* subset){
+void Color::color_heatmap(Cloud* subset){
   //---------------------------
 
   heatmapManager->make_subset_heatmap(subset);
@@ -162,7 +162,7 @@ void Color::color_heatmap(Subset* subset){
 void Color::set_color_new(Collection* cloud, vec4 RGBA){
   cloud->unicolor = RGBA;
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB = subset->rgb;
     vector<float>& Is = subset->I;
     //---------------------------
@@ -177,7 +177,7 @@ void Color::set_color_new(Collection* cloud, vec4 RGBA){
 }
 void Color::set_color_RGB(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB_obj = subset->rgb;
     vector<vec4>& RGB_ini = subset->rgb;
     //---------------------------
@@ -190,7 +190,7 @@ void Color::set_color_RGB(Collection* cloud){
 }
 void Color::set_color_I(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB_obj = subset->rgb;
     vector<float>& Is = subset->I;
     //---------------------------
@@ -206,7 +206,7 @@ void Color::set_color_I(Collection* cloud){
 }
 void Color::set_color_enhanced(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vector<float>& Is = subset->I;
     const vector<vec4>& RGB = subset->rgb;
     //---------------------------
@@ -223,7 +223,7 @@ void Color::set_color_enhanced(Collection* cloud){
 }
 void Color::set_color_random(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB = subset->rgb;
     //---------------------------
 
@@ -241,8 +241,8 @@ void Color::set_color_random(Collection* cloud){
 }
 void Color::set_color_initial(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-    Subset* subset_init = *next(cloud->subset_init.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset_init = *next(cloud->subset_init.begin(), i);
     //---------------------------
 
     subset->rgb = subset_init->rgb;

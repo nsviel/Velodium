@@ -13,7 +13,7 @@ OctreeView::OctreeView(){
 OctreeView::~OctreeView(){}
 
 //Main functions
-void OctreeView::construct_octree(Subset* subset){
+void OctreeView::construct_octree(Cloud* subset){
   //---------------------------
 
   struct Cube{

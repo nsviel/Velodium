@@ -37,7 +37,7 @@ void Followup::update_configuration(){
   //---------------------------
 }
 void Followup::camera_followup(Collection* cloud, int ID_subset){
-  Subset* subset = cloud->get_subset_byID(ID_subset);
+  Cloud* subset = cloud->get_subset_byID(ID_subset);
   if(subset == nullptr) return;
   //---------------------------
 
@@ -72,8 +72,8 @@ void Followup::camera_mode(string mode){
 
 //Subfunctions
 vec3 Followup::camera_payload(Collection* cloud, int ID_subset){
-  Subset* subset_m0 = cloud->get_subset_byID(ID_subset);
-  Subset* subset_m1 = cloud->get_subset_byID(ID_subset - 1);
+  Cloud* subset_m0 = cloud->get_subset_byID(ID_subset);
+  Cloud* subset_m1 = cloud->get_subset_byID(ID_subset - 1);
   //---------------------------
 
   //Primilarly check
@@ -88,7 +88,7 @@ vec3 Followup::camera_payload(Collection* cloud, int ID_subset){
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){
-    Subset* subset = cloud->get_subset_byID(ID_subset - i);
+    Cloud* subset = cloud->get_subset_byID(ID_subset - i);
     Eigen::Vector3d pos = subset->pose_T;
 
     for(int j=0; j<3; j++){
@@ -102,7 +102,7 @@ vec3 Followup::camera_payload(Collection* cloud, int ID_subset){
   //---------------------------
   return E;
 }
-void Followup::camera_position(Subset* subset, vec3 E){
+void Followup::camera_position(Cloud* subset, vec3 E){
   //---------------------------
 
   //Camera pose
@@ -140,7 +140,7 @@ void Followup::camera_position(Subset* subset, vec3 E){
 
   //---------------------------
 }
-void Followup::camera_orientation(Subset* subset, vec3 E){
+void Followup::camera_orientation(Cloud* subset, vec3 E){
   //---------------------------
 
   //Forced camera angle

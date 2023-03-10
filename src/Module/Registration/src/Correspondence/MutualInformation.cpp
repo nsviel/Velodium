@@ -7,7 +7,7 @@
 MutualInformation::MutualInformation(){}
 MutualInformation::~MutualInformation(){}
 
-bool MutualInformation::algo(Subset* subset_P, Subset* subset_Q){
+bool MutualInformation::algo(Cloud* subset_P, Cloud* subset_Q){
   vector<float>& I_P = subset_P->I;
   vector<float>& I_Q = subset_Q->I;
   //---------------------------

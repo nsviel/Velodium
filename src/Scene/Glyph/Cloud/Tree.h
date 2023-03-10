@@ -14,8 +14,8 @@ public:
   ~Tree();
 
 public:
-  void create_glyph(Subset* subset);
-  void update_tree(Subset* subset);
+  void create_glyph(Cloud* subset);
+  void update_tree(Cloud* subset);
 
   inline bool* get_visibility(){return &is_visible;}
   inline int* get_tree_level(){return &tree_level;}

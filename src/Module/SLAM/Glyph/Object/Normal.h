@@ -12,9 +12,9 @@ public:
   ~Normal();
 
 public:
-  void create_glyph(Subset* subset);
-  void update_normal_subset(Subset* subset);
-  void update_normal_subset(Subset* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s);
+  void create_glyph(Cloud* subset);
+  void update_normal_subset(Cloud* subset);
+  void update_normal_subset(Cloud* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s);
 
   inline bool* get_visibility(){return &visibility;}
   inline int* get_size(){return &size;}

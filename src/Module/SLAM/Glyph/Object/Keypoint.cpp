@@ -12,7 +12,7 @@ Keypoint::Keypoint(){
   //---------------------------
 }
 
-void Keypoint::create_glyph(Subset* subset){
+void Keypoint::create_glyph(Cloud* subset){
   Glyph keypoint;
   //---------------------------
 
@@ -26,7 +26,7 @@ void Keypoint::create_glyph(Subset* subset){
   //---------------------------
   subset->glyphs.insert({"keypoint", keypoint});
 }
-void Keypoint::update_keypoint_location(Subset* subset){
+void Keypoint::update_keypoint_location(Cloud* subset){
   Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
@@ -43,7 +43,7 @@ void Keypoint::update_keypoint_location(Subset* subset){
 
   //---------------------------
 }
-void Keypoint::update_keypoint_normal(Subset* subset){
+void Keypoint::update_keypoint_normal(Cloud* subset){
   Glyph* normal = &subset->glyphs["normal"];
   Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------

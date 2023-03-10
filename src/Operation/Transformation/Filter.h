@@ -22,9 +22,9 @@ public:
   void filter_maxAngle(Collection* cloud, float sampleAngle);
   void filter_sphere();
   void filter_sphere_cloud(Collection* cloud);
-  void filter_sphere_subset(Subset* subset);
+  void filter_sphere_subset(Cloud* subset);
   void filter_cylinder_cloud(Collection* cloud);
-  void filter_cylinder_subset(Subset* subset);
+  void filter_cylinder_subset(Cloud* subset);
 
   //Setters / Getters
   inline void set_sphereDiameter(float value){this->sphere_D = value;}

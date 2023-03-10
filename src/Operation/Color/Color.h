@@ -25,13 +25,13 @@ public:
 
   //Colorization functions
   void make_colorization(Collection* cloud, int ID_subset);
-  void make_colorization(Subset* subset, vec4 RGB_in);
-  void make_colorization_specific(Subset* subset);
+  void make_colorization(Cloud* subset, vec4 RGB_in);
+  void make_colorization_specific(Cloud* subset);
 
   //Specific functions
-  void color_unicolor(Subset* subset, vec4 color);
-  void color_intensity(Subset* subset);
-  void color_heatmap(Subset* subset);
+  void color_unicolor(Cloud* subset, vec4 color);
+  void color_intensity(Cloud* subset);
+  void color_heatmap(Cloud* subset);
 
   //Color cloud functions
   void set_color_new(Collection* cloud, vec4 RGBA);

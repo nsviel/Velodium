@@ -206,9 +206,9 @@ void GUI_Player::player_selection(){
   //---------------------------
 
   if(cloud != nullptr && cloud->nb_subset > 2){
-    Subset* subset = cloud->subset_selected;
-    Subset* subset_first = cloud->get_subset(0);
-    Subset* subset_last = cloud->get_subset(cloud->nb_subset-1);
+    Cloud* subset = cloud->subset_selected;
+    Cloud* subset_first = cloud->get_subset(0);
+    Cloud* subset_last = cloud->get_subset(cloud->nb_subset-1);
     int subset_selected_ID = cloud->ID_selected;
 
     ImGui::SetNextItemWidth(140);

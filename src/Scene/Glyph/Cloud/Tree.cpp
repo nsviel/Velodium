@@ -20,7 +20,7 @@ Tree::Tree(){
 }
 Tree::~Tree(){}
 
-void Tree::create_glyph(Subset* subset){
+void Tree::create_glyph(Cloud* subset){
   Glyph tree;
   //---------------------------
 
@@ -35,7 +35,7 @@ void Tree::create_glyph(Subset* subset){
   //---------------------------
   subset->glyphs.insert({"tree", tree});
 }
-void Tree::update_tree(Subset* subset){
+void Tree::update_tree(Cloud* subset){
   //---------------------------
 
   if(is_visible){

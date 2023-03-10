@@ -56,7 +56,7 @@ void SLAM::update_configuration(){
   //---------------------------
 }
 bool SLAM::compute_slam(Collection* cloud, int subset_ID){
-  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = cloud->get_subset_byID(subset_ID);
   auto t1 = start_chrono();
   if(check_condition(cloud, subset_ID) == false) return false;
   //---------------------------
@@ -82,7 +82,7 @@ void SLAM::reset_slam(){
 
 //Sub-functions
 void SLAM::compute_finalization(Collection* cloud, int subset_ID, bool success, float duration){
-  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame = cloud->get_frame_byID(subset_ID);
   //---------------------------
 
@@ -105,7 +105,7 @@ void SLAM::compute_finalization(Collection* cloud, int subset_ID, bool success, 
   //---------------------------
 }
 bool SLAM::check_condition(Collection* cloud, int subset_ID){
-  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame = cloud->get_frame_byID(subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
@@ -160,7 +160,7 @@ void SLAM::reset_visibility(Collection* cloud, int subset_ID){
 
   //Set visibility just for last subset
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = cloud->get_subset(i);
+    Cloud* subset = cloud->get_subset(i);
 
     if(subset->ID == subset_ID){
       subset->is_visible = true;

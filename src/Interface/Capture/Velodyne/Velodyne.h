@@ -27,7 +27,7 @@ public:
   //Recording functions
   void start_watcher(int port);
   void stop_watcher();
-  Subset* get_subset_capture();
+  Cloud* get_subset_capture();
 
   //LiDAR function
   void lidar_start_motor();
@@ -61,7 +61,7 @@ private:
   Capture_server* serverManager;
   Parser_VLP16* vlp16Parser;
 
-  Subset* subset_capture;
+  Cloud* subset_capture;
   Data_file udp_capture;
 
   float time_frame;

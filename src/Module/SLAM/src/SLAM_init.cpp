@@ -50,7 +50,7 @@ void SLAM_init::init_frame_ID(Collection* cloud, int subset_ID){
   //---------------------------
 }
 void SLAM_init::init_frame_ts(Collection* cloud, int subset_ID){
-  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame = &subset->frame;
   vector<float>& ts = subset->ts;
   //---------------------------

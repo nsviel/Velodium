@@ -32,7 +32,7 @@ public:
   void update_buffer_color(Object_* object);
   void update_glyph(Object_* object);
   void update_cloud_IntensityToColor(Collection* cloud);
-  void update_subset_IntensityToColor(Subset* subset);
+  void update_subset_IntensityToColor(Cloud* subset);
   void update_cloud_MinMax(Collection* cloud);
   void update_MinMax(Object_* object);
   void update_ID_order(list<Collection*>* list);

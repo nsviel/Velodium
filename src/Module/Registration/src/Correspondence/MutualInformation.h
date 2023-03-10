@@ -12,7 +12,7 @@ public:
   ~MutualInformation();
 
 public:
-  bool algo(Subset* subset_P, Subset* subset_Q);
+  bool algo(Cloud* subset_P, Cloud* subset_Q);
   float entropy(vector<float>& Is);
   float mutualEntropy(vector<float>& I1, vector<float>& I2);
   vector<float> hist(vector<float>& Is);

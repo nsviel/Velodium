@@ -42,7 +42,7 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
   this->init_cloud_parameter(cloud, data);
 
   for(int i=0; i<data.size(); i++){
-    Subset* subset = new Subset();
+    Cloud* subset = new Cloud();
 
     //Init
     this->check_data(data[i]);
@@ -61,8 +61,8 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractor::extract_data(Data_file& data_file){
-  Subset* object = new Subset();
+Cloud* Extractor::extract_data(Data_file& data_file){
+  Cloud* object = new Cloud();
   //---------------------------
 
   //Init
@@ -93,7 +93,7 @@ Object_* Extractor::extract_data_object(Data_file* data_file){
   return object;
 }
 void Extractor::extract_data(Collection* cloud, Data_file* data){
-  Subset* subset = new Subset();
+  Cloud* subset = new Cloud();
   //---------------------------
 
   //Init
@@ -219,7 +219,7 @@ void Extractor::init_object_parameter(Object_* object, Data_file* data, int ID){
 
   //---------------------------
 }
-void Extractor::init_subset_parameter(Subset* subset, Data_file* data, int ID){
+void Extractor::init_subset_parameter(Cloud* subset, Data_file* data, int ID){
   //---------------------------
 
   subset->xyz = data->xyz;
@@ -269,7 +269,7 @@ void Extractor::init_random_color(){
 }
 
 // Param function
-void Extractor::define_visibility(Subset* subset, int i){
+void Extractor::define_visibility(Cloud* subset, int i){
   //---------------------------
 
   if(i == 0){
@@ -280,11 +280,11 @@ void Extractor::define_visibility(Subset* subset, int i){
 
   //---------------------------
 }
-void Extractor::define_buffer_init(Collection* cloud, Subset* subset){
+void Extractor::define_buffer_init(Collection* cloud, Cloud* subset){
   //---------------------------
 
-  Subset* subset_buf = new Subset(*subset);
-  Subset* subset_ini = new Subset(*subset);
+  Cloud* subset_buf = new Cloud(*subset);
+  Cloud* subset_ini = new Cloud(*subset);
 
   cloud->subset_selected = subset;
   cloud->subset.push_back(subset);
@@ -293,7 +293,7 @@ void Extractor::define_buffer_init(Collection* cloud, Subset* subset){
 
   //---------------------------
 }
-void Extractor::compute_texture(Subset* subset, Data_file* data){
+void Extractor::compute_texture(Cloud* subset, Data_file* data){
   if(data->path_texture == ""){return;}
   //---------------------------
 

@@ -58,7 +58,7 @@ void SLAM_map::update_configuration(){
   //---------------------------
 }
 void SLAM_map::update_map(Collection* cloud, int subset_ID){
-  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame = cloud->get_frame_byID(subset_ID);
   //---------------------------
 
@@ -132,7 +132,7 @@ void SLAM_map::add_pointToMap(slamap* map, vector<vec3>& xyz){
 
   //---------------------------
 }
-void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
+void SLAM_map::add_pointToMap(slamap* map, Cloud* subset){
   //---------------------------
 
   for(int i=0; i<subset->xyz.size(); i++){
@@ -178,7 +178,7 @@ void SLAM_map::add_pointToMap(slamap* map, Subset* subset){
 
   //---------------------------
 }
-void SLAM_map::add_pointToCloud(slamap* map, Subset* subset){
+void SLAM_map::add_pointToCloud(slamap* map, Cloud* subset){
   Eigen::Vector3d point_3d;
   Eigen::Vector4d point_4d;
   //---------------------------
@@ -237,7 +237,7 @@ void SLAM_map::add_pointToCloud(slamap* map, Subset* subset){
   //---------------------------
 }
 void SLAM_map::save_local_cloud(){
-  Subset* subset = new Subset();
+  Cloud* subset = new Cloud();
   //---------------------------
 
   //Put local cloud data into a new subset

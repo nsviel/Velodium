@@ -749,7 +749,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
 
   if (ply_format == "ascii"){
     for(int i=0; i<cloud->nb_subset; i++){
-      Subset* subset = *next(cloud->subset.begin(), i);
+      Cloud* subset = *next(cloud->subset.begin(), i);
 
       //Open file
       std::ofstream file(path_file);
@@ -765,7 +765,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
   }
   else if (format == "binary" || format == "binary_little_endian"){
     for(int i=0; i<cloud->nb_subset; i++){
-      Subset* subset = *next(cloud->subset.begin(), i);
+      Cloud* subset = *next(cloud->subset.begin(), i);
       format = "binary_little_endian";
 
       //Locak file
@@ -792,7 +792,7 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subset){
+bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset){
   string filePath = path_dir + subset->name + ".tmp";
   string filePath_end = path_dir + subset->name + ".ply";
   //---------------------------
@@ -837,7 +837,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subset, string fileName){
+bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset, string fileName){
   string filePath = path_dir + fileName + ".ply";
   //---------------------------
 
@@ -883,7 +883,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
   return true;
 }
 bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* cloud, int ID, int nb){
-  Subset* subset = *next(cloud->subset.begin(), ID);
+  Cloud* subset = *next(cloud->subset.begin(), ID);
   string filePath = path_dir + subset->name + ".tmp";
   string filePath_end = path_dir + subset->name + ".ply";
   //---------------------------
@@ -900,7 +900,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* clou
     for(int i=0; i<nb; i++){
       int ID_subset = ID - i;
       if(ID_subset >= 0){
-        Subset* subset = *next(cloud->subset.begin(), ID - i);
+        Cloud* subset = *next(cloud->subset.begin(), ID - i);
         nb_point += subset->xyz.size();
       }
     }
@@ -912,7 +912,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* clou
     for(int i=0; i<nb; i++){
       int ID_subset = ID - i;
       if(ID_subset >= 0){
-        Subset* subset = *next(cloud->subset.begin(), ID - i);
+        Cloud* subset = *next(cloud->subset.begin(), ID - i);
         this->Exporter_data_binary(file, subset);
       }
     }
@@ -933,7 +933,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* clou
 }
 
 //Exporter subfunctions
-void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subset, int nb_point){
+void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* subset, int nb_point){
   this->point_number = nb_point;
   this->property_number = 3;
   this->property_name.clear();
@@ -975,7 +975,7 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Subset* subse
 
   //---------------------------
 }
-void file_PLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
+void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<vec4>& RGB = subset->rgb;
   vector<vec3>& N = subset->Nxyz;
@@ -1011,7 +1011,7 @@ void file_PLY::Exporter_data_ascii(std::ofstream& file, Subset* subset){
 
   //---------------------------
 }
-void file_PLY::Exporter_data_binary(std::ofstream& file, Subset* subset){
+void file_PLY::Exporter_data_binary(std::ofstream& file, Cloud* subset){
   //---------------------------
 
   //Prepare data writing by blocks

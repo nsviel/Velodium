@@ -34,7 +34,7 @@ public:
 
   //Other functions
   void compute_recording(Collection* cloud, int& ID_subset);
-  void compute_displayStats(Subset* subset);
+  void compute_displayStats(Cloud* subset);
   void compute_http_command();
 
   inline bool* get_with_sphere_filter(){return &with_filter_sphere;}

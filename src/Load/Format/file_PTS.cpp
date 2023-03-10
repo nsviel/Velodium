@@ -318,7 +318,7 @@ bool file_PTS::Exporter(string path, Collection* cloud){
 
   //Data : xyz (R) (rgb) (nxnynz)
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->rgb;
     vector<vec3>& N = subset->Nxyz;
@@ -363,7 +363,7 @@ bool file_PTS::Exporter(string path, Collection* cloud){
   //---------------------------
   return true;
 }
-bool file_PTS::Exporter(string path, Subset* subset){
+bool file_PTS::Exporter(string path, Cloud* subset){
   //---------------------------
 
   //Create file

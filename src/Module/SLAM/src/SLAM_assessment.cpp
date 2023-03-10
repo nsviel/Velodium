@@ -73,7 +73,7 @@ void SLAM_assessment::compute_visibility(Collection* cloud){
   //---------------------------
 
   for(int i=cloud->nb_subset-1; i=0; i--){
-    Subset* subset = cloud->get_subset(i);
+    Cloud* subset = cloud->get_subset(i);
     Frame* frame = &subset->frame;
 
     if(frame->is_slam_done == false){
@@ -241,7 +241,7 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   return true;
 }
 void SLAM_assessment::compute_statistics(Collection* cloud, int subset_ID, float duration){
-  Subset* subset = cloud->get_subset_byID(subset_ID);
+  Cloud* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
   Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
   slamap* local_map = slam_map->get_local_map();

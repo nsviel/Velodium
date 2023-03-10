@@ -20,7 +20,7 @@ void file_JSON::parse_json_obstacle(Collection* cloud, vector<string> paths, str
   if(paths.size() != cloud->subset.size()) return;
 
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
 
     //ieme json frame name
     for(int j=0; j<paths.size(); j++){

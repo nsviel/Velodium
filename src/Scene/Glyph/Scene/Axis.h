@@ -14,8 +14,8 @@ public:
 public:
   void create_axis_scene();
   void create_axis_circle(float circleRadius);
-  void create_axis_subset(Subset* subset);
-  void update_axis_subset(Subset* subset);
+  void create_axis_subset(Cloud* subset);
+  void update_axis_subset(Cloud* subset);
 
   inline Glyph* get_axis_scene(){return axis_scene;}
   inline Glyph* get_axis_circle(){return axis_circle;}

@@ -2,7 +2,7 @@
 #define GLYPH_SOURCE_H
 
 #include "../../Base/struct_glyph.h"
-#include "../../Base/struct_subset.h"
+#include "../../Base/struct_cloud.h"
 #include "../../../common.h"
 
 

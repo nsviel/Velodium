@@ -123,7 +123,7 @@ void Capture::runtime(){
     return;
   }
 
-  //Check for new Subset
+  //Check for new Cloud
   if(lidar_model == "velodyne_vlp16"){
     this->runtime_velodyne();
   }
@@ -137,7 +137,7 @@ void Capture::runtime(){
   //---------------------------
 }
 void Capture::runtime_velodyne(){
-  Subset* new_subset = nullptr;
+  Cloud* new_subset = nullptr;
   //---------------------------
 
   bool* new_capture = veloManager->get_is_newSubset();
@@ -146,7 +146,7 @@ void Capture::runtime_velodyne(){
     //Pick new subset
     new_subset = veloManager->get_subset_capture();
 
-    //Unset new Subset flag
+    //Unset new Cloud flag
     *new_capture = false;
     this->capture_nb_point_raw = new_subset->xyz.size();
 
@@ -159,15 +159,15 @@ void Capture::runtime_velodyne(){
   //---------------------------
 }
 void Capture::runtime_scala(){
-  Subset* new_subset = nullptr;
+  Cloud* new_subset = nullptr;
   //---------------------------
 
   bool* new_capture = scalaManager->get_is_newSubset();
   if(*new_capture){
     //Pick new subset
-    new_subset = new Subset(*scalaManager->get_subset_capture());
+    new_subset = new Cloud(*scalaManager->get_subset_capture());
 
-    //Unset new Subset flag
+    //Unset new Cloud flag
     *new_capture = false;
   }
 
@@ -214,7 +214,7 @@ void Capture::start_capture_scala(){
 }
 
 //Subfunctions
-void Capture::operation_new_subset(Subset* subset){
+void Capture::operation_new_subset(Cloud* subset){
   //---------------------------
 
   //We take only one frame amounst several with ratio_frame
@@ -257,7 +257,7 @@ void Capture::operation_new_subset(Subset* subset){
 
   //---------------------------
 }
-void Capture::supress_nullpoints(Subset* subset){
+void Capture::supress_nullpoints(Cloud* subset){
   vector<vec3> xyz;
   vector<vec4> RGB;
   vector<vec3> N;

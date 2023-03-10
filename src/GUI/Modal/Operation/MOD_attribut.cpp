@@ -50,8 +50,8 @@ void MOD_attribut::window_normal(){
 
   if(modal_tab.show_normal && cloud != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = cloud->subset_selected;
-    Subset* subset_init = cloud->get_subset_selected_init();
+    Cloud* subset = cloud->subset_selected;
+    Cloud* subset_init = cloud->get_subset_selected_init();
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -84,8 +84,8 @@ void MOD_attribut::window_normal(){
     if(ImGui::Button("Compute", ImVec2(200,0))){
       if(cloud != nullptr){
         //---------------------------
-        Subset* subset = cloud->subset_selected;
-        Subset* subset_init = cloud->get_subset_selected_init();
+        Cloud* subset = cloud->subset_selected;
+        Cloud* subset_init = cloud->get_subset_selected_init();
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);
@@ -208,8 +208,8 @@ void MOD_attribut::window_intensity(){
 
   if(modal_tab.show_intensity && cloud != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = cloud->subset_selected;
-    Subset* subset_init = cloud->get_subset_selected_init();
+    Cloud* subset = cloud->subset_selected;
+    Cloud* subset_init = cloud->get_subset_selected_init();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity functions");
@@ -321,7 +321,7 @@ void MOD_attribut::window_color(){
 
   if(modal_tab.show_color && cloud != nullptr){
     ImGui::Begin("Colorization", &modal_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     //---------------------------
 
     gui_color->colorization_choice();

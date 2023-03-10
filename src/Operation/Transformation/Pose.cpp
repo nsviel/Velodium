@@ -38,8 +38,8 @@ void Pose::make_centering(Collection* cloud){
   console.AddLog("#", "Point cloud centered");
 }
 void Pose::make_elevation(Collection* cloud, float Z){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
-  Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
   vector<vec3>& XYZ = subset->xyz;
@@ -52,7 +52,7 @@ void Pose::make_elevation(Collection* cloud, float Z){
   //---------------------------
 }
 void Pose::make_positionning(Collection* cloud, vec3 pos){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   vec3& COM = subset->COM;
   //---------------------------
 
@@ -65,7 +65,7 @@ void Pose::make_positionning(Collection* cloud, vec3 pos){
   transformManager->make_translation(cloud, diff);
 }
 void Pose::make_positionning_XY(Collection* cloud, vec3 pos){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   vec3& COM = subset->COM;
   //---------------------------
 
@@ -107,7 +107,7 @@ void Pose::make_positionning_glyph(vector<vec3>& XYZ, vec3& COM, vec3 pos){
   //---------------------------
 }
 float Pose::make_soilDetermination(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   vector<vec3>& XYZ = subset->xyz;
   //---------------------------
 
@@ -133,7 +133,7 @@ float Pose::make_soilDetermination(Collection* cloud){
   return Z_soil;
 }
 void Pose::make_adjustPosToScanner(Collection* cloud, float Z_scan){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   vector<vec3>& XYZ = subset->xyz;
   vec3& min = subset->min;
   float Z_soil = make_soilDetermination(cloud);
@@ -148,7 +148,7 @@ void Pose::make_adjustPosToScanner(Collection* cloud, float Z_scan){
 
 // Orientation
 float Pose::make_orientAxis_X(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   //---------------------------
 
   //Retrieve A & B points
@@ -177,7 +177,7 @@ float Pose::make_orientAxis_X(Collection* cloud){
   return angle;
 }
 void Pose::make_alignAxis_X(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   vector<vec3>& XYZ = subset->xyz;
   //---------------------------
 
@@ -188,7 +188,7 @@ void Pose::make_alignAxis_X(Collection* cloud){
   //---------------------------
 }
 float Pose::make_alignAxisX_AB(Collection* cloud, vec3 A, vec3 B){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   //---------------------------
 
   //Determination of angle with x axis
@@ -204,7 +204,7 @@ float Pose::make_alignAxisX_AB(Collection* cloud, vec3 A, vec3 B){
   return angle;
 }
 float Pose::make_alignAxisY_AB(Collection* cloud, vec3 A, vec3 B){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   //---------------------------
 
   //Determination of angle with x axis
@@ -225,7 +225,7 @@ void Pose::make_alignSelectionToGround(Collection* cloud){
 
   // Get all selected points
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     if(subset->is_visible){
       vector<int>& idx = subset->selected;
       for(int j=0; j<idx.size(); j++){
@@ -324,7 +324,7 @@ mat4 Pose::compute_transformMatrix(float tx, float ty, float tz, float rx, float
   return transMat;
 }
 vec3 Pose::compute_anglesError(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   mat4 matReal = subset->transformation;//.RealPose;
   mat4 matIcp = subset->transformation;
   vec3 angleReal = this->compute_anglesFromTransformationMatrix(matReal);
@@ -341,7 +341,7 @@ vec3 Pose::compute_anglesError(Collection* cloud){
   return error;
 }
 vec3 Pose::compute_translationsError(Collection* cloud){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   mat4 matReal = subset->transformation; //.RealPose;
   mat4 matIcp = subset->transformation;
   vec3 transReal = this->compute_translFromTransformationMatrix(matReal);
@@ -418,7 +418,7 @@ vec3 Pose::compute_translFromTransformationMatrix(const mat4& mat){
   return translation;
 }
 vector<vec3> Pose::compute_transformcloud_XYZ(Collection* cloud, mat4 Mat){
-  Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
+  Cloud* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   vec3& COM = subset->COM;
   vector<vec3> XYZ = subset->xyz;
   //---------------------------
@@ -461,7 +461,7 @@ void Pose::compute_COM(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     COM += fct_centroid(subset->xyz);
   }
 
@@ -473,7 +473,7 @@ void Pose::compute_min(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
+    Cloud* subset = *next(cloud->subset.begin(), i);
     vec3 subset_min = fct_min_vec3(subset->xyz);
 
     for(int j=0; j<3; j++){

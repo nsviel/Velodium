@@ -1,7 +1,7 @@
-#include "struct_subset.h"
+#include "struct_cloud.h"
 
 
-Subset::Subset(){
+Cloud::Cloud(){
   //---------------------------
 
   this->obj_type = "subset";
@@ -11,7 +11,7 @@ Subset::Subset(){
   //---------------------------
 }
 
-Frame* Subset::get_frame(){
+Frame* Cloud::get_frame(){
   //---------------------------
 
   return &frame;

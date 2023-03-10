@@ -60,7 +60,7 @@ bool Saver::save_cloud(Collection* cloud, string path){
   console.AddLog("ok", log);
   return true;
 }
-bool Saver::save_subset(Subset* subset, string format, string dirPath){
+bool Saver::save_subset(Cloud* subset, string format, string dirPath){
   bool success = false;
   //---------------------------
 
@@ -87,7 +87,7 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath){
   console.AddLog("ok", log);
   return true;
 }
-bool Saver::save_subset(Subset* subset, string format, string dirPath, string fileName){
+bool Saver::save_subset(Cloud* subset, string format, string dirPath, string fileName){
   bool success = false;
   //---------------------------
 
@@ -114,7 +114,7 @@ bool Saver::save_subset(Subset* subset, string format, string dirPath, string fi
   console.AddLog("ok", log);
   return true;
 }
-bool Saver::save_subset_silent(Subset* subset, string format, string dirPath){
+bool Saver::save_subset_silent(Cloud* subset, string format, string dirPath){
   bool success = false;
   //---------------------------
 

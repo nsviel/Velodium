@@ -36,7 +36,7 @@ Velodyne::Velodyne(Node_interface* node_interface){
   this->serverManager = new Capture_server();
   this->frameManager = new Capture_frame();
   this->vlp16Parser = new Parser_VLP16();
-  this->subset_capture = new Subset();
+  this->subset_capture = new Cloud();
 
   this->time_frame = 0;
   this->time_packet = 0;
@@ -121,14 +121,14 @@ void Velodyne::stop_watcher(){
 
   //---------------------------
 }
-Subset* Velodyne::get_subset_capture(){
+Cloud* Velodyne::get_subset_capture(){
   //---------------------------
 
   //Free the memory to get synchroneous data
   udp_capture.name = "";
 
   //Convert the udp packet into subset
-  Subset* subset = extractManager->extract_data(udp_capture);
+  Cloud* subset = extractManager->extract_data(udp_capture);
 
   //---------------------------
   return subset;

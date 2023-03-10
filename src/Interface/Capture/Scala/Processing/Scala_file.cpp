@@ -65,7 +65,7 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
       cloud->path_file = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
-        Subset* subset = *next(cloud->subset.begin(), j);
+        Cloud* subset = *next(cloud->subset.begin(), j);
 
         for(int k=0; k<subset->rgb.size(); k++){
           subset->rgb[k] = vec4(Red, Green, Blue, 1.0f);
@@ -83,7 +83,7 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
 Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
   Collection* cloud_scala = new Collection();
   cloud_scala->path_file = clouds[0]->path_file;
-  Subset* subset;
+  Cloud* subset;
   //---------------------------
 
   //ieme common subset
@@ -91,12 +91,12 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
 
     //We accumulate 2 frame in one
     if(i == 0 || i % 2 == 0){
-      subset = new Subset();
+      subset = new Cloud();
     }
 
     //jeme cloud
     for(int j=0; j<clouds.size(); j++){
-      Subset* subset_scala = clouds[j]->get_subset(i);
+      Cloud* subset_scala = clouds[j]->get_subset(i);
 
       //keme points
       for(int k=0; k<subset_scala->xyz.size(); k++){
@@ -127,7 +127,7 @@ void Scala_file::compute_relativeTimestamp(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<1; i++){
-    Subset* subset = cloud->get_subset(i);
+    Cloud* subset = cloud->get_subset(i);
     vector<float>& ts = subset->ts;
 
     float ts_cpt = ts[0];

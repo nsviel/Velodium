@@ -19,8 +19,8 @@ public:
   //Main functions
   Data_file* Loader(string path_file);
   bool Exporter_cloud(string path_file, string format, Collection* cloud);
-  bool Exporter_subset(string path_dir, string format, Subset* subset);
-  bool Exporter_subset(string path_dir, string format, Subset* subset, string fileName);
+  bool Exporter_subset(string path_dir, string format, Cloud* subset);
+  bool Exporter_subset(string path_dir, string format, Cloud* subset, string fileName);
   bool Exporter_set(string path_dir, string ply_format, Collection* cloud, int ID, int nb);
 
 private:
@@ -47,9 +47,9 @@ private:
   float get_uchar_from_binary(char* block_data, int& offset);
 
   //Exporter subfunctions
-  void Exporter_header(std::ofstream& file, string format, Subset* subset, int nb_point);
-  void Exporter_data_ascii(std::ofstream& file, Subset* subset);
-  void Exporter_data_binary(std::ofstream& file, Subset* subset);
+  void Exporter_header(std::ofstream& file, string format, Cloud* subset, int nb_point);
+  void Exporter_data_ascii(std::ofstream& file, Cloud* subset);
+  void Exporter_data_binary(std::ofstream& file, Cloud* subset);
 
 private:
   Data_file* data_out;

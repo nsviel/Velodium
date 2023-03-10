@@ -24,8 +24,8 @@ namespace{
   }
 
   //EIGEN to GLM
-  Subset eigen_to_glm(Eigen::MatrixXf mat_in){
-    Subset subset;
+  Cloud eigen_to_glm(Eigen::MatrixXf mat_in){
+    Cloud subset;
     std::vector<glm::vec3>& XYZ = subset.xyz;
     //---------------------------
 

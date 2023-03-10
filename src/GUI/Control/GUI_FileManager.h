@@ -22,7 +22,7 @@ public:
   void cloudManager(Collection* cloud);
 
   void info_cloud(Collection* cloud);
-  void info_subset(Subset* subset);
+  void info_subset(Cloud* subset);
   void info_iconAction(Collection* cloud);
 
 private:

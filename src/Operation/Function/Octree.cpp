@@ -20,7 +20,7 @@ Octree::Octree(){
 Octree::~Octree(){}
 
 //Main function
-void Octree::create_octree(Subset* subset){
+void Octree::create_octree(Cloud* subset){
   this->nb_level = 6;
   //---------------------------
 
@@ -36,7 +36,7 @@ toc_ms("octree");
   //---------------------------
   this->remove_octree(root);
 }
-void Octree::create_octree(Subset* subset, int level){
+void Octree::create_octree(Cloud* subset, int level){
   this->nb_level = level;
   //---------------------------
 
@@ -75,7 +75,7 @@ void Octree::remove_cube(Cube* cube){
 
   //---------------------------
 }
-void Octree::build_root(Subset* subset){
+void Octree::build_root(Cloud* subset){
   //---------------------------
 
   // Create a vector of indexes

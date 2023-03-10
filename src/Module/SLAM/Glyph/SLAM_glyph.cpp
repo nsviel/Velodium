@@ -50,7 +50,7 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
 SLAM_glyph::~SLAM_glyph(){}
 
 //Main function
-void SLAM_glyph::update_glyph(Collection* cloud, Subset* subset){
+void SLAM_glyph::update_glyph(Collection* cloud, Cloud* subset){
   Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
@@ -72,7 +72,7 @@ void SLAM_glyph::update_glyph(Collection* cloud, Subset* subset){
   //---------------------------
   objectManager->update_object(keypoint);
 }
-void SLAM_glyph::update_visibility(Subset* subset){
+void SLAM_glyph::update_visibility(Cloud* subset){
   //---------------------------
 
   Glyph* keypoint = &subset->glyphs["keypoint"];
@@ -100,7 +100,7 @@ void SLAM_glyph::reset_glyph(){
 }
 
 //Subfunctions
-void SLAM_glyph::update_glyph_keypoint(Subset* subset){
+void SLAM_glyph::update_glyph_keypoint(Cloud* subset){
   if(with_keypoint){
     Glyph* keypoint = &subset->glyphs["keypoint"];
     vector<vec3>& xyz = keypoint->xyz;
@@ -116,7 +116,7 @@ void SLAM_glyph::update_glyph_keypoint(Subset* subset){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_nn(Subset* subset){
+void SLAM_glyph::update_glyph_nn(Cloud* subset){
   if(with_neighbor){
     Glyph* keypoint = &subset->glyphs["keypoint"];
     vector<vec3>& xyz = keypoint->xyz;
@@ -143,7 +143,7 @@ void SLAM_glyph::update_glyph_nn(Subset* subset){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_matching(Subset* subset){
+void SLAM_glyph::update_glyph_matching(Cloud* subset){
   if(with_matching){
     vector<vec3> xyz_matching;
     Frame* frame = &subset->frame;
@@ -169,7 +169,7 @@ void SLAM_glyph::update_glyph_matching(Subset* subset){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_normal(Subset* subset){
+void SLAM_glyph::update_glyph_normal(Cloud* subset){
   vector<vec3> xyz;
   vector<vec3> Nxyz;
   Frame* frame = &subset->frame;

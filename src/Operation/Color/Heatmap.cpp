@@ -67,9 +67,9 @@ void Heatmap::make_cloud_heatmap(Collection* cloud){
 
   //Apply or reverse heatmap for cloud
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = cloud->get_subset(i);
-    Subset* subset_buf = cloud->get_subset_buffer(i);
-    Subset* subset_ini = cloud->get_subset_init(i);
+    Cloud* subset = cloud->get_subset(i);
+    Cloud* subset_buf = cloud->get_subset_buffer(i);
+    Cloud* subset_ini = cloud->get_subset_init(i);
 
     //Apply heatmap
     if(cloud->is_heatmap == false){
@@ -88,7 +88,7 @@ void Heatmap::make_cloud_heatmap(Collection* cloud){
   //---------------------------
   sceneManager->update_buffer_color(cloud);
 }
-void Heatmap::make_subset_heatmap(Subset* subset){
+void Heatmap::make_subset_heatmap(Cloud* subset){
   //---------------------------
 
   switch(heatmap_mode){
@@ -119,7 +119,7 @@ void Heatmap::make_subset_heatmap(Subset* subset){
 }
 
 //Specific mode functions
-void Heatmap::mode_height(Subset* subset){
+void Heatmap::mode_height(Cloud* subset){
   //---------------------------
 
   vector<float> z_vec = attribManager->get_z_vector(subset->xyz);
@@ -137,7 +137,7 @@ void Heatmap::mode_height(Subset* subset){
   //---------------------------
   this->heatmap_set(subset, color_vec);
 }
-void Heatmap::mode_intensity(Subset* subset){
+void Heatmap::mode_intensity(Cloud* subset){
   if(subset->I.size() != 0){
     //---------------------------
 
@@ -159,7 +159,7 @@ void Heatmap::mode_intensity(Subset* subset){
     this->heatmap_set(subset, color_vec);
   }
 }
-void Heatmap::mode_distance(Subset* subset){
+void Heatmap::mode_distance(Cloud* subset){
   vector<float>& dist = subset->R;
   //---------------------------
 
@@ -173,7 +173,7 @@ void Heatmap::mode_distance(Subset* subset){
   //---------------------------
   this->heatmap_set(subset, color_vec);
 }
-void Heatmap::mode_cosIt(Subset* subset){
+void Heatmap::mode_cosIt(Cloud* subset){
   vector<float>& color_vec = subset->cosIt;
   //---------------------------
 
@@ -184,7 +184,7 @@ void Heatmap::mode_cosIt(Subset* subset){
   //---------------------------
   this->heatmap_set(subset, color_vec);
 }
-void Heatmap::mode_It(Subset* subset){
+void Heatmap::mode_It(Cloud* subset){
   vector<float>& It = subset->It;
   //---------------------------
 
@@ -200,7 +200,7 @@ void Heatmap::mode_It(Subset* subset){
 }
 
 //Processing functions
-void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
+void Heatmap::heatmap_set(Cloud* subset, vector<float>& v_in){
   vector<vec4>& RGB = subset->rgb;
   //---------------------------
 
@@ -235,7 +235,7 @@ void Heatmap::heatmap_set(Subset* subset, vector<float>& v_in){
 
   //---------------------------
 }
-void Heatmap::heatmap_unset(Subset* subset){
+void Heatmap::heatmap_unset(Cloud* subset){
   vector<vec4>& RGB = subset->rgb;
   vector<float>& Is = subset->I;
   //---------------------------

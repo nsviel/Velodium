@@ -52,12 +52,12 @@ public:
 
 public:
   void algo(Collection* cloud);
-	void algo(Subset* subset);
+	void algo(Cloud* subset);
 	void reset();
 
 private:
 	//Algo functions
-	void do_truc(Subset* subset, vector<Point3D>& frame);
+	void do_truc(Cloud* subset, vector<Point3D>& frame);
 	void update_voxelMap(vector<Point3D>& frame);
 
 	//Subfunctions

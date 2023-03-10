@@ -19,7 +19,7 @@ Warning::Warning(Module_obstacle* module){
 }
 Warning::~Warning(){}
 
-void Warning::send_warning(Subset* subset){
+void Warning::send_warning(Cloud* subset){
   //PAHO* mqtt_sncf = mqttManager->get_mqtt_sncf();
   //---------------------------
 
@@ -29,7 +29,7 @@ void Warning::send_warning(Subset* subset){
 
   //---------------------------
 }
-string Warning::build_jsonFile(Subset* subset){
+string Warning::build_jsonFile(Cloud* subset){
   /*Data_pred* obstacle = &subset->detection;
   //---------------------------
 

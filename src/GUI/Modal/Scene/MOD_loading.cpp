@@ -412,7 +412,7 @@ void MOD_loading::saving_action(){
 
   //Save selected subset
   if(save_mode == 1 && subset_mode == 0 && !sceneManager->get_is_list_empty()){
-    Subset* subset = cloud->subset_selected;
+    Cloud* subset = cloud->subset_selected;
     pathManager->saving_subset(subset);
   }
 

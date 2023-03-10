@@ -69,7 +69,7 @@ void Prediction::compute_prediction(string path){
 
   //For the subset with same name
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = cloud->get_subset(i);
+    Cloud* subset = cloud->get_subset(i);
 
     if(subset->ID == frame_ID){
       this->parse_json_prediction(subset, path);
@@ -96,7 +96,7 @@ void Prediction::compute_prediction(Collection* cloud, vector<string> path_vec){
 
     //For the subset with same name
     for(int j=0; j<cloud->subset.size(); j++){
-      Subset* subset = cloud->get_subset(j);
+      Cloud* subset = cloud->get_subset(j);
 
       if(subset->ID == frame_ID){
         this->parse_json_prediction(subset, path_file);
@@ -116,7 +116,7 @@ void Prediction::compute_groundTruth(Collection* cloud, string path_file){
 
   //For the subset with same name
   for(int i=0; i<cloud->subset.size(); i++){
-    Subset* subset = cloud->get_subset(i);
+    Cloud* subset = cloud->get_subset(i);
 
     if(subset->ID == frame_ID){
       this->parse_json_groundTruth(subset, path_file);
@@ -137,7 +137,7 @@ void Prediction::compute_groundTruth(Collection* cloud, vector<string> path_vec)
 
     //For the subset with same name
     for(int j=0; j<cloud->subset.size(); j++){
-      Subset* subset = cloud->get_subset(j);
+      Cloud* subset = cloud->get_subset(j);
 
       if(subset->ID == frame_ID){
         this->parse_json_groundTruth(subset, path_file);
@@ -156,7 +156,7 @@ void Prediction::remove_prediction_file(string path){
 }
 
 //JSON parsers
-void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
+void Prediction::parse_json_groundTruth(Cloud* subset, string path_file){
   /*Data_pred* detection_gt = &subset->detection;
   //---------------------------
 
@@ -206,7 +206,7 @@ void Prediction::parse_json_groundTruth(Subset* subset, string path_file){
 
   //---------------------------
 }
-void Prediction::parse_json_prediction(Subset* subset, string path_file){
+void Prediction::parse_json_prediction(Cloud* subset, string path_file){
   //---------------------------
   /*
   // Clear old data

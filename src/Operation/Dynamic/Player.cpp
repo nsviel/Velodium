@@ -83,7 +83,7 @@ void Player::select_bySubsetID(Collection* cloud, int ID_subset){
   }
 
   //Update glyphs
-  Subset* subset = cloud->get_subset_byID(ID_subset);
+  Cloud* subset = cloud->get_subset_byID(ID_subset);
   objectManager->update_glyph_subset(subset);
 
   //---------------------------
@@ -109,12 +109,12 @@ void Player::compute_wheel_selection(string direction){
   //----------------------------
 }
 bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
-  Subset* subset_first = cloud->get_subset(0);
-  Subset* subset_last = cloud->get_subset(cloud->nb_subset-1);
+  Cloud* subset_first = cloud->get_subset(0);
+  Cloud* subset_last = cloud->get_subset(cloud->nb_subset-1);
   //---------------------------
 //PROBLEM DE ID ICI JE PENSE
   //Check if subset exists
-  Subset* subset = cloud->get_subset(ID_subset);
+  Cloud* subset = cloud->get_subset(ID_subset);
   if(subset == nullptr){
     return false;
   }
@@ -206,7 +206,7 @@ void Player::player_save(Collection* cloud){
 
   //Save each subset
   for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = cloud->get_subset(i);
+    Cloud* subset = cloud->get_subset(i);
     saverManager->save_subset(subset, "ply", player_saveas);
   }
 

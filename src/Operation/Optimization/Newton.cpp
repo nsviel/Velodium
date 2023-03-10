@@ -23,10 +23,10 @@ void Newton::init(vector<vec3>& XYZ, vector<bool>& DOF){
   }
 }
 vector<float> Newton::algo_Newton(Collection* cloud_P, Collection* cloud_Q, vector<bool>& DOF, vector<Uplet> idx){
-  Subset* subset_P = *next(cloud_P->subset.begin(), 0);
-  Subset* subset_Q = *next(cloud_Q->subset.begin(), 0);
-  Subset* subset_P_buf = *next(cloud_P->subset_buffer.begin(), 0);
-  Subset* subset_Q_buf = *next(cloud_Q->subset_buffer.begin(), 0);
+  Cloud* subset_P = *next(cloud_P->subset.begin(), 0);
+  Cloud* subset_Q = *next(cloud_Q->subset.begin(), 0);
+  Cloud* subset_P_buf = *next(cloud_P->subset_buffer.begin(), 0);
+  Cloud* subset_Q_buf = *next(cloud_Q->subset_buffer.begin(), 0);
   //---------------------
 
   vector<vec3>& XYZ_P_obj = subset_P->xyz;

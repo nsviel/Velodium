@@ -14,7 +14,7 @@ pcl_functions::pcl_functions(){
 }
 pcl_functions::~pcl_functions(){}
 
-void pcl_functions::compute_normals_PCL(Subset* subset){
+void pcl_functions::compute_normals_PCL(Cloud* subset){
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = glm_to_pcl_XYZ(subset);
   tic();
   //---------------------------
@@ -52,7 +52,7 @@ void pcl_functions::compute_normals_PCL(Subset* subset){
   string log = "Normal for " + subset->name + " computed in " + duration + " ms";
   console.AddLog("#", log);
 }
-void pcl_functions::Plane_cloud(Subset* subset){
+void pcl_functions::Plane_cloud(Cloud* subset){
   vector<vec3>& XYZ = subset->xyz;
   vector<vec4>& RGB = subset->rgb;
   int size = subset->nb_point;
@@ -82,7 +82,7 @@ void pcl_functions::Plane_cloud(Subset* subset){
 
   //---------------------------
 }
-void pcl_functions::detectSphere(Subset* subset){
+void pcl_functions::detectSphere(Cloud* subset){
   vector<int> inliers;
   //---------------------------
 

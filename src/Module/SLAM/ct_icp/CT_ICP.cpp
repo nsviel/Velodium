@@ -74,7 +74,7 @@ void CT_ICP::algo(Collection* cloud){
 	int index_frame = 0;
 
 	for(int i=0; i<cloud->nb_subset; i++){
-		Subset* subset = *next(cloud->subset.begin(), i);
+		Cloud* subset = *next(cloud->subset.begin(), i);
 
 		// subset to local format
 		std::vector<Point3D> frame;
@@ -195,7 +195,7 @@ void CT_ICP::algo(Collection* cloud){
 
 	//---------------------------
 }
-void CT_ICP::algo(Subset* subset){
+void CT_ICP::algo(Cloud* subset){
 	if(subset == nullptr) return;
 	//---------------------------
 
@@ -338,7 +338,7 @@ void CT_ICP::reset(){
 }
 
 // Algo functions
-void CT_ICP::do_truc(Subset* subset, vector<Point3D>& frame){
+void CT_ICP::do_truc(Cloud* subset, vector<Point3D>& frame){
 	//---------------------------
 
 	for(int j=0; j<subset->xyz.size(); j++){
