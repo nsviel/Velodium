@@ -60,7 +60,7 @@ bool Saver::save_cloud(Collection* collection, string path){
   console.AddLog("ok", log);
   return true;
 }
-bool Saver::save_subset(Cloud* subset, string format, string dirPath){
+bool Saver::save_subset(Cloud* cloud, string format, string dirPath){
   bool success = false;
   //---------------------------
 
@@ -69,11 +69,11 @@ bool Saver::save_subset(Cloud* subset, string format, string dirPath){
 
   //Check file format
   if     (format == "pts"){
-    success = ptsManager->Exporter(dirPath, subset);
+    success = ptsManager->Exporter(dirPath, cloud);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    success = plyManager->Exporter_subset(dirPath, ply_format, subset);
+    success = plyManager->Exporter_subset(dirPath, ply_format, cloud);
   }
 
   //Say if save is successfull
@@ -87,7 +87,7 @@ bool Saver::save_subset(Cloud* subset, string format, string dirPath){
   console.AddLog("ok", log);
   return true;
 }
-bool Saver::save_subset(Cloud* subset, string format, string dirPath, string fileName){
+bool Saver::save_subset(Cloud* cloud, string format, string dirPath, string fileName){
   bool success = false;
   //---------------------------
 
@@ -96,11 +96,11 @@ bool Saver::save_subset(Cloud* subset, string format, string dirPath, string fil
 
   //Check file format
   if     (format == "pts"){
-    success = ptsManager->Exporter(dirPath, subset);
+    success = ptsManager->Exporter(dirPath, cloud);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    success = plyManager->Exporter_subset(dirPath, ply_format, subset, fileName);
+    success = plyManager->Exporter_subset(dirPath, ply_format, cloud, fileName);
   }
 
   //Say if save is successfull
@@ -114,7 +114,7 @@ bool Saver::save_subset(Cloud* subset, string format, string dirPath, string fil
   console.AddLog("ok", log);
   return true;
 }
-bool Saver::save_subset_silent(Cloud* subset, string format, string dirPath){
+bool Saver::save_subset_silent(Cloud* cloud, string format, string dirPath){
   bool success = false;
   //---------------------------
 
@@ -123,11 +123,11 @@ bool Saver::save_subset_silent(Cloud* subset, string format, string dirPath){
 
   //Check file format
   if     (format == "pts"){
-    success = ptsManager->Exporter(dirPath, subset);
+    success = ptsManager->Exporter(dirPath, cloud);
   }
   else if(format == "ply"){
     string ply_format = "binary";
-    success = plyManager->Exporter_subset(dirPath, ply_format, subset);
+    success = plyManager->Exporter_subset(dirPath, ply_format, cloud);
   }
 
   //Say if save is successfull

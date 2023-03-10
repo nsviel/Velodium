@@ -86,39 +86,39 @@ void Scene::reset_collection(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
     Cloud* list_obj_init = (Cloud*)collection->get_obj_init(i);
 
     //Reinitialize visibility
     if(i == 0){
-      subset->is_visible = true;
+      cloud->is_visible = true;
     }else{
-      subset->is_visible = false;
+      cloud->is_visible = false;
     }
 
     //Reinitialize main data
-    subset->xyz = list_obj_init->xyz;
-    subset->rgb = list_obj_init->rgb;
-    subset->Nxyz = list_obj_init->Nxyz;
+    cloud->xyz = list_obj_init->xyz;
+    cloud->rgb = list_obj_init->rgb;
+    cloud->Nxyz = list_obj_init->Nxyz;
 
     //Reset additional data
-    subset->R.clear();
-    subset->It.clear();
-    subset->cosIt.clear();
-    subset->root = vec3(0,0,0);
+    cloud->R.clear();
+    cloud->It.clear();
+    cloud->cosIt.clear();
+    cloud->root = vec3(0,0,0);
 
     //Transformation matrices
-    subset->scale = mat4(1.0);
-    subset->trans = mat4(1.0);
-    subset->rotat = mat4(1.0);
+    cloud->scale = mat4(1.0);
+    cloud->trans = mat4(1.0);
+    cloud->rotat = mat4(1.0);
 
     //Update
-    this->update_MinMax(subset);
-    this->update_buffer_location(subset);
-    this->update_buffer_color(subset);
+    this->update_MinMax(cloud);
+    this->update_buffer_location(cloud);
+    this->update_buffer_color(cloud);
 
     //Reset frame
-    subset->frame.reset();
+    cloud->frame.reset();
   }
 
   //collection->ID_obj_selected = (Cloud*)collection->get_obj(0)->ID;
@@ -152,8 +152,8 @@ void Scene::update_buffer_location(Object_* object){
   /*
     Collection* collection = (Collection*)object;
     for(int i=0; i<collection->list_obj.size(); i++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
-      gpuManager->update_buffer_location(subset);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+      gpuManager->update_buffer_location(cloud);
   */
 
   gpuManager->update_buffer_location(object);
@@ -165,8 +165,8 @@ void Scene::update_buffer_color(Object_* object){
   /*
     Collection* collection = (Collection*)object;
     for(int i=0; i<collection->list_obj.size(); i++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
-      gpuManager->update_buffer_color(subset);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+      gpuManager->update_buffer_color(cloud);
     */
 
 
@@ -182,8 +182,8 @@ void Scene::update_glyph(Object_* object){
 
     /*Collection* collection = (Collection*)object;
     for(int i=0; i<collection->list_obj.size(); i++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
-      gpuManager->update_buffer_color(subset);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+      gpuManager->update_buffer_color(cloud);
     }*/
 
 
@@ -198,13 +198,13 @@ void Scene::update_col_MinMax(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
-    this->update_MinMax(subset);
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+    this->update_MinMax(cloud);
 
     //Collection
     for(int j=0; j<3; j++){
-      if ( min_cloud[j] > subset->min[j] ) min_cloud[j] = subset->min[j];
-      if ( max_cloud[j] < subset->max[j] ) max_cloud[j] = subset->max[j];
+      if ( min_cloud[j] > cloud->min[j] ) min_cloud[j] = cloud->min[j];
+      if ( max_cloud[j] < cloud->max[j] ) max_cloud[j] = cloud->max[j];
     }
   }
 
@@ -240,25 +240,25 @@ void Scene::update_cloud_IntensityToColor(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
 
-    vector<float>& Is = subset->I;
-    vector<vec4>& RGB = subset->rgb;
+    vector<float>& Is = cloud->I;
+    vector<vec4>& RGB = cloud->rgb;
 
     for(int i=0; i<Is.size(); i++){
       RGB[i] = vec4(Is[i], Is[i], Is[i], 1.0f);
     }
 
-    this->update_buffer_color(subset);
+    this->update_buffer_color(cloud);
   }
 
   //---------------------------
 }
-void Scene::update_subset_IntensityToColor(Cloud* subset){
+void Scene::update_subset_IntensityToColor(Cloud* cloud){
   //---------------------------
 
-  vector<float>& Is = subset->I;
-  vector<vec4>& RGB = subset->rgb;
+  vector<float>& Is = cloud->I;
+  vector<vec4>& RGB = cloud->rgb;
   RGB.clear();
 
   for(int i=0; i<Is.size(); i++){
@@ -266,7 +266,7 @@ void Scene::update_subset_IntensityToColor(Cloud* subset){
     RGB.push_back(new_color);
   }
 
-  this->update_buffer_color(subset);
+  this->update_buffer_color(cloud);
 
   //---------------------------
 }

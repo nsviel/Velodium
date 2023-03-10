@@ -17,7 +17,7 @@ Normal::Normal(){
 }
 Normal::~Normal(){}
 
-void Normal::create_glyph(Cloud* subset){
+void Normal::create_glyph(Cloud* cloud){
   Glyph normal;
   //---------------------------
 
@@ -29,16 +29,16 @@ void Normal::create_glyph(Cloud* subset){
   normal.is_visible = is_visible;
 
   //---------------------------
-  subset->glyphs.insert({"normal", normal});
+  cloud->glyphs.insert({"normal", normal});
 }
-void Normal::update_normal_cloud(Cloud* subset){
-  Glyph* normal = &subset->glyphs["normal"];
+void Normal::update_normal_cloud(Cloud* cloud){
+  Glyph* normal = &cloud->glyphs["normal"];
   normal->draw_point_size = size;
   //---------------------------
 
   //Get vector values
-  vector<vec3>& xyz_s = subset->xyz;
-  vector<vec3>& Nxyz_s = subset->Nxyz;
+  vector<vec3>& xyz_s = cloud->xyz;
+  vector<vec3>& Nxyz_s = cloud->Nxyz;
   vector<vec3>& xyz_n = normal->xyz;
   vector<vec4>& rgb_n = normal->rgb;
 
@@ -70,8 +70,8 @@ void Normal::update_normal_cloud(Cloud* subset){
 
   //---------------------------
 }
-void Normal::update_normal_cloud(Cloud* subset, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s){
-  Glyph* normal = &subset->glyphs["normal"];
+void Normal::update_normal_cloud(Cloud* cloud, vector<vec3>& xyz_s, vector<vec3>& Nxyz_s){
+  Glyph* normal = &cloud->glyphs["normal"];
   normal->draw_point_size = size;
   //---------------------------
 

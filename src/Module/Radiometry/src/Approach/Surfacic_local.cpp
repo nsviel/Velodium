@@ -45,11 +45,11 @@ bool Surfacic_local::algo(Collection* collection){
 
 //Sub-functions
 bool Surfacic_local::algo_checking(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cosIt = subset->cosIt;
-  vector<float>& It = subset->It;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
+  vector<float>& cosIt = cloud->cosIt;
+  vector<float>& It = cloud->It;
   //---------------------------
 
   if(Is.size() == 0){
@@ -86,11 +86,11 @@ bool Surfacic_local::algo_ParameterSpace(){
   return true;
 }
 bool Surfacic_local::algo_interpolation(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cosIt = subset->cosIt;
-  vector<float>& It = subset->It;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
+  vector<float>& cosIt = cloud->cosIt;
+  vector<float>& It = cloud->It;
   Im.clear();
   //---------------------------------
 
@@ -137,8 +137,8 @@ bool Surfacic_local::algo_interpolation(Collection* collection){
   return true;
 }
 bool Surfacic_local::algo_correction(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   Ic.clear();
   //---------------------------
 

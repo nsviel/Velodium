@@ -50,7 +50,7 @@ void MOD_attribut::window_normal(){
 
   if(modal_tab.show_normal && collection != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
     //---------------------------
 
@@ -84,43 +84,43 @@ void MOD_attribut::window_normal(){
     if(ImGui::Button("Compute", ImVec2(200,0))){
       if(collection != nullptr){
         //---------------------------
-        Cloud* subset = (Cloud*)collection->selected_obj;
+        Cloud* cloud = (Cloud*)collection->selected_obj;
         Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
 
         if(normalMethod == 0){
-          attribManager->compute_normals(subset);
+          attribManager->compute_normals(cloud);
         }
 
         if(normalMethod == 1){
-          attribManager->compute_normals_Hough(subset);
+          attribManager->compute_normals_Hough(cloud);
         }
 
         if(normalMethod == 2){
-          attribManager->compute_normals_sphere(subset);
+          attribManager->compute_normals_sphere(cloud);
         }
 
         if(normalMethod == 3){
-          attribManager->compute_normals_planFitting(subset);
+          attribManager->compute_normals_planFitting(cloud);
         }
 
         if(normalMethod == 4){
           float angle = poseManager->make_orientAxis_X(collection);
-          attribManager->compute_normals_planXaxis(subset);
+          attribManager->compute_normals_planXaxis(cloud);
           vec3 rotation = vec3(0, 0, -angle);
           transformManager->make_rotation(collection, vec3(0,0,0), rotation);
-          list_obj_init->Nxyz = subset->Nxyz;
+          list_obj_init->Nxyz = cloud->Nxyz;
           //sceneManager->update_buffer_location(collection);
         }
 
         if(normalMethod == 5){
-          attribManager->compute_normals_planYaxis(subset);
-          list_obj_init->Nxyz = subset->Nxyz;
-          sceneManager->update_buffer_location(subset);
+          attribManager->compute_normals_planYaxis(cloud);
+          list_obj_init->Nxyz = cloud->Nxyz;
+          sceneManager->update_buffer_location(cloud);
         }
 
         if(normalMethod == 6){
-          attribManager->compute_normals_planZaxis(subset);
-          list_obj_init->Nxyz = subset->Nxyz;
+          attribManager->compute_normals_planZaxis(cloud);
+          list_obj_init->Nxyz = cloud->Nxyz;
           //sceneManager->update_buffer_location(collection);
         }
 
@@ -139,40 +139,40 @@ void MOD_attribut::window_normal(){
           Collection* collection = *next(list_collection->begin(),i);
 
           if(normalMethod == 0){
-            attribManager->compute_normals(subset);
+            attribManager->compute_normals(cloud);
           }
 
           if(normalMethod == 1){
-            attribManager->compute_normals_Hough(subset);
+            attribManager->compute_normals_Hough(cloud);
           }
 
           if(normalMethod == 2){
-            attribManager->compute_normals_sphere(subset);
+            attribManager->compute_normals_sphere(cloud);
           }
 
           if(normalMethod == 3){
-            attribManager->compute_normals_planFitting(subset);
+            attribManager->compute_normals_planFitting(cloud);
           }
 
           if(normalMethod == 4){
             float angle = poseManager->make_orientAxis_X(collection);
-            attribManager->compute_normals_planXaxis(subset);
+            attribManager->compute_normals_planXaxis(cloud);
             vec3 rotation = vec3(0, 0, -angle);
             transformManager->make_rotation(collection, vec3(0,0,0), rotation);
-            list_obj_init->Nxyz = subset->Nxyz;
-            sceneManager->update_buffer_location(subset);
+            list_obj_init->Nxyz = cloud->Nxyz;
+            sceneManager->update_buffer_location(cloud);
           }
 
           if(normalMethod == 5){
-            attribManager->compute_normals_planYaxis(subset);
-            list_obj_init->Nxyz = subset->Nxyz;
-            sceneManager->update_buffer_location(subset);
+            attribManager->compute_normals_planYaxis(cloud);
+            list_obj_init->Nxyz = cloud->Nxyz;
+            sceneManager->update_buffer_location(cloud);
           }
 
           if(normalMethod == 6){
-            attribManager->compute_normals_planZaxis(subset);
-            list_obj_init->Nxyz = subset->Nxyz;
-            sceneManager->update_buffer_location(subset);
+            attribManager->compute_normals_planZaxis(cloud);
+            list_obj_init->Nxyz = cloud->Nxyz;
+            sceneManager->update_buffer_location(cloud);
           }
 
           //glyphManager->update_glyph_object("normal", collection);
@@ -184,7 +184,7 @@ void MOD_attribut::window_normal(){
 
     if(ImGui::Button("Reoriente to origin", ImVec2(200,0))){
       if(collection != nullptr){
-        attribManager->compute_normals_reorientToOrigin(subset);
+        attribManager->compute_normals_reorientToOrigin(cloud);
         //glyphManager->update_glyph_object("normal", collection);
       }
     }
@@ -208,7 +208,7 @@ void MOD_attribut::window_intensity(){
 
   if(modal_tab.show_intensity && collection != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
     //---------------------------
 
@@ -229,22 +229,22 @@ void MOD_attribut::window_intensity(){
     if(ImGui::Button("Inversion Is", ImVec2(200,0))){
       if(collection != nullptr){
         attribManager->compute_intensityInversion();
-        sceneManager->update_subset_IntensityToColor(subset);
+        sceneManager->update_subset_IntensityToColor(cloud);
       }
     }
 
     //fct_normalize the intensity values
     if(ImGui::Button("fct_normalize Intensity to [0,1]", ImVec2(200,0))){
-      vector<float>& Is = subset->I;
+      vector<float>& Is = cloud->I;
       Is = fct_normalize(Is);
-      sceneManager->update_subset_IntensityToColor(subset);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
 
     //Intensity display slider
     ImGui::Text("Selection intensity");
     static float min = 0, max = 1;
     if(ImGui::DragFloatRange2("##123321", &min, &max, 0.001f, 0.00f, 1.0f, "%.3f", "%.3f")){
-      subset->I = list_obj_init->I;
+      cloud->I = list_obj_init->I;
       attribManager->fct_IsRange(vec2(min, max));
     }
 
@@ -258,21 +258,21 @@ void MOD_attribut::window_intensity(){
     float spacing = style.ItemInnerSpacing.x;
     ImGui::PushButtonRepeat(true);
     if(ImGui::ArrowButton("##left", ImGuiDir_Left)){
-      vector<float>& Is = subset->I;
+      vector<float>& Is = cloud->I;
       for(int i=0; i<Is.size(); i++){
         Is[i] = Is[i] - shift;
         if(Is[i] < 0.0f) Is[i] = 0.0f;
       }
-      sceneManager->update_subset_IntensityToColor(subset);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::SameLine(0.0f, spacing);
     if(ImGui::ArrowButton("##right", ImGuiDir_Right)){
-      vector<float>& Is = subset->I;
+      vector<float>& Is = cloud->I;
       for(int i=0; i<Is.size(); i++){
         Is[i] = Is[i] + shift;
         if(Is[i] > 1.0f) Is[i] = 1.0f;
       }
-      sceneManager->update_subset_IntensityToColor(subset);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::PopButtonRepeat();
     ImGui::Separator();
@@ -280,32 +280,32 @@ void MOD_attribut::window_intensity(){
     //Reconvert intensity
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scaling");
     if(ImGui::Button("Restore I initial", ImVec2(200,0))){
-      subset->I = list_obj_init->I;
-      sceneManager->update_subset_IntensityToColor(subset);
+      cloud->I = list_obj_init->I;
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
     if(ImGui::Button("I:255->2048", ImVec2(100,0))){
-      attribManager->fct_convert255to2048(subset);
-      sceneManager->update_subset_IntensityToColor(subset);
+      attribManager->fct_convert255to2048(cloud);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::SameLine();
     if(ImGui::Button("I:2048->255", ImVec2(100,0))){
-      attribManager->fct_convert2048to255(subset);
-      sceneManager->update_subset_IntensityToColor(subset);
+      attribManager->fct_convert2048to255(cloud);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
     if(ImGui::Button("I:1->2048", ImVec2(100,0))){
-      vector<float>& Is = subset->I;
+      vector<float>& Is = cloud->I;
       for(int i=0; i<Is.size(); i++){
         Is[i] = Is[i]*4096-2048;
       }
-      sceneManager->update_subset_IntensityToColor(subset);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::SameLine();
     if(ImGui::Button("I:2048->1", ImVec2(100,0))){
-      vector<float>& Is = subset->I;
+      vector<float>& Is = cloud->I;
       for(int i=0; i<Is.size(); i++){
         Is[i] = (Is[i]+2048)/4096;
       }
-      sceneManager->update_subset_IntensityToColor(subset);
+      sceneManager->update_subset_IntensityToColor(cloud);
     }
 
     //---------------------------
@@ -321,7 +321,7 @@ void MOD_attribut::window_color(){
 
   if(modal_tab.show_color && collection != nullptr){
     ImGui::Begin("Colorization", &modal_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     //---------------------------
 
     gui_color->colorization_choice();

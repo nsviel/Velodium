@@ -29,8 +29,8 @@ public:
   void compute_groundTruth(Collection* collection, vector<string> path_vec);
 
   //JSON parsers
-  void parse_json_groundTruth(Cloud* subset, string file_path);
-  void parse_json_prediction(Cloud* subset, string file_path);
+  void parse_json_groundTruth(Cloud* cloud, string file_path);
+  void parse_json_prediction(Cloud* cloud, string file_path);
   int parse_frame_ID(string file_path);
 
   inline bool* get_is_new_pred(){return &is_new_pred;}

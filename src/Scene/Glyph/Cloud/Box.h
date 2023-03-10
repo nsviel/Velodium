@@ -19,7 +19,7 @@ public:
   //Subfunction
   void build_box_location();
   void build_box_color();
-  void compute_box_MinMax(Cloud* subset, vec3 min_perc, vec3 max_perc);
+  void compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc);
 
   inline Glyph* get_glyph(){return box;}
 

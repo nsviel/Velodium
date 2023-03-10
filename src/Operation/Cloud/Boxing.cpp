@@ -85,15 +85,15 @@ void Boxing::compute_visibility(Collection* collection){
 void Boxing::compute_visibility(Collection* collection, int ID){
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
-  Cloud* subset = (Cloud*)collection->get_obj(ID);
+  Cloud* cloud = (Cloud*)collection->get_obj(ID);
   Cloud* list_obj_init = (Cloud*)collection->get_obj_init(ID);
   //---------------------------
 
-  subset->xyz = list_obj_init->xyz;
-  subset->I = list_obj_init->I;
-  subset->rgb = list_obj_init->rgb;
+  cloud->xyz = list_obj_init->xyz;
+  cloud->I = list_obj_init->I;
+  cloud->rgb = list_obj_init->rgb;
 
-  vector<vec3>& xyz = subset->xyz;
+  vector<vec3>& xyz = cloud->xyz;
   vector<int> idx;
   vec3 min = box->min;
   vec3 max = box->max;
@@ -106,8 +106,8 @@ void Boxing::compute_visibility(Collection* collection, int ID){
     }
   }
 
-  attribManager->make_supressPoints(subset, idx);
-  sceneManager->update_buffer_location(subset);
+  attribManager->make_supressPoints(cloud, idx);
+  sceneManager->update_buffer_location(cloud);
 
   //---------------------------
 }
@@ -116,16 +116,16 @@ void Boxing::supress_selected_point(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
     Cloud* list_obj_init = (Cloud*)collection->get_obj_init(i);
-    vector<int>& idx = subset->selected;
+    vector<int>& idx = cloud->selected;
 
-    subset->xyz = list_obj_init->xyz;
-    subset->rgb = list_obj_init->rgb;
-    subset->I = list_obj_init->I;
+    cloud->xyz = list_obj_init->xyz;
+    cloud->rgb = list_obj_init->rgb;
+    cloud->I = list_obj_init->I;
 
     if(idx.size() != 0){
-      attribManager->make_supressPoints(subset, idx);
+      attribManager->make_supressPoints(cloud, idx);
       idx.clear();
     }
 
@@ -143,12 +143,12 @@ void Boxing::stop_boxing(){
     Collection* collection = *next(list_collection->begin(), i);
     collection->is_boxed = false;
     for(int j=0; j<collection->nb_obj; j++){
-      Cloud* subset = (Cloud*)collection->get_obj(j);
+      Cloud* cloud = (Cloud*)collection->get_obj(j);
       Cloud* list_obj_init = (Cloud*)collection->get_obj_init(j);
-      subset->xyz = list_obj_init->xyz;
-      subset->rgb = list_obj_init->rgb;
-      subset->I = list_obj_init->I;
-      sceneManager->update_buffer_location(subset);
+      cloud->xyz = list_obj_init->xyz;
+      cloud->rgb = list_obj_init->rgb;
+      cloud->I = list_obj_init->I;
+      sceneManager->update_buffer_location(cloud);
     }
   }
 

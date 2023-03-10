@@ -43,10 +43,10 @@ void MOD_texture::window_texture(){
 }
 void MOD_texture::texture_operation(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
-  //Apply texture on selected subset
+  //Apply texture on selected cloud
   if(ImGui::Button("Apply texture", ImVec2(item_width, 0))){
 
   }

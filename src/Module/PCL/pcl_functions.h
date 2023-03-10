@@ -25,9 +25,9 @@ public:
   ~pcl_functions();
 
 public:
-  void compute_normals_PCL(Cloud* subset);
-  void Plane_cloud(Cloud* subset);
-  void detectSphere(Cloud* subset);
+  void compute_normals_PCL(Cloud* cloud);
+  void Plane_cloud(Cloud* cloud);
+  void detectSphere(Cloud* cloud);
 
   inline void set_normalRadiusSeach(float value){this->radiusSearch = value;}
 

@@ -40,13 +40,13 @@ void Car::create_glyph(){
   //---------------------------
 }
 void Car::update_glyph(Collection* collection){
-  Cloud* subset = (Cloud*)collection->selected_obj;
-  vec3 trans_abs = subset->root;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
+  vec3 trans_abs = cloud->root;
   //---------------------------
 
   glyph->xyz = glyph->xyz_init;
   trans_abs.z -= lidar_height;
-  SLAM_utility::make_rotation_origin(glyph->xyz, subset->rotat);
+  SLAM_utility::make_rotation_origin(glyph->xyz, cloud->rotat);
   SLAM_utility::make_translation(glyph->xyz, trans_abs);
 
   //---------------------------

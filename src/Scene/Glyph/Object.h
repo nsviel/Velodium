@@ -33,18 +33,18 @@ public:
 public:
   //Creation function
   void create_glyph_scene();
-  void create_glyph_subset(Cloud* subset);
+  void create_glyph_subset(Cloud* cloud);
   Glyph* create_glyph_ostacle();
 
   //Runtime function
   void runtime_glyph_scene();
   void runtime_glyph_subset_all(Collection* collection);
-  void runtime_glyph_subset_selected(Cloud* subset);
-  void runtime_glyph_pred(Cloud* subset);
+  void runtime_glyph_subset_selected(Cloud* cloud);
+  void runtime_glyph_pred(Cloud* cloud);
 
   //Update function
   void update_configuration();
-  void update_glyph_subset(Cloud* subset);
+  void update_glyph_subset(Cloud* cloud);
   void update_glyph_collection(Collection* collection);
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);

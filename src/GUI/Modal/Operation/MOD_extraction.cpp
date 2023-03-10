@@ -50,7 +50,7 @@ void MOD_extraction::design_extractCloud(){
 //Specific function
 void MOD_extraction::extract_with_aabb(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Extraction functions
@@ -58,9 +58,9 @@ void MOD_extraction::extract_with_aabb(){
   bool* highlightON = extractionManager->get_highlightON();
   if(ImGui::Checkbox("Hightligth", highlightON)){
     if(collection != nullptr){
-      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* cloud = (Cloud*)collection->selected_obj;
       Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, list_obj_init);
+      extractionManager->fct_highlighting(cloud, list_obj_init);
     }
   }
   ImGui::SameLine();
@@ -108,9 +108,9 @@ void MOD_extraction::extract_with_aabb(){
     if(collection != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* cloud = (Cloud*)collection->selected_obj;
       Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, list_obj_init);
+      extractionManager->fct_highlighting(cloud, list_obj_init);
 
       //Extract cloud
       extractionManager->fct_extractCloud(collection);
@@ -127,12 +127,12 @@ void MOD_extraction::extract_with_aabb(){
     if(collection != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* cloud = (Cloud*)collection->selected_obj;
       Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, list_obj_init);
+      extractionManager->fct_highlighting(cloud, list_obj_init);
 
       //Cut collection
-      extractionManager->fct_cutCloud(subset);
+      extractionManager->fct_cutCloud(cloud);
     }
   }
   ImGui::SameLine();
@@ -140,9 +140,9 @@ void MOD_extraction::extract_with_aabb(){
     if(collection != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* cloud = (Cloud*)collection->selected_obj;
       Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, list_obj_init);
+      extractionManager->fct_highlighting(cloud, list_obj_init);
 
       //Cut clouds
       extractionManager->fct_cutCloud_all();
@@ -154,7 +154,7 @@ void MOD_extraction::extract_with_aabb(){
 }
 void MOD_extraction::extract_with_mouse(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Extract points selected with the mouse frame
@@ -170,7 +170,7 @@ void MOD_extraction::extract_with_mouse(){
 }
 void MOD_extraction::merge_cloud(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Merge and extract two clouds

@@ -67,16 +67,16 @@ void Prediction::compute_prediction(string path){
   //Retrieve prediction frame ID
   int frame_ID = parse_frame_ID(path);
 
-  //For the subset with same name
+  //For the cloud with same name
   for(int i=0; i<collection->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
 
-    if(subset->ID == frame_ID){
-      this->parse_json_prediction(subset, path);
+    if(cloud->ID == frame_ID){
+      this->parse_json_prediction(cloud, path);
       this->remove_prediction_file(path);
       this->is_new_pred = true;
 
-      string log = "Prediction - file " + path + " parsed to " + subset->name;
+      string log = "Prediction - file " + path + " parsed to " + cloud->name;
       console.AddLog("ok", log);
       break;
     }
@@ -94,12 +94,12 @@ void Prediction::compute_prediction(Collection* collection, vector<string> path_
     //Retrieve prediction frame ID
     int frame_ID = parse_frame_ID(path_file);
 
-    //For the subset with same name
+    //For the cloud with same name
     for(int j=0; j<collection->list_obj.size(); j++){
-      Cloud* subset = (Cloud*)collection->get_obj(j);
+      Cloud* cloud = (Cloud*)collection->get_obj(j);
 
-      if(subset->ID == frame_ID){
-        this->parse_json_prediction(subset, path_file);
+      if(cloud->ID == frame_ID){
+        this->parse_json_prediction(cloud, path_file);
         break;
       }
     }
@@ -114,12 +114,12 @@ void Prediction::compute_groundTruth(Collection* collection, string path_file){
   //Retrieve prediction frame ID
   int frame_ID = parse_frame_ID(path_file);
 
-  //For the subset with same name
+  //For the cloud with same name
   for(int i=0; i<collection->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
 
-    if(subset->ID == frame_ID){
-      this->parse_json_groundTruth(subset, path_file);
+    if(cloud->ID == frame_ID){
+      this->parse_json_groundTruth(cloud, path_file);
     }
   }
 
@@ -135,12 +135,12 @@ void Prediction::compute_groundTruth(Collection* collection, vector<string> path
     //Retrieve prediction frame ID
     int frame_ID = parse_frame_ID(path_file);
 
-    //For the subset with same name
+    //For the cloud with same name
     for(int j=0; j<collection->list_obj.size(); j++){
-      Cloud* subset = (Cloud*)collection->get_obj(j);
+      Cloud* cloud = (Cloud*)collection->get_obj(j);
 
-      if(subset->ID == frame_ID){
-        this->parse_json_groundTruth(subset, path_file);
+      if(cloud->ID == frame_ID){
+        this->parse_json_groundTruth(cloud, path_file);
       }
     }
   }
@@ -156,8 +156,8 @@ void Prediction::remove_prediction_file(string path){
 }
 
 //JSON parsers
-void Prediction::parse_json_groundTruth(Cloud* subset, string path_file){
-  /*Data_pred* detection_gt = &subset->detection;
+void Prediction::parse_json_groundTruth(Cloud* cloud, string path_file){
+  /*Data_pred* detection_gt = &cloud->detection;
   //---------------------------
 
   //Reset all values
@@ -206,14 +206,14 @@ void Prediction::parse_json_groundTruth(Cloud* subset, string path_file){
 
   //---------------------------
 }
-void Prediction::parse_json_prediction(Cloud* subset, string path_file){
+void Prediction::parse_json_prediction(Cloud* cloud, string path_file){
   //---------------------------
   /*
   // Clear old data
-  subset->detection.name.clear();
-  subset->detection.position.clear();
-  subset->detection.dimension.clear();
-  subset->detection.heading.clear();
+  cloud->detection.name.clear();
+  cloud->detection.position.clear();
+  cloud->detection.dimension.clear();
+  cloud->detection.heading.clear();
 
   //Parse prediction json file
   std::ifstream ifs(path_file);
@@ -246,10 +246,10 @@ void Prediction::parse_json_prediction(Cloud* subset, string path_file){
     float heading = json_head.asFloat();
 
     //Store all data
-    subset->detection.name.push_back(name);
-    subset->detection.position.push_back(position);
-    subset->detection.dimension.push_back(dimension);
-    subset->detection.heading.push_back(heading);
+    cloud->detection.name.push_back(name);
+    cloud->detection.position.push_back(position);
+    cloud->detection.dimension.push_back(dimension);
+    cloud->detection.heading.push_back(heading);
   }*/
 
   //---------------------------

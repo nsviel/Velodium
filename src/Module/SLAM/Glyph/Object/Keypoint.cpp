@@ -12,7 +12,7 @@ Keypoint::Keypoint(){
   //---------------------------
 }
 
-void Keypoint::create_glyph(Cloud* subset){
+void Keypoint::create_glyph(Cloud* cloud){
   Glyph keypoint;
   //---------------------------
 
@@ -24,10 +24,10 @@ void Keypoint::create_glyph(Cloud* subset){
   keypoint.is_visible = is_visible;
 
   //---------------------------
-  subset->glyphs.insert({"keypoint", keypoint});
+  cloud->glyphs.insert({"keypoint", keypoint});
 }
-void Keypoint::update_keypoint_location(Cloud* subset){
-  Glyph* keypoint = &subset->glyphs["keypoint"];
+void Keypoint::update_keypoint_location(Cloud* cloud){
+  Glyph* keypoint = &cloud->glyphs["keypoint"];
   //---------------------------
 
   vector<vec3>& XYZ_key = keypoint->xyz;
@@ -43,9 +43,9 @@ void Keypoint::update_keypoint_location(Cloud* subset){
 
   //---------------------------
 }
-void Keypoint::update_keypoint_normal(Cloud* subset){
-  Glyph* normal = &subset->glyphs["normal"];
-  Glyph* keypoint = &subset->glyphs["keypoint"];
+void Keypoint::update_keypoint_normal(Cloud* cloud){
+  Glyph* normal = &cloud->glyphs["normal"];
+  Glyph* keypoint = &cloud->glyphs["keypoint"];
   //---------------------------
 
   //Get vector values

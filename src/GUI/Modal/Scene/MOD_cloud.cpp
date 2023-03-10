@@ -38,7 +38,7 @@ void MOD_cloud::mod_cloud_info(){
 
   if(*open && collection != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
 
     //Visibility
     static bool visible = true;
@@ -84,8 +84,8 @@ void MOD_cloud::mod_cloud_info(){
     }
     ImGui::NextColumn();
 
-    //Number of subset
-    ImGui::Text("Nb subset ");
+    //Number of cloud
+    ImGui::Text("Nb cloud ");
     ImGui::NextColumn();
     string nb_obj = to_string(collection->nb_obj);
     ImGui::Text("%s", nb_obj.c_str());
@@ -99,7 +99,7 @@ void MOD_cloud::mod_cloud_info(){
     ImGui::NextColumn();*/
 
     //Root pos
-    vec3& root = subset->root;
+    vec3& root = cloud->root;
     ImGui::Text("Root ");
     ImGui::NextColumn();
     ImGui::Text("%.2f  %.2f  %.2f", root.x, root.y, root.z);
@@ -131,29 +131,29 @@ void MOD_cloud::mod_cloud_info(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     //---------------------------
 
     // Data vectors
-    vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->rgb;
-    vector<float>& Is = subset->I;
-    vector<vec3>& N = subset->Nxyz;
-    vector<float>& ts = subset->ts;
+    vector<vec3>& XYZ = cloud->xyz;
+    vector<vec4>& RGB = cloud->rgb;
+    vector<float>& Is = cloud->I;
+    vector<vec3>& N = cloud->Nxyz;
+    vector<float>& ts = cloud->ts;
 
     //Settings
     static int nbLines = 100;
-    if(ImGui::SliderInt("Number of lines", &nbLines, 1, subset->nb_point)){
+    if(ImGui::SliderInt("Number of lines", &nbLines, 1, cloud->nb_point)){
       if(nbLines > XYZ.size()) nbLines = XYZ.size();
     }
     ImGui::Separator();
 
     // Get number of attributs
     int nb = 2;
-    if(subset->has_intensity) nb++;
-    if(subset->has_color) nb++;
-    if(subset->has_normal) nb++;
-    if(subset->has_timestamp) nb++;
+    if(cloud->has_intensity) nb++;
+    if(cloud->has_color) nb++;
+    if(cloud->has_normal) nb++;
+    if(cloud->has_timestamp) nb++;
 
     //Columns
     ImGui::Columns(nb);
@@ -162,19 +162,19 @@ void MOD_cloud::mod_cloud_info(){
     ImGui::NextColumn();
     ImGui::Text("XYZ");
     ImGui::NextColumn();
-    if(subset->has_intensity){
+    if(cloud->has_intensity){
       ImGui::Text("I");
       ImGui::NextColumn();
     }
-    if(subset->has_color){
+    if(cloud->has_color){
       ImGui::Text("RGB");
       ImGui::NextColumn();
     }
-    if(subset->has_normal){
+    if(cloud->has_normal){
       ImGui::Text("Nxyz");
       ImGui::NextColumn();
     }
-    if(subset->has_timestamp){
+    if(cloud->has_timestamp){
       ImGui::Text("ts");
       ImGui::NextColumn();
     }
@@ -192,25 +192,25 @@ void MOD_cloud::mod_cloud_info(){
       ImGui::NextColumn();
 
       // Intensity
-      if(subset->has_intensity){
+      if(cloud->has_intensity){
         ImGui::Text("%f", Is[i]);
         ImGui::NextColumn();
       }
 
       // Color
-      if(subset->has_color){
+      if(cloud->has_color){
         ImGui::Text("%f %f %f", RGB[i].x, RGB[i].y, RGB[i].z);
         ImGui::NextColumn();
       }
 
       //Normal
-      if(subset->has_normal){
+      if(cloud->has_normal){
         ImGui::Text("%f %f %f", N[i].x, N[i].y, N[i].z);
         ImGui::NextColumn();
       }
 
       // Timestamp
-      if(subset->has_timestamp){
+      if(cloud->has_timestamp){
         ImGui::Text("%f", ts[i]);
         ImGui::NextColumn();
       }
@@ -227,29 +227,29 @@ void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     //---------------------------
 
     // Data vectors
-    vector<vec3>& XYZ = subset->xyz;
-    vector<vec4>& RGB = subset->rgb;
-    vector<float>& Is = subset->I;
-    vector<vec3>& N = subset->Nxyz;
-    vector<float>& ts = subset->ts;
+    vector<vec3>& XYZ = cloud->xyz;
+    vector<vec4>& RGB = cloud->rgb;
+    vector<float>& Is = cloud->I;
+    vector<vec3>& N = cloud->Nxyz;
+    vector<float>& ts = cloud->ts;
 
     //Settings
     static int nbLines = 100;
-    if(ImGui::SliderInt("Number of lines", &nbLines, 1, subset->nb_point)){
+    if(ImGui::SliderInt("Number of lines", &nbLines, 1, cloud->nb_point)){
       if(nbLines > XYZ.size()) nbLines = XYZ.size();
     }
     ImGui::Separator();
 
     // Get number of attributs
     int nb_column = 2;
-    if(subset->has_intensity) nb_column++;
-    if(subset->has_color) nb_column++;
-    if(subset->has_normal) nb_column++;
-    if(subset->has_timestamp) nb_column++;
+    if(cloud->has_intensity) nb_column++;
+    if(cloud->has_color) nb_column++;
+    if(cloud->has_normal) nb_column++;
+    if(cloud->has_timestamp) nb_column++;
 
     ImGuiTableFlags flag = ImGuiTableFlags_Resizable | ImGuiTableColumnFlags_WidthStretch;
     if (ImGui::BeginTable("table_data", nb_column, flag)){
@@ -260,19 +260,19 @@ void MOD_cloud::mod_cloud_data(){
       ImGui::TableNextColumn();
       ImGui::Text("XYZ");
       ImGui::TableNextColumn();
-      if(subset->has_intensity){
+      if(cloud->has_intensity){
         ImGui::Text("I");
         ImGui::TableNextColumn();
       }
-      if(subset->has_color){
+      if(cloud->has_color){
         ImGui::Text("RGB");
         ImGui::TableNextColumn();
       }
-      if(subset->has_normal){
+      if(cloud->has_normal){
         ImGui::Text("Nxyz");
         ImGui::TableNextColumn();
       }
-      if(subset->has_timestamp){
+      if(cloud->has_timestamp){
         ImGui::Text("ts");
         ImGui::TableNextColumn();
       }
@@ -291,25 +291,25 @@ void MOD_cloud::mod_cloud_data(){
         ImGui::TableNextColumn();
 
         // Intensity
-        if(subset->has_intensity){
+        if(cloud->has_intensity){
           ImGui::Text("%f", Is[i]);
           ImGui::TableNextColumn();
         }
 
         // Color
-        if(subset->has_color){
+        if(cloud->has_color){
           ImGui::Text("%f %f %f", RGB[i].x, RGB[i].y, RGB[i].z);
           ImGui::TableNextColumn();
         }
 
         //Normal
-        if(subset->has_normal){
+        if(cloud->has_normal){
           ImGui::Text("%f %f %f", N[i].x, N[i].y, N[i].z);
           ImGui::TableNextColumn();
         }
 
         // Timestamp
-        if(subset->has_timestamp){
+        if(cloud->has_timestamp){
           ImGui::Text("%f", ts[i]);
           ImGui::TableNextColumn();
         }

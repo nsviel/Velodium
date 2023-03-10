@@ -27,19 +27,19 @@ SLAM_sampling::SLAM_sampling(){
 SLAM_sampling::~SLAM_sampling(){}
 
 //Sampling functions
-vector<vec3> SLAM_sampling::sub_sampling_subset(Cloud* subset, float voxel_size){
+vector<vec3> SLAM_sampling::sub_sampling_subset(Cloud* cloud, float voxel_size){
   vector<vec3> xyz_sampled;
   float size_voxel = 0.2;
   //---------------------------
 
   cloudMap grid;
   Eigen::Vector4d point;
-	for (int i=0; i<subset->xyz.size(); i++) {
-    int kx = static_cast<int>(subset->xyz[i].x / voxel_size);
-    int ky = static_cast<int>(subset->xyz[i].y / voxel_size);
-    int kz = static_cast<int>(subset->xyz[i].z / voxel_size);
+	for (int i=0; i<cloud->xyz.size(); i++) {
+    int kx = static_cast<int>(cloud->xyz[i].x / voxel_size);
+    int ky = static_cast<int>(cloud->xyz[i].y / voxel_size);
+    int kz = static_cast<int>(cloud->xyz[i].z / voxel_size);
     int key = (kx*2000 + ky)*1000 + kz;
-    point << subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z, 0;
+    point << cloud->xyz[i].x, cloud->xyz[i].y, cloud->xyz[i].z, 0;
     grid[key].push_back(point);
 	}
 
@@ -55,8 +55,8 @@ vector<vec3> SLAM_sampling::sub_sampling_subset(Cloud* subset, float voxel_size)
   //---------------------------
   return xyz_sampled;
 }
-void SLAM_sampling::grid_sampling_subset(Cloud* subset){
-  Frame* frame = &subset->frame;
+void SLAM_sampling::grid_sampling_subset(Cloud* cloud){
+  Frame* frame = &cloud->frame;
   //---------------------------
 
   //Clear vectors
@@ -70,9 +70,9 @@ void SLAM_sampling::grid_sampling_subset(Cloud* subset){
   //Subsample the scan with voxels
   cloudMap grid;
   Eigen::Vector4d point;
-  for(int i=0; i<subset->xyz.size(); i++){
-    vec3 xyz = subset->xyz[i];
-    double ts_n = subset->ts_n[i];
+  for(int i=0; i<cloud->xyz.size(); i++){
+    vec3 xyz = cloud->xyz[i];
+    double ts_n = cloud->ts_n[i];
     double dist = fct_distance_origin(xyz);
 
     if(dist > min_root_distance && dist < max_root_distance){

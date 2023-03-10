@@ -41,11 +41,11 @@ void AABB::update_glyph(Collection* collection, Glyph* glyph){
 
   //---------------------------
 }
-void AABB::update_glyph(Cloud* subset){
+void AABB::update_glyph(Cloud* cloud){
   vector<vec3>& XYZ = glyph->xyz;
   vector<vec4>& RGB = glyph->rgb;
-  vec3 min = subset->min;
-  vec3 max = subset->max;
+  vec3 min = cloud->min;
+  vec3 max = cloud->max;
   //---------------------------
 
   //location

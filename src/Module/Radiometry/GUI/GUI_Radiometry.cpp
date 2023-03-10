@@ -167,8 +167,8 @@ void GUI_radiometry::correction(){
 void GUI_radiometry::plotting(){
   if(ImGui::CollapsingHeader("Plotting")){
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    const char* name_c = subset->name.c_str();
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    const char* name_c = cloud->name.c_str();
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity");
     Plotting plotManager;
     //---------------------------
@@ -177,7 +177,7 @@ void GUI_radiometry::plotting(){
       if(!sceneManager->get_is_list_empty()){
         plotManager.set_Xlabel("Intensity");
         plotManager.set_Ylabel("Number of points");
-        plotManager.plot_histogram(subset->I);
+        plotManager.plot_histogram(cloud->I);
       }
     }
 

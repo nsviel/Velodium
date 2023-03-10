@@ -162,12 +162,12 @@ void Box::build_box_color(){
 
   //---------------------------
 }
-void Box::compute_box_MinMax(Cloud* subset, vec3 min_perc, vec3 max_perc){
+void Box::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
   //---------------------------
 
   //Get Z extremums
-  vec3 min = subset->min;
-  vec3 max = subset->max;
+  vec3 min = cloud->min;
+  vec3 max = cloud->max;
   vec3 diff = max - min;
 
   //Compute min abs

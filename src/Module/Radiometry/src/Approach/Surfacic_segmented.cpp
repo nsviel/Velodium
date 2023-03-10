@@ -230,10 +230,10 @@ vec2 Surfacic_segmented::algo_searchSegment(float R){
   return infsup;
 }
 void Surfacic_segmented::algo_correction(Collection* collection, MatrixXf list_P){
-	Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-	vector<float>& Is = subset->I;
-	vector<float>& dist = subset->R;
-	vector<float>& cIt_all = subset->cosIt;
+	Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+	vector<float>& Is = cloud->I;
+	vector<float>& dist = cloud->R;
+	vector<float>& cIt_all = cloud->cosIt;
   Ic.clear(); Im.clear();
   //---------------------------
 

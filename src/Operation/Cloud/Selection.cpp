@@ -63,19 +63,19 @@ void Selection::update(){
 void Selection::validate(){
   if(!sceneManager->get_is_list_empty()){
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
-    list<int>& idx = subset->highlighted;
+    list<int>& idx = cloud->highlighted;
     //---------------------------
 
     //Plane normal computation
     if(idx.size() == 0){
       this->mark_planeABpoints(collection);
       float angle = poseManager->make_orientAxis_X(collection);
-      attribManager->compute_normals(subset);
+      attribManager->compute_normals(cloud);
       vec3 rotation = vec3(0, 0, -angle);
-      transformManager->make_rotation(collection, subset->COM, rotation);
-      list_obj_init->Nxyz = subset->Nxyz;
+      transformManager->make_rotation(collection, cloud->COM, rotation);
+      list_obj_init->Nxyz = cloud->Nxyz;
       //sceneManager->update_buffer_location(collection);
     }
 
@@ -104,22 +104,22 @@ void Selection::mark_pointCreation(vec3 point){
 
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
 
-    vector<vec3>& XYZ = subset->xyz;
+    vector<vec3>& XYZ = cloud->xyz;
 
     for(int j=0; j<XYZ.size(); j++){
       if(point.x <= XYZ[j].x + err && point.x >= XYZ[j].x - err &&
          point.y <= XYZ[j].y + err && point.y >= XYZ[j].y - err &&
          point.z <= XYZ[j].z + err && point.z >= XYZ[j].z - err){
-        vector<float>& Is = subset->I;
+        vector<float>& Is = cloud->I;
         const vector<float>& Is_ini = list_obj_init->I;
-        vector<float>& It = subset->It;
+        vector<float>& It = cloud->It;
 
         //Give information about point
-        if(It.size() == 0 && subset->Nxyz.size() != 0){
-          attribManager->compute_cosIt(subset);
+        if(It.size() == 0 && cloud->Nxyz.size() != 0){
+          attribManager->compute_cosIt(cloud);
         }
         if(Is.size() != 0 && It.size() != 0){
           float dist = fct_distance(XYZ[j], vec3(0,0,0));
@@ -140,7 +140,7 @@ void Selection::mark_pointCreation(vec3 point){
         }
 
         //Clear point list if no marks
-        list<int>& idx = subset->highlighted;
+        list<int>& idx = cloud->highlighted;
         if(list_glyph.size() == 0){
           idx.clear();
         }
@@ -171,10 +171,10 @@ bool Selection::mark_pointSupression(vec3 point){
   //For each collection
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
 
-    vector<vec3>& XYZ = subset->xyz;
-    list<int>& idx = subset->highlighted;
+    vector<vec3>& XYZ = cloud->xyz;
+    list<int>& idx = cloud->highlighted;
 
     //If point
     for(int j=0; j<idx.size(); j++){
@@ -230,8 +230,8 @@ void Selection::mark_pointColor(Collection* ptMark, int num){
     }
   }
 
-  Cloud* subset = (Cloud*)*next(ptMark->list_obj.begin(), 0);
-  vector<vec4>& RGB = subset->rgb;
+  Cloud* cloud = (Cloud*)*next(ptMark->list_obj.begin(), 0);
+  vector<vec4>& RGB = cloud->rgb;
   for(int i=0; i<RGB.size(); i++){
     RGB[i] = vec4(R, G, B, 1.0f);
   }
@@ -244,9 +244,9 @@ void Selection::mark_supressAll(){
 
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
 
-    list<int>& idx = subset->highlighted;
+    list<int>& idx = cloud->highlighted;
     idx.clear();
   }
 
@@ -259,11 +259,11 @@ bool Selection::mark_supressSelectedPoints_all(){
 
   for(int i=0;i<list_collection->size();i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    vector<int>& idx = subset->selected;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    vector<int>& idx = cloud->selected;
 
     if(idx.size() != 0){
-      this->mark_supressSelectedPoints(subset);
+      this->mark_supressSelectedPoints(cloud);
       is_selected_point = true;
     }
   }
@@ -273,24 +273,24 @@ bool Selection::mark_supressSelectedPoints_all(){
 }
 void Selection::mark_supressSelectedPoints(Collection* collection){
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
-    vector<int>& idx = subset->selected;
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
+    vector<int>& idx = cloud->selected;
     //---------------------------
 
     if(idx.size() != 0){
-      attribManager->make_supressPoints(subset, idx);
+      attribManager->make_supressPoints(cloud, idx);
       idx.clear();
     }
 
     //---------------------------
   }
 }
-void Selection::mark_supressSelectedPoints(Cloud* subset){
-  vector<int>& idx = subset->selected;
+void Selection::mark_supressSelectedPoints(Cloud* cloud){
+  vector<int>& idx = cloud->selected;
   //---------------------------
 
   if(idx.size() != 0){
-    attribManager->make_supressPoints(subset, idx);
+    attribManager->make_supressPoints(cloud, idx);
     idx.clear();
   }
 
@@ -304,10 +304,10 @@ void Selection::mark_pointLocation(){
   int cpt = 0;
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
 
-    list<int>& idx = subset->highlighted;
-    vector<vec3>& XYZ = subset->xyz;
+    list<int>& idx = cloud->highlighted;
+    vector<vec3>& XYZ = cloud->xyz;
 
     //Points marks
     if(idx.size() <= list_glyph.size()){
@@ -397,13 +397,13 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
     Collection* collection = *next(list_collection->begin(),i);
 
     for(int j=0; j<collection->nb_obj; j++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), j);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
       Cloud* subset_buf = (Cloud*)*next(collection->list_obj_buffer.begin(), j);
 
-      if(subset->is_visible){
-        vector<vec3>& XYZ = subset->xyz;
-        vector<vec4>& RGB = subset->rgb;
-        vector<int>& idx = subset->selected;
+      if(cloud->is_visible){
+        vector<vec3>& XYZ = cloud->xyz;
+        vector<vec4>& RGB = cloud->rgb;
+        vector<int>& idx = cloud->selected;
         vector<vec4>& RGB_buf = subset_buf->rgb;
         idx.clear();
 
@@ -419,7 +419,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
           }
         }
 
-        sceneManager->update_buffer_color(subset);
+        sceneManager->update_buffer_color(cloud);
       }
     }
   }
@@ -518,17 +518,17 @@ void Selection::update_glDims(){
 //Plane
 void Selection::mark_planeCreation(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
-  list<int>& idx = subset->highlighted;
+  list<int>& idx = cloud->highlighted;
   vector<vec3> XYZ;
   vector<vec4> RGB;
 
   int i0 = *next(idx.begin(), 0);
   int i1 = *next(idx.begin(), 1);
-  A = subset->xyz[i0];
-  C = subset->xyz[i1];
+  A = cloud->xyz[i0];
+  C = cloud->xyz[i1];
 
   //infere more points
   B = vec3(C.x, C.y, A.z);
@@ -551,11 +551,11 @@ void Selection::mark_planeCreation(){
   //ID_plane = objectManager->create_glyph(XYZ, RGB, "triangle", false);
 }
 void Selection::mark_planeABpoints(Collection* collection){
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Retrieve A & B points
-  vector<vec3>& XYZ = subset->xyz;
+  vector<vec3>& XYZ = cloud->xyz;
   A = XYZ[0];
   B = XYZ[0];
 
@@ -577,9 +577,9 @@ void Selection::mark_planeLocation(){
   //For each Cloud insert plane
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
 
-    list<int>& idx = subset->highlighted;
+    list<int>& idx = cloud->highlighted;
     if(idx.size() == 2){
       this->mark_planeCreation();
     }else if(ID_plane != -1){
@@ -591,10 +591,10 @@ void Selection::mark_planeLocation(){
   int cpt = 0;
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
 
-    list<int>& idx = subset->highlighted;
-    vector<vec3>& XYZ = subset->xyz;
+    list<int>& idx = cloud->highlighted;
+    vector<vec3>& XYZ = cloud->xyz;
 
     //Plane marks
     if(ID_plane != -1){

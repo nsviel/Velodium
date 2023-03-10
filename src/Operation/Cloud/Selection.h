@@ -37,7 +37,7 @@ public:
   void mark_supressAll();
   bool mark_supressSelectedPoints_all();
   void mark_supressSelectedPoints(Collection* collection);
-  void mark_supressSelectedPoints(Cloud* subset);
+  void mark_supressSelectedPoints(Cloud* cloud);
 
   //Mouse interactivity
   void mouse_selection(int selectMouseMode);

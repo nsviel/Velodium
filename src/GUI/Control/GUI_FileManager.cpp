@@ -122,18 +122,18 @@ void GUI_fileManager::cloudManager(Collection* collection){
   if(open_cloud_node && collection != nullptr && (collection->nb_obj > 1 || collection->is_onthefly)){
 
     for(int j=0; j<collection->list_obj.size(); j++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), j);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
 
-      if(subset->is_visible){
+      if(cloud->is_visible){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
       }else{
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
       }
 
-      bool open_subset_node = ImGui::TreeNodeEx(subset->name.c_str(), node_flags);
+      bool open_subset_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
 
       if(open_subset_node){
-        this->info_subset(subset);
+        this->info_subset(cloud);
         ImGui::TreePop();
       }
 
@@ -161,16 +161,16 @@ void GUI_fileManager::info_collection(Collection* collection){
 
   //---------------------------
 }
-void GUI_fileManager::info_subset(Cloud* subset){
-  vec3& COM = subset->COM;
-  vec3& PCroot = subset->root;
+void GUI_fileManager::info_subset(Cloud* cloud){
+  vec3& COM = cloud->COM;
+  vec3& PCroot = cloud->root;
   ImGui::Separator();
   //---------------------------
 
   //Additional info
-  ImGui::Text("Points: %d", (int)subset->xyz.size());
+  ImGui::Text("Points: %d", (int)cloud->xyz.size());
   ImGui::Text("COM (%.2f, %.2f, %.2f)", COM.x, COM.y, COM.z);
-  ImGui::Text("Z [%.2f; %.2f]", subset->min.z, subset->max.z);
+  ImGui::Text("Z [%.2f; %.2f]", cloud->min.z, cloud->max.z);
 
   //---------------------------
   ImGui::Separator();

@@ -21,7 +21,7 @@ public:
   Data_file* Loader(string pathFile, int lmin, int lmax);
 
   bool Exporter(string pathFile, Collection* collection);
-  bool Exporter(string pathFile, Cloud* subset);
+  bool Exporter(string pathFile, Cloud* cloud);
 
   inline void set_IdataFormat(int value){this->IdataFormat = value;}
   inline void set_retrievingIntensity(bool value){this->retrieve_I = value;}

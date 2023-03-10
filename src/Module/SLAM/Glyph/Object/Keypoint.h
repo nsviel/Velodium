@@ -10,9 +10,9 @@ public:
   Keypoint();
 
 public:
-  void create_glyph(Cloud* subset);
-  void update_keypoint_location(Cloud* subset);
-  void update_keypoint_normal(Cloud* subset);
+  void create_glyph(Cloud* cloud);
+  void update_keypoint_location(Cloud* cloud);
+  void update_keypoint_normal(Cloud* cloud);
 
 private:
 };

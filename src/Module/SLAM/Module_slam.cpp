@@ -68,8 +68,8 @@ void Module_slam::online(Collection* collection, int subset_ID){
 
   if(with_slam){
     if(algo == 0){
-      Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
-      cticpManager->algo(subset);
+      Cloud* cloud = (Cloud*)collection->get_obj_byID(subset_ID);
+      cticpManager->algo(cloud);
     }
     else if(algo == 1){
       slamManager->compute_slam(collection, subset_ID);

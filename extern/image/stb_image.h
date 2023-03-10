@@ -16,7 +16,7 @@
           avoid problematic images and only need the trivial interface
       JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
       PNG 1/2/4/8/16-bit-per-channel
-      TGA (not sure what subset, if a subset)
+      TGA (not sure what cloud, if a cloud)
       BMP non-1bpp, non-RLE
       PSD (composited view only, no extra channels, 8/16 bit-per-channel)
       GIF (*comp always reports as 4-channel)
@@ -7889,7 +7889,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
       1.05    fix TGA loading to return correct *comp and use good luminance calc
       1.04    default float alpha is 1, not 255; use 'void *' for stbi_image_free
       1.03    bugfixes to STBI_NO_STDIO, STBI_NO_HDR
-      1.02    support for (subset of) HDR files, float interface for preferred access to them
+      1.02    support for (cloud of) HDR files, float interface for preferred access to them
       1.01    fix bug: possible bug in handling right-side up bmps... not sure
               fix bug: the stbi__bmp_load() and stbi__tga_load() functions didn't work at all
       1.00    interface to zlib that skips zlib header

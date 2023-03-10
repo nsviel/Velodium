@@ -39,7 +39,7 @@ public:
 
   //Frame saving
   void save_frame(Collection* collection, int ID_subset);
-  void save_frame_subset(Cloud* subset);
+  void save_frame_subset(Cloud* cloud);
   void save_frame_set(Collection* collection, int ID_subset);
 
   //Path selection

@@ -9,6 +9,12 @@
 #include <string>
 #include <list>
 
+/*
+Collection 0: Glyph
+Collection 1: Light
+Collection n: Cloud
+*/
+
 
 class Data
 {
@@ -18,6 +24,7 @@ public:
     static Data instance;
     return &instance;
   }
+  void create_new_collection(std::string name);
 
   inline std::list<Collection*>* get_list_collection(){return list_collection;}
   inline std::list<Light_*>* get_list_light(){return list_light;}

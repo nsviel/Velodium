@@ -20,32 +20,32 @@ Octree::Octree(){
 Octree::~Octree(){}
 
 //Main function
-void Octree::create_octree(Cloud* subset){
+void Octree::create_octree(Cloud* cloud){
   this->nb_level = 6;
   //---------------------------
 
 tic();
-  this->build_root(subset);
+  this->build_root(cloud);
   this->build_octree(root->child);
 toc_ms("octree");
 
-  Glyph* glyph = &subset->glyphs["tree"];
+  Glyph* glyph = &cloud->glyphs["tree"];
   glyph->xyz = root->xyz;
   glyph->rgb = root->rgb;
 
   //---------------------------
   this->remove_octree(root);
 }
-void Octree::create_octree(Cloud* subset, int level){
+void Octree::create_octree(Cloud* cloud, int level){
   this->nb_level = level;
   //---------------------------
 
   tic();
-  this->build_root(subset);
+  this->build_root(cloud);
   this->build_octree(root->child);
   this->octree_time = toc_ms();
 
-  Glyph* glyph = &subset->glyphs["tree"];
+  Glyph* glyph = &cloud->glyphs["tree"];
   glyph->xyz = root->xyz;
   glyph->rgb = root->rgb;
 
@@ -75,19 +75,19 @@ void Octree::remove_cube(Cube* cube){
 
   //---------------------------
 }
-void Octree::build_root(Cloud* subset){
+void Octree::build_root(Cloud* cloud){
   //---------------------------
 
   // Create a vector of indexes
   vector<int> idx;
-  for(int i=0; i<subset->xyz.size(); i++){
+  for(int i=0; i<cloud->xyz.size(); i++){
     idx.push_back(i);
   }
 
   //Create root cube
   Cube* cube = new Cube();
-  cube->min = fct_min_vec3(subset->xyz);
-  cube->max = fct_max_vec3(subset->xyz);
+  cube->min = fct_min_vec3(cloud->xyz);
+  cube->max = fct_max_vec3(cloud->xyz);
   cube->center = fct_centroid(cube->min, cube->max);
   cube->level = 0;
   cube->idx_cube = idx;
@@ -100,7 +100,7 @@ void Octree::build_root(Cloud* subset){
     // /this->remove_octree(root);
     this->root = new Root();
   }
-  root->xyz_subset = &subset->xyz;
+  root->xyz_subset = &cloud->xyz;
   root->xyz = compute_cube_location(cube->min, cube->max);
   root->rgb = compute_cube_color(root->xyz.size());
   root->child = cube;

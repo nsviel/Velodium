@@ -22,8 +22,11 @@ public:
   void cloudManager(Collection* collection);
 
   void info_collection(Collection* collection);
-  void info_subset(Cloud* subset);
+  void info_subset(Cloud* cloud);
   void info_iconAction(Collection* collection);
+
+
+  void treeview();
 
 private:
   Scene* sceneManager;

@@ -92,7 +92,7 @@ void Axis::create_axis_circle(float circleRadius){
 
   //---------------------------
 }
-void Axis::create_axis_subset(Cloud* subset){
+void Axis::create_axis_subset(Cloud* cloud){
   Glyph axis_subset;
   //---------------------------
 
@@ -112,19 +112,19 @@ void Axis::create_axis_subset(Cloud* subset){
   RGB.push_back(vec4(0.2f, 0.2f, 0.9f, 1.0f));
 
   //---------------------------
-  subset->glyphs.insert({"axis", axis_subset});
+  cloud->glyphs.insert({"axis", axis_subset});
 }
-void Axis::update_axis_subset(Cloud* subset){
-  Glyph* axis_subset = &subset->glyphs["axis"];
+void Axis::update_axis_subset(Cloud* cloud){
+  Glyph* axis_subset = &cloud->glyphs["axis"];
   vector<vec3>& XYZ = axis_subset->xyz;
-  vec3 subset_root = subset->root;
+  vec3 subset_root = cloud->root;
   //---------------------------
 
   axis_subset->is_visible = is_visible;
   XYZ.clear();
 
   //Axis rotation
-  mat4 R = subset->rotat;
+  mat4 R = cloud->rotat;
   vec4 Rx = vec4(0.1,0,0,1) * R;
   vec4 Ry = vec4(0,0.1,0,1) * R;
   vec4 Rz = vec4(0,0,0.1,1) * R;

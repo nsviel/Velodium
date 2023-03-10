@@ -23,11 +23,11 @@ void BundleByClass::compute_bundleByClass(Collection* collection, float stepAngl
   //---------------------------
 }
 void BundleByClass::compute_bundleByClass_maxAngle(Collection* collection, int stepAngle, int maxAngle){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
   Cloud* list_obj_init = (Cloud*)*next(collection->list_obj_init.begin(), collection->ID_obj_selected);
   //---------------------------
 
-  vector<float>& Is = subset->I;
+  vector<float>& Is = cloud->I;
   vector<float>& dist = list_obj_init->R;
   vector<float>& cosIt = list_obj_init->cosIt;
   vector<float>& It = list_obj_init->It;
@@ -180,11 +180,11 @@ void BundleByClass::compute_vectorByClass(vector<vector<float>>& data_X, vector<
 
 //Subfunctions
 void BundleByClass::make_bundle(Collection* collection, float stepAngle, int maxAngle){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
   Cloud* list_obj_init = (Cloud*)*next(collection->list_obj_init.begin(), collection->ID_obj_selected);
   //---------------------------
 
-  vector<float>& Is = subset->I;
+  vector<float>& Is = cloud->I;
   vector<float>& dist = list_obj_init->R;
   vector<float>& cosIt = list_obj_init->cosIt;
   vector<float>& It = list_obj_init->It;
@@ -226,11 +226,11 @@ void BundleByClass::make_bundle(Collection* collection, float stepAngle, int max
   }
 }
 void BundleByClass::make_checking(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
   Cloud* list_obj_init = (Cloud*)*next(collection->list_obj_init.begin(), collection->ID_obj_selected);
   //---------------------------
 
-  vector<float>& Is = subset->I;
+  vector<float>& Is = cloud->I;
   vector<float>& dist = list_obj_init->R;
   vector<float>& cosIt = list_obj_init->cosIt;
   vector<float>& It = list_obj_init->It;
@@ -331,11 +331,11 @@ void BundleByClass::plot_confidenceInterval(){
     //---------------------------
 }
 void BundleByClass::plot_intensityBundle(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
   Cloud* list_obj_init = (Cloud*)*next(collection->list_obj_init.begin(), collection->ID_obj_selected);
   //---------------------------
 
-  vector<float>& Is = subset->I;
+  vector<float>& Is = cloud->I;
   vector<float>& It = list_obj_init->It;
   Gnuplot gp;
 

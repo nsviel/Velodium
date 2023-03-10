@@ -65,9 +65,9 @@ void Online::update_configuration(){
   //---------------------------
 }
 void Online::compute_onlineOpe(Collection* collection, int ID_subset){
-  //This function is called each time a new subset arrives
+  //This function is called each time a new cloud arrives
   Node_module* node_module = node_engine->get_node_module();
-  Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
   auto t1 = start_chrono();
   //---------------------------
 
@@ -75,19 +75,19 @@ void Online::compute_onlineOpe(Collection* collection, int ID_subset){
   this->compute_http_command();
 
   //Some init operation
-  if(subset == nullptr) return;
-  collection->selected_obj = subset;
+  if(cloud == nullptr) return;
+  collection->selected_obj = cloud;
 
-  //Control subset visibilities
+  //Control cloud visibilities
   visibilityManager->compute_visibility(collection, ID_subset);
 
-  //Make slam on the current subset
+  //Make slam on the current cloud
   node_module->online(collection, ID_subset);
-  sceneManager->update_buffer_location(subset);
+  sceneManager->update_buffer_location(cloud);
 
-  //Make cleaning on the current subset
+  //Make cleaning on the current cloud
   if(with_filter_sphere){
-    filterManager->filter_sphere_subset(subset);
+    filterManager->filter_sphere_subset(cloud);
   }
 
   //If camera follow up option activated
@@ -101,7 +101,7 @@ void Online::compute_onlineOpe(Collection* collection, int ID_subset){
 
   //---------------------------
   this->time_ope = stop_chrono(t1);
-  this->compute_displayStats(subset);
+  this->compute_displayStats(cloud);
 }
 
 //Subfunctions
@@ -114,12 +114,12 @@ void Online::compute_recording(Collection* collection, int& ID_subset){
 
   //---------------------------
 }
-void Online::compute_displayStats(Cloud* subset){
-  Frame* frame = &subset->frame;
+void Online::compute_displayStats(Cloud* cloud){
+  Frame* frame = &cloud->frame;
   //---------------------------
 
   //Consol result
-  string stats = subset->name + ": ope in ";
+  string stats = cloud->name + ": ope in ";
   stats += to_string((int)time_ope) + " ms";
   console.AddLog("#", stats);
 

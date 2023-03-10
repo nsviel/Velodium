@@ -43,10 +43,10 @@ void Plot_radio::compute_IRmeans(list<Collection*>* list){
   //Compute R mean and I mean for each cloud
   for(int i=0;i<list->size();i++){
     Collection* collection = *next(list->begin(),i);
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-    vector<float>& Is = subset->I;
-    vector<float>& dist = subset->R;
-    vector<float>& It = subset->It;
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+    vector<float>& Is = cloud->I;
+    vector<float>& dist = cloud->R;
+    vector<float>& It = cloud->It;
 
     R_mean.push_back(fct_mean(dist));
     Is_mean.push_back(fct_mean(Is));
@@ -68,9 +68,9 @@ void Plot_radio::compute_IsItconcat(list<Collection*>* list){
   //Compute R mean and I mean for each cloud
   for(int i=0; i<list->size(); i++){
     Collection* collection = *next(list->begin(),i);
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-    vector<float>& Is = subset->I;
-    vector<float>& It = subset->It;
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+    vector<float>& Is = cloud->I;
+    vector<float>& It = cloud->It;
 
     Is_conc.insert(Is_conc.end(), Is.begin(), Is.end());
     It_conc.insert(It_conc.end(), It.begin(), It.end());
@@ -127,10 +127,10 @@ void Plot_radio::plot_2Dmap(){
   //--------------------------
 
   for(int i=0; i<list_dist->size(); i++){
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-    vector<float>& Is = subset->I;
-    vector<float>& dist = subset->R;
-    vector<float>& cosIt = subset->cosIt;
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+    vector<float>& Is = cloud->I;
+    vector<float>& dist = cloud->R;
+    vector<float>& cosIt = cloud->cosIt;
 
     //Store data
     int cpt = 0;
@@ -1288,9 +1288,9 @@ void Plot_radio::plot_IbyR_cloud(Collection* collection){
 }
 void Plot_radio::plot_IbyR_data(Collection* collection){
   attribManager->compute_attribut_cloud(cloud);
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& R = subset->R;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& R = cloud->R;
   //---------------------------
 
   //Plotting

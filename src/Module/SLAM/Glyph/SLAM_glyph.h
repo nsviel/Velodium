@@ -18,15 +18,15 @@ public:
 
 public:
   //Main function
-  void update_glyph(Collection* collection, Cloud* subset);
-  void update_visibility(Cloud* subset);
+  void update_glyph(Collection* collection, Cloud* cloud);
+  void update_visibility(Cloud* cloud);
   void reset_glyph();
 
   //Subfunctions$
-  void update_glyph_keypoint(Cloud* subset);
-  void update_glyph_nn(Cloud* subset);
-  void update_glyph_matching(Cloud* subset);
-  void update_glyph_normal(Cloud* subset);
+  void update_glyph_keypoint(Cloud* cloud);
+  void update_glyph_nn(Cloud* cloud);
+  void update_glyph_matching(Cloud* cloud);
+  void update_glyph_normal(Cloud* cloud);
   void update_glyph_map();
   void update_glyph_car(Collection* collection);
   void update_glyph_trajectory(Collection* collection);

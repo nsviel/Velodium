@@ -206,7 +206,7 @@ void GUI_Player::player_selection(){
   //---------------------------
 
   if(collection != nullptr && collection->nb_obj > 2){
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     Cloud* subset_first = (Cloud*)collection->get_obj(0);
     Cloud* subset_last = (Cloud*)collection->get_obj(collection->nb_obj-1);
     int subset_selected_ID = collection->ID_obj_selected;
@@ -218,8 +218,8 @@ void GUI_Player::player_selection(){
       }
     }
     ImGui::SameLine();
-    if(subset != nullptr){
-      float ts =  subset->ts[0];
+    if(cloud != nullptr){
+      float ts =  cloud->ts[0];
       ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", ts);
     }
   }

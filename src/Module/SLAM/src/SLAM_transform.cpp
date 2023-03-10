@@ -34,11 +34,11 @@ SLAM_transform::~SLAM_transform(){}
 
 //Main function
 void SLAM_transform::compute_preprocessing(Collection* collection, int subset_ID){
-  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(subset_ID);
   Frame* frame = collection->get_frame_byID(subset_ID);
   //---------------------------
 
-  slam_sampling->grid_sampling_subset(subset);
+  slam_sampling->grid_sampling_subset(cloud);
   //this->distort_frame(frame);
   this->transform_frame(frame);
 
@@ -69,8 +69,8 @@ void SLAM_transform::transform_frame(Frame* frame){
 
   //---------------------------
 }
-void SLAM_transform::transform_subset(Cloud* subset){
-  Frame* frame = &subset->frame;
+void SLAM_transform::transform_subset(Cloud* cloud){
+  Frame* frame = &cloud->frame;
   //---------------------------
 
   Eigen::Quaterniond quat_b = Eigen::Quaterniond(frame->rotat_b);
@@ -79,31 +79,31 @@ void SLAM_transform::transform_subset(Cloud* subset){
   Eigen::Vector3d trans_e = frame->trans_e;
 
   //Update frame root
-  subset->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
-  subset->root = eigen_to_glm_vec3(trans_b);
+  cloud->rotat = eigen_to_glm_mat4(quat_b.toRotationMatrix());
+  cloud->root = eigen_to_glm_vec3(trans_b);
   frame->is_slam_made = true;
 
-  //Update subset position
+  //Update cloud position
   //#pragma omp parallel for num_threads(nb_thread)
-  for(int i=0; i<subset->xyz.size(); i++){
+  for(int i=0; i<cloud->xyz.size(); i++){
     //Compute paramaters
-    float ts_n = subset->ts_n[i];
+    float ts_n = cloud->ts_n[i];
     Eigen::Matrix3d R = quat_b.slerp(ts_n, quat_e).normalized().toRotationMatrix();
     Eigen::Vector3d t = (1.0 - ts_n) * trans_b + ts_n * trans_e;
 
     //Apply transformation
-    Eigen::Vector3d point {subset->xyz[i].x, subset->xyz[i].y, subset->xyz[i].z};
+    Eigen::Vector3d point {cloud->xyz[i].x, cloud->xyz[i].y, cloud->xyz[i].z};
     point = R * point + t;
-    subset->xyz[i] = vec3(point(0), point(1), point(2));
+    cloud->xyz[i] = vec3(point(0), point(1), point(2));
   }
 
-  //Update subset pose
-  subset->pose_T = frame->trans_b;
-  subset->pose_R = frame->rotat_b;
-  subset->root = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
+  //Update cloud pose
+  cloud->pose_T = frame->trans_b;
+  cloud->pose_R = frame->rotat_b;
+  cloud->root = vec3(frame->trans_b(0), frame->trans_b(1), frame->trans_b(2));
 
   //---------------------------
-  sceneManager->update_buffer_location(subset);
+  sceneManager->update_buffer_location(cloud);
 }
 void SLAM_transform::distort_frame(Frame* frame){
   //---------------------------

@@ -65,10 +65,10 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
       collection->path_file_load = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<collection->list_obj.size(); j++){
-        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), j);
+        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
 
-        for(int k=0; k<subset->rgb.size(); k++){
-          subset->rgb[k] = vec4(Red, Green, Blue, 1.0f);
+        for(int k=0; k<cloud->rgb.size(); k++){
+          cloud->rgb[k] = vec4(Red, Green, Blue, 1.0f);
         }
 
       }
@@ -83,15 +83,15 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
 Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
   Collection* cloud_scala = new Collection();
   cloud_scala->path_file_load = clouds[0]->path_file_load;
-  Cloud* subset;
+  Cloud* cloud;
   //---------------------------
 
-  //ieme common subset
+  //ieme common cloud
   for(int i=0; i<clouds[0]->list_obj.size(); i++){
 
     //We accumulate 2 frame in one
     if(i == 0 || i % 2 == 0){
-      subset = new Cloud();
+      cloud = new Cloud();
     }
 
     //jeme collection
@@ -100,14 +100,14 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
 
       //keme points
       for(int k=0; k<subset_scala->xyz.size(); k++){
-        subset->xyz.push_back(subset_scala->xyz[k]);
-        subset->rgb.push_back(subset_scala->rgb[k]);
-        subset->ts.push_back(subset_scala->ts[k]);
+        cloud->xyz.push_back(subset_scala->xyz[k]);
+        cloud->rgb.push_back(subset_scala->rgb[k]);
+        cloud->ts.push_back(subset_scala->ts[k]);
       }
     }
 
     if(i % 2 == 0){
-      cloud_scala->list_obj.push_back(subset);
+      cloud_scala->list_obj.push_back(cloud);
     }
   }
 
@@ -127,8 +127,8 @@ void Scala_file::compute_relativeTimestamp(Collection* collection){
   //---------------------------
 
   for(int i=0; i<1; i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
-    vector<float>& ts = subset->ts;
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
+    vector<float>& ts = cloud->ts;
 
     float ts_cpt = ts[0];
     for(int j=0; j<ts.size(); j++){

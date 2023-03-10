@@ -59,7 +59,7 @@ void Recorder::update_configuration(){
 void Recorder::compute_online(Collection* collection, int ID_subset){
   //---------------------------
 
-  //Save subset frame
+  //Save cloud frame
   if(with_save_frame){
     this->save_frame(collection, ID_subset);
   }
@@ -148,12 +148,12 @@ void Recorder::save_frame(Collection* collection, int ID_subset){
   //---------------------------
 
   if(with_save_frame_raw){
-    Cloud* subset = (Cloud*)collection->get_obj_init_byID(ID_subset);
-    this->save_frame_subset(subset);
+    Cloud* cloud = (Cloud*)collection->get_obj_init_byID(ID_subset);
+    this->save_frame_subset(cloud);
   }else{
     if(save_frame_accu == 1){
-      Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
-      this->save_frame_subset(subset);
+      Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+      this->save_frame_subset(cloud);
     }else{
       this->save_frame_set(collection, ID_subset);
     }
@@ -161,15 +161,15 @@ void Recorder::save_frame(Collection* collection, int ID_subset){
 
   //---------------------------
 }
-void Recorder::save_frame_subset(Cloud* subset){
+void Recorder::save_frame_subset(Cloud* cloud){
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
   //Save frame
-  saverManager->save_subset_silent(subset, "ply", path_frame);
+  saverManager->save_subset_silent(cloud, "ply", path_frame);
 
   //Keep only a certain number of frame
-  string path = path_frame + subset->name + ".ply";
+  string path = path_frame + cloud->name + ".ply";
   if(save_frame_vec.size() < save_frame_max){
     save_frame_vec.push(path);
   }else{
@@ -183,7 +183,7 @@ void Recorder::save_frame_subset(Cloud* subset){
   this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 void Recorder::save_frame_set(Collection* collection, int ID_subset){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID_subset);
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), ID_subset);
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
@@ -191,7 +191,7 @@ void Recorder::save_frame_set(Collection* collection, int ID_subset){
   saverManager->save_set_silent(collection, ID_subset, path_frame, save_frame_accu);
 
   //Keep only a certain number of frame
-  string path = path_frame + subset->name + ".ply";
+  string path = path_frame + cloud->name + ".ply";
   if(save_frame_vec.size() < save_frame_max){
     save_frame_vec.push(path);
   }else{

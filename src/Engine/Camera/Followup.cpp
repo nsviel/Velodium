@@ -37,8 +37,8 @@ void Followup::update_configuration(){
   //---------------------------
 }
 void Followup::camera_followup(Collection* collection, int ID_subset){
-  Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
-  if(subset == nullptr) return;
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+  if(cloud == nullptr) return;
   //---------------------------
 
   vec3 empty(0.0);
@@ -48,10 +48,10 @@ void Followup::camera_followup(Collection* collection, int ID_subset){
 
     //Camera pose
     if(E != empty){
-      this->camera_position(subset, E);
+      this->camera_position(cloud, E);
 
       //Camera orientation
-      this->camera_orientation(subset, E);
+      this->camera_orientation(cloud, E);
     }
   }
 
@@ -88,8 +88,8 @@ vec3 Followup::camera_payload(Collection* collection, int ID_subset){
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){
-    Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset - i);
-    Eigen::Vector3d pos = subset->pose_T;
+    Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset - i);
+    Eigen::Vector3d pos = cloud->pose_T;
 
     for(int j=0; j<3; j++){
       E[j] += pos(j);
@@ -102,11 +102,11 @@ vec3 Followup::camera_payload(Collection* collection, int ID_subset){
   //---------------------------
   return E;
 }
-void Followup::camera_position(Cloud* subset, vec3 E){
+void Followup::camera_position(Cloud* cloud, vec3 E){
   //---------------------------
 
   //Camera pose
-  vec3 pose = eigen_to_glm_vec3(subset->pose_T);
+  vec3 pose = eigen_to_glm_vec3(cloud->pose_T);
   vec3 C = pose - camera_distFromPos * (pose - E);
 
   //Forced absolute camera pose
@@ -140,12 +140,12 @@ void Followup::camera_position(Cloud* subset, vec3 E){
 
   //---------------------------
 }
-void Followup::camera_orientation(Cloud* subset, vec3 E){
+void Followup::camera_orientation(Cloud* cloud, vec3 E){
   //---------------------------
 
   //Forced camera angle
   if(with_camera_absolute){
-    vec3 pose = eigen_to_glm_vec3(subset->pose_T);
+    vec3 pose = eigen_to_glm_vec3(cloud->pose_T);
     vec3 C = pose - camera_distFromPos * (pose - E);
     vec3 D = pose - C;
     float angle = atan(D.y, D.x) - atan(0.0f, 1.0f);

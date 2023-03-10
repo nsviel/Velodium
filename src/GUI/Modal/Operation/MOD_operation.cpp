@@ -42,7 +42,7 @@ void MOD_operation::window_selection(){
   if(modal_tab.show_selection){
     ImGui::Begin("Selection part", &modal_tab.show_selection,ImGuiWindowFlags_AlwaysAutoResize);
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     //---------------------------
 
     ImGui::Text("Point");
@@ -50,13 +50,13 @@ void MOD_operation::window_selection(){
     if(ImGui::Checkbox("Selection mode", &selectionPtON)){
       if(collection != nullptr && selectionPtON){
         selectionManager->set_markMode("sphere");
-        subset->draw_point_size = 10;
+        cloud->draw_point_size = 10;
         //cloud_movement = false;
       }
 
       if(!selectionPtON){
         selectionManager->set_markMode("cube");
-        subset->draw_point_size = 1;
+        cloud->draw_point_size = 1;
         //cloud_movement = true;
       }
     }
@@ -83,9 +83,9 @@ void MOD_operation::window_selection(){
     bool* highlightON = extractionManager->get_highlightON();
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(collection != nullptr){
-        Cloud* subset = (Cloud*)collection->selected_obj;
+        Cloud* cloud = (Cloud*)collection->selected_obj;
         Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
-        extractionManager->fct_highlighting(subset, list_obj_init);
+        extractionManager->fct_highlighting(cloud, list_obj_init);
       }
     }
 
@@ -118,7 +118,7 @@ void MOD_operation::window_selection(){
       if(collection != nullptr){
         vec3 min_pourc = vec3(xmin, ymin, zmin);
         vec3 max_pourc = vec3(xmax, ymax, zmax);
-        extractionManager->fct_selectPart(subset, min_pourc, max_pourc);
+        extractionManager->fct_selectPart(cloud, min_pourc, max_pourc);
       }
     }
 
@@ -195,7 +195,7 @@ void MOD_operation::window_fitting(){
   if(modal_tab.show_fitting){
     ImGui::Begin("Fitting", &modal_tab.show_fitting,ImGuiWindowFlags_AlwaysAutoResize);
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     int sizeButton = 150;
     //---------------------------
 
@@ -210,7 +210,7 @@ void MOD_operation::window_fitting(){
     //Plane fitting
     if(ImGui::Button("Plane fitting", ImVec2(sizeButton,0))){
       if(collection != nullptr){
-        //fitManager->Plane_cloud(subset);
+        //fitManager->Plane_cloud(cloud);
       }
     }
 

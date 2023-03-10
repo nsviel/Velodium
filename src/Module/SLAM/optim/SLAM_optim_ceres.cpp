@@ -24,7 +24,7 @@ void SLAM_optim_ceres::optim_CERES(Frame* frame, Frame* frame_m1){
   int iter_max = 20;
   int nb_threads = 8;
 
-  //For each subset
+  //For each cloud
   this->frame_distort(frame);
   this->frame_update(frame);
 

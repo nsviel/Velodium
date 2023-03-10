@@ -74,17 +74,17 @@ void Player::select_bySubsetID(Collection* collection, int ID_subset){
   if(collection == nullptr) return;
   //---------------------------
 
-  //If on the fly option, load subset
+  //If on the fly option, load cloud
   flyManager->compute_onthefly(collection, ID_subset);
 
-  //If in side range, make operation on subset
+  //If in side range, make operation on cloud
   if(compute_range_limit(collection, ID_subset)){
     onlineManager->compute_onlineOpe(collection, ID_subset);
   }
 
   //Update glyphs
-  Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
-  objectManager->update_glyph_subset(subset);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+  objectManager->update_glyph_subset(cloud);
 
   //---------------------------
 }
@@ -113,13 +113,13 @@ bool Player::compute_range_limit(Collection* collection, int& ID_subset){
   Cloud* subset_last = (Cloud*)collection->get_obj(collection->nb_obj-1);
   //---------------------------
 //PROBLEM DE ID ICI JE PENSE
-  //Check if subset exists
-  Cloud* subset = (Cloud*)collection->get_obj(ID_subset);
-  if(subset == nullptr){
+  //Check if cloud exists
+  Cloud* cloud = (Cloud*)collection->get_obj(ID_subset);
+  if(cloud == nullptr){
     return false;
   }
 
-  //If frame desired ID is superior to the number of subset restart it
+  //If frame desired ID is superior to the number of cloud restart it
   if(player_returnToZero){
     if(ID_subset > subset_last->ID){
       ID_subset = subset_first->ID;
@@ -139,7 +139,7 @@ bool Player::compute_range_limit(Collection* collection, int& ID_subset){
     }
   }
 
-  //Set visibility parameter for each collection subset
+  //Set visibility parameter for each collection cloud
   collection->ID_obj_selected = ID_subset;
 
   //---------------------------
@@ -204,10 +204,10 @@ void Player::player_stop(){
 void Player::player_save(Collection* collection){
   //---------------------------
 
-  //Save each subset
+  //Save each cloud
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
-    saverManager->save_subset(subset, "ply", player_saveas);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
+    saverManager->save_subset(cloud, "ply", player_saveas);
   }
 
   //---------------------------

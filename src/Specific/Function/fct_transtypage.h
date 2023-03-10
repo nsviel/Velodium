@@ -25,8 +25,8 @@ namespace{
 
   //EIGEN to GLM
   Cloud eigen_to_glm(Eigen::MatrixXf mat_in){
-    Cloud subset;
-    std::vector<glm::vec3>& XYZ = subset.xyz;
+    Cloud cloud;
+    std::vector<glm::vec3>& XYZ = cloud.xyz;
     //---------------------------
 
     for(int i=0; i<mat_in.rows(); i++){
@@ -36,7 +36,7 @@ namespace{
     }
 
     //---------------------------
-    return subset;
+    return cloud;
   }
   glm::mat4 eigen_to_glm_mat4(Eigen::Matrix4f mat_eig){
     glm::mat4 mat_glm;

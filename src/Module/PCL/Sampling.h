@@ -25,11 +25,11 @@ public:
 public:
   void sampling_gui();
 
-  void sampling_random(Cloud* subset);
-  void sampling_outlier(Cloud* subset);
-  void sampling_statistical(Cloud* subset);
-  void sampling_spaceRadius_PCL(Cloud* subset);
-  void sampling_spaceRadius(Cloud* subset, float resolution);
+  void sampling_random(Cloud* cloud);
+  void sampling_outlier(Cloud* cloud);
+  void sampling_statistical(Cloud* cloud);
+  void sampling_spaceRadius_PCL(Cloud* cloud);
+  void sampling_spaceRadius(Cloud* cloud, float resolution);
 
   //Setters / Getters
   inline void set_sampling(int value){this->sampling_percentagePts = value;}

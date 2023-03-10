@@ -36,8 +36,8 @@ public:
   void start_capture_scala();
 
   //Subfunctions
-  void operation_new_subset(Cloud* subset);
-  void supress_nullpoints(Cloud* subset);
+  void operation_new_subset(Cloud* cloud);
+  void supress_nullpoints(Cloud* cloud);
   void control_nb_subset(Collection* collection);
   void create_empty_cloud();
 

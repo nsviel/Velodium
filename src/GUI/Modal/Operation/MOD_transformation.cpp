@@ -56,11 +56,11 @@ void MOD_transformation::design_transformation(){
 //Specific function
 void MOD_transformation::actual_transformation_mat(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Actual transformation from initial position");
-  MatrixXf cloudTransformation = glm_to_eigen_mat4_matXf(subset->transformation);
+  MatrixXf cloudTransformation = glm_to_eigen_mat4_matXf(cloud->transformation);
   std::stringstream ss;
   ss << cloudTransformation;
   string bla = ss.str();
@@ -73,7 +73,7 @@ void MOD_transformation::actual_transformation_mat(){
 }
 void MOD_transformation::manual_transformation_mat(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
 
   if(ImGui::CollapsingHeader("Manual transformation matrix")){
     //---------------------------
@@ -130,10 +130,10 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
         Collection* collection = sceneManager->get_selected_collection();
-        Cloud* subset = (Cloud*)collection->selected_obj;
+        Cloud* cloud = (Cloud*)collection->selected_obj;
 
         sceneManager->reset_collection(collection);
-        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
         //sceneManager->update_buffer_location(collection);
       }
     }
@@ -143,7 +143,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
         //------------------
-        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
         ////sceneManager->update_buffer_location(collection);
       }
     }
@@ -153,10 +153,10 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat2 = inverse(mat);
 
         Collection* collection = sceneManager->get_selected_collection();
-        Cloud* subset = (Cloud*)collection->selected_obj;
+        Cloud* cloud = (Cloud*)collection->selected_obj;
 
         sceneManager->reset_collection(collection);
-        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
         //sceneManager->update_buffer_location(collection);
       }
     }
@@ -166,7 +166,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        transformManager->make_Transformation(subset, vec3(0,0,0), mat);
+        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
         ////sceneManager->update_buffer_location(collection);
       }
     }
@@ -177,7 +177,7 @@ void MOD_transformation::manual_transformation_mat(){
 }
 void MOD_transformation::cloud_translation(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
 
   if(ImGui::CollapsingHeader("Collection translation")){
     //---------------------------
@@ -203,7 +203,7 @@ void MOD_transformation::cloud_translation(){
 }
 void MOD_transformation::cloud_rotation(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
 
   if(ImGui::CollapsingHeader("Collection rotation")){
     //---------------------------
@@ -211,48 +211,48 @@ void MOD_transformation::cloud_rotation(){
     if(ImGui::Button("X ->")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(90, 0, 0));
-        transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_buffer_location(subset);
+        transformManager->make_rotation(cloud, cloud->COM, radian);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("X <-")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(-90, 0, 0));
-        transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_buffer_location(subset);
+        transformManager->make_rotation(cloud, cloud->COM, radian);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Y ->")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 90, 0));
-        transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_buffer_location(subset);
+        transformManager->make_rotation(cloud, cloud->COM, radian);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Y <-")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, -90, 0));
-        transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_buffer_location(subset);
+        transformManager->make_rotation(cloud, cloud->COM, radian);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Z ->")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, 90));
-        transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_buffer_location(subset);
+        transformManager->make_rotation(cloud, cloud->COM, radian);
+        sceneManager->update_buffer_location(cloud);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Z <-")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, -90));
-        transformManager->make_rotation(subset, subset->COM, radian);
-        sceneManager->update_buffer_location(subset);
+        transformManager->make_rotation(cloud, cloud->COM, radian);
+        sceneManager->update_buffer_location(cloud);
       }
     }
 

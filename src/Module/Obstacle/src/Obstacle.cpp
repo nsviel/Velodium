@@ -107,26 +107,26 @@ void Obstacle::add_obstacle_grTr(){
 void Obstacle::build_cloud_obstacle(Collection* collection){
   //---------------------------
   /*
-  //Process prediction if the ieme subset are not already processed
+  //Process prediction if the ieme cloud are not already processed
   for(int i=0; i<collection->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
 
-    if(subset->detection.is_predicted == false){
+    if(cloud->detection.is_predicted == false){
       //Build obstacle glyph
-      this->build_obstacleGlyph_pr(subset);
-      this->build_obstacleGlyph_gt(subset);
+      this->build_obstacleGlyph_pr(cloud);
+      this->build_obstacleGlyph_gt(cloud);
 
       //Send MQTT warning
       if(with_warning){
-        warningManager->send_warning(subset);
+        warningManager->send_warning(cloud);
       }
     }
   }*/
 
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_pr(Cloud* subset){
-  /*Data_pred* detection = &subset->detection;
+void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
+  /*Data_pred* detection = &cloud->detection;
   //---------------------------
 
   for(int i=0; i<detection->name.size(); i++){
@@ -148,8 +148,8 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* subset){
   */
   //---------------------------
 }
-void Obstacle::build_obstacleGlyph_gt(Cloud* subset){
-  /*Data_pred* detection_gt = &subset->detection_gt;
+void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
+  /*Data_pred* detection_gt = &cloud->detection_gt;
   //---------------------------
 
   for(int j=0; j<detection_gt->name.size(); j++){

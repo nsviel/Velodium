@@ -263,25 +263,25 @@ void Pather::saving_cloud_frame(Collection* collection){
 
   //Save current cloud
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
-    string path = path_saving + subset->name;
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+    string path = path_saving + cloud->name;
 
-    if(subset != nullptr && path_saving != ""){
-      saverManager->save_subset(subset, ".ply", path);
+    if(cloud != nullptr && path_saving != ""){
+      saverManager->save_subset(cloud, ".ply", path);
     }
   }
 
   //---------------------------
 }
-void Pather::saving_subset(Cloud* subset){
+void Pather::saving_subset(Cloud* cloud){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenity_saving(path_current_dir, subset->name);
+  string path_saving = zenity_saving(path_current_dir, cloud->name);
 
   //Save current cloud
-  if(subset != nullptr && path_saving != ""){
-    saverManager->save_subset(subset, "ply", path_saving);
+  if(cloud != nullptr && path_saving != ""){
+    saverManager->save_subset(cloud, "ply", path_saving);
   }
 
   //---------------------------
@@ -296,8 +296,8 @@ void Pather::saving_subset_range(int frame_b, int frame_e){
   //Save current cloud
   if(collection != nullptr && path_saving != ""){
     for(int i=frame_b; i<frame_e; i++){
-      Cloud* subset = (Cloud*)collection->get_obj(i);
-      saverManager->save_subset(subset, ".ply", path_saving);
+      Cloud* cloud = (Cloud*)collection->get_obj(i);
+      saverManager->save_subset(cloud, ".ply", path_saving);
     }
   }
 

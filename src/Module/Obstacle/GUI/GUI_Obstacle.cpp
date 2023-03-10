@@ -126,8 +126,8 @@ void GUI_Obstacle::runtime_display_naming(){
   if(cloud != nullptr){
     //---------------------------
 
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    Data_pred* detection = &subset->detection;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    Data_pred* detection = &cloud->detection;
 
     this->label_ID = 0;
     for(int j=0; j<detection->name.size(); j++){

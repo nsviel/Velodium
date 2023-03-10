@@ -48,8 +48,8 @@ public:
 private:
   bool check_condition(Collection* collection, int subset_ID);
   void compute_finalization(Collection* collection, int subset_ID, bool success, float t_begin);
-  void compute_transform_subset(Cloud* subset);
-  void compute_transform_glyph(Cloud* subset);
+  void compute_transform_subset(Cloud* cloud);
+  void compute_transform_glyph(Cloud* cloud);
   void reset_visibility(Collection* collection, int subset_ID);
 
 private:

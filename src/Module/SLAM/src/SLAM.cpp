@@ -56,7 +56,7 @@ void SLAM::update_configuration(){
   //---------------------------
 }
 bool SLAM::compute_slam(Collection* collection, int subset_ID){
-  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(subset_ID);
   auto t1 = start_chrono();
   if(check_condition(collection, subset_ID) == false) return false;
   //---------------------------
@@ -82,15 +82,15 @@ void SLAM::reset_slam(){
 
 //Sub-functions
 void SLAM::compute_finalization(Collection* collection, int subset_ID, bool success, float duration){
-  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(subset_ID);
   Frame* frame = collection->get_frame_byID(subset_ID);
   //---------------------------
 
   //Apply transformation
   if(success){
-    slam_transf->transform_subset(subset);
+    slam_transf->transform_subset(cloud);
     slam_map->update_map(collection, subset_ID);
-    slam_glyph->update_glyph(collection, subset);
+    slam_glyph->update_glyph(collection, cloud);
   //Else reset slam map
   }else{
     frame->reset();
@@ -105,7 +105,7 @@ void SLAM::compute_finalization(Collection* collection, int subset_ID, bool succ
   //---------------------------
 }
 bool SLAM::check_condition(Collection* collection, int subset_ID){
-  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(subset_ID);
   Frame* frame = collection->get_frame_byID(subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
@@ -124,14 +124,14 @@ bool SLAM::check_condition(Collection* collection, int subset_ID){
     console.AddLog("error" ,"[SLAM] No enough subsets");
     return false;
   }
-  if(subset->has_timestamp == false){
+  if(cloud->has_timestamp == false){
     console.AddLog("error" ,"[SLAM] No timestamp");
     return false;
   }
 
   //Frame already slam computed
   if(frame->is_slam_made == true){
-    slam_glyph->update_glyph(collection, subset);
+    slam_glyph->update_glyph(collection, cloud);
     return false;
   }
 
@@ -158,14 +158,14 @@ bool SLAM::check_condition(Collection* collection, int subset_ID){
 void SLAM::reset_visibility(Collection* collection, int subset_ID){
   //---------------------------
 
-  //Set visibility just for last subset
+  //Set visibility just for last cloud
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* subset = (Cloud*)collection->get_obj(i);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
 
-    if(subset->ID == subset_ID){
-      subset->is_visible = true;
+    if(cloud->ID == subset_ID){
+      cloud->is_visible = true;
     }else{
-      subset->is_visible = false;
+      cloud->is_visible = false;
     }
   }
 

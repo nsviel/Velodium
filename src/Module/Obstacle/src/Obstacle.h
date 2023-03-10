@@ -33,8 +33,8 @@ public:
 
   //Subfunctions
   void build_cloud_obstacle(Collection* collection);
-  void build_obstacleGlyph_gt(Cloud* subset);
-  void build_obstacleGlyph_pr(Cloud* subset);
+  void build_obstacleGlyph_gt(Cloud* cloud);
+  void build_obstacleGlyph_pr(Cloud* cloud);
 
   inline bool* get_with_warning(){return &with_warning;}
   inline bool* get_with_prediction(){return &with_prediction;}

@@ -29,6 +29,34 @@ Collection::Collection(){
 
   //---------------------------
 }
+Collection::Collection(std::string name){
+  //---------------------------
+
+  //IDs
+  this->ID_col_perma = 0;
+  this->ID_col_order = 0;
+  this->ID_obj_selected = 0;
+  this->ID_obj_last = 0;
+  this->ID_obj_otf = 0;
+
+  //Info
+  this->name = name;
+  this->file_format = "";
+  this->path_file_load = "";
+  this->path_file_save = "";
+  this->lidar_model = "";
+
+  this->is_visible = true;
+  this->is_heatmap = false;
+  this->is_boxed = false;
+  this->is_onthefly = false;
+
+  //Object
+  this->nb_obj = 0;
+  this->selected_obj = nullptr;
+
+  //---------------------------
+}
 
 //Add / remove object
 void Collection::obj_add_new(Object_* object){

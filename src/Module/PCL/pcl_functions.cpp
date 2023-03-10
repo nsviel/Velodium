@@ -14,8 +14,8 @@ pcl_functions::pcl_functions(){
 }
 pcl_functions::~pcl_functions(){}
 
-void pcl_functions::compute_normals_PCL(Cloud* subset){
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = glm_to_pcl_XYZ(subset);
+void pcl_functions::compute_normals_PCL(Cloud* cloud){
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = glm_to_pcl_XYZ(cloud);
   tic();
   //---------------------------
 
@@ -29,7 +29,7 @@ void pcl_functions::compute_normals_PCL(Cloud* subset){
   ne.setRadiusSearch (radiusSearch);
 
   // /!\ compute the normales with direction to the scanner position
-  vec3& scanpos = subset->root;
+  vec3& scanpos = cloud->root;
   ne.setViewPoint(scanpos.x, scanpos.y, scanpos.z);
 
   // Compute the features
@@ -37,28 +37,28 @@ void pcl_functions::compute_normals_PCL(Cloud* subset){
 
   //Store computed normals into cloud data
   vec3 normal;
-  subset->Nxyz.clear();
+  cloud->Nxyz.clear();
   #pragma omp parallel for
-  for(int i=0;i<subset->xyz.size();i++){
+  for(int i=0;i<cloud->xyz.size();i++){
     normal.x = cloud_normals->points[i].normal_x;
     normal.y = cloud_normals->points[i].normal_y;
     normal.z = cloud_normals->points[i].normal_z;
 
-    subset->Nxyz.push_back(normal);
+    cloud->Nxyz.push_back(normal);
   }
 
   //---------------------------
   float duration = toc();
-  string log = "Normal for " + subset->name + " computed in " + duration + " ms";
+  string log = "Normal for " + cloud->name + " computed in " + duration + " ms";
   console.AddLog("#", log);
 }
-void pcl_functions::Plane_cloud(Cloud* subset){
-  vector<vec3>& XYZ = subset->xyz;
-  vector<vec4>& RGB = subset->rgb;
-  int size = subset->nb_point;
+void pcl_functions::Plane_cloud(Cloud* cloud){
+  vector<vec3>& XYZ = cloud->xyz;
+  vector<vec4>& RGB = cloud->rgb;
+  int size = cloud->nb_point;
   //---------------------------
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(subset);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(cloud);
 
   pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
@@ -82,11 +82,11 @@ void pcl_functions::Plane_cloud(Cloud* subset){
 
   //---------------------------
 }
-void pcl_functions::detectSphere(Cloud* subset){
+void pcl_functions::detectSphere(Cloud* cloud){
   vector<int> inliers;
   //---------------------------
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(subset);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(cloud);
   pcl::PointCloud<pcl::PointXYZ>::Ptr final (new pcl::PointCloud<pcl::PointXYZ>);
 
   // created RandomSampleConsensus object and compute the appropriated model
@@ -99,7 +99,7 @@ void pcl_functions::detectSphere(Cloud* subset){
 
   pcl::copyPointCloud (*cloud_pcl, inliers, *final);
   Subset subset_out = pcl_to_glm_XYZ(final);
-  subset->xyz = subset_out.xyz;
+  cloud->xyz = subset_out.xyz;
 
   //---------------------------
 }

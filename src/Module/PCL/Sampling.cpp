@@ -26,12 +26,12 @@ Sampling::Sampling(){
 Sampling::~Sampling(){}
 
 //Functions
-void Sampling::sampling_random(Cloud* subset){
-  int size_before = subset->nb_point;
+void Sampling::sampling_random(Cloud* cloud){
+  int size_before = cloud->nb_point;
   tic();
   //---------------------------
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(subset);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(cloud);
 
   //Retrieve left number of points
   float leftPts = size_before * (float(sampling_percentagePts)/100);
@@ -45,21 +45,21 @@ void Sampling::sampling_random(Cloud* subset){
   vector<int> indices = *idx.get();
 
   float duration = toc();
-  int size_filtered = subset->xyz.size();
-  attribManager->make_supressPoints(subset, indices);
+  int size_filtered = cloud->xyz.size();
+  attribManager->make_supressPoints(cloud, indices);
 
   //---------------------------
-  sceneManager->update_buffer_location(subset);
-  string log = "Random sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  sceneManager->update_buffer_location(cloud);
+  string log = "Random sampling " + cloud->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_spaceRadius_PCL(Cloud* subset){
-  int size_before = subset->nb_point;
+void Sampling::sampling_spaceRadius_PCL(Cloud* cloud){
+  int size_before = cloud->nb_point;
   tic();
   //---------------------------
 
   //Filtering
-  pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_pcl = glm_to_pcl_XYZI(subset);
+  pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_pcl = glm_to_pcl_XYZI(cloud);
   pcl::VoxelGrid<pcl::PointXYZI> sor;
   sor.setInputCloud(cloud_pcl);
   sor.setDownsampleAllData(true);
@@ -68,25 +68,25 @@ void Sampling::sampling_spaceRadius_PCL(Cloud* subset){
 
   //Retrieve data
   Subset subset_filter = pcl_to_glm_XYZI(cloud_pcl);
-  subset->xyz = subset_filter.xyz;
-  subset->I = subset_filter.I;
+  cloud->xyz = subset_filter.xyz;
+  cloud->I = subset_filter.I;
 
   //Update cloud
-  sceneManager->update_subset_IntensityToColor(subset);
-  sceneManager->update_buffer_location(subset);
+  sceneManager->update_subset_IntensityToColor(cloud);
+  sceneManager->update_buffer_location(cloud);
 
   //---------------------------
   float duration = toc();
-  int size_filtered = subset->xyz.size();
-  string log = "Space sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  int size_filtered = cloud->xyz.size();
+  string log = "Space sampling " + cloud->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_outlier(Cloud* subset){
-  int size_before = subset->nb_point;
+void Sampling::sampling_outlier(Cloud* cloud){
+  int size_before = cloud->nb_point;
   tic();
   //---------------------------
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(subset);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(cloud);
 
   //Filtering
   pcl::RadiusOutlierRemoval<pcl::PointXYZ> RO(true);
@@ -99,21 +99,21 @@ void Sampling::sampling_outlier(Cloud* subset){
   vector<int> indices = *idx.get();
 
   //---------------------------
-  attribManager->make_supressPoints(subset, indices);
-  sceneManager->update_buffer_location(subset);
+  attribManager->make_supressPoints(cloud, indices);
+  sceneManager->update_buffer_location(cloud);
 
   float duration = toc();
-  int size_filtered = subset->xyz.size();
-  string log = "Filter outliers " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  int size_filtered = cloud->xyz.size();
+  string log = "Filter outliers " + cloud->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_statistical(Cloud* subset){
+void Sampling::sampling_statistical(Cloud* cloud){
   //http://pointclouds.org/documentation/tutorials/statistical_outlier.php
-  int size_before = subset->nb_point;
+  int size_before = cloud->nb_point;
   tic();
   //---------------------------
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(subset);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(cloud);
 
   //Filtering
   pcl::StatisticalOutlierRemoval<pcl::PointXYZ> SO(true);
@@ -124,24 +124,24 @@ void Sampling::sampling_statistical(Cloud* subset){
   vector<int> indices = *idx.get();
 
   //---------------------------
-  attribManager->make_supressPoints(subset, indices);
-  sceneManager->update_buffer_location(subset);
+  attribManager->make_supressPoints(cloud, indices);
+  sceneManager->update_buffer_location(cloud);
 
   float duration = toc();
-  int size_filtered = subset->xyz.size();
-  string log = "Statistical sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  int size_filtered = cloud->xyz.size();
+  string log = "Statistical sampling " + cloud->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }
-void Sampling::sampling_spaceRadius(Cloud* subset, float radius){
+void Sampling::sampling_spaceRadius(Cloud* cloud, float radius){
   tic();
   //---------------------------
 
-  vector<vec3>& XYZ = subset->xyz;
-  vec3 min = subset->min;
-  vec3 max = subset->max;
-  int size_before = subset->nb_point;
+  vector<vec3>& XYZ = cloud->xyz;
+  vec3 min = cloud->min;
+  vec3 max = cloud->max;
+  int size_before = cloud->nb_point;
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(subset);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_pcl = glm_to_pcl_XYZ(cloud);
 
   pcl::octree::OctreePointCloudSearch<pcl::PointXYZ> octree(radius);
   octree.setInputCloud(cloud_pcl);
@@ -181,12 +181,12 @@ void Sampling::sampling_spaceRadius(Cloud* subset, float radius){
 
   //---------------------------
   sort(id_supp.begin(), id_supp.end());
-  attribManager->make_supressPoints(subset, id_supp);
-  sceneManager->update_buffer_location(subset);
+  attribManager->make_supressPoints(cloud, id_supp);
+  sceneManager->update_buffer_location(cloud);
 
   float duration = toc();
-  int size_filtered = subset->xyz.size();
-  string log = "Space sampling " + subset->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
+  int size_filtered = cloud->xyz.size();
+  string log = "Space sampling " + cloud->name + " : " + size_before + " -> " + size_filtered + " points (" + duration + " ms)";
   console.AddLog("ok", log);
 }*/
 

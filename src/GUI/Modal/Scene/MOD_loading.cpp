@@ -303,7 +303,7 @@ void MOD_loading::loading_action(){
     pathManager->loading();
   }
 
-  //Load subset
+  //Load cloud
   if(load_mode == 1){
     pathManager->loading_frames();
   }
@@ -335,9 +335,9 @@ void MOD_loading::saving_configuration(){
     ImGui::RadioButton("Range", &subset_mode, 1);
   }
 
-  //Setup subset range
+  //Setup cloud range
   if(save_mode == 1 && subset_mode == 1){
-    //Retrieve max number of cloud subset
+    //Retrieve max number of cloud cloud
     int subset_max;
     if(sceneManager->get_is_list_empty()){
       subset_max = 0;
@@ -410,13 +410,13 @@ void MOD_loading::saving_action(){
     pathManager->saving_cloud_all();
   }
 
-  //Save selected subset
+  //Save selected cloud
   if(save_mode == 1 && subset_mode == 0 && !sceneManager->get_is_list_empty()){
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    pathManager->saving_subset(subset);
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    pathManager->saving_subset(cloud);
   }
 
-  //Save subset range
+  //Save cloud range
   if(save_mode == 1 && subset_mode == 1 && !sceneManager->get_is_list_empty()){
     pathManager->saving_subset_range(frame_b, frame_e);
   }

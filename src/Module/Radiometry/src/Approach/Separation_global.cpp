@@ -149,10 +149,10 @@ bool Separation_global::algo_distance(){
   return true;
 }
 bool Separation_global::algo_correction(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cIt = subset->cosIt;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
+  vector<float>& cIt = cloud->cosIt;
   Im.clear(); Ic.clear();
   //---------------------------
 
@@ -363,9 +363,9 @@ void Separation_global::compute_Reference_angle(){
 
   for(int i=0; i<list_ref->size() ;i++){
     Collection* cloud_25 = *next(list_ref->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud_25->list_obj.begin(), 0);
-    if(subset->name == nameRef){
-      vector<float> d_ref{ fct_mean(subset->cosIt) };
+    Cloud* cloud = (Cloud*)*next(cloud_25->list_obj.begin(), 0);
+    if(cloud->name == nameRef){
+      vector<float> d_ref{ fct_mean(cloud->cosIt) };
       cIt_lambda = polyval(d_ref, cIt_coeffs, cIt_n);
     }
   }
@@ -383,9 +383,9 @@ void Separation_global::compute_Reference_distance(){
 
   for(int i=0; i<list_ref->size() ;i++){
     Collection* cloud_ref = *next(list_ref->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud_ref->list_obj.begin(), 0);
-    if(subset->name == nameRef){
-      vector<float> R_ref{ fct_mean(subset->R) };
+    Cloud* cloud = (Cloud*)*next(cloud_ref->list_obj.begin(), 0);
+    if(cloud->name == nameRef){
+      vector<float> R_ref{ fct_mean(cloud->R) };
       R_lambda = polyval(R_ref, R_coeffs, R_n);
     }
   }
@@ -555,10 +555,10 @@ void Separation_global::plot_MeanError(){
   plotManager->plot_Curve(ebyn_cIt_n, ebyn_cIt_e);
 }
 void Separation_global::plot_PolyRegression(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cIt = subset->cosIt;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
+  vector<float>& cIt = cloud->cosIt;
   this->algo(cloud);
   //---------------------------
 
@@ -599,8 +599,8 @@ void Separation_global::plot_bundleByClass(Collection* collection){
 }
 void Separation_global::plot_Icorr(Collection* collection){
   this->algo(cloud);
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   //--------------------------------
 
   plotManager->plot_Curve_lin(Is, Im);

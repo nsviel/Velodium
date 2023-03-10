@@ -127,11 +127,11 @@ Cloud* Velodyne::get_obj_capture(){
   //Free the memory to get synchroneous data
   udp_capture.name = "";
 
-  //Convert the udp packet into subset
-  Cloud* subset = extractManager->extract_data(udp_capture);
+  //Convert the udp packet into cloud
+  Cloud* cloud = extractManager->extract_data(udp_capture);
 
   //---------------------------
-  return subset;
+  return cloud;
 }
 
 //LiDAR function

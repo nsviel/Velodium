@@ -41,13 +41,13 @@ void Graph::selection_setSubset(Collection* collection, int ID){
   //---------------------------
 
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
+    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
 
     if(i == ID){
       collection->ID_obj_selected = ID;
-      subset->is_visible = true;
+      cloud->is_visible = true;
     }else{
-      subset->is_visible = false;
+      cloud->is_visible = false;
     }
 
   }

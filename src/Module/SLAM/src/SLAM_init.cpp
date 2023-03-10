@@ -50,13 +50,13 @@ void SLAM_init::init_frame_ID(Collection* collection, int subset_ID){
   //---------------------------
 }
 void SLAM_init::init_frame_ts(Collection* collection, int subset_ID){
-  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
-  Frame* frame = &subset->frame;
-  vector<float>& ts = subset->ts;
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(subset_ID);
+  Frame* frame = &cloud->frame;
+  vector<float>& ts = cloud->ts;
   //---------------------------
 
   //Clear vector
-  subset->ts_n.clear();
+  cloud->ts_n.clear();
 
   //If there is timestamp data, normalize it
   if(ts.size() != 0){
@@ -71,15 +71,15 @@ void SLAM_init::init_frame_ts(Collection* collection, int subset_ID){
     //Normalization
     for(int i=0; i<ts.size(); i++){
       double ts_n = (ts[i] - ts_min) / (ts_max - ts_min);
-      subset->ts_n.push_back(ts_n);
+      cloud->ts_n.push_back(ts_n);
     }
   }
   //If there is no timestamp data, create synthetic one
   else{
     console.AddLog("error" ,"[SLAM] No timestamp");
-    for(int i=0; i<subset->xyz.size(); i++){
-      double ts_n = i / subset->xyz.size();
-      subset->ts_n.push_back(ts_n);
+    for(int i=0; i<cloud->xyz.size(); i++){
+      double ts_n = i / cloud->xyz.size();
+      cloud->ts_n.push_back(ts_n);
     }
   }
 

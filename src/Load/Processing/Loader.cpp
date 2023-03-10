@@ -188,33 +188,33 @@ bool Loader::load_cloud_creation(Collection* cloud_in){
 
   //Take input data
   for(int i=0; i<cloud_in->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)cloud_in->get_obj(i);
+    Cloud* cloud = (Cloud*)cloud_in->get_obj(i);
     Data_file* data = new Data_file();
     data->path_file = cloud_in->path_file_load;
 
     //Location
-    if(subset->xyz.size() != 0){
-      data->xyz = subset->xyz;
+    if(cloud->xyz.size() != 0){
+      data->xyz = cloud->xyz;
     }
 
     //Color
-    if(subset->rgb.size() != 0){
-      data->rgb = subset->rgb;
+    if(cloud->rgb.size() != 0){
+      data->rgb = cloud->rgb;
     }
 
     //Intensity
-    if(subset->I.size() != 0){
-      data->I = subset->I;
+    if(cloud->I.size() != 0){
+      data->I = cloud->I;
     }
 
     //Timestamp
-    if(subset->ts.size() != 0){
-      data->ts = subset->ts;
+    if(cloud->ts.size() != 0){
+      data->ts = cloud->ts;
     }
 
     //Normal
-    if(subset->Nxyz.size() != 0){
-      data->Nxyz = subset->Nxyz;
+    if(cloud->Nxyz.size() != 0){
+      data->Nxyz = cloud->Nxyz;
     }
 
     data_vec.push_back(data);

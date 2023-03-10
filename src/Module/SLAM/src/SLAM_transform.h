@@ -23,7 +23,7 @@ public:
 
   //Tranformation function
   void transform_frame(Frame* frame);
-  void transform_subset(Cloud* subset);
+  void transform_subset(Cloud* cloud);
   void distort_frame(Frame* frame);
 
 private:

@@ -20,7 +20,7 @@ Tree::Tree(){
 }
 Tree::~Tree(){}
 
-void Tree::create_glyph(Cloud* subset){
+void Tree::create_glyph(Cloud* cloud){
   Glyph tree;
   //---------------------------
 
@@ -33,13 +33,13 @@ void Tree::create_glyph(Cloud* subset){
   tree.unicolor = tree_color;
 
   //---------------------------
-  subset->glyphs.insert({"tree", tree});
+  cloud->glyphs.insert({"tree", tree});
 }
-void Tree::update_tree(Cloud* subset){
+void Tree::update_tree(Cloud* cloud){
   //---------------------------
 
   if(is_visible){
-    octreeManager->create_octree(subset, tree_level);
+    octreeManager->create_octree(cloud, tree_level);
   }
 
   //---------------------------

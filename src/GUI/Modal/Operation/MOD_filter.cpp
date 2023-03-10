@@ -50,7 +50,7 @@ void MOD_filter::design_filter(){
 //Specific function
 void MOD_filter::filter_cylinder(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   if (ImGui::Button("Cylinder cleaning", ImVec2(item_width,0))){
@@ -72,7 +72,7 @@ void MOD_filter::filter_cylinder(){
 }
 void MOD_filter::filter_byAngle(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   static int maxAngle = 80;
@@ -96,7 +96,7 @@ void MOD_filter::filter_byAngle(){
 }
 void MOD_filter::filter_sphere(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)collection->selected_obj;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 
   if(ImGui::Button("Clean sphere cloud", ImVec2(item_width,0))){

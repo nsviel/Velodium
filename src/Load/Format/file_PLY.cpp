@@ -749,23 +749,23 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
 
   if (ply_format == "ascii"){
     for(int i=0; i<collection->nb_obj; i++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
 
       //Open file
       std::ofstream file(path_file);
 
       //Save header
-      this->Exporter_header(file, ply_format, subset, subset->xyz.size());
+      this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
 
       //Save data
-      this->Exporter_data_ascii(file, subset);
+      this->Exporter_data_ascii(file, cloud);
 
       file.close();
     }
   }
   else if (format == "binary" || format == "binary_little_endian"){
     for(int i=0; i<collection->nb_obj; i++){
-      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
       format = "binary_little_endian";
 
       //Locak file
@@ -776,10 +776,10 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
       std::ofstream file(path_file, ios::binary);
 
       //Save header
-      this->Exporter_header(file, ply_format, subset, subset->xyz.size());
+      this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
 
       //Save data
-      this->Exporter_data_binary(file, subset);
+      this->Exporter_data_binary(file, cloud);
 
       file.close();
     }
@@ -792,9 +792,9 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset){
-  string filePath = path_dir + subset->name + ".tmp";
-  string filePath_end = path_dir + subset->name + ".ply";
+bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* cloud){
+  string filePath = path_dir + cloud->name + ".tmp";
+  string filePath_end = path_dir + cloud->name + ".ply";
   //---------------------------
 
   //Check for file format ending
@@ -804,10 +804,10 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
     std::ofstream file(filePath);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
+    this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
 
     //Save data
-    this->Exporter_data_ascii(file, subset);
+    this->Exporter_data_ascii(file, cloud);
 
     file.close();
   }
@@ -818,10 +818,10 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
     std::ofstream file(filePath, ios::binary);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
+    this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
 
     //Save data
-    this->Exporter_data_binary(file, subset);
+    this->Exporter_data_binary(file, cloud);
 
     file.close();
 
@@ -837,7 +837,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset, string fileName){
+bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* cloud, string fileName){
   string filePath = path_dir + fileName + ".ply";
   //---------------------------
 
@@ -848,10 +848,10 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
     std::ofstream file(filePath);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
+    this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
 
     //Save data
-    this->Exporter_data_ascii(file, subset);
+    this->Exporter_data_ascii(file, cloud);
 
     file.close();
   }
@@ -866,10 +866,10 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
     std::ofstream file(filePath, ios::binary);
 
     //Save header
-    this->Exporter_header(file, ply_format, subset, subset->xyz.size());
+    this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
 
     //Save data
-    this->Exporter_data_binary(file, subset);
+    this->Exporter_data_binary(file, cloud);
 
     file.close();
 
@@ -883,9 +883,9 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
   return true;
 }
 bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* collection, int ID, int nb){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID);
-  string filePath = path_dir + subset->name + ".tmp";
-  string filePath_end = path_dir + subset->name + ".ply";
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), ID);
+  string filePath = path_dir + cloud->name + ".tmp";
+  string filePath_end = path_dir + cloud->name + ".ply";
   //---------------------------
 
   //Check for file format ending
@@ -900,20 +900,20 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* coll
     for(int i=0; i<nb; i++){
       int ID_subset = ID - i;
       if(ID_subset >= 0){
-        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID - i);
-        nb_point += subset->xyz.size();
+        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), ID - i);
+        nb_point += cloud->xyz.size();
       }
     }
 
     //Save header
-    this->Exporter_header(file, ply_format, subset, nb_point);
+    this->Exporter_header(file, ply_format, cloud, nb_point);
 
     //Save data
     for(int i=0; i<nb; i++){
       int ID_subset = ID - i;
       if(ID_subset >= 0){
-        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID - i);
-        this->Exporter_data_binary(file, subset);
+        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), ID - i);
+        this->Exporter_data_binary(file, cloud);
       }
     }
 
@@ -933,7 +933,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* coll
 }
 
 //Exporter subfunctions
-void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* subset, int nb_point){
+void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* cloud, int nb_point){
   this->point_number = nb_point;
   this->property_number = 3;
   this->property_name.clear();
@@ -941,32 +941,32 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* subset
 
   //Write header
   file << "ply" << endl;
-  file << "ID " << subset->ID << endl;
+  file << "ID " << cloud->ID << endl;
   file << "format " + format + " 1.0" << endl;
   file << "element vertex " << point_number << endl;
   file << "property float x" << endl;
   file << "property float y" << endl;
   file << "property float z" << endl;
-  if(subset->has_color){
+  if(cloud->has_color){
     file << "property uchar red" << endl;
     file << "property uchar green" << endl;
     file << "property uchar blue" << endl;
 
     property_number += 3;
   }
-  if(subset->has_normal != 0){
+  if(cloud->has_normal != 0){
     file << "property float nx" << endl;
     file << "property float ny" << endl;
     file << "property float nz" << endl;
 
     property_number += 3;
   }
-  if(subset->has_intensity != 0){
+  if(cloud->has_intensity != 0){
     file << "property float scalar_Scalar_field" << endl;
 
     property_number++;
   }
-  if(subset->has_timestamp != 0){
+  if(cloud->has_timestamp != 0){
     file << "property float timestamp" << endl;
 
     property_number++;
@@ -975,11 +975,11 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* subset
 
   //---------------------------
 }
-void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* subset){
-  vector<vec3>& XYZ = subset->xyz;
-  vector<vec4>& RGB = subset->rgb;
-  vector<vec3>& N = subset->Nxyz;
-  vector<float>& Is = subset->I;
+void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* cloud){
+  vector<vec3>& XYZ = cloud->xyz;
+  vector<vec4>& RGB = cloud->rgb;
+  vector<vec3>& N = cloud->Nxyz;
+  vector<float>& Is = cloud->I;
   int precision = 6;
   //---------------------------
 
@@ -991,17 +991,17 @@ void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* subset){
     file << setprecision(precision) << XYZ[i].x <<" "<< XYZ[i].y <<" "<< XYZ[i].z <<" ";
 
     //Color
-    if(subset->has_color){
+    if(cloud->has_color){
       file << setprecision(0) << RGB[i].x * 255 <<" "<< RGB[i].y * 255 <<" "<< RGB[i].z * 255 <<" ";
     }
 
     //Normal
-    if(subset->Nxyz.size() != 0){
+    if(cloud->Nxyz.size() != 0){
       file << setprecision(precision) << N[i].x <<" "<< N[i].y <<" "<< N[i].z <<" ";
     }
 
     //Intensity
-    if(subset->I.size() != 0){
+    if(cloud->I.size() != 0){
       float Is_scaled = (Is[i]*4096)-2048;
       file << setprecision(0) << Is_scaled << " ";
     }
@@ -1011,31 +1011,31 @@ void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* subset){
 
   //---------------------------
 }
-void file_PLY::Exporter_data_binary(std::ofstream& file, Cloud* subset){
+void file_PLY::Exporter_data_binary(std::ofstream& file, Cloud* cloud){
   //---------------------------
 
   //Prepare data writing by blocks
-  int block_size = property_number * subset->xyz.size() * sizeof(float);
+  int block_size = property_number * cloud->xyz.size() * sizeof(float);
   char* block_data = new char[block_size];
 
   //Convert decimal data into binary data
   int offset = 0;
-  for (int i=0; i<subset->xyz.size(); i++){
+  for (int i=0; i<cloud->xyz.size(); i++){
     //Location
     for(int j=0; j<3; j++){
-      memcpy(block_data + offset, &subset->xyz[i][j], sizeof(float));
+      memcpy(block_data + offset, &cloud->xyz[i][j], sizeof(float));
       offset += sizeof(float);
     }
 
     //Intensity
-    if(subset->has_intensity){
-      memcpy(block_data + offset, &subset->I[i], sizeof(float));
+    if(cloud->has_intensity){
+      memcpy(block_data + offset, &cloud->I[i], sizeof(float));
       offset += sizeof(float);
     }
 
     //Timestamp
-    if(subset->has_timestamp){
-      memcpy(block_data + offset, &subset->ts[i], sizeof(float));
+    if(cloud->has_timestamp){
+      memcpy(block_data + offset, &cloud->ts[i], sizeof(float));
       offset += sizeof(float);
     }
   }

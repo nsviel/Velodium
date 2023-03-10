@@ -35,9 +35,9 @@ public:
   //Extract / Cutting function
   void fct_extractCloud(Collection* collection);
   void fct_extractSelected(Collection* collection);
-  void fct_cutCloud(Cloud* subset);
+  void fct_cutCloud(Cloud* cloud);
   void fct_cutCloud_all();
-  void fct_selectPart(Cloud* subset, vec3 min, vec3 max);
+  void fct_selectPart(Cloud* cloud, vec3 min, vec3 max);
   void supress_selectedpart(subpart* part);
 
   //Merging function
@@ -46,7 +46,7 @@ public:
   void fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2);
 
   //Selection function
-  void fct_highlighting(Cloud* subset, Cloud* list_obj_init);
+  void fct_highlighting(Cloud* cloud, Cloud* list_obj_init);
   void set_AABB_min(vec3 min_in);
   void set_AABB_max(vec3 max_in);
 

@@ -48,7 +48,7 @@ void Onthefly::compute_onthefly(Collection* collection, int ID){
     vector<string>& list_path = collection->list_otf_path;
     list<int>& list_id = collection->list_otf_loaded;
 
-    //Check if the subset is already loaded
+    //Check if the cloud is already loaded
     bool already_load = false;
     for(auto i=list_id.begin(); i!=list_id.end(); i++){
       if(*i == ID){
@@ -62,10 +62,10 @@ void Onthefly::compute_onthefly(Collection* collection, int ID){
       if(ok) list_id.push_back(ID);
     }
 
-    //If too mush subset, remove the last one
+    //If too mush cloud, remove the last one
     if(collection->list_obj.size() > range){
-      Cloud* subset = (Cloud*)collection->get_obj(0);
-      list_id.remove(subset->ID);
+      Cloud* cloud = (Cloud*)collection->get_obj(0);
+      list_id.remove(cloud->ID);
       collection->obj_remove_last();
     }
   }

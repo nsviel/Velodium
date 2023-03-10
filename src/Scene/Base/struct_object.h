@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-struct Object_{ //Cloud subset / part
+struct Object_{ //Cloud cloud / part
   //---------------------------
 
   Object_();

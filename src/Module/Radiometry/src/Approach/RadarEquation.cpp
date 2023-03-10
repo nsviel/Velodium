@@ -18,10 +18,10 @@ RadarEquation::RadarEquation(){
 RadarEquation::~RadarEquation(){}
 
 void RadarEquation::compute_RadarEquation(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cosIt = subset->cosIt;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
+  vector<float>& cosIt = cloud->cosIt;
   int size = Is.size();
   Ic.clear();
   //---------------------------
@@ -36,10 +36,10 @@ void RadarEquation::compute_RadarEquation(Collection* collection){
   this->plot_intensityCorrected(cloud);
 }
 void RadarEquation::compute_IR2bycosIt(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
-  vector<float>& cosIt = subset->cosIt;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
+  vector<float>& cosIt = cloud->cosIt;
   int size = Is.size();
   Ic.clear();
   //---------------------------
@@ -54,9 +54,9 @@ void RadarEquation::compute_IR2bycosIt(Collection* collection){
   this->plot_intensityCorrected(cloud);
 }
 void RadarEquation::compute_IbyR2(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
 
   float R_ref = 6.0f;
   int size = Is.size();
@@ -73,9 +73,9 @@ void RadarEquation::compute_IbyR2(Collection* collection){
   this->plot_intensityCorrected(cloud);
 }
 void RadarEquation::compute_IbyCosIt(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& cosIt = subset->cosIt;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& cosIt = cloud->cosIt;
   int size = Is.size();
   Ic.clear();
   //---------------------------
@@ -92,8 +92,8 @@ void RadarEquation::compute_IbyCosIt(Collection* collection){
 
 //Plotting functions
 void RadarEquation::plot_intensityCorrected(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   //---------------------------
 
   plotManager->plot_2histograms(Is, Ic);

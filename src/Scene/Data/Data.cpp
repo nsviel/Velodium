@@ -12,3 +12,22 @@ Data::Data(){
 
   //---------------------------
 }
+
+void Data::create_new_collection(std::string name){
+  //---------------------------
+
+  //Check if there is not any other collection with this name
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* col = *next(list_collection->begin(), i);
+
+    if(col->name == name){
+      return;
+    }
+  }
+
+  //If ok, create it
+  Collection* col_new = new Collection(name);
+  list_collection->push_back(col_new);
+
+  //---------------------------
+}

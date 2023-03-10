@@ -67,8 +67,8 @@ void Linearization::algo_reverse(Collection* collection, int method){
 
 //Linearization
 void Linearization::lin_SurfacicGlobal(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   //---------------------------
 
   //Compute coefficients if necessary
@@ -92,8 +92,8 @@ void Linearization::lin_SurfacicGlobal(Collection* collection){
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::lin_SeparationGlobal(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   int size = Is.size();
   float D = 0.24;
   float E = 5.23;
@@ -114,8 +114,8 @@ void Linearization::lin_SeparationGlobal(Collection* collection){
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::lin_SurfacicLocal(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   int size = Is.size();
   float D = 0.1513;
   float E = 5.1416;
@@ -138,9 +138,9 @@ void Linearization::lin_SurfacicLocal(Collection* collection){
 
 //Reverse
 void Linearization::rev_SurfacicGlobal(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
-  vector<float>& dist = subset->R;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
+  vector<float>& dist = cloud->R;
   int size = Is.size();
   float A = 1.46;
   float B = 0.21;
@@ -154,8 +154,8 @@ void Linearization::rev_SurfacicGlobal(Collection* collection){
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::rev_SeparationGlobal(Collection* collection){
-  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
+  vector<float>& Is = cloud->I;
   int size = Is.size();
   float A = 1.30;
   float B = 0.20;

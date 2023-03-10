@@ -18,6 +18,9 @@ Glyphs::Glyphs(){
 //  this->list_glyph = new list<Glyph*>;
   this->ID_glyph = 0;
 
+  //data->create_new_collection("glyph");
+
+
   //---------------------------
 }
 Glyphs::~Glyphs(){

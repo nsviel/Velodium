@@ -602,8 +602,8 @@ void GUI_Slam::state_SLAM(){
 
   if(sceneManager->get_is_list_empty() == false){
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    Frame* frame = &subset->frame;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    Frame* frame = &cloud->frame;
 
     is_slam_made = frame->is_slam_made;
     time = frame->time_slam;
@@ -630,8 +630,8 @@ void GUI_Slam::state_localmap(){
 
   if(sceneManager->get_is_list_empty() == false){
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    Frame* frame = &subset->frame;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    Frame* frame = &cloud->frame;
 
     map_size_abs = frame->map_size_abs;
     map_size_rlt = frame->map_size_rlt;
@@ -675,8 +675,8 @@ void GUI_Slam::state_transformation(){
 
   if(sceneManager->get_is_list_empty() == false){
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    Frame* frame = &subset->frame;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    Frame* frame = &cloud->frame;
 
     trans_b_rlt = frame->trans_b_rlt;
     rotat_b_rlt = frame->rotat_b_rlt;

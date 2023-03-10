@@ -74,17 +74,17 @@ void CT_ICP::algo(Collection* collection){
 	int index_frame = 0;
 
 	for(int i=0; i<collection->nb_obj; i++){
-		Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
+		Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
 
-		// subset to local format
+		// cloud to local format
 		std::vector<Point3D> frame;
-		for(int j=0; j<subset->xyz.size(); j++){
+		for(int j=0; j<cloud->xyz.size(); j++){
 			Point3D new_point;
-			new_point.raw_pt[0] = subset->xyz[j].x;
-			new_point.raw_pt[1] = subset->xyz[j].y;
-			new_point.raw_pt[2] = subset->xyz[j].z;
+			new_point.raw_pt[0] = cloud->xyz[j].x;
+			new_point.raw_pt[1] = cloud->xyz[j].y;
+			new_point.raw_pt[2] = cloud->xyz[j].z;
 			new_point.pt = new_point.raw_pt;
-			new_point.timestamp = subset->ts[j];
+			new_point.timestamp = cloud->ts[j];
 			new_point.index_frame = index_frame;
 
 			double r = new_point.raw_pt.norm();
@@ -159,11 +159,11 @@ void CT_ICP::algo(Collection* collection){
 			}
 
 			//Update frame
-			for(int j=0; j<subset->xyz.size(); j++){
+			for(int j=0; j<cloud->xyz.size(); j++){
 				Eigen::Vector3d point;
-				point << subset->xyz[j].x, subset->xyz[j].y, subset->xyz[j].z;
+				point << cloud->xyz[j].x, cloud->xyz[j].y, cloud->xyz[j].z;
 				point = trajectory[index_frame].center_R * point + trajectory[index_frame].center_t;
-				subset->xyz[j] = vec3(point(0), point(1), point(2));
+				cloud->xyz[j] = vec3(point(0), point(1), point(2));
 			}
 		}
 
@@ -195,22 +195,22 @@ void CT_ICP::algo(Collection* collection){
 
 	//---------------------------
 }
-void CT_ICP::algo(Cloud* subset){
-	if(subset == nullptr) return;
+void CT_ICP::algo(Cloud* cloud){
+	if(cloud == nullptr) return;
 	//---------------------------
 
 	TrajectoryFrame traj;
 	trajectory.push_back(traj);
 
 	vector<Point3D> frame;
-	//this->do_truc(subset, frame);
-	for(int j=0; j<subset->xyz.size(); j++){
+	//this->do_truc(cloud, frame);
+	for(int j=0; j<cloud->xyz.size(); j++){
 		Point3D new_point;
-		new_point.raw_pt[0] = subset->xyz[j].x;
-		new_point.raw_pt[1] = subset->xyz[j].y;
-		new_point.raw_pt[2] = subset->xyz[j].z;
+		new_point.raw_pt[0] = cloud->xyz[j].x;
+		new_point.raw_pt[1] = cloud->xyz[j].y;
+		new_point.raw_pt[2] = cloud->xyz[j].z;
 		new_point.pt = new_point.raw_pt;
-		new_point.timestamp = subset->ts[j];
+		new_point.timestamp = cloud->ts[j];
 		new_point.index_frame = index_frame;
 
 		double r = new_point.raw_pt.norm();
@@ -291,15 +291,15 @@ void CT_ICP::algo(Cloud* subset){
 		}
 
 		//Update frame
-		for(int j=0; j<subset->xyz.size(); j++){
+		for(int j=0; j<cloud->xyz.size(); j++){
 			Eigen::Vector3d point;
-			point << subset->xyz[j].x, subset->xyz[j].y, subset->xyz[j].z;
+			point << cloud->xyz[j].x, cloud->xyz[j].y, cloud->xyz[j].z;
 			point = trajectory[index_frame].center_R * point + trajectory[index_frame].center_t;
-			subset->xyz[j] = vec3(point(0), point(1), point(2));
+			cloud->xyz[j] = vec3(point(0), point(1), point(2));
 		}
-		subset->pose_T = trajectory[index_frame].center_t;
-		subset->pose_R = trajectory[index_frame].center_R;
-		subset->root = vec3(subset->pose_T(0), subset->pose_T(1), subset->pose_T(2));
+		cloud->pose_T = trajectory[index_frame].center_t;
+		cloud->pose_R = trajectory[index_frame].center_R;
+		cloud->root = vec3(cloud->pose_T(0), cloud->pose_T(1), cloud->pose_T(2));
 	}
 
 	//Update Voxel Map
@@ -338,16 +338,16 @@ void CT_ICP::reset(){
 }
 
 // Algo functions
-void CT_ICP::do_truc(Cloud* subset, vector<Point3D>& frame){
+void CT_ICP::do_truc(Cloud* cloud, vector<Point3D>& frame){
 	//---------------------------
 
-	for(int j=0; j<subset->xyz.size(); j++){
+	for(int j=0; j<cloud->xyz.size(); j++){
 		Point3D new_point;
-		new_point.raw_pt[0] = subset->xyz[j].x;
-		new_point.raw_pt[1] = subset->xyz[j].y;
-		new_point.raw_pt[2] = subset->xyz[j].z;
+		new_point.raw_pt[0] = cloud->xyz[j].x;
+		new_point.raw_pt[1] = cloud->xyz[j].y;
+		new_point.raw_pt[2] = cloud->xyz[j].z;
 		new_point.pt = new_point.raw_pt;
-		new_point.timestamp = subset->ts[j];
+		new_point.timestamp = cloud->ts[j];
 		new_point.index_frame = index_frame;
 
 		double r = new_point.raw_pt.norm();

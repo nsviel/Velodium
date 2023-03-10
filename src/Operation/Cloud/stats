@@ -27,11 +27,11 @@ if(ImGui::Button("cos(It)", ImVec2(100,0))){
 
 //Sub functions
 void MOD_cloud::cloud_stats_location(Collection* collection){
-  Cloud* subset = (Cloud*)collection->selected_obj;
-  vector<vec3>& XYZ = subset->xyz;
-  vec3 XYZ_COM = subset->COM;
-  vec3 XYZ_Min = subset->min;
-  vec3 XYZ_Max = subset->max;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
+  vector<vec3>& XYZ = cloud->xyz;
+  vec3 XYZ_COM = cloud->COM;
+  vec3 XYZ_Min = cloud->min;
+  vec3 XYZ_Max = cloud->max;
   //---------------------------
 
   vector<float> X, Y, Z;
@@ -42,7 +42,7 @@ void MOD_cloud::cloud_stats_location(Collection* collection){
   }
 
   cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
+  cout<<"Name : "<<cloud->name<<endl;
 
   if(XYZ.size() != 0){
     cout<<"___XYZ___"<<endl;
@@ -56,12 +56,12 @@ void MOD_cloud::cloud_stats_location(Collection* collection){
   }
 }
 void MOD_cloud::cloud_stats_intensity(Collection* collection){
-  Cloud* subset = (Cloud*)collection->selected_obj;
-  vector<float>& Is = subset->I;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
+  vector<float>& Is = cloud->I;
   //---------------------------
 
   cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
+  cout<<"Name : "<<cloud->name<<endl;
 
   if(Is.size() != 0){
     cout<<"___Is___"<<endl;
@@ -75,16 +75,16 @@ void MOD_cloud::cloud_stats_intensity(Collection* collection){
   }
 }
 void MOD_cloud::cloud_stats_distance(Collection* collection){
-  Cloud* subset = (Cloud*)collection->selected_obj;
-  vector<float>& dist = subset->R;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
+  vector<float>& dist = cloud->R;
   //---------------------------
 
   cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
+  cout<<"Name : "<<cloud->name<<endl;
 
   //Distance
   if(dist.size() == 0){
-    attribManager->compute_Distances(subset);
+    attribManager->compute_Distances(cloud);
   }
   cout<<"___Dist___"<<endl;
   cout<<"Min : "<<fct_min(dist)<<endl;
@@ -94,17 +94,17 @@ void MOD_cloud::cloud_stats_distance(Collection* collection){
   cout<<"__________"<<endl;
 }
 void MOD_cloud::cloud_stats_cosIt(Collection* collection){
-  Cloud* subset = (Cloud*)collection->selected_obj;
-  vector<float>& cosIt =  subset->cosIt;
-  vector<float>& It =  subset->It;
+  Cloud* cloud = (Cloud*)collection->selected_obj;
+  vector<float>& cosIt =  cloud->cosIt;
+  vector<float>& It =  cloud->It;
   //---------------------------
 
   cout<<"---------"<<endl;
-  cout<<"Name : "<<subset->name<<endl;
+  cout<<"Name : "<<cloud->name<<endl;
 
   //Angle d'incidence
   if(cosIt.size() == 0 || It.size() == 0){
-    attribManager->compute_cosIt(subset);
+    attribManager->compute_cosIt(cloud);
   }
   cout<<"___cosIt___"<<endl;
   cout<<"Min : "<<fct_min(cosIt)<<endl;

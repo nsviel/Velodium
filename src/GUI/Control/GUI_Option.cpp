@@ -183,9 +183,9 @@ void GUI_option::option_glyph(){
   int* tree_level = treeObject->get_tree_level();
   ImGui::PushItemWidth(75);
   if(ImGui::DragInt("##458", tree_level, 1, 1, 50, "%d")){
-    Cloud* subset = (Cloud*)collection->selected_obj;
-    treeObject->update_tree(subset);
-    objectManager->update_object(&subset->glyphs["tree"]);
+    Cloud* cloud = (Cloud*)collection->selected_obj;
+    treeObject->update_tree(cloud);
+    objectManager->update_object(&cloud->glyphs["tree"]);
   }
   ImGui::NextColumn();
 
@@ -241,7 +241,7 @@ void GUI_option::option_mode(){
 void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Collection* collection = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)collection->selected_obj;
+    Cloud* cloud = (Cloud*)collection->selected_obj;
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
 
@@ -258,9 +258,9 @@ void GUI_option::option_parameter(){
       if(!sceneManager->get_is_list_empty()){
         Transformation transformManager;
         for(int i=0; i<collection->list_obj.size(); i++){
-          Cloud* subset = (Cloud*)collection->get_obj(i);
-          transformManager.make_scaling(subset, scale);
-          sceneManager->update_buffer_location(subset);
+          Cloud* cloud = (Cloud*)collection->get_obj(i);
+          transformManager.make_scaling(cloud, scale);
+          sceneManager->update_buffer_location(cloud);
         }
       }
     }
@@ -279,31 +279,31 @@ void GUI_option::option_parameter(){
     //Draw type
     static int draw_type = 0;
     if(collection != nullptr){
-      if(subset->draw_type_name == "point"){
+      if(cloud->draw_type_name == "point"){
         draw_type = 0;
       }
-      if(subset->draw_type_name == "line"){
+      if(cloud->draw_type_name == "line"){
         draw_type = 1;
       }
-      if(subset->draw_type_name == "triangle"){
+      if(cloud->draw_type_name == "triangle"){
         draw_type = 2;
       }
-      if(subset->draw_type_name == "quad"){
+      if(cloud->draw_type_name == "quad"){
         draw_type = 3;
       }
     }
     if(ImGui::Combo("Draw type", &draw_type, "Point\0Line\0Triangle\0Quad\0")){
       if(draw_type == 0){
-        subset->draw_type_name = "point";
+        cloud->draw_type_name = "point";
       }
       else if(draw_type == 1){
-        subset->draw_type_name = "line";
+        cloud->draw_type_name = "line";
       }
       else if(draw_type == 2){
-        subset->draw_type_name = "triangle";
+        cloud->draw_type_name = "triangle";
       }
       else if(draw_type == 3){
-        subset->draw_type_name = "quad";
+        cloud->draw_type_name = "quad";
       }
     }
 
@@ -314,21 +314,21 @@ void GUI_option::option_parameter(){
     ImGui::NextColumn();
     ImGui::PushButtonRepeat(true);
     static int point_size = 1;
-    if(subset != nullptr){
-      point_size = subset->draw_point_size;
+    if(cloud != nullptr){
+      point_size = cloud->draw_point_size;
     }
-    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && subset != nullptr){
-      subset->draw_point_size--;
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && cloud != nullptr){
+      cloud->draw_point_size--;
 
-      if(subset->draw_point_size <= 1){
-        subset->draw_point_size = 1;
+      if(cloud->draw_point_size <= 1){
+        cloud->draw_point_size = 1;
       }
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
-    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && subset != nullptr){
-      subset->draw_point_size++;
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && cloud != nullptr){
+      cloud->draw_point_size++;
 
-      point_size = subset->draw_point_size;
+      point_size = cloud->draw_point_size;
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
