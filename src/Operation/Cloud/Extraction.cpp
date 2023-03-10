@@ -281,7 +281,7 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
   //Infos
   subset_out->name = "Merged cloud";
   cloud_out->file_format = ".pts";
-  cloud_out->nb_point = subset_out->xyz.size();
+  /*cloud_out->nb_point = subset_out->xyz.size();
 
   //---------------------------
   if(cloud_out->nb_point > 0){
@@ -290,7 +290,7 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
   }
   else{
     cout<<"No points available"<<endl;
-  }
+  }*/
 }
 void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   //---------------------------
@@ -342,7 +342,7 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   //Infos
   subset_out->name = "Merging_" + subset_1->name + "_" + subset_2->name;
   cloud_out->file_format = ".pts";
-  cloud_out->nb_point = subset_out->xyz.size();
+  /*cloud_out->nb_point = subset_out->xyz.size();
 
   //Create slice if any points
   if(cloud_out->nb_point != 0){
@@ -351,7 +351,7 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   }
   else{
     cout<<"No points available"<<endl;
-  }
+  }*/
 
   //---------------------------
 }
@@ -367,7 +367,7 @@ void Extraction::fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2){
   vector<vec3>& XYZ_2 = subset_2->xyz;
   XYZ_1.insert( XYZ_1.end(), XYZ_2.begin(), XYZ_2.end());
   subset_1_init->xyz = XYZ_1;
-  cloud_1->nb_point = XYZ_1.size();
+  //cloud_1->nb_point = XYZ_1.size();
 
   //Color
   if(subset_1->has_color && subset_2->has_color){

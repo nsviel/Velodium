@@ -152,13 +152,12 @@ void GUI_fileManager::cloudManager(Collection* cloud){
 
 }
 
-void GUI_fileManager::info_cloud(Collection* cloud){
+void GUI_fileManager::info_collection(Collection* collection){
   //---------------------------
 
   //Additional info
-  ImGui::Text("Format: %s", cloud->file_format.c_str());
-  ImGui::Text("Frames: %d", (int)cloud->list_obj.size());
-  ImGui::Text("Points: %d", cloud->nb_point);
+  ImGui::Text("Format: %s", collection->file_format.c_str());
+  ImGui::Text("Frames: %d", (int)collection->list_obj.size());
 
   //---------------------------
 }

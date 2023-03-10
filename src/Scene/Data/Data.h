@@ -32,9 +32,7 @@ private:
   Data& operator=(const Data&) = delete; // disable copy assignment operator
 
 private:
-  std::list<Object_*>* list_object;
   std::list<Collection*>* list_collection;
-  std::list<Mesh*>* list_mesh;
   std::list<Light_*>* list_light;
   std::list<Glyph*>* list_glyph;
 

@@ -92,11 +92,11 @@ void MOD_cloud::mod_cloud_info(){
     ImGui::NextColumn();
 
     //Number of points
-    ImGui::Text("Nb point ");
+  /*  ImGui::Text("Nb point ");
     ImGui::NextColumn();
     string nb_point = thousandSeparator(cloud->nb_point);
     ImGui::Text("%s", nb_point.c_str());
-    ImGui::NextColumn();
+    ImGui::NextColumn();*/
 
     //Root pos
     vec3& root = subset->root;

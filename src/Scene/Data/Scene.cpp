@@ -37,7 +37,7 @@ void Scene::remove_cloud(Collection* cloud){
     //this->selection_setCloud(oID);
 
     //Delete subsets
-    cloud->remove_subset_all();
+    cloud->obj_remove_all();
 
     //Delete cloud
     delete cloud;
@@ -149,30 +149,29 @@ void Scene::reset_cloud_all(){
 void Scene::update_buffer_location(Object_* object){
   //---------------------------
 
-  if(object->obj_type == "collection"){
+  /*
     Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->list_obj.size(); i++){
       Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
       gpuManager->update_buffer_location(subset);
-    }
-  }else{
-    gpuManager->update_buffer_location(object);
-  }
+  */
+
+  gpuManager->update_buffer_location(object);
 
   //---------------------------
 }
 void Scene::update_buffer_color(Object_* object){
   //---------------------------
-
-  if(object->obj_type == "collection"){
+  /*
     Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->list_obj.size(); i++){
       Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
       gpuManager->update_buffer_color(subset);
-    }
-  }else{
+    */
+
+
     gpuManager->update_buffer_color(object);
-  }
+
 
   //---------------------------
 }
@@ -180,18 +179,16 @@ void Scene::update_glyph(Object_* object){
   if(object == nullptr) return;
   //---------------------------
 
-  if(object->obj_type == "collection"){
+
     /*Collection* cloud = (Collection*)object;
     for(int i=0; i<cloud->list_obj.size(); i++){
       Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
       gpuManager->update_buffer_color(subset);
     }*/
-    this->update_cloud_MinMax((Collection*)object);
-    objectManager->update_glyph_cloud((Collection*)object);
-  }else if(object->obj_type == "subset"){
-    this->update_MinMax(object);
-    objectManager->update_glyph_subset((Cloud*)object);
-  }
+
+
+  this->update_MinMax(object);
+  objectManager->update_glyph_subset((Cloud*)object);
 
   //---------------------------
 }

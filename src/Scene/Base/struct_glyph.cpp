@@ -4,7 +4,6 @@
 Glyph::Glyph(){
   //---------------------------
 
-  this->obj_type= "glyph";
   this->is_permanent = false;
 
   //---------------------------

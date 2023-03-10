@@ -320,8 +320,8 @@ void Pather::saving_cloud_same(Collection* cloud){
   //---------------------------
 
   //Save current cloud
-  if(cloud != nullptr && cloud->path_file != ""){
-    saverManager->save_cloud(cloud, cloud->path_file);
+  if(cloud != nullptr && cloud->path_file_load != ""){
+    saverManager->save_cloud(cloud, cloud->path_file_load);
   }
 
   //---------------------------

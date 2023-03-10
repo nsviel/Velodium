@@ -31,7 +31,7 @@ public:
 private:
   //Init function
   void check_data(Data_file* data);
-  void init_cloud_parameter(Collection* cloud, vector<Data_file*> data);
+  void init_collection_parameter(Collection* cloud, vector<Data_file*> data);
   void init_subset_parameter(Cloud* subset, Data_file* data, int ID);
   void init_object_parameter(Object_* object, Data_file* data, int ID);
   void init_random_color();

@@ -4,9 +4,7 @@
 Data::Data(){
   //---------------------------
 
-  this->list_object = new std::list<Object_*>;
   this->list_collection = new std::list<Collection*>;
-  this->list_mesh = new std::list<Mesh*>;
   this->list_light = new std::list<Light_*>;
   this->list_glyph = new std::list<Glyph*>;
 

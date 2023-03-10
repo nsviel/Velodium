@@ -66,7 +66,7 @@ void Onthefly::compute_onthefly(Collection* cloud, int ID){
     if(cloud->list_obj.size() > range){
       Cloud* subset = (Cloud*)cloud->get_obj(0);
       list_id.remove(subset->ID);
-      cloud->remove_subset_last();
+      cloud->obj_remove_last();
     }
   }
 
@@ -83,7 +83,7 @@ void Onthefly::reset(){
       vector<string>& list_path = cloud->list_path;
       list<int>& list_id = cloud->list_loaded;
 
-      cloud->remove_subset_all();
+      cloud->obj_remove_all();
       cloud->list_loaded.clear();
       cloud->ID_obj_last = 0;
       cloud->ID_onthefly = 0;

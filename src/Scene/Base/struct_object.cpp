@@ -14,7 +14,6 @@ Object_::Object_(){
   this->ID = -1;
   this->nb_point = 0;
   this->name = "";
-  this->obj_type = "object";
   this->unicolor = glm::vec4(1.0f);
 
   this->is_visible = true;

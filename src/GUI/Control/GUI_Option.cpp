@@ -314,21 +314,21 @@ void GUI_option::option_parameter(){
     ImGui::NextColumn();
     ImGui::PushButtonRepeat(true);
     static int point_size = 1;
-    if(cloud != nullptr){
-      point_size = cloud->draw_point_size;
+    if(subset != nullptr){
+      point_size = subset->draw_point_size;
     }
-    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && cloud != nullptr){
-      cloud->draw_point_size--;
+    if (ImGui::ArrowButton("##left", ImGuiDir_Left) && subset != nullptr){
+      subset->draw_point_size--;
 
-      if(cloud->draw_point_size <= 1){
-        cloud->draw_point_size = 1;
+      if(subset->draw_point_size <= 1){
+        subset->draw_point_size = 1;
       }
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
-    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && cloud != nullptr){
-      cloud->draw_point_size++;
+    if (ImGui::ArrowButton("##right", ImGuiDir_Right) && subset != nullptr){
+      subset->draw_point_size++;
 
-      point_size = cloud->draw_point_size;
+      point_size = subset->draw_point_size;
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();

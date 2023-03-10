@@ -4,7 +4,6 @@
 Cloud::Cloud(){
   //---------------------------
 
-  this->obj_type = "cloud";
   this->has_intensity = false;
   this->has_timestamp = false;
 

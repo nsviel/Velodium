@@ -39,7 +39,7 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
 
   //Init collection parameters
   this->init_random_color();
-  this->init_cloud_parameter(collection, data);
+  this->init_collection_parameter(collection, data);
 
   for(int i=0; i<data.size(); i++){
     Cloud* cloud = new Cloud();
@@ -170,7 +170,7 @@ void Extractor::check_data(Data_file* data){
 
   //---------------------------
 }
-void Extractor::init_cloud_parameter(Collection* collection, vector<Data_file*> data){
+void Extractor::init_collection_parameter(Collection* collection, vector<Data_file*> data){
   //---------------------------
 
   //Calculate number of point
@@ -181,16 +181,15 @@ void Extractor::init_cloud_parameter(Collection* collection, vector<Data_file*> 
 
   //General information
   string path = data[0]->path_file;
-  collection->path_file = path;
+  collection->path_file_load = path;
   collection->name = get_name_from_path(path);
   collection->file_format = get_format_from_path(path);
 
   collection->is_visible = true;
-  collection->nb_point = nb_point;
   collection->nb_obj = data.size();
 
   collection->unicolor = color_rdm;
-  collection->path_save = get_path_abs_build() + "../media/data/";
+  collection->path_file_save = get_path_abs_build() + "../media/data/";
 
   //---------------------------
 }

@@ -7,21 +7,23 @@ Collection::Collection(){
   //IDs
   this->ID_col_perma = 0;
   this->ID_col_order = 0;
+  this->ID_obj_selected = 0;
+  this->ID_obj_last = 0;
+  this->ID_onthefly = 0;
 
   //Info
-  this->obj_type = "collection";
+  this->name = "";
+  this->file_format = "";
+  this->path_file_load = "";
+  this->path_file_save = "";
   this->lidar_model = "";
+
   this->is_visible = true;
   this->is_heatmap = false;
   this->is_boxed = false;
-
-  //Onthefly
   this->is_onthefly = false;
-  this->ID_onthefly = 0;
 
-  //Subset
-  this->ID_obj_selected = 0;
-  this->ID_obj_last = 0;
+  //Object
   this->nb_obj = 0;
   this->selected_obj = nullptr;
 
@@ -29,7 +31,7 @@ Collection::Collection(){
 }
 
 //Add / remove object
-void Collection::add_new_subset(Object_* object){
+void Collection::obj_add_new(Object_* object){
   //---------------------------
 
   //Initialize parameters
@@ -49,7 +51,7 @@ void Collection::add_new_subset(Object_* object){
 
   //---------------------------
 }
-void Collection::remove_subset_last(){
+void Collection::obj_remove_last(){
   //---------------------------
 
   //Get list_obj object
@@ -76,12 +78,12 @@ void Collection::remove_subset_last(){
   //---------------------------
   this->nb_obj = list_obj.size();
 }
-void Collection::remove_subset_all(){
+void Collection::obj_remove_all(){
   int size = list_obj.size();
   //---------------------------
 
   for(int i=0; i<size; i++){
-    this->remove_subset_last();
+    this->obj_remove_last();
   }
 
   //---------------------------

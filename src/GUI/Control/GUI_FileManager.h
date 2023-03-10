@@ -21,7 +21,7 @@ public:
   void fileManager();
   void cloudManager(Collection* cloud);
 
-  void info_cloud(Collection* cloud);
+  void info_collection(Collection* cloud);
   void info_subset(Cloud* subset);
   void info_iconAction(Collection* cloud);
 

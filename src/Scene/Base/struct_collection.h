@@ -15,9 +15,9 @@ struct Collection
 
   //Add / remove functions  A REVOIR
   Collection();
-  void add_new_subset(Object_* subset);
-  void remove_subset_all();
-  void remove_subset_last();
+  void obj_add_new(Object_* object);
+  void obj_remove_all();
+  void obj_remove_last();
   Frame* get_frame_byID(int querry);
 
   //Stored object retrieval function
@@ -34,23 +34,26 @@ struct Collection
   int ID_col_order; // List order collection ID
   int ID_obj_selected; //Actual selected object ID
   int ID_obj_last; //Last given object ID
+  int ID_onthefly;
 
   //Infos   A REVOIR
-  std::string lidar_model;
   std::string name;
-  std::string path_file;
-  std::string path_save;
+  std::string lidar_model;
   std::string file_format;
-  std::string obj_type;
+  std::string path_file_load;
+  std::string path_file_save;
 
-  int nb_point;
+  glm::vec4 unicolor;
+  glm::vec3 COM;
+  glm::vec3 min;
+  glm::vec3 max;
+
+  bool is_visible;
   bool is_heatmap;
   bool is_boxed;
-  bool is_visible;
-  int draw_point_size;
-  glm::vec4 unicolor;
+  bool is_onthefly;
 
-  //Stored Objects  A REVOIR
+  //Stored Objects
   int nb_obj;
   Object_* selected_obj;
   std::list<Object_*> list_obj;
@@ -58,13 +61,8 @@ struct Collection
   std::list<Object_*> list_obj_init;
 
   //On-the-fly  A REVOIR
-  bool is_onthefly;
-  int ID_onthefly;
   std::vector<std::string> list_path;
   std::list<int> list_loaded;
-  glm::vec3 COM;
-  glm::vec3 min;
-  glm::vec3 max;
 
   //---------------------------
 };
