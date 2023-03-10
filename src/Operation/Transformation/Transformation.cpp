@@ -26,7 +26,7 @@ void Transformation::make_translation(Cloud* cloud, vec3 trans){
 
   //---------------------------
 }
-void Transformation::make_translation(Subset* subset, vec3 trans){
+void Transformation::make_translation(Object_* object, vec3 trans){
   //Translation matrice creation
   glm::mat4 translation(1.0);
   //---------------------------
@@ -36,8 +36,8 @@ void Transformation::make_translation(Subset* subset, vec3 trans){
   translation[2][3] = trans.z;
 
   //---------------------------
-  subset->trans *= translation;
-  this->make_Transformation(subset, subset->root, translation);
+  object->trans *= translation;
+  this->make_Transformation(object, object->root, translation);
 }
 void Transformation::make_translation(vector<vec3>& XYZ, vec3 trans){
   //Translation matrice creation
@@ -105,7 +105,7 @@ void Transformation::make_rotation(Cloud* cloud, vec3 R, string direction){
 
   //---------------------------
 }
-void Transformation::make_rotation(Subset* subset, vec3 COM, vec3 radian){
+void Transformation::make_rotation(Object_* object, vec3 COM, vec3 radian){
   //Rotation matrice creation - rx, ry, rz are in radian !
   glm::mat4 Rx(1.0);
   glm::mat4 Ry(1.0);
@@ -134,8 +134,8 @@ void Transformation::make_rotation(Subset* subset, vec3 COM, vec3 radian){
   glm::mat4 rotation = Rx * Ry * Rz;
 
   //---------------------------
-  subset->rotat *= rotation;
-  this->make_Transformation(subset, COM, rotation);
+  object->rotat *= rotation;
+  this->make_Transformation(object, COM, rotation);
 }
 void Transformation::make_rotation(vector<vec3>& XYZ, vec3 radian){
   //Rotation matrice creation - rx, ry, rz are in radian !
@@ -181,24 +181,6 @@ void Transformation::make_rotation_origin(vector<vec3>& XYZ, mat4 R){
 }
 
 // Scaling
-void Transformation::make_scaling(Cloud* cloud, float Sxyz){
-  //---------------------------
-
-  for(int i=0; i<cloud->nb_subset; i++){
-    Subset* subset = *next(cloud->subset.begin(), i);
-
-    //Reverso old scaling
-    mat4 scaling_reverse(1/subset->scale[0][0]);
-    this->make_Transformation_atomic(subset->xyz, subset->COM, scaling_reverse);
-
-    //Scale to new value
-    mat4 scaling(Sxyz);
-    subset->scale = scaling;
-    this->make_Transformation_atomic(subset->xyz, subset->COM, scaling);
-  }
-
-  //---------------------------
-}
 void Transformation::make_scaling(Object_* object, float Sxyz){
   //---------------------------
 
@@ -215,14 +197,14 @@ void Transformation::make_scaling(Object_* object, float Sxyz){
 }
 
 // Transformation
-void Transformation::make_Transformation(Subset* subset, vec3 COM, mat4 M){
-  vector<vec3>& XYZ = subset->xyz;
-  vector<vec3>& N = subset->Nxyz;
-  vec3& ROOT = subset->root;
+void Transformation::make_Transformation(Object_* object, vec3 COM, mat4 M){
+  vector<vec3>& XYZ = object->xyz;
+  vector<vec3>& N = object->Nxyz;
+  vec3& ROOT = object->root;
   //---------------------------
 
   this->make_Transformation_atomic(XYZ, COM, M);
-  this->make_transformation_attribut(subset, COM, M);
+  this->make_transformation_attribut(object, COM, M);
   this->make_Transformation_point(ROOT, COM, M);
   //this->make_Transformation_normal(N, M);
 
@@ -261,8 +243,8 @@ void Transformation::make_Transformation_normal(vector<vec3>& N, mat4 Transforma
 
   //---------------------------
 }
-mat4 Transformation::make_transformation_attribut(Subset* subset, vec3 COM, mat4 transformation){
-  mat4& M = subset->transformation;
+mat4 Transformation::make_transformation_attribut(Object_* object, vec3 COM, mat4 transformation){
+  mat4& M = object->transformation;
   //---------------------------
 
   M[0][3] -= COM.x;

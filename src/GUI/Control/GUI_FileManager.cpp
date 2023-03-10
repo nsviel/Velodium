@@ -103,10 +103,7 @@ void GUI_fileManager::fileManager(){
 }
 void GUI_fileManager::cloudManager(Cloud* cloud){
   Cloud* cloud_selected = sceneManager->get_selected_cloud();
-  if(cloud_selected == nullptr) {
-    say("nullptr");
-    return;
-  }
+  if(cloud_selected == nullptr) {}
   //-------------------------------
 
   ImGuiTreeNodeFlags node_flags;

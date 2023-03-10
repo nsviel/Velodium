@@ -107,7 +107,7 @@ void MOD_camera::cam_info(){
   ImGui::Text("Model-View matrix");
   ImGui::SameLine();
   if(ImGui::Button("Print")){
-    sayMat4(cam_pos);
+    say(cam_pos);
   }
   ImGui::Columns(4, "Proj");
   for(int i=0;i<4;i++){

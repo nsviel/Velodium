@@ -23,6 +23,9 @@ Light::Light(){
   this->data = Data::get_instance();
 
   //---------------------------
+
+
+  //VOID POURQUOI DYNAMIC CLOUD MARCHE PLUS !!!!
 }
 Light::~Light(){}
 

@@ -43,7 +43,7 @@ void Onthefly::update_configuration(){
 }
 void Onthefly::compute_onthefly(Cloud* cloud, int ID){
   //---------------------------
-
+say("----");
   if(cloud->is_onthefly){
     vector<string>& list_path = cloud->list_path;
     list<int>& list_id = cloud->list_loaded;
@@ -55,7 +55,7 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
         already_load = true;
       }
     }
-
+say(list_id);
     //If not, load it
     if(already_load == false && ID < list_path.size() && ID >= cloud->ID_onthefly){
       bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[ID]);
@@ -64,12 +64,12 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
 
     //If too mush subset, remove the last one
     if(cloud->subset.size() > range){
-      Subset* subset = *next(cloud->subset.begin(), 0);
+      Subset* subset = cloud->get_subset(0);
       list_id.remove(subset->ID);
       cloud->remove_subset_last();
     }
   }
-
+sayHello();
   //---------------------------
 }
 void Onthefly::reset(){
