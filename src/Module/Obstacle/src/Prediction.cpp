@@ -58,8 +58,8 @@ bool* Prediction::runtime_prediction(){
 
 //Subfunctions
 void Prediction::compute_prediction(string path){
-  Collection* cloud = sceneManager->get_selected_collection();
-  if(cloud == nullptr){
+  Collection* collection = sceneManager->get_selected_collection();
+  if(collection == nullptr){
     return;
   }
   //---------------------------
@@ -68,8 +68,8 @@ void Prediction::compute_prediction(string path){
   int frame_ID = parse_frame_ID(path);
 
   //For the subset with same name
-  for(int i=0; i<cloud->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
+  for(int i=0; i<collection->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)collection->get_obj(i);
 
     if(subset->ID == frame_ID){
       this->parse_json_prediction(subset, path);
@@ -84,8 +84,8 @@ void Prediction::compute_prediction(string path){
 
   //---------------------------
 }
-void Prediction::compute_prediction(Collection* cloud, vector<string> path_vec){
-  if(cloud == nullptr) return;
+void Prediction::compute_prediction(Collection* collection, vector<string> path_vec){
+  if(collection == nullptr) return;
   //---------------------------
 
   for(int i=0; i<path_vec.size(); i++){
@@ -95,8 +95,8 @@ void Prediction::compute_prediction(Collection* cloud, vector<string> path_vec){
     int frame_ID = parse_frame_ID(path_file);
 
     //For the subset with same name
-    for(int j=0; j<cloud->list_obj.size(); j++){
-      Cloud* subset = (Cloud*)cloud->get_obj(j);
+    for(int j=0; j<collection->list_obj.size(); j++){
+      Cloud* subset = (Cloud*)collection->get_obj(j);
 
       if(subset->ID == frame_ID){
         this->parse_json_prediction(subset, path_file);
@@ -107,16 +107,16 @@ void Prediction::compute_prediction(Collection* cloud, vector<string> path_vec){
 
   //---------------------------
 }
-void Prediction::compute_groundTruth(Collection* cloud, string path_file){
-  if(cloud == nullptr) return;
+void Prediction::compute_groundTruth(Collection* collection, string path_file){
+  if(collection == nullptr) return;
   //---------------------------
 
   //Retrieve prediction frame ID
   int frame_ID = parse_frame_ID(path_file);
 
   //For the subset with same name
-  for(int i=0; i<cloud->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
+  for(int i=0; i<collection->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)collection->get_obj(i);
 
     if(subset->ID == frame_ID){
       this->parse_json_groundTruth(subset, path_file);
@@ -125,8 +125,8 @@ void Prediction::compute_groundTruth(Collection* cloud, string path_file){
 
   //---------------------------
 }
-void Prediction::compute_groundTruth(Collection* cloud, vector<string> path_vec){
-  if(cloud == nullptr) return;
+void Prediction::compute_groundTruth(Collection* collection, vector<string> path_vec){
+  if(collection == nullptr) return;
   //---------------------------
 
   for(int i=0; i<path_vec.size(); i++){
@@ -136,8 +136,8 @@ void Prediction::compute_groundTruth(Collection* cloud, vector<string> path_vec)
     int frame_ID = parse_frame_ID(path_file);
 
     //For the subset with same name
-    for(int j=0; j<cloud->list_obj.size(); j++){
-      Cloud* subset = (Cloud*)cloud->get_obj(j);
+    for(int j=0; j<collection->list_obj.size(); j++){
+      Cloud* subset = (Cloud*)collection->get_obj(j);
 
       if(subset->ID == frame_ID){
         this->parse_json_groundTruth(subset, path_file);

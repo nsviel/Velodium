@@ -32,7 +32,7 @@ public:
   void add_obstacle_grTr();
 
   //Subfunctions
-  void build_cloud_obstacle(Collection* cloud);
+  void build_cloud_obstacle(Collection* collection);
   void build_obstacleGlyph_gt(Cloud* subset);
   void build_obstacleGlyph_pr(Cloud* subset);
 

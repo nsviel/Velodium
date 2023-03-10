@@ -22,7 +22,7 @@ Surfacic_global_piecewise::Surfacic_global_piecewise(Ref_Operation* opeClass){
 Surfacic_global_piecewise::~Surfacic_global_piecewise(){}
 
 //Method function
-bool Surfacic_global_piecewise::algo(Collection* cloud){
+bool Surfacic_global_piecewise::algo(Collection* collection){
   //-------------------------------
 
   this->algo_nbP();
@@ -140,8 +140,8 @@ bool Surfacic_global_piecewise::algo_fitting(){
   //---------------------------
   return true;
 }
-bool Surfacic_global_piecewise::algo_correction(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+bool Surfacic_global_piecewise::algo_correction(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -292,7 +292,7 @@ void Surfacic_global_piecewise::compute_normalizeCoeffs(VectorXf P){
 
   //-------------------------------
 }
-void Surfacic_global_piecewise::compute_error(Collection* cloud){
+void Surfacic_global_piecewise::compute_error(Collection* collection){
   this->algo(cloud);
   vector<float> map_fit;
   float fit;
@@ -403,9 +403,9 @@ void Surfacic_global_piecewise::plot_SpaceParameter(){
 
   //-------------------------------
 }
-void Surfacic_global_piecewise::plot_intensityCorrection(Collection* cloud){
+void Surfacic_global_piecewise::plot_intensityCorrection(Collection* collection){
   Plotting plotManager;
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   this->algo(cloud);
   //--------------------------------

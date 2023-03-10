@@ -57,9 +57,9 @@ void SLAM_map::update_configuration(){
 
   //---------------------------
 }
-void SLAM_map::update_map(Collection* cloud, int subset_ID){
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
-  Frame* frame = cloud->get_frame_byID(subset_ID);
+void SLAM_map::update_map(Collection* collection, int subset_ID){
+  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Frame* frame = collection->get_frame_byID(subset_ID);
   //---------------------------
 
   //Local map

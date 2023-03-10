@@ -17,8 +17,8 @@ RadarEquation::RadarEquation(){
 }
 RadarEquation::~RadarEquation(){}
 
-void RadarEquation::compute_RadarEquation(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void RadarEquation::compute_RadarEquation(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -35,8 +35,8 @@ void RadarEquation::compute_RadarEquation(Collection* cloud){
   //---------------------------
   this->plot_intensityCorrected(cloud);
 }
-void RadarEquation::compute_IR2bycosIt(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void RadarEquation::compute_IR2bycosIt(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -53,8 +53,8 @@ void RadarEquation::compute_IR2bycosIt(Collection* cloud){
   //---------------------------
   this->plot_intensityCorrected(cloud);
 }
-void RadarEquation::compute_IbyR2(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void RadarEquation::compute_IbyR2(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
 
@@ -72,8 +72,8 @@ void RadarEquation::compute_IbyR2(Collection* cloud){
   //---------------------------
   this->plot_intensityCorrected(cloud);
 }
-void RadarEquation::compute_IbyCosIt(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void RadarEquation::compute_IbyCosIt(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& cosIt = subset->cosIt;
   int size = Is.size();
@@ -91,8 +91,8 @@ void RadarEquation::compute_IbyCosIt(Collection* cloud){
 }
 
 //Plotting functions
-void RadarEquation::plot_intensityCorrected(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void RadarEquation::plot_intensityCorrected(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   //---------------------------
 

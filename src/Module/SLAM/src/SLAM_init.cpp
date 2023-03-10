@@ -24,19 +24,19 @@ SLAM_init::SLAM_init(SLAM* slam){
 SLAM_init::~SLAM_init(){}
 
 //Main functions
-void SLAM_init::compute_initialization(Collection* cloud, int subset_ID){
+void SLAM_init::compute_initialization(Collection* collection, int subset_ID){
   //---------------------------
 
-  this->init_frame_ID(cloud, subset_ID);
-  this->init_frame_ts(cloud, subset_ID);
-  this->init_frame_chain(cloud, subset_ID);
+  this->init_frame_ID(collection, subset_ID);
+  this->init_frame_ts(collection, subset_ID);
+  this->init_frame_chain(collection, subset_ID);
 
   //---------------------------
 }
 
 //Subfunctions
-void SLAM_init::init_frame_ID(Collection* cloud, int subset_ID){
-  Frame* frame = cloud->get_frame_byID(subset_ID);
+void SLAM_init::init_frame_ID(Collection* collection, int subset_ID){
+  Frame* frame = collection->get_frame_byID(subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
@@ -44,13 +44,13 @@ void SLAM_init::init_frame_ID(Collection* cloud, int subset_ID){
   frame->ID = local_map->current_frame_ID;
   local_map->current_frame_ID++;
 
-  //Assign the current cloud to the selected one
-  local_map->linked_cloud_ID = cloud->ID_col_perma;
+  //Assign the current collection to the selected one
+  local_map->linked_col_ID = collection->ID_col_perma;
 
   //---------------------------
 }
-void SLAM_init::init_frame_ts(Collection* cloud, int subset_ID){
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
+void SLAM_init::init_frame_ts(Collection* collection, int subset_ID){
+  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
   Frame* frame = &subset->frame;
   vector<float>& ts = subset->ts;
   //---------------------------
@@ -85,10 +85,10 @@ void SLAM_init::init_frame_ts(Collection* cloud, int subset_ID){
 
   //---------------------------
 }
-void SLAM_init::init_frame_chain(Collection* cloud, int subset_ID){
-  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
-  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
-  Frame* frame_m2 = cloud->get_frame_byID(subset_ID-2);
+void SLAM_init::init_frame_chain(Collection* collection, int subset_ID){
+  Frame* frame_m0 = collection->get_frame_byID(subset_ID);
+  Frame* frame_m1 = collection->get_frame_byID(subset_ID-1);
+  Frame* frame_m2 = collection->get_frame_byID(subset_ID-2);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 

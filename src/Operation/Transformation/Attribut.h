@@ -22,7 +22,7 @@ public:
   //General
   void compute_attribut_all();
   void compute_attribut_list(list<Collection*>* list);
-  void compute_attribut_cloud(Collection* cloud);
+  void compute_attribut_cloud(Collection* collection);
   void compute_attribut_subset(Cloud* subset);
   void compute_distToScanner(Cloud* subset);
   void compute_Distances(Cloud* subset);

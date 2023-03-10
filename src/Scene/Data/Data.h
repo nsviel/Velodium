@@ -24,7 +24,7 @@ public:
   inline std::list<Glyph*>* get_list_glyph(){return list_glyph;}
 
   inline Collection* get_cloud_selected(){return cloud_selected;}
-  inline void set_cloud_selected(Collection* cloud){cloud_selected = cloud;}
+  inline void set_cloud_selected(Collection* collection){cloud_selected = collection;}
 
 private:
   Data();

@@ -300,7 +300,7 @@ void file_PTS::Loader_data(int FILE_config){
 }
 
 //Main exporter functions
-bool file_PTS::Exporter(string path, Collection* cloud){
+bool file_PTS::Exporter(string path, Collection* collection){
   //---------------------------
 
   //Create file
@@ -317,8 +317,8 @@ bool file_PTS::Exporter(string path, Collection* cloud){
   file << fixed;
 
   //Data : xyz (R) (rgb) (nxnynz)
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
     vector<vec3>& XYZ = subset->xyz;
     vector<vec4>& RGB = subset->rgb;
     vector<vec3>& N = subset->Nxyz;

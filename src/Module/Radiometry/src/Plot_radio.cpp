@@ -42,8 +42,8 @@ void Plot_radio::compute_IRmeans(list<Collection*>* list){
 
   //Compute R mean and I mean for each cloud
   for(int i=0;i<list->size();i++){
-    Collection* cloud = *next(list->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+    Collection* collection = *next(list->begin(),i);
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& dist = subset->R;
     vector<float>& It = subset->It;
@@ -67,8 +67,8 @@ void Plot_radio::compute_IsItconcat(list<Collection*>* list){
 
   //Compute R mean and I mean for each cloud
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+    Collection* collection = *next(list->begin(),i);
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& It = subset->It;
 
@@ -96,7 +96,7 @@ void Plot_radio::plot_3Dmap(){
   //---------------------------------
 
   for(int i=0; i<list_dist->size(); i++){
-    Collection* cloud = *next(list_dist->begin(),i);
+    Collection* collection = *next(list_dist->begin(),i);
 
     //Bundle by statistical classes
     bundler->compute_bundleByClass(cloud, 5);
@@ -127,7 +127,7 @@ void Plot_radio::plot_2Dmap(){
   //--------------------------
 
   for(int i=0; i<list_dist->size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& dist = subset->R;
     vector<float>& cosIt = subset->cosIt;
@@ -481,7 +481,7 @@ void Plot_radio::plot_IbyR_all(){
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
     attribManager->compute_attribut_cloud(cloud);
 
     bundler->compute_bundleByClass_maxAngle(cloud, 5, 15);
@@ -765,7 +765,7 @@ void Plot_radio::plot_IbyIt_Spectralon(bool normalised){
   }
 }
 void Plot_radio::plot_IbyCosIt_Sphere(bool normalised){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Bundle by classes
@@ -798,7 +798,7 @@ void Plot_radio::plot_IbyCosIt_Sphere(bool normalised){
   }
 }
 void Plot_radio::plot_IbyIt_Sphere(bool normalised){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Bundle by classes
@@ -867,7 +867,7 @@ void Plot_radio::plot_IbyCosIt_all_Sphere(){
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     //Bundle by statistical classes
     bundler->compute_bundleByClass(cloud, 5);
@@ -1229,7 +1229,7 @@ void Plot_radio::plot_IbyIt_allPercentage_Spectralon_40m(){
 }
 
 //cloud specific
-void Plot_radio::plot_IbyIt_cloud(Collection* cloud){
+void Plot_radio::plot_IbyIt_cloud(Collection* collection){
   attribManager->compute_attribut_cloud(cloud);
   //---------------------------
 
@@ -1266,7 +1266,7 @@ void Plot_radio::plot_IbyIt_cloud(Collection* cloud){
   string log = "IbyIt Intensity: I=" + to_string(fct_mean(Ib)) + " std=" + to_string(fct_std(Ib)) + " CV=" + to_string(fct_cv(Ib));
   console.AddLog("ok", log);
 }
-void Plot_radio::plot_IbyR_cloud(Collection* cloud){
+void Plot_radio::plot_IbyR_cloud(Collection* collection){
   attribManager->compute_attribut_cloud(cloud);
   //---------------------------
 
@@ -1286,9 +1286,9 @@ void Plot_radio::plot_IbyR_cloud(Collection* cloud){
 
   //---------------------------
 }
-void Plot_radio::plot_IbyR_data(Collection* cloud){
+void Plot_radio::plot_IbyR_data(Collection* collection){
   attribManager->compute_attribut_cloud(cloud);
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& R = subset->R;
   //---------------------------
@@ -1311,7 +1311,7 @@ void Plot_radio::plot_IbyItbyR(){
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
 
@@ -1369,7 +1369,7 @@ void Plot_radio::plot_nDbycosIt(){
 
   //Bundle all reference targets
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 5);
     vector<float> Ib_cosIt = bundler->get_Ib_cosIt();
@@ -1413,7 +1413,7 @@ void Plot_radio::plot_JbycosIt(){
 
   //Bundle all reference targets
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 5);
     vector<float> Ib_cosIt = bundler->get_Ib_cosIt();

@@ -202,14 +202,14 @@ void Pather::loading_sampledCloud(string path){
     extractionManager->merging_addCloud(cloud_base, cloud_toAdd);
 
     //Supress nth added part
-    sceneManager->remove_cloud(cloud_toAdd);
+    sceneManager->remove_collection(cloud_toAdd);
 
     //Space sampling the resulting cloud
     filterManager.spaceSampling(cloud_base, spaceSampling);
     cout<<" - "<<cloud_base->nb_point<<" points"<<endl;
 
     //Update final cloud
-    sceneManager->update_glyph(cloud_base);
+    sceneManager->update_glyph(collection_base);
   }
   */
   //---------------------------
@@ -228,9 +228,9 @@ void Pather::loading_treatment(){
     loaderManager->load_cloud(path);
 
     //Save and remove
-    Collection* cloud = data->get_cloud_selected();
-    saverManager->save_cloud(cloud, path);
-    sceneManager->remove_cloud(cloud);
+    Collection* collection = data->get_cloud_selected();
+    saverManager->save_cloud(collection, path);
+    sceneManager->remove_collection(collection);
   }
 
   //---------------------------
@@ -238,15 +238,15 @@ void Pather::loading_treatment(){
 
 //Other functions
 void Pather::saving(){
-  Collection* cloud = data->get_cloud_selected();
+  Collection* collection = data->get_cloud_selected();
   //---------------------------
 
   if(sceneManager->get_is_list_empty() == false){
     if(save_mode == "cloud"){
-      this->saving_cloud(cloud);
+      this->saving_cloud(collection);
     }
     else if(save_mode == "frame"){
-      this->saving_cloud_frame(cloud);
+      this->saving_cloud_frame(collection);
     }
     else if(save_mode == "saved_frame"){
       this->saving_saved_frames();
@@ -255,15 +255,15 @@ void Pather::saving(){
 
   //---------------------------
 }
-void Pather::saving_cloud_frame(Collection* cloud){
+void Pather::saving_cloud_frame(Collection* collection){
   //---------------------------
 
   //Select saving path
   string path_saving = zenity_directory("Save frame", path_current_dir);
 
   //Save current cloud
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
     string path = path_saving + subset->name;
 
     if(subset != nullptr && path_saving != ""){
@@ -287,41 +287,41 @@ void Pather::saving_subset(Cloud* subset){
   //---------------------------
 }
 void Pather::saving_subset_range(int frame_b, int frame_e){
-  Collection* cloud = data->get_cloud_selected();
+  Collection* collection = data->get_cloud_selected();
   //---------------------------
 
   //Select saving path
   string path_saving = zenity_directory("Save", path_current_dir);
 
   //Save current cloud
-  if(cloud != nullptr && path_saving != ""){
+  if(collection != nullptr && path_saving != ""){
     for(int i=frame_b; i<frame_e; i++){
-      Cloud* subset = (Cloud*)cloud->get_obj(i);
+      Cloud* subset = (Cloud*)collection->get_obj(i);
       saverManager->save_subset(subset, ".ply", path_saving);
     }
   }
 
   //---------------------------
 }
-void Pather::saving_cloud(Collection* cloud){
+void Pather::saving_cloud(Collection* collection){
   //---------------------------
 
   //Select saving path
-  string path_saving = zenity_saving(path_current_dir, cloud->name);
+  string path_saving = zenity_saving(path_current_dir, collection->name);
 
-  //Save current cloud
-  if(cloud != nullptr && path_saving != ""){
-    saverManager->save_cloud(cloud, path_saving);
+  //Save current collection
+  if(collection != nullptr && path_saving != ""){
+    saverManager->save_cloud(collection, path_saving);
   }
 
   //---------------------------
 }
-void Pather::saving_cloud_same(Collection* cloud){
+void Pather::saving_cloud_same(Collection* collection){
   //---------------------------
 
-  //Save current cloud
-  if(cloud != nullptr && cloud->path_file_load != ""){
-    saverManager->save_cloud(cloud, cloud->path_file_load);
+  //Save current collection
+  if(collection != nullptr && collection->path_file_load != ""){
+    saverManager->save_cloud(collection, collection->path_file_load);
   }
 
   //---------------------------
@@ -335,10 +335,10 @@ void Pather::saving_cloud_all(){
   //Save all scene clouds
   list<Collection*>* list_collection = sceneManager->get_list_collection();
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
+    Collection* collection = *next(list_collection->begin(),i);
 
-    string pathFile = path_dir + "/" + cloud->name + ".pts";
-    saverManager->save_cloud(cloud, pathFile);
+    string pathFile = path_dir + "/" + collection->name + ".pts";
+    saverManager->save_cloud(collection, pathFile);
   }
 
   //---------------------------

@@ -93,7 +93,7 @@ bool Reference::load_SphereTarget_precomp(){
 
   //Inserte into sphere list
   for(int i=0; i<list_ref->size() ;i++){
-    Collection* cloud = *next(list_ref->begin(),i);
+    Collection* collection = *next(list_ref->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
     list_Sphere->push_back(cloud);
@@ -114,7 +114,7 @@ bool Reference::load_SphereTarget_precomp_80d(){
 
   //Insert into sphere list
   for(int i=0; i<list_ref->size() ;i++){
-    Collection* cloud = *next(list_ref->begin(),i);
+    Collection* collection = *next(list_ref->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
     list_Sphere->push_back(cloud);
@@ -138,7 +138,7 @@ bool Reference::load_SphereTarget_precomp_add80d(){
 
   //Inserte into sphere list
   for(int i=0; i<list_ref->size() ;i++){
-    Collection* cloud = *next(list_ref->begin(),i);
+    Collection* collection = *next(list_ref->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
     list_Sphere->push_back(cloud);
@@ -179,7 +179,7 @@ bool Reference::load_calibrationTargets(list<Collection*>* list, string path_str
     //Load all files
     for(int i=0; i<list_path.size(); i++){
       loaderManager->load_cloud_silent(list_path[i]);
-      Collection* cloud = (Collection*)loaderManager->get_created_object();
+      Collection* collection = (Collection*)loaderManager->get_created_object();
       list->push_back(cloud);
     }
   }
@@ -264,7 +264,7 @@ bool Reference::compute_list(list<Collection*>* list){
 
   //General lists
   for(int i=0; i<list->size() ;i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     if(cloud->name.find("Sphere") != std::string::npos){
       attribManager->compute_attribut_cloud(cloud);
@@ -301,7 +301,7 @@ bool Reference::extract_listSphere(){
   //---------------------------
 
   for(int i=0;i<list_Sphere->size();i++){
-    Collection* cloud = *next(list_Sphere->begin(),i);
+    Collection* collection = *next(list_Sphere->begin(),i);
 
     list_Ref_dist->push_back(cloud);
     list_Ref_angle->push_back(cloud);
@@ -314,7 +314,7 @@ bool Reference::extract_listSpectralon(){
   /*//---------------------------
 
   for(int i=0;i<list_Spectralon->size();i++){
-    Collection* cloud = *next(list_Spectralon->begin(),i);
+    Collection* collection = *next(list_Spectralon->begin(),i);
 
     //xp
     if(cloud->name.find("10p") != std::string::npos){
@@ -472,7 +472,7 @@ bool Reference::extract_listSpectralon(){
 }
 
 //Subfunctions
-bool Reference::is_cloudReference(Collection* cloud){
+bool Reference::is_cloudReference(Collection* collection){
   /*//---------------------------
 
   for(int i=0; i<list_Sphere->size() ;i++){
@@ -498,7 +498,7 @@ Collection* Reference::get_specificSpectralon(string p, string m, bool degree){
   //---------------------------
 
   /*for(int i=0;i<list_Spectralon->size();i++){
-    Collection* cloud = *next(list_Spectralon->begin(),i);
+    Collection* collection = *next(list_Spectralon->begin(),i);
 
     if(cloud->name.find(p) == std::string::npos &&
       cloud->name.find(m) == std::string::npos){
@@ -523,7 +523,7 @@ Collection* Reference::get_specificSphere(string m){
   //---------------------------
 
   /*for(int i=0;i<list_Sphere->size();i++){
-    Collection* cloud = *next(list_Sphere->begin(),i);
+    Collection* collection = *next(list_Sphere->begin(),i);
 
     if(cloud->name.find(m) != std::string::npos){
       cloud_out = cloud;

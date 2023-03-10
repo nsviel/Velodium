@@ -18,7 +18,7 @@ public:
 
 public:
   void update_configuration();
-  void compute_onthefly(Collection* cloud, int ID);
+  void compute_onthefly(Collection* collection, int ID);
   void reset();
 
   inline int get_range(){return range;}

@@ -83,12 +83,12 @@ void GUI_Slam::design_state(){
 }
 void GUI_Slam::design_misc(){
   if(ImGui::BeginTabItem("Misc##123")){
-    Collection* cloud = sceneManager->get_selected_collection();
+    Collection* collection = sceneManager->get_selected_collection();
     //---------------------------
 
     ImGui::PushItemWidth(100);
     if(ImGui::Button("CT-ICP", ImVec2(75,0))){
-      cticpManager->algo(cloud);
+      cticpManager->algo(collection);
       //sceneManager->update_buffer_location(cloud);
     }
 
@@ -126,24 +126,24 @@ void GUI_Slam::design_option(){
 }
 
 void GUI_Slam::parameter_lidar(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Configuration model
   int slam_conf;
-  if(cloud == nullptr){
+  if(collection == nullptr){
     slam_conf = *slam_param->get_predefined_conf();
   }else{
-    if(cloud->lidar_model == "velodyne_vlp16"){
+    if(collection->lidar_model == "velodyne_vlp16"){
       slam_conf = 0;
     }
-    else if(cloud->lidar_model == "velodyne_vlp64"){
+    else if(collection->lidar_model == "velodyne_vlp64"){
       slam_conf = 1;
     }
-    else if(cloud->lidar_model == "velodyne_hdl32"){
+    else if(collection->lidar_model == "velodyne_hdl32"){
       slam_conf = 2;
     }
-    else if(cloud->lidar_model == "velodyne_vlp16_reduced"){
+    else if(collection->lidar_model == "velodyne_vlp16_reduced"){
       slam_conf = 3;
     }
   }
@@ -153,16 +153,16 @@ void GUI_Slam::parameter_lidar(){
     slam_param->set_predefined_conf(slam_conf);
 
     if(slam_conf == 0){
-      cloud->lidar_model = "velodyne_vlp16";
+      collection->lidar_model = "velodyne_vlp16";
     }
     else if(slam_conf == 1){
-      cloud->lidar_model = "velodyne_vlp64";
+      collection->lidar_model = "velodyne_vlp64";
     }
     else if(slam_conf == 2){
-      cloud->lidar_model = "velodyne_hdl32";
+      collection->lidar_model = "velodyne_hdl32";
     }
     else if(slam_conf == 3){
-      cloud->lidar_model = "velodyne_vlp16_reduced";
+      collection->lidar_model = "velodyne_vlp16_reduced";
     }
   }
 
@@ -221,27 +221,27 @@ void GUI_Slam::parameter_glyph(){
 }
 void GUI_Slam::parameter_offline(){
   if(ImGui::TreeNode("Offline##tree")){
-    Collection* cloud = sceneManager->get_selected_collection();
+    Collection* collection = sceneManager->get_selected_collection();
     //---------------------------
 
     //Compute algorithm
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
     if(ImGui::Button("Compute", ImVec2(item_width,0))){
-      if(cloud != nullptr){
-        sceneManager->reset_cloud(cloud);
+      if(collection != nullptr){
+        sceneManager->reset_collection(collection);
         //slamManager->compute_slam_offline(cloud);
 
         //sceneManager->update_buffer_location(cloud);
-        //sceneManager->update_glyph(cloud);
+        //sceneManager->update_glyph(collection);
       }
     }
     ImGui::PopStyleColor(1);
 
     //Number of frame to compute
-    if(cloud != nullptr){
-      static int frame_max = cloud->nb_obj;
+    if(collection != nullptr){
+      static int frame_max = collection->nb_obj;
       ImGui::SetNextItemWidth(item_width);
-      if(ImGui::SliderInt("Number frame", &frame_max, 1, cloud->nb_obj)){
+      if(ImGui::SliderInt("Number frame", &frame_max, 1, collection->nb_obj)){
         //slamManager->set_offline_ID_max(frame_max);
       }
     }else{
@@ -601,8 +601,8 @@ void GUI_Slam::state_SLAM(){
   float time = 0;
 
   if(sceneManager->get_is_list_empty() == false){
-    Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = sceneManager->get_selected_collection();
+    Cloud* subset = (Cloud*)collection->selected_obj;
     Frame* frame = &subset->frame;
 
     is_slam_made = frame->is_slam_made;
@@ -629,8 +629,8 @@ void GUI_Slam::state_localmap(){
   int nb_keypoint = 0;
 
   if(sceneManager->get_is_list_empty() == false){
-    Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = sceneManager->get_selected_collection();
+    Cloud* subset = (Cloud*)collection->selected_obj;
     Frame* frame = &subset->frame;
 
     map_size_abs = frame->map_size_abs;
@@ -674,8 +674,8 @@ void GUI_Slam::state_transformation(){
   vec3 rotat_e_rlt = vec3(0, 0, 0);
 
   if(sceneManager->get_is_list_empty() == false){
-    Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = sceneManager->get_selected_collection();
+    Cloud* subset = (Cloud*)collection->selected_obj;
     Frame* frame = &subset->frame;
 
     trans_b_rlt = frame->trans_b_rlt;

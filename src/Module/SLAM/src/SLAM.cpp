@@ -55,20 +55,20 @@ void SLAM::update_configuration(){
 
   //---------------------------
 }
-bool SLAM::compute_slam(Collection* cloud, int subset_ID){
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
+bool SLAM::compute_slam(Collection* collection, int subset_ID){
+  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
   auto t1 = start_chrono();
-  if(check_condition(cloud, subset_ID) == false) return false;
+  if(check_condition(collection, subset_ID) == false) return false;
   //---------------------------
 
-  slam_init->compute_initialization(cloud, subset_ID);
-  slam_transf->compute_preprocessing(cloud, subset_ID);
-  slam_optim->compute_optimization(cloud, subset_ID);
+  slam_init->compute_initialization(collection, subset_ID);
+  slam_transf->compute_preprocessing(collection, subset_ID);
+  slam_optim->compute_optimization(collection, subset_ID);
 
   //---------------------------
   time_slam = stop_chrono(t1);
-  bool success = slam_assess->compute_assessment(cloud, subset_ID, time_slam);
-  this->compute_finalization(cloud, subset_ID, success, time_slam);
+  bool success = slam_assess->compute_assessment(collection, subset_ID, time_slam);
+  this->compute_finalization(collection, subset_ID, success, time_slam);
   return success;
 }
 void SLAM::reset_slam(){
@@ -81,46 +81,46 @@ void SLAM::reset_slam(){
 }
 
 //Sub-functions
-void SLAM::compute_finalization(Collection* cloud, int subset_ID, bool success, float duration){
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
-  Frame* frame = cloud->get_frame_byID(subset_ID);
+void SLAM::compute_finalization(Collection* collection, int subset_ID, bool success, float duration){
+  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Frame* frame = collection->get_frame_byID(subset_ID);
   //---------------------------
 
   //Apply transformation
   if(success){
     slam_transf->transform_subset(subset);
-    slam_map->update_map(cloud, subset_ID);
-    slam_glyph->update_glyph(cloud, subset);
+    slam_map->update_map(collection, subset_ID);
+    slam_glyph->update_glyph(collection, subset);
   //Else reset slam map
   }else{
     frame->reset();
     slam_map->reset_map();
-    this->reset_visibility(cloud, subset_ID);
+    this->reset_visibility(collection, subset_ID);
   }
 
   //Compute SLAM statistiques
-  slam_assess->compute_statistics(cloud, subset_ID, duration);
+  slam_assess->compute_statistics(collection, subset_ID, duration);
   this->print_result();
 
   //---------------------------
 }
-bool SLAM::check_condition(Collection* cloud, int subset_ID){
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
-  Frame* frame = cloud->get_frame_byID(subset_ID);
+bool SLAM::check_condition(Collection* collection, int subset_ID){
+  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Frame* frame = collection->get_frame_byID(subset_ID);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
   //Cloud existence & consistency
-  if(cloud == nullptr){
-    console.AddLog("error" ,"[SLAM] No cloud");
+  if(collection == nullptr){
+    console.AddLog("error" ,"[SLAM] No collection");
     return false;
   }
-  if(cloud->ID_col_perma != local_map->linked_cloud_ID && local_map->linked_cloud_ID != -1){
+  if(collection->ID_col_perma != local_map->linked_col_ID && local_map->linked_col_ID != -1){
     this->reset_slam();
   }
 
   //Subset number & timestamp
-  if(subset_ID >= 2 && cloud->list_obj.size() < 2){
+  if(subset_ID >= 2 && collection->list_obj.size() < 2){
     console.AddLog("error" ,"[SLAM] No enough subsets");
     return false;
   }
@@ -131,7 +131,7 @@ bool SLAM::check_condition(Collection* cloud, int subset_ID){
 
   //Frame already slam computed
   if(frame->is_slam_made == true){
-    slam_glyph->update_glyph(cloud, subset);
+    slam_glyph->update_glyph(collection, subset);
     return false;
   }
 
@@ -147,20 +147,20 @@ bool SLAM::check_condition(Collection* cloud, int subset_ID){
   }
 
   //Check lidar model
-  if(lidar_model != cloud->lidar_model){
-    slam_param->make_config(cloud->lidar_model);
-    this->lidar_model = cloud->lidar_model;
+  if(lidar_model != collection->lidar_model){
+    slam_param->make_config(collection->lidar_model);
+    this->lidar_model = collection->lidar_model;
   }
 
   //---------------------------
   return true;
 }
-void SLAM::reset_visibility(Collection* cloud, int subset_ID){
+void SLAM::reset_visibility(Collection* collection, int subset_ID){
   //---------------------------
 
   //Set visibility just for last subset
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)collection->get_obj(i);
 
     if(subset->ID == subset_ID){
       subset->is_visible = true;

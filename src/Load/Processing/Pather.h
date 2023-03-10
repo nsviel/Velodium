@@ -35,11 +35,11 @@ public:
 
   //Saving functions
   void saving();
-  void saving_cloud_frame(Collection* cloud);
+  void saving_cloud_frame(Collection* collection);
   void saving_subset(Cloud* subset);
   void saving_subset_range(int frame_b, int frame_e);
-  void saving_cloud(Collection* cloud);
-  void saving_cloud_same(Collection* cloud);
+  void saving_cloud(Collection* collection);
+  void saving_cloud_same(Collection* collection);
   void saving_cloud_all();
   void saving_saved_frames();
 

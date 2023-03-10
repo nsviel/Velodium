@@ -42,7 +42,7 @@ void Node_scene::reset(){
   //---------------------------
 
   objectManager->reset_scene_object();
-  sceneManager->reset_cloud_all();
+  sceneManager->reset_collection_all();
 
   //---------------------------
 }

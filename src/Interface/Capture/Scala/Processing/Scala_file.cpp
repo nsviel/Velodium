@@ -61,11 +61,11 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
 
     if(format == "csv"){
       loaderManager->load_cloud_silent(path);
-      Collection* cloud = (Collection*)loaderManager->get_created_object();
-      cloud->path_file_load = allpath[i] + "/" + "scala" + ".csv";
+      Collection* collection = (Collection*)loaderManager->get_created_object();
+      collection->path_file_load = allpath[i] + "/" + "scala" + ".csv";
 
-      for(int j=0; j<cloud->list_obj.size(); j++){
-        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), j);
+      for(int j=0; j<collection->list_obj.size(); j++){
+        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), j);
 
         for(int k=0; k<subset->rgb.size(); k++){
           subset->rgb[k] = vec4(Red, Green, Blue, 1.0f);
@@ -73,7 +73,7 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
 
       }
 
-      clouds.push_back(cloud);
+      clouds.push_back(collection);
     }
   }
 
@@ -94,7 +94,7 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
       subset = new Cloud();
     }
 
-    //jeme cloud
+    //jeme collection
     for(int j=0; j<clouds.size(); j++){
       Cloud* subset_scala = (Cloud*)clouds[j]->get_obj(i);
 
@@ -116,18 +116,18 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
     delete clouds[i];
   }
 
-  //Load final cloud
+  //Load final collection
   loaderManager->load_cloud_creation(cloud_scala);
-  Collection* cloud = (Collection*)loaderManager->get_created_object();
+  Collection* collection = (Collection*)loaderManager->get_created_object();
 
   //---------------------------
-  return cloud;
+  return collection;
 }
-void Scala_file::compute_relativeTimestamp(Collection* cloud){
+void Scala_file::compute_relativeTimestamp(Collection* collection){
   //---------------------------
 
   for(int i=0; i<1; i++){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
+    Cloud* subset = (Cloud*)collection->get_obj(i);
     vector<float>& ts = subset->ts;
 
     float ts_cpt = ts[0];

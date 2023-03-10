@@ -13,19 +13,19 @@ public:
 
 public:
   // Translation
-  void make_translation(Collection* cloud, vec3 trans);
+  void make_translation(Collection* collection, vec3 trans);
   void make_translation(Object_* object, vec3 trans);
   void make_translation(vector<vec3>& XYZ, vec3 trans);
 
   // Rotation
-  mat4 make_rotation(Collection* cloud, vec3 COM, vec3 angles);
-  void make_rotation(Collection* cloud, vec3 R, string direction);
+  mat4 make_rotation(Collection* collection, vec3 COM, vec3 angles);
+  void make_rotation(Collection* collection, vec3 R, string direction);
   void make_rotation(Object_* object, vec3 COM, vec3 angles);
   void make_rotation(vector<vec3>& XYZ, vec3 radian);
   void make_rotation_origin(vector<vec3>& XYZ, mat4 R);
 
   // Scaling
-  void make_scaling(Collection* cloud, float scaling);
+  void make_scaling(Collection* collection, float scaling);
   void make_scaling(Object_* object, float scaling);
 
   // Transformation

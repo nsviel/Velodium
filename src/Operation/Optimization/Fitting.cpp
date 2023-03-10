@@ -13,8 +13,8 @@ void Fitting::Sphere_cloudToCenter_all(list<Collection*>* list_collection){
   //--------------------------
 
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = *next(list_collection->begin(),i);
+    Cloud* subset = (Cloud*)collection->selected_obj;
     this->Sphere_cloudToCenter(subset);
   }
 

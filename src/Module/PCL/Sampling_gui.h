@@ -15,13 +15,13 @@ public:
   ~GUI_sampling();
 
 public:
-  void sampling_gui(Collection* cloud){
+  void sampling_gui(Collection* collection){
     int sizeButton = 150;
 
     //Random sampling
     if(ImGui::Button("Random sampling", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        Cloud* subset = (Cloud*)cloud->selected_obj;
+        Cloud* subset = (Cloud*)collection->selected_obj;
         samplingManager->sampling_random(subset);
       }
     }
@@ -36,7 +36,7 @@ public:
     static float resolution = 0.1f;
     if(ImGui::Button("Space sampling", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        Cloud* subset = (Cloud*)cloud->selected_obj;
+        Cloud* subset = (Cloud*)collection->selected_obj;
         samplingManager->sampling_spaceRadius(subset, resolution);
       }
     }
@@ -46,7 +46,7 @@ public:
     //Outliers filtering
     if(ImGui::Button("Outlier sampling", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        Cloud* subset = (Cloud*)cloud->selected_obj;
+        Cloud* subset = (Cloud*)collection->selected_obj;
         samplingManager->sampling_outlier(subset);
       }
     }
@@ -60,7 +60,7 @@ public:
     //Statistical filtering
     if(ImGui::Button("Statistical sampling", ImVec2(sizeButton,0))){
       if(cloud != nullptr){
-        Cloud* subset = (Cloud*)cloud->selected_obj;
+        Cloud* subset = (Cloud*)collection->selected_obj;
         samplingManager->sampling_statistical(subset);
       }
     }

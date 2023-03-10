@@ -135,11 +135,11 @@ void Object::runtime_glyph_scene(){
 
   //---------------------------
 }
-void Object::runtime_glyph_subset_all(Collection* cloud){
+void Object::runtime_glyph_subset_all(Collection* collection){
   //---------------------------
 
-  for(int j=0; j<cloud->list_obj.size(); j++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), j);
+  for(int j=0; j<collection->list_obj.size(); j++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), j);
 
     //If the subset is visible
     if(subset->is_visible){
@@ -263,7 +263,7 @@ void Object::update_glyph_subset(Cloud* subset){
 
   //Subset normal
   Normal* normal_src = (Normal*)get_glyph_src_byName("normal");
-  normal_src->update_normal_subset(subset);
+  normal_src->update_normal_cloud(subset);
   this->update_object(&subset->glyphs["normal"]);
 
   //Tree
@@ -273,18 +273,18 @@ void Object::update_glyph_subset(Cloud* subset){
 
   //---------------------------
 }
-void Object::update_glyph_cloud(Collection* cloud){
+void Object::update_glyph_collection(Collection* collection){
   //---------------------------
 
   //Update cloud AABB
   Glyph* aabb = get_glyph_by_name("aabb");
   AABB* aabb_src = (AABB*)get_glyph_src_byName("aabb");
-  aabb_src->update_glyph(cloud, aabb);
+  aabb_src->update_glyph(collection, aabb);
   this->update_object(aabb);
 
   //Update cloud subset glyphs
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
     this->update_glyph_subset(subset);
   }
 
@@ -343,28 +343,28 @@ void Object::set_object_visibility(string name, bool val){
   //---------------------------
 
   for (int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
+    Collection* collection = *next(list_collection->begin(),i);
 
     //Set normal glyph visibility
     if(name == "normal"){
-      for(int i=0; i<cloud->nb_obj; i++){
-        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+      for(int i=0; i<collection->nb_obj; i++){
+        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
         Glyph* normal = &subset->glyphs["normal"];
         normal->is_visible = val;
       }
     }
     //Set keypoint glyph visibility
     else if(name == "keypoint"){
-      for(int i=0; i<cloud->nb_obj; i++){
-        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+      for(int i=0; i<collection->nb_obj; i++){
+        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
         Glyph* keypoint = &subset->glyphs["keypoint"];
         keypoint->is_visible = val;
       }
     }
     //Set tree glyph visibility
     else if(name == "tree"){
-      for(int i=0; i<cloud->nb_obj; i++){
-        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+      for(int i=0; i<collection->nb_obj; i++){
+        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
         Glyph* tree = &subset->glyphs["tree"];
         tree->is_visible = val;
       }

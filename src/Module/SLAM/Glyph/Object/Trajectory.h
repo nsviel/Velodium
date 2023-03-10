@@ -13,7 +13,7 @@ public:
 
 public:
   void create();
-  void update(Collection* cloud);
+  void update(Collection* collection);
   void reset();
 
   inline Glyph* get_glyph(){return trajectory;}

@@ -87,13 +87,13 @@ void GUI_Color::option_heatmap(){
 }
 void GUI_Color::heatmap_application(){
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Heatmap");
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Apply heatMap on one cloud
   if(ImGui::Button("Apply", ImVec2(75,0))){
-    if(cloud != nullptr){
-      heatmapManager->make_cloud_heatmap(cloud);
+    if(collection != nullptr){
+      heatmapManager->make_col_heatmap(collection);
     }
   }
   ImGui::SameLine();
@@ -101,7 +101,7 @@ void GUI_Color::heatmap_application(){
   //Heatmap all clouds
   static bool heatAll = false;
   if(ImGui::Button("Apply all", ImVec2(75,0))){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       heatAll = !heatAll;
       heatmapManager->make_heatmap_all(heatAll);
     }

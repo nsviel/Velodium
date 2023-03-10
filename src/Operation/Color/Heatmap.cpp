@@ -54,34 +54,34 @@ void Heatmap::make_heatmap_all(bool is_heatmap){
   //---------------------------
 
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
+    Collection* collection = *next(list_collection->begin(),i);
 
-    cloud->is_heatmap = is_heatmap;
-    this->make_cloud_heatmap(cloud);
+    collection->is_heatmap = is_heatmap;
+    this->make_col_heatmap(collection);
   }
 
   //---------------------------
 }
-void Heatmap::make_cloud_heatmap(Collection* cloud){
+void Heatmap::make_col_heatmap(Collection* collection){
   //---------------------------
 
   //Apply or reverse heatmap for cloud
-  for(int i=0; i<cloud->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
-    Cloud* subset_buf = (Cloud*)cloud->get_obj_buffer(i);
-    Cloud* subset_ini = (Cloud*)cloud->get_obj_init(i);
+  for(int i=0; i<collection->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)collection->get_obj(i);
+    Cloud* subset_buf = (Cloud*)collection->get_obj_buffer(i);
+    Cloud* subset_ini = (Cloud*)collection->get_obj_init(i);
 
     //Apply heatmap
-    if(cloud->is_heatmap == false){
+    if(collection->is_heatmap == false){
       subset_buf->rgb = subset->rgb;
       this->make_subset_heatmap(subset);
-      cloud->is_heatmap = true;
+      collection->is_heatmap = true;
     }
     //Reverse heatmap
     else{
       //this->heatmap_unset(subset);
       subset->rgb = subset_buf->rgb;
-      cloud->is_heatmap = false;
+      collection->is_heatmap = false;
     }
   }
 

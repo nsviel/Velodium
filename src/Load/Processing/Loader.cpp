@@ -127,9 +127,9 @@ bool Loader::load_cloud_onthefly(vector<string> path_vec){
   this->load_insertIntoDatabase(data_vec);
 
   //Save list of file
-  collection->list_path = path_vec;
+  collection->list_otf_path = path_vec;
   collection->is_onthefly = true;
-  collection->ID_onthefly++;
+  collection->ID_obj_otf++;
 
   //---------------------------
   string log = "Loaded on-the-fly cloud";
@@ -401,7 +401,7 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
   //Update list cloud
   //data->set_cloud_selected(object);
   //sceneManager->update_ID_order(list_collection);
-  ////sceneManager->update_glyph(cloud);
+  ////sceneManager->update_glyph(collection);
 
   //Delete raw data
   delete data_file;
@@ -414,7 +414,7 @@ void Loader::load_insertIntoCloud(Data_file* data, Collection* collection){
 
   //Extract data and put in the engine
   extractManager->extract_data(collection, data);
-  collection->ID_onthefly++;
+  collection->ID_obj_otf++;
 
   //---------------------------
 }

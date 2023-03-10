@@ -34,7 +34,7 @@ struct Collection
   int ID_col_order; // List order collection ID
   int ID_obj_selected; //Actual selected object ID
   int ID_obj_last; //Last given object ID
-  int ID_onthefly;
+  int ID_obj_otf; // On the fly ID
 
   //Infos   A REVOIR
   std::string name;
@@ -60,9 +60,9 @@ struct Collection
   std::list<Object_*> list_obj_buffer;
   std::list<Object_*> list_obj_init;
 
-  //On-the-fly  A REVOIR
-  std::vector<std::string> list_path;
-  std::list<int> list_loaded;
+  //On-the-fly
+  std::vector<std::string> list_otf_path;
+  std::list<int> list_otf_loaded;
 
   //---------------------------
 };

@@ -15,13 +15,13 @@ public:
 
 public:
   //Method function
-  bool algo(Collection* cloud);
+  bool algo(Collection* collection);
 
   //Sub-functions
   void algo_nbP();
   MatrixXf algo_ParameterSpace_segmented();
   vec2 algo_searchSegment(float R);
-  void algo_correction(Collection* cloud, MatrixXf list_P);
+  void algo_correction(Collection* collection, MatrixXf list_P);
   void repacking();
 
   //Plotting

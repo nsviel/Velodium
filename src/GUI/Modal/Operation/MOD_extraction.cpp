@@ -49,17 +49,17 @@ void MOD_extraction::design_extractCloud(){
 
 //Specific function
 void MOD_extraction::extract_with_aabb(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Extraction functions
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Extract from AABB manipulators");
   bool* highlightON = extractionManager->get_highlightON();
   if(ImGui::Checkbox("Hightligth", highlightON)){
-    if(cloud != nullptr){
-      Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+    if(collection != nullptr){
+      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, list_obj_init);
     }
   }
@@ -81,39 +81,39 @@ void MOD_extraction::extract_with_aabb(){
   //AABB manipulators
   ImGui::PushAllowKeyboardFocus(false);
   if(ImGui::DragFloatRange2("X", &xmin, &xmax, 0.25f, 0.01f, 100.0f, "%.1f %%", "%.1f %%")){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
       extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-      //glyphManager->update_glyph_object("aabb", cloud);
+      //glyphManager->update_glyph_object("aabb", collection);
     }
   }
   if(ImGui::DragFloatRange2("Y", &ymin, &ymax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
       extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-      //glyphManager->update_glyph_object("aabb", cloud);
+      //glyphManager->update_glyph_object("aabb", collection);
     }
   }
   if(ImGui::DragFloatRange2("Z", &zmin, &zmax, 0.25f, 0.0f, 100.0f, "%.1f %%", "%.1f %%")){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       extractionManager->set_AABB_min(vec3(xmin,ymin,zmin));
       extractionManager->set_AABB_max(vec3(xmax,ymax,zmax));
-      //glyphManager->update_glyph_object("aabb", cloud);
+      //glyphManager->update_glyph_object("aabb", collection);
     }
   }
   ImGui::PopAllowKeyboardFocus();
 
   //Extract a new cloud from AABB manipulators
   if(ImGui::Button("Extract cloud", ImVec2(100,0))){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, list_obj_init);
 
       //Extract cloud
-      extractionManager->fct_extractCloud(cloud);
+      extractionManager->fct_extractCloud(collection);
     }
   }
   ImGui::SameLine();
@@ -124,24 +124,24 @@ void MOD_extraction::extract_with_aabb(){
 
   //Cutting functions
   if(ImGui::Button("Cut", ImVec2(100,0))){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, list_obj_init);
 
-      //Cut cloud
+      //Cut collection
       extractionManager->fct_cutCloud(subset);
     }
   }
   ImGui::SameLine();
   if(ImGui::Button("Cut all cloud", ImVec2(100,0))){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       //Reset color
       *highlightON = false;
-      Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      Cloud* subset = (Cloud*)collection->selected_obj;
+      Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
       extractionManager->fct_highlighting(subset, list_obj_init);
 
       //Cut clouds
@@ -153,15 +153,15 @@ void MOD_extraction::extract_with_aabb(){
   ImGui::Separator();
 }
 void MOD_extraction::extract_with_mouse(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Extract points selected with the mouse frame
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Extract from mouse frame");
   if(ImGui::Button("Extract selected frame", ImVec2(150,0))){
-    if(cloud != nullptr){
-      extractionManager->fct_extractSelected(cloud);
+    if(collection != nullptr){
+      extractionManager->fct_extractSelected(collection);
     }
   }
 
@@ -169,8 +169,8 @@ void MOD_extraction::extract_with_mouse(){
   ImGui::Separator();
 }
 void MOD_extraction::merge_cloud(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Merge and extract two clouds
@@ -179,7 +179,7 @@ void MOD_extraction::merge_cloud(){
     list<Collection*>* list_collection = sceneManager->get_list_collection();
     if(list_collection->size() >= 2){
       //Collection* cloud_2 = sceneManager->get_cloud_next();
-      //extractionManager->fct_merging_newCloud(cloud, cloud_2);
+      //extractionManager->fct_merging_newCloud(collection, cloud_2);
     }
   }
 

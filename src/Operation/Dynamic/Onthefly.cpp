@@ -41,12 +41,12 @@ void Onthefly::update_configuration(){
 
   //---------------------------
 }
-void Onthefly::compute_onthefly(Collection* cloud, int ID){
+void Onthefly::compute_onthefly(Collection* collection, int ID){
   //---------------------------
 
-  if(cloud->is_onthefly){
-    vector<string>& list_path = cloud->list_path;
-    list<int>& list_id = cloud->list_loaded;
+  if(collection->is_onthefly){
+    vector<string>& list_path = collection->list_otf_path;
+    list<int>& list_id = collection->list_otf_loaded;
 
     //Check if the subset is already loaded
     bool already_load = false;
@@ -57,16 +57,16 @@ void Onthefly::compute_onthefly(Collection* cloud, int ID){
     }
 
     //If not, load it
-    if(already_load == false && ID < list_path.size() && ID >= cloud->ID_onthefly){
-      bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[ID]);
+    if(already_load == false && ID < list_path.size() && ID >= collection->ID_obj_otf){
+      bool ok = loaderManager->load_cloud_oneFrame(collection, list_path[ID]);
       if(ok) list_id.push_back(ID);
     }
 
     //If too mush subset, remove the last one
-    if(cloud->list_obj.size() > range){
-      Cloud* subset = (Cloud*)cloud->get_obj(0);
+    if(collection->list_obj.size() > range){
+      Cloud* subset = (Cloud*)collection->get_obj(0);
       list_id.remove(subset->ID);
-      cloud->obj_remove_last();
+      collection->obj_remove_last();
     }
   }
 
@@ -78,26 +78,26 @@ void Onthefly::reset(){
 
   //Reset all clouds
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
-    if(cloud->is_onthefly){
-      vector<string>& list_path = cloud->list_path;
-      list<int>& list_id = cloud->list_loaded;
+    Collection* collection = *next(list_collection->begin(),i);
+    if(collection->is_onthefly){
+      vector<string>& list_path = collection->list_otf_path;
+      list<int>& list_id = collection->list_otf_loaded;
 
-      cloud->obj_remove_all();
-      cloud->list_loaded.clear();
-      cloud->ID_obj_last = 0;
-      cloud->ID_onthefly = 0;
-      cloud->ID_obj_selected = 0;
-      cloud->nb_obj = 0;
+      collection->obj_remove_all();
+      collection->list_otf_loaded.clear();
+      collection->ID_obj_last = 0;
+      collection->ID_obj_otf = 0;
+      collection->ID_obj_selected = 0;
+      collection->nb_obj = 0;
 
-      bool ok = loaderManager->load_cloud_oneFrame(cloud, list_path[0]);
+      bool ok = loaderManager->load_cloud_oneFrame(collection, list_path[0]);
       if(ok) list_id.push_back(0);
     }
   }
 
   // Reset glyph
   Collection* cloud_selected = sceneManager->get_selected_collection();
-  //sceneManager->update_glyph(cloud_selected);
+  //sceneManager->update_glyph(collection_selected);
 
   //---------------------------
 }

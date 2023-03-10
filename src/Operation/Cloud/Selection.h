@@ -36,7 +36,7 @@ public:
   void mark_pointLocation();
   void mark_supressAll();
   bool mark_supressSelectedPoints_all();
-  void mark_supressSelectedPoints(Collection* cloud);
+  void mark_supressSelectedPoints(Collection* collection);
   void mark_supressSelectedPoints(Cloud* subset);
 
   //Mouse interactivity
@@ -50,7 +50,7 @@ public:
 
   //Plane
   void mark_planeCreation();
-  void mark_planeABpoints(Collection* cloud);
+  void mark_planeABpoints(Collection* collection);
   void mark_planeLocation();
 
   //Setters / Getters

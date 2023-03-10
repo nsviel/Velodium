@@ -50,8 +50,8 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
 SLAM_glyph::~SLAM_glyph(){}
 
 //Main function
-void SLAM_glyph::update_glyph(Collection* cloud, Cloud* subset){
-  Glyph* keypoint = &subset->glyphs["keypoint"];
+void SLAM_glyph::update_glyph(Collection* collection, Cloud* cloud){
+  Glyph* keypoint = &cloud->glyphs["keypoint"];
   //---------------------------
 
   //Clear vectors
@@ -60,22 +60,22 @@ void SLAM_glyph::update_glyph(Collection* cloud, Cloud* subset){
   keypoint->Nxyz.clear();
 
   //Update glyphs
-  this->update_glyph_keypoint(subset);
-  this->update_glyph_nn(subset);
-  this->update_glyph_matching(subset);
-  this->update_glyph_normal(subset);
+  this->update_glyph_keypoint(cloud);
+  this->update_glyph_nn(cloud);
+  this->update_glyph_matching(cloud);
+  this->update_glyph_normal(cloud);
   this->update_glyph_map();
-  this->update_glyph_car(cloud);
-  this->update_glyph_trajectory(cloud);
-  this->update_visibility(subset);
+  this->update_glyph_car(collection);
+  this->update_glyph_trajectory(collection);
+  this->update_visibility(cloud);
 
   //---------------------------
   objectManager->update_object(keypoint);
 }
-void SLAM_glyph::update_visibility(Cloud* subset){
+void SLAM_glyph::update_visibility(Cloud* cloud){
   //---------------------------
 
-  Glyph* keypoint = &subset->glyphs["keypoint"];
+  Glyph* keypoint = &cloud->glyphs["keypoint"];
   Glyph* trajectory = get_glyph_byName("trajectory");
   Glyph* localmap = get_glyph_byName("localmap");
   Glyph* localcloud = get_glyph_byName("localcloud");
@@ -100,12 +100,12 @@ void SLAM_glyph::reset_glyph(){
 }
 
 //Subfunctions
-void SLAM_glyph::update_glyph_keypoint(Cloud* subset){
+void SLAM_glyph::update_glyph_keypoint(Cloud* cloud){
   if(with_keypoint){
-    Glyph* keypoint = &subset->glyphs["keypoint"];
+    Glyph* keypoint = &cloud->glyphs["keypoint"];
     vector<vec3>& xyz = keypoint->xyz;
     vector<vec4>& rgb = keypoint->rgb;
-    Frame* frame = &subset->frame;
+    Frame* frame = &cloud->frame;
     //---------------------------
 
     for(int i=0; i<frame->xyz.size(); i++){
@@ -116,12 +116,12 @@ void SLAM_glyph::update_glyph_keypoint(Cloud* subset){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_nn(Cloud* subset){
+void SLAM_glyph::update_glyph_nn(Cloud* cloud){
   if(with_neighbor){
-    Glyph* keypoint = &subset->glyphs["keypoint"];
+    Glyph* keypoint = &cloud->glyphs["keypoint"];
     vector<vec3>& xyz = keypoint->xyz;
     vector<vec4>& rgb = keypoint->rgb;
-    Frame* frame = &subset->frame;
+    Frame* frame = &cloud->frame;
     //---------------------------
 
     //Initial checks
@@ -143,10 +143,10 @@ void SLAM_glyph::update_glyph_nn(Cloud* subset){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_matching(Cloud* subset){
+void SLAM_glyph::update_glyph_matching(Cloud* cloud){
   if(with_matching){
     vector<vec3> xyz_matching;
-    Frame* frame = &subset->frame;
+    Frame* frame = &cloud->frame;
     vec4 color = vec4(0.7f, 0.1f, 0.1f, 1.0f);
     //---------------------------
 
@@ -169,10 +169,10 @@ void SLAM_glyph::update_glyph_matching(Cloud* subset){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_normal(Cloud* subset){
+void SLAM_glyph::update_glyph_normal(Cloud* cloud){
   vector<vec3> xyz;
   vector<vec3> Nxyz;
-  Frame* frame = &subset->frame;
+  Frame* frame = &cloud->frame;
   //---------------------------
 
   // Frame keypoint nearest neighbor location and normal
@@ -186,7 +186,7 @@ void SLAM_glyph::update_glyph_normal(Cloud* subset){
   }
 
   Normal* normalObject = objectManager->get_object_normal();
-  normalObject->update_normal_subset(subset, xyz, Nxyz);
+  normalObject->update_normal_cloud(cloud, xyz, Nxyz);
 
   //---------------------------
 }
@@ -201,25 +201,25 @@ void SLAM_glyph::update_glyph_map(){
 
   //---------------------------
 }
-void SLAM_glyph::update_glyph_car(Collection* cloud){
+void SLAM_glyph::update_glyph_car(Collection* collection){
   if(with_car){
     //---------------------------
 
     Car* carObject = objectManager->get_object_car();
     Glyph* car = carObject->get_glyph();
-    carObject->update_glyph(cloud);
+    carObject->update_glyph(collection);
     objectManager->update_object(car);
 
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_trajectory(Collection* cloud){
+void SLAM_glyph::update_glyph_trajectory(Collection* collection){
   if(with_trajectory){
     //---------------------------
 
     Trajectory* trajObject = objectManager->get_object_trajectory();
     Glyph* traj = trajObject->get_glyph();
-    trajObject->update(cloud);
+    trajObject->update(collection);
     objectManager->update_object(traj);
 
     //---------------------------

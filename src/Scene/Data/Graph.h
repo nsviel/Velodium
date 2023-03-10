@@ -18,9 +18,9 @@ public:
 public:
   void selection_setNext();
   void selection_setCloud(int ID);
-  void selection_setSubset(Collection* cloud, int ID);
+  void selection_setSubset(Collection* collection, int ID);
   void selection_cloudByName(string name);
-  void selection_setCloud(Collection* cloud);
+  void selection_setCloud(Collection* collection);
 
 private:
   Scene* sceneManager;

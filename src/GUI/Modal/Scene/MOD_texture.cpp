@@ -42,8 +42,8 @@ void MOD_texture::window_texture(){
   }
 }
 void MOD_texture::texture_operation(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   //Apply texture on selected subset

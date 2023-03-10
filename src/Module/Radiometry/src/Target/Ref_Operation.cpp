@@ -30,7 +30,7 @@ bool Ref_Operation::compute_Sphere_IbyR(){
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     bundler->compute_bundleByClass_maxAngle(cloud, 5, 17);
     vector<float> Ib_01 = bundler->get_Ib();
@@ -56,7 +56,7 @@ bool Ref_Operation::compute_Sphere_IbycIt(){
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 10);
     vector<float> Ib = bundler->get_Ib();
@@ -111,7 +111,7 @@ bool Ref_Operation::compute_Surfacic_gloabPiecewise(float R_1, float R_2){
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 5);
     vector<float> Ib = bundler->get_Ib();
@@ -148,7 +148,7 @@ bool Ref_Operation::compute_ParameterSpace_Sphere(float bundle){
 
   //Parameter space
   for(int i=0; i<list_ref->size(); i++){
-    Collection* cloud = *next(list_ref->begin(),i);
+    Collection* collection = *next(list_ref->begin(),i);
 
     bundler->compute_bundleByClass(cloud, bundle);
     vector<float> Ib = bundler->get_Ib();
@@ -191,7 +191,7 @@ bool Ref_Operation::compute_ParameterSpace_Spectralon(){
 
   //Parameter space
   for(int i=0; i<list_ref->size(); i++){
-    Collection* cloud = *next(list_ref->begin(),i);
+    Collection* collection = *next(list_ref->begin(),i);
 
     float Ib = fct_mean(cloud->intensity.OBJ);
     float Ib_cosIt = fct_mean(cloud->attribut.cosIt);

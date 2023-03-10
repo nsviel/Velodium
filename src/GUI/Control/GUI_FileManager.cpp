@@ -59,34 +59,34 @@ void GUI_fileManager::fileManager(){
     ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 20);
 
     for (int row_i=0; row_i<list_collection->size(); row_i++){
-      Collection* cloud = *next(list_collection->begin(), row_i);
+      Collection* collection = *next(list_collection->begin(), row_i);
       ImGui::TableNextRow(ImGuiTableRowFlags_None, 0.5);
       ImGui::PushItemWidth(-FLT_MIN);flags |= ImGuiTreeNodeFlags_OpenOnArrow;
       ImGui::PushID(row_i);
       //----------
 
-      ImGui::Selectable(cloud->name.c_str(), true, flags_selec);
+      ImGui::Selectable(collection->name.c_str(), true, flags_selec);
 
       //Cloud name
       ImGui::TableSetColumnIndex(0);
-      this->cloudManager(cloud);
+      this->cloudManager(collection);
 
       //Icon: info
       ImGui::TableSetColumnIndex(1);
       if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
-        graphManager->selection_setCloud(cloud);
+        graphManager->selection_setCloud(collection);
         modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
       }
 
       //Icon: delete
       ImGui::TableSetColumnIndex(2);
       if(ImGui::SmallButton(ICON_FA_TRASH)){
-        sceneManager->remove_cloud(cloud);
+        sceneManager->remove_collection(collection);
       }
 
       //Icon: visualization
       ImGui::TableSetColumnIndex(3);
-      ImGui::Checkbox("", &cloud->is_visible);
+      ImGui::Checkbox("", &collection->is_visible);
 
       //----------
       ImGui::PopItemWidth();
@@ -101,28 +101,28 @@ void GUI_fileManager::fileManager(){
 
   //-------------------------------
 }
-void GUI_fileManager::cloudManager(Collection* cloud){
-  Collection* cloud_selected = sceneManager->get_selected_collection();
-  if(cloud_selected == nullptr) {}
+void GUI_fileManager::cloudManager(Collection* collection){
+  Collection* selected_col = sceneManager->get_selected_collection();
+  if(selected_col == nullptr) {}
   //-------------------------------
 
   ImGuiTreeNodeFlags node_flags;
   node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-  if(cloud_selected->ID_col_order == cloud->ID_col_order){
+  if(selected_col->ID_col_order == collection->ID_col_order){
     node_flags |= ImGuiTreeNodeFlags_Selected;
   }
-  bool open_cloud_node = ImGui::TreeNodeEx(cloud->name.c_str(), node_flags);
+  bool open_cloud_node = ImGui::TreeNodeEx(collection->name.c_str(), node_flags);
 
   //If clicked by mouse
   if(ImGui::IsItemClicked()){
-    graphManager->selection_setCloud(cloud);
+    graphManager->selection_setCloud(collection);
   }
 
   //Subset tree node
-  if(open_cloud_node && cloud != nullptr && (cloud->nb_obj > 1 || cloud->is_onthefly)){
+  if(open_cloud_node && collection != nullptr && (collection->nb_obj > 1 || collection->is_onthefly)){
 
-    for(int j=0; j<cloud->list_obj.size(); j++){
-      Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), j);
+    for(int j=0; j<collection->list_obj.size(); j++){
+      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), j);
 
       if(subset->is_visible){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
@@ -139,12 +139,12 @@ void GUI_fileManager::cloudManager(Collection* cloud){
 
       //If clicked by mouse
       if(ImGui::IsItemClicked()){
-        graphManager->selection_setSubset(cloud, j);
+        graphManager->selection_setSubset(collection, j);
       }
     }
 
     ImGui::TreePop();
-  }/*else if(open_cloud_node && cloud != nullptr && cloud->nb_obj == 1){
+  }/*else if(open_cloud_node && collection != nullptr && collection->nb_obj == 1){
     ImGui::TreePop();
   }*/
 
@@ -175,21 +175,21 @@ void GUI_fileManager::info_subset(Cloud* subset){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_fileManager::info_iconAction(Collection* cloud){
+void GUI_fileManager::info_iconAction(Collection* collection){
   //---------------------------
 
   //Removal cross
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 0, 0, 255));
-  ImGui::PushID(cloud->ID_col_order);
+  ImGui::PushID(collection->ID_col_order);
   //ImGui::SameLine(ImGui::GetWindowWidth()-40);
   if(ImGui::Button(ICON_FA_TRASH)){
-    sceneManager->remove_cloud(cloud);
+    sceneManager->remove_collection(collection);
   }
 
   //Modification window
   ImGui::SameLine(ImGui::GetWindowWidth()-60);
   if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
-    graphManager->selection_setCloud(cloud);
+    graphManager->selection_setCloud(collection);
     modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
   }
   ImGui::PopID();

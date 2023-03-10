@@ -739,7 +739,7 @@ float file_PLY::get_uchar_from_binary(char* block_data, int& offset){
 }
 
 //Main exporter functions
-bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* cloud){
+bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* collection){
   //---------------------------
 
   //Check for file format ending
@@ -748,8 +748,8 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
   }
 
   if (ply_format == "ascii"){
-    for(int i=0; i<cloud->nb_obj; i++){
-      Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+    for(int i=0; i<collection->nb_obj; i++){
+      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
 
       //Open file
       std::ofstream file(path_file);
@@ -764,8 +764,8 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
     }
   }
   else if (format == "binary" || format == "binary_little_endian"){
-    for(int i=0; i<cloud->nb_obj; i++){
-      Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+    for(int i=0; i<collection->nb_obj; i++){
+      Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
       format = "binary_little_endian";
 
       //Locak file
@@ -882,8 +882,8 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* subset
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* cloud, int ID, int nb){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), ID);
+bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* collection, int ID, int nb){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID);
   string filePath = path_dir + subset->name + ".tmp";
   string filePath_end = path_dir + subset->name + ".ply";
   //---------------------------
@@ -900,7 +900,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* clou
     for(int i=0; i<nb; i++){
       int ID_subset = ID - i;
       if(ID_subset >= 0){
-        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), ID - i);
+        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID - i);
         nb_point += subset->xyz.size();
       }
     }
@@ -912,7 +912,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* clou
     for(int i=0; i<nb; i++){
       int ID_subset = ID - i;
       if(ID_subset >= 0){
-        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), ID - i);
+        Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID - i);
         this->Exporter_data_binary(file, subset);
       }
     }

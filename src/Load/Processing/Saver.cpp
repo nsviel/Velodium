@@ -35,23 +35,23 @@ Saver::Saver(){
 Saver::~Saver(){}
 
 //Main function
-bool Saver::save_cloud(Collection* cloud, string path){
+bool Saver::save_cloud(Collection* collection, string path){
   string format = get_format_from_path(path);
   bool success = false;
   //---------------------------
 
   //Check file format
   if(format.at(0) == '/' || format == "pts"){
-    success = ptsManager->Exporter(path, cloud);
+    success = ptsManager->Exporter(path, collection);
   }
   else if(format == "ply"){
     string format = "binary";
-    success = plyManager->Exporter_cloud(path, format, cloud);
+    success = plyManager->Exporter_cloud(path, format, collection);
   }
 
   //Say if save is successfull
   if(!success){
-    console.AddLog("error", "Failing saving point cloud");
+    console.AddLog("error", "Failing saving point collection");
     return false;
   }
 
@@ -78,7 +78,7 @@ bool Saver::save_subset(Cloud* subset, string format, string dirPath){
 
   //Say if save is successfull
   if(!success){
-    console.AddLog("error", "Failing saving point cloud");
+    console.AddLog("error", "Failing saving object");
     return false;
   }
 
@@ -105,7 +105,7 @@ bool Saver::save_subset(Cloud* subset, string format, string dirPath, string fil
 
   //Say if save is successfull
   if(!success){
-    console.AddLog("error", "Failing saving point cloud");
+    console.AddLog("error", "Failing saving object");
     return false;
   }
 
@@ -132,22 +132,22 @@ bool Saver::save_subset_silent(Cloud* subset, string format, string dirPath){
 
   //Say if save is successfull
   if(!success){
-    console.AddLog("error", "Failing saving point cloud");
+    console.AddLog("error", "Failing saving object");
     return false;
   }
 
   //---------------------------
   return true;
 }
-bool Saver::save_set_silent(Collection* cloud, int ID, string path, int nb){
+bool Saver::save_set_silent(Collection* collection, int ID, string path, int nb){
   bool success = false;
   //---------------------------
 
-  success = plyManager->Exporter_set(path, "binary", cloud, ID, nb);
+  success = plyManager->Exporter_set(path, "binary", collection, ID, nb);
 
   //Say if save is successfull
   if(!success){
-    console.AddLog("error", "Failing saving point cloud set");
+    console.AddLog("error", "Failing saving collection");
     return false;
   }
 

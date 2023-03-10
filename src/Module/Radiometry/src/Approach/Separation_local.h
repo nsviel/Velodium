@@ -17,13 +17,13 @@ public:
 
 public:
   //Method function
-  bool algo(Collection* cloud);
+  bool algo(Collection* collection);
 
   //Sub-functions
-  bool algo_checking(Collection* cloud);
+  bool algo_checking(Collection* collection);
   bool algo_ParameterSpace();
-  bool algo_interpolation(Collection* cloud);
-  bool algo_correction(Collection* cloud);
+  bool algo_interpolation(Collection* collection);
+  bool algo_correction(Collection* collection);
 
   //Math functions
   MatrixXf kNN_KdTreeFLANN(vector<vec2> PT_PS, vector<vec2> PT_query, bool normalized);

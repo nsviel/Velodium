@@ -19,11 +19,11 @@ public:
 public:
   //Main function
   void update_configuration();
-  void camera_followup(Collection* cloud, int i);
+  void camera_followup(Collection* collection, int i);
   void camera_mode(string mode);
 
   //Subfunctions
-  vec3 camera_payload(Collection* cloud, int ID_subset);
+  vec3 camera_payload(Collection* collection, int ID_subset);
   void camera_position(Cloud* subset, vec3 E);
   void camera_orientation(Cloud* subset, vec3 E);
   void camera_reset();

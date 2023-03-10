@@ -33,9 +33,9 @@ void SLAM_optim::update_configuration(){
 
   //---------------------------
 }
-void SLAM_optim::compute_optimization(Collection* cloud, int subset_ID){
-  Frame* frame = cloud->get_frame_byID(subset_ID);
-  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
+void SLAM_optim::compute_optimization(Collection* collection, int subset_ID){
+  Frame* frame = collection->get_frame_byID(subset_ID);
+  Frame* frame_m1 = collection->get_frame_byID(subset_ID-1);
   //---------------------------
 
   if(frame->ID > 0){

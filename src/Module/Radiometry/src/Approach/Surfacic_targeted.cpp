@@ -26,8 +26,8 @@ Surfacic_targeted::Surfacic_targeted(Ref_Operation* opeClass){
 Surfacic_targeted::~Surfacic_targeted(){}
 
 //Main function
-bool Surfacic_targeted::algo(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+bool Surfacic_targeted::algo(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;

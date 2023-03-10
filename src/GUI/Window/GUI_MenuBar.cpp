@@ -76,7 +76,7 @@ void GUI_menuBar::design_MenuBar(){
 
 //Subfunctions
 void GUI_menuBar::MenuBar_menu(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //-------------------------
 
   this->MenuBar_menu_file();
@@ -104,24 +104,24 @@ void GUI_menuBar::MenuBar_menu(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_menu_file(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //File menu
   if(ImGui::BeginMenu("File")){
-    if(ImGui::MenuItem("Remove cloud", "Suppr")){
-      sceneManager->remove_cloud(cloud);
+    if(ImGui::MenuItem("Remove collection", "Suppr")){
+      sceneManager->remove_collection(collection);
     }
     if(ImGui::MenuItem("Remove all", "Fin")){
       sceneManager->remove_cloud_all();
     }
-    if(ImGui::MenuItem("Next cloud","tab")){
+    if(ImGui::MenuItem("Next collection","tab")){
       graphManager->selection_setNext();
     }
-    if(ImGui::MenuItem("Center cloud", "c")){
+    if(ImGui::MenuItem("Center collection", "c")){
       if(!sceneManager->get_is_list_empty()){
         Pose poseManager;
-        poseManager.make_centering(cloud);
+        poseManager.make_centering(collection);
         //Module* moduleManager = engineManager->get_moduleManager();
         //moduleManager->module_update();
       }
@@ -141,7 +141,7 @@ void GUI_menuBar::MenuBar_menu_file(){
   //---------------------------
 }
 void GUI_menuBar::MenuBar_menu_load(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
@@ -164,18 +164,18 @@ void GUI_menuBar::MenuBar_menu_load(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_menu_save(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_BOOK " Save")){
     if(ImGui::MenuItem("Save")){
-      pathManager->saving_cloud_same(cloud);
+      pathManager->saving_cloud_same(collection);
     }
-    if(ImGui::MenuItem("Save cloud")){
-      pathManager->saving_cloud(cloud);
+    if(ImGui::MenuItem("Save collection")){
+      pathManager->saving_cloud(collection);
     }
     if(ImGui::MenuItem("Save frame")){
-      pathManager->saving_cloud_frame(cloud);
+      pathManager->saving_cloud_frame(collection);
     }
     ImGui::Separator();
     if(ImGui::MenuItem("Options")){
@@ -253,7 +253,7 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_Operations(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Functions

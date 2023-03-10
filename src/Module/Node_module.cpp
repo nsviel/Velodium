@@ -119,11 +119,11 @@ void Node_module::draw_online(){
 
   //---------------------------
 }
-void Node_module::online(Collection* cloud, int subset_ID){
+void Node_module::online(Collection* collection, int subset_ID){
   //---------------------------
 
   if(WITH_SLAM){
-    module_slam->online(cloud, subset_ID);
+    module_slam->online(collection, subset_ID);
   }
 
   //---------------------------

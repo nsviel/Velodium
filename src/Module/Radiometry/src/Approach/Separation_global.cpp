@@ -29,7 +29,7 @@ Separation_global::Separation_global(Reference* refClass){
 Separation_global::~Separation_global(){}
 
 //Method function
-bool Separation_global::algo(Collection* cloud){
+bool Separation_global::algo(Collection* collection){
   //---------------------------
 
   this->algo_angle();
@@ -148,8 +148,8 @@ bool Separation_global::algo_distance(){
   }
   return true;
 }
-bool Separation_global::algo_correction(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+bool Separation_global::algo_correction(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cIt = subset->cosIt;
@@ -554,8 +554,8 @@ void Separation_global::plot_MeanError(){
   plotManager->set_Format_data1("with linespoints pt 7 ps 0.3 lw 1 lc rgb 'black' notitle");
   plotManager->plot_Curve(ebyn_cIt_n, ebyn_cIt_e);
 }
-void Separation_global::plot_PolyRegression(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void Separation_global::plot_PolyRegression(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cIt = subset->cosIt;
@@ -589,7 +589,7 @@ void Separation_global::plot_PolyRegression(Collection* cloud){
   plotManager->set_Format_data2("title 'Regression'");
   plotManager->plot_Regression(cIt, Is, cIt_curve);
 }
-void Separation_global::plot_bundleByClass(Collection* cloud){
+void Separation_global::plot_bundleByClass(Collection* collection){
   //---------------------------
 
   bundler->compute_bundleByClass(cloud, 5);
@@ -597,9 +597,9 @@ void Separation_global::plot_bundleByClass(Collection* cloud){
 
   //---------------------------
 }
-void Separation_global::plot_Icorr(Collection* cloud){
+void Separation_global::plot_Icorr(Collection* collection){
   this->algo(cloud);
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   //--------------------------------
 

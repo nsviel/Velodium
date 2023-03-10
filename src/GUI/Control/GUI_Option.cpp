@@ -81,7 +81,7 @@ void GUI_option::option_font(){
   ImGui::Separator();
 }
 void GUI_option::option_glyph(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   ImGui::Columns(2);
   //---------------------------
 
@@ -149,7 +149,7 @@ void GUI_option::option_glyph(){
   if(ImGui::Checkbox("Axis cloud", &axis_cloud)){
     bool* axis_visibility = axisObject->get_axis_subset_visibility();
     *axis_visibility = axis_cloud;
-    objectManager->update_glyph_cloud(cloud);
+    objectManager->update_glyph_collection(collection);
   }
   ImGui::NextColumn();
 
@@ -183,7 +183,7 @@ void GUI_option::option_glyph(){
   int* tree_level = treeObject->get_tree_level();
   ImGui::PushItemWidth(75);
   if(ImGui::DragInt("##458", tree_level, 1, 1, 50, "%d")){
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Cloud* subset = (Cloud*)collection->selected_obj;
     treeObject->update_tree(subset);
     objectManager->update_object(&subset->glyphs["tree"]);
   }
@@ -240,8 +240,8 @@ void GUI_option::option_mode(){
 }
 void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
-    Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = sceneManager->get_selected_collection();
+    Cloud* subset = (Cloud*)collection->selected_obj;
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
 
@@ -257,8 +257,8 @@ void GUI_option::option_parameter(){
     if(ImGui::DragFloat("Scale", &scale, 0.01, 0.1, 100, "%.2f x")){
       if(!sceneManager->get_is_list_empty()){
         Transformation transformManager;
-        for(int i=0; i<cloud->list_obj.size(); i++){
-          Cloud* subset = (Cloud*)cloud->get_obj(i);
+        for(int i=0; i<collection->list_obj.size(); i++){
+          Cloud* subset = (Cloud*)collection->get_obj(i);
           transformManager.make_scaling(subset, scale);
           sceneManager->update_buffer_location(subset);
         }
@@ -278,7 +278,7 @@ void GUI_option::option_parameter(){
 
     //Draw type
     static int draw_type = 0;
-    if(cloud != nullptr){
+    if(collection != nullptr){
       if(subset->draw_type_name == "point"){
         draw_type = 0;
       }
@@ -352,7 +352,7 @@ void GUI_option::option_parameter(){
       //Apply new normal size value
       int* size = normObject->get_size();
       *size = cpt_nor;
-      objectManager->update_glyph_cloud(cloud);
+      objectManager->update_glyph_collection(collection);
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if(ImGui::ArrowButton("##right_n", ImGuiDir_Right)){
@@ -362,7 +362,7 @@ void GUI_option::option_parameter(){
       //Apply new normal size value
       int* size = normObject->get_size();
       *size = cpt_nor;
-      objectManager->update_glyph_cloud(cloud);
+      objectManager->update_glyph_collection(collection);
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
@@ -375,7 +375,7 @@ void GUI_option::option_parameter(){
 }
 void GUI_option::option_color(){
   if(ImGui::CollapsingHeader("Colors")){
-    Collection* cloud = sceneManager->get_selected_collection();
+    Collection* collection = sceneManager->get_selected_collection();
     int colorEditSize = 150;
     //---------------------------
 
@@ -407,14 +407,14 @@ void GUI_option::option_color(){
       objectManager->update_object(aabbObject->get_glyph(), *aabb_color);
     }
 
-    //Uniform cloud color
-    if(cloud != nullptr){
-      vec4 cloud_color = cloud->unicolor;
+    //Uniform collection color
+    if(collection != nullptr){
+      vec4 cloud_color = collection->unicolor;
 
       ImGui::SetNextItemWidth(colorEditSize);
       if(ImGui::ColorEdit4("Point cloud", (float*)&cloud_color, ImGuiColorEditFlags_AlphaBar)){
         if(!sceneManager->get_is_list_empty()){
-          colorManager->set_color_new(cloud, cloud_color);
+          colorManager->set_color_new(collection, cloud_color);
         }
       }
     }

@@ -56,12 +56,12 @@ void Recorder::update_configuration(){
 
   //---------------------------
 }
-void Recorder::compute_online(Collection* cloud, int ID_subset){
+void Recorder::compute_online(Collection* collection, int ID_subset){
   //---------------------------
 
   //Save subset frame
   if(with_save_frame){
-    this->save_frame(cloud, ID_subset);
+    this->save_frame(collection, ID_subset);
   }
 
   //Save rendered image
@@ -144,18 +144,18 @@ void Recorder::save_image_path(){
 }
 
 // Frame saving
-void Recorder::save_frame(Collection* cloud, int ID_subset){
+void Recorder::save_frame(Collection* collection, int ID_subset){
   //---------------------------
 
   if(with_save_frame_raw){
-    Cloud* subset = (Cloud*)cloud->get_obj_init_byID(ID_subset);
+    Cloud* subset = (Cloud*)collection->get_obj_init_byID(ID_subset);
     this->save_frame_subset(subset);
   }else{
     if(save_frame_accu == 1){
-      Cloud* subset = (Cloud*)cloud->get_obj_byID(ID_subset);
+      Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
       this->save_frame_subset(subset);
     }else{
-      this->save_frame_set(cloud, ID_subset);
+      this->save_frame_set(collection, ID_subset);
     }
   }
 
@@ -182,13 +182,13 @@ void Recorder::save_frame_subset(Cloud* subset){
   auto t2 = std::chrono::high_resolution_clock::now();
   this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
-void Recorder::save_frame_set(Collection* cloud, int ID_subset){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), ID_subset);
+void Recorder::save_frame_set(Collection* collection, int ID_subset){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), ID_subset);
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 
   //Save frame
-  saverManager->save_set_silent(cloud, ID_subset, path_frame, save_frame_accu);
+  saverManager->save_set_silent(collection, ID_subset, path_frame, save_frame_accu);
 
   //Keep only a certain number of frame
   string path = path_frame + subset->name + ".ply";

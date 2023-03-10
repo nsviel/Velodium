@@ -61,20 +61,20 @@ CT_ICP::CT_ICP(){
 CT_ICP::~CT_ICP(){}
 
 //Main function
-void CT_ICP::algo(Collection* cloud){
-	if(cloud == nullptr) return;
+void CT_ICP::algo(Collection* collection){
+	if(collection == nullptr) return;
 	//---------------------------
 
 	//Creating trajectory
 	std::vector<TrajectoryFrame> trajectory;
-	trajectory.resize(cloud->nb_obj);
+	trajectory.resize(collection->nb_obj);
 
 	//Creating voxel_map and keypoint_map
 	std::unordered_map<Voxel, std::list<Eigen::Vector3d>> voxels_map;
 	int index_frame = 0;
 
-	for(int i=0; i<cloud->nb_obj; i++){
-		Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+	for(int i=0; i<collection->nb_obj; i++){
+		Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
 
 		// subset to local format
 		std::vector<Point3D> frame;

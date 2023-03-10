@@ -33,13 +33,13 @@ public:
   void player_pause();
 
   //Specific button function
-  void button_player_play(Collection* cloud);
-  void button_player_pause(Collection* cloud);
-  void button_player_stop(Collection* cloud);
+  void button_player_play(Collection* collection);
+  void button_player_pause(Collection* collection);
+  void button_player_stop(Collection* collection);
 
-  void button_capture_play(Collection* cloud);
-  void button_capture_pause(Collection* cloud);
-  void button_capture_stop(Collection* cloud);
+  void button_capture_play(Collection* collection);
+  void button_capture_pause(Collection* collection);
+  void button_capture_stop(Collection* collection);
   void button_capture_port();
 
 private:

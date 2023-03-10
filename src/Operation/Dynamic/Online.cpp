@@ -64,10 +64,10 @@ void Online::update_configuration(){
 
   //---------------------------
 }
-void Online::compute_onlineOpe(Collection* cloud, int ID_subset){
+void Online::compute_onlineOpe(Collection* collection, int ID_subset){
   //This function is called each time a new subset arrives
   Node_module* node_module = node_engine->get_node_module();
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(ID_subset);
+  Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
   auto t1 = start_chrono();
   //---------------------------
 
@@ -76,13 +76,13 @@ void Online::compute_onlineOpe(Collection* cloud, int ID_subset){
 
   //Some init operation
   if(subset == nullptr) return;
-  cloud->selected_obj = subset;
+  collection->selected_obj = subset;
 
   //Control subset visibilities
-  visibilityManager->compute_visibility(cloud, ID_subset);
+  visibilityManager->compute_visibility(collection, ID_subset);
 
   //Make slam on the current subset
-  node_module->online(cloud, ID_subset);
+  node_module->online(collection, ID_subset);
   sceneManager->update_buffer_location(subset);
 
   //Make cleaning on the current subset
@@ -91,13 +91,13 @@ void Online::compute_onlineOpe(Collection* cloud, int ID_subset){
   }
 
   //If camera follow up option activated
-  followManager->camera_followup(cloud, ID_subset);
+  followManager->camera_followup(collection, ID_subset);
 
   //Colorization
-  colorManager->make_colorization(cloud, ID_subset);
+  colorManager->make_colorization(collection, ID_subset);
 
   //Update dynamic interfaces
-  this->compute_recording(cloud, ID_subset);
+  this->compute_recording(collection, ID_subset);
 
   //---------------------------
   this->time_ope = stop_chrono(t1);
@@ -105,12 +105,12 @@ void Online::compute_onlineOpe(Collection* cloud, int ID_subset){
 }
 
 //Subfunctions
-void Online::compute_recording(Collection* cloud, int& ID_subset){
+void Online::compute_recording(Collection* collection, int& ID_subset){
   Node_interface* node_interface = node_engine->get_node_interface();
   Recorder* recordManager = node_interface->get_recordManager();
   //---------------------------
 
-  recordManager->compute_online(cloud, ID_subset);
+  recordManager->compute_online(collection, ID_subset);
 
   //---------------------------
 }

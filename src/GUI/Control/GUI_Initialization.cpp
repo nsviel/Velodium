@@ -83,18 +83,18 @@ void GUI_Initialization::update_configuration(){
 }
 
 //GUI subfunctions
-void GUI_Initialization::operation_cloud(Collection* cloud){
+void GUI_Initialization::operation_cloud(Collection* collection){
   //---------------------------
 
-  if(cloud != nullptr){
+  if(collection != nullptr){
     //Set lidar model
-    cloud->lidar_model = lidar_model;
+    collection->lidar_model = lidar_model;
 
     //Set scaling
     if(cloud_scale != 1){
       Transformation transformManager;
-      for(int i=0; i<cloud->list_obj.size(); i++){
-        Cloud* subset = (Cloud*)cloud->get_obj(i);
+      for(int i=0; i<collection->list_obj.size(); i++){
+        Cloud* subset = (Cloud*)collection->get_obj(i);
         transformManager.make_scaling(subset, (float)cloud_scale);
         sceneManager->update_buffer_location(subset);
       }

@@ -15,13 +15,13 @@ public:
 
 public:
   //Method functions
-  void compute_RadarEquation(Collection* cloud);
-  void compute_IR2bycosIt(Collection* cloud);
-  void compute_IbyR2(Collection* cloud);
-  void compute_IbyCosIt(Collection* cloud);
+  void compute_RadarEquation(Collection* collection);
+  void compute_IR2bycosIt(Collection* collection);
+  void compute_IbyR2(Collection* collection);
+  void compute_IbyCosIt(Collection* collection);
 
   //Plotting
-  void plot_intensityCorrected(Collection* cloud);
+  void plot_intensityCorrected(Collection* collection);
 
   //Setters / Getters
   inline vector<float> get_Ic(){return Ic;}

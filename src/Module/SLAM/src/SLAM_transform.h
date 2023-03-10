@@ -19,7 +19,7 @@ public:
 
 public:
   //Main function
-  void compute_preprocessing(Collection* cloud, int subset_ID);
+  void compute_preprocessing(Collection* collection, int subset_ID);
 
   //Tranformation function
   void transform_frame(Frame* frame);

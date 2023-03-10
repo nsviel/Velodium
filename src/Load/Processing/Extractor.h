@@ -26,19 +26,19 @@ public:
   Collection* extract_data(vector<Data_file*> data);
   Object_* extract_data_object(Data_file* data);
   Cloud* extract_data(Data_file& data);
-  void extract_data(Collection* cloud, Data_file* data);
+  void extract_data(Collection* collection, Data_file* data);
 
 private:
   //Init function
   void check_data(Data_file* data);
-  void init_collection_parameter(Collection* cloud, vector<Data_file*> data);
+  void init_collection_parameter(Collection* collection, vector<Data_file*> data);
   void init_subset_parameter(Cloud* subset, Data_file* data, int ID);
   void init_object_parameter(Object_* object, Data_file* data, int ID);
   void init_random_color();
 
   //Param function
   void define_visibility(Cloud* subset, int i);
-  void define_buffer_init(Collection* cloud, Cloud* subset);
+  void define_buffer_init(Collection* collection, Cloud* subset);
   void compute_texture(Cloud* subset, Data_file* data);
 
 private:

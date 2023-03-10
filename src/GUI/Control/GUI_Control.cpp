@@ -244,7 +244,7 @@ void GUI_Control::control_keyboard_oneAction(){
 
     //H key - Heatmap
     if (ImGui::IsKeyPressed(72) && !io.WantCaptureMouse){
-      heatmapManager->make_cloud_heatmap(collection);
+      heatmapManager->make_col_heatmap(collection);
       break;
     }
 
@@ -453,7 +453,7 @@ void GUI_Control::key_suppr(){
     bool is_selected = selectionManager->mark_supressSelectedPoints_all();
 
     if(is_selected == false){
-      sceneManager->remove_cloud(collection);
+      sceneManager->remove_collection(collection);
     }
   }else{
     boxingManager->supress_selected_point(collection);

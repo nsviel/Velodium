@@ -308,17 +308,17 @@ void Capture::supress_nullpoints(Cloud* subset){
 
   //---------------------------
 }
-void Capture::control_nb_subset(Collection* cloud){
+void Capture::control_nb_subset(Collection* collection){
   //---------------------------
 
   //If option, remove all other subset
   if(with_justOneFrame){
-    cloud->obj_remove_last();
+    collection->obj_remove_last();
   }
   //Remove old frame if option is activated
   else{
-    if(cloud->list_obj.size() > nb_subset_max){
-      cloud->obj_remove_last();
+    if(collection->list_obj.size() > nb_subset_max){
+      collection->obj_remove_last();
     }
   }
 

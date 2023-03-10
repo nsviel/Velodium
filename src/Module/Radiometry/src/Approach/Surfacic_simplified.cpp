@@ -25,7 +25,7 @@ Surfacic_simplified::Surfacic_simplified(Reference* refClass){
 Surfacic_simplified::~Surfacic_simplified(){}
 
 //Method function
-bool Surfacic_simplified::algo_Bretagne(Collection* cloud){
+bool Surfacic_simplified::algo_Bretagne(Collection* collection){
   //---------------------------
 
   this->compute_linearRegression();
@@ -50,7 +50,7 @@ bool Surfacic_simplified::compute_linearRegression(){
   mdist.push_back(0);
 
   for(int i=0; i<list->size(); i++){
-    Collection* cloud = *next(list->begin(),i);
+    Collection* collection = *next(list->begin(),i);
 
     //Bundle by classes
     bundler->compute_bundleByClass_maxAngle(cloud, 5, 70);
@@ -96,8 +96,8 @@ bool Surfacic_simplified::compute_quadraRegression(){
   //---------------------------
   return true;
 }
-bool Surfacic_simplified::compute_correction(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+bool Surfacic_simplified::compute_correction(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -145,7 +145,7 @@ bool Surfacic_simplified::compute_IIR2(vector<float>& Ib, vector<float>& Ib_dist
 }
 
 //Plotting
-void Surfacic_simplified::plot_bundleByClass(Collection* cloud){
+void Surfacic_simplified::plot_bundleByClass(Collection* collection){
   //---------------------------
 
   bundler->compute_bundleByClass(cloud, 5);
@@ -153,7 +153,7 @@ void Surfacic_simplified::plot_bundleByClass(Collection* cloud){
 
   //---------------------------
 }
-void Surfacic_simplified::plot_linearRegression(Collection* cloud){
+void Surfacic_simplified::plot_linearRegression(Collection* collection){
   //---------------------------
 
   //Bundle by classes
@@ -182,7 +182,7 @@ void Surfacic_simplified::plot_linearRegression(Collection* cloud){
 
   //---------------------------
 }
-void Surfacic_simplified::plot_quadraticRegression(Collection* cloud){
+void Surfacic_simplified::plot_quadraticRegression(Collection* collection){
   this->algo_Bretagne(cloud);
   //---------------------------
 
@@ -209,8 +209,8 @@ void Surfacic_simplified::plot_quadraticRegression(Collection* cloud){
 
   //---------------------------
 }
-void Surfacic_simplified::plot_intensityCorrection(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void Surfacic_simplified::plot_intensityCorrection(Collection* collection){
+  Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   this->algo_Bretagne(cloud);
   //--------------------------

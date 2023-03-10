@@ -35,7 +35,7 @@ public:
   void plot_MultipleCurveRegression(vector<float>& Xd, vector<float>& Y1d, vector<float>& Y2d, vector<float>& Y3d, vector<float>& Y4d, vector<float>& regr);
   void plot_histogram(vector<float>& Xd);
   void plot_2histograms(vector<float>& X1d, vector<float>& X2d);
-  void plot_PointCloud(Collection* cloud);
+  void plot_PointCloud(Collection* collection);
   void plot_CurveErrorRegression(vector<float>& Xd, vector<float>& Y1d, vector<float>& Y2d, vector<float>& err);
   void plot_3Dmap_vec3(vector<vec3> Xd);
   void plot_3Dmap(vector<vector<float>>& Xd, vector<vector<float>>& Yd, vector<vector<float>>& Zd);

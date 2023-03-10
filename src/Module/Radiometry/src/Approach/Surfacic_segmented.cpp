@@ -100,7 +100,7 @@ Surfacic_segmented::Surfacic_segmented(Ref_Operation* opeClass){
 Surfacic_segmented::~Surfacic_segmented(){}
 
 //Main function
-bool Surfacic_segmented::algo(Collection* cloud){
+bool Surfacic_segmented::algo(Collection* collection){
   this->algo_nbP();
   refopeManager->compute_Sphere_IbyR();
   //-------------------------------
@@ -229,8 +229,8 @@ vec2 Surfacic_segmented::algo_searchSegment(float R){
   //-------------------------------
   return infsup;
 }
-void Surfacic_segmented::algo_correction(Collection* cloud, MatrixXf list_P){
-	Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
+void Surfacic_segmented::algo_correction(Collection* collection, MatrixXf list_P){
+	Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), 0);
 	vector<float>& Is = subset->I;
 	vector<float>& dist = subset->R;
 	vector<float>& cIt_all = subset->cosIt;

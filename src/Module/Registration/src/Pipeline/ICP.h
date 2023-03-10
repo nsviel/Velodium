@@ -33,10 +33,10 @@ public:
 
   //Subfunctions
   float compute_SSE(Collection* cloud_P, Collection* cloud_Q);
-  float compute_SSE_groundTruth(Collection* cloud);
-  float compute_MSE_groundTruth(Collection* cloud);
-  float compute_RMSE_groundTruth(Collection* cloud);
-  float compute_MAE_groundTruth(Collection* cloud);
+  float compute_SSE_groundTruth(Collection* collection);
+  float compute_MSE_groundTruth(Collection* collection);
+  float compute_RMSE_groundTruth(Collection* collection);
+  float compute_MAE_groundTruth(Collection* collection);
 
   void compute_prepareData(Collection* cloud_P, Collection* cloud_Q);
   void compute_checknPnD();

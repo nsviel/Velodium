@@ -34,16 +34,16 @@ void Trajectory::create(){
 
   //---------------------------
 }
-void Trajectory::update(Collection* cloud){
+void Trajectory::update(Collection* collection){
   //---------------------------
 
   trajectory->xyz.clear();
   trajectory->rgb.clear();
 
   //Compute new trajectory values
-  for(int j=1; j<cloud->list_obj.size(); j++){
-    Cloud* subset_m0 = (Cloud*)*next(cloud->list_obj.begin(), j);
-    Cloud* subset_m1 = (Cloud*)*next(cloud->list_obj.begin(), j-1);
+  for(int j=1; j<collection->list_obj.size(); j++){
+    Cloud* subset_m0 = (Cloud*)*next(collection->list_obj.begin(), j);
+    Cloud* subset_m1 = (Cloud*)*next(collection->list_obj.begin(), j-1);
 
     if(subset_m0->is_visible && subset_m1->is_visible){
       vec3 root_m0 = subset_m0->root;

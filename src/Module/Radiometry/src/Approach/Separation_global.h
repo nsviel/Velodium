@@ -19,12 +19,12 @@ public:
 
 public:
   //Method functions
-  bool algo(Collection* cloud);
+  bool algo(Collection* collection);
 
   //Sub-functions
   bool algo_angle();
   bool algo_distance();
-  bool algo_correction(Collection* cloud);
+  bool algo_correction(Collection* collection);
 
   //Math functions
   void compute_normalizeCoeffs_angle();
@@ -39,9 +39,9 @@ public:
   void plot_IbyR_atomic();
   void plot_IbyIt();
   void plot_MeanError();
-  void plot_bundleByClass(Collection* cloud);
-  void plot_PolyRegression(Collection* cloud);
-  void plot_Icorr(Collection* cloud);
+  void plot_bundleByClass(Collection* collection);
+  void plot_PolyRegression(Collection* collection);
+  void plot_Icorr(Collection* collection);
 
   //Setters / Getters
   inline vector<float> get_Im(){return Im;}

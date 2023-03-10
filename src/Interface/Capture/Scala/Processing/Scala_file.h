@@ -21,7 +21,7 @@ public:
   vector<string> loading_allPathDir(string pathDir);
   vector<Collection*> loading_allFile(vector<string> allpath);
   Collection* loading_reoganizeData(vector<Collection*> clouds);
-  void compute_relativeTimestamp(Collection* cloud);
+  void compute_relativeTimestamp(Collection* collection);
 
 private:
   Scene* sceneManager;

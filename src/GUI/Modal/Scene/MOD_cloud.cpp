@@ -32,32 +32,32 @@ MOD_cloud::~MOD_cloud(){}
 
 //Main function
 void MOD_cloud::mod_cloud_info(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   bool* open = &modal_tab.show_modifyFileInfo;
   //---------------------------
 
-  if(*open && cloud != nullptr){
+  if(*open && collection != nullptr){
     ImGui::Begin(ICON_FA_COMMENT " Point cloud", open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav);
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Cloud* subset = (Cloud*)collection->selected_obj;
 
     //Visibility
     static bool visible = true;
     if(ImGui::Checkbox("Visibility", &visible)){
-      cloud->is_visible = visible;
+      collection->is_visible = visible;
     }
     ImGui::SameLine();
 
-    //Uniform cloud color
+    //Uniform collection color
     static vec4 color_PC(0.0f);
-    if(cloud != nullptr){
-      color_PC = cloud->unicolor;
+    if(collection != nullptr){
+      color_PC = collection->unicolor;
     }
 
     ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs;
     flags |= ImGuiColorEditFlags_AlphaBar;
     if(ImGui::ColorEdit4("Color", (float*)&color_PC, flags)){
-      if(cloud != nullptr){
-        colorManager->set_color_new(cloud, color_PC);
+      if(collection != nullptr){
+        colorManager->set_color_new(collection, color_PC);
       }
     }
     ImGui::Separator();
@@ -68,9 +68,9 @@ void MOD_cloud::mod_cloud_info(){
     ImGui::Text("Name ");
     ImGui::NextColumn();
     static char str_n[256];
-    strcpy(str_n, cloud->name.c_str());
+    strcpy(str_n, collection->name.c_str());
     if(ImGui::InputText("##name", str_n, IM_ARRAYSIZE(str_n), ImGuiInputTextFlags_EnterReturnsTrue)){
-      cloud->name = str_n;
+      collection->name = str_n;
     }
     ImGui::NextColumn();
 
@@ -78,23 +78,23 @@ void MOD_cloud::mod_cloud_info(){
     ImGui::Text("Format ");
     ImGui::NextColumn();
     static char str_f[256];
-    strcpy(str_f, cloud->file_format.c_str());
+    strcpy(str_f, collection->file_format.c_str());
     if(ImGui::InputText("##format", str_f, IM_ARRAYSIZE(str_f), ImGuiInputTextFlags_EnterReturnsTrue)){
-      cloud->file_format = str_f;
+      collection->file_format = str_f;
     }
     ImGui::NextColumn();
 
     //Number of subset
     ImGui::Text("Nb subset ");
     ImGui::NextColumn();
-    string nb_obj = to_string(cloud->nb_obj);
+    string nb_obj = to_string(collection->nb_obj);
     ImGui::Text("%s", nb_obj.c_str());
     ImGui::NextColumn();
 
     //Number of points
   /*  ImGui::Text("Nb point ");
     ImGui::NextColumn();
-    string nb_point = thousandSeparator(cloud->nb_point);
+    string nb_point = thousandSeparator(collection->nb_point);
     ImGui::Text("%s", nb_point.c_str());
     ImGui::NextColumn();*/
 
@@ -130,8 +130,8 @@ void MOD_cloud::mod_cloud_info(){
 /*void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
-    Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = sceneManager->get_selected_collection();
+    Cloud* subset = (Cloud*)collection->selected_obj;
     //---------------------------
 
     // Data vectors
@@ -226,8 +226,8 @@ void MOD_cloud::mod_cloud_info(){
 void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
-    Collection* cloud = sceneManager->get_selected_collection();
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = sceneManager->get_selected_collection();
+    Cloud* subset = (Cloud*)collection->selected_obj;
     //---------------------------
 
     // Data vectors

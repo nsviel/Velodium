@@ -43,8 +43,8 @@ void Filter::update_configuration(){
 }
 
 //Functions
-void Filter::filter_maxAngle(Collection* cloud, float angleMax){
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+void Filter::filter_maxAngle(Collection* collection, float angleMax){
+  Cloud* subset = (Cloud*)collection->selected_obj;
   attribManager->compute_attribut_subset(subset);
   vector<float>& It = subset->It;
   int size_before = subset->nb_point;
@@ -76,8 +76,8 @@ void Filter::filter_sphere(){
   //---------------------------
 
   for(int i=0; i<list_collection->size(); i++){
-    Collection* cloud = *next(list_collection->begin(),i);
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Collection* collection = *next(list_collection->begin(),i);
+    Cloud* subset = (Cloud*)collection->selected_obj;
 
     if(subset->name.find("Sphere") != std::string::npos){
       vector<vec3>& XYZ = subset->xyz;
@@ -109,17 +109,17 @@ void Filter::filter_sphere(){
       }
 
       attribManager->make_supressPoints(subset, idx);
-      //sceneManager->update_glyph(cloud);
+      //sceneManager->update_glyph(collection);
     }
   }
 
   //---------------------------
 }
-void Filter::filter_sphere_cloud(Collection* cloud){
+void Filter::filter_sphere_cloud(Collection* collection){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
     this->filter_sphere_subset(subset);
   }
 
@@ -143,11 +143,11 @@ void Filter::filter_sphere_subset(Cloud* subset){
 
   //---------------------------
 }
-void Filter::filter_cylinder_cloud(Collection* cloud){
+void Filter::filter_cylinder_cloud(Collection* collection){
   //---------------------------
 
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
     this->filter_cylinder_subset(subset);
   }
 

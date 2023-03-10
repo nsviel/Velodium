@@ -92,23 +92,23 @@ Object_* Extractor::extract_data_object(Data_file* data_file){
   //---------------------------
   return object;
 }
-void Extractor::extract_data(Collection* cloud, Data_file* data){
+void Extractor::extract_data(Collection* collection, Data_file* data){
   Cloud* subset = new Cloud();
   //---------------------------
 
   //Init
-  this->color_rdm = cloud->unicolor;
+  this->color_rdm = collection->unicolor;
   this->check_data(data);
-  this->init_subset_parameter(subset, data, cloud->ID_obj_last);
+  this->init_subset_parameter(subset, data, collection->ID_obj_last);
 
   //Create associated glyphs
   objectManager->create_glyph_subset(subset);
-  this->define_buffer_init(cloud, subset);
+  this->define_buffer_init(collection, subset);
   gpuManager->gen_object_buffers(subset);
 
-  //Update cloud stats
-  cloud->nb_obj++;
-  cloud->ID_obj_last++;
+  //Update collection stats
+  collection->nb_obj++;
+  collection->ID_obj_last++;
 
   //---------------------------
 }

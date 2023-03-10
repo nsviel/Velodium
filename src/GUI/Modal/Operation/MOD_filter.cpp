@@ -49,13 +49,13 @@ void MOD_filter::design_filter(){
 
 //Specific function
 void MOD_filter::filter_cylinder(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   if (ImGui::Button("Cylinder cleaning", ImVec2(item_width,0))){
-    if(cloud != nullptr){
-      filterManager->filter_cylinder_cloud(cloud);
+    if(collection != nullptr){
+      filterManager->filter_cylinder_cloud(collection);
     }
   }
   float* r_min = filterManager->get_cyl_r_min();
@@ -71,19 +71,19 @@ void MOD_filter::filter_cylinder(){
   //---------------------------
 }
 void MOD_filter::filter_byAngle(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   static int maxAngle = 80;
   if(ImGui::Button("Filter by angle", ImVec2(item_width,0))){
-    if(cloud != nullptr){
+    if(collection != nullptr){
 
       list<Collection*>* list_collection = sceneManager->get_list_collection();
       for(int i=0; i<list_collection->size(); i++){
-        Collection* cloud = *next(list_collection->begin(),i);
-        filterManager->filter_maxAngle(cloud, maxAngle);
-        //sceneManager->update_buffer_location(cloud);
+        Collection* collection = *next(list_collection->begin(),i);
+        filterManager->filter_maxAngle(collection, maxAngle);
+        //sceneManager->update_buffer_location(collection);
       }
 
     }
@@ -95,12 +95,12 @@ void MOD_filter::filter_byAngle(){
   //---------------------------
 }
 void MOD_filter::filter_sphere(){
-  Collection* cloud = sceneManager->get_selected_collection();
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+  Collection* collection = sceneManager->get_selected_collection();
+  Cloud* subset = (Cloud*)collection->selected_obj;
   //---------------------------
 
   if(ImGui::Button("Clean sphere cloud", ImVec2(item_width,0))){
-    if(cloud != nullptr){
+    if(collection != nullptr){
       filterManager->filter_sphere();
     }
   }

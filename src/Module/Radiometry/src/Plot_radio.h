@@ -43,9 +43,9 @@ public:
   void plot_IbyIt_allPercentage_Spectralon_30m();
   void plot_IbyIt_allPercentage_Spectralon_40m();
   void plot_IbyIt_Sphere(bool normalised);
-  void plot_IbyIt_cloud(Collection* cloud);
-  void plot_IbyR_cloud(Collection* cloud);
-  void plot_IbyR_data(Collection* cloud);
+  void plot_IbyIt_cloud(Collection* collection);
+  void plot_IbyR_cloud(Collection* collection);
+  void plot_IbyR_data(Collection* collection);
   void plot_nDbycosIt();
   void plot_JbycosIt();
   void plot_SpectralonAllMeans();

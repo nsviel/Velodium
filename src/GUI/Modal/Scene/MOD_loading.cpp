@@ -342,8 +342,8 @@ void MOD_loading::saving_configuration(){
     if(sceneManager->get_is_list_empty()){
       subset_max = 0;
     }else{
-      Collection* cloud = sceneManager->get_selected_collection();
-      subset_max = cloud->nb_obj - 1;
+      Collection* collection = sceneManager->get_selected_collection();
+      subset_max = collection->nb_obj - 1;
     }
 
     //Drag range
@@ -397,12 +397,12 @@ void MOD_loading::saving_dataFormat(){
   //---------------------------
 }
 void MOD_loading::saving_action(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Save selected cloud
   if(save_mode == 0 && cloud_mode == 0 && !sceneManager->get_is_list_empty()){
-    pathManager->saving_cloud(cloud);
+    pathManager->saving_cloud(collection);
   }
 
   //Save all cloud
@@ -412,7 +412,7 @@ void MOD_loading::saving_action(){
 
   //Save selected subset
   if(save_mode == 1 && subset_mode == 0 && !sceneManager->get_is_list_empty()){
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Cloud* subset = (Cloud*)collection->selected_obj;
     pathManager->saving_subset(subset);
   }
 

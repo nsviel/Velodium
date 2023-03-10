@@ -18,19 +18,19 @@ public:
 
 public:
   //Method functions
-  bool algo_Bretagne(Collection* cloud);
+  bool algo_Bretagne(Collection* collection);
 
   //Sub-functions
   bool compute_linearRegression();
   bool compute_quadraRegression();
-  bool compute_correction(Collection* cloud);
+  bool compute_correction(Collection* collection);
   bool compute_IIR2(vector<float>& Ib, vector<float>& Ib_dist);
 
   //Plotting
-  void plot_bundleByClass(Collection* cloud);
-  void plot_linearRegression(Collection* cloud);
-  void plot_quadraticRegression(Collection* cloud);
-  void plot_intensityCorrection(Collection* cloud);
+  void plot_bundleByClass(Collection* collection);
+  void plot_linearRegression(Collection* collection);
+  void plot_quadraticRegression(Collection* collection);
+  void plot_intensityCorrection(Collection* collection);
 
   //Setters / Getters
   inline vector<float> get_Im(){return Im;}

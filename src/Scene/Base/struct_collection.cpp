@@ -9,7 +9,7 @@ Collection::Collection(){
   this->ID_col_order = 0;
   this->ID_obj_selected = 0;
   this->ID_obj_last = 0;
-  this->ID_onthefly = 0;
+  this->ID_obj_otf = 0;
 
   //Info
   this->name = "";

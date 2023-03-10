@@ -18,16 +18,16 @@ if(ImGui::Button("cos(It)", ImVec2(100,0))){
 
 
   //Sub functions
-  void cloud_stats_location(Collection* cloud);
-  void cloud_stats_intensity(Collection* cloud);
-  void cloud_stats_distance(Collection* cloud);
-  void cloud_stats_cosIt(Collection* cloud);
+  void cloud_stats_location(Collection* collection);
+  void cloud_stats_intensity(Collection* collection);
+  void cloud_stats_distance(Collection* collection);
+  void cloud_stats_cosIt(Collection* collection);
 
 
 
 //Sub functions
-void MOD_cloud::cloud_stats_location(Collection* cloud){
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+void MOD_cloud::cloud_stats_location(Collection* collection){
+  Cloud* subset = (Cloud*)collection->selected_obj;
   vector<vec3>& XYZ = subset->xyz;
   vec3 XYZ_COM = subset->COM;
   vec3 XYZ_Min = subset->min;
@@ -55,8 +55,8 @@ void MOD_cloud::cloud_stats_location(Collection* cloud){
     cout<<"__________"<<endl;
   }
 }
-void MOD_cloud::cloud_stats_intensity(Collection* cloud){
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+void MOD_cloud::cloud_stats_intensity(Collection* collection){
+  Cloud* subset = (Cloud*)collection->selected_obj;
   vector<float>& Is = subset->I;
   //---------------------------
 
@@ -74,8 +74,8 @@ void MOD_cloud::cloud_stats_intensity(Collection* cloud){
     cout<<"__________"<<endl;
   }
 }
-void MOD_cloud::cloud_stats_distance(Collection* cloud){
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+void MOD_cloud::cloud_stats_distance(Collection* collection){
+  Cloud* subset = (Cloud*)collection->selected_obj;
   vector<float>& dist = subset->R;
   //---------------------------
 
@@ -93,8 +93,8 @@ void MOD_cloud::cloud_stats_distance(Collection* cloud){
   cout<<"Mean : "<<fct_mean(dist)<<endl;
   cout<<"__________"<<endl;
 }
-void MOD_cloud::cloud_stats_cosIt(Collection* cloud){
-  Cloud* subset = (Cloud*)cloud->selected_obj;
+void MOD_cloud::cloud_stats_cosIt(Collection* collection){
+  Cloud* subset = (Cloud*)collection->selected_obj;
   vector<float>& cosIt =  subset->cosIt;
   vector<float>& It =  subset->It;
   //---------------------------

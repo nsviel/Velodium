@@ -33,8 +33,8 @@ public:
 
 public:
   //Extract / Cutting function
-  void fct_extractCloud(Collection* cloud);
-  void fct_extractSelected(Collection* cloud);
+  void fct_extractCloud(Collection* collection);
+  void fct_extractSelected(Collection* collection);
   void fct_cutCloud(Cloud* subset);
   void fct_cutCloud_all();
   void fct_selectPart(Cloud* subset, vec3 min, vec3 max);

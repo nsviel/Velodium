@@ -26,7 +26,7 @@ public:
   bool save_subset(Cloud* subset, string format, string dirPath);
   bool save_subset(Cloud* subset, string format, string dirPath, string fileName);
   bool save_subset_silent(Cloud* subset, string format, string dirPath);
-  bool save_set_silent(Collection* cloud, int ID, string path, int nb);
+  bool save_set_silent(Collection* collection, int ID, string path, int nb);
 
   inline file_PTS* get_ptsManager(){return ptsManager;}
   inline file_PTX* get_ptxManager(){return ptxManager;}

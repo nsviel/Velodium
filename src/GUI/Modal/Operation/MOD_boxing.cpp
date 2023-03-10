@@ -107,14 +107,14 @@ void MOD_boxing::control_box(){
   //---------------------------
 }
 void MOD_boxing::change_box(float xmin, float ymin, float zmin, float xmax, float ymax, float zmax){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
-  if(cloud != nullptr){
+  if(collection != nullptr){
     vec3 min_perc = vec3(xmin, ymin, zmin);
     vec3 max_perc = vec3(xmax, ymax, zmax);
-    boxingManager->compute_box_MinMax(cloud, min_perc, max_perc);
-    boxingManager->compute_visibility(cloud);
+    boxingManager->compute_box_MinMax(collection, min_perc, max_perc);
+    boxingManager->compute_visibility(collection);
   }
 
   //---------------------------

@@ -18,7 +18,7 @@ void slamap::reset(){
   this->map.clear();
   this->cloud.clear();
 
-  this->linked_cloud_ID = -1;
+  this->linked_col_ID = -1;
   this->linked_subset_ID = -1;
   this->current_frame_ID = 0;
 

@@ -38,15 +38,15 @@ Obstacle::~Obstacle(){}
 
 //Main functions
 void Obstacle::runtime(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
-  if(with_prediction && cloud != nullptr){
+  if(with_prediction && collection != nullptr){
     //Check for new prediction (ground thruth or prediction)
     bool* is_new_pred = predManager->runtime_prediction();
 
     if(*is_new_pred){
-      this->build_cloud_obstacle(cloud);
+      this->build_cloud_obstacle(collection);
 
       //Reverse flag
       *is_new_pred = false;
@@ -58,58 +58,58 @@ void Obstacle::runtime(){
 
 //Manual obstacle adding
 void Obstacle::add_detectioned(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Get prediction file paths
   vector<string> path_vec = zenity_file_vec("Prediction loading");
 
   //Parses predictions files
-  predManager->compute_prediction(cloud, path_vec);
+  predManager->compute_prediction(collection, path_vec);
 
   //Build glyphs
-  this->build_cloud_obstacle(cloud);
+  this->build_cloud_obstacle(collection);
 
   //---------------------------
 }
 void Obstacle::add_detectioned(string path_dir){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Get prediction file paths
   vector<string> path_vec = list_all_path(path_dir);
 
   //Parses predictions files
-  predManager->compute_prediction(cloud, path_vec);
+  predManager->compute_prediction(collection, path_vec);
 
   //Build glyphs
-  this->build_cloud_obstacle(cloud);
+  this->build_cloud_obstacle(collection);
 
   //---------------------------
 }
 void Obstacle::add_obstacle_grTr(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
   //Get prediction file paths
   vector<string> path_vec = zenity_file_vec("Ground truth loading");
 
   //Parses predictions files
-  predManager->compute_groundTruth(cloud, path_vec);
+  predManager->compute_groundTruth(collection, path_vec);
 
   //Build glyphs
-  this->build_cloud_obstacle(cloud);
+  this->build_cloud_obstacle(collection);
 
   //---------------------------
 }
 
 //Subfunctions
-void Obstacle::build_cloud_obstacle(Collection* cloud){
+void Obstacle::build_cloud_obstacle(Collection* collection){
   //---------------------------
   /*
   //Process prediction if the ieme subset are not already processed
-  for(int i=0; i<cloud->list_obj.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+  for(int i=0; i<collection->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(collection->list_obj.begin(), i);
 
     if(subset->detection.is_predicted == false){
       //Build obstacle glyph

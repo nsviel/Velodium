@@ -31,7 +31,7 @@ public:
   bool extract_listTest();
 
   //Subfunctions
-  bool is_cloudReference(Collection* cloud);
+  bool is_cloudReference(Collection* collection);
   bool load_calibrationTargets(list<Collection*>* list, string path_str);
   Collection* get_specificSpectralon(string p, string m, bool degree);
   Collection* get_specificSphere(string m);

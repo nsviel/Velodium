@@ -26,25 +26,25 @@ public:
 public:
   //Main functions
   void algo_keypoints(Collection* cloud_P, Collection* cloud_Q);
-  void algo_keypoints_one(Collection* cloud);
-  void algo_normals(Collection* cloud);
+  void algo_keypoints_one(Collection* collection);
+  void algo_normals(Collection* collection);
 
   //DownSampling
-  void downSamp_VoxelGrid(Collection* cloud);
-  void downSamp_Segmentation(Collection* cloud);
-  void downSamp_Octree(Collection* cloud);
+  void downSamp_VoxelGrid(Collection* collection);
+  void downSamp_Segmentation(Collection* collection);
+  void downSamp_Octree(Collection* collection);
 
   //Keypoints methods
-  void keypoint_SIFT(Collection* cloud);
-  void keypoint_HARRIS3D(Collection* cloud);
-  void keypoint_HARRIS6D(Collection* cloud);
-  void keypoint_SUSAN(Collection* cloud);
+  void keypoint_SIFT(Collection* collection);
+  void keypoint_HARRIS3D(Collection* collection);
+  void keypoint_HARRIS6D(Collection* collection);
+  void keypoint_SUSAN(Collection* collection);
 
   //Descriptor methods
-  void descriptor_PFH(Collection* cloud, PFHtype& descriptors);
-  void descriptor_FPFH(Collection* cloud, FPFHtype& descriptors);
-  void descriptor_SHOT(Collection* cloud, SHOTtype& descriptors);
-  void descriptor_3DSC(Collection* cloud, SCtype& descriptors);
+  void descriptor_PFH(Collection* collection, PFHtype& descriptors);
+  void descriptor_FPFH(Collection* collection, FPFHtype& descriptors);
+  void descriptor_SHOT(Collection* collection, SHOTtype& descriptors);
+  void descriptor_3DSC(Collection* collection, SCtype& descriptors);
 
   //Rejection mesthods
   void rejection_siftNNradius(XYZRGBtype& keypoints);

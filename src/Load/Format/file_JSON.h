@@ -12,7 +12,7 @@ public:
   ~file_JSON();
 
 public:
-  void parse_json_obstacle(Collection* cloud, vector<string> paths, string data);
+  void parse_json_obstacle(Collection* collection, vector<string> paths, string data);
 
 private:
 

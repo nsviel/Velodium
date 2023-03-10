@@ -39,9 +39,9 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
 SLAM_assessment::~SLAM_assessment(){}
 
 //Main function
-bool SLAM_assessment::compute_assessment(Collection* cloud, int subset_ID, float time){
-  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
-  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
+bool SLAM_assessment::compute_assessment(Collection* collection, int subset_ID, float time){
+  Frame* frame_m0 = collection->get_frame_byID(subset_ID);
+  Frame* frame_m1 = collection->get_frame_byID(subset_ID-1);
   //---------------------------
 
   //Check computation time
@@ -51,7 +51,7 @@ bool SLAM_assessment::compute_assessment(Collection* cloud, int subset_ID, float
   bool success_abs = compute_assessment_abs(frame_m0, frame_m1);
 
   //Check relative values
-  bool success_rlt = compute_assessment_rlt(cloud, subset_ID);
+  bool success_rlt = compute_assessment_rlt(collection, subset_ID);
 
   //Check number of residuals
   bool success_rsd = compute_assessment_rsd(frame_m0);
@@ -65,15 +65,15 @@ bool SLAM_assessment::compute_assessment(Collection* cloud, int subset_ID, float
 
   //---------------------------
   frame_m0->is_slam_done = success;
-  this->compute_visibility(cloud);
+  this->compute_visibility(collection);
   return success;
 }
-void SLAM_assessment::compute_visibility(Collection* cloud){
+void SLAM_assessment::compute_visibility(Collection* collection){
   bool slam_failed = false;
   //---------------------------
 
-  for(int i=cloud->nb_obj-1; i=0; i--){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
+  for(int i=collection->nb_obj-1; i=0; i--){
+    Cloud* subset = (Cloud*)collection->get_obj(i);
     Frame* frame = &subset->frame;
 
     if(frame->is_slam_done == false){
@@ -155,9 +155,9 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   //---------------------------
   return success;
 }
-bool SLAM_assessment::compute_assessment_rlt(Collection* cloud, int subset_ID){
-  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
-  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
+bool SLAM_assessment::compute_assessment_rlt(Collection* collection, int subset_ID){
+  Frame* frame_m0 = collection->get_frame_byID(subset_ID);
+  Frame* frame_m1 = collection->get_frame_byID(subset_ID-1);
   bool success = true;
   //---------------------------
 
@@ -175,7 +175,7 @@ bool SLAM_assessment::compute_assessment_rlt(Collection* cloud, int subset_ID){
 
   //Make verification tests
   if(frame_m0->ID >= nb_rlt_previous_pose){
-    this->compute_stat_mean(cloud, subset_ID);
+    this->compute_stat_mean(collection, subset_ID);
 
     //Test 1: check ego distance
     if(frame_m0->ego_trans > sum_ego_trans + 1){
@@ -240,10 +240,10 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   //---------------------------
   return true;
 }
-void SLAM_assessment::compute_statistics(Collection* cloud, int subset_ID, float duration){
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
-  Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
-  Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
+void SLAM_assessment::compute_statistics(Collection* collection, int subset_ID, float duration){
+  Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
+  Frame* frame_m0 = collection->get_frame_byID(subset_ID);
+  Frame* frame_m1 = collection->get_frame_byID(subset_ID-1);
   slamap* local_map = slam_map->get_local_map();
   //---------------------------
 
@@ -296,7 +296,7 @@ double SLAM_assessment::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &
   //---------------------------
   return norm;
 }
-void SLAM_assessment::compute_stat_mean(Collection* cloud, int subset_ID){
+void SLAM_assessment::compute_stat_mean(Collection* collection, int subset_ID){
   //---------------------------
 
   //Compute previous frame stat means
@@ -306,7 +306,7 @@ void SLAM_assessment::compute_stat_mean(Collection* cloud, int subset_ID){
   this->sum_diff_rotat = 0;
   this->sum_opti_score = 0;
   for(int j=1; j<nb_rlt_previous_pose; j++){
-    Frame* frame_m = cloud->get_frame_byID(subset_ID-j);
+    Frame* frame_m = collection->get_frame_byID(subset_ID-j);
 
     if(frame_m->is_slam_made){
       sum_ego_trans += frame_m->ego_trans;

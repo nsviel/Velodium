@@ -63,16 +63,16 @@ void Module_slam::draw_online(){
 
   //---------------------------
 }
-void Module_slam::online(Collection* cloud, int subset_ID){
+void Module_slam::online(Collection* collection, int subset_ID){
   //---------------------------
 
   if(with_slam){
     if(algo == 0){
-      Cloud* subset = (Cloud*)cloud->get_obj_byID(subset_ID);
+      Cloud* subset = (Cloud*)collection->get_obj_byID(subset_ID);
       cticpManager->algo(subset);
     }
     else if(algo == 1){
-      slamManager->compute_slam(cloud, subset_ID);
+      slamManager->compute_slam(collection, subset_ID);
     }
   }
 

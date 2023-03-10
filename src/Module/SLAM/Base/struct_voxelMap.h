@@ -36,7 +36,7 @@ struct slamap{
   double dist_max;
 
   //IDs
-  int linked_cloud_ID;
+  int linked_col_ID;
   int linked_subset_ID;
   int current_frame_ID;
 

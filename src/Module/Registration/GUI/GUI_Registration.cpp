@@ -230,7 +230,7 @@ void GUI_registration::regist_Registration(){
   ImGui::Separator();
 }
 void GUI_registration::regist_Stats(){
-  /*Collection* cloud = sceneManager->get_selected_collection();
+  /*Collection* collection = sceneManager->get_selected_collection();
   Collection* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 

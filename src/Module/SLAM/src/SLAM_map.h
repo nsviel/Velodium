@@ -20,7 +20,7 @@ public:
 public:
   //Main function
   void update_configuration();
-  void update_map(Collection* cloud, int subset_ID);
+  void update_map(Collection* collection, int subset_ID);
   void reset_map();
 
   //Sub-function

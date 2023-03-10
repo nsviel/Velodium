@@ -122,11 +122,11 @@ void GUI_Obstacle::parameter_prediction(){
 
 //Draw label text function
 void GUI_Obstacle::runtime_display_naming(){
-  /*Collection* cloud = sceneManager->get_selected_collection();
+  /*Collection* collection = sceneManager->get_selected_collection();
   if(cloud != nullptr){
     //---------------------------
 
-    Cloud* subset = (Cloud*)cloud->selected_obj;
+    Cloud* subset = (Cloud*)collection->selected_obj;
     Data_pred* detection = &subset->detection;
 
     this->label_ID = 0;

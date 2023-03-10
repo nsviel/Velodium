@@ -57,11 +57,11 @@ void Player::update_configuration(){
 }
 void Player::runtime(){
   //Continually running, wait for flag to proceed
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //---------------------------
 
-  if(player_time_flag && cloud != nullptr){
-    this->select_bySubsetID(cloud, cloud->ID_obj_selected + 1);
+  if(player_time_flag && collection != nullptr){
+    this->select_bySubsetID(collection, collection->ID_obj_selected + 1);
 
     player_time_flag = false;
   }
@@ -70,31 +70,31 @@ void Player::runtime(){
 }
 
 //Selection functions
-void Player::select_bySubsetID(Collection* cloud, int ID_subset){
-  if(cloud == nullptr) return;
+void Player::select_bySubsetID(Collection* collection, int ID_subset){
+  if(collection == nullptr) return;
   //---------------------------
 
   //If on the fly option, load subset
-  flyManager->compute_onthefly(cloud, ID_subset);
+  flyManager->compute_onthefly(collection, ID_subset);
 
   //If in side range, make operation on subset
-  if(compute_range_limit(cloud, ID_subset)){
-    onlineManager->compute_onlineOpe(cloud, ID_subset);
+  if(compute_range_limit(collection, ID_subset)){
+    onlineManager->compute_onlineOpe(collection, ID_subset);
   }
 
   //Update glyphs
-  Cloud* subset = (Cloud*)cloud->get_obj_byID(ID_subset);
+  Cloud* subset = (Cloud*)collection->get_obj_byID(ID_subset);
   objectManager->update_glyph_subset(subset);
 
   //---------------------------
 }
 void Player::compute_wheel_selection(string direction){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
   //Wheel - rolling stone
-  if(cloud != nullptr){
-    int subset_selected_ID = cloud->ID_obj_selected;
+  if(collection != nullptr){
+    int subset_selected_ID = collection->ID_obj_selected;
 
     if(direction == "up"){
       subset_selected_ID++;
@@ -103,18 +103,18 @@ void Player::compute_wheel_selection(string direction){
       subset_selected_ID--;
     }
 
-    this->select_bySubsetID(cloud, subset_selected_ID);
+    this->select_bySubsetID(collection, subset_selected_ID);
   }
 
   //----------------------------
 }
-bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
-  Cloud* subset_first = (Cloud*)cloud->get_obj(0);
-  Cloud* subset_last = (Cloud*)cloud->get_obj(cloud->nb_obj-1);
+bool Player::compute_range_limit(Collection* collection, int& ID_subset){
+  Cloud* subset_first = (Cloud*)collection->get_obj(0);
+  Cloud* subset_last = (Cloud*)collection->get_obj(collection->nb_obj-1);
   //---------------------------
 //PROBLEM DE ID ICI JE PENSE
   //Check if subset exists
-  Cloud* subset = (Cloud*)cloud->get_obj(ID_subset);
+  Cloud* subset = (Cloud*)collection->get_obj(ID_subset);
   if(subset == nullptr){
     return false;
   }
@@ -139,8 +139,8 @@ bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
     }
   }
 
-  //Set visibility parameter for each cloud subset
-  cloud->ID_obj_selected = ID_subset;
+  //Set visibility parameter for each collection subset
+  collection->ID_obj_selected = ID_subset;
 
   //---------------------------
   return true;
@@ -191,22 +191,22 @@ void Player::player_start_or_pause(){
   //---------------------------
 }
 void Player::player_stop(){
-  Collection* cloud = sceneManager->get_selected_collection();
+  Collection* collection = sceneManager->get_selected_collection();
   this->player_isrunning = false;
   this->player_ispaused = false;
   //---------------------------
 
   timerManager->stop();
-  this->select_bySubsetID(cloud, 0);
+  this->select_bySubsetID(collection, 0);
 
   //---------------------------
 }
-void Player::player_save(Collection* cloud){
+void Player::player_save(Collection* collection){
   //---------------------------
 
   //Save each subset
-  for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)cloud->get_obj(i);
+  for(int i=0; i<collection->nb_obj; i++){
+    Cloud* subset = (Cloud*)collection->get_obj(i);
     saverManager->save_subset(subset, "ply", player_saveas);
   }
 

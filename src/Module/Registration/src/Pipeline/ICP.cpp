@@ -280,7 +280,7 @@ float ICP::compute_SSE(Collection* cloud_P, Collection* cloud_Q){
   //---------------------------
   return SSE;
 }
-float ICP::compute_SSE_groundTruth(Collection* cloud){
+float ICP::compute_SSE_groundTruth(Collection* collection){
   float SSE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
@@ -304,7 +304,7 @@ float ICP::compute_SSE_groundTruth(Collection* cloud){
   //---------------------------
   return SSE;
 }
-float ICP::compute_MSE_groundTruth(Collection* cloud){
+float ICP::compute_MSE_groundTruth(Collection* collection){
   float MSE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
@@ -332,7 +332,7 @@ float ICP::compute_MSE_groundTruth(Collection* cloud){
   //---------------------------
   return MSE;
 }
-float ICP::compute_RMSE_groundTruth(Collection* cloud){
+float ICP::compute_RMSE_groundTruth(Collection* collection){
   float RMSE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;
@@ -359,7 +359,7 @@ float ICP::compute_RMSE_groundTruth(Collection* cloud){
   //---------------------------
   return RMSE;
 }
-float ICP::compute_MAE_groundTruth(Collection* cloud){
+float ICP::compute_MAE_groundTruth(Collection* collection){
   float MAE;
   /*vector<vec3>& XYZ = cloud->location.OBJ;
   vector<vec3>& XYZ_truth = cloud->registration.XYZ_groundTruth;

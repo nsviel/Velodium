@@ -38,7 +38,7 @@ public:
   //Subfunctions
   void operation_new_subset(Cloud* subset);
   void supress_nullpoints(Cloud* subset);
-  void control_nb_subset(Collection* cloud);
+  void control_nb_subset(Collection* collection);
   void create_empty_cloud();
 
   inline Scala* get_scalaManager(){return scalaManager;}

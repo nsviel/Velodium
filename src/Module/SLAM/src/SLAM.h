@@ -29,7 +29,7 @@ public:
 
 public:
   void update_configuration();
-  bool compute_slam(Collection* cloud, int subset_ID);
+  bool compute_slam(Collection* collection, int subset_ID);
   void reset_slam();
   void print_result();
 
@@ -46,11 +46,11 @@ public:
   inline void set_nb_thread(int value){this->nb_thread = value;}
 
 private:
-  bool check_condition(Collection* cloud, int subset_ID);
-  void compute_finalization(Collection* cloud, int subset_ID, bool success, float t_begin);
+  bool check_condition(Collection* collection, int subset_ID);
+  void compute_finalization(Collection* collection, int subset_ID, bool success, float t_begin);
   void compute_transform_subset(Cloud* subset);
   void compute_transform_glyph(Cloud* subset);
-  void reset_visibility(Collection* cloud, int subset_ID);
+  void reset_visibility(Collection* collection, int subset_ID);
 
 private:
   Node_engine* node_engine;
