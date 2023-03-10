@@ -119,7 +119,7 @@ void Filter::filter_sphere_cloud(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     this->filter_sphere_subset(subset);
   }
 
@@ -147,7 +147,7 @@ void Filter::filter_cylinder_cloud(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     this->filter_cylinder_subset(subset);
   }
 

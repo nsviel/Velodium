@@ -53,10 +53,9 @@ struct Collection
   //Stored Objects  A REVOIR
   int nb_obj;
   Object_* selected_obj;
-  std::list<Object_*> subset;
-  std::list<Object_*> subset_voxel;
-  std::list<Object_*> subset_buffer;
-  std::list<Object_*> subset_init;
+  std::list<Object_*> list_obj;
+  std::list<Object_*> list_obj_buffer;
+  std::list<Object_*> list_obj_init;
 
   //On-the-fly  A REVOIR
   bool is_onthefly;

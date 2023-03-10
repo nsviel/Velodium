@@ -74,7 +74,7 @@ void CT_ICP::algo(Collection* cloud){
 	int index_frame = 0;
 
 	for(int i=0; i<cloud->nb_obj; i++){
-		Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+		Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
 
 		// subset to local format
 		std::vector<Point3D> frame;

@@ -68,7 +68,7 @@ void Prediction::compute_prediction(string path){
   int frame_ID = parse_frame_ID(path);
 
   //For the subset with same name
-  for(int i=0; i<cloud->subset.size(); i++){
+  for(int i=0; i<cloud->list_obj.size(); i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
 
     if(subset->ID == frame_ID){
@@ -95,7 +95,7 @@ void Prediction::compute_prediction(Collection* cloud, vector<string> path_vec){
     int frame_ID = parse_frame_ID(path_file);
 
     //For the subset with same name
-    for(int j=0; j<cloud->subset.size(); j++){
+    for(int j=0; j<cloud->list_obj.size(); j++){
       Cloud* subset = (Cloud*)cloud->get_obj(j);
 
       if(subset->ID == frame_ID){
@@ -115,7 +115,7 @@ void Prediction::compute_groundTruth(Collection* cloud, string path_file){
   int frame_ID = parse_frame_ID(path_file);
 
   //For the subset with same name
-  for(int i=0; i<cloud->subset.size(); i++){
+  for(int i=0; i<cloud->list_obj.size(); i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
 
     if(subset->ID == frame_ID){
@@ -136,7 +136,7 @@ void Prediction::compute_groundTruth(Collection* cloud, vector<string> path_vec)
     int frame_ID = parse_frame_ID(path_file);
 
     //For the subset with same name
-    for(int j=0; j<cloud->subset.size(); j++){
+    for(int j=0; j<cloud->list_obj.size(); j++){
       Cloud* subset = (Cloud*)cloud->get_obj(j);
 
       if(subset->ID == frame_ID){

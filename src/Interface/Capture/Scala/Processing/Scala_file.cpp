@@ -64,8 +64,8 @@ vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
       Collection* cloud = (Collection*)loaderManager->get_created_object();
       cloud->path_file = allpath[i] + "/" + "scala" + ".csv";
 
-      for(int j=0; j<cloud->subset.size(); j++){
-        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
+      for(int j=0; j<cloud->list_obj.size(); j++){
+        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), j);
 
         for(int k=0; k<subset->rgb.size(); k++){
           subset->rgb[k] = vec4(Red, Green, Blue, 1.0f);
@@ -87,7 +87,7 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
   //---------------------------
 
   //ieme common subset
-  for(int i=0; i<clouds[0]->subset.size(); i++){
+  for(int i=0; i<clouds[0]->list_obj.size(); i++){
 
     //We accumulate 2 frame in one
     if(i == 0 || i % 2 == 0){
@@ -107,7 +107,7 @@ Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
     }
 
     if(i % 2 == 0){
-      cloud_scala->subset.push_back(subset);
+      cloud_scala->list_obj.push_back(subset);
     }
   }
 

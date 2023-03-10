@@ -287,9 +287,9 @@ void Extractor::define_buffer_init(Collection* collection, Cloud* cloud){
   Cloud* cloud_ini = new Cloud(*cloud);
 
   collection->selected_obj = cloud;
-  collection->subset.push_back(cloud);
-  collection->subset_buffer.push_back(cloud_buf);
-  collection->subset_init.push_back(cloud_ini);
+  collection->list_obj.push_back(cloud);
+  collection->list_obj_buffer.push_back(cloud_buf);
+  collection->list_obj_init.push_back(cloud_ini);
 
   //---------------------------
 }

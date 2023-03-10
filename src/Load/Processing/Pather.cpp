@@ -263,7 +263,7 @@ void Pather::saving_cloud_frame(Collection* cloud){
 
   //Save current cloud
   for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     string path = path_saving + subset->name;
 
     if(subset != nullptr && path_saving != ""){

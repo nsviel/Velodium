@@ -97,7 +97,7 @@ bool Surfacic_simplified::compute_quadraRegression(){
   return true;
 }
 bool Surfacic_simplified::compute_correction(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cosIt = subset->cosIt;
@@ -210,7 +210,7 @@ void Surfacic_simplified::plot_quadraticRegression(Collection* cloud){
   //---------------------------
 }
 void Surfacic_simplified::plot_intensityCorrection(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   this->algo_Bretagne(cloud);
   //--------------------------

@@ -28,31 +28,31 @@ Collection::Collection(){
   //---------------------------
 }
 
-//Add / remove subset
-void Collection::add_new_subset(Object_* subset){
+//Add / remove object
+void Collection::add_new_subset(Object_* object){
   //---------------------------
 
   //Initialize parameters
-  subset->is_visible = true;
-  Object_* subset_buffer = new Object_(*subset);
-  Object_* subset_init = new Object_(*subset);
+  object->is_visible = true;
+  Object_* list_obj_buffer = new Object_(*object);
+  Object_* list_obj_init = new Object_(*object);
 
-  //Insert new subset into cloud lists
-  this->subset.push_back(subset);
-  this->subset_buffer.push_back(subset_buffer);
-  this->subset_init.push_back(subset_init);
+  //Insert new object into cloud lists
+  this->list_obj.push_back(object);
+  this->list_obj_buffer.push_back(list_obj_buffer);
+  this->list_obj_init.push_back(list_obj_init);
 
-  //Update number of cloud subset
-  this->nb_obj = this->subset.size();
-  this->ID_obj_selected = subset->ID;
-  this->selected_obj = subset;
+  //Update number of cloud object
+  this->nb_obj = this->list_obj.size();
+  this->ID_obj_selected = object->ID;
+  this->selected_obj = object;
 
   //---------------------------
 }
 void Collection::remove_subset_last(){
   //---------------------------
 
-  //Get subset object
+  //Get list_obj object
   Object_* sub = this->get_obj(0);
   Object_* sub_buf = this->get_obj_buffer(0);
   Object_* sub_ini = this->get_obj_init(0);
@@ -64,9 +64,9 @@ void Collection::remove_subset_last(){
   glDeleteVertexArrays(1, &sub->vao);
 
   //Supress Subset pointer
-  subset.pop_front();
-  subset_buffer.pop_front();
-  subset_init.pop_front();
+  list_obj.pop_front();
+  list_obj_buffer.pop_front();
+  list_obj_init.pop_front();
 
   //Delete Subset object
   delete sub;
@@ -74,10 +74,10 @@ void Collection::remove_subset_last(){
   delete sub_ini;
 
   //---------------------------
-  this->nb_obj = subset.size();
+  this->nb_obj = list_obj.size();
 }
 void Collection::remove_subset_all(){
-  int size = subset.size();
+  int size = list_obj.size();
   //---------------------------
 
   for(int i=0; i<size; i++){
@@ -87,13 +87,13 @@ void Collection::remove_subset_all(){
   //---------------------------
 }
 
-// Get subset frame
+// Get object frame
 Frame* Collection::get_frame_byID(int querry){
   //---------------------------
 
-  Object_* subset = get_obj_byID(querry);
-  if(subset != nullptr){
-    //return subset->get_frame();
+  Object_* object = get_obj_byID(querry);
+  if(object != nullptr){
+    //return object->get_frame();
   }else{
     return nullptr;
   }
@@ -101,12 +101,12 @@ Frame* Collection::get_frame_byID(int querry){
   //---------------------------
 }
 
-//Retrieve subset
+//Retrieve object
 Object_* Collection::get_obj_selected_init(){
   //---------------------------
 
-  for(int i=0; i<subset.size(); i++){
-    Object_* sub = *next(subset_init.begin(), i);
+  for(int i=0; i<list_obj.size(); i++){
+    Object_* sub = *next(list_obj_init.begin(), i);
 
     if(sub->ID == ID_obj_selected){
       return sub;
@@ -119,9 +119,9 @@ Object_* Collection::get_obj_selected_init(){
 Object_* Collection::get_obj(int querry){
   //---------------------------
 
-  if(querry > subset.size()) return nullptr;
+  if(querry > list_obj.size()) return nullptr;
   else{
-    return *next(subset.begin(), querry);
+    return *next(list_obj.begin(), querry);
   }
 
   //---------------------------
@@ -129,8 +129,8 @@ Object_* Collection::get_obj(int querry){
 Object_* Collection::get_obj_byID(int querry){
   //---------------------------
 
-  for(int i=0; i<subset.size(); i++){
-    Object_* sub = *next(subset.begin(), i);
+  for(int i=0; i<list_obj.size(); i++){
+    Object_* sub = *next(list_obj.begin(), i);
 
     if(sub->ID == querry){
       return sub;
@@ -143,15 +143,15 @@ Object_* Collection::get_obj_byID(int querry){
 Object_* Collection::get_obj_buffer(int querry){
   //---------------------------
 
-  return *next(subset_buffer.begin(), querry);
+  return *next(list_obj_buffer.begin(), querry);
 
   //---------------------------
 }
 Object_* Collection::get_obj_buffer_byID(int querry){
   //---------------------------
 
-  for(int i=0; i<subset.size(); i++){
-    Object_* sub = *next(subset_buffer.begin(), i);
+  for(int i=0; i<list_obj.size(); i++){
+    Object_* sub = *next(list_obj_buffer.begin(), i);
 
     if(sub->ID == querry){
       return sub;
@@ -164,9 +164,9 @@ Object_* Collection::get_obj_buffer_byID(int querry){
 Object_* Collection::get_obj_init(int querry){
   //---------------------------
 
-  if(querry > subset_init.size()) return nullptr;
+  if(querry > list_obj_init.size()) return nullptr;
   else{
-    return *next(subset_init.begin(), querry);
+    return *next(list_obj_init.begin(), querry);
   }
 
   //---------------------------
@@ -174,8 +174,8 @@ Object_* Collection::get_obj_init(int querry){
 Object_* Collection::get_obj_init_byID(int querry){
   //---------------------------
 
-  for(int i=0; i<subset.size(); i++){
-    Object_* sub = *next(subset_init.begin(), i);
+  for(int i=0; i<list_obj.size(); i++){
+    Object_* sub = *next(list_obj_init.begin(), i);
 
     if(sub->ID == querry){
       return sub;

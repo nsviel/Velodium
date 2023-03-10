@@ -30,16 +30,16 @@ Boxing::Boxing(Node_operation* node_ope){
 Boxing::~Boxing(){}
 
 void Boxing::compute_box_MinMax(Collection* cloud, vec3 min_perc, vec3 max_perc){
-  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
   //---------------------------
 
-  sceneManager->update_MinMax(subset_init);
+  sceneManager->update_MinMax(list_obj_init);
 
   //Get Z extremums
-  vec3 min = subset_init->min;
-  vec3 max = subset_init->max;
+  vec3 min = list_obj_init->min;
+  vec3 max = list_obj_init->max;
   vec3 diff = max - min;
 
   //Compute min abs
@@ -86,12 +86,12 @@ void Boxing::compute_visibility(Collection* cloud, int ID){
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
   Cloud* subset = (Cloud*)cloud->get_obj(ID);
-  Cloud* subset_init = (Cloud*)cloud->get_obj_init(ID);
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_init(ID);
   //---------------------------
 
-  subset->xyz = subset_init->xyz;
-  subset->I = subset_init->I;
-  subset->rgb = subset_init->rgb;
+  subset->xyz = list_obj_init->xyz;
+  subset->I = list_obj_init->I;
+  subset->rgb = list_obj_init->rgb;
 
   vector<vec3>& xyz = subset->xyz;
   vector<int> idx;
@@ -117,12 +117,12 @@ void Boxing::supress_selected_point(Collection* cloud){
 
   for(int i=0; i<cloud->nb_obj; i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
-    Cloud* subset_init = (Cloud*)cloud->get_obj_init(i);
+    Cloud* list_obj_init = (Cloud*)cloud->get_obj_init(i);
     vector<int>& idx = subset->selected;
 
-    subset->xyz = subset_init->xyz;
-    subset->rgb = subset_init->rgb;
-    subset->I = subset_init->I;
+    subset->xyz = list_obj_init->xyz;
+    subset->rgb = list_obj_init->rgb;
+    subset->I = list_obj_init->I;
 
     if(idx.size() != 0){
       attribManager->make_supressPoints(subset, idx);
@@ -144,10 +144,10 @@ void Boxing::stop_boxing(){
     cloud->is_boxed = false;
     for(int j=0; j<cloud->nb_obj; j++){
       Cloud* subset = (Cloud*)cloud->get_obj(j);
-      Cloud* subset_init = (Cloud*)cloud->get_obj_init(j);
-      subset->xyz = subset_init->xyz;
-      subset->rgb = subset_init->rgb;
-      subset->I = subset_init->I;
+      Cloud* list_obj_init = (Cloud*)cloud->get_obj_init(j);
+      subset->xyz = list_obj_init->xyz;
+      subset->rgb = list_obj_init->rgb;
+      subset->I = list_obj_init->I;
       sceneManager->update_buffer_location(subset);
     }
   }

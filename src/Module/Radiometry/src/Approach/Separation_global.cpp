@@ -149,7 +149,7 @@ bool Separation_global::algo_distance(){
   return true;
 }
 bool Separation_global::algo_correction(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cIt = subset->cosIt;
@@ -363,7 +363,7 @@ void Separation_global::compute_Reference_angle(){
 
   for(int i=0; i<list_ref->size() ;i++){
     Collection* cloud_25 = *next(list_ref->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud_25->subset.begin(), 0);
+    Cloud* subset = (Cloud*)*next(cloud_25->list_obj.begin(), 0);
     if(subset->name == nameRef){
       vector<float> d_ref{ fct_mean(subset->cosIt) };
       cIt_lambda = polyval(d_ref, cIt_coeffs, cIt_n);
@@ -383,7 +383,7 @@ void Separation_global::compute_Reference_distance(){
 
   for(int i=0; i<list_ref->size() ;i++){
     Collection* cloud_ref = *next(list_ref->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud_ref->subset.begin(), 0);
+    Cloud* subset = (Cloud*)*next(cloud_ref->list_obj.begin(), 0);
     if(subset->name == nameRef){
       vector<float> R_ref{ fct_mean(subset->R) };
       R_lambda = polyval(R_ref, R_coeffs, R_n);
@@ -555,7 +555,7 @@ void Separation_global::plot_MeanError(){
   plotManager->plot_Curve(ebyn_cIt_n, ebyn_cIt_e);
 }
 void Separation_global::plot_PolyRegression(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
   vector<float>& cIt = subset->cosIt;
@@ -599,7 +599,7 @@ void Separation_global::plot_bundleByClass(Collection* cloud){
 }
 void Separation_global::plot_Icorr(Collection* cloud){
   this->algo(cloud);
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   //--------------------------------
 

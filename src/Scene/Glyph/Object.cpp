@@ -138,8 +138,8 @@ void Object::runtime_glyph_scene(){
 void Object::runtime_glyph_subset_all(Collection* cloud){
   //---------------------------
 
-  for(int j=0; j<cloud->subset.size(); j++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
+  for(int j=0; j<cloud->list_obj.size(); j++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), j);
 
     //If the subset is visible
     if(subset->is_visible){
@@ -284,7 +284,7 @@ void Object::update_glyph_cloud(Collection* cloud){
 
   //Update cloud subset glyphs
   for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     this->update_glyph_subset(subset);
   }
 
@@ -348,7 +348,7 @@ void Object::set_object_visibility(string name, bool val){
     //Set normal glyph visibility
     if(name == "normal"){
       for(int i=0; i<cloud->nb_obj; i++){
-        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
         Glyph* normal = &subset->glyphs["normal"];
         normal->is_visible = val;
       }
@@ -356,7 +356,7 @@ void Object::set_object_visibility(string name, bool val){
     //Set keypoint glyph visibility
     else if(name == "keypoint"){
       for(int i=0; i<cloud->nb_obj; i++){
-        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
         Glyph* keypoint = &subset->glyphs["keypoint"];
         keypoint->is_visible = val;
       }
@@ -364,7 +364,7 @@ void Object::set_object_visibility(string name, bool val){
     //Set tree glyph visibility
     else if(name == "tree"){
       for(int i=0; i<cloud->nb_obj; i++){
-        Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+        Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
         Glyph* tree = &subset->glyphs["tree"];
         tree->is_visible = val;
       }

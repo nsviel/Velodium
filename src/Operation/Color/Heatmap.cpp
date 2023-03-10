@@ -66,7 +66,7 @@ void Heatmap::make_cloud_heatmap(Collection* cloud){
   //---------------------------
 
   //Apply or reverse heatmap for cloud
-  for(int i=0; i<cloud->subset.size(); i++){
+  for(int i=0; i<cloud->list_obj.size(); i++){
     Cloud* subset = (Cloud*)cloud->get_obj(i);
     Cloud* subset_buf = (Cloud*)cloud->get_obj_buffer(i);
     Cloud* subset_ini = (Cloud*)cloud->get_obj_init(i);

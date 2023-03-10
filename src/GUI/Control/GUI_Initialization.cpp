@@ -93,7 +93,7 @@ void GUI_Initialization::operation_cloud(Collection* cloud){
     //Set scaling
     if(cloud_scale != 1){
       Transformation transformManager;
-      for(int i=0; i<cloud->subset.size(); i++){
+      for(int i=0; i<cloud->list_obj.size(); i++){
         Cloud* subset = (Cloud*)cloud->get_obj(i);
         transformManager.make_scaling(subset, (float)cloud_scale);
         sceneManager->update_buffer_location(subset);

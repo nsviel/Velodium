@@ -46,7 +46,7 @@ public:
   void fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2);
 
   //Selection function
-  void fct_highlighting(Cloud* subset, Cloud* subset_init);
+  void fct_highlighting(Cloud* subset, Cloud* list_obj_init);
   void set_AABB_min(vec3 min_in);
   void set_AABB_max(vec3 max_in);
 

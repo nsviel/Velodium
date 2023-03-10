@@ -84,8 +84,8 @@ void MOD_operation::window_selection(){
     if(ImGui::Checkbox("Hightligth", highlightON) || ImGui::IsKeyPressed(258)){
       if(cloud != nullptr){
         Cloud* subset = (Cloud*)cloud->selected_obj;
-        Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
-        extractionManager->fct_highlighting(subset, subset_init);
+        Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+        extractionManager->fct_highlighting(subset, list_obj_init);
       }
     }
 

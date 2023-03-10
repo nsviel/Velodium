@@ -101,8 +101,8 @@ void Engine::draw_untextured_cloud(){
 
     //By cloud
     if(collection->is_visible){
-      for(int j=0; j<collection->subset.size(); j++){
-        Cloud* cloud = (Cloud*)*next(collection->subset.begin(), j);
+      for(int j=0; j<collection->list_obj.size(); j++){
+        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
 
         if(cloud->is_visible && cloud->has_texture == false){
           gpuManager->draw_object(cloud);
@@ -125,8 +125,8 @@ void Engine::draw_textured_cloud(){
 
     //By cloud
     if(collection->is_visible){
-      for(int j=0; j<collection->subset.size(); j++){
-        Cloud* cloud = (Cloud*)*next(collection->subset.begin(), j);
+      for(int j=0; j<collection->list_obj.size(); j++){
+        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
 
         if(cloud->is_visible && cloud->has_texture && with_texture){
           gpuManager->bind_texture(cloud->tex_ID);

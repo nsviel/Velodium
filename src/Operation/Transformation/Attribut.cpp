@@ -367,14 +367,14 @@ void Attribut::cloudsData(){
   for(int i=0; i<list_collection->size(); i++){
     Collection* cloud = *next(list_collection->begin(),i);
     Cloud* subset = (Cloud*)cloud->selected_obj;
-    Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+    Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
 
     if(subset->name.find("rdm") != std::string::npos){
       vector<float>& Is = subset->I;
-      vector<float>& Is_ini = subset_init->I;
-      vector<float>& It = subset_init->It;
-      vector<float>& cosIt = subset_init->cosIt;
-      vector<float>& dist = subset_init->R;
+      vector<float>& Is_ini = list_obj_init->I;
+      vector<float>& It = list_obj_init->It;
+      vector<float>& cosIt = list_obj_init->cosIt;
+      vector<float>& dist = list_obj_init->R;
 
       if(cosIt.size() == 0 && subset->Nxyz.size() != 0) compute_cosIt(subset);
 
@@ -608,7 +608,7 @@ void Attribut::compute_normals_invert(){
   if(!sceneManager->get_is_list_empty()){
     Collection* cloud = sceneManager->get_selected_collection();
     Cloud* subset = (Cloud*)cloud->selected_obj;
-    Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+    Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
     vector<vec3>& normals = subset->Nxyz;
     //---------------------------
 
@@ -617,7 +617,7 @@ void Attribut::compute_normals_invert(){
         normals[i][j] = -normals[i][j];
       }
     }
-    subset_init->Nxyz = normals;
+    list_obj_init->Nxyz = normals;
 
     //---------------------------
   }
@@ -740,9 +740,9 @@ void Attribut::fct_moins(){
 void Attribut::fct_IsRange(vec2 range){
   Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = (Cloud*)cloud->selected_obj;
-  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
   vector<float>& Is = subset->I;
-  const vector<float>& Is_ini = subset_init->I;
+  const vector<float>& Is_ini = list_obj_init->I;
   //---------------------------
 
   for(int i=0; i<Is.size(); i++){

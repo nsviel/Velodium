@@ -120,7 +120,7 @@ bool SLAM::check_condition(Collection* cloud, int subset_ID){
   }
 
   //Subset number & timestamp
-  if(subset_ID >= 2 && cloud->subset.size() < 2){
+  if(subset_ID >= 2 && cloud->list_obj.size() < 2){
     console.AddLog("error" ,"[SLAM] No enough subsets");
     return false;
   }

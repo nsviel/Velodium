@@ -59,8 +59,8 @@ void MOD_extraction::extract_with_aabb(){
   if(ImGui::Checkbox("Hightligth", highlightON)){
     if(cloud != nullptr){
       Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, subset_init);
+      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      extractionManager->fct_highlighting(subset, list_obj_init);
     }
   }
   ImGui::SameLine();
@@ -109,8 +109,8 @@ void MOD_extraction::extract_with_aabb(){
       //Reset color
       *highlightON = false;
       Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, subset_init);
+      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      extractionManager->fct_highlighting(subset, list_obj_init);
 
       //Extract cloud
       extractionManager->fct_extractCloud(cloud);
@@ -128,8 +128,8 @@ void MOD_extraction::extract_with_aabb(){
       //Reset color
       *highlightON = false;
       Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, subset_init);
+      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      extractionManager->fct_highlighting(subset, list_obj_init);
 
       //Cut cloud
       extractionManager->fct_cutCloud(subset);
@@ -141,8 +141,8 @@ void MOD_extraction::extract_with_aabb(){
       //Reset color
       *highlightON = false;
       Cloud* subset = (Cloud*)cloud->selected_obj;
-      Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
-      extractionManager->fct_highlighting(subset, subset_init);
+      Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
+      extractionManager->fct_highlighting(subset, list_obj_init);
 
       //Cut clouds
       extractionManager->fct_cutCloud_all();

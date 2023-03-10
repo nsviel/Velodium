@@ -955,7 +955,7 @@ void Plotting::plot_2Dmap(MatrixXf HM, vector<float>& R_map, vector<float>& cosI
   //---------------------------
 }
 void Plotting::plot_PointCloud(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   Gnuplot gp;
   //---------------------------
 

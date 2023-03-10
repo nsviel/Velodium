@@ -187,7 +187,7 @@ bool Loader::load_cloud_creation(Collection* cloud_in){
   //---------------------------
 
   //Take input data
-  for(int i=0; i<cloud_in->subset.size(); i++){
+  for(int i=0; i<cloud_in->list_obj.size(); i++){
     Cloud* subset = (Cloud*)cloud_in->get_obj(i);
     Data_file* data = new Data_file();
     data->path_file = cloud_in->path_file;

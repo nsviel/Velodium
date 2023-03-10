@@ -43,7 +43,7 @@ void Plot_radio::compute_IRmeans(list<Collection*>* list){
   //Compute R mean and I mean for each cloud
   for(int i=0;i<list->size();i++){
     Collection* cloud = *next(list->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& dist = subset->R;
     vector<float>& It = subset->It;
@@ -68,7 +68,7 @@ void Plot_radio::compute_IsItconcat(list<Collection*>* list){
   //Compute R mean and I mean for each cloud
   for(int i=0; i<list->size(); i++){
     Collection* cloud = *next(list->begin(),i);
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& It = subset->It;
 
@@ -127,7 +127,7 @@ void Plot_radio::plot_2Dmap(){
   //--------------------------
 
   for(int i=0; i<list_dist->size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& dist = subset->R;
     vector<float>& cosIt = subset->cosIt;
@@ -1288,7 +1288,7 @@ void Plot_radio::plot_IbyR_cloud(Collection* cloud){
 }
 void Plot_radio::plot_IbyR_data(Collection* cloud){
   attribManager->compute_attribut_cloud(cloud);
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), 0);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& R = subset->R;
   //---------------------------

@@ -121,8 +121,8 @@ void GUI_fileManager::cloudManager(Collection* cloud){
   //Subset tree node
   if(open_cloud_node && cloud != nullptr && (cloud->nb_obj > 1 || cloud->is_onthefly)){
 
-    for(int j=0; j<cloud->subset.size(); j++){
-      Cloud* subset = (Cloud*)*next(cloud->subset.begin(), j);
+    for(int j=0; j<cloud->list_obj.size(); j++){
+      Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), j);
 
       if(subset->is_visible){
         node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
@@ -157,7 +157,7 @@ void GUI_fileManager::info_cloud(Collection* cloud){
 
   //Additional info
   ImGui::Text("Format: %s", cloud->file_format.c_str());
-  ImGui::Text("Frames: %d", (int)cloud->subset.size());
+  ImGui::Text("Frames: %d", (int)cloud->list_obj.size());
   ImGui::Text("Points: %d", cloud->nb_point);
 
   //---------------------------

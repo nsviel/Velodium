@@ -317,7 +317,7 @@ void Capture::control_nb_subset(Collection* cloud){
   }
   //Remove old frame if option is activated
   else{
-    if(cloud->subset.size() > nb_subset_max){
+    if(cloud->list_obj.size() > nb_subset_max){
       cloud->remove_subset_last();
     }
   }

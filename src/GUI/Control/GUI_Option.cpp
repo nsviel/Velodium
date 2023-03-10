@@ -257,7 +257,7 @@ void GUI_option::option_parameter(){
     if(ImGui::DragFloat("Scale", &scale, 0.01, 0.1, 100, "%.2f x")){
       if(!sceneManager->get_is_list_empty()){
         Transformation transformManager;
-        for(int i=0; i<cloud->subset.size(); i++){
+        for(int i=0; i<cloud->list_obj.size(); i++){
           Cloud* subset = (Cloud*)cloud->get_obj(i);
           transformManager.make_scaling(subset, scale);
           sceneManager->update_buffer_location(subset);

@@ -37,7 +37,7 @@ Extraction::~Extraction(){}
 //Extract / Cutting function
 void Extraction::fct_extractCloud(Collection* cloud){
   Cloud* subset = (Cloud*)cloud->selected_obj;
-  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   //New cloud
@@ -46,7 +46,7 @@ void Extraction::fct_extractCloud(Collection* cloud){
 
   //Parameters
   vector<vec3>& XYZ = subset->xyz;
-  const vector<vec4>& RGB = subset_init->rgb;
+  const vector<vec4>& RGB = list_obj_init->rgb;
   vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
   vec3& max = subset->max;
@@ -85,7 +85,7 @@ void Extraction::fct_extractCloud(Collection* cloud){
   //---------------------------
   if(subset_out->xyz.size() != 0){
     //Create slice if any points
-    cloud_out->subset.push_back(subset_out);
+    cloud_out->list_obj.push_back(subset_out);
     loaderManager->load_cloud_creation(cloud_out);
   }
   else{
@@ -94,7 +94,7 @@ void Extraction::fct_extractCloud(Collection* cloud){
 }
 void Extraction::fct_extractSelected(Collection* cloud){
   Cloud* subset = (Cloud*)cloud->selected_obj;
-  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   //New cloud
@@ -103,7 +103,7 @@ void Extraction::fct_extractSelected(Collection* cloud){
 
   //Parameters
   vector<vec3>& XYZ = subset->xyz;
-  const vector<vec4>& RGB = subset_init->rgb;
+  const vector<vec4>& RGB = list_obj_init->rgb;
   vector<vec3>& N = subset->Nxyz;
   vector<float>& Is = subset->I;
 
@@ -136,7 +136,7 @@ void Extraction::fct_extractSelected(Collection* cloud){
   //---------------------------
   idx.clear();
   if(subset_out->xyz.size() != 0){
-    cloud_out->subset.push_back(subset_out);
+    cloud_out->list_obj.push_back(subset_out);
     loaderManager->load_cloud_creation(cloud_out);
   }
   else{
@@ -285,7 +285,7 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
 
   //---------------------------
   if(cloud_out->nb_point > 0){
-    cloud_out->subset.push_back(subset_out);
+    cloud_out->list_obj.push_back(subset_out);
     loaderManager->load_cloud_creation(cloud_out);
   }
   else{
@@ -346,7 +346,7 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
 
   //Create slice if any points
   if(cloud_out->nb_point != 0){
-    cloud_out->subset.push_back(subset_out);
+    cloud_out->list_obj.push_back(subset_out);
     loaderManager->load_cloud_creation(cloud_out);
   }
   else{
@@ -395,12 +395,12 @@ void Extraction::fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2){
 }
 
 //Selection function
-void Extraction::fct_highlighting(Cloud* subset, Cloud* subset_init){
+void Extraction::fct_highlighting(Cloud* subset, Cloud* list_obj_init){
   vec3 max = subset->max;
   vec3 min = subset->min;
   vector<vec3>& pos = subset->xyz;
   vector<vec4>& color = subset->rgb;
-  vector<vec4>& RGB = subset_init->rgb;
+  vector<vec4>& RGB = list_obj_init->rgb;
   //---------------------------
 
   if(highlightON == true){
@@ -430,7 +430,7 @@ void Extraction::fct_highlighting(Cloud* subset, Cloud* subset_init){
 void Extraction::set_AABB_min(vec3 min_in){
   Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = (Cloud*)cloud->selected_obj;
-  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   vec3 max_old = subset->max;
@@ -457,13 +457,13 @@ void Extraction::set_AABB_min(vec3 min_in){
   subset->min = min_out;
 
   //---------------------------
-  this->fct_highlighting(subset, subset_init);
+  this->fct_highlighting(subset, list_obj_init);
   objectManager->update_glyph_cloud(cloud);
 }
 void Extraction::set_AABB_max(vec3 max_in){
   Collection* cloud = sceneManager->get_selected_collection();
   Cloud* subset = (Cloud*)cloud->selected_obj;
-  Cloud* subset_init = (Cloud*)cloud->get_obj_selected_init();
+  Cloud* list_obj_init = (Cloud*)cloud->get_obj_selected_init();
   //---------------------------
 
   vec3 max_old = subset->max;
@@ -490,5 +490,5 @@ void Extraction::set_AABB_max(vec3 max_in){
   subset->max = max_out;
 
   //---------------------------
-  this->fct_highlighting(subset, subset_init);
+  this->fct_highlighting(subset, list_obj_init);
 }

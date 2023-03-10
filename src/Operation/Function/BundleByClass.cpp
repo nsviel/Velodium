@@ -9,28 +9,28 @@ BundleByClass::~BundleByClass(){}
 
 //Bundle functions
 void BundleByClass::compute_bundleByClass(Collection* cloud, float stepAngle){
-  Cloud* subset_init = (Cloud*)*next(cloud->subset_init.begin(), cloud->ID_obj_selected);
+  Cloud* list_obj_init = (Cloud*)*next(cloud->list_obj_init.begin(), cloud->ID_obj_selected);
   //---------------------------
 
   this->make_checking(cloud);
   this->make_clear();
 
   //Compute bundling
-  this->make_bundle(cloud, stepAngle, fct_max(subset_init->It));
+  this->make_bundle(cloud, stepAngle, fct_max(list_obj_init->It));
 
   //Compute confidence interval
   this->make_StudentLaw();
   //---------------------------
 }
 void BundleByClass::compute_bundleByClass_maxAngle(Collection* cloud, int stepAngle, int maxAngle){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), cloud->ID_obj_selected);
-  Cloud* subset_init = (Cloud*)*next(cloud->subset_init.begin(), cloud->ID_obj_selected);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), cloud->ID_obj_selected);
+  Cloud* list_obj_init = (Cloud*)*next(cloud->list_obj_init.begin(), cloud->ID_obj_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
-  vector<float>& dist = subset_init->R;
-  vector<float>& cosIt = subset_init->cosIt;
-  vector<float>& It = subset_init->It;
+  vector<float>& dist = list_obj_init->R;
+  vector<float>& cosIt = list_obj_init->cosIt;
+  vector<float>& It = list_obj_init->It;
   vector<float> cIs, cDist, cCosIt, cIt;
   this->make_checking(cloud);
   this->make_clear();
@@ -180,14 +180,14 @@ void BundleByClass::compute_vectorByClass(vector<vector<float>>& data_X, vector<
 
 //Subfunctions
 void BundleByClass::make_bundle(Collection* cloud, float stepAngle, int maxAngle){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), cloud->ID_obj_selected);
-  Cloud* subset_init = (Cloud*)*next(cloud->subset_init.begin(), cloud->ID_obj_selected);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), cloud->ID_obj_selected);
+  Cloud* list_obj_init = (Cloud*)*next(cloud->list_obj_init.begin(), cloud->ID_obj_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
-  vector<float>& dist = subset_init->R;
-  vector<float>& cosIt = subset_init->cosIt;
-  vector<float>& It = subset_init->It;
+  vector<float>& dist = list_obj_init->R;
+  vector<float>& cosIt = list_obj_init->cosIt;
+  vector<float>& It = list_obj_init->It;
   vector<float> cIs, cDist, cCosIt, cIt;
 
   //Sample of data for each degree units
@@ -226,14 +226,14 @@ void BundleByClass::make_bundle(Collection* cloud, float stepAngle, int maxAngle
   }
 }
 void BundleByClass::make_checking(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), cloud->ID_obj_selected);
-  Cloud* subset_init = (Cloud*)*next(cloud->subset_init.begin(), cloud->ID_obj_selected);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), cloud->ID_obj_selected);
+  Cloud* list_obj_init = (Cloud*)*next(cloud->list_obj_init.begin(), cloud->ID_obj_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
-  vector<float>& dist = subset_init->R;
-  vector<float>& cosIt = subset_init->cosIt;
-  vector<float>& It = subset_init->It;
+  vector<float>& dist = list_obj_init->R;
+  vector<float>& cosIt = list_obj_init->cosIt;
+  vector<float>& It = list_obj_init->It;
 
   if(Is.size() == 0){
     cout<<"--> Bundle: No intensity data"<<endl;
@@ -331,12 +331,12 @@ void BundleByClass::plot_confidenceInterval(){
     //---------------------------
 }
 void BundleByClass::plot_intensityBundle(Collection* cloud){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), cloud->ID_obj_selected);
-  Cloud* subset_init = (Cloud*)*next(cloud->subset_init.begin(), cloud->ID_obj_selected);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), cloud->ID_obj_selected);
+  Cloud* list_obj_init = (Cloud*)*next(cloud->list_obj_init.begin(), cloud->ID_obj_selected);
   //---------------------------
 
   vector<float>& Is = subset->I;
-  vector<float>& It = subset_init->It;
+  vector<float>& It = list_obj_init->It;
   Gnuplot gp;
 
   //Style

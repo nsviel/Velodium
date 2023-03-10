@@ -63,7 +63,7 @@ void Onthefly::compute_onthefly(Collection* cloud, int ID){
     }
 
     //If too mush subset, remove the last one
-    if(cloud->subset.size() > range){
+    if(cloud->list_obj.size() > range){
       Cloud* subset = (Cloud*)cloud->get_obj(0);
       list_id.remove(subset->ID);
       cloud->remove_subset_last();

@@ -92,11 +92,11 @@ bool file_PTX::Exporter(string path){
     //----->HEADER
     //***********************************
     int nbRows = 3;
-    if(cloud->subset[0].I.size() != 0) nbRows++;
-    if(cloud->subset[0].has_color) nbRows++;
-    if(cloud->subset[0].N.size() != 0) nbRows++;
+    if(cloud->list_obj[0].I.size() != 0) nbRows++;
+    if(cloud->list_obj[0].has_color) nbRows++;
+    if(cloud->list_obj[0].N.size() != 0) nbRows++;
     //number of columns
-    file << cloud->subset[0].nb_point << endl;
+    file << cloud->list_obj[0].nb_point << endl;
     //number of rows
     file << nbRows << endl;
     //scanner registered position
@@ -107,8 +107,8 @@ bool file_PTX::Exporter(string path){
     file << 0 << " " << 1 << " " << 0 << endl;
     file << 0 << " " << 0 << " " << 1 << endl;
     //transformation matrix
-    mat4& transMat = cloud->subset[0].trans;
-    mat4& rotMat = cloud->subset[0].rotat;
+    mat4& transMat = cloud->list_obj[0].trans;
+    mat4& rotMat = cloud->list_obj[0].rotat;
     mat4 finalMat = transpose(transMat * rotMat);
     file << setprecision(6) << finalMat[0][0] << " " << finalMat[0][1] << " " << finalMat[0][2] << " " << finalMat[0][3] << endl;
     file << setprecision(6) << finalMat[1][0] << " " << finalMat[1][1] << " " << finalMat[1][2] << " " << finalMat[1][3] << endl;
@@ -130,16 +130,16 @@ bool file_PTX::Exporter(string path){
       file << setprecision(precision) << pos[i].x <<" "<< pos[i].y <<" "<< pos[i].z ;
 
       //---> R
-      if(cloud->subset[0].I.size() != 0)
+      if(cloud->list_obj[0].I.size() != 0)
         file << setprecision(0) <<" "<< ref[i];
 
       //---> rgb
       //Color only
-      if(cloud->subset[0].has_color)
+      if(cloud->list_obj[0].has_color)
         file << setprecision(0) <<" "<< col[i].x * 255 <<" "<< col[i].y * 255 <<" "<< col[i].z * 255;
 
       //---> nx ny nz
-      if(cloud->subset[0].N.size() != 0)
+      if(cloud->list_obj[0].N.size() != 0)
         file << setprecision(precision) <<" "<< nor[i].x <<" "<< nor[i].y <<" "<< nor[i].z;
 
       //We end the line

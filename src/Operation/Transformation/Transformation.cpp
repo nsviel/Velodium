@@ -19,7 +19,7 @@ void Transformation::make_translation(Collection* cloud, vec3 trans){
 
   //Apply
   for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     subset->trans *= translation;
     this->make_Transformation(subset, subset->root, translation);
   }
@@ -85,7 +85,7 @@ mat4 Transformation::make_rotation(Collection* cloud, vec3 COM, vec3 radian){
 
   //Apply
   for(int i=0; i<cloud->nb_obj; i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     subset->rotat *= rotation;
     this->make_Transformation(subset, COM, rotation);
   }

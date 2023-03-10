@@ -183,7 +183,7 @@ void Recorder::save_frame_subset(Cloud* subset){
   this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
 void Recorder::save_frame_set(Collection* cloud, int ID_subset){
-  Cloud* subset = (Cloud*)*next(cloud->subset.begin(), ID_subset);
+  Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), ID_subset);
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------
 

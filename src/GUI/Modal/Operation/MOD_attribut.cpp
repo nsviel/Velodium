@@ -51,7 +51,7 @@ void MOD_attribut::window_normal(){
   if(modal_tab.show_normal && collection != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* subset = (Cloud*)collection->selected_obj;
-    Cloud* subset_init = (Cloud*)collection->get_obj_selected_init();
+    Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
     //---------------------------
 
     if(ImGui::Button("Compute attributs for all clouds", ImVec2(200,0))){
@@ -85,7 +85,7 @@ void MOD_attribut::window_normal(){
       if(collection != nullptr){
         //---------------------------
         Cloud* subset = (Cloud*)collection->selected_obj;
-        Cloud* subset_init = (Cloud*)collection->get_obj_selected_init();
+        Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
 
         if(normalMethod == 0){
           attribManager->compute_normals(subset);
@@ -108,19 +108,19 @@ void MOD_attribut::window_normal(){
           attribManager->compute_normals_planXaxis(subset);
           vec3 rotation = vec3(0, 0, -angle);
           transformManager->make_rotation(collection, vec3(0,0,0), rotation);
-          subset_init->Nxyz = subset->Nxyz;
+          list_obj_init->Nxyz = subset->Nxyz;
           //sceneManager->update_buffer_location(collection);
         }
 
         if(normalMethod == 5){
           attribManager->compute_normals_planYaxis(subset);
-          subset_init->Nxyz = subset->Nxyz;
+          list_obj_init->Nxyz = subset->Nxyz;
           sceneManager->update_buffer_location(subset);
         }
 
         if(normalMethod == 6){
           attribManager->compute_normals_planZaxis(subset);
-          subset_init->Nxyz = subset->Nxyz;
+          list_obj_init->Nxyz = subset->Nxyz;
           //sceneManager->update_buffer_location(collection);
         }
 
@@ -159,19 +159,19 @@ void MOD_attribut::window_normal(){
             attribManager->compute_normals_planXaxis(subset);
             vec3 rotation = vec3(0, 0, -angle);
             transformManager->make_rotation(collection, vec3(0,0,0), rotation);
-            subset_init->Nxyz = subset->Nxyz;
+            list_obj_init->Nxyz = subset->Nxyz;
             sceneManager->update_buffer_location(subset);
           }
 
           if(normalMethod == 5){
             attribManager->compute_normals_planYaxis(subset);
-            subset_init->Nxyz = subset->Nxyz;
+            list_obj_init->Nxyz = subset->Nxyz;
             sceneManager->update_buffer_location(subset);
           }
 
           if(normalMethod == 6){
             attribManager->compute_normals_planZaxis(subset);
-            subset_init->Nxyz = subset->Nxyz;
+            list_obj_init->Nxyz = subset->Nxyz;
             sceneManager->update_buffer_location(subset);
           }
 
@@ -209,7 +209,7 @@ void MOD_attribut::window_intensity(){
   if(modal_tab.show_intensity && collection != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
     Cloud* subset = (Cloud*)collection->selected_obj;
-    Cloud* subset_init = (Cloud*)collection->get_obj_selected_init();
+    Cloud* list_obj_init = (Cloud*)collection->get_obj_selected_init();
     //---------------------------
 
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity functions");
@@ -244,7 +244,7 @@ void MOD_attribut::window_intensity(){
     ImGui::Text("Selection intensity");
     static float min = 0, max = 1;
     if(ImGui::DragFloatRange2("##123321", &min, &max, 0.001f, 0.00f, 1.0f, "%.3f", "%.3f")){
-      subset->I = subset_init->I;
+      subset->I = list_obj_init->I;
       attribManager->fct_IsRange(vec2(min, max));
     }
 
@@ -280,7 +280,7 @@ void MOD_attribut::window_intensity(){
     //Reconvert intensity
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scaling");
     if(ImGui::Button("Restore I initial", ImVec2(200,0))){
-      subset->I = subset_init->I;
+      subset->I = list_obj_init->I;
       sceneManager->update_subset_IntensityToColor(subset);
     }
     if(ImGui::Button("I:255->2048", ImVec2(100,0))){

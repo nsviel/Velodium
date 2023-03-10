@@ -161,8 +161,8 @@ void Color::color_heatmap(Cloud* subset){
 //Color cloud functions
 void Color::set_color_new(Collection* cloud, vec4 RGBA){
   cloud->unicolor = RGBA;
-  for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     vector<vec4>& RGB = subset->rgb;
     vector<float>& Is = subset->I;
     //---------------------------
@@ -176,8 +176,8 @@ void Color::set_color_new(Collection* cloud, vec4 RGBA){
   }
 }
 void Color::set_color_RGB(Collection* cloud){
-  for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     vector<vec4>& RGB_obj = subset->rgb;
     vector<vec4>& RGB_ini = subset->rgb;
     //---------------------------
@@ -189,8 +189,8 @@ void Color::set_color_RGB(Collection* cloud){
   }
 }
 void Color::set_color_I(Collection* cloud){
-  for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     vector<vec4>& RGB_obj = subset->rgb;
     vector<float>& Is = subset->I;
     //---------------------------
@@ -205,8 +205,8 @@ void Color::set_color_I(Collection* cloud){
   }
 }
 void Color::set_color_enhanced(Collection* cloud){
-  for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     vector<float>& Is = subset->I;
     const vector<vec4>& RGB = subset->rgb;
     //---------------------------
@@ -222,8 +222,8 @@ void Color::set_color_enhanced(Collection* cloud){
   }
 }
 void Color::set_color_random(Collection* cloud){
-  for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
+  for(int i=0; i<cloud->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
     vector<vec4>& RGB = subset->rgb;
     //---------------------------
 
@@ -240,12 +240,12 @@ void Color::set_color_random(Collection* cloud){
   }
 }
 void Color::set_color_initial(Collection* cloud){
-  for(int i=0; i<cloud->subset.size(); i++){
-    Cloud* subset = (Cloud*)*next(cloud->subset.begin(), i);
-    Cloud* subset_init = (Cloud*)*next(cloud->subset_init.begin(), i);
+  for(int i=0; i<cloud->list_obj.size(); i++){
+    Cloud* subset = (Cloud*)*next(cloud->list_obj.begin(), i);
+    Cloud* list_obj_init = (Cloud*)*next(cloud->list_obj_init.begin(), i);
     //---------------------------
 
-    subset->rgb = subset_init->rgb;
+    subset->rgb = list_obj_init->rgb;
 
     //---------------------------
     sceneManager->update_buffer_color(subset);
