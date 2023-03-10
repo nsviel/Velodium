@@ -29,7 +29,6 @@ GUI::GUI(Node_gui* node_gui){
   //---------------------------
 
   Node_engine* node_engine = node_gui->get_node_engine();
-  Configuration* configManager = node_engine->get_configManager();
 
   this->dimManager = node_engine->get_dimManager();
   this->gui_window = node_gui->get_gui_window();
@@ -38,8 +37,6 @@ GUI::GUI(Node_gui* node_gui){
   this->gui_leftPanel = node_gui->get_gui_leftPanel();
   this->gui_menuBar = node_gui->get_gui_menuBar();
   this->gui_consol = node_gui->get_gui_consol();
-
-  this->is_visualization = configManager->parse_json_b("window", "visualization");
 
   //---------------------------
   this->Gui_init();
@@ -123,10 +120,7 @@ void GUI::Gui_loop(){
   gui_menuBar->design_MenuBar();
   gui_control->make_control();
   gui_window->window_Draw();
-
-  if(is_visualization){
-    gui_leftPanel->design_leftPanel();
-  }
+  gui_leftPanel->design_leftPanel();
 
   this->Gui_Dimensions();
 

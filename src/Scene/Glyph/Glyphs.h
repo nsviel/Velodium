@@ -1,9 +1,9 @@
 #ifndef GLYPHS_H
 #define GLYPHS_H
 
+#include "../Data/Data.h"
 #include "../../common.h"
 
-class Node_scene;
 class GPU_data;
 
 
@@ -11,7 +11,7 @@ class Glyphs
 {
 public:
   //Constructor / Destructor
-  Glyphs(Node_scene* node);
+  Glyphs();
   ~Glyphs();
 
 public:
@@ -33,10 +33,9 @@ public:
   void create_glyph_scene(Glyph* glyph);
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
 
-  inline list<Glyph*>* get_list_glyph(){return list_glyph;}
-
 private:
   GPU_data* gpuManager;
+  Data* data;
 
   list<Glyph*>* list_glyph;
   int ID_glyph;

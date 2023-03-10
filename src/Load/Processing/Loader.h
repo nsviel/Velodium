@@ -1,10 +1,10 @@
 #ifndef LOADER_H
 #define LOADER_H
 
+#include "../../Scene/Data/Data.h"
 #include "../../Scene/Base/struct_data_file.h"
 #include "../../common.h"
 
-class Node_load;
 class Extractor;
 class Scene;
 
@@ -23,12 +23,12 @@ class Loader
 {
 public:
   //Constructor / Destructor
-  Loader(Node_load* node_load);
+  Loader();
   ~Loader();
 
 public:
   //Main functions
-  bool load_object(string pathFile);
+  Object_* load_object(string pathFile);
   bool load_cloud_byFrame(vector<string> path_vec);
   bool load_cloud_onthefly(vector<string> path_vec);
   bool load_cloud_silent(string pathFile);
@@ -45,7 +45,7 @@ public:
 
 private:
   vector<Data_file*> load_retrieve_data(string path);
-  void load_insertIntoDatabase(vector<Data_file*> data_vec);
+  Object_* load_insertIntoDatabase(vector<Data_file*> data_vec);
   void load_insertIntoCloud(Data_file* data, Cloud* cloud);
 
 private:
@@ -53,6 +53,7 @@ private:
   Scene* sceneManager;
   Cloud* cloud;
   Object_ object;
+  Data* data;
 
   file_PTS* ptsManager;
   file_PLY* plyManager;

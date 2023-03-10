@@ -1,13 +1,11 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "../Data/Data.h"
 #include "../../common.h"
 
-class Node_scene;
-class Node_engine;
 class Configuration;
 class Glyphs;
-
 class Glyph_source;
 
 class Grid;
@@ -29,7 +27,7 @@ class Object
 {
 public:
   //Constructor / Destructor
-  Object(Node_scene* node);
+  Object();
   ~Object();
 
 public:
@@ -78,9 +76,9 @@ public:
   inline Localmap* get_object_localmap(){return mapObject;}
 
 private:
-  Node_engine* node_engine;
   Glyphs* glyphManager;
   Configuration* configManager;
+  Data* data;
 
   vector<Glyph_source*> vec_glyph_src;
 

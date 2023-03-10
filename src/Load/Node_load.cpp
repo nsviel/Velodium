@@ -6,9 +6,9 @@ Node_load::Node_load(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 
-  this->extractManager = new Extractor(this);
+  this->extractManager = new Extractor();
   this->saverManager = new Saver(this);
-  this->loaderManager = new Loader(this);
+  this->loaderManager = new Loader();
   this->patherManager = new Pather(this);
 
   //---------------------------

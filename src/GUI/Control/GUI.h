@@ -42,8 +42,6 @@ private:
   GUI_leftPanel* gui_leftPanel;
   GUI_menuBar* gui_menuBar;
   GUI_consol* gui_consol;
-
-  bool is_visualization;
 };
 
 #endif

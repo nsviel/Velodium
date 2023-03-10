@@ -11,6 +11,8 @@ public:
   Node();
   ~Node();
 
+  virtual void init(){}
+
 public:
   //Main functions
   virtual void update(){cout<<"Could not update Node base class"<<endl;}

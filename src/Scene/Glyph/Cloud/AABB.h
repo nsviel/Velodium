@@ -11,7 +11,7 @@ public:
 
 public:
   void create_glyph();
-  void update_glyph(Cloud* cloud);
+  void update_glyph(Cloud* cloud, Glyph* glyph);
   void update_glyph(Subset* subset);
   vector<vec3> build_box(vec3 min, vec3 max);
 

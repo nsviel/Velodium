@@ -1,18 +1,15 @@
 #include "Scene.h"
 
-#include "../Node_scene.h"
 #include "../Glyph/Object.h"
 #include "../../Engine/GPU/GPU_data.h"
 
 
 //Constructor / Destructor
-Scene::Scene(Node_scene* node){
+Scene::Scene(){
   //---------------------------
 
-  this->objectManager = node->get_objectManager();
+  this->objectManager = new Object();
   this->gpuManager = new GPU_data();
-
-  this->cloud_selected = nullptr;
   this->data = Data::get_instance();
 
   //---------------------------
@@ -28,6 +25,7 @@ Scene::~Scene(){
 //Remove functions
 void Scene::remove_cloud(Cloud* cloud){
   std::list<Cloud*>* list_cloud = data->get_list_cloud();
+  Cloud* cloud_selected = data->get_cloud_selected();
   //---------------------------
 
   if(!get_is_list_empty()){
@@ -66,7 +64,7 @@ void Scene::remove_cloud(Cloud* cloud){
   //If cloud list empty
   if(list_cloud->size() == 0){
     objectManager->reset_scene_object();
-    this->cloud_selected = nullptr;
+    cloud_selected = nullptr;
   }
 
   //---------------------------
@@ -130,6 +128,7 @@ void Scene::reset_cloud(Cloud* cloud){
 }
 void Scene::reset_cloud_all(){
   std::list<Cloud*>* list_cloud = data->get_list_cloud();
+  Cloud* cloud_selected = data->get_cloud_selected();
   //---------------------------
 
   //Reset all clouds

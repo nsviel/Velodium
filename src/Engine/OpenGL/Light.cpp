@@ -1,5 +1,6 @@
 #include "Light.h"
 
+#include "../GPU/GPU_data.h"
 #include "../Node_engine.h"
 
 #include "../../Scene/Node_scene.h"
@@ -11,16 +12,14 @@
 
 
 //Constructor / Destructor
-Light::Light(Node_engine* node){
+Light::Light(){
   //---------------------------
 
-  Node_load* node_load = node->get_node_load();
-  Node_scene* node_scene = node->get_node_scene();
-
-  this->loaderManager = node_load->get_loaderManager();
-  this->sceneManager = node_scene->get_sceneManager();
+  this->loaderManager = new Loader();
+  this->sceneManager = new Scene();
   this->transformManager = new Transformation();
   this->poseManager = new Pose();
+  this->gpuManager = new GPU_data();
   this->data = Data::get_instance();
 
   //---------------------------
@@ -30,18 +29,19 @@ Light::~Light(){}
 void Light::init(){
   std::list<Light_*>* list_light = data->get_list_light();
   //---------------------------
+sayHello();
+  Object_* light = loaderManager->load_object("../media/engine/Marks/sphere.obj");
 
-  //LIGHT Class est build avant LOAD class -> problem
-  //Il faut rendre loader totalement independant !
+  //Ce quon recoit ici Cloud, les données sont dans son subset[0]
+  // Il faut abstracter les fonctions load object
 
-  loaderManager->load_object("../media/engine/Marks/sphere.obj");
-  Light_* light = (Light_*)loaderManager->get_created_object();
+  say(light->xyz.size());
   light->name = "Light";
   light->is_visible = true;
   transformManager->make_scaling(light, 0.1);
-  sceneManager->update_buffer_location(light);
-  sceneManager->update_glyph(light);
-  list_light->push_back(light);
-
+  //gpuManager->update_buffer_location(light);
+  //sceneManager->update_MinMax(light);
+  //list_light->push_back(light);
+sayHello();
   //---------------------------
 }

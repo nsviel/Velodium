@@ -14,15 +14,23 @@ Node_scene::Node_scene(Node_engine* node){
   this->node_engine = node;
   //---------------------------
 
-  this->glyphManager = new Glyphs(this);
-  this->objectManager = new Object(this);
-  this->sceneManager = new Scene(this);
+  this->glyphManager = new Glyphs();
+  this->objectManager = new Object();
+  this->sceneManager = new Scene();
   this->graphManager = new Graph(this);
 
   //---------------------------
+  this->init();
 }
 Node_scene::~Node_scene(){}
 
+void Node_scene::init(){
+  //---------------------------
+
+  objectManager->create_glyph_scene();
+
+  //---------------------------
+}
 void Node_scene::update(){
   //---------------------------
 

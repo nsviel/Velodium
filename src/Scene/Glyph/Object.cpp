@@ -26,12 +26,12 @@
 
 
 //Constructor / Destructor
-Object::Object(Node_scene* node){
-  this->node_engine = node->get_node_engine();
+Object::Object(){
   //---------------------------
 
-  this->glyphManager = node->get_glyphManager();
-  this->configManager = node_engine->get_configManager();
+  this->glyphManager = new Glyphs();
+  this->configManager = new Configuration();
+  this->data = Data::get_instance();
 
   this->vec_glyph_src.push_back(new Grid());
   this->vec_glyph_src.push_back(new Axis());
@@ -47,15 +47,12 @@ Object::Object(Node_scene* node){
   //this->vec_glyph_src.push_back(new Car());
   //this->vec_glyph_src.push_back(new Keypoint());
   //this->vec_glyph_src.push_back(new Localmap());
-
   this->trajObject = new Trajectory();
   this->carObject = new Car();
   this->keyObject = new Keypoint();
   this->mapObject = new Localmap();
 
   //---------------------------
-  this->create_glyph_scene();
-  this->update_configuration();
 }
 Object::~Object(){
   //---------------------------
@@ -89,6 +86,7 @@ void Object::create_glyph_scene(){
   glyphManager->create_glyph_scene(mapObject->get_localcloud());
 
   //---------------------------
+  this->update_configuration();
 }
 void Object::create_glyph_subset(Subset* subset){
   //---------------------------
@@ -127,7 +125,7 @@ Glyph* Object::create_glyph_ostacle(){
 
 //Runtime function
 void Object::runtime_glyph_scene(){
-  list<Glyph*>* list_glyph = glyphManager->get_list_glyph();
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   //---------------------------
 
   for(int i=0;i<list_glyph->size();i++){
@@ -279,9 +277,10 @@ void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 
   //Update cloud AABB
+  Glyph* aabb = get_glyph_by_name("aabb");
   AABB* aabb_src = (AABB*)get_glyph_src_byName("aabb");
-  aabb_src->update_glyph(cloud);
-  this->update_object(aabb_src->get_glyph());
+  aabb_src->update_glyph(cloud, aabb);
+  this->update_object(aabb);
 
   //Update cloud subset glyphs
   for(int i=0; i<cloud->nb_subset; i++){
@@ -340,9 +339,7 @@ void Object::reset_object(Glyph* glyph){
 
 //Misc function
 void Object::set_object_visibility(string name, bool val){
-  Node_scene* node_scene = node_engine->get_node_scene();
-  Scene* sceneManager = node_scene->get_sceneManager();
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Cloud*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
   for (int i=0; i<list_cloud->size(); i++){
@@ -392,9 +389,9 @@ void Object::set_slam_object(bool value){
   //---------------------------
 }
 Glyph* Object::get_glyph_by_name(string name){
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   //---------------------------
 
-  list<Glyph*>* list_glyph = glyphManager->get_list_glyph();
   for(int i=0; i<list_glyph->size(); i++){
     Glyph* glyph = *next(list_glyph->begin(), i);
 

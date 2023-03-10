@@ -7,7 +7,6 @@
 #include <list>
 #include <GLFW/glfw3.h>
 
-class Node_scene;
 class Object;
 class GPU_data;
 
@@ -16,7 +15,7 @@ class Scene
 {
 public:
   //Constructor / Destructor
-  Scene(Node_scene* node);
+  Scene();
   ~Scene();
 
 public:
@@ -40,8 +39,8 @@ public:
 
   inline int get_nb_cloud(){return data->get_list_cloud()->size();}
   inline list<Cloud*>* get_list_cloud(){return data->get_list_cloud();}
-  inline Cloud* get_selected_cloud(){return cloud_selected;}
-  inline void set_selected_cloud(Cloud* cloud){cloud_selected = cloud;}
+  inline Cloud* get_selected_cloud(){return data->get_cloud_selected();}
+  inline void set_selected_cloud(Cloud* cloud){Cloud* cl = data->get_cloud_selected(); cl = cloud;}
   inline bool get_is_list_empty(){return data->get_list_cloud()->empty();}
   inline int get_new_oID_cloud(){return data->get_list_cloud()->size();}
   inline Data* get_data(){return data;}
@@ -50,8 +49,6 @@ private:
   Object* objectManager;
   GPU_data* gpuManager;
   Data* data;
-
-  Cloud* cloud_selected;
 };
 
 #endif

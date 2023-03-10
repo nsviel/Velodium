@@ -1,16 +1,11 @@
 #include "Extractor.h"
 
-#include "../Node_load.h"
-
-#include "../../Engine/Node_engine.h"
-#include "../../Scene/Node_scene.h"
 #include "../../Scene/Glyph/Object.h"
-#include "../../Scene/Data/Scene.h"
-#include "../../Engine/Core/Configuration.h"
 #include "../../Engine/OpenGL/Texture.h"
 #include "../../Engine/GPU/GPU_data.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/color.h"
+
 #include "../../Specific/File/Directory.h"
 #include "../../Specific/File/Info.h"
 #include "../../Specific/File/Path.h"
@@ -18,13 +13,10 @@
 
 
 // Constructor / Destructor
-Extractor::Extractor(Node_load* node_load){
+Extractor::Extractor(){
   //---------------------------
 
-  Node_engine* node_engine = node_load->get_node_engine();
-  Node_scene* node_scene = node_engine->get_node_scene();
-
-  this->objectManager = node_scene->get_objectManager();
+  this->objectManager = new Object();
   this->texManager = new Texture();
   this->gpuManager = new GPU_data();
 

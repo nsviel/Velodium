@@ -18,7 +18,7 @@ class Extractor
 {
 public:
   //Constructor / Destructor
-  Extractor(Node_load* node_load);
+  Extractor();
   ~Extractor();
 
 public:
@@ -40,9 +40,7 @@ private:
   void compute_texture(Subset* subset, Data_file* data);
 
 private:
-  Scene* sceneManager;
   Object* objectManager;
-  Configuration* configManager;
   Texture* texManager;
   GPU_data* gpuManager;
 

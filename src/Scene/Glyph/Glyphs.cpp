@@ -9,12 +9,13 @@
 
 
 //Constructor / Destructor
-Glyphs::Glyphs(Node_scene* node){
+Glyphs::Glyphs(){
   //---------------------------
 
   this->gpuManager = new GPU_data();
+  this->data = Data::get_instance();
 
-  this->list_glyph = new list<Glyph*>;
+//  this->list_glyph = new list<Glyph*>;
   this->ID_glyph = 0;
 
   //---------------------------
@@ -22,7 +23,7 @@ Glyphs::Glyphs(Node_scene* node){
 Glyphs::~Glyphs(){
   //---------------------------
 
-  delete list_glyph;
+//  delete list_glyph;
 
   //---------------------------
 }
@@ -97,6 +98,7 @@ void Glyphs::update_glyph_MinMax(Glyph* glyph){
 
 //Glyph creation / supression
 void Glyphs::insert_into_gpu(Glyph* glyph){
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   //---------------------------
 
   gpuManager->gen_vao(glyph);
@@ -105,11 +107,12 @@ void Glyphs::insert_into_gpu(Glyph* glyph){
   gpuManager->convert_draw_type_byName(glyph);
 
   //ID
-  glyph->ID = ID_glyph++;
+  glyph->ID = list_glyph->size();
 
   //---------------------------
 }
 void Glyphs::remove_temporary_glyph(){
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   //---------------------------
 
   //Remove non permanent glyphs
@@ -125,6 +128,7 @@ void Glyphs::remove_temporary_glyph(){
   //---------------------------
 }
 void Glyphs::remove_glyph_scene(int ID){
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   //---------------------------
 
   for(int i=0;i<list_glyph->size();i++){
@@ -140,6 +144,7 @@ void Glyphs::remove_glyph_scene(int ID){
   //---------------------------
 }
 void Glyphs::create_glyph_scene(Glyph* glyph){
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   //---------------------------
 
   this->insert_into_gpu(glyph);
@@ -148,6 +153,7 @@ void Glyphs::create_glyph_scene(Glyph* glyph){
   //---------------------------
 }
 Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
+  list<Glyph*>* list_glyph = data->get_list_glyph();
   Glyph* glyph = new Glyph();
   unsigned int VAO;
   uint colorVBO, locationVBO;

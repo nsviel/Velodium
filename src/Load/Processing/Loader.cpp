@@ -12,10 +12,6 @@
 #include "../Format/file_LAS.h"
 #include "../Format/file_CBOR.h"
 
-#include "../Node_load.h"
-
-#include "../../Engine/Node_engine.h"
-#include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Specific/File/Directory.h"
 #include "../../Specific/File/Info.h"
@@ -23,14 +19,12 @@
 
 
 //Constructor / Destructor
-Loader::Loader(Node_load* node_load){
+Loader::Loader(){
   //---------------------------
 
-  Node_engine* node_engine = node_load->get_node_engine();
-  Node_scene* node_scene = node_engine->get_node_scene();
-
-  this->sceneManager = node_scene->get_sceneManager();
-  this->extractManager = node_load->get_extractManager();
+  this->sceneManager = new Scene();
+  this->extractManager = new Extractor();
+  this->data = Data::get_instance();
 
   this->ptsManager = new file_PTS();
   this->plyManager = new file_PLY();
@@ -44,29 +38,42 @@ Loader::Loader(Node_load* node_load){
 
   //---------------------------
 }
-Loader::~Loader(){}
+Loader::~Loader(){
+  //---------------------------
+
+  delete ptsManager;
+  delete plyManager;
+  delete ptxManager;
+  delete csvManager;
+  delete objManager;
+  delete xyzManager;
+  delete lasManager;
+  delete pcapManager;
+  delete cborManager;
+
+  //---------------------------
+}
 
 //Main functions
-bool Loader::load_object(string path){
+Object_* Loader::load_object(string path){
   //---------------------------
 
   //Check file existence
   if(is_file_exist(path) == false){
     string log = "File doesn't exists: "+ path;
     console.AddLog("error", log);
-    return false;
   }
 
   //Check file format & retrieve data
   vector<Data_file*> data_vec = load_retrieve_data(path);
 
   //Insert cloud
-  this->load_insertIntoDatabase(data_vec);
+  Object_* object = load_insertIntoDatabase(data_vec);
 
   //---------------------------
   string log = "Loaded "+ path;
   console.AddLog("ok", log);
-  return true;
+  return object;
 }
 bool Loader::load_cloud_byFrame(vector<string> path_vec){
   vector<Data_file*> data_vec;
@@ -309,16 +316,19 @@ vector<Data_file*> Loader::load_retrieve_data(string path){
   //---------------------------
   return data_vec;
 }
-void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+Object_* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
+  list<Cloud*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
   //Extract data and put in the engine
   cloud = extractManager->extract_data(data_vec);
   list_cloud->push_back(cloud);
 
+
+
   //Update list cloud
-  sceneManager->set_selected_cloud(cloud);
+//  cloud_selected = cloud;
+  data->set_cloud_selected(cloud);
   sceneManager->update_ID_order(list_cloud);
   sceneManager->update_glyph(cloud);
 
@@ -328,6 +338,7 @@ void Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   }
 
   //---------------------------
+  return cloud;
 }
 void Loader::load_insertIntoCloud(Data_file* data, Cloud* cloud){
   //---------------------------

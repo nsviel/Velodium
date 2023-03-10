@@ -45,7 +45,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->node_module = new Node_module(this);
   this->node_gui = new Node_gui(this);
 
-  this->lightManager = new Light(this);
+  this->lightManager = new Light();
   this->engineManager = new Engine(this);
 
   lightManager->init();
