@@ -24,6 +24,7 @@ public:
 public:
   //Main function
   Cloud* extract_data(vector<Data_file*> data);
+  Object_* extract_data_object(Data_file* data);
   Subset* extract_data(Data_file& data);
   void extract_data(Cloud* cloud, Data_file* data);
 
@@ -32,6 +33,7 @@ private:
   void check_data(Data_file* data);
   void init_cloud_parameter(Cloud* cloud, vector<Data_file*> data);
   void init_subset_parameter(Subset* subset, Data_file* data, int ID);
+  void init_object_parameter(Object_* object, Data_file* data, int ID);
   void init_random_color();
 
   //Param function

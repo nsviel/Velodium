@@ -55,6 +55,26 @@ Loader::~Loader(){
 }
 
 //Main functions
+Object_* Loader::load_cloud(string path){
+  //---------------------------
+
+  //Check file existence
+  if(is_file_exist(path) == false){
+    string log = "File doesn't exists: "+ path;
+    console.AddLog("error", log);
+  }
+
+  //Check file format & retrieve data
+  vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
+
+  //Insert cloud
+  Object_* object = load_insertIntoDatabase(data_vec);
+
+  //---------------------------
+  string log = "Loaded "+ path;
+  console.AddLog("ok", log);
+  return object;
+}
 Object_* Loader::load_object(string path){
   //---------------------------
 
@@ -65,10 +85,10 @@ Object_* Loader::load_object(string path){
   }
 
   //Check file format & retrieve data
-  vector<Data_file*> data_vec = load_retrieve_data(path);
+  Data_file* data_file = load_retrieve_data(path);
 
   //Insert cloud
-  Object_* object = load_insertIntoDatabase(data_vec);
+  Object_* object = load_insertIntoDatabase(data_file);
 
   //---------------------------
   string log = "Loaded "+ path;
@@ -127,7 +147,7 @@ bool Loader::load_cloud_silent(string path){
   }
 
   //Check file format & retrieve data
-  vector<Data_file*> data_vec = load_retrieve_data(path);
+  vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
 
   //Extract data and put in the engine
   cloud = extractManager->extract_data(data_vec);
@@ -259,7 +279,7 @@ vector<vec3> Loader::load_vertices(string path){
   }
 
   //Check file format & retrieve data
-  vector<Data_file*> data_vec = load_retrieve_data(path);
+  vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
 
   //Extract data
   vector<vec3> xyz = data_vec[0]->xyz;
@@ -269,7 +289,39 @@ vector<vec3> Loader::load_vertices(string path){
 }
 
 //Sub-functions
-vector<Data_file*> Loader::load_retrieve_data(string path){
+Data_file* Loader::load_retrieve_data(string path){
+  string format = get_format_from_path(path);
+  Data_file* data_out;
+  //---------------------------
+
+  if     (format == "pts"){
+    data_out = ptsManager->Loader(path);
+  }
+  else if(format == "ptx"){
+    data_out = ptxManager->Loader(path);
+  }
+  else if(format == "pcd"){
+    #ifdef FILE_PCD_H
+    data_out = pcdManager->Loader(path);
+    #endif
+  }
+  else if(format == "ply"){
+    data_out = plyManager->Loader(path);
+  }
+  else if(format == "obj"){
+    data_out = objManager->Loader(path);
+  }
+  else if(format == "xyz"){
+    data_out = xyzManager->Loader(path);
+  }
+  else{
+    console.AddLog("error", "File format not recognized");
+  }
+
+  //---------------------------
+  return data_out;
+}
+vector<Data_file*> Loader::load_retrieve_cloud_data(string path){
   string format = get_format_from_path(path);
   vector<Data_file*> data_vec;
   //---------------------------
@@ -339,6 +391,23 @@ Object_* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
 
   //---------------------------
   return cloud;
+}
+Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
+  //---------------------------
+
+  //Extract data and put in the engine
+  Object_* object = extractManager->extract_data_object(data_file);
+
+  //Update list cloud
+  //data->set_cloud_selected(object);
+  //sceneManager->update_ID_order(list_cloud);
+  //sceneManager->update_glyph(cloud);
+
+  //Delete raw data
+  delete data_file;
+
+  //---------------------------
+  return object;
 }
 void Loader::load_insertIntoCloud(Data_file* data, Cloud* cloud){
   //---------------------------

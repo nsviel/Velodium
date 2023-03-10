@@ -29,19 +29,16 @@ Light::~Light(){}
 void Light::init(){
   std::list<Light_*>* list_light = data->get_list_light();
   //---------------------------
-sayHello();
-  Object_* light = loaderManager->load_object("../media/engine/Marks/sphere.obj");
 
-  //Ce quon recoit ici Cloud, les données sont dans son subset[0]
-  // Il faut abstracter les fonctions load object
+  Light_* light = (Light_*)loaderManager->load_object("../media/engine/Marks/sphere.obj");
 
-  say(light->xyz.size());
   light->name = "Light";
   light->is_visible = true;
   transformManager->make_scaling(light, 0.1);
-  //gpuManager->update_buffer_location(light);
-  //sceneManager->update_MinMax(light);
-  //list_light->push_back(light);
-sayHello();
+  gpuManager->update_buffer_location(light);
+  gpuManager->update_buffer_color(light);
+  sceneManager->update_MinMax(light);
+  list_light->push_back(light);
+
   //---------------------------
 }

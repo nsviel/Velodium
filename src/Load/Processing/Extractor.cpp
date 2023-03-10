@@ -61,21 +61,36 @@ Cloud* Extractor::extract_data(vector<Data_file*> data){
   //---------------------------
   return cloud;
 }
-Subset* Extractor::extract_data(Data_file& data){
-  Subset* subset = new Subset();
+Subset* Extractor::extract_data(Data_file& data_file){
+  Subset* object = new Subset();
   //---------------------------
 
   //Init
-  this->check_data(&data);
+  this->check_data(&data_file);
   this->init_random_color();
-  this->init_subset_parameter(subset, &data, 0);
+  this->init_subset_parameter(object, &data_file, 0);
 
   //Set parametrization
-  objectManager->create_glyph_subset(subset);
-  gpuManager->gen_object_buffers(subset);
+  objectManager->create_glyph_subset(object);
+  gpuManager->gen_object_buffers(object);
 
   //---------------------------
-  return subset;
+  return object;
+}
+Object_* Extractor::extract_data_object(Data_file* data_file){
+  Object_* object = new Object_();
+  //---------------------------
+
+  //Init
+  this->check_data(data_file);
+  this->init_random_color();
+  this->init_object_parameter(object, data_file, 0);
+
+  //Set parametrization
+  gpuManager->gen_object_buffers(object);
+
+  //---------------------------
+  return object;
 }
 void Extractor::extract_data(Cloud* cloud, Data_file* data){
   Subset* subset = new Subset();
@@ -176,6 +191,31 @@ void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
 
   cloud->unicolor = color_rdm;
   cloud->path_save = get_path_abs_build() + "../media/data/";
+
+  //---------------------------
+}
+void Extractor::init_object_parameter(Object_* object, Data_file* data, int ID){
+  //---------------------------
+
+  object->xyz = data->xyz;
+  object->rgb = data->rgb;
+  object->Nxyz = data->Nxyz;
+  object->uv = data->uv;
+
+  object->draw_type_name = data->draw_type_name ;
+  object->unicolor = color_rdm;
+  object->has_color = is_color;
+  object->has_normal = is_normal;
+
+  gpuManager->gen_vao(object);
+
+  // Subset info
+  object->ID = ID;
+  if(data->name != ""){
+    object->name = data->name;
+  }else{
+    object->name = "frame_" + to_string(ID);
+  }
 
   //---------------------------
 }

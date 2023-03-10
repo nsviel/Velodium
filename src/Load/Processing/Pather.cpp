@@ -93,7 +93,7 @@ void Pather::loading_cloud(){
   //Load files
   for(int i=0; i<path_vec.size(); i++){
     string path = path_vec[i];
-    loaderManager->load_object(path);
+    loaderManager->load_cloud(path);
   }
 
   //---------------------------
@@ -227,7 +227,7 @@ void Pather::loading_treatment(){
     string path = path_vec[i];
 
     //Load files
-    loaderManager->load_object(path);
+    loaderManager->load_cloud(path);
 
     //Save and remove
     Cloud* cloud = sceneManager->get_selected_cloud();

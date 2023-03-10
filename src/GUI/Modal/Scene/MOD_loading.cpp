@@ -132,7 +132,7 @@ void MOD_loading::loading_custom_file(){
     //Open selected file
     if (ImGui::Button("Load selected", ImVec2(item_width, 0))){
       file_PCAP* pcapManager = loaderManager->get_pcapManager();
-      loaderManager->load_object(file_path);
+      loaderManager->load_cloud(file_path);
     }
   }
 

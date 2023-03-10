@@ -355,7 +355,7 @@ void GUI_Initialization::open_selection(tree_file* node){
   }
 
   if(node->type == "File"){
-    bool ok = loaderManager->load_object(node->path);
+    bool ok = loaderManager->load_cloud(node->path);
     if(ok){
       this->operation_cloud((Cloud*)loaderManager->get_created_object());
     }

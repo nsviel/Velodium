@@ -28,7 +28,8 @@ public:
 
 public:
   //Main functions
-  Object_* load_object(string pathFile);
+  Object_* load_cloud(string pathFile);
+  Object_* load_object(string path);
   bool load_cloud_byFrame(vector<string> path_vec);
   bool load_cloud_onthefly(vector<string> path_vec);
   bool load_cloud_silent(string pathFile);
@@ -44,7 +45,9 @@ public:
   inline file_PCAP* get_pcapManager(){return pcapManager;}
 
 private:
-  vector<Data_file*> load_retrieve_data(string path);
+  Data_file* load_retrieve_data(string path);
+  vector<Data_file*> load_retrieve_cloud_data(string path);
+  Object_* load_insertIntoDatabase(Data_file* data_file);
   Object_* load_insertIntoDatabase(vector<Data_file*> data_vec);
   void load_insertIntoCloud(Data_file* data, Cloud* cloud);
 
