@@ -8,7 +8,7 @@ BundleByClass::BundleByClass(){}
 BundleByClass::~BundleByClass(){}
 
 //Bundle functions
-void BundleByClass::compute_bundleByClass(Cloud* cloud, float stepAngle){
+void BundleByClass::compute_bundleByClass(Collection* cloud, float stepAngle){
   Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
 
@@ -22,7 +22,7 @@ void BundleByClass::compute_bundleByClass(Cloud* cloud, float stepAngle){
   this->make_StudentLaw();
   //---------------------------
 }
-void BundleByClass::compute_bundleByClass_maxAngle(Cloud* cloud, int stepAngle, int maxAngle){
+void BundleByClass::compute_bundleByClass_maxAngle(Collection* cloud, int stepAngle, int maxAngle){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
@@ -179,7 +179,7 @@ void BundleByClass::compute_vectorByClass(vector<vector<float>>& data_X, vector<
 }
 
 //Subfunctions
-void BundleByClass::make_bundle(Cloud* cloud, float stepAngle, int maxAngle){
+void BundleByClass::make_bundle(Collection* cloud, float stepAngle, int maxAngle){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
@@ -225,7 +225,7 @@ void BundleByClass::make_bundle(Cloud* cloud, float stepAngle, int maxAngle){
     cout<<"--> Bundle by class: fail"<<endl;
   }
 }
-void BundleByClass::make_checking(Cloud* cloud){
+void BundleByClass::make_checking(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------
@@ -330,7 +330,7 @@ void BundleByClass::plot_confidenceInterval(){
 
     //---------------------------
 }
-void BundleByClass::plot_intensityBundle(Cloud* cloud){
+void BundleByClass::plot_intensityBundle(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), cloud->ID_selected);
   Subset* subset_init = *next(cloud->subset_init.begin(), cloud->ID_selected);
   //---------------------------

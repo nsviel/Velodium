@@ -27,7 +27,7 @@ public:
 public:
   //Main functions
   void update_configuration();
-  void compute_online(Cloud* cloud, int ID_subset);
+  void compute_online(Collection* cloud, int ID_subset);
   void clean_directories();
   void check_directories();
 
@@ -38,9 +38,9 @@ public:
   void save_image_path();
 
   //Frame saving
-  void save_frame(Cloud* cloud, int ID_subset);
+  void save_frame(Collection* cloud, int ID_subset);
   void save_frame_subset(Subset* subset);
-  void save_frame_set(Cloud* cloud, int ID_subset);
+  void save_frame_set(Collection* cloud, int ID_subset);
 
   //Path selection
   void select_path_image();

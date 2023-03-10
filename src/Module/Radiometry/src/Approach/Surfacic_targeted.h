@@ -17,7 +17,7 @@ public:
 
 public:
   //Method function
-  bool algo(Cloud* cloud);
+  bool algo(Collection* cloud);
 
   //Sub-functions
   void algo_nbP();
@@ -35,7 +35,7 @@ public:
   //Specific functions
   bool compute_ReferencePoints(VectorXf P_b, VectorXf P_m, VectorXf P_e);
   void compute_normalizeCoeffs(VectorXf P);
-  void compute_error(Cloud* cloud);
+  void compute_error(Collection* cloud);
 
 
   //Setters / Getters

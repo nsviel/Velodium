@@ -23,14 +23,14 @@ bool Ref_Operation::compute_Sphere_IbyR(){
     cout<<"No Sphere ref"<<endl;
     return false;
   }
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   Sphere_IbyR_I01.clear();
   Sphere_IbyR_R.clear();
   Sphere_IbyR_I01_std.clear();
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     bundler->compute_bundleByClass_maxAngle(cloud, 5, 17);
     vector<float> Ib_01 = bundler->get_Ib();
@@ -49,14 +49,14 @@ bool Ref_Operation::compute_Sphere_IbycIt(){
     cout<<"No Sphere ref"<<endl;
     return false;
   }
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   Sphere_IbycIt_cIt.clear(); Sphere_IbycIt_I.clear();
   Sphere_IbycIt_std.clear(); Sphere_IbycIt_It.clear();
   Sphere_IbycIt_R.clear();
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 10);
     vector<float> Ib = bundler->get_Ib();
@@ -79,11 +79,11 @@ bool Ref_Operation::compute_Sphere_IbycIt(){
   return true;
 }
 vector<vec3> Ref_Operation::get_sphereData(int i){
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   vector<vec3> sphere_data;
   //---------------------------
 
-  Cloud* sphere = *next(list->begin(),i);
+  Collection* sphere = *next(list->begin(),i);
 
   bundler->compute_bundleByClass(sphere, 2);
   vector<float> Ib_01 = bundler->get_Ib();
@@ -104,14 +104,14 @@ bool Ref_Operation::compute_Surfacic_gloabPiecewise(float R_1, float R_2){
     cout<<"No Sphere ref"<<endl;
     return false;
   }
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   Pfeifer_cIt_b.clear(); Pfeifer_cIt_m.clear(); Pfeifer_cIt_e.clear();
   Pfeifer_I01_b.clear(); Pfeifer_I01_m.clear(); Pfeifer_I01_e.clear();
   Pfeifer_R_b.clear(); Pfeifer_R_m.clear(); Pfeifer_R_e.clear();
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 5);
     vector<float> Ib = bundler->get_Ib();
@@ -142,13 +142,13 @@ bool Ref_Operation::compute_ParameterSpace_Sphere(float bundle){
     cout<<"--> Parameter space: Do not find sphere references"<<endl;
     return false;
   }
-  list<Cloud*>* list_ref = refManager->get_listSphere();
+  list<Collection*>* list_ref = refManager->get_listSphere();
   PS.clear();
   //---------------------------
 
   //Parameter space
   for(int i=0; i<list_ref->size(); i++){
-    Cloud* cloud = *next(list_ref->begin(),i);
+    Collection* cloud = *next(list_ref->begin(),i);
 
     bundler->compute_bundleByClass(cloud, bundle);
     vector<float> Ib = bundler->get_Ib();
@@ -185,13 +185,13 @@ bool Ref_Operation::compute_ParameterSpace_Spectralon(){
   /*if(!refManager->isref_Spectralon()){
     return false;
   }
-  list<Cloud*>* list_ref = refManager->get_listSpectralon();
+  list<Collection*>* list_ref = refManager->get_listSpectralon();
   PS.clear();
   //---------------------------
 
   //Parameter space
   for(int i=0; i<list_ref->size(); i++){
-    Cloud* cloud = *next(list_ref->begin(),i);
+    Collection* cloud = *next(list_ref->begin(),i);
 
     float Ib = fct_mean(cloud->intensity.OBJ);
     float Ib_cosIt = fct_mean(cloud->attribut.cosIt);
@@ -379,16 +379,16 @@ bool Ref_Operation::compute_Spectralon_IbyR(){
   if(!refManager->isref_Spectralon()){
     refManager->load_SpectralonTarget();
   }
-  list<Cloud*>* list_99p_xm = refManager->get_list_99p_xm();
-  list<Cloud*>* list_50p_xm = refManager->get_list_50p_xm();
-  list<Cloud*>* list_25p_xm = refManager->get_list_25p_xm();
-  list<Cloud*>* list_10p_xm = refManager->get_list_10p_xm();
+  list<Collection*>* list_99p_xm = refManager->get_list_99p_xm();
+  list<Collection*>* list_50p_xm = refManager->get_list_50p_xm();
+  list<Collection*>* list_25p_xm = refManager->get_list_25p_xm();
+  list<Collection*>* list_10p_xm = refManager->get_list_10p_xm();
 
   for(int i=0; i<list_99p_xm->size() ;i++){
-    Cloud* cloud_99 = *next(list_99p_xm->begin(),i);
-    Cloud* cloud_50 = *next(list_50p_xm->begin(),i);
-    Cloud* cloud_25 = *next(list_25p_xm->begin(),i);
-    Cloud* cloud_10 = *next(list_10p_xm->begin(),i);
+    Collection* cloud_99 = *next(list_99p_xm->begin(),i);
+    Collection* cloud_50 = *next(list_50p_xm->begin(),i);
+    Collection* cloud_25 = *next(list_25p_xm->begin(),i);
+    Collection* cloud_10 = *next(list_10p_xm->begin(),i);
 
     Spec_IbyR_I01_99.push_back(fct_mean(cloud_99->intensity.OBJ));
     Spec_IbyR_I01_50.push_back(fct_mean(cloud_50->intensity.OBJ));
@@ -445,10 +445,10 @@ bool Ref_Operation::compute_Spectralon_IbycIt(int distance){
   //---------------------------
 
   //Get Spectralon lists
-  list<Cloud*>* list_99p = new list<Cloud*>;
-  list<Cloud*>* list_50p = new list<Cloud*>;
-  list<Cloud*>* list_25p = new list<Cloud*>;
-  list<Cloud*>* list_10p = new list<Cloud*>;
+  list<Collection*>* list_99p = new list<Collection*>;
+  list<Collection*>* list_50p = new list<Collection*>;
+  list<Collection*>* list_25p = new list<Collection*>;
+  list<Collection*>* list_10p = new list<Collection*>;
   if(!refManager->isref_Spectralon()){
     cout<<"No Spectralon ref"<<endl;
     return false;
@@ -499,10 +499,10 @@ bool Ref_Operation::compute_Spectralon_IbycIt(int distance){
   }
 
   for(int i=0; i<list_99p->size() ;i++){
-    /*Cloud* cloud_99 = *next(list_99p->begin(),i);
-    Cloud* cloud_50 = *next(list_50p->begin(),i);
-    Cloud* cloud_25 = *next(list_25p->begin(),i);
-    Cloud* cloud_10 = *next(list_10p->begin(),i);
+    /*Collection* cloud_99 = *next(list_99p->begin(),i);
+    Collection* cloud_50 = *next(list_50p->begin(),i);
+    Collection* cloud_25 = *next(list_25p->begin(),i);
+    Collection* cloud_10 = *next(list_10p->begin(),i);
 
     // 99%
     vector<float>& Is_99 = cloud_99->intensity.OBJ;

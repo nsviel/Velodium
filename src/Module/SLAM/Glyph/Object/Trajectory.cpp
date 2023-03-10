@@ -34,7 +34,7 @@ void Trajectory::create(){
 
   //---------------------------
 }
-void Trajectory::update(Cloud*cloud){
+void Trajectory::update(Collection* cloud){
   //---------------------------
 
   trajectory->xyz.clear();

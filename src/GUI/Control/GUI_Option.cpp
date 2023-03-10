@@ -81,7 +81,7 @@ void GUI_option::option_font(){
   ImGui::Separator();
 }
 void GUI_option::option_glyph(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   ImGui::Columns(2);
   //---------------------------
 
@@ -240,7 +240,7 @@ void GUI_option::option_mode(){
 }
 void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
@@ -375,7 +375,7 @@ void GUI_option::option_parameter(){
 }
 void GUI_option::option_color(){
   if(ImGui::CollapsingHeader("Colors")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     int colorEditSize = 150;
     //---------------------------
 

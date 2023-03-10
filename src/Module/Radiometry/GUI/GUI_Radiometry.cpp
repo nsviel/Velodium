@@ -67,7 +67,7 @@ void GUI_radiometry::design_Radiometry(){
 
 //Subfunctions
 void GUI_radiometry::cloudStat(){
-  /*Cloud* cloud = sceneManager->get_selected_cloud();
+  /*Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Radiometric cloud state
@@ -87,7 +87,7 @@ void GUI_radiometry::cloudStat(){
   ImGui::Separator();*/
 }
 void GUI_radiometry::correction(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Intensity correction
@@ -130,11 +130,11 @@ void GUI_radiometry::correction(){
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Apply##linearization", ImVec2(100,0))){
     if(corr_num == 1){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+      list<Collection*>* list_cloud = sceneManager->get_list_cloud();
       //-------------------------------
 
       for(int i=0; i<list_cloud->size(); i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
+        Collection* cloud = *next(list_cloud->begin(),i);
         linManager->algo_linearization(cloud, method);
       }
 
@@ -147,11 +147,11 @@ void GUI_radiometry::correction(){
   ImGui::SameLine();
   if(ImGui::Button("Reverse##linearization", ImVec2(100,0))){
     if(corr_num == 1){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+      list<Collection*>* list_cloud = sceneManager->get_list_cloud();
       //-------------------------------
 
       for(int i=0; i<list_cloud->size(); i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
+        Collection* cloud = *next(list_cloud->begin(),i);
         linManager->algo_reverse(cloud, method);
       }
 
@@ -166,7 +166,7 @@ void GUI_radiometry::correction(){
 }
 void GUI_radiometry::plotting(){
   if(ImGui::CollapsingHeader("Plotting")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     const char* name_c = subset->name.c_str();
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity");
@@ -212,7 +212,7 @@ void GUI_radiometry::plotting(){
     }
 
     /*if(ImGui::Button("Special", ImVec2(150,0))){
-      list<Cloud*>* list = sceneManager->get_list_cloud();
+      list<Collection*>* list = sceneManager->get_list_cloud();
       vector<float> Is_99, Is_50, Is_25, Is_10;
       vector<float> Istd_99, Istd_50, Istd_25, Istd_10;
       vector<float> R_99, R_50, R_25, R_10;
@@ -222,7 +222,7 @@ void GUI_radiometry::plotting(){
       //---------------------------
 
       for(int i=0; i<list->size(); i++){
-        Cloud* cloud = *next(list->begin(),i);
+        Collection* cloud = *next(list->begin(),i);
         attribManager.compute_attribut_cloud(cloud);
 
         if(cloud->name.find("10p") != std::string::npos){
@@ -492,7 +492,7 @@ void GUI_radiometry::calibrationTargets(){
     ImGui::SameLine();
     if(ImGui::Button("I(alpha)##sphere", ImVec2(60,0))){
       refManager->load_References_path(*path_sphereTarget_add80d);
-      Cloud* cloud = refManager->get_specificSphere("10.0m");
+      Collection* cloud = refManager->get_specificSphere("10.0m");
       say(cloud->name);
       radioplotManager->plot_IbyIt_cloud(cloud);
       refManager->clear();
@@ -572,7 +572,7 @@ void GUI_radiometry::options(){
 }
 void GUI_radiometry::Approaches(){
   /*if(ImGui::CollapsingHeader("Approach")){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     //---------------------------
 
     //Surfacic global piecewise approach

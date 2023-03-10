@@ -182,7 +182,7 @@ bool Loader::load_cloud_part(string path, int lmin, int lmax){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_creation(Cloud* cloud_in){
+bool Loader::load_cloud_creation(Collection* cloud_in){
   vector<Data_file*> data_vec;
   //---------------------------
 
@@ -250,7 +250,7 @@ bool Loader::load_cloud_empty(){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_oneFrame(Cloud* cloud, string path){
+bool Loader::load_cloud_oneFrame(Collection* cloud, string path){
   //---------------------------
 
   if(is_file_exist(path)){
@@ -369,7 +369,7 @@ vector<Data_file*> Loader::load_retrieve_cloud_data(string path){
   return data_vec;
 }
 Object_* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
-  list<Cloud*>* list_cloud = data->get_list_cloud();
+  list<Collection*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
   //Extract data and put in the engine
@@ -409,7 +409,7 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
   //---------------------------
   return object;
 }
-void Loader::load_insertIntoCloud(Data_file* data, Cloud* cloud){
+void Loader::load_insertIntoCloud(Data_file* data, Collection* cloud){
   //---------------------------
 
   //Extract data and put in the engine

@@ -32,26 +32,26 @@ public:
 public:
   //Correction Methods
   void algo_RadarEquation(int num);
-  void algo_surfacicSimplified(Cloud* cloud);
-  void algo_separationGlobal(Cloud* cloud);
-  void algo_surfacicGlobalPiecewise(Cloud* cloud);
-  void algo_surfacicLocal(Cloud* cloud);
-  void algo_surfacicSegmented(Cloud* cloud);
+  void algo_surfacicSimplified(Collection* cloud);
+  void algo_separationGlobal(Collection* cloud);
+  void algo_surfacicGlobalPiecewise(Collection* cloud);
+  void algo_surfacicLocal(Collection* cloud);
+  void algo_surfacicSegmented(Collection* cloud);
 
   //Correction functions
   void correction_allClouds();
   void correction_allClouds_Iini();
   void correction_allClouds_WtRefs();
-  void correction_oneCloud(Cloud* cloud);
-  void correction_oneCloud_Iini(Cloud* cloud);
-  bool compute_RadioCorrection(Cloud* cloud);
+  void correction_oneCloud(Collection* cloud);
+  void correction_oneCloud_Iini(Collection* cloud);
+  bool compute_RadioCorrection(Collection* cloud);
 
   //Subfunctions
   void compute_sortByIt(vector<float>& vec1, vector<float>& vec2);
   void compute_SpectralonAjustement();
   bool compute_list();
   bool compute_subListSpectralon();
-  bool check_cloudData(Cloud* cloud);
+  bool check_cloudData(Collection* cloud);
   void set_referenceON(bool value);
   void remove_References();
   void wrt_results();

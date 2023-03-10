@@ -24,7 +24,7 @@ Linearization::Linearization(Scene* scene, Ref_Operation* ope){
 Linearization::~Linearization(){}
 
 //General functions
-void Linearization::algo_linearization(Cloud* cloud, int method){
+void Linearization::algo_linearization(Collection* cloud, int method){
   //---------------------------
 
   switch(method){
@@ -46,7 +46,7 @@ void Linearization::algo_linearization(Cloud* cloud, int method){
   sceneManager->update_buffer_color(cloud);
   console.AddLog("ok", "linearized");
 }
-void Linearization::algo_reverse(Cloud* cloud, int method){
+void Linearization::algo_reverse(Collection* cloud, int method){
   //---------------------------
 
   switch(method){
@@ -66,7 +66,7 @@ void Linearization::algo_reverse(Cloud* cloud, int method){
 }
 
 //Linearization
-void Linearization::lin_SurfacicGlobal(Cloud* cloud){
+void Linearization::lin_SurfacicGlobal(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   //---------------------------
@@ -91,7 +91,7 @@ void Linearization::lin_SurfacicGlobal(Cloud* cloud){
   //---------------------------
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
-void Linearization::lin_SeparationGlobal(Cloud* cloud){
+void Linearization::lin_SeparationGlobal(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   int size = Is.size();
@@ -113,7 +113,7 @@ void Linearization::lin_SeparationGlobal(Cloud* cloud){
   //---------------------------
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
-void Linearization::lin_SurfacicLocal(Cloud* cloud){
+void Linearization::lin_SurfacicLocal(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   int size = Is.size();
@@ -137,7 +137,7 @@ void Linearization::lin_SurfacicLocal(Cloud* cloud){
 }
 
 //Reverse
-void Linearization::rev_SurfacicGlobal(Cloud* cloud){
+void Linearization::rev_SurfacicGlobal(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
@@ -153,7 +153,7 @@ void Linearization::rev_SurfacicGlobal(Cloud* cloud){
   //---------------------------
   sceneManager->update_cloud_IntensityToColor(cloud);
 }
-void Linearization::rev_SeparationGlobal(Cloud* cloud){
+void Linearization::rev_SeparationGlobal(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   int size = Is.size();
@@ -172,14 +172,14 @@ void Linearization::rev_SeparationGlobal(Cloud* cloud){
 //Math functions
 void Linearization::compute_SpectralonValues(){
   /* WORK IN PROGRESS */
-  list<Cloud*>* list_10p_xm_xd = refManager->get_list_10p_xm_xd();
-  list<Cloud*>* list_25p_xm_xd = refManager->get_list_25p_xm_xd();
-  list<Cloud*>* list_50p_xm_xd = refManager->get_list_50p_xm_xd();
-  list<Cloud*>* list_99p_xm_xd = refManager->get_list_99p_xm_xd();
+  list<Collection*>* list_10p_xm_xd = refManager->get_list_10p_xm_xd();
+  list<Collection*>* list_25p_xm_xd = refManager->get_list_25p_xm_xd();
+  list<Collection*>* list_50p_xm_xd = refManager->get_list_50p_xm_xd();
+  list<Collection*>* list_99p_xm_xd = refManager->get_list_99p_xm_xd();
   //---------------------------
 
   for(int i=0; i<list_10p_xm_xd->size(); i++){
-    Cloud* cloud = *next(list_10p_xm_xd->begin(),i);
+    Collection* cloud = *next(list_10p_xm_xd->begin(),i);
   }
 
   //---------------------------

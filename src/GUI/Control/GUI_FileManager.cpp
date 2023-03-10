@@ -33,7 +33,7 @@ GUI_fileManager::~GUI_fileManager(){}
 
 //Subfunctions
 void GUI_fileManager::fileManager(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   //-------------------------------
 
   static ImVector<int> selection;
@@ -59,7 +59,7 @@ void GUI_fileManager::fileManager(){
     ImGui::TableSetupColumn("Delete", ImGuiTableColumnFlags_WidthFixed, 20);
 
     for (int row_i=0; row_i<list_cloud->size(); row_i++){
-      Cloud* cloud = *next(list_cloud->begin(), row_i);
+      Collection* cloud = *next(list_cloud->begin(), row_i);
       ImGui::TableNextRow(ImGuiTableRowFlags_None, 0.5);
       ImGui::PushItemWidth(-FLT_MIN);flags |= ImGuiTreeNodeFlags_OpenOnArrow;
       ImGui::PushID(row_i);
@@ -101,8 +101,8 @@ void GUI_fileManager::fileManager(){
 
   //-------------------------------
 }
-void GUI_fileManager::cloudManager(Cloud* cloud){
-  Cloud* cloud_selected = sceneManager->get_selected_cloud();
+void GUI_fileManager::cloudManager(Collection* cloud){
+  Collection* cloud_selected = sceneManager->get_selected_cloud();
   if(cloud_selected == nullptr) {}
   //-------------------------------
 
@@ -152,7 +152,7 @@ void GUI_fileManager::cloudManager(Cloud* cloud){
 
 }
 
-void GUI_fileManager::info_cloud(Cloud* cloud){
+void GUI_fileManager::info_cloud(Collection* cloud){
   //---------------------------
 
   //Additional info
@@ -176,7 +176,7 @@ void GUI_fileManager::info_subset(Subset* subset){
   //---------------------------
   ImGui::Separator();
 }
-void GUI_fileManager::info_iconAction(Cloud* cloud){
+void GUI_fileManager::info_iconAction(Collection* cloud){
   //---------------------------
 
   //Removal cross

@@ -61,7 +61,7 @@ CT_ICP::CT_ICP(){
 CT_ICP::~CT_ICP(){}
 
 //Main function
-void CT_ICP::algo(Cloud* cloud){
+void CT_ICP::algo(Collection* cloud){
 	if(cloud == nullptr) return;
 	//---------------------------
 

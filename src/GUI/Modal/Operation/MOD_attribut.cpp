@@ -46,7 +46,7 @@ MOD_attribut::~MOD_attribut(){}
 
 //Main function
 void MOD_attribut::window_normal(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
 
   if(modal_tab.show_normal && cloud != nullptr){
     ImGui::Begin("Attributs", &modal_tab.show_normal,ImGuiWindowFlags_AlwaysAutoResize);
@@ -134,9 +134,9 @@ void MOD_attribut::window_normal(){
         //---------------------------
 
 
-        list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+        list<Collection*>* list_cloud = sceneManager->get_list_cloud();
         for(int i=0;i<list_cloud->size();i++){
-          Cloud* cloud = *next(list_cloud->begin(),i);
+          Collection* cloud = *next(list_cloud->begin(),i);
 
           if(normalMethod == 0){
             attribManager->compute_normals(subset);
@@ -204,7 +204,7 @@ void MOD_attribut::window_normal(){
   }
 }
 void MOD_attribut::window_intensity(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
 
   if(modal_tab.show_intensity && cloud != nullptr){
     ImGui::Begin("Intensity", &modal_tab.show_intensity, ImGuiWindowFlags_AlwaysAutoResize);
@@ -317,7 +317,7 @@ void MOD_attribut::window_intensity(){
   }
 }
 void MOD_attribut::window_color(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
 
   if(modal_tab.show_color && cloud != nullptr){
     ImGui::Begin("Colorization", &modal_tab.show_color, ImGuiWindowFlags_AlwaysAutoResize);

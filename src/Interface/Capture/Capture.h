@@ -38,12 +38,12 @@ public:
   //Subfunctions
   void operation_new_subset(Subset* subset);
   void supress_nullpoints(Subset* subset);
-  void control_nb_subset(Cloud* cloud);
+  void control_nb_subset(Collection* cloud);
   void create_empty_cloud();
 
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
-  inline Cloud* get_cloud_capture(){return cloud_capture;}
+  inline Collection* get_cloud_capture(){return cloud_capture;}
 
   inline string* get_lidar_model(){return &lidar_model;}
   inline bool* get_is_capturing(){return &is_capturing;}
@@ -61,7 +61,7 @@ private:
   Configuration* configManager;
   Node_operation* node_ope;
 
-  Cloud* cloud_capture;
+  Collection* cloud_capture;
   Scala* scalaManager;
   Velodyne* veloManager;
 

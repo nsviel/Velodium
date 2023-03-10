@@ -62,7 +62,7 @@ Keypoint::Keypoint(Glyphs* glyph){
 Keypoint::~Keypoint(){}
 
 //Main functions
-void Keypoint::algo_keypoints(Cloud* cloud_P, Cloud* cloud_Q){
+void Keypoint::algo_keypoints(Collection* cloud_P, Collection* cloud_Q){
   corresp_P.clear(); corresp_Q.clear();
   correspondence_scores.clear();
   //---------------------------
@@ -216,7 +216,7 @@ void Keypoint::algo_keypoints(Cloud* cloud_P, Cloud* cloud_Q){
   //---------------------------
   this->compute_matching(cloud_P, cloud_Q);*/
 }
-void Keypoint::algo_keypoints_one(Cloud* cloud){
+void Keypoint::algo_keypoints_one(Collection* cloud){
   /*cloud->pcl.Nxyz = glm_to_pcl_Nxyz(cloud);
   //---------------------------
 
@@ -297,7 +297,7 @@ void Keypoint::algo_keypoints_one(Cloud* cloud){
 
   //---------------------------*/
 }
-void Keypoint::algo_normals(Cloud* cloud){
+void Keypoint::algo_normals(Collection* cloud){
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = cloud->pcl.XYZRGB;
   pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> ne;
   pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal>);
@@ -314,7 +314,7 @@ void Keypoint::algo_normals(Cloud* cloud){
 }
 
 //DownSampling
-void Keypoint::downSamp_VoxelGrid(Cloud* cloud){
+void Keypoint::downSamp_VoxelGrid(Collection* cloud){
   XYZRGBNtype cloud = glm_to_pcl_XYZRGBNormal(cloud);
   cout<<"Voxel grid: "<<cloud->size()<<flush;
   //---------------------------
@@ -343,7 +343,7 @@ void Keypoint::downSamp_VoxelGrid(Cloud* cloud){
 
   //---------------------------
 }
-void Keypoint::downSamp_Octree(Cloud* cloud){
+void Keypoint::downSamp_Octree(Collection* cloud){
   /*XYZRGBNtype cloud = glm_to_pcl_XYZRGBNormal(cloud);
   cout<<"Voxel grid: "<<cloud->size()<<flush;
   //---------------------
@@ -382,7 +382,7 @@ void Keypoint::downSamp_Octree(Cloud* cloud){
   }
   cloud->pcl.Nxyz = normals;*/
 }
-void Keypoint::downSamp_Segmentation(Cloud* cloud){
+void Keypoint::downSamp_Segmentation(Collection* cloud){
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
   cout<<"Segmentation: "<<cloud->width * cloud->height<<flush;
   //---------------------------
@@ -441,7 +441,7 @@ void Keypoint::downSamp_Segmentation(Cloud* cloud){
 }
 
 //Keypoints
-void Keypoint::keypoint_SIFT(Cloud* cloud){
+void Keypoint::keypoint_SIFT(Collection* cloud){
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
   PtWithScale keypoints (new pcl::PointCloud<pcl::PointWithScale>);
   tic();
@@ -475,7 +475,7 @@ void Keypoint::keypoint_SIFT(Cloud* cloud){
   int size = keypoints->size();
   console.AddLog("SIFT %s: Found %i keypoints in %.2fms", cloud->name.c_str(), size, duration);
 }
-void Keypoint::keypoint_HARRIS3D(Cloud* cloud){
+void Keypoint::keypoint_HARRIS3D(Collection* cloud){
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
   XYZItype keypoints (new pcl::PointCloud<pcl::PointXYZI>);
   //---------------------------
@@ -504,7 +504,7 @@ void Keypoint::keypoint_HARRIS3D(Cloud* cloud){
   int size_tot = cloud->size();
   console.AddLog("HARRIS %s: Found %i keypoints out of %i total points.", cloud->name.c_str(), size, size_tot);
 }
-void Keypoint::keypoint_HARRIS6D(Cloud* cloud){
+void Keypoint::keypoint_HARRIS6D(Collection* cloud){
   /*XYZRGBtype& cloud = cloud->pcl.XYZRGB;
   XYZItype keypoints (new pcl::PointCloud<pcl::PointXYZI>);
   //-----------------------
@@ -534,7 +534,7 @@ void Keypoint::keypoint_HARRIS6D(Cloud* cloud){
   cout << "HARRIS " << cloud->name <<": Found " << keypoints->size () << " keypoints ";
   cout << "out of " << cloud->size () << " total points." << endl;*/
 }
-void Keypoint::keypoint_SUSAN(Cloud* cloud){
+void Keypoint::keypoint_SUSAN(Collection* cloud){
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
   pcl::PointCloud<pcl::Normal>::Ptr &normals = cloud->pcl.Nxyz;
   PtWithScale keypoints (new pcl::PointCloud<pcl::PointWithScale>);
@@ -565,7 +565,7 @@ void Keypoint::keypoint_SUSAN(Cloud* cloud){
 }
 
 //Descriptors
-void Keypoint::descriptor_PFH(Cloud* cloud, PFHtype& descriptors){
+void Keypoint::descriptor_PFH(Collection* cloud, PFHtype& descriptors){
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ> ());
   pcl::PointCloud<pcl::Normal>::Ptr &normals = cloud->pcl.Nxyz;
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
@@ -582,7 +582,7 @@ void Keypoint::descriptor_PFH(Cloud* cloud, PFHtype& descriptors){
 
   //---------------------------
 }
-void Keypoint::descriptor_FPFH(Cloud* cloud, FPFHtype& descriptors){
+void Keypoint::descriptor_FPFH(Collection* cloud, FPFHtype& descriptors){
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>());
   pcl::PointCloud<pcl::Normal>::Ptr &normals = cloud->pcl.Nxyz;
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
@@ -599,7 +599,7 @@ void Keypoint::descriptor_FPFH(Cloud* cloud, FPFHtype& descriptors){
 
   //---------------------------
 }
-void Keypoint::descriptor_SHOT(Cloud* cloud, SHOTtype& descriptors){
+void Keypoint::descriptor_SHOT(Collection* cloud, SHOTtype& descriptors){
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ> ());
   pcl::PointCloud<pcl::Normal>::Ptr &normals = cloud->pcl.Nxyz;
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
@@ -629,7 +629,7 @@ void Keypoint::descriptor_SHOT(Cloud* cloud, SHOTtype& descriptors){
   int size = desc_2->size();
   console.AddLog("-> SHOT %s: vectorize %i in %.2fms", cloud->name.c_str(), size, duration);
 }
-void Keypoint::descriptor_3DSC(Cloud* cloud, SCtype& descriptors){
+void Keypoint::descriptor_3DSC(Collection* cloud, SCtype& descriptors){
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ> ());
   pcl::PointCloud<pcl::Normal>::Ptr &normals = cloud->pcl.Nxyz;
   XYZRGBtype& cloud = cloud->pcl.XYZRGB;
@@ -809,7 +809,7 @@ void Keypoint::rejection_correspNbBest(){
   corresp_Q = c_Q;
   cout<<"->"<<corresp_Q.size()<<endl;
 }
-void Keypoint::rejection_Ransac(Cloud* cloud_P, Cloud* cloud_Q){
+void Keypoint::rejection_Ransac(Collection* cloud_P, Collection* cloud_Q){
   if(correspondence_scores.size() == 0) return;
   XYZRGBtype& key_P = cloud_P->pcl.keypoints;
   XYZRGBtype& key_Q = cloud_Q->pcl.keypoints;
@@ -933,7 +933,7 @@ void Keypoint::compute_correspondences_FPFH(FPFHtype& descrip_P, FPFHtype& descr
 }
 
 //Visualization
-void Keypoint::compute_matching(Cloud* cloud_P, Cloud* cloud_Q){
+void Keypoint::compute_matching(Collection* cloud_P, Collection* cloud_Q){
   XYZRGBtype& key_P = cloud_P->pcl.keypoints;
   XYZRGBtype& key_Q = cloud_Q->pcl.keypoints;
   vector<vec3>& keypoints_P = cloud_P->registration.keypoints;

@@ -739,7 +739,7 @@ float file_PLY::get_uchar_from_binary(char* block_data, int& offset){
 }
 
 //Main exporter functions
-bool file_PLY::Exporter_cloud(string path_file, string ply_format, Cloud* cloud){
+bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* cloud){
   //---------------------------
 
   //Check for file format ending
@@ -882,7 +882,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Subset* subse
   //---------------------------
   return true;
 }
-bool file_PLY::Exporter_set(string path_dir, string ply_format, Cloud* cloud, int ID, int nb){
+bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* cloud, int ID, int nb){
   Subset* subset = *next(cloud->subset.begin(), ID);
   string filePath = path_dir + subset->name + ".tmp";
   string filePath_end = path_dir + subset->name + ".ply";

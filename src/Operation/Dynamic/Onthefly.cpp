@@ -41,7 +41,7 @@ void Onthefly::update_configuration(){
 
   //---------------------------
 }
-void Onthefly::compute_onthefly(Cloud* cloud, int ID){
+void Onthefly::compute_onthefly(Collection* cloud, int ID){
   //---------------------------
 
   if(cloud->is_onthefly){
@@ -73,12 +73,12 @@ void Onthefly::compute_onthefly(Cloud* cloud, int ID){
   //---------------------------
 }
 void Onthefly::reset(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //Reset all clouds
   for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
     if(cloud->is_onthefly){
       vector<string>& list_path = cloud->list_path;
       list<int>& list_id = cloud->list_loaded;
@@ -96,7 +96,7 @@ void Onthefly::reset(){
   }
 
   // Reset glyph
-  Cloud* cloud_selected = sceneManager->get_selected_cloud();
+  Collection* cloud_selected = sceneManager->get_selected_cloud();
   sceneManager->update_glyph(cloud_selected);
 
   //---------------------------

@@ -39,7 +39,7 @@ SLAM_assessment::SLAM_assessment(SLAM* slam){
 SLAM_assessment::~SLAM_assessment(){}
 
 //Main function
-bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID, float time){
+bool SLAM_assessment::compute_assessment(Collection* cloud, int subset_ID, float time){
   Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
   Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
   //---------------------------
@@ -68,7 +68,7 @@ bool SLAM_assessment::compute_assessment(Cloud* cloud, int subset_ID, float time
   this->compute_visibility(cloud);
   return success;
 }
-void SLAM_assessment::compute_visibility(Cloud* cloud){
+void SLAM_assessment::compute_visibility(Collection* cloud){
   bool slam_failed = false;
   //---------------------------
 
@@ -155,7 +155,7 @@ bool SLAM_assessment::compute_assessment_abs(Frame* frame_m0, Frame* frame_m1){
   //---------------------------
   return success;
 }
-bool SLAM_assessment::compute_assessment_rlt(Cloud* cloud, int subset_ID){
+bool SLAM_assessment::compute_assessment_rlt(Collection* cloud, int subset_ID){
   Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
   Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
   bool success = true;
@@ -240,7 +240,7 @@ bool SLAM_assessment::compute_assessment_rsd(Frame* frame){
   //---------------------------
   return true;
 }
-void SLAM_assessment::compute_statistics(Cloud* cloud, int subset_ID, float duration){
+void SLAM_assessment::compute_statistics(Collection* cloud, int subset_ID, float duration){
   Subset* subset = cloud->get_subset_byID(subset_ID);
   Frame* frame_m0 = cloud->get_frame_byID(subset_ID);
   Frame* frame_m1 = cloud->get_frame_byID(subset_ID-1);
@@ -296,7 +296,7 @@ double SLAM_assessment::AngularDistance(Eigen::Matrix3d &rota, Eigen::Matrix3d &
   //---------------------------
   return norm;
 }
-void SLAM_assessment::compute_stat_mean(Cloud* cloud, int subset_ID){
+void SLAM_assessment::compute_stat_mean(Collection* cloud, int subset_ID){
   //---------------------------
 
   //Compute previous frame stat means

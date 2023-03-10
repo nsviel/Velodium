@@ -38,7 +38,7 @@ Obstacle::~Obstacle(){}
 
 //Main functions
 void Obstacle::runtime(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   if(with_prediction && cloud != nullptr){
@@ -58,7 +58,7 @@ void Obstacle::runtime(){
 
 //Manual obstacle adding
 void Obstacle::add_detectioned(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Get prediction file paths
@@ -73,7 +73,7 @@ void Obstacle::add_detectioned(){
   //---------------------------
 }
 void Obstacle::add_detectioned(string path_dir){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Get prediction file paths
@@ -88,7 +88,7 @@ void Obstacle::add_detectioned(string path_dir){
   //---------------------------
 }
 void Obstacle::add_obstacle_grTr(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Get prediction file paths
@@ -104,7 +104,7 @@ void Obstacle::add_obstacle_grTr(){
 }
 
 //Subfunctions
-void Obstacle::build_cloud_obstacle(Cloud* cloud){
+void Obstacle::build_cloud_obstacle(Collection* cloud){
   //---------------------------
   /*
   //Process prediction if the ieme subset are not already processed

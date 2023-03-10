@@ -18,7 +18,7 @@ public:
 
 public:
   //Sphere fitting
-  void Sphere_cloudToCenter_all(list<Cloud*>* list_cloud);
+  void Sphere_cloudToCenter_all(list<Collection*>* list_cloud);
   void Sphere_cloudToCenter(Subset* subset);
   vec3 Sphere_FindCenter(Subset* subset);
 

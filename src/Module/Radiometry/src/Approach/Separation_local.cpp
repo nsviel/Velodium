@@ -31,7 +31,7 @@ Separation_local::Separation_local(Ref_Operation* opeClass){
 Separation_local::~Separation_local(){}
 
 //Method function
-bool Separation_local::algo(Cloud* cloud){
+bool Separation_local::algo(Collection* cloud){
   //---------------------------
 
   this->algo_ParameterSpace();
@@ -44,7 +44,7 @@ bool Separation_local::algo(Cloud* cloud){
 }
 
 //Sub-functions
-bool Separation_local::algo_checking(Cloud* cloud){
+bool Separation_local::algo_checking(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
@@ -85,7 +85,7 @@ bool Separation_local::algo_ParameterSpace(){
   PS_size = PS_Sphere.size();
   return true;
 }
-bool Separation_local::algo_interpolation(Cloud* cloud){
+bool Separation_local::algo_interpolation(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
@@ -136,7 +136,7 @@ bool Separation_local::algo_interpolation(Cloud* cloud){
   }
   return true;
 }
-bool Separation_local::algo_correction(Cloud* cloud){
+bool Separation_local::algo_correction(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   Ic.clear();

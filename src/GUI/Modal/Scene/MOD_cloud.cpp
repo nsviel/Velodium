@@ -32,7 +32,7 @@ MOD_cloud::~MOD_cloud(){}
 
 //Main function
 void MOD_cloud::mod_cloud_info(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   bool* open = &modal_tab.show_modifyFileInfo;
   //---------------------------
 
@@ -130,7 +130,7 @@ void MOD_cloud::mod_cloud_info(){
 /*void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -226,7 +226,7 @@ void MOD_cloud::mod_cloud_info(){
 void MOD_cloud::mod_cloud_data(){
   if(modal_tab.show_asciiData){
     ImGui::Begin("Data", &modal_tab.show_asciiData);
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 

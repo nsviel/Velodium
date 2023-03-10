@@ -35,14 +35,14 @@ Plot_radio::Plot_radio(Node_engine* node){
 }
 Plot_radio::~Plot_radio(){}
 
-void Plot_radio::compute_IRmeans(list<Cloud*>* list){
+void Plot_radio::compute_IRmeans(list<Collection*>* list){
   attribManager->compute_attribut_all();
   Is_mean.clear(); R_mean.clear(); It_mean.clear(); std_mean.clear();
   //---------------------------
 
   //Compute R mean and I mean for each cloud
   for(int i=0;i<list->size();i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
     Subset* subset = *next(cloud->subset.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& dist = subset->R;
@@ -60,14 +60,14 @@ void Plot_radio::compute_IRmeans(list<Cloud*>* list){
     R_saved.push_back(R_mean);
   }
 }
-void Plot_radio::compute_IsItconcat(list<Cloud*>* list){
+void Plot_radio::compute_IsItconcat(list<Collection*>* list){
   attribManager->compute_attribut_all();
   Is_conc.clear(); It_conc.clear();
   //---------------------------
 
   //Compute R mean and I mean for each cloud
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
     Subset* subset = *next(cloud->subset.begin(), 0);
     vector<float>& Is = subset->I;
     vector<float>& It = subset->It;
@@ -90,13 +90,13 @@ void Plot_radio::compute_IsItconcat(list<Cloud*>* list){
 //plotting function
 void Plot_radio::plot_3Dmap(){
   refManager->compute_list(sceneManager->get_list_cloud());
-  list<Cloud*>* list_dist = refManager->get_listDist();
-  list<Cloud*>* list_angle = refManager->get_listAngle();
+  list<Collection*>* list_dist = refManager->get_listDist();
+  list<Collection*>* list_angle = refManager->get_listAngle();
   vector<vector<float>> data_X, data_Y, data_Z;
   //---------------------------------
 
   for(int i=0; i<list_dist->size(); i++){
-    Cloud* cloud = *next(list_dist->begin(),i);
+    Collection* cloud = *next(list_dist->begin(),i);
 
     //Bundle by statistical classes
     bundler->compute_bundleByClass(cloud, 5);
@@ -119,8 +119,8 @@ void Plot_radio::plot_3Dmap(){
 }
 void Plot_radio::plot_2Dmap(){
   /*refManager->compute_list(sceneManager->get_list_cloud());
-  list<Cloud*>* list_dist = refManager->get_listDist();
-  list<Cloud*>* list_angle = refManager->get_listAngle();
+  list<Collection*>* list_dist = refManager->get_listDist();
+  list<Collection*>* list_angle = refManager->get_listAngle();
   this->compute_IRmeans(list_dist);
   MatrixXf heatmap(20, list_dist->size());
   vector<float> R_map, cosIt_map;
@@ -476,12 +476,12 @@ void Plot_radio::plot_IbyR(){
   //---------------------------
 }
 void Plot_radio::plot_IbyR_all(){
-  list<Cloud*>* list = sceneManager->get_list_cloud();
+  list<Collection*>* list = sceneManager->get_list_cloud();
   vector<float> Is, Is_std, Is_R;
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
     attribManager->compute_attribut_cloud(cloud);
 
     bundler->compute_bundleByClass_maxAngle(cloud, 5, 15);
@@ -685,10 +685,10 @@ void Plot_radio::plot_IbyCosIt(bool normalised){
   //---------------------------
 }
 void Plot_radio::plot_IbyIt_Spectralon(bool normalised){
-  list<Cloud*>* list_xp_10m_xd = refManager->get_list_xp_10m_xd();
-  list<Cloud*>* list_xp_20m_xd = refManager->get_list_xp_20m_xd();
-  list<Cloud*>* list_xp_30m_xd = refManager->get_list_xp_30m_xd();
-  list<Cloud*>* list_xp_40m_xd = refManager->get_list_xp_40m_xd();
+  list<Collection*>* list_xp_10m_xd = refManager->get_list_xp_10m_xd();
+  list<Collection*>* list_xp_20m_xd = refManager->get_list_xp_20m_xd();
+  list<Collection*>* list_xp_30m_xd = refManager->get_list_xp_30m_xd();
+  list<Collection*>* list_xp_40m_xd = refManager->get_list_xp_40m_xd();
   //---------------------------
 
   //Compute separate lists
@@ -765,7 +765,7 @@ void Plot_radio::plot_IbyIt_Spectralon(bool normalised){
   }
 }
 void Plot_radio::plot_IbyCosIt_Sphere(bool normalised){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Bundle by classes
@@ -798,7 +798,7 @@ void Plot_radio::plot_IbyCosIt_Sphere(bool normalised){
   }
 }
 void Plot_radio::plot_IbyIt_Sphere(bool normalised){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Bundle by classes
@@ -862,12 +862,12 @@ this->plot_IbyIt_allPercentage_Spectralon_10m();
   //---------------------------
 }
 void Plot_radio::plot_IbyCosIt_all_Sphere(){
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   vector<vector<float>> data_X, data_Y;
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     //Bundle by statistical classes
     bundler->compute_bundleByClass(cloud, 5);
@@ -917,10 +917,10 @@ void Plot_radio::plot_IbyIt_all_Sphere(){
   //---------------------------
 }
 void Plot_radio::plot_IbyIt_allAngle_Spectralon(bool normalised){
-  list<Cloud*>* list_xp_10m_xd = refManager->get_list_xp_10m_xd();
-  list<Cloud*>* list_xp_20m_xd = refManager->get_list_xp_20m_xd();
-  list<Cloud*>* list_xp_30m_xd = refManager->get_list_xp_30m_xd();
-  list<Cloud*>* list_xp_40m_xd = refManager->get_list_xp_40m_xd();
+  list<Collection*>* list_xp_10m_xd = refManager->get_list_xp_10m_xd();
+  list<Collection*>* list_xp_20m_xd = refManager->get_list_xp_20m_xd();
+  list<Collection*>* list_xp_30m_xd = refManager->get_list_xp_30m_xd();
+  list<Collection*>* list_xp_40m_xd = refManager->get_list_xp_40m_xd();
   vector<vector<float>> Is_multi, Is_multi_n, It_multi;
   //---------------------------
 
@@ -1229,7 +1229,7 @@ void Plot_radio::plot_IbyIt_allPercentage_Spectralon_40m(){
 }
 
 //cloud specific
-void Plot_radio::plot_IbyIt_cloud(Cloud* cloud){
+void Plot_radio::plot_IbyIt_cloud(Collection* cloud){
   attribManager->compute_attribut_cloud(cloud);
   //---------------------------
 
@@ -1266,7 +1266,7 @@ void Plot_radio::plot_IbyIt_cloud(Cloud* cloud){
   string log = "IbyIt Intensity: I=" + to_string(fct_mean(Ib)) + " std=" + to_string(fct_std(Ib)) + " CV=" + to_string(fct_cv(Ib));
   console.AddLog("ok", log);
 }
-void Plot_radio::plot_IbyR_cloud(Cloud* cloud){
+void Plot_radio::plot_IbyR_cloud(Collection* cloud){
   attribManager->compute_attribut_cloud(cloud);
   //---------------------------
 
@@ -1286,7 +1286,7 @@ void Plot_radio::plot_IbyR_cloud(Cloud* cloud){
 
   //---------------------------
 }
-void Plot_radio::plot_IbyR_data(Cloud* cloud){
+void Plot_radio::plot_IbyR_data(Collection* cloud){
   attribManager->compute_attribut_cloud(cloud);
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
@@ -1306,12 +1306,12 @@ void Plot_radio::plot_IbyR_data(Cloud* cloud){
 
 //Sphere specific
 void Plot_radio::plot_IbyItbyR(){
-  list<Cloud*>* list = sceneManager->get_list_cloud();
+  list<Collection*>* list = sceneManager->get_list_cloud();
   vector<float> I_all, R_all, cIt_all;
   //---------------------------
 
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
 
@@ -1363,13 +1363,13 @@ void Plot_radio::plot_nDbycosIt(){
   if(!refManager->isref_Sphere()){
     refManager->load_SphereTarget_precomp();
   }
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   vector<vector<float>> data_X, data_Y;
   //---------------------------
 
   //Bundle all reference targets
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 5);
     vector<float> Ib_cosIt = bundler->get_Ib_cosIt();
@@ -1407,13 +1407,13 @@ void Plot_radio::plot_JbycosIt(){
   if(!refManager->isref_Sphere()){
     refManager->load_SphereTarget_precomp();
   }
-  list<Cloud*>* list = refManager->get_listSphere();
+  list<Collection*>* list = refManager->get_listSphere();
   vector<vector<float>> data_X, data_Y;
   //---------------------------
 
   //Bundle all reference targets
   for(int i=0; i<list->size(); i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     bundler->compute_bundleByClass(cloud, 5);
     vector<float> Ib_cosIt = bundler->get_Ib_cosIt();

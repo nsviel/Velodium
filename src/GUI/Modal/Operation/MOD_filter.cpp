@@ -49,7 +49,7 @@ void MOD_filter::design_filter(){
 
 //Specific function
 void MOD_filter::filter_cylinder(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 
@@ -71,7 +71,7 @@ void MOD_filter::filter_cylinder(){
   //---------------------------
 }
 void MOD_filter::filter_byAngle(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 
@@ -79,9 +79,9 @@ void MOD_filter::filter_byAngle(){
   if(ImGui::Button("Filter by angle", ImVec2(item_width,0))){
     if(cloud != nullptr){
 
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+      list<Collection*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0; i<list_cloud->size(); i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
+        Collection* cloud = *next(list_cloud->begin(),i);
         filterManager->filter_maxAngle(cloud, maxAngle);
         sceneManager->update_buffer_location(cloud);
       }
@@ -95,7 +95,7 @@ void MOD_filter::filter_byAngle(){
   //---------------------------
 }
 void MOD_filter::filter_sphere(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 

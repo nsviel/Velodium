@@ -28,8 +28,8 @@ Extractor::Extractor(){
 Extractor::~Extractor(){}
 
 // Main function
-Cloud* Extractor::extract_data(vector<Data_file*> data){
-  Cloud* cloud = new Cloud();
+Collection* Extractor::extract_data(vector<Data_file*> data){
+  Collection* cloud = new Collection();
   //---------------------------
 
   if(data.size() == 0){
@@ -92,7 +92,7 @@ Object_* Extractor::extract_data_object(Data_file* data_file){
   //---------------------------
   return object;
 }
-void Extractor::extract_data(Cloud* cloud, Data_file* data){
+void Extractor::extract_data(Collection* cloud, Data_file* data){
   Subset* subset = new Subset();
   //---------------------------
 
@@ -170,7 +170,7 @@ void Extractor::check_data(Data_file* data){
 
   //---------------------------
 }
-void Extractor::init_cloud_parameter(Cloud* cloud, vector<Data_file*> data){
+void Extractor::init_cloud_parameter(Collection* cloud, vector<Data_file*> data){
   //---------------------------
 
   //Calculate number of point
@@ -280,7 +280,7 @@ void Extractor::define_visibility(Subset* subset, int i){
 
   //---------------------------
 }
-void Extractor::define_buffer_init(Cloud* cloud, Subset* subset){
+void Extractor::define_buffer_init(Collection* cloud, Subset* subset){
   //---------------------------
 
   Subset* subset_buf = new Subset(*subset);

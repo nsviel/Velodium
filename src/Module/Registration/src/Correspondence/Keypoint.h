@@ -25,26 +25,26 @@ public:
 
 public:
   //Main functions
-  void algo_keypoints(Cloud* cloud_P, Cloud* cloud_Q);
-  void algo_keypoints_one(Cloud* cloud);
-  void algo_normals(Cloud* cloud);
+  void algo_keypoints(Collection* cloud_P, Collection* cloud_Q);
+  void algo_keypoints_one(Collection* cloud);
+  void algo_normals(Collection* cloud);
 
   //DownSampling
-  void downSamp_VoxelGrid(Cloud* cloud);
-  void downSamp_Segmentation(Cloud* cloud);
-  void downSamp_Octree(Cloud* cloud);
+  void downSamp_VoxelGrid(Collection* cloud);
+  void downSamp_Segmentation(Collection* cloud);
+  void downSamp_Octree(Collection* cloud);
 
   //Keypoints methods
-  void keypoint_SIFT(Cloud* cloud);
-  void keypoint_HARRIS3D(Cloud* cloud);
-  void keypoint_HARRIS6D(Cloud* cloud);
-  void keypoint_SUSAN(Cloud* cloud);
+  void keypoint_SIFT(Collection* cloud);
+  void keypoint_HARRIS3D(Collection* cloud);
+  void keypoint_HARRIS6D(Collection* cloud);
+  void keypoint_SUSAN(Collection* cloud);
 
   //Descriptor methods
-  void descriptor_PFH(Cloud* cloud, PFHtype& descriptors);
-  void descriptor_FPFH(Cloud* cloud, FPFHtype& descriptors);
-  void descriptor_SHOT(Cloud* cloud, SHOTtype& descriptors);
-  void descriptor_3DSC(Cloud* cloud, SCtype& descriptors);
+  void descriptor_PFH(Collection* cloud, PFHtype& descriptors);
+  void descriptor_FPFH(Collection* cloud, FPFHtype& descriptors);
+  void descriptor_SHOT(Collection* cloud, SHOTtype& descriptors);
+  void descriptor_3DSC(Collection* cloud, SCtype& descriptors);
 
   //Rejection mesthods
   void rejection_siftNNradius(XYZRGBtype& keypoints);
@@ -52,12 +52,12 @@ public:
   void rejection_siftNbBest(PtWithScale& keypoints);
   void rejection_correspScore();
   void rejection_correspNbBest();
-  void rejection_Ransac(Cloud* cloud_P, Cloud* cloud_Q);
+  void rejection_Ransac(Collection* cloud_P, Collection* cloud_Q);
 
   void compute_correspondences_PFH(PFHtype& descrip_P, PFHtype& descrip_Q);
   void compute_correspondences_FPFH(FPFHtype& descrip_P, FPFHtype& descrip_Q);
   void compute_correspondences_SHOT(SHOTtype& descrip_P, SHOTtype& descrip_Q);
-  void compute_matching(Cloud* cloud_P, Cloud* cloud_Q);
+  void compute_matching(Collection* cloud_P, Collection* cloud_Q);
   void compute_pointAtKeypoint(XYZRGBtype& keyp);
   void remove_pointAtKeypoint();
 

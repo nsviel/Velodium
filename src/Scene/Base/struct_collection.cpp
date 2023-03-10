@@ -1,7 +1,7 @@
-#include "struct_cloud.h"
+#include "struct_collection.h"
 
 
-Cloud::Cloud(){
+Collection::Collection(){
   //---------------------------
 
   //IDs
@@ -29,7 +29,7 @@ Cloud::Cloud(){
 }
 
 //Add / remove subset
-void Cloud::add_new_subset(Subset* subset){
+void Collection::add_new_subset(Subset* subset){
   //---------------------------
 
   //Initialize parameters
@@ -49,7 +49,7 @@ void Cloud::add_new_subset(Subset* subset){
 
   //---------------------------
 }
-void Cloud::remove_subset_last(){
+void Collection::remove_subset_last(){
   //---------------------------
 
   //Get subset object
@@ -76,7 +76,7 @@ void Cloud::remove_subset_last(){
   //---------------------------
   this->nb_subset = subset.size();
 }
-void Cloud::remove_subset_all(){
+void Collection::remove_subset_all(){
   int size = subset.size();
   //---------------------------
 
@@ -88,14 +88,14 @@ void Cloud::remove_subset_all(){
 }
 
 // Get subset frame
-Frame* Cloud::get_frame_selected(){
+Frame* Collection::get_frame_selected(){
   //---------------------------
 
   return subset_selected->get_frame();
 
   //---------------------------
 }
-Frame* Cloud::get_frame_byID(int querry){
+Frame* Collection::get_frame_byID(int querry){
   //---------------------------
 
   Subset* subset = get_subset_byID(querry);
@@ -109,7 +109,7 @@ Frame* Cloud::get_frame_byID(int querry){
 }
 
 //Retrieve subset
-Subset* Cloud::get_subset_selected_init(){
+Subset* Collection::get_subset_selected_init(){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
@@ -123,7 +123,7 @@ Subset* Cloud::get_subset_selected_init(){
   //---------------------------
   return nullptr;
 }
-Subset* Cloud::get_subset(int querry){
+Subset* Collection::get_subset(int querry){
   //---------------------------
 
   if(querry > subset.size()) return nullptr;
@@ -133,7 +133,7 @@ Subset* Cloud::get_subset(int querry){
 
   //---------------------------
 }
-Subset* Cloud::get_subset_byID(int querry){
+Subset* Collection::get_subset_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
@@ -147,14 +147,14 @@ Subset* Cloud::get_subset_byID(int querry){
   //---------------------------
   return nullptr;
 }
-Subset* Cloud::get_subset_buffer(int querry){
+Subset* Collection::get_subset_buffer(int querry){
   //---------------------------
 
   return *next(subset_buffer.begin(), querry);
 
   //---------------------------
 }
-Subset* Cloud::get_subset_buffer_byID(int querry){
+Subset* Collection::get_subset_buffer_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){
@@ -168,7 +168,7 @@ Subset* Cloud::get_subset_buffer_byID(int querry){
   //---------------------------
   return nullptr;
 }
-Subset* Cloud::get_subset_init(int querry){
+Subset* Collection::get_subset_init(int querry){
   //---------------------------
 
   if(querry > subset_init.size()) return nullptr;
@@ -178,7 +178,7 @@ Subset* Cloud::get_subset_init(int querry){
 
   //---------------------------
 }
-Subset* Cloud::get_subset_init_byID(int querry){
+Subset* Collection::get_subset_init_byID(int querry){
   //---------------------------
 
   for(int i=0; i<subset.size(); i++){

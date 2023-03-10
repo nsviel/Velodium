@@ -36,8 +36,8 @@ Registration::~Registration(){}
 
 //Main functions
 void Registration::make_Iteration(){
-  /*Cloud* cloud_P = sceneManager->get_selected_cloud();
-  Cloud* cloud_Q = sceneManager->get_cloud_next();
+  /*Collection* cloud_P = sceneManager->get_selected_cloud();
+  Collection* cloud_Q = sceneManager->get_cloud_next();
   //------------------------------
 
   //Cloud coloration
@@ -100,7 +100,7 @@ void Registration::print_ICP(){
 
   //------------------------------
 }
-void Registration::colorization(Cloud* cloud_P, Cloud* cloud_Q){
+void Registration::colorization(Collection* cloud_P, Collection* cloud_Q){
   /*//---------------------------
 
   switch(colorMeth){

@@ -18,17 +18,17 @@ public:
 
 public:
   //General functions
-  void algo_linearization(Cloud* cloud, int method);
-  void algo_reverse(Cloud* cloud, int method);
+  void algo_linearization(Collection* cloud, int method);
+  void algo_reverse(Collection* cloud, int method);
 
   //Linearization
-  void lin_SurfacicGlobal(Cloud* cloud);
-  void lin_SeparationGlobal(Cloud* cloud);
-  void lin_SurfacicLocal(Cloud* cloud);
+  void lin_SurfacicGlobal(Collection* cloud);
+  void lin_SeparationGlobal(Collection* cloud);
+  void lin_SurfacicLocal(Collection* cloud);
 
   //Reverse
-  void rev_SurfacicGlobal(Cloud* cloud);
-  void rev_SeparationGlobal(Cloud* cloud);
+  void rev_SurfacicGlobal(Collection* cloud);
+  void rev_SeparationGlobal(Collection* cloud);
 
   //Math functions
   void compute_SpectralonValues();

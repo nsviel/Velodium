@@ -28,7 +28,7 @@ public:
   void runtime();
   void draw();
   void draw_online();
-  void online(Cloud* cloud, int subset_ID);
+  void online(Collection* cloud, int subset_ID);
 
   inline Node_engine* get_node_engine(){return node_engine;}
   inline Node_operation* get_node_ope(){return node_ope;}

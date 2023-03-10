@@ -18,7 +18,7 @@ public:
 
 public:
   //Main functions
-  void make_cloud_heatmap(Cloud* cloud);
+  void make_cloud_heatmap(Collection* cloud);
   void make_subset_heatmap(Subset* subset);
   void make_heatmap_all(bool heatAll);
 

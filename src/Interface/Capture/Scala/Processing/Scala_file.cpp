@@ -30,8 +30,8 @@ void Scala_file::loading(string pathDir){
   //---------------------------
 
   vector<string> allpath = loading_allPathDir(pathDir);
-  vector<Cloud*> clouds = loading_allFile(allpath);
-  Cloud* cloud_scala = loading_reoganizeData(clouds);
+  vector<Collection*> clouds = loading_allFile(allpath);
+  Collection* cloud_scala = loading_reoganizeData(clouds);
   this->compute_relativeTimestamp(cloud_scala);
 
   //---------------------------
@@ -45,8 +45,8 @@ vector<string> Scala_file::loading_allPathDir(string pathDir){
   //---------------------------
   return allpath;
 }
-vector<Cloud*> Scala_file::loading_allFile(vector<string> allpath){
-  vector<Cloud*> clouds;
+vector<Collection*> Scala_file::loading_allFile(vector<string> allpath){
+  vector<Collection*> clouds;
   //---------------------------
 
   string format = "csv";
@@ -61,7 +61,7 @@ vector<Cloud*> Scala_file::loading_allFile(vector<string> allpath){
 
     if(format == "csv"){
       loaderManager->load_cloud_silent(path);
-      Cloud* cloud = (Cloud*)loaderManager->get_created_object();
+      Collection* cloud = (Collection*)loaderManager->get_created_object();
       cloud->path_file = allpath[i] + "/" + "scala" + ".csv";
 
       for(int j=0; j<cloud->subset.size(); j++){
@@ -80,8 +80,8 @@ vector<Cloud*> Scala_file::loading_allFile(vector<string> allpath){
   //---------------------------
   return clouds;
 }
-Cloud* Scala_file::loading_reoganizeData(vector<Cloud*> clouds){
-  Cloud* cloud_scala = new Cloud();
+Collection* Scala_file::loading_reoganizeData(vector<Collection*> clouds){
+  Collection* cloud_scala = new Collection();
   cloud_scala->path_file = clouds[0]->path_file;
   Subset* subset;
   //---------------------------
@@ -118,12 +118,12 @@ Cloud* Scala_file::loading_reoganizeData(vector<Cloud*> clouds){
 
   //Load final cloud
   loaderManager->load_cloud_creation(cloud_scala);
-  Cloud* cloud = (Cloud*)loaderManager->get_created_object();
+  Collection* cloud = (Collection*)loaderManager->get_created_object();
 
   //---------------------------
   return cloud;
 }
-void Scala_file::compute_relativeTimestamp(Cloud* cloud){
+void Scala_file::compute_relativeTimestamp(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<1; i++){

@@ -24,7 +24,7 @@ public:
   void update_configuration();
 
   //Colorization functions
-  void make_colorization(Cloud* cloud, int ID_subset);
+  void make_colorization(Collection* cloud, int ID_subset);
   void make_colorization(Subset* subset, vec4 RGB_in);
   void make_colorization_specific(Subset* subset);
 
@@ -34,12 +34,12 @@ public:
   void color_heatmap(Subset* subset);
 
   //Color cloud functions
-  void set_color_new(Cloud* cloud, vec4 RGBA);
-  void set_color_enhanced(Cloud* cloud);
-  void set_color_random(Cloud* cloud);
-  void set_color_initial(Cloud* cloud);
-  void set_color_RGB(Cloud* cloud);
-  void set_color_I(Cloud* cloud);
+  void set_color_new(Collection* cloud, vec4 RGBA);
+  void set_color_enhanced(Collection* cloud);
+  void set_color_random(Collection* cloud);
+  void set_color_initial(Collection* cloud);
+  void set_color_RGB(Collection* cloud);
+  void set_color_I(Collection* cloud);
   string get_color_mode_name();
 
   inline int* get_color_mode(){return &color_mode;}

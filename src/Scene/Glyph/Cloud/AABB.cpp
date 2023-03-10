@@ -31,7 +31,7 @@ void AABB::create_glyph(){
 
   //---------------------------
 }
-void AABB::update_glyph(Cloud* cloud, Glyph* glyph){
+void AABB::update_glyph(Collection* cloud, Glyph* glyph){
   vec3 min = cloud->min;
   vec3 max = cloud->max;
   //---------------------------

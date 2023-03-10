@@ -20,8 +20,8 @@ public:
   ~Plot_radio();
 
 public:
-  void compute_IRmeans(list<Cloud*>* list);
-  void compute_IsItconcat(list<Cloud*>* list);
+  void compute_IRmeans(list<Collection*>* list);
+  void compute_IsItconcat(list<Collection*>* list);
 
   void plot_3Dmap();
   void plot_2Dmap();
@@ -43,9 +43,9 @@ public:
   void plot_IbyIt_allPercentage_Spectralon_30m();
   void plot_IbyIt_allPercentage_Spectralon_40m();
   void plot_IbyIt_Sphere(bool normalised);
-  void plot_IbyIt_cloud(Cloud* cloud);
-  void plot_IbyR_cloud(Cloud* cloud);
-  void plot_IbyR_data(Cloud* cloud);
+  void plot_IbyIt_cloud(Collection* cloud);
+  void plot_IbyR_cloud(Collection* cloud);
+  void plot_IbyR_data(Collection* cloud);
   void plot_nDbycosIt();
   void plot_JbycosIt();
   void plot_SpectralonAllMeans();

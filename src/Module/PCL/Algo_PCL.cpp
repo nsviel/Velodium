@@ -25,7 +25,7 @@
 Algo_PCL::Algo_PCL(){}
 Algo_PCL::~Algo_PCL(){}
 
-float Algo_PCL::algo_ICP(Cloud* cloud_P, Cloud* cloud_Q){
+float Algo_PCL::algo_ICP(Collection* cloud_P, Collection* cloud_Q){
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_XYZ(cloud_P);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_Q = glm_to_pcl_XYZ(cloud_Q);
   //---------------------------
@@ -42,7 +42,7 @@ float Algo_PCL::algo_ICP(Cloud* cloud_P, Cloud* cloud_Q){
   float sse = icp.getFitnessScore();
   return sse;
 }
-float Algo_PCL::algo_NDT(Cloud* cloud_P, Cloud* cloud_Q){
+float Algo_PCL::algo_NDT(Collection* cloud_P, Collection* cloud_Q){
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_XYZ(cloud_P);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_Q = glm_to_pcl_XYZ(cloud_Q);
   //---------------------------
@@ -79,7 +79,7 @@ float Algo_PCL::algo_NDT(Cloud* cloud_P, Cloud* cloud_Q){
   float sse = ndt.getFitnessScore();
   return sse;
 }
-float Algo_PCL::algo_GICP(Cloud* cloud_P, Cloud* cloud_Q){
+float Algo_PCL::algo_GICP(Collection* cloud_P, Collection* cloud_Q){
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_XYZ(cloud_P);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_Q = glm_to_pcl_XYZ(cloud_Q);
   //---------------------------
@@ -98,7 +98,7 @@ float Algo_PCL::algo_GICP(Cloud* cloud_P, Cloud* cloud_Q){
   float sse = gicp.getFitnessScore();
   return sse;
 }
-float Algo_PCL::algo_LUM(Cloud* cloud_P, Cloud* cloud_Q){
+float Algo_PCL::algo_LUM(Collection* cloud_P, Collection* cloud_Q){
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_XYZ(cloud_P);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_Q = glm_to_pcl_XYZ(cloud_Q);
   //---------------------------
@@ -118,7 +118,7 @@ float Algo_PCL::algo_LUM(Cloud* cloud_P, Cloud* cloud_Q){
   return sse;*/
   return 0;
 }
-float Algo_PCL::algo_4ptsCong(Cloud* cloud_P, Cloud* cloud_Q){
+float Algo_PCL::algo_4ptsCong(Collection* cloud_P, Collection* cloud_Q){
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_XYZ(cloud_P);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_Q = glm_to_pcl_XYZ(cloud_Q);
   //---------------------------
@@ -138,7 +138,7 @@ float Algo_PCL::algo_4ptsCong(Cloud* cloud_P, Cloud* cloud_Q){
   return sse;
 }
 
-void Algo_PCL::algo_NN_OctreePCL(Cloud* cloud_P, Cloud* cloud_Q){
+void Algo_PCL::algo_NN_OctreePCL(Collection* cloud_P, Collection* cloud_Q){
   //http://www.pointclouds.org/documentation/tutorials/octree.php#octree-search
 
   //FLANN : Find the K neighbors points by "Squared Distance"
@@ -162,7 +162,7 @@ void Algo_PCL::algo_NN_OctreePCL(Cloud* cloud_P, Cloud* cloud_Q){
   int K = 5;
   vector<int> pointIdxVec(K);
 }
-void Algo_PCL::algo_NN_KdTreePCL(Cloud* cloud_P, Cloud* cloud_Q){
+void Algo_PCL::algo_NN_KdTreePCL(Collection* cloud_P, Collection* cloud_Q){
   //FLANN : Find the K neighbors points by "Squared Distance"
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_XYZ(cloud_P);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_Q = glm_to_pcl_XYZ(cloud_Q);
@@ -187,7 +187,7 @@ void Algo_PCL::algo_NN_KdTreePCL(Cloud* cloud_P, Cloud* cloud_Q){
   //---------------------------
 }
 
-Matrix4f Algo_PCL::optimization_SVD(Cloud* cloud_1, Cloud* cloud_2){
+Matrix4f Algo_PCL::optimization_SVD(Collection* cloud_1, Collection* cloud_2){
   vector<vec3>& XYZ_P_obj = cloud_1->registration.keypoints;
   vector<vec3>& XYZ_Q_obj = cloud_2->registration.trgpoints;
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_vecXYZ_ptr(XYZ_P_obj);
@@ -201,7 +201,7 @@ Matrix4f Algo_PCL::optimization_SVD(Cloud* cloud_1, Cloud* cloud_2){
   //---------------------
   return transMat;
 }
-Matrix4f Algo_PCL::optimization_LM(Cloud* cloud_1, Cloud* cloud_2){
+Matrix4f Algo_PCL::optimization_LM(Collection* cloud_1, Collection* cloud_2){
   vector<vec3>& XYZ_P_obj = cloud_1->registration.keypoints;
   vector<vec3>& XYZ_Q_obj = cloud_2->registration.trgpoints;
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_vecXYZ_ptr(XYZ_P_obj);
@@ -215,7 +215,7 @@ Matrix4f Algo_PCL::optimization_LM(Cloud* cloud_1, Cloud* cloud_2){
   //---------------------
   return transMat;
 }
-Matrix4f Algo_PCL::optimization_DualQuaternion(Cloud* cloud_1, Cloud* cloud_2){
+Matrix4f Algo_PCL::optimization_DualQuaternion(Collection* cloud_1, Collection* cloud_2){
   vector<vec3>& XYZ_P_obj = cloud_1->registration.keypoints;
   vector<vec3>& XYZ_Q_obj = cloud_2->registration.trgpoints;
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_P = glm_to_pcl_vecXYZ_ptr(XYZ_P_obj);

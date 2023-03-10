@@ -38,14 +38,14 @@ public:
 
   //Runtime function
   void runtime_glyph_scene();
-  void runtime_glyph_subset_all(Cloud* cloud);
+  void runtime_glyph_subset_all(Collection* cloud);
   void runtime_glyph_subset_selected(Subset* subset);
   void runtime_glyph_pred(Subset* subset);
 
   //Update function
   void update_configuration();
   void update_glyph_subset(Subset* subset);
-  void update_glyph_cloud(Cloud* cloud);
+  void update_glyph_cloud(Collection* cloud);
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);
   void update_object(string obj, vec4 color);

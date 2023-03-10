@@ -16,8 +16,8 @@ public:
   ~Visibility();
 
 public:
-  void compute_visibility(Cloud* cloud, int& ID_subset);
-  void compute_visibility_range_max(Cloud* cloud);
+  void compute_visibility(Collection* cloud, int& ID_subset);
+  void compute_visibility_range_max(Collection* cloud);
 
   inline int* get_visibility_range(){return &visibility_range;}
   inline int get_visibility_range_max(){return visibility_range_max;}

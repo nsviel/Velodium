@@ -26,7 +26,7 @@ Visibility::Visibility(Node_operation* node_ope){
 Visibility::~Visibility(){}
 
 //Main function
-void Visibility::compute_visibility(Cloud* cloud, int& ID_subset){
+void Visibility::compute_visibility(Collection* cloud, int& ID_subset){
   Subset* subset = cloud->get_subset_byID(ID_subset);
   if(subset == nullptr) return;
   //---------------------------
@@ -44,7 +44,7 @@ void Visibility::compute_visibility(Cloud* cloud, int& ID_subset){
 
   //---------------------------
 }
-void Visibility::compute_visibility_range_max(Cloud* cloud){
+void Visibility::compute_visibility_range_max(Collection* cloud){
   if(cloud == nullptr) return;
   //---------------------------
 

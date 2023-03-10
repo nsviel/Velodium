@@ -35,13 +35,13 @@ Extraction::Extraction(Node_operation* node_ope){
 Extraction::~Extraction(){}
 
 //Extract / Cutting function
-void Extraction::fct_extractCloud(Cloud* cloud){
+void Extraction::fct_extractCloud(Collection* cloud){
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
 
   //New cloud
-  Cloud* cloud_out = new Cloud();
+  Collection* cloud_out = new Collection();
   Subset* subset_out = new Subset();
 
   //Parameters
@@ -92,13 +92,13 @@ void Extraction::fct_extractCloud(Cloud* cloud){
     cout<<"No points detected"<<endl;
   }
 }
-void Extraction::fct_extractSelected(Cloud* cloud){
+void Extraction::fct_extractSelected(Collection* cloud){
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
 
   //New cloud
-  Cloud* cloud_out = new Cloud();
+  Collection* cloud_out = new Collection();
   Subset* subset_out = new Subset();
 
   //Parameters
@@ -165,15 +165,15 @@ void Extraction::fct_cutCloud(Subset* subset){
   //---------------------------
 }
 void Extraction::fct_cutCloud_all(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
-  Cloud* cloud_selected = sceneManager->get_selected_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
+  Collection* cloud_selected = sceneManager->get_selected_cloud();
   vec3& max = cloud_selected->max;
   vec3& min = cloud_selected->min;
   //---------------------------
 
   for(int i=0;i<list_cloud->size();i++){
     //Select ieme Point Cloud
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
 
     vector<vec3>& XYZ = subset->xyz;
@@ -225,16 +225,16 @@ void Extraction::fct_selectPart(Subset* subset, vec3 mina, vec3 maxa){
 }
 
 //Merging function
-void Extraction::fct_merging_list(vector<Cloud*> list_part){
+void Extraction::fct_merging_list(vector<Collection*> list_part){
   //---------------------------
 
   //New cloud
-  Cloud* cloud_out = new Cloud();
+  Collection* cloud_out = new Collection();
   Subset* subset_out = new Subset();
 
   for(int i=0; i<list_part.size()-1; i++){
-    Cloud* part_1 = list_part[i];
-    Cloud* part_2 = list_part[i+1];
+    Collection* part_1 = list_part[i];
+    Collection* part_2 = list_part[i+1];
 
     Subset* subset_1 = part_1->get_subset(0);
     Subset* subset_2 = part_2->get_subset(0);
@@ -292,11 +292,11 @@ void Extraction::fct_merging_list(vector<Cloud*> list_part){
     cout<<"No points available"<<endl;
   }
 }
-void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
+void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   //---------------------------
 
   //New cloud
-  Cloud* cloud_out = new Cloud();
+  Collection* cloud_out = new Collection();
   Subset* subset_out = new Subset();
 
   Subset* subset_1 = cloud_1->get_subset(0);
@@ -355,7 +355,7 @@ void Extraction::fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2){
 
   //---------------------------
 }
-void Extraction::fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2){
+void Extraction::fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2){
   //---------------------------
 
   Subset* subset_1 = cloud_1->get_subset(0);
@@ -428,7 +428,7 @@ void Extraction::fct_highlighting(Subset* subset, Subset* subset_init){
   sceneManager->update_buffer_color(subset);
 }
 void Extraction::set_AABB_min(vec3 min_in){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------
@@ -461,7 +461,7 @@ void Extraction::set_AABB_min(vec3 min_in){
   objectManager->update_glyph_cloud(cloud);
 }
 void Extraction::set_AABB_max(vec3 max_in){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = cloud->get_subset_selected_init();
   //---------------------------

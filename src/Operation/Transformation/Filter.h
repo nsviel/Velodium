@@ -19,11 +19,11 @@ public:
 public:
   void update_configuration();
 
-  void filter_maxAngle(Cloud* cloud, float sampleAngle);
+  void filter_maxAngle(Collection* cloud, float sampleAngle);
   void filter_sphere();
-  void filter_sphere_cloud(Cloud* cloud);
+  void filter_sphere_cloud(Collection* cloud);
   void filter_sphere_subset(Subset* subset);
-  void filter_cylinder_cloud(Cloud* cloud);
+  void filter_cylinder_cloud(Collection* cloud);
   void filter_cylinder_subset(Subset* subset);
 
   //Setters / Getters

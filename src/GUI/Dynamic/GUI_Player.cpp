@@ -71,7 +71,7 @@ void GUI_Player::design_run(){
 
 //Player action
 void GUI_Player::player_visibility(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   visibilityManager->compute_visibility_range_max(cloud);
@@ -88,7 +88,7 @@ void GUI_Player::player_visibility(){
   //---------------------------
 }
 void GUI_Player::player_recording(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Recording button
@@ -111,7 +111,7 @@ void GUI_Player::player_recording(){
   //---------------------------
 }
 void GUI_Player::player_onthefly(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "On the fly");
@@ -121,7 +121,7 @@ void GUI_Player::player_onthefly(){
   ImGui::Separator();
 }
 void GUI_Player::player_parameter(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   string* player_mode = playerManager->get_player_mode();
   //---------------------------
 
@@ -144,7 +144,7 @@ void GUI_Player::player_parameter(){
   ImGui::Separator();
 }
 void GUI_Player::player_button(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   string* player_mode = playerManager->get_player_mode();
   //---------------------------
 
@@ -202,7 +202,7 @@ void GUI_Player::player_button(){
   //---------------------------
 }
 void GUI_Player::player_selection(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   if(cloud != nullptr && cloud->nb_subset > 2){
@@ -242,7 +242,7 @@ void GUI_Player::player_pause(){
 }
 
 //Specific button function
-void GUI_Player::button_player_play(Cloud* cloud){
+void GUI_Player::button_player_play(Collection* cloud){
   bool is_playing = *playerManager->get_player_isrunning();
   //---------------------------
 
@@ -266,7 +266,7 @@ void GUI_Player::button_player_play(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_player_pause(Cloud* cloud){
+void GUI_Player::button_player_pause(Collection* cloud){
   bool is_paused = *playerManager->get_player_ispaused();
   //---------------------------
 
@@ -284,7 +284,7 @@ void GUI_Player::button_player_pause(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_player_stop(Cloud* cloud){
+void GUI_Player::button_player_stop(Collection* cloud){
   //---------------------------
 
   if (ImGui::Button(ICON_FA_STOP "##37")){
@@ -296,7 +296,7 @@ void GUI_Player::button_player_stop(Cloud* cloud){
   //---------------------------
 }
 
-void GUI_Player::button_capture_play(Cloud* cloud){
+void GUI_Player::button_capture_play(Collection* cloud){
   Capture* captureManager = node_interface->get_captureManager();
   bool* is_capturing = captureManager->get_is_capturing();
   //---------------------------
@@ -317,7 +317,7 @@ void GUI_Player::button_capture_play(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_capture_pause(Cloud* cloud){
+void GUI_Player::button_capture_pause(Collection* cloud){
   Capture* captureManager = node_interface->get_captureManager();
   bool is_capturing = *captureManager->get_is_capturing();
   bool is_finished = *captureManager->get_is_capture_finished();
@@ -336,7 +336,7 @@ void GUI_Player::button_capture_pause(Cloud* cloud){
 
   //---------------------------
 }
-void GUI_Player::button_capture_stop(Cloud* cloud){
+void GUI_Player::button_capture_stop(Collection* cloud){
   Capture* captureManager = node_interface->get_captureManager();
   //---------------------------
 

@@ -16,11 +16,11 @@ Graph::~Graph(){}
 
 //Selection
 void Graph::selection_setCloud(int ID){
-  list<Cloud*>* list_cloud= sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud= sceneManager->get_list_cloud();
   //---------------------------
 
   for (int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
     if(cloud->ID_order == ID){
       sceneManager->set_selected_cloud(cloud);
       sceneManager->update_glyph(cloud);
@@ -29,7 +29,7 @@ void Graph::selection_setCloud(int ID){
 
   //---------------------------
 }
-void Graph::selection_setCloud(Cloud* cloud){
+void Graph::selection_setCloud(Collection* cloud){
   //---------------------------
 
   sceneManager->set_selected_cloud(cloud);
@@ -37,7 +37,7 @@ void Graph::selection_setCloud(Cloud* cloud){
 
   //---------------------------
 }
-void Graph::selection_setSubset(Cloud* cloud, int ID){
+void Graph::selection_setSubset(Collection* cloud, int ID){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
@@ -55,8 +55,8 @@ void Graph::selection_setSubset(Cloud* cloud, int ID){
   //---------------------------
 }
 void Graph::selection_setNext(){
-  list<Cloud*>* list_cloud= sceneManager->get_list_cloud();
-  Cloud* cloud_selected = sceneManager->get_selected_cloud();;
+  list<Collection*>* list_cloud= sceneManager->get_list_cloud();
+  Collection* cloud_selected = sceneManager->get_selected_cloud();;
   if(list_cloud->size() == 0) return;
   //---------------------------
 
@@ -73,11 +73,11 @@ void Graph::selection_setNext(){
   //---------------------------
 }
 void Graph::selection_cloudByName(string name){
-  list<Cloud*>* list_cloud= sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud= sceneManager->get_list_cloud();
   //---------------------------
 
   for (int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
 
     if(cloud->name == name){
       sceneManager->set_selected_cloud(cloud);

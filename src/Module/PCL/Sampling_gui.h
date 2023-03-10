@@ -15,7 +15,7 @@ public:
   ~GUI_sampling();
 
 public:
-  void sampling_gui(Cloud* cloud){
+  void sampling_gui(Collection* cloud){
     int sizeButton = 150;
 
     //Random sampling

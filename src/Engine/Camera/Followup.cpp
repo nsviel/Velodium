@@ -36,7 +36,7 @@ void Followup::update_configuration(){
 
   //---------------------------
 }
-void Followup::camera_followup(Cloud* cloud, int ID_subset){
+void Followup::camera_followup(Collection* cloud, int ID_subset){
   Subset* subset = cloud->get_subset_byID(ID_subset);
   if(subset == nullptr) return;
   //---------------------------
@@ -71,7 +71,7 @@ void Followup::camera_mode(string mode){
 }
 
 //Subfunctions
-vec3 Followup::camera_payload(Cloud* cloud, int ID_subset){
+vec3 Followup::camera_payload(Collection* cloud, int ID_subset){
   Subset* subset_m0 = cloud->get_subset_byID(ID_subset);
   Subset* subset_m1 = cloud->get_subset_byID(ID_subset - 1);
   //---------------------------

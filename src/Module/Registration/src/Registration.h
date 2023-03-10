@@ -27,7 +27,7 @@ public:
   void reset();
   void restart();
   void print_ICP();
-  void colorization(Cloud* cloud_P, Cloud* cloud_Q);
+  void colorization(Collection* cloud_P, Collection* cloud_Q);
 
   //Accesseurs
   inline ICP* get_icpManager(){return icpManager;}

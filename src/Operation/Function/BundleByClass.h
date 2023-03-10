@@ -14,21 +14,21 @@ public:
 
 public:
   //Bundle functions
-  void compute_bundleByClass(Cloud* cloud, float step);
-  void compute_bundleByClass_maxAngle(Cloud* cloud_in, int stepAngle, int maxAngle);
+  void compute_bundleByClass(Collection* cloud, float step);
+  void compute_bundleByClass_maxAngle(Collection* cloud_in, int stepAngle, int maxAngle);
   void compute_bundleByClass_vector(vector<float>& It, vector<float>& Is, int stepAngle);
   void compute_bundleByClass_vector2(vector<float>& It, vector<float>& cosIt, vector<float>& Is, float stepAngle, float maxAngle);
   void compute_vectorByClass(vector<vector<float>>& data_X, vector<vector<float>>& data_Y);
 
   //Subfunctions
-  void make_checking(Cloud* cloud);
+  void make_checking(Collection* cloud);
   void make_clear();
-  void make_bundle(Cloud* cloud, float stepAngle, int maxAngle);
+  void make_bundle(Collection* cloud, float stepAngle, int maxAngle);
   void make_StudentLaw();
 
   //Plot functions
   void plot_confidenceInterval();
-  void plot_intensityBundle(Cloud* cloud);
+  void plot_intensityBundle(Collection* cloud);
 
   //Setters / Getters
   inline vector<float> get_Ib(){return Ib;}

@@ -63,7 +63,7 @@ void Module_slam::draw_online(){
 
   //---------------------------
 }
-void Module_slam::online(Cloud* cloud, int subset_ID){
+void Module_slam::online(Collection* cloud, int subset_ID){
   //---------------------------
 
   if(with_slam){

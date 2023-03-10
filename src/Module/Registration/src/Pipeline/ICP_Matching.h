@@ -34,8 +34,8 @@ public:
   void algo_PFH(Subset* subset_P, Subset* subset_Q);
 
 private:
-  Cloud* cloud_P;
-  Cloud* cloud_Q;
+  Collection* cloud_P;
+  Collection* cloud_Q;
   vector<Uplet> idx;
 };
 

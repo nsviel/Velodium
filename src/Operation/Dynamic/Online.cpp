@@ -64,7 +64,7 @@ void Online::update_configuration(){
 
   //---------------------------
 }
-void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
+void Online::compute_onlineOpe(Collection* cloud, int ID_subset){
   //This function is called each time a new subset arrives
   Node_module* node_module = node_engine->get_node_module();
   Subset* subset = cloud->get_subset_byID(ID_subset);
@@ -105,7 +105,7 @@ void Online::compute_onlineOpe(Cloud* cloud, int ID_subset){
 }
 
 //Subfunctions
-void Online::compute_recording(Cloud* cloud, int& ID_subset){
+void Online::compute_recording(Collection* cloud, int& ID_subset){
   Node_interface* node_interface = node_engine->get_node_interface();
   Recorder* recordManager = node_interface->get_recordManager();
   //---------------------------

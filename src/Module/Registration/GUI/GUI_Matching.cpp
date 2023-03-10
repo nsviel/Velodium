@@ -51,8 +51,8 @@ void GUI_matching::design_Matching(){
 
 //Subcategories
 void GUI_matching::match_matching(){
-  /*Cloud* cloud_P = sceneManager->get_selected_cloud();
-  Cloud* cloud_Q = sceneManager->get_cloud_next();
+  /*Collection* cloud_P = sceneManager->get_selected_cloud();
+  Collection* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 
   //Matching method
@@ -68,8 +68,8 @@ void GUI_matching::match_matching(){
   if(ImGui::Button("Apply", ImVec2(175,0))){
     int nbCloud = sceneManager->get_nb_cloud();
     if(nbCloud >=2){
-      Cloud* cloud_P = sceneManager->get_selected_cloud();
-      Cloud* cloud_Q = sceneManager->get_cloud_next();
+      Collection* cloud_P = sceneManager->get_selected_cloud();
+      Collection* cloud_Q = sceneManager->get_cloud_next();
 
       bool* restartCorrespondences = icpManager->get_makeCorrespondences();
       *restartCorrespondences = true;
@@ -128,8 +128,8 @@ void GUI_matching::match_dense(){
   }
 }
 void GUI_matching::match_methods(){
-  /*Cloud* cloud_P = sceneManager->get_selected_cloud();
-  Cloud* cloud_Q = sceneManager->get_cloud_next();
+  /*Collection* cloud_P = sceneManager->get_selected_cloud();
+  Collection* cloud_Q = sceneManager->get_cloud_next();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Methods");

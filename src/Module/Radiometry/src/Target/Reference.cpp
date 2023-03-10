@@ -17,55 +17,55 @@ Reference::Reference(Node_engine* node){
   this->loaderManager = node_load->get_loaderManager();
   this->attribManager = new Attribut(node_ope);
 
-  this->list_Sphere = new list<Cloud*>;
-  this->list_Spectralon = new list<Cloud*>;
+  this->list_Sphere = new list<Collection*>;
+  this->list_Spectralon = new list<Collection*>;
 
-  this->list_10p_xm_xd = new list<Cloud*>;
-  this->list_25p_xm_xd = new list<Cloud*>;
-  this->list_50p_xm_xd = new list<Cloud*>;
-  this->list_99p_xm_xd = new list<Cloud*>;
+  this->list_10p_xm_xd = new list<Collection*>;
+  this->list_25p_xm_xd = new list<Collection*>;
+  this->list_50p_xm_xd = new list<Collection*>;
+  this->list_99p_xm_xd = new list<Collection*>;
 
-  this->list_xp_10m_xd = new list<Cloud*>;
-  this->list_xp_20m_xd = new list<Cloud*>;
-  this->list_xp_30m_xd = new list<Cloud*>;
-  this->list_xp_40m_xd = new list<Cloud*>;
+  this->list_xp_10m_xd = new list<Collection*>;
+  this->list_xp_20m_xd = new list<Collection*>;
+  this->list_xp_30m_xd = new list<Collection*>;
+  this->list_xp_40m_xd = new list<Collection*>;
 
-  this->list_10p_05m_xd = new list<Cloud*>;
-  this->list_25p_05m_xd = new list<Cloud*>;
-  this->list_50p_05m_xd = new list<Cloud*>;
-  this->list_99p_05m_xd = new list<Cloud*>;
+  this->list_10p_05m_xd = new list<Collection*>;
+  this->list_25p_05m_xd = new list<Collection*>;
+  this->list_50p_05m_xd = new list<Collection*>;
+  this->list_99p_05m_xd = new list<Collection*>;
 
-  this->list_10p_10m_xd = new list<Cloud*>;
-  this->list_25p_10m_xd = new list<Cloud*>;
-  this->list_50p_10m_xd = new list<Cloud*>;
-  this->list_99p_10m_xd = new list<Cloud*>;
+  this->list_10p_10m_xd = new list<Collection*>;
+  this->list_25p_10m_xd = new list<Collection*>;
+  this->list_50p_10m_xd = new list<Collection*>;
+  this->list_99p_10m_xd = new list<Collection*>;
 
-  this->list_10p_20m_xd = new list<Cloud*>;
-  this->list_25p_20m_xd = new list<Cloud*>;
-  this->list_50p_20m_xd = new list<Cloud*>;
-  this->list_99p_20m_xd = new list<Cloud*>;
+  this->list_10p_20m_xd = new list<Collection*>;
+  this->list_25p_20m_xd = new list<Collection*>;
+  this->list_50p_20m_xd = new list<Collection*>;
+  this->list_99p_20m_xd = new list<Collection*>;
 
-  this->list_10p_30m_xd = new list<Cloud*>;
-  this->list_25p_30m_xd = new list<Cloud*>;
-  this->list_50p_30m_xd = new list<Cloud*>;
-  this->list_99p_30m_xd = new list<Cloud*>;
+  this->list_10p_30m_xd = new list<Collection*>;
+  this->list_25p_30m_xd = new list<Collection*>;
+  this->list_50p_30m_xd = new list<Collection*>;
+  this->list_99p_30m_xd = new list<Collection*>;
 
-  this->list_10p_40m_xd = new list<Cloud*>;
-  this->list_25p_40m_xd = new list<Cloud*>;
-  this->list_50p_40m_xd = new list<Cloud*>;
-  this->list_99p_40m_xd = new list<Cloud*>;
+  this->list_10p_40m_xd = new list<Collection*>;
+  this->list_25p_40m_xd = new list<Collection*>;
+  this->list_50p_40m_xd = new list<Collection*>;
+  this->list_99p_40m_xd = new list<Collection*>;
 
-  this->list_10p_xm = new list<Cloud*>;
-  this->list_25p_xm = new list<Cloud*>;
-  this->list_50p_xm = new list<Cloud*>;
-  this->list_99p_xm = new list<Cloud*>;
+  this->list_10p_xm = new list<Collection*>;
+  this->list_25p_xm = new list<Collection*>;
+  this->list_50p_xm = new list<Collection*>;
+  this->list_99p_xm = new list<Collection*>;
 
-  this->list_Spec_dist = new list<Cloud*>;
-  this->list_Spec_angle = new list<Cloud*>;
+  this->list_Spec_dist = new list<Collection*>;
+  this->list_Spec_angle = new list<Collection*>;
 
-  this->list_Reference = new list<Cloud*>;
-  this->list_Ref_dist = new list<Cloud*>;
-  this->list_Ref_angle = new list<Cloud*>;
+  this->list_Reference = new list<Collection*>;
+  this->list_Ref_dist = new list<Collection*>;
+  this->list_Ref_angle = new list<Collection*>;
 
   this->listsCompiled = false;
   this->ref_Spectralon = false;
@@ -84,7 +84,7 @@ Reference::~Reference(){}
 
 //Load functions
 bool Reference::load_SphereTarget_precomp(){
-  list<Cloud*>* list_ref = new list<Cloud*>;
+  list<Collection*>* list_ref = new list<Collection*>;
   if(isref_Sphere()) return false;
   //---------------------------
 
@@ -93,7 +93,7 @@ bool Reference::load_SphereTarget_precomp(){
 
   //Inserte into sphere list
   for(int i=0; i<list_ref->size() ;i++){
-    Cloud* cloud = *next(list_ref->begin(),i);
+    Collection* cloud = *next(list_ref->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
     list_Sphere->push_back(cloud);
@@ -105,7 +105,7 @@ bool Reference::load_SphereTarget_precomp(){
   return true;
 }
 bool Reference::load_SphereTarget_precomp_80d(){
-  list<Cloud*>* list_ref = new list<Cloud*>;
+  list<Collection*>* list_ref = new list<Collection*>;
   if(isref_Sphere()) return false;
   //---------------------------
 
@@ -114,7 +114,7 @@ bool Reference::load_SphereTarget_precomp_80d(){
 
   //Insert into sphere list
   for(int i=0; i<list_ref->size() ;i++){
-    Cloud* cloud = *next(list_ref->begin(),i);
+    Collection* cloud = *next(list_ref->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
     list_Sphere->push_back(cloud);
@@ -126,7 +126,7 @@ bool Reference::load_SphereTarget_precomp_80d(){
   return true;
 }
 bool Reference::load_SphereTarget_precomp_add80d(){
-  list<Cloud*>* list_ref = new list<Cloud*>;
+  list<Collection*>* list_ref = new list<Collection*>;
   if(isref_Sphere()) return false;
   //---------------------------
 
@@ -138,7 +138,7 @@ bool Reference::load_SphereTarget_precomp_add80d(){
 
   //Inserte into sphere list
   for(int i=0; i<list_ref->size() ;i++){
-    Cloud* cloud = *next(list_ref->begin(),i);
+    Collection* cloud = *next(list_ref->begin(),i);
 
     attribManager->compute_attribut_cloud(cloud);
     list_Sphere->push_back(cloud);
@@ -151,7 +151,7 @@ bool Reference::load_SphereTarget_precomp_add80d(){
 }
 bool Reference::load_SpectralonTarget(){
   char path[PATH_MAX];
-  list<Cloud*>* list_ref = new list<Cloud*>;
+  list<Collection*>* list_ref = new list<Collection*>;
   //---------------------------
 
   this->load_calibrationTargets(list_ref, path_spectralonTarget_dist);
@@ -161,7 +161,7 @@ bool Reference::load_SpectralonTarget(){
   //---------------------------
   return true;
 }
-bool Reference::load_calibrationTargets(list<Cloud*>* list, string path_str){
+bool Reference::load_calibrationTargets(list<Collection*>* list, string path_str){
   /*char path[PATH_MAX];
   vector<string> list_path;
   //---------------------------
@@ -179,7 +179,7 @@ bool Reference::load_calibrationTargets(list<Cloud*>* list, string path_str){
     //Load all files
     for(int i=0; i<list_path.size(); i++){
       loaderManager->load_cloud_silent(list_path[i]);
-      Cloud* cloud = (Cloud*)loaderManager->get_created_object();
+      Collection* cloud = (Collection*)loaderManager->get_created_object();
       list->push_back(cloud);
     }
   }
@@ -191,7 +191,7 @@ bool Reference::load_calibrationTargets(list<Cloud*>* list, string path_str){
   return true;
 }
 bool Reference::load_References_path(string path){
-  list<Cloud*>* list_ref = new list<Cloud*>;
+  list<Collection*>* list_ref = new list<Collection*>;
   //---------------------------
 
   this->load_calibrationTargets(list_ref, path);
@@ -257,14 +257,14 @@ bool Reference::clear(){
   //---------------------------
   return true;
 }
-bool Reference::compute_list(list<Cloud*>* list){
+bool Reference::compute_list(list<Collection*>* list){
   /*bool sucess = true;
   this->clear();
   //---------------------------
 
   //General lists
   for(int i=0; i<list->size() ;i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
 
     if(cloud->name.find("Sphere") != std::string::npos){
       attribManager->compute_attribut_cloud(cloud);
@@ -301,7 +301,7 @@ bool Reference::extract_listSphere(){
   //---------------------------
 
   for(int i=0;i<list_Sphere->size();i++){
-    Cloud* cloud = *next(list_Sphere->begin(),i);
+    Collection* cloud = *next(list_Sphere->begin(),i);
 
     list_Ref_dist->push_back(cloud);
     list_Ref_angle->push_back(cloud);
@@ -314,7 +314,7 @@ bool Reference::extract_listSpectralon(){
   /*//---------------------------
 
   for(int i=0;i<list_Spectralon->size();i++){
-    Cloud* cloud = *next(list_Spectralon->begin(),i);
+    Collection* cloud = *next(list_Spectralon->begin(),i);
 
     //xp
     if(cloud->name.find("10p") != std::string::npos){
@@ -472,18 +472,18 @@ bool Reference::extract_listSpectralon(){
 }
 
 //Subfunctions
-bool Reference::is_cloudReference(Cloud* cloud){
+bool Reference::is_cloudReference(Collection* cloud){
   /*//---------------------------
 
   for(int i=0; i<list_Sphere->size() ;i++){
-    Cloud* cloud_list = *next(list_Sphere->begin(),i);
+    Collection* cloud_list = *next(list_Sphere->begin(),i);
     if(cloud->name == cloud_list->Name){
       return true;
     }
   }
 
   for(int i=0; i<list_Spectralon->size() ;i++){
-    Cloud* cloud_list = *next(list_Spectralon->begin(),i);
+    Collection* cloud_list = *next(list_Spectralon->begin(),i);
     if(cloud->name == cloud_list->Name){
       return true;
     }
@@ -493,12 +493,12 @@ bool Reference::is_cloudReference(Cloud* cloud){
   return false;
 }
 
-Cloud* Reference::get_specificSpectralon(string p, string m, bool degree){
-  Cloud* cloud_out;
+Collection* Reference::get_specificSpectralon(string p, string m, bool degree){
+  Collection* cloud_out;
   //---------------------------
 
   /*for(int i=0;i<list_Spectralon->size();i++){
-    Cloud* cloud = *next(list_Spectralon->begin(),i);
+    Collection* cloud = *next(list_Spectralon->begin(),i);
 
     if(cloud->name.find(p) == std::string::npos &&
       cloud->name.find(m) == std::string::npos){
@@ -518,12 +518,12 @@ Cloud* Reference::get_specificSpectralon(string p, string m, bool degree){
   //---------------------------
   return cloud_out;
 }
-Cloud* Reference::get_specificSphere(string m){
-  Cloud* cloud_out;
+Collection* Reference::get_specificSphere(string m){
+  Collection* cloud_out;
   //---------------------------
 
   /*for(int i=0;i<list_Sphere->size();i++){
-    Cloud* cloud = *next(list_Sphere->begin(),i);
+    Collection* cloud = *next(list_Sphere->begin(),i);
 
     if(cloud->name.find(m) != std::string::npos){
       cloud_out = cloud;

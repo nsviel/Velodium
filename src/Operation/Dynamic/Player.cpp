@@ -57,7 +57,7 @@ void Player::update_configuration(){
 }
 void Player::runtime(){
   //Continually running, wait for flag to proceed
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   if(player_time_flag && cloud != nullptr){
@@ -70,7 +70,7 @@ void Player::runtime(){
 }
 
 //Selection functions
-void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
+void Player::select_bySubsetID(Collection* cloud, int ID_subset){
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -89,7 +89,7 @@ void Player::select_bySubsetID(Cloud* cloud, int ID_subset){
   //---------------------------
 }
 void Player::compute_wheel_selection(string direction){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //----------------------------
 
   //Wheel - rolling stone
@@ -108,7 +108,7 @@ void Player::compute_wheel_selection(string direction){
 
   //----------------------------
 }
-bool Player::compute_range_limit(Cloud* cloud, int& ID_subset){
+bool Player::compute_range_limit(Collection* cloud, int& ID_subset){
   Subset* subset_first = cloud->get_subset(0);
   Subset* subset_last = cloud->get_subset(cloud->nb_subset-1);
   //---------------------------
@@ -191,7 +191,7 @@ void Player::player_start_or_pause(){
   //---------------------------
 }
 void Player::player_stop(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   this->player_isrunning = false;
   this->player_ispaused = false;
   //---------------------------
@@ -201,7 +201,7 @@ void Player::player_stop(){
 
   //---------------------------
 }
-void Player::player_save(Cloud* cloud){
+void Player::player_save(Collection* cloud){
   //---------------------------
 
   //Save each subset

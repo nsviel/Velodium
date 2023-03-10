@@ -18,7 +18,7 @@ public:
 
 public:
   //Main function
-  void update_glyph(Cloud* cloud, Subset* subset);
+  void update_glyph(Collection* cloud, Subset* subset);
   void update_visibility(Subset* subset);
   void reset_glyph();
 
@@ -28,8 +28,8 @@ public:
   void update_glyph_matching(Subset* subset);
   void update_glyph_normal(Subset* subset);
   void update_glyph_map();
-  void update_glyph_car(Cloud* cloud);
-  void update_glyph_trajectory(Cloud* cloud);
+  void update_glyph_car(Collection* cloud);
+  void update_glyph_trajectory(Collection* cloud);
 
   //Accesseur
   Glyph* get_glyph_byName(string querry);

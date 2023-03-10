@@ -29,7 +29,7 @@ Separation_global::Separation_global(Reference* refClass){
 Separation_global::~Separation_global(){}
 
 //Method function
-bool Separation_global::algo(Cloud* cloud){
+bool Separation_global::algo(Collection* cloud){
   //---------------------------
 
   this->algo_angle();
@@ -42,7 +42,7 @@ bool Separation_global::algo(Cloud* cloud){
 
 //Sub-functions
 bool Separation_global::algo_angle(){
-  list<Cloud*>* list_ref = refManager->get_list_99p_10m_xd();
+  list<Collection*>* list_ref = refManager->get_list_99p_10m_xd();
   refopeManager->compute_Spectralon_IbycIt(10);
   //---------------------------
 
@@ -148,7 +148,7 @@ bool Separation_global::algo_distance(){
   }
   return true;
 }
-bool Separation_global::algo_correction(Cloud* cloud){
+bool Separation_global::algo_correction(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
@@ -357,12 +357,12 @@ void Separation_global::compute_MeanError_distance(){
   }
 }
 void Separation_global::compute_Reference_angle(){
-  list<Cloud*>* list_ref = refManager->get_list_99p_10m_xd();
+  list<Collection*>* list_ref = refManager->get_list_99p_10m_xd();
   string nameRef = "Spectralon_99p_10m_00d";
   //---------------------------
 
   for(int i=0; i<list_ref->size() ;i++){
-    Cloud* cloud_25 = *next(list_ref->begin(),i);
+    Collection* cloud_25 = *next(list_ref->begin(),i);
     Subset* subset = *next(cloud_25->subset.begin(), 0);
     if(subset->name == nameRef){
       vector<float> d_ref{ fct_mean(subset->cosIt) };
@@ -376,13 +376,13 @@ void Separation_global::compute_Reference_angle(){
   }
 }
 void Separation_global::compute_Reference_distance(){
-  list<Cloud*>* list_ref = refManager->get_list_99p_xm();
+  list<Collection*>* list_ref = refManager->get_list_99p_xm();
   string nameRef = "Spectralon_99p_10m";
   R_lambda.clear();
   //---------------------------
 
   for(int i=0; i<list_ref->size() ;i++){
-    Cloud* cloud_ref = *next(list_ref->begin(),i);
+    Collection* cloud_ref = *next(list_ref->begin(),i);
     Subset* subset = *next(cloud_ref->subset.begin(), 0);
     if(subset->name == nameRef){
       vector<float> R_ref{ fct_mean(subset->R) };
@@ -554,7 +554,7 @@ void Separation_global::plot_MeanError(){
   plotManager->set_Format_data1("with linespoints pt 7 ps 0.3 lw 1 lc rgb 'black' notitle");
   plotManager->plot_Curve(ebyn_cIt_n, ebyn_cIt_e);
 }
-void Separation_global::plot_PolyRegression(Cloud* cloud){
+void Separation_global::plot_PolyRegression(Collection* cloud){
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;
   vector<float>& dist = subset->R;
@@ -589,7 +589,7 @@ void Separation_global::plot_PolyRegression(Cloud* cloud){
   plotManager->set_Format_data2("title 'Regression'");
   plotManager->plot_Regression(cIt, Is, cIt_curve);
 }
-void Separation_global::plot_bundleByClass(Cloud* cloud){
+void Separation_global::plot_bundleByClass(Collection* cloud){
   //---------------------------
 
   bundler->compute_bundleByClass(cloud, 5);
@@ -597,7 +597,7 @@ void Separation_global::plot_bundleByClass(Cloud* cloud){
 
   //---------------------------
 }
-void Separation_global::plot_Icorr(Cloud* cloud){
+void Separation_global::plot_Icorr(Collection* cloud){
   this->algo(cloud);
   Subset* subset = *next(cloud->subset.begin(), 0);
   vector<float>& Is = subset->I;

@@ -50,11 +50,11 @@ Heatmap::~Heatmap(){
 
 //HMI functions
 void Heatmap::make_heatmap_all(bool is_heatmap){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
 
     cloud->is_heatmap = is_heatmap;
     this->make_cloud_heatmap(cloud);
@@ -62,7 +62,7 @@ void Heatmap::make_heatmap_all(bool is_heatmap){
 
   //---------------------------
 }
-void Heatmap::make_cloud_heatmap(Cloud* cloud){
+void Heatmap::make_cloud_heatmap(Collection* cloud){
   //---------------------------
 
   //Apply or reverse heatmap for cloud

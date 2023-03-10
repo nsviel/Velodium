@@ -17,11 +17,11 @@ public:
   Boxing(Node_operation* node_ope);
   ~Boxing();
 
-  void compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc);
-  void compute_visibility(Cloud* cloud);
-  void compute_visibility(Cloud* cloud, int ID);
+  void compute_box_MinMax(Collection* cloud, vec3 min_perc, vec3 max_perc);
+  void compute_visibility(Collection* cloud);
+  void compute_visibility(Collection* cloud, int ID);
 
-  void supress_selected_point(Cloud* cloud);
+  void supress_selected_point(Collection* cloud);
   void stop_boxing();
 
 public:

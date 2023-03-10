@@ -18,10 +18,10 @@ public:
 public:
   //Main functions
   Data_file* Loader(string path_file);
-  bool Exporter_cloud(string path_file, string format, Cloud* cloud);
+  bool Exporter_cloud(string path_file, string format, Collection* cloud);
   bool Exporter_subset(string path_dir, string format, Subset* subset);
   bool Exporter_subset(string path_dir, string format, Subset* subset, string fileName);
-  bool Exporter_set(string path_dir, string ply_format, Cloud* cloud, int ID, int nb);
+  bool Exporter_set(string path_dir, string ply_format, Collection* cloud, int ID, int nb);
 
 private:
   //Loader data

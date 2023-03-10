@@ -43,7 +43,7 @@ void Filter::update_configuration(){
 }
 
 //Functions
-void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
+void Filter::filter_maxAngle(Collection* cloud, float angleMax){
   Subset* subset = cloud->subset_selected;
   attribManager->compute_attribut_subset(subset);
   vector<float>& It = subset->It;
@@ -70,13 +70,13 @@ void Filter::filter_maxAngle(Cloud* cloud, float angleMax){
   }
 }
 void Filter::filter_sphere(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   float r = sphere_D/2;
   float err = r/20;
   //---------------------------
 
   for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
 
     if(subset->name.find("Sphere") != std::string::npos){
@@ -115,7 +115,7 @@ void Filter::filter_sphere(){
 
   //---------------------------
 }
-void Filter::filter_sphere_cloud(Cloud* cloud){
+void Filter::filter_sphere_cloud(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
@@ -143,7 +143,7 @@ void Filter::filter_sphere_subset(Subset* subset){
 
   //---------------------------
 }
-void Filter::filter_cylinder_cloud(Cloud* cloud){
+void Filter::filter_cylinder_cloud(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){

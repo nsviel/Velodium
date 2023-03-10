@@ -17,12 +17,12 @@ public:
 
 public:
   //Main functions
-  void compute_initialization(Cloud* cloud, int subset_ID);
+  void compute_initialization(Collection* cloud, int subset_ID);
 
   //Subfunctions
-  void init_frame_ID(Cloud* cloud, int subset_ID);
-  void init_frame_ts(Cloud* cloud, int subset_ID);
-  void init_frame_chain(Cloud* cloud, int subset_ID);
+  void init_frame_ID(Collection* cloud, int subset_ID);
+  void init_frame_ts(Collection* cloud, int subset_ID);
+  void init_frame_chain(Collection* cloud, int subset_ID);
 
 private:
   SLAM_map* slam_map;

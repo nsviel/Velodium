@@ -29,7 +29,7 @@ Boxing::Boxing(Node_operation* node_ope){
 }
 Boxing::~Boxing(){}
 
-void Boxing::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
+void Boxing::compute_box_MinMax(Collection* cloud, vec3 min_perc, vec3 max_perc){
   Subset* subset_init = cloud->get_subset_selected_init();
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
@@ -72,7 +72,7 @@ void Boxing::compute_box_MinMax(Cloud* cloud, vec3 min_perc, vec3 max_perc){
 
   //---------------------------
 }
-void Boxing::compute_visibility(Cloud* cloud){
+void Boxing::compute_visibility(Collection* cloud){
   cloud->is_boxed = true;
   //---------------------------
 
@@ -82,7 +82,7 @@ void Boxing::compute_visibility(Cloud* cloud){
 
   //---------------------------
 }
-void Boxing::compute_visibility(Cloud* cloud, int ID){
+void Boxing::compute_visibility(Collection* cloud, int ID){
   Box* boxObject = objectManager->get_object_box();
   Glyph* box = boxObject->get_glyph();
   Subset* subset = cloud->get_subset(ID);
@@ -112,7 +112,7 @@ void Boxing::compute_visibility(Cloud* cloud, int ID){
   //---------------------------
 }
 
-void Boxing::supress_selected_point(Cloud* cloud){
+void Boxing::supress_selected_point(Collection* cloud){
   //---------------------------
 
   for(int i=0; i<cloud->nb_subset; i++){
@@ -135,12 +135,12 @@ void Boxing::supress_selected_point(Cloud* cloud){
   //---------------------------
 }
 void Boxing::stop_boxing(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   //By cloud
   for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(), i);
+    Collection* cloud = *next(list_cloud->begin(), i);
     cloud->is_boxed = false;
     for(int j=0; j<cloud->nb_subset; j++){
       Subset* subset = cloud->get_subset(j);

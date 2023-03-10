@@ -8,12 +8,12 @@
 #include <list>
 
 
-//Cloud are subset containers
-struct Cloud : public Object_
+//Collection are subset containers
+struct Collection : public Object_
 {
   //---------------------------
 
-  Cloud();
+  Collection();
 
   void add_new_subset(Subset* subset);
   void remove_subset_all();

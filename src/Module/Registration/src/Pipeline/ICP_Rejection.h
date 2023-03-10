@@ -14,13 +14,13 @@ public:
 
 public:
   //ICCP implementation
-  void weighting_ICCP(Cloud* cloud_P, Cloud* cloud_Q);
+  void weighting_ICCP(Collection* cloud_P, Collection* cloud_Q);
 
   //Rejection methods
-  void rejection_distance(Cloud* cloud_P, Cloud* cloud_Q, float threshold);
-  void rejection_color(Cloud* cloud_P, Cloud* cloud_Q);
-  void rejection_normal(Cloud* cloud_P, Cloud* cloud_Q);
-  void rejection_duplicata(Cloud* cloud_P, Cloud* cloud_Q);
+  void rejection_distance(Collection* cloud_P, Collection* cloud_Q, float threshold);
+  void rejection_color(Collection* cloud_P, Collection* cloud_Q);
+  void rejection_normal(Collection* cloud_P, Collection* cloud_Q);
+  void rejection_duplicata(Collection* cloud_P, Collection* cloud_Q);
 
   //Subfunctions
   void make_supressPoints(vector<vec3>& XYZ, vector<int>& idx);

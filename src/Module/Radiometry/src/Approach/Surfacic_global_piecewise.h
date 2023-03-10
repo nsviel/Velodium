@@ -15,13 +15,13 @@ public:
 
 public:
   //Method function
-  bool algo(Cloud* cloud);
+  bool algo(Collection* cloud);
 
   //Sub-functions
   bool algo_nbP();
   bool algo_fitting();
   bool algo_spaceParameter();
-  bool algo_correction(Cloud* cloud);
+  bool algo_correction(Collection* cloud);
 
   //Surface fitting
   float multivariatePoly(VectorXf P, float x, float y);
@@ -31,11 +31,11 @@ public:
   //Specific functions
   bool compute_ReferencePoints(VectorXf P_b, VectorXf P_m, VectorXf P_e);
   void compute_normalizeCoeffs(VectorXf P);
-  void compute_error(Cloud* cloud);
+  void compute_error(Collection* cloud);
 
   //Plotting
   void plot_SurfaceFitting();
-  void plot_intensityCorrection(Cloud* cloud);
+  void plot_intensityCorrection(Collection* cloud);
   void plot_SpaceParameter();
 
   //Setters / Getters

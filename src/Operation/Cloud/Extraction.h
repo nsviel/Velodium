@@ -33,17 +33,17 @@ public:
 
 public:
   //Extract / Cutting function
-  void fct_extractCloud(Cloud* cloud);
-  void fct_extractSelected(Cloud* cloud);
+  void fct_extractCloud(Collection* cloud);
+  void fct_extractSelected(Collection* cloud);
   void fct_cutCloud(Subset* subset);
   void fct_cutCloud_all();
   void fct_selectPart(Subset* subset, vec3 min, vec3 max);
   void supress_selectedpart(subpart* part);
 
   //Merging function
-  void fct_merging_list(vector<Cloud*> list_part);
-  void fct_merging_newCloud(Cloud* cloud_1, Cloud* cloud_2);
-  void fct_merging_addCloud(Cloud* cloud_1, Cloud* cloud_2);
+  void fct_merging_list(vector<Collection*> list_part);
+  void fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2);
+  void fct_merging_addCloud(Collection* cloud_1, Collection* cloud_2);
 
   //Selection function
   void fct_highlighting(Subset* subset, Subset* subset_init);

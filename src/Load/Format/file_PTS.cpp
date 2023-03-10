@@ -300,7 +300,7 @@ void file_PTS::Loader_data(int FILE_config){
 }
 
 //Main exporter functions
-bool file_PTS::Exporter(string path, Cloud* cloud){
+bool file_PTS::Exporter(string path, Collection* cloud){
   //---------------------------
 
   //Create file

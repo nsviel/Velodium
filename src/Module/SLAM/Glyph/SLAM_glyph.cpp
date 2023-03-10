@@ -50,7 +50,7 @@ SLAM_glyph::SLAM_glyph(SLAM* slam){
 SLAM_glyph::~SLAM_glyph(){}
 
 //Main function
-void SLAM_glyph::update_glyph(Cloud* cloud, Subset* subset){
+void SLAM_glyph::update_glyph(Collection* cloud, Subset* subset){
   Glyph* keypoint = &subset->glyphs["keypoint"];
   //---------------------------
 
@@ -201,7 +201,7 @@ void SLAM_glyph::update_glyph_map(){
 
   //---------------------------
 }
-void SLAM_glyph::update_glyph_car(Cloud* cloud){
+void SLAM_glyph::update_glyph_car(Collection* cloud){
   if(with_car){
     //---------------------------
 
@@ -213,7 +213,7 @@ void SLAM_glyph::update_glyph_car(Cloud* cloud){
     //---------------------------
   }
 }
-void SLAM_glyph::update_glyph_trajectory(Cloud* cloud){
+void SLAM_glyph::update_glyph_trajectory(Collection* cloud){
   if(with_trajectory){
     //---------------------------
 

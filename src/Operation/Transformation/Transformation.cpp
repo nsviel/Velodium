@@ -8,7 +8,7 @@ Transformation::Transformation(){}
 Transformation::~Transformation(){}
 
 // Translation
-void Transformation::make_translation(Cloud* cloud, vec3 trans){
+void Transformation::make_translation(Collection* cloud, vec3 trans){
   //Translation matrice creation
   glm::mat4 translation(1.0);
   //---------------------------
@@ -55,7 +55,7 @@ void Transformation::make_translation(vector<vec3>& XYZ, vec3 trans){
 }
 
 // Rotation
-mat4 Transformation::make_rotation(Cloud* cloud, vec3 COM, vec3 radian){
+mat4 Transformation::make_rotation(Collection* cloud, vec3 COM, vec3 radian){
   //Rotation matrice creation - rx, ry, rz are in radian !
   glm::mat4 Rx(1.0);
   glm::mat4 Ry(1.0);
@@ -93,7 +93,7 @@ mat4 Transformation::make_rotation(Cloud* cloud, vec3 COM, vec3 radian){
   //---------------------------
   return rotation;
 }
-void Transformation::make_rotation(Cloud* cloud, vec3 R, string direction){
+void Transformation::make_rotation(Collection* cloud, vec3 R, string direction){
   //---------------------------
 
   if(direction == "up"){

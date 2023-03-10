@@ -11,7 +11,7 @@ public:
 
 public:
   void create_glyph();
-  void update_glyph(Cloud* cloud);
+  void update_glyph(Collection* cloud);
   void reset_glyph();
 
 private:

@@ -65,7 +65,7 @@ void Color::update_configuration(){
 }
 
 //Color subset functions
-void Color::make_colorization(Cloud* cloud, int ID_subset){
+void Color::make_colorization(Collection* cloud, int ID_subset){
   Subset* subset = cloud->get_subset_byID(ID_subset);
   //---------------------------
 
@@ -159,7 +159,7 @@ void Color::color_heatmap(Subset* subset){
 }
 
 //Color cloud functions
-void Color::set_color_new(Cloud* cloud, vec4 RGBA){
+void Color::set_color_new(Collection* cloud, vec4 RGBA){
   cloud->unicolor = RGBA;
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
@@ -175,7 +175,7 @@ void Color::set_color_new(Cloud* cloud, vec4 RGBA){
     sceneManager->update_buffer_color(subset);
   }
 }
-void Color::set_color_RGB(Cloud* cloud){
+void Color::set_color_RGB(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB_obj = subset->rgb;
@@ -188,7 +188,7 @@ void Color::set_color_RGB(Cloud* cloud){
     sceneManager->update_buffer_color(subset);
   }
 }
-void Color::set_color_I(Cloud* cloud){
+void Color::set_color_I(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB_obj = subset->rgb;
@@ -204,7 +204,7 @@ void Color::set_color_I(Cloud* cloud){
     sceneManager->update_buffer_color(subset);
   }
 }
-void Color::set_color_enhanced(Cloud* cloud){
+void Color::set_color_enhanced(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     vector<float>& Is = subset->I;
@@ -221,7 +221,7 @@ void Color::set_color_enhanced(Cloud* cloud){
     sceneManager->update_buffer_color(subset);
   }
 }
-void Color::set_color_random(Cloud* cloud){
+void Color::set_color_random(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     vector<vec4>& RGB = subset->rgb;
@@ -239,7 +239,7 @@ void Color::set_color_random(Cloud* cloud){
     //---------------------------
   }
 }
-void Color::set_color_initial(Cloud* cloud){
+void Color::set_color_initial(Collection* cloud){
   for(int i=0; i<cloud->subset.size(); i++){
     Subset* subset = *next(cloud->subset.begin(), i);
     Subset* subset_init = *next(cloud->subset_init.begin(), i);

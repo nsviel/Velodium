@@ -12,7 +12,7 @@ ICP_Rejection::ICP_Rejection(){
 ICP_Rejection::~ICP_Rejection(){}
 
 //ICCP implementation
-void ICP_Rejection::weighting_ICCP(Cloud* cloud_P, Cloud* cloud_Q){
+void ICP_Rejection::weighting_ICCP(Collection* cloud_P, Collection* cloud_Q){
   /*vector<vec3>& key_P = cloud_P->registration.keypoints;
   vector<vec3>& trg_Q = cloud_Q->registration.trgpoints;
   vector<float>& key_I = cloud_P->registration.keypoint_intensity;
@@ -44,7 +44,7 @@ void ICP_Rejection::weighting_ICCP(Cloud* cloud_P, Cloud* cloud_Q){
 }
 
 //Rejection methods
-void ICP_Rejection::rejection_distance(Cloud* cloud_P, Cloud* cloud_Q, float threshold){
+void ICP_Rejection::rejection_distance(Collection* cloud_P, Collection* cloud_Q, float threshold){
   /*vector<vec3>& XYZ_icp = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_trg = cloud_Q->registration.trgpoints;
   vector<int> idx;
@@ -62,7 +62,7 @@ void ICP_Rejection::rejection_distance(Cloud* cloud_P, Cloud* cloud_Q, float thr
   this->make_supressPoints(XYZ_trg, idx);
   cout<<"->"<<XYZ_icp.size()<<endl;*/
 }
-void ICP_Rejection::rejection_color(Cloud* cloud_P, Cloud* cloud_Q){
+void ICP_Rejection::rejection_color(Collection* cloud_P, Collection* cloud_Q){
   /*vector<vec4>& RGB_icp = cloud_P->color.OBJ;
   vector<vec4>& RGB_trg = cloud_Q->color.OBJ;
   Uplet tuple;
@@ -77,7 +77,7 @@ void ICP_Rejection::rejection_color(Cloud* cloud_P, Cloud* cloud_Q){
 
   //---------------------------
 }
-void ICP_Rejection::rejection_normal(Cloud* cloud_P, Cloud* cloud_Q){
+void ICP_Rejection::rejection_normal(Collection* cloud_P, Collection* cloud_Q){
   /*vector<vec3>& n1 = cloud_P->normal.OBJ;
   vector<vec3>& n2 = cloud_Q->normal.OBJ;
   vector<vec3>& XYZ_icp = cloud_P->location.OBJ;
@@ -96,7 +96,7 @@ void ICP_Rejection::rejection_normal(Cloud* cloud_P, Cloud* cloud_Q){
 
   //---------------------------
 }
-void ICP_Rejection::rejection_duplicata(Cloud* cloud_P, Cloud* cloud_Q){
+void ICP_Rejection::rejection_duplicata(Collection* cloud_P, Collection* cloud_Q){
   vector<int> id;
   Uplet tuple1, tuple2;
   //---------------------------

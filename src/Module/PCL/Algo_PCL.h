@@ -12,18 +12,18 @@ public:
   ~Algo_PCL();
 
 public:
-  float algo_ICP(Cloud* cloud_P, Cloud* cloud_Q);
-  float algo_NDT(Cloud* cloud_P, Cloud* cloud_Q);
-  float algo_GICP(Cloud* cloud_P, Cloud* cloud_Q);
-  float algo_LUM(Cloud* cloud_P, Cloud* cloud_Q);
-  float algo_4ptsCong(Cloud* cloud_P, Cloud* cloud_Q);
+  float algo_ICP(Collection* cloud_P, Collection* cloud_Q);
+  float algo_NDT(Collection* cloud_P, Collection* cloud_Q);
+  float algo_GICP(Collection* cloud_P, Collection* cloud_Q);
+  float algo_LUM(Collection* cloud_P, Collection* cloud_Q);
+  float algo_4ptsCong(Collection* cloud_P, Collection* cloud_Q);
 
-  void algo_NN_OctreePCL(Cloud* cloud_P, Cloud* cloud_Q);
-  void algo_NN_KdTreePCL(Cloud* cloud_P, Cloud* cloud_Q);
+  void algo_NN_OctreePCL(Collection* cloud_P, Collection* cloud_Q);
+  void algo_NN_KdTreePCL(Collection* cloud_P, Collection* cloud_Q);
 
-  Matrix4f optimization_SVD(Cloud* cloud_1, Cloud* cloud_2);
-  Matrix4f optimization_LM(Cloud* cloud_1, Cloud* cloud_2);
-  Matrix4f optimization_DualQuaternion(Cloud* cloud_1, Cloud* cloud_2);
+  Matrix4f optimization_SVD(Collection* cloud_1, Collection* cloud_2);
+  Matrix4f optimization_LM(Collection* cloud_1, Collection* cloud_2);
+  Matrix4f optimization_DualQuaternion(Collection* cloud_1, Collection* cloud_2);
 
 private:
 

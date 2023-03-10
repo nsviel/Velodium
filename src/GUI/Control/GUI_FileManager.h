@@ -19,11 +19,11 @@ public:
 
 public:
   void fileManager();
-  void cloudManager(Cloud* cloud);
+  void cloudManager(Collection* cloud);
 
-  void info_cloud(Cloud* cloud);
+  void info_cloud(Collection* cloud);
   void info_subset(Subset* subset);
-  void info_iconAction(Cloud* cloud);
+  void info_iconAction(Collection* cloud);
 
 private:
   Scene* sceneManager;

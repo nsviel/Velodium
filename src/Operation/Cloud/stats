@@ -18,15 +18,15 @@ if(ImGui::Button("cos(It)", ImVec2(100,0))){
 
 
   //Sub functions
-  void cloud_stats_location(Cloud* cloud);
-  void cloud_stats_intensity(Cloud* cloud);
-  void cloud_stats_distance(Cloud* cloud);
-  void cloud_stats_cosIt(Cloud* cloud);
+  void cloud_stats_location(Collection* cloud);
+  void cloud_stats_intensity(Collection* cloud);
+  void cloud_stats_distance(Collection* cloud);
+  void cloud_stats_cosIt(Collection* cloud);
 
 
 
 //Sub functions
-void MOD_cloud::cloud_stats_location(Cloud* cloud){
+void MOD_cloud::cloud_stats_location(Collection* cloud){
   Subset* subset = cloud->subset_selected;
   vector<vec3>& XYZ = subset->xyz;
   vec3 XYZ_COM = subset->COM;
@@ -55,7 +55,7 @@ void MOD_cloud::cloud_stats_location(Cloud* cloud){
     cout<<"__________"<<endl;
   }
 }
-void MOD_cloud::cloud_stats_intensity(Cloud* cloud){
+void MOD_cloud::cloud_stats_intensity(Collection* cloud){
   Subset* subset = cloud->subset_selected;
   vector<float>& Is = subset->I;
   //---------------------------
@@ -74,7 +74,7 @@ void MOD_cloud::cloud_stats_intensity(Cloud* cloud){
     cout<<"__________"<<endl;
   }
 }
-void MOD_cloud::cloud_stats_distance(Cloud* cloud){
+void MOD_cloud::cloud_stats_distance(Collection* cloud){
   Subset* subset = cloud->subset_selected;
   vector<float>& dist = subset->R;
   //---------------------------
@@ -93,7 +93,7 @@ void MOD_cloud::cloud_stats_distance(Cloud* cloud){
   cout<<"Mean : "<<fct_mean(dist)<<endl;
   cout<<"__________"<<endl;
 }
-void MOD_cloud::cloud_stats_cosIt(Cloud* cloud){
+void MOD_cloud::cloud_stats_cosIt(Collection* cloud){
   Subset* subset = cloud->subset_selected;
   vector<float>& cosIt =  subset->cosIt;
   vector<float>& It =  subset->It;

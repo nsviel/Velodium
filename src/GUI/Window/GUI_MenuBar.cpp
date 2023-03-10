@@ -76,7 +76,7 @@ void GUI_menuBar::design_MenuBar(){
 
 //Subfunctions
 void GUI_menuBar::MenuBar_menu(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //-------------------------
 
   this->MenuBar_menu_file();
@@ -104,7 +104,7 @@ void GUI_menuBar::MenuBar_menu(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_menu_file(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //File menu
@@ -141,7 +141,7 @@ void GUI_menuBar::MenuBar_menu_file(){
   //---------------------------
 }
 void GUI_menuBar::MenuBar_menu_load(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
@@ -164,7 +164,7 @@ void GUI_menuBar::MenuBar_menu_load(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_menu_save(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //-------------------------
 
   if(ImGui::BeginMenu(ICON_FA_BOOK " Save")){
@@ -199,14 +199,14 @@ void GUI_menuBar::MenuBar_icons(){
   float iconSize = 0;
   Texture* texture;
 
-  //Cloud info
+  //Collection info
   if(ImGui::Button(ICON_FA_COMMENT, ImVec2(iconSize,iconSize))){
     if(!sceneManager->get_is_list_empty()){
       modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
     }
   }
   if(ImGui::IsItemHovered()){
-    ImGui::SetTooltip("Cloud info");
+    ImGui::SetTooltip("Collection info");
   }
 
   //Heatmap
@@ -233,7 +233,7 @@ void GUI_menuBar::MenuBar_icons(){
     modal_tab.show_boxing = !modal_tab.show_boxing;
   }
   if(ImGui::IsItemHovered()){
-    ImGui::SetTooltip("Cloud boxing");
+    ImGui::SetTooltip("Collection boxing");
   }
 
   //---------------------------
@@ -253,7 +253,7 @@ void GUI_menuBar::MenuBar_subsetSelection(){
   //-------------------------
 }
 void GUI_menuBar::MenuBar_Operations(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   //Functions

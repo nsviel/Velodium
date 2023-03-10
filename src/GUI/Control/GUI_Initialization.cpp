@@ -83,7 +83,7 @@ void GUI_Initialization::update_configuration(){
 }
 
 //GUI subfunctions
-void GUI_Initialization::operation_cloud(Cloud* cloud){
+void GUI_Initialization::operation_cloud(Collection* cloud){
   //---------------------------
 
   if(cloud != nullptr){
@@ -360,7 +360,7 @@ void GUI_Initialization::open_selection(tree_file* node){
   if(node->type == "File"){
     bool ok = loaderManager->load_cloud(node->path);
     if(ok){
-      this->operation_cloud((Cloud*)loaderManager->get_created_object());
+      this->operation_cloud((Collection*)loaderManager->get_created_object());
     }
   }
   else if(node->type == "Folder" && node->end_folder){
@@ -372,7 +372,7 @@ void GUI_Initialization::open_selection(tree_file* node){
         ok = pathManager->loading_onthefly(node->path);
       }
       if(ok){
-        this->operation_cloud((Cloud*)loaderManager->get_created_object());
+        this->operation_cloud((Collection*)loaderManager->get_created_object());
       }
     }
   }

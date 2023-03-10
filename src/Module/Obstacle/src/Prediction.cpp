@@ -58,7 +58,7 @@ bool* Prediction::runtime_prediction(){
 
 //Subfunctions
 void Prediction::compute_prediction(string path){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   if(cloud == nullptr){
     return;
   }
@@ -84,7 +84,7 @@ void Prediction::compute_prediction(string path){
 
   //---------------------------
 }
-void Prediction::compute_prediction(Cloud* cloud, vector<string> path_vec){
+void Prediction::compute_prediction(Collection* cloud, vector<string> path_vec){
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -107,7 +107,7 @@ void Prediction::compute_prediction(Cloud* cloud, vector<string> path_vec){
 
   //---------------------------
 }
-void Prediction::compute_groundTruth(Cloud* cloud, string path_file){
+void Prediction::compute_groundTruth(Collection* cloud, string path_file){
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -125,7 +125,7 @@ void Prediction::compute_groundTruth(Cloud* cloud, string path_file){
 
   //---------------------------
 }
-void Prediction::compute_groundTruth(Cloud* cloud, vector<string> path_vec){
+void Prediction::compute_groundTruth(Collection* cloud, vector<string> path_vec){
   if(cloud == nullptr) return;
   //---------------------------
 

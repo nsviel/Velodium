@@ -18,19 +18,19 @@ public:
 
 public:
   //Main function
-  bool compute_assessment(Cloud* cloud, int ID, float time);
-  void compute_visibility(Cloud* cloud);
+  bool compute_assessment(Collection* cloud, int ID, float time);
+  void compute_visibility(Collection* cloud);
 
   //Specific function
   bool compute_assessment_time(float time);
   bool compute_assessment_abs(Frame* frame, Frame* frame_m1);
-  bool compute_assessment_rlt(Cloud* cloud, int i);
+  bool compute_assessment_rlt(Collection* cloud, int i);
   bool compute_assessment_rsd(Frame* frame);
-  void compute_statistics(Cloud* cloud, int subset_ID, float duration);
+  void compute_statistics(Collection* cloud, int subset_ID, float duration);
 
   //Sub-function
   double AngularDistance(Eigen::Matrix3d& rota, Eigen::Matrix3d& rotb);
-  void compute_stat_mean(Cloud* cloud, int ID);
+  void compute_stat_mean(Collection* cloud, int ID);
 
   inline double* get_thres_ego_trans(){return &thres_ego_trans;}
   inline double* get_thres_ego_rotat(){return &thres_ego_rotat;}

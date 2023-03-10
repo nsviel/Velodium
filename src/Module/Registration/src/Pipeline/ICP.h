@@ -23,22 +23,22 @@ public:
   //Main functions
   void init();
   void reset();
-  void algo(Cloud* cloud_P, Cloud* cloud_Q);
+  void algo(Collection* cloud_P, Collection* cloud_Q);
 
   //Step functions
-  void step_matching(Cloud* cloud_P, Cloud* cloud_Q);
-  void step_rejection(Cloud* cloud_P, Cloud* cloud_Q);
-  void step_optimization(Cloud* cloud_P, Cloud* cloud_Q);
-  void step_transformation(Cloud* cloud_P, Cloud* cloud_Q);
+  void step_matching(Collection* cloud_P, Collection* cloud_Q);
+  void step_rejection(Collection* cloud_P, Collection* cloud_Q);
+  void step_optimization(Collection* cloud_P, Collection* cloud_Q);
+  void step_transformation(Collection* cloud_P, Collection* cloud_Q);
 
   //Subfunctions
-  float compute_SSE(Cloud* cloud_P, Cloud* cloud_Q);
-  float compute_SSE_groundTruth(Cloud* cloud);
-  float compute_MSE_groundTruth(Cloud* cloud);
-  float compute_RMSE_groundTruth(Cloud* cloud);
-  float compute_MAE_groundTruth(Cloud* cloud);
+  float compute_SSE(Collection* cloud_P, Collection* cloud_Q);
+  float compute_SSE_groundTruth(Collection* cloud);
+  float compute_MSE_groundTruth(Collection* cloud);
+  float compute_RMSE_groundTruth(Collection* cloud);
+  float compute_MAE_groundTruth(Collection* cloud);
 
-  void compute_prepareData(Cloud* cloud_P, Cloud* cloud_Q);
+  void compute_prepareData(Collection* cloud_P, Collection* cloud_Q);
   void compute_checknPnD();
   void compute_adaptativeGain();
 

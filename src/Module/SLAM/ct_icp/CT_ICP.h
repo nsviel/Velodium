@@ -51,7 +51,7 @@ public:
   ~CT_ICP();
 
 public:
-  void algo(Cloud* cloud);
+  void algo(Collection* cloud);
 	void algo(Subset* subset);
 	void reset();
 

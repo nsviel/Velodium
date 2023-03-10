@@ -34,9 +34,9 @@ public:
   bool load_cloud_onthefly(vector<string> path_vec);
   bool load_cloud_silent(string pathFile);
   bool load_cloud_part(string path, int lmin, int lmax);
-  bool load_cloud_creation(Cloud* cloud_in);
+  bool load_cloud_creation(Collection* cloud_in);
   bool load_cloud_empty();
-  bool load_cloud_oneFrame(Cloud* cloud, string path);
+  bool load_cloud_oneFrame(Collection* cloud, string path);
   vector<vec3> load_vertices(string path);
 
   inline Object_* get_created_object(){return cloud;}
@@ -49,12 +49,12 @@ private:
   vector<Data_file*> load_retrieve_cloud_data(string path);
   Object_* load_insertIntoDatabase(Data_file* data_file);
   Object_* load_insertIntoDatabase(vector<Data_file*> data_vec);
-  void load_insertIntoCloud(Data_file* data, Cloud* cloud);
+  void load_insertIntoCloud(Data_file* data, Collection* cloud);
 
 private:
   Extractor* extractManager;
   Scene* sceneManager;
-  Cloud* cloud;
+  Collection* cloud;
   Object_ object;
   Data* data;
 

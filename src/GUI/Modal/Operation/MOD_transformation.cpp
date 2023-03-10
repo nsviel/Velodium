@@ -34,7 +34,7 @@ MOD_transformation::~MOD_transformation(){}
 
 //Main function
 void MOD_transformation::design_transformation(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   if(modal_tab.show_transformation && cloud != nullptr){
     ImGui::Begin("Transformation", &modal_tab.show_transformation, ImGuiWindowFlags_AlwaysAutoResize);
     //---------------------------
@@ -55,7 +55,7 @@ void MOD_transformation::design_transformation(){
 
 //Specific function
 void MOD_transformation::actual_transformation_mat(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 
@@ -72,7 +72,7 @@ void MOD_transformation::actual_transformation_mat(){
   //---------------------------
 }
 void MOD_transformation::manual_transformation_mat(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
 
   if(ImGui::CollapsingHeader("Manual transformation matrix")){
@@ -129,7 +129,7 @@ void MOD_transformation::manual_transformation_mat(){
       if(cloud != nullptr){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
-        Cloud* cloud = sceneManager->get_selected_cloud();
+        Collection* cloud = sceneManager->get_selected_cloud();
         Subset* subset = cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
@@ -152,7 +152,7 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        Cloud* cloud = sceneManager->get_selected_cloud();
+        Collection* cloud = sceneManager->get_selected_cloud();
         Subset* subset = cloud->subset_selected;
 
         sceneManager->reset_cloud(cloud);
@@ -176,10 +176,10 @@ void MOD_transformation::manual_transformation_mat(){
   }
 }
 void MOD_transformation::cloud_translation(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
 
-  if(ImGui::CollapsingHeader("Cloud translation")){
+  if(ImGui::CollapsingHeader("Collection translation")){
     //---------------------------
 
     ImGui::PushItemWidth(150);
@@ -202,10 +202,10 @@ void MOD_transformation::cloud_translation(){
   }
 }
 void MOD_transformation::cloud_rotation(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
 
-  if(ImGui::CollapsingHeader("Cloud rotation")){
+  if(ImGui::CollapsingHeader("Collection rotation")){
     //---------------------------
 
     if(ImGui::Button("X ->")){
@@ -261,7 +261,7 @@ void MOD_transformation::cloud_rotation(){
   }
 }
 void MOD_transformation::cloud_elevation(){
-  if(ImGui::CollapsingHeader("Cloud elevation")){
+  if(ImGui::CollapsingHeader("Collection elevation")){
     //---------------------------
 
     this->elevation_ground();
@@ -275,7 +275,7 @@ void MOD_transformation::cloud_elevation(){
 
 //Elevation function
 void MOD_transformation::elevation_ground(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Ground");
@@ -304,7 +304,7 @@ void MOD_transformation::elevation_ground(){
   ImGui::Separator();
 }
 void MOD_transformation::elevation_height(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Elevation");
@@ -325,9 +325,9 @@ void MOD_transformation::elevation_height(){
 
   if(ImGui::Button("Apply##0")){
     if(allClouds){
-      list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+      list<Collection*>* list_cloud = sceneManager->get_list_cloud();
       for(int i=0;i<list_cloud->size();i++){
-        Cloud* cloud = *next(list_cloud->begin(),i);
+        Collection* cloud = *next(list_cloud->begin(),i);
         poseManager->make_adjustPosToScanner(cloud, Z_scan);
         sceneManager->update_buffer_location(cloud);
       }
@@ -345,7 +345,7 @@ void MOD_transformation::elevation_height(){
   ImGui::Separator();
 }
 void MOD_transformation::elevation_redressment(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Redressment");

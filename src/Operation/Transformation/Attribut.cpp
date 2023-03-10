@@ -32,22 +32,22 @@ Attribut::~Attribut(){
 
 //General
 void Attribut::compute_attribut_all(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   for(int i=0;i<list_cloud->size();i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
     this->compute_attribut_subset(subset);
   }
 
   //---------------------------
 }
-void Attribut::compute_attribut_list(list<Cloud*>* list){
+void Attribut::compute_attribut_list(list<Collection*>* list){
   //---------------------------
 
   for(int i=0;i<list->size();i++){
-    Cloud* cloud = *next(list->begin(),i);
+    Collection* cloud = *next(list->begin(),i);
     Subset* subset = cloud->subset_selected;
     this->compute_attribut_subset(subset);
   }
@@ -86,7 +86,7 @@ void Attribut::compute_attribut_subset(Subset* subset){
     cout<<"cosit data problem - XYZ: "<<XYZ.size()<<" - cosIt: "<<cosIt.size()<<endl;
   }
 }
-void Attribut::compute_attribut_cloud(Cloud* cloud){
+void Attribut::compute_attribut_cloud(Collection* cloud){
   //---------------------------
 
   Subset* subset = cloud->subset_selected;
@@ -358,14 +358,14 @@ void Attribut::make_supressPoints(vector<vec3>& vec, vector<int>& idx){
   vec = vec_b;
 }
 void Attribut::cloudsData(){
-  list<Cloud*>* list_cloud = sceneManager->get_list_cloud();
+  list<Collection*>* list_cloud = sceneManager->get_list_cloud();
   //---------------------------
 
   ofstream myfile;
   myfile.open ("Clouds_Name-Is_Ic_It_cosIt_R.txt");
   myfile << "\n";
   for(int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
     Subset* subset = cloud->subset_selected;
     Subset* subset_init = cloud->get_subset_selected_init();
 
@@ -606,7 +606,7 @@ void Attribut::compute_normals_planFitting(Subset* subset){
 }
 void Attribut::compute_normals_invert(){
   if(!sceneManager->get_is_list_empty()){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     Subset* subset_init = cloud->get_subset_selected_init();
     vector<vec3>& normals = subset->Nxyz;
@@ -664,7 +664,7 @@ void Attribut::compute_checkForNan(Subset* subset){
 //Intensity
 void Attribut::compute_intensityInversion(){
   if(!sceneManager->get_is_list_empty()){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     //---------------------------
 
@@ -721,7 +721,7 @@ void Attribut::fct_convert2048to255(Subset* subset){
 }
 void Attribut::fct_moins(){
   if(!sceneManager->get_is_list_empty()){
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Collection* cloud = sceneManager->get_selected_cloud();
     Subset* subset = cloud->subset_selected;
     vector<float>& Is = subset->I;
     vector<vec3>& XYZ = subset->xyz;
@@ -738,7 +738,7 @@ void Attribut::fct_moins(){
   }
 }
 void Attribut::fct_IsRange(vec2 range){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   Subset* subset_init = cloud->get_subset_selected_init();
   vector<float>& Is = subset->I;
@@ -758,7 +758,7 @@ void Attribut::fct_IsRange(vec2 range){
   sceneManager->update_buffer_color(subset);
 }
 vec2 Attribut::get_IsRange(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Collection* cloud = sceneManager->get_selected_cloud();
   Subset* subset = cloud->subset_selected;
   vector<float>& Is = subset->I;
   //---------------------------

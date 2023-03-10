@@ -24,9 +24,9 @@ public:
   //Subfunctions
   void remove_prediction_file(string path);
   void compute_prediction(string file_path);
-  void compute_prediction(Cloud* cloud, vector<string> path_vec);
-  void compute_groundTruth(Cloud* cloud, string path_file);
-  void compute_groundTruth(Cloud* cloud, vector<string> path_vec);
+  void compute_prediction(Collection* cloud, vector<string> path_vec);
+  void compute_groundTruth(Collection* cloud, string path_file);
+  void compute_groundTruth(Collection* cloud, vector<string> path_vec);
 
   //JSON parsers
   void parse_json_groundTruth(Subset* subset, string file_path);

@@ -20,7 +20,7 @@ public:
   Data_file* Loader(string pathFile);
   Data_file* Loader(string pathFile, int lmin, int lmax);
 
-  bool Exporter(string pathFile, Cloud* cloud);
+  bool Exporter(string pathFile, Collection* cloud);
   bool Exporter(string pathFile, Subset* subset);
 
   inline void set_IdataFormat(int value){this->IdataFormat = value;}

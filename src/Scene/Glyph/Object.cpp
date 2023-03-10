@@ -135,7 +135,7 @@ void Object::runtime_glyph_scene(){
 
   //---------------------------
 }
-void Object::runtime_glyph_subset_all(Cloud* cloud){
+void Object::runtime_glyph_subset_all(Collection* cloud){
   //---------------------------
 
   for(int j=0; j<cloud->subset.size(); j++){
@@ -273,7 +273,7 @@ void Object::update_glyph_subset(Subset* subset){
 
   //---------------------------
 }
-void Object::update_glyph_cloud(Cloud* cloud){
+void Object::update_glyph_cloud(Collection* cloud){
   //---------------------------
 
   //Update cloud AABB
@@ -339,11 +339,11 @@ void Object::reset_object(Glyph* glyph){
 
 //Misc function
 void Object::set_object_visibility(string name, bool val){
-  list<Cloud*>* list_cloud = data->get_list_cloud();
+  list<Collection*>* list_cloud = data->get_list_cloud();
   //---------------------------
 
   for (int i=0; i<list_cloud->size(); i++){
-    Cloud* cloud = *next(list_cloud->begin(),i);
+    Collection* cloud = *next(list_cloud->begin(),i);
 
     //Set normal glyph visibility
     if(name == "normal"){

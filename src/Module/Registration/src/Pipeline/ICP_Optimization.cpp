@@ -36,7 +36,7 @@ void ICP_Optimization::init(int XYZsize){
 
   //---------------------------
 }
-void ICP_Optimization::algo_Newton(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
+void ICP_Optimization::algo_Newton(Collection* cloud_P, Collection* cloud_Q, vec3 COM){
   /*vector<vec3>& XYZ_P_obj = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q_obj = cloud_Q->registration.trgpoints;
   vector<float>& key_w = cloud_P_m->registration.keypoint_weight;
@@ -59,7 +59,7 @@ void ICP_Optimization::algo_Newton(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
 
   //---------------------------*/
 }
-void ICP_Optimization::algo_Newton_separated(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
+void ICP_Optimization::algo_Newton_separated(Collection* cloud_P, Collection* cloud_Q, vec3 COM){
   /*int size = cloud_P->registration.keypoints.size();
   if(size == 0) return;
   //---------------------------
@@ -70,7 +70,7 @@ void ICP_Optimization::algo_Newton_separated(Cloud* cloud_P, Cloud* cloud_Q, vec
 
   //---------------------------*/
 }
-void ICP_Optimization::algo_Xt(Cloud* cloud_P, Cloud* cloud_Q){
+void ICP_Optimization::algo_Xt(Collection* cloud_P, Collection* cloud_Q){
   /*vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q = cloud_Q->registration.trgpoints;
   vector<float>& KEY_W = cloud_P->registration.keypoint_weight;
@@ -92,7 +92,7 @@ void ICP_Optimization::algo_Xt(Cloud* cloud_P, Cloud* cloud_Q){
 
   //---------------------------*/
 }
-void ICP_Optimization::algo_Xr(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
+void ICP_Optimization::algo_Xr(Collection* cloud_P, Collection* cloud_Q, vec3 COM){
   /*vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q = cloud_Q->registration.trgpoints;
   vector<float>& KEY_W = cloud_P->registration.keypoint_weight;
@@ -113,7 +113,7 @@ void ICP_Optimization::algo_Xr(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
   //---------------------------
   this->compute_param_Pr(Xr);*/
 }
-void ICP_Optimization::algo_Xr_separated(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM){
+void ICP_Optimization::algo_Xr_separated(Collection* cloud_P, Collection* cloud_Q, vec3 COM){
   /*vector<vec3>& XYZ_P = cloud_P->registration.keypoints;
   vector<vec3>& XYZ_Q = cloud_Q->registration.trgpoints;
   vector<float>& KEY_W = cloud_P->registration.keypoint_weight;

@@ -56,7 +56,7 @@ void Recorder::update_configuration(){
 
   //---------------------------
 }
-void Recorder::compute_online(Cloud* cloud, int ID_subset){
+void Recorder::compute_online(Collection* cloud, int ID_subset){
   //---------------------------
 
   //Save subset frame
@@ -144,7 +144,7 @@ void Recorder::save_image_path(){
 }
 
 // Frame saving
-void Recorder::save_frame(Cloud* cloud, int ID_subset){
+void Recorder::save_frame(Collection* cloud, int ID_subset){
   //---------------------------
 
   if(with_save_frame_raw){
@@ -182,7 +182,7 @@ void Recorder::save_frame_subset(Subset* subset){
   auto t2 = std::chrono::high_resolution_clock::now();
   this->time_save_frame = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 }
-void Recorder::save_frame_set(Cloud* cloud, int ID_subset){
+void Recorder::save_frame_set(Collection* cloud, int ID_subset){
   Subset* subset = *next(cloud->subset.begin(), ID_subset);
   auto t1 = std::chrono::high_resolution_clock::now();
   //---------------------------

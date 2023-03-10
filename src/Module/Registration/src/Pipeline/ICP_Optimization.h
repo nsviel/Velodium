@@ -13,11 +13,11 @@ public:
   ~ICP_Optimization();
 
 public:
-  void algo_Newton(Cloud* cloud_1, Cloud* cloud_2, vec3 COM);
-  void algo_Newton_separated(Cloud* cloud_1, Cloud* cloud_2, vec3 COM);
-  void algo_Xt(Cloud* cloud_P, Cloud* cloud_Q);
-  void algo_Xr(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM);
-  void algo_Xr_separated(Cloud* cloud_P, Cloud* cloud_Q, vec3 COM);
+  void algo_Newton(Collection* cloud_1, Collection* cloud_2, vec3 COM);
+  void algo_Newton_separated(Collection* cloud_1, Collection* cloud_2, vec3 COM);
+  void algo_Xt(Collection* cloud_P, Collection* cloud_Q);
+  void algo_Xr(Collection* cloud_P, Collection* cloud_Q, vec3 COM);
+  void algo_Xr_separated(Collection* cloud_P, Collection* cloud_Q, vec3 COM);
   void init(int size);
 
   MatrixXf compute_Jacobian(vector<vec3>& XYZ_P, vec3 COM);
@@ -46,7 +46,7 @@ public:
 
 private:
   SpeudoInverse invManager;
-  Cloud* cloud_P_m;
+  Collection* cloud_P_m;
 
   vector<bool> DOF;
   vec3 Pr, Pt;

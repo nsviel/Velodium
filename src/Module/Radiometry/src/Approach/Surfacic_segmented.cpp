@@ -100,7 +100,7 @@ Surfacic_segmented::Surfacic_segmented(Ref_Operation* opeClass){
 Surfacic_segmented::~Surfacic_segmented(){}
 
 //Main function
-bool Surfacic_segmented::algo(Cloud* cloud){
+bool Surfacic_segmented::algo(Collection* cloud){
   this->algo_nbP();
   refopeManager->compute_Sphere_IbyR();
   //-------------------------------
@@ -121,7 +121,7 @@ bool Surfacic_segmented::algo(Cloud* cloud){
 //Subfunctions
 MatrixXf Surfacic_segmented::algo_ParameterSpace_segmented(){
   Reference* refManager = refopeManager->get_refManager();
-  list<Cloud*>* list_sphere = refManager->get_listSphere();
+  list<Collection*>* list_sphere = refManager->get_listSphere();
   MatrixXf list_P(list_sphere->size() - 1, nbP);
   //-------------------------------
 
@@ -229,7 +229,7 @@ vec2 Surfacic_segmented::algo_searchSegment(float R){
   //-------------------------------
   return infsup;
 }
-void Surfacic_segmented::algo_correction(Cloud* cloud, MatrixXf list_P){
+void Surfacic_segmented::algo_correction(Collection* cloud, MatrixXf list_P){
 	Subset* subset = *next(cloud->subset.begin(), 0);
 	vector<float>& Is = subset->I;
 	vector<float>& dist = subset->R;
