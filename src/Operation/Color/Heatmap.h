@@ -3,17 +3,17 @@
 
 #include "../../common.h"
 
-class Node_operation;
 class Scene;
 class Attribut;
 class Colormap;
+class GPU_data;
 
 
 class Heatmap
 {
 public:
   //Constructor / Destructor
-  Heatmap(Node_operation* node_ope);
+  Heatmap();
   ~Heatmap();
 
 public:
@@ -45,6 +45,7 @@ private:
   Scene* sceneManager;
   Attribut* attribManager;
   Colormap* colormapManager;
+  GPU_data* gpuManager;
 
   vec2 range_norm;
   vec2 range_height;

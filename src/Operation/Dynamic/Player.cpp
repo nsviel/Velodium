@@ -112,7 +112,7 @@ bool Player::compute_range_limit(Cloud* cloud, int& ID_subset){
   Subset* subset_first = cloud->get_subset(0);
   Subset* subset_last = cloud->get_subset(cloud->nb_subset-1);
   //---------------------------
-
+//PROBLEM DE ID ICI JE PENSE
   //Check if subset exists
   Subset* subset = cloud->get_subset(ID_subset);
   if(subset == nullptr){

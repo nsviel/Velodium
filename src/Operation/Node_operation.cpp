@@ -28,8 +28,8 @@ Node_operation::Node_operation(Node_engine* node){
   this->node_load = node->get_node_load();
 
   this->fittingManager = new Fitting();
-  this->attribManager = new Attribut(this);
-  this->heatmapManager = new Heatmap(this);
+  this->attribManager = new Attribut();
+  this->heatmapManager = new Heatmap();
   this->colorManager = new Color(this);
   this->filterManager = new Filter(this);
   this->coordManager = new Coordinate(this);

@@ -42,8 +42,6 @@ public:
   inline Cloud* get_selected_cloud(){return data->get_cloud_selected();}
   inline void set_selected_cloud(Cloud* cloud){Cloud* cl = data->get_cloud_selected(); cl = cloud;}
   inline bool get_is_list_empty(){return data->get_list_cloud()->empty();}
-  inline int get_new_oID_cloud(){return data->get_list_cloud()->size();}
-  inline Data* get_data(){return data;}
 
 private:
   Object* objectManager;

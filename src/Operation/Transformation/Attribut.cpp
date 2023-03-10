@@ -3,8 +3,6 @@
 #include "../Node_operation.h"
 #include "../Optimization/Fitting.h"
 
-#include "../../Engine/Node_engine.h"
-#include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/Function/fct_terminal.h"
@@ -13,20 +11,24 @@
 
 
 //Constructor / destructor
-Attribut::Attribut(Node_operation* node_ope){
+Attribut::Attribut(){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
-  Node_scene* node_scene = node_engine->get_node_scene();
-
-  this->sceneManager = node_scene->get_sceneManager();
-  this->fitManager = node_ope->get_fittingManager();
+  this->sceneManager = new Scene();
+  this->fitManager = new Fitting();
 
   this->sphereRadius = 0.0695;
 
   //---------------------------
 }
-Attribut::~Attribut(){}
+Attribut::~Attribut(){
+  //---------------------------
+
+  delete sceneManager;
+  delete fitManager;
+
+  //---------------------------
+}
 
 //General
 void Attribut::compute_attribut_all(){

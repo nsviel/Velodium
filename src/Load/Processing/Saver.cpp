@@ -19,13 +19,8 @@
 
 
 //Constructor / Destructor
-Saver::Saver(Node_load* node_load){
+Saver::Saver(){
   //---------------------------
-
-  Node_engine* node_engine = node_load->get_node_engine();
-  Node_scene* node_scene = node_engine->get_node_scene();
-
-  this->sceneManager = node_scene->get_sceneManager();
 
   this->ptsManager = new file_PTS();
   this->plyManager = new file_PLY();

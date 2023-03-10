@@ -66,7 +66,7 @@ void Engine::draw_untextured_glyph(){
   //---------------------------
 }
 void Engine::arcball_cam_lookat(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Cloud* cloud = data->get_cloud_selected();
   Subset* subset = cloud->subset_selected;
   //---------------------------
 

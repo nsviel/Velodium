@@ -7,7 +7,6 @@
 
 using namespace Eigen;
 
-class Node_operation;
 class Scene;
 class Fitting;
 
@@ -16,7 +15,7 @@ class Attribut
 {
 public:
   //Constructor / Destructor
-  Attribut(Node_operation* node_ope);
+  Attribut();
   ~Attribut();
 
 public:

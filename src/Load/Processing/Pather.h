@@ -1,9 +1,9 @@
 #ifndef PATHER_H
 #define PATHER_H
 
+#include "../../Scene/Data/Data.h"
 #include "../../common.h"
 
-class Node_load;
 class Scene;
 class Loader;
 class Saver;
@@ -14,7 +14,7 @@ class Pather
 {
 public:
   //Constructor / Destructor
-  Pather(Node_load* node_load);
+  Pather();
   ~Pather();
 
 public:
@@ -54,6 +54,7 @@ private:
   Loader* loaderManager;
   Saver* saverManager;
   Configuration* configManager;
+  Data* data;
 
   float spaceSampling;
   int nbLineSampling;

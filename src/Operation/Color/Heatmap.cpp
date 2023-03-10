@@ -6,6 +6,7 @@
 #include "../Transformation/Attribut.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Engine/GPU/GPU_data.h"
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Specific/Function/fct_math.h"
@@ -20,15 +21,13 @@
 
 
 //Constructor / destructor
-Heatmap::Heatmap(Node_operation* node_ope){
+Heatmap::Heatmap(){
   //---------------------------
 
-  Node_engine* node_engine = node_ope->get_node_engine();
-  Node_scene* node_scene = node_engine->get_node_scene();
-
   this->colormapManager = new Colormap();
-  this->sceneManager = node_scene->get_sceneManager();
-  this->attribManager = node_ope->get_attribManager();
+  this->sceneManager = new Scene();
+  this->attribManager = new Attribut();
+  this->gpuManager = new GPU_data();
 
   this->heatmap_mode = 1;
   this->is_normalization = true;
@@ -38,7 +37,16 @@ Heatmap::Heatmap(Node_operation* node_ope){
 
   //---------------------------
 }
-Heatmap::~Heatmap(){}
+Heatmap::~Heatmap(){
+  //---------------------------
+
+  delete colormapManager;
+  delete sceneManager;
+  delete attribManager;
+  delete gpuManager;
+
+  //---------------------------
+}
 
 //HMI functions
 void Heatmap::make_heatmap_all(bool is_heatmap){
@@ -107,7 +115,7 @@ void Heatmap::make_subset_heatmap(Subset* subset){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(subset);
+  gpuManager->update_buffer_color(subset);
 }
 
 //Specific mode functions

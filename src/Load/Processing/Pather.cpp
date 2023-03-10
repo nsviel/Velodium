@@ -23,16 +23,14 @@
 
 
 //Constructor / destructor
-Pather::Pather(Node_load* node_load){
+Pather::Pather(){
   //---------------------------
 
-  Node_engine* node_engine = node_load->get_node_engine();
-  Node_scene* node_scene = node_engine->get_node_scene();
-
-  this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_scene->get_sceneManager();
-  this->loaderManager = node_load->get_loaderManager();
-  this->saverManager = node_load->get_saverManager();
+  this->configManager = new Configuration();
+  this->sceneManager = new Scene();
+  this->loaderManager = new Loader();
+  this->saverManager = new Saver();
+  this->data = Data::get_instance();
 
   //---------------------------
   this->update_configuration();
@@ -184,7 +182,7 @@ void Pather::loading_sampledCloud(string path){
 
   //Load the "base" part
   loaderManager->load_cloud_part(path, lmin, lmax);
-  Cloud* cloud_base = sceneManager->get_selected_cloud();
+  Cloud* cloud_base = data->get_cloud_selected();
   Cloud* cloud_toAdd;
 
   //load and merge all other parts
@@ -198,7 +196,7 @@ void Pather::loading_sampledCloud(string path){
 
     //Load nth part
     loaderManager->load_cloud_part(path, lmin, lmax);
-    cloud_toAdd = sceneManager->get_selected_cloud();
+    cloud_toAdd = data->get_cloud_selected();
 
     //Merge the nth part with the base
     extractionManager->merging_addCloud(cloud_base, cloud_toAdd);
@@ -230,7 +228,7 @@ void Pather::loading_treatment(){
     loaderManager->load_cloud(path);
 
     //Save and remove
-    Cloud* cloud = sceneManager->get_selected_cloud();
+    Cloud* cloud = data->get_cloud_selected();
     saverManager->save_cloud(cloud, path);
     sceneManager->remove_cloud(cloud);
   }
@@ -240,7 +238,7 @@ void Pather::loading_treatment(){
 
 //Other functions
 void Pather::saving(){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Cloud* cloud = data->get_cloud_selected();
   //---------------------------
 
   if(sceneManager->get_is_list_empty() == false){
@@ -289,7 +287,7 @@ void Pather::saving_subset(Subset* subset){
   //---------------------------
 }
 void Pather::saving_subset_range(int frame_b, int frame_e){
-  Cloud* cloud = sceneManager->get_selected_cloud();
+  Cloud* cloud = data->get_cloud_selected();
   //---------------------------
 
   //Select saving path

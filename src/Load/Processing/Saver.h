@@ -4,9 +4,6 @@
 #include "../../Scene/Base/struct_data_file.h"
 #include "../../common.h"
 
-class Node_load;
-class Scene;
-
 class file_PTS;
 class file_PLY;
 class file_PTX;
@@ -20,7 +17,7 @@ class Saver
 {
 public:
   //Constructor / Destructor
-  Saver(Node_load* node_load);
+  Saver();
   ~Saver();
 
 public:
@@ -36,8 +33,6 @@ public:
   inline file_PCAP* get_pcapManager(){return pcapManager;}
 
 private:
-  Scene* sceneManager;
-
   file_PTS* ptsManager;
   file_PLY* plyManager;
   file_PTX* ptxManager;
