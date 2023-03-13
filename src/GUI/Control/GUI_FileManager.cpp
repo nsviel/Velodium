@@ -41,6 +41,7 @@ void GUI_fileManager::data_tree(){
   static ImGuiTableFlags flags;
   flags |= ImGuiTableFlags_ScrollY;
   flags |= ImGuiTableFlags_SizingFixedFit;
+  flags |= ImGuiTableFlags_SizingStretchSame;
 
   static ImGuiSelectableFlags flags_selec;
   flags_selec |= ImGuiSelectableFlags_SpanAllColumns;
@@ -53,32 +54,23 @@ void GUI_fileManager::data_tree(){
   ImGui::PushStyleColor(ImGuiCol_CheckMark, IM_COL32(255, 255, 255, 255));
   ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(0,0,0, 255));
 
-  if (ImGui::BeginTable("table_advanced", 2, flags, ImVec2(0, 0), 0)){
-    ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 160);
-    ImGui::TableSetupColumn("Visibility", ImGuiTableColumnFlags_WidthFixed, 10);
+  if (ImGui::BeginTable("table_advanced", 1, flags)){
+    ImGui::TableSetupColumn("Name");
 
     for (int row_i=0; row_i<list_collection->size(); row_i++){
       Collection* collection = *next(list_collection->begin(), row_i);
-      //----------
-
       if(collection->nb_obj == 0) continue;
+      //----------
 
       //Set table row
-      ImGui::TableNextRow(ImGuiTableRowFlags_None, 0.5);
-      ImGui::PushItemWidth(-FLT_MIN);flags |= ImGuiTreeNodeFlags_OpenOnArrow;
+      ImGui::TableNextRow();
       ImGui::PushID(row_i);
-      ImGui::Selectable(collection->name.c_str(), true, flags_selec);
 
       //Cloud name
-      ImGui::TableSetColumnIndex(0);
+      ImGui::TableNextColumn();
       this->collection_node(collection);
 
-      //Icon: visibility
-      ImGui::TableSetColumnIndex(1);
-      ImGui::Checkbox("", &collection->is_visible);
-
       //----------
-      ImGui::PopItemWidth();
       ImGui::PopID();
     }
 
@@ -99,12 +91,13 @@ void GUI_fileManager::collection_node(Collection* collection){
   //-------------------------------
 
   ImGuiTreeNodeFlags node_flags;
-  node_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+  node_flags |= ImGuiTreeNodeFlags_OpenOnArrow;
+  node_flags |= ImGuiTreeNodeFlags_OpenOnDoubleClick;
   if(selected_col->ID_col_order == collection->ID_col_order){
     node_flags |= ImGuiTreeNodeFlags_Selected;
   }
 
-  bool open_object_node = ImGui::TreeNodeEx(collection->name.c_str(), node_flags);
+  bool is_node_open = ImGui::TreeNodeEx(collection->name.c_str(), node_flags);
 
   //If clicked by mouse
   if(ImGui::IsItemClicked()){
@@ -112,16 +105,12 @@ void GUI_fileManager::collection_node(Collection* collection){
   }
 
   //Subset tree node
-  if(open_object_node && collection != nullptr && (collection->list_obj.size() > 1 || collection->is_onthefly)){
+  if(is_node_open && collection != nullptr && (collection->list_obj.size() > 0 || collection->is_onthefly)){
+
+    this->info_collection(collection);
 
     for(int j=0; j<collection->list_obj.size(); j++){
       Object_* object = *next(collection->list_obj.begin(), j);
-
-      if(object->is_visible){
-        node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_Selected;
-      }else{
-        node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-      }
 
       bool is_node_open = ImGui::TreeNodeEx(object->name.c_str(), node_flags);
 
@@ -149,6 +138,24 @@ void GUI_fileManager::info_collection(Collection* collection){
   //Additional info
   ImGui::Text("Format: %s", collection->file_format.c_str());
   ImGui::Text("Frames: %d", (int)collection->list_obj.size());
+
+  //Icon: info
+  if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
+    data->set_selected_collection(collection);
+    modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
+  }
+
+  //Icon: delete
+  ImGui::TableSetColumnIndex(2);
+  if(ImGui::SmallButton(ICON_FA_TRASH)){
+    sceneManager->remove_collection(collection);
+  }
+
+  //Icon: visibility
+  ImGui::TableNextColumn();
+  ImGui::PushItemWidth(1);
+  ImGui::Checkbox("", &collection->is_visible);
+  ImGui::PopItemWidth();
 
   //---------------------------
 }
@@ -187,17 +194,3 @@ void GUI_fileManager::info_iconAction(Collection* collection){
 
   //---------------------------
 }
-
-
-//Icon: info
-/*ImGui::TableSetColumnIndex(1);
-if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
-  data->set_selected_collection(collection);
-  modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
-}
-
-//Icon: delete
-ImGui::TableSetColumnIndex(2);
-if(ImGui::SmallButton(ICON_FA_TRASH)){
-  sceneManager->remove_collection(collection);
-}*/
