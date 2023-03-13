@@ -10,8 +10,8 @@ Data::Data(){
 
   this->selected_col = nullptr;
 
-  this->create_new_collection(list_col_glyph, "glyph_scene");
-  this->create_new_collection(list_col_glyph, "light");
+  this->create_collection_glyph("glyph_scene");
+  this->create_collection_glyph("light");
 
   //---------------------------
 }
@@ -27,12 +27,12 @@ void Data::update_ID_order(){
 
   //---------------------------
 }
-void Data::create_new_collection(std::list<Collection*>* list, std::string name){
+void Data::create_collection_glyph(std::string name){
   //---------------------------
 
   //Check if there is not any other collection with this name
-  for(int i=0; i<list->size(); i++){
-    Collection* col = *next(list->begin(), i);
+  for(int i=0; i<list_col_glyph->size(); i++){
+    Collection* col = *next(list_col_glyph->begin(), i);
 
     if(col->name == name){
       return;
@@ -41,10 +41,29 @@ void Data::create_new_collection(std::list<Collection*>* list, std::string name)
 
   //If ok, create it
   Collection* col_new = new Collection(name);
-  list->push_back(col_new);
+  list_col_glyph->push_back(col_new);
+
+  //---------------------------
+}
+Collection* Data::create_collection_object(std::string name){
+  //---------------------------
+
+  //Check if there is not any other collection with this name
+  for(int i=0; i<list_col_object->size(); i++){
+    Collection* col = *next(list_col_object->begin(), i);
+
+    if(col->name == name){
+      return col;
+    }
+  }
+
+  //If ok, create it
+  Collection* col_new = new Collection(name);
+  list_col_object->push_back(col_new);
   this->selected_col = col_new;
 
   //---------------------------
+  return col_new;
 }
 void Data::insert_new_collection(Collection* collection){
   //---------------------------

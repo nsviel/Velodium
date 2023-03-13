@@ -898,8 +898,8 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* coll
     //Get total number of point
     int nb_point = 0;
     for(int i=0; i<nb; i++){
-      int ID_subset = ID - i;
-      if(ID_subset >= 0){
+      int ID_object = ID - i;
+      if(ID_object >= 0){
         Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), ID - i);
         nb_point += cloud->xyz.size();
       }
@@ -910,8 +910,8 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* coll
 
     //Save data
     for(int i=0; i<nb; i++){
-      int ID_subset = ID - i;
-      if(ID_subset >= 0){
+      int ID_object = ID - i;
+      if(ID_object >= 0){
         Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), ID - i);
         this->Exporter_data_binary(file, cloud);
       }

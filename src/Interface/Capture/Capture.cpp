@@ -203,7 +203,7 @@ void Capture::start_capture_scala(){
 
   //Create new empty cloud
   loaderManager->load_cloud_empty();
-  cloud_capture = (Collection*)loaderManager->get_created_object();
+  cloud_capture = (Collection*)loaderManager->get_created_collection();
   cloud_capture->name = "start_capture_scala_" + to_string(ID_capture);
 
   this->is_capturing = true;
@@ -328,7 +328,7 @@ void Capture::create_empty_cloud(){
   //---------------------------
 
   loaderManager->load_cloud_empty();
-  cloud_capture = (Collection*)loaderManager->get_created_object();
+  cloud_capture = (Collection*)loaderManager->get_created_collection();
   cloud_capture->ID_obj_last = 0;
   cloud_capture->name = "Capture_" + to_string(ID_capture);
   this->ID_capture++;

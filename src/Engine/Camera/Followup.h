@@ -23,7 +23,7 @@ public:
   void camera_mode(string mode);
 
   //Subfunctions
-  vec3 camera_payload(Collection* collection, int ID_subset);
+  vec3 camera_payload(Collection* collection, int ID_object);
   void camera_position(Cloud* cloud, vec3 E);
   void camera_orientation(Cloud* cloud, vec3 E);
   void camera_reset();

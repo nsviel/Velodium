@@ -30,10 +30,10 @@ public:
 public:
   //Main functions
   void update_configuration();
-  void compute_onlineOpe(Collection* collection, int ID_subset);
+  void compute_onlineOpe(Collection* collection, int ID_object);
 
   //Other functions
-  void compute_recording(Collection* collection, int& ID_subset);
+  void compute_recording(Collection* collection, int& ID_object);
   void compute_displayStats(Cloud* cloud);
   void compute_http_command();
 

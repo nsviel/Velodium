@@ -26,8 +26,8 @@ Visibility::Visibility(Node_operation* node_ope){
 Visibility::~Visibility(){}
 
 //Main function
-void Visibility::compute_visibility(Collection* collection, int& ID_subset){
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+void Visibility::compute_visibility(Collection* collection, int& ID_object){
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object);
   if(cloud == nullptr) return;
   //---------------------------
 
@@ -35,7 +35,7 @@ void Visibility::compute_visibility(Collection* collection, int& ID_subset){
   for(int i=0; i<collection->nb_obj; i++){
     Cloud* cloud = (Cloud*)collection->get_obj(i);
 
-    if(cloud->ID >= ID_subset - visibility_range + 1 && cloud->ID <= ID_subset){
+    if(cloud->ID >= ID_object - visibility_range + 1 && cloud->ID <= ID_object){
       cloud->is_visible = true;
     }else{
       cloud->is_visible = false;

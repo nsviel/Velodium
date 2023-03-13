@@ -25,10 +25,12 @@ public:
     return &instance;
   }
   void update_ID_order();
-  void create_new_collection(std::list<Collection*>* list, std::string name);
+  void create_collection_glyph(std::string name);
   void insert_new_collection(Collection* collection);
   void set_selected_collection(int ID_order);
   void set_selected_collection(Collection* collection);
+
+  Collection* create_collection_object(std::string name);
   Collection* get_collection_byName(std::string list_name, std::string querry);
 
   inline std::list<Collection*>* get_list_col_object(){return list_col_object;}

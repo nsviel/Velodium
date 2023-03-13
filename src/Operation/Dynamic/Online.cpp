@@ -64,10 +64,10 @@ void Online::update_configuration(){
 
   //---------------------------
 }
-void Online::compute_onlineOpe(Collection* collection, int ID_subset){
+void Online::compute_onlineOpe(Collection* collection, int ID_object){
   //This function is called each time a new cloud arrives
   Node_module* node_module = node_engine->get_node_module();
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object);
   auto t1 = start_chrono();
   //---------------------------
 
@@ -79,10 +79,10 @@ void Online::compute_onlineOpe(Collection* collection, int ID_subset){
   collection->selected_obj = cloud;
 
   //Control cloud visibilities
-  visibilityManager->compute_visibility(collection, ID_subset);
+  visibilityManager->compute_visibility(collection, ID_object);
 
   //Make slam on the current cloud
-  node_module->online(collection, ID_subset);
+  node_module->online(collection, ID_object);
   sceneManager->update_buffer_location(cloud);
 
   //Make cleaning on the current cloud
@@ -91,13 +91,13 @@ void Online::compute_onlineOpe(Collection* collection, int ID_subset){
   }
 
   //If camera follow up option activated
-  followManager->camera_followup(collection, ID_subset);
+  followManager->camera_followup(collection, ID_object);
 
   //Colorization
-  colorManager->make_colorization(collection, ID_subset);
+  colorManager->make_colorization(collection, ID_object);
 
   //Update dynamic interfaces
-  this->compute_recording(collection, ID_subset);
+  this->compute_recording(collection, ID_object);
 
   //---------------------------
   this->time_ope = stop_chrono(t1);
@@ -105,12 +105,12 @@ void Online::compute_onlineOpe(Collection* collection, int ID_subset){
 }
 
 //Subfunctions
-void Online::compute_recording(Collection* collection, int& ID_subset){
+void Online::compute_recording(Collection* collection, int& ID_object){
   Node_interface* node_interface = node_engine->get_node_interface();
   Recorder* recordManager = node_interface->get_recordManager();
   //---------------------------
 
-  recordManager->compute_online(collection, ID_subset);
+  recordManager->compute_online(collection, ID_object);
 
   //---------------------------
 }

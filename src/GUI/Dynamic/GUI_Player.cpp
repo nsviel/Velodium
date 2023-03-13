@@ -81,7 +81,7 @@ void GUI_Player::player_visibility(){
   ImGui::SetNextItemWidth(140);
   if(ImGui::DragInt("Display##666", visibility_range, 1, 1, visibility_range_max)){
     if(collection != nullptr){
-      playerManager->select_bySubsetID(collection, collection->ID_obj_selected);
+      playerManager->select_byObjectID(collection, collection->ID_obj_selected);
     }
   }
 
@@ -214,7 +214,7 @@ void GUI_Player::player_selection(){
     ImGui::SetNextItemWidth(140);
     if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
       if(collection != nullptr){
-        playerManager->select_bySubsetID(collection, subset_selected_ID);
+        playerManager->select_byObjectID(collection, subset_selected_ID);
       }
     }
     ImGui::SameLine();

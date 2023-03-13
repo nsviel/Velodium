@@ -95,38 +95,40 @@ Object_* Loader::load_object(string path){
   console.AddLog("ok", log);
   return object;
 }
-bool Loader::load_cloud_byFrame(vector<string> path_vec){
-  vector<Data_file*> data_vec;
+Collection* Loader::load_cloud_byFrame(vector<string> path_vec){
   tic();
   //---------------------------
 
   //Retrieve data
+  vector<Data_file*> data_vec;
   for(int i=0; i<path_vec.size(); i++){
     Data_file* data = plyManager->Loader(path_vec[i]);
     data_vec.push_back(data);
   }
 
   //Insert cloud
-  this->load_insertIntoDatabase(data_vec);
+  Collection* collection = load_insertIntoDatabase(data_vec);
 
   //---------------------------
   int duration = (int)toc_ms();
   string log = "Loaded " + to_string(data_vec.size()) + " frames in " + to_string(duration) + " ms";
   console.AddLog("ok", log);
-  return true;
+  return collection;
 }
-bool Loader::load_cloud_onthefly(vector<string> path_vec){
-  vector<Data_file*> data_vec;
+Collection* Loader::load_cloud_onthefly(vector<string> path_vec){
   //---------------------------
 
   //Load only the first cloud
-  Data_file* data = plyManager->Loader(path_vec[0]);
-  data_vec.push_back(data);
+  Data_file* data_file = plyManager->Loader(path_vec[0]);
 
-  //Insert cloud
-  this->load_insertIntoDatabase(data_vec);
+  Object_* object = extractManager->extract_data_object(data_file);
+
+  //Delete raw data
+  delete data_file;
 
   //Save list of file
+  Collection* collection = data->create_collection_object(object->name);
+  collection->obj_add_new(object);
   collection->list_otf_path = path_vec;
   collection->is_onthefly = true;
   collection->ID_obj_otf++;
@@ -134,7 +136,7 @@ bool Loader::load_cloud_onthefly(vector<string> path_vec){
   //---------------------------
   string log = "Loaded on-the-fly cloud";
   console.AddLog("ok", log);
-  return true;
+  return collection;
 }
 bool Loader::load_cloud_silent(string path){
   //---------------------------
@@ -389,11 +391,6 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
 
   //Extract data and put in the engine
   Object_* object = extractManager->extract_data_object(data_file);
-
-  //Update list cloud
-  //data->set_selected_collection(object);
-  //data->update_ID_order();
-  ////sceneManager->update_glyph(collection);
 
   //Delete raw data
   delete data_file;

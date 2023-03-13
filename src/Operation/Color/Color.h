@@ -24,7 +24,7 @@ public:
   void update_configuration();
 
   //Colorization functions
-  void make_colorization(Collection* collection, int ID_subset);
+  void make_colorization(Collection* collection, int ID_object);
   void make_colorization(Cloud* cloud, vec4 RGB_in);
   void make_colorization_specific(Cloud* cloud);
 

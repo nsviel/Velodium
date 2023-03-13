@@ -61,7 +61,7 @@ void Player::runtime(){
   //---------------------------
 
   if(player_time_flag && collection != nullptr){
-    this->select_bySubsetID(collection, collection->ID_obj_selected + 1);
+    this->select_byObjectID(collection, collection->ID_obj_selected + 1);
 
     player_time_flag = false;
   }
@@ -70,21 +70,21 @@ void Player::runtime(){
 }
 
 //Selection functions
-void Player::select_bySubsetID(Collection* collection, int ID_subset){
+void Player::select_byObjectID(Collection* collection, int ID_object){
   if(collection == nullptr) return;
   //---------------------------
 
   //If on the fly option, load cloud
-  flyManager->compute_onthefly(collection, ID_subset);
+  flyManager->compute_onthefly(collection, ID_object);
 
   //If in side range, make operation on cloud
-  if(compute_range_limit(collection, ID_subset)){
-    onlineManager->compute_onlineOpe(collection, ID_subset);
+  if(compute_range_limit(collection, ID_object)){
+    onlineManager->compute_onlineOpe(collection, ID_object);
   }
 
   //Update glyphs
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
-  objectManager->update_glyph_cloud(cloud);
+  Object_* object = collection->get_obj_byID(ID_object);
+  //objectManager->update_glyph_cloud(object);
 
   //---------------------------
 }
@@ -103,44 +103,44 @@ void Player::compute_wheel_selection(string direction){
       subset_selected_ID--;
     }
 
-    this->select_bySubsetID(collection, subset_selected_ID);
+    this->select_byObjectID(collection, subset_selected_ID);
   }
 
   //----------------------------
 }
-bool Player::compute_range_limit(Collection* collection, int& ID_subset){
+bool Player::compute_range_limit(Collection* collection, int& ID_object){
   Cloud* subset_first = (Cloud*)collection->get_obj(0);
   Cloud* subset_last = (Cloud*)collection->get_obj(collection->nb_obj-1);
   //---------------------------
 //PROBLEM DE ID ICI JE PENSE
   //Check if cloud exists
-  Cloud* cloud = (Cloud*)collection->get_obj(ID_subset);
+  Cloud* cloud = (Cloud*)collection->get_obj(ID_object);
   if(cloud == nullptr){
     return false;
   }
 
   //If frame desired ID is superior to the number of cloud restart it
   if(player_returnToZero){
-    if(ID_subset > subset_last->ID){
-      ID_subset = subset_first->ID;
+    if(ID_object > subset_last->ID){
+      ID_object = subset_first->ID;
     }
-    if(ID_subset < subset_first->ID){
-      ID_subset = subset_last->ID;
+    if(ID_object < subset_first->ID){
+      ID_object = subset_last->ID;
     }
   }
   else{
-    if(ID_subset > subset_last->ID){
-      ID_subset = subset_last->ID;
+    if(ID_object > subset_last->ID){
+      ID_object = subset_last->ID;
       return false;
     }
-    if(ID_subset < subset_first->ID){
-      ID_subset = subset_first->ID;
+    if(ID_object < subset_first->ID){
+      ID_object = subset_first->ID;
       return false;
     }
   }
 
   //Set visibility parameter for each collection cloud
-  collection->ID_obj_selected = ID_subset;
+  collection->ID_obj_selected = ID_object;
 
   //---------------------------
   return true;
@@ -197,7 +197,7 @@ void Player::player_stop(){
   //---------------------------
 
   timerManager->stop();
-  this->select_bySubsetID(collection, 0);
+  this->select_byObjectID(collection, 0);
 
   //---------------------------
 }

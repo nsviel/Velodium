@@ -122,38 +122,6 @@ void Pather::loading_onthefly(){
 
   //---------------------------
 }
-bool Pather::loading_onthefly(string path){
-  bool ok = false;
-  //---------------------------
-
-  //select files
-  vector<string> path_vec = list_all_path(path);
-
-  //Load files
-  if(path_vec.size() != 0){
-    ok = loaderManager->load_cloud_onthefly(path_vec);
-  }
-
-  //---------------------------
-  return ok;
-}
-
-bool Pather::loading_directory_frame(string path){
-  bool ok = false;
-  //---------------------------
-
-  //Get all frame path
-  vector<string> path_vec = list_all_path(path);
-
-  //Sort alphabetically and load
-  if(path_vec.size() != 0){
-    fct_sort_alpha_num_(path_vec);
-    ok = loaderManager->load_cloud_byFrame(path_vec);
-  }
-
-  //---------------------------
-  return ok;
-}
 void Pather::loading_sampling(){
   //---------------------------
 
@@ -234,6 +202,38 @@ void Pather::loading_treatment(){
   }
 
   //---------------------------
+}
+
+Collection* Pather::loading_onthefly(string path){
+  Collection* collection = nullptr;
+  //---------------------------
+
+  //select files
+  vector<string> path_vec = list_all_path(path);
+
+  //Load files
+  if(path_vec.size() != 0){
+    collection = loaderManager->load_cloud_onthefly(path_vec);
+  }
+
+  //---------------------------
+  return collection;
+}
+Collection* Pather::loading_directory_frame(string path){
+  Collection* collection = nullptr;
+  //---------------------------
+
+  //Get all frame path
+  vector<string> path_vec = list_all_path(path);
+
+  //Sort alphabetically and load
+  if(path_vec.size() != 0){
+    fct_sort_alpha_num_(path_vec);
+    collection = loaderManager->load_cloud_byFrame(path_vec);
+  }
+
+  //---------------------------
+  return collection;
 }
 
 //Other functions

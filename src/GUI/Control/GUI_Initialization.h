@@ -33,7 +33,7 @@ public:
   void init_gui();
   void update_configuration();
 
-  void operation_cloud(Collection* collection);
+  void operation_new_collection(Collection* collection);
   void operation_option();
 
   void treeview();

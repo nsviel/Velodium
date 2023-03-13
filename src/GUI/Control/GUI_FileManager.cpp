@@ -47,8 +47,8 @@ void GUI_fileManager::data_tree(){
   flags_selec |= ImGuiSelectableFlags_SpanAllColumns;
   flags_selec |= ImGuiSelectableFlags_AllowItemOverlap;
 
-  ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(20, 20, 20, 255));
-  ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 255, 255));
+  ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(250, 250, 250, 255));
+  ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 255));
 
   if (ImGui::BeginTable("table_advanced", 1, flags)){
     ImGui::TableSetupColumn("Name");

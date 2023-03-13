@@ -65,8 +65,8 @@ void Color::update_configuration(){
 }
 
 //Color cloud functions
-void Color::make_colorization(Collection* collection, int ID_subset){
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+void Color::make_colorization(Collection* collection, int ID_object){
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object);
   //---------------------------
 
   switch(color_mode){

@@ -16,7 +16,7 @@ public:
   ~Visibility();
 
 public:
-  void compute_visibility(Collection* collection, int& ID_subset);
+  void compute_visibility(Collection* collection, int& ID_object);
   void compute_visibility_range_max(Collection* collection);
 
   inline int* get_visibility_range(){return &visibility_range;}

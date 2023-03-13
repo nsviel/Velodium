@@ -36,15 +36,15 @@ void Followup::update_configuration(){
 
   //---------------------------
 }
-void Followup::camera_followup(Collection* collection, int ID_subset){
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
+void Followup::camera_followup(Collection* collection, int ID_object){
+  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object);
   if(cloud == nullptr) return;
   //---------------------------
 
   vec3 empty(0.0);
   if(collection->nb_obj >= camera_nb_pose && with_camera_follow){
     //Camera payload
-    vec3 E = camera_payload(collection, ID_subset);
+    vec3 E = camera_payload(collection, ID_object);
 
     //Camera pose
     if(E != empty){
@@ -71,9 +71,9 @@ void Followup::camera_mode(string mode){
 }
 
 //Subfunctions
-vec3 Followup::camera_payload(Collection* collection, int ID_subset){
-  Cloud* subset_m0 = (Cloud*)collection->get_obj_byID(ID_subset);
-  Cloud* subset_m1 = (Cloud*)collection->get_obj_byID(ID_subset - 1);
+vec3 Followup::camera_payload(Collection* collection, int ID_object){
+  Cloud* subset_m0 = (Cloud*)collection->get_obj_byID(ID_object);
+  Cloud* subset_m1 = (Cloud*)collection->get_obj_byID(ID_object - 1);
   //---------------------------
 
   //Primilarly check
@@ -88,7 +88,7 @@ vec3 Followup::camera_payload(Collection* collection, int ID_subset){
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){
-    Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset - i);
+    Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object - i);
     Eigen::Vector3d pos = cloud->pose_T;
 
     for(int j=0; j<3; j++){

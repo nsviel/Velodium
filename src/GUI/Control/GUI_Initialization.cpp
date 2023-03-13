@@ -83,7 +83,7 @@ void GUI_Initialization::update_configuration(){
 }
 
 //GUI subfunctions
-void GUI_Initialization::operation_cloud(Collection* collection){
+void GUI_Initialization::operation_new_collection(Collection* collection){
   //---------------------------
 
   if(collection != nullptr){
@@ -359,19 +359,19 @@ void GUI_Initialization::open_selection(tree_file* node){
 
   if(node->type == "File"){
     Collection* collection = loaderManager->load_collection(node->path);
-    this->operation_cloud(collection);
+    this->operation_new_collection(collection);
   }
   else if(node->type == "Folder" && node->end_folder){
     if(pathManager->check_folder_format(node->path, "ply")){
-      bool ok = false;
+      Collection* collection;
+
       if(with_onthefly == false){
-        ok = pathManager->loading_directory_frame(node->path);
+        collection = pathManager->loading_directory_frame(node->path);
       }else{
-        ok = pathManager->loading_onthefly(node->path);
+        collection = pathManager->loading_onthefly(node->path);
       }
-      if(ok){
-        this->operation_cloud((Collection*)loaderManager->get_created_object());
-      }
+
+      this->operation_new_collection(collection);
     }
   }
 

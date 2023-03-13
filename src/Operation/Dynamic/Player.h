@@ -26,9 +26,9 @@ public:
   void runtime();
 
   //Selection function
-  void select_bySubsetID(Collection* collection, int ID_subset);
+  void select_byObjectID(Collection* collection, int ID_object);
   void compute_wheel_selection(string direction);
-  bool compute_range_limit(Collection* collection, int& ID_subset);
+  bool compute_range_limit(Collection* collection, int& ID_object);
 
   //Player functions
   void player_start();
