@@ -24,14 +24,16 @@ public:
     static Data instance;
     return &instance;
   }
+  void update_ID_order();
   void create_new_collection(std::string name);
+  void set_selected_collection(int ID_order);
+  void set_selected_collection(Collection* collection);
 
   inline std::list<Collection*>* get_list_collection(){return list_collection;}
   inline std::list<Light_*>* get_list_light(){return list_light;}
   inline std::list<Glyph*>* get_list_glyph(){return list_glyph;}
 
-  inline Collection* get_cloud_selected(){return cloud_selected;}
-  inline void set_cloud_selected(Collection* collection){cloud_selected = collection;}
+  inline Collection* get_selected_collection(){return selected_col;}
 
 private:
   Data();
@@ -43,7 +45,7 @@ private:
   std::list<Light_*>* list_light;
   std::list<Glyph*>* list_glyph;
 
-  Collection* cloud_selected;
+  Collection* selected_col;
 };
 
 #endif

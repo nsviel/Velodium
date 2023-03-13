@@ -22,7 +22,7 @@ void Graph::selection_setCloud(int ID){
   for (int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
     if(collection->ID_col_order == ID){
-      sceneManager->set_selected_col(collection);
+      sceneManager->set_selected_collection(collection);
       //sceneManager->update_glyph(collection);
     }
   }
@@ -32,7 +32,7 @@ void Graph::selection_setCloud(int ID){
 void Graph::selection_setCloud(Collection* collection){
   //---------------------------
 
-  sceneManager->set_selected_col(collection);
+  sceneManager->set_selected_collection(collection);
   //sceneManager->update_glyph(collection);
 
   //---------------------------
@@ -66,9 +66,9 @@ void Graph::selection_setNext(){
   else{
     selected_col = *next(list_collection->begin(),0);
   }
-  sceneManager->update_col_MinMax(selected_col);
+  sceneManager->update_MinMax_col(selected_col);
   //sceneManager->update_glyph(selected_col);
-  sceneManager->set_selected_col(selected_col);
+  sceneManager->set_selected_collection(selected_col);
 
   //---------------------------
 }
@@ -80,7 +80,7 @@ void Graph::selection_cloudByName(string name){
     Collection* collection = *next(list_collection->begin(),i);
 
     if(collection->name == name){
-      sceneManager->set_selected_col(collection);
+      sceneManager->set_selected_collection(collection);
       //sceneManager->update_glyph(collection);
     }
   }

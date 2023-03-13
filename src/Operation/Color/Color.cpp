@@ -5,8 +5,8 @@
 #include "../Node_operation.h"
 
 #include "../../Engine/Node_engine.h"
+#include "../../Engine/GPU/GPU_data.h"
 #include "../../Scene/Node_scene.h"
-#include "../../Scene/Data/Scene.h"
 #include "../../Engine/Core/Configuration.h"
 #include "../../Specific/Function/fct_math.h"
 
@@ -40,8 +40,8 @@ Color::Color(Node_operation* node_ope){
   Node_scene* node_scene = node_engine->get_node_scene();
 
   this->configManager = node_engine->get_configManager();
-  this->sceneManager = node_scene->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
+  this->gpuManager = new GPU_data();
 
   //---------------------------
   this->update_configuration();
@@ -95,7 +95,7 @@ void Color::make_colorization(Cloud* cloud, vec4 RGB_in){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Color::make_colorization_specific(Cloud* cloud){
   vector<vec4>& RGB = cloud->rgb;
@@ -106,7 +106,7 @@ void Color::make_colorization_specific(Cloud* cloud){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 
 void Color::color_unicolor(Cloud* cloud, vec4 color){
@@ -118,7 +118,7 @@ void Color::color_unicolor(Cloud* cloud, vec4 color){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Color::color_intensity(Cloud* cloud){
   vector<vec4>& RGB = cloud->rgb;
@@ -148,7 +148,7 @@ void Color::color_intensity(Cloud* cloud){
   }
 
   //---------------------------
-  sceneManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Color::color_heatmap(Cloud* cloud){
   //---------------------------
@@ -172,7 +172,7 @@ void Color::set_color_new(Collection* collection, vec4 RGBA){
     }
 
     //---------------------------
-    sceneManager->update_buffer_color(cloud);
+    gpuManager->update_buffer_color(cloud);
   }
 }
 void Color::set_color_RGB(Collection* collection){
@@ -185,7 +185,7 @@ void Color::set_color_RGB(Collection* collection){
     RGB_obj = RGB_ini;
 
     //---------------------------
-    sceneManager->update_buffer_color(cloud);
+    gpuManager->update_buffer_color(cloud);
   }
 }
 void Color::set_color_I(Collection* collection){
@@ -201,7 +201,7 @@ void Color::set_color_I(Collection* collection){
     }
 
     //---------------------------
-    sceneManager->update_buffer_color(cloud);
+    gpuManager->update_buffer_color(cloud);
   }
 }
 void Color::set_color_enhanced(Collection* collection){
@@ -218,7 +218,7 @@ void Color::set_color_enhanced(Collection* collection){
     }
 
     //---------------------------
-    sceneManager->update_buffer_color(cloud);
+    gpuManager->update_buffer_color(cloud);
   }
 }
 void Color::set_color_random(Collection* collection){
@@ -248,7 +248,7 @@ void Color::set_color_initial(Collection* collection){
     cloud->rgb = list_obj_init->rgb;
 
     //---------------------------
-    sceneManager->update_buffer_color(cloud);
+    gpuManager->update_buffer_color(cloud);
   }
 }
 string Color::get_color_mode_name(){

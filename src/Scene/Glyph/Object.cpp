@@ -251,7 +251,7 @@ void Object::update_object(string obj, vec4 color){
 
   //---------------------------
 }
-void Object::update_glyph_subset(Cloud* cloud){
+void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 
   //Subset axis
@@ -285,7 +285,7 @@ void Object::update_glyph_collection(Collection* collection){
   //Update cloud cloud glyphs
   for(int i=0; i<collection->nb_obj; i++){
     Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    this->update_glyph_subset(cloud);
+    //this->update_glyph_object(cloud);
   }
 
   //---------------------------

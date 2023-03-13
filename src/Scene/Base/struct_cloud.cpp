@@ -10,6 +10,16 @@ Cloud::Cloud(){
   //---------------------------
 }
 
+void Cloud::reset(){
+  //---------------------------
+
+  this->R.clear();
+  this->It.clear();
+  this->cosIt.clear();
+  this->frame.reset();
+
+  //---------------------------
+}
 Frame* Cloud::get_frame(){
   //---------------------------
 

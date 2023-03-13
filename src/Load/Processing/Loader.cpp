@@ -376,12 +376,10 @@ Collection* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
   this->collection = extractManager->extract_data(data_vec);
   list_collection->push_back(collection);
 
-
-
   //Update list collection
 //  cloud_selected = collection;
-  data->set_cloud_selected(collection);
-  sceneManager->update_ID_order(list_collection);
+  data->set_selected_collection(collection);
+  data->update_ID_order();
   ////sceneManager->update_glyph(collection);
 
   //Delete raw data
@@ -399,8 +397,8 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
   Object_* object = extractManager->extract_data_object(data_file);
 
   //Update list cloud
-  //data->set_cloud_selected(object);
-  //sceneManager->update_ID_order(list_collection);
+  //data->set_selected_collection(object);
+  //data->update_ID_order();
   ////sceneManager->update_glyph(collection);
 
   //Delete raw data

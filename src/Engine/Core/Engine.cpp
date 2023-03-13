@@ -66,7 +66,7 @@ void Engine::draw_untextured_glyph(){
   //---------------------------
 }
 void Engine::arcball_cam_lookat(){
-  Collection* collection = data->get_cloud_selected();
+  Collection* collection = data->get_selected_collection();
   Cloud* cloud = (Cloud*)collection->selected_obj;
   //---------------------------
 

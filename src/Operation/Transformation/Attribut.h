@@ -9,6 +9,7 @@ using namespace Eigen;
 
 class Scene;
 class Fitting;
+class GPU_data;
 
 
 class Attribut
@@ -52,6 +53,7 @@ public:
   //Intensity
   void compute_intensityInversion();
   void compute_colorToIntensity(Cloud* cloud);
+  void compute_intensityToColor(Cloud* cloud);
   void fct_convert255to2048(Cloud* cloud);
   void fct_convert2048to255(Cloud* cloud);
   void fct_moins();
@@ -64,6 +66,7 @@ public:
 private:
   Scene* sceneManager;
   Fitting* fitManager;
+  GPU_data* gpuManager;
 
   float sphereRadius;
 };

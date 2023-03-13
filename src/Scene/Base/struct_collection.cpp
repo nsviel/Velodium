@@ -58,6 +58,32 @@ Collection::Collection(std::string name){
   //---------------------------
 }
 
+//Misc function
+void Collection::reset(){
+  //---------------------------
+
+  for(int i=0; i<list_obj.size(); i++){
+    Object_* object = get_obj(i);
+    Object_* object_init = get_obj_init(i);
+
+    //Reinitialize visibility
+    object->is_visible = i == 0 ? true : false;
+
+    //Reinitialize main data
+    object->xyz = object_init->xyz;
+    object->rgb = object_init->rgb;
+    object->Nxyz = object_init->Nxyz;
+
+    //Reset pose
+    object->root = glm::vec3(0,0,0);
+    object->scale = glm::mat4(1.0);
+    object->trans = glm::mat4(1.0);
+    object->rotat = glm::mat4(1.0);
+  }
+
+  //---------------------------
+}
+
 //Add / remove object
 void Collection::obj_add_new(Object_* object){
   //---------------------------

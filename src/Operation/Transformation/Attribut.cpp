@@ -3,6 +3,7 @@
 #include "../Node_operation.h"
 #include "../Optimization/Fitting.h"
 
+#include "../../Engine/GPU/GPU_data.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Specific/Function/fct_math.h"
 #include "../../Specific/Function/fct_terminal.h"
@@ -16,6 +17,7 @@ Attribut::Attribut(){
 
   this->sceneManager = new Scene();
   this->fitManager = new Fitting();
+  this->gpuManager = new GPU_data();
 
   this->sphereRadius = 0.0695;
 
@@ -279,8 +281,8 @@ void Attribut::make_supressPoints(Cloud* cloud, vector<int>& idx){
   idx.clear();
 
   //---------------------------
-  sceneManager->update_buffer_location(cloud);
-  sceneManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_location(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Attribut::make_supressPoint(Cloud* cloud, int id){
   vector<vec3>& XYZ = cloud->xyz;
@@ -328,8 +330,8 @@ void Attribut::make_supressPoint(Cloud* cloud, int id){
   cloud->selected.clear();
 
   //---------------------------
-  sceneManager->update_buffer_location(cloud);
-  sceneManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_location(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Attribut::make_supressPoints(vector<vec3>& vec, vector<int>& idx){
   if(idx.size() == 0)return;
@@ -682,14 +684,33 @@ void Attribut::compute_intensityInversion(){
 void Attribut::compute_colorToIntensity(Cloud* cloud){
   vector<float>& Is_obj = cloud->I;
   vector<vec4>& RGB = cloud->rgb;
-  Is_obj.clear();
   //---------------------------
 
+  //Clear vector
+  Is_obj.clear();
+
+  //Convert color into intensity
   if(cloud->has_color){
     for(int i=0; i<RGB.size(); i++){
       float I = (RGB[i].x + RGB[i].y + RGB[i].z) / 3;
       Is_obj.push_back(I);
     }
+  }
+
+  //---------------------------
+}
+void Attribut::compute_intensityToColor(Cloud* cloud){
+  vector<float>& Is = cloud->I;
+  vector<vec4>& RGB = cloud->rgb;
+  //---------------------------
+
+  //Clear vector
+  RGB.clear();
+
+  //Convert intensity into color
+  for(int i=0; i<Is.size(); i++){
+    vec4 new_color = vec4(Is[i], Is[i], Is[i], 1.0f);
+    RGB.push_back(new_color);
   }
 
   //---------------------------
@@ -703,8 +724,8 @@ void Attribut::fct_convert255to2048(Cloud* cloud){
   }
 
   //-------------------------
-  sceneManager->update_subset_IntensityToColor(cloud);
-  sceneManager->update_buffer_color(cloud);
+  //sceneManager->update_subset_IntensityToColor(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Attribut::fct_convert2048to255(Cloud* cloud){
   static bool I_2048 = false;
@@ -716,8 +737,8 @@ void Attribut::fct_convert2048to255(Cloud* cloud){
   }
 
   //-------------------------
-  sceneManager->update_subset_IntensityToColor(cloud);
-  sceneManager->update_buffer_color(cloud);
+  //sceneManager->update_subset_IntensityToColor(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 void Attribut::fct_moins(){
   if(!sceneManager->get_is_list_empty()){
@@ -733,8 +754,8 @@ void Attribut::fct_moins(){
     cosIt.push_back(0.0f);
 
     //-------------------------
-    sceneManager->update_subset_IntensityToColor(cloud);
-    sceneManager->update_buffer_color(cloud);
+    //sceneManager->update_subset_IntensityToColor(cloud);
+    gpuManager->update_buffer_color(cloud);
   }
 }
 void Attribut::fct_IsRange(vec2 range){
@@ -754,8 +775,8 @@ void Attribut::fct_IsRange(vec2 range){
   }
 
   //-------------------------
-  sceneManager->update_subset_IntensityToColor(cloud);
-  sceneManager->update_buffer_color(cloud);
+  //sceneManager->update_subset_IntensityToColor(cloud);
+  gpuManager->update_buffer_color(cloud);
 }
 vec2 Attribut::get_IsRange(){
   Collection* collection = sceneManager->get_selected_collection();

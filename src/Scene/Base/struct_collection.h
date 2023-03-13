@@ -16,6 +16,9 @@ struct Collection
   //Add / remove functions  A REVOIR
   Collection();
   Collection(std::string name);
+
+  void reset();
+
   void obj_add_new(Object_* object);
   void obj_remove_all();
   void obj_remove_last();

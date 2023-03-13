@@ -229,7 +229,7 @@ void MOD_attribut::window_intensity(){
     if(ImGui::Button("Inversion Is", ImVec2(200,0))){
       if(collection != nullptr){
         attribManager->compute_intensityInversion();
-        sceneManager->update_subset_IntensityToColor(cloud);
+        //sceneManager->update_subset_IntensityToColor(cloud);
       }
     }
 
@@ -237,7 +237,7 @@ void MOD_attribut::window_intensity(){
     if(ImGui::Button("fct_normalize Intensity to [0,1]", ImVec2(200,0))){
       vector<float>& Is = cloud->I;
       Is = fct_normalize(Is);
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
 
     //Intensity display slider
@@ -263,7 +263,7 @@ void MOD_attribut::window_intensity(){
         Is[i] = Is[i] - shift;
         if(Is[i] < 0.0f) Is[i] = 0.0f;
       }
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::SameLine(0.0f, spacing);
     if(ImGui::ArrowButton("##right", ImGuiDir_Right)){
@@ -272,7 +272,7 @@ void MOD_attribut::window_intensity(){
         Is[i] = Is[i] + shift;
         if(Is[i] > 1.0f) Is[i] = 1.0f;
       }
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::PopButtonRepeat();
     ImGui::Separator();
@@ -281,23 +281,23 @@ void MOD_attribut::window_intensity(){
     ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Intensity scaling");
     if(ImGui::Button("Restore I initial", ImVec2(200,0))){
       cloud->I = list_obj_init->I;
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
     if(ImGui::Button("I:255->2048", ImVec2(100,0))){
       attribManager->fct_convert255to2048(cloud);
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::SameLine();
     if(ImGui::Button("I:2048->255", ImVec2(100,0))){
       attribManager->fct_convert2048to255(cloud);
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
     if(ImGui::Button("I:1->2048", ImVec2(100,0))){
       vector<float>& Is = cloud->I;
       for(int i=0; i<Is.size(); i++){
         Is[i] = Is[i]*4096-2048;
       }
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
     ImGui::SameLine();
     if(ImGui::Button("I:2048->1", ImVec2(100,0))){
@@ -305,7 +305,7 @@ void MOD_attribut::window_intensity(){
       for(int i=0; i<Is.size(); i++){
         Is[i] = (Is[i]+2048)/4096;
       }
-      sceneManager->update_subset_IntensityToColor(cloud);
+      //sceneManager->update_subset_IntensityToColor(cloud);
     }
 
     //---------------------------

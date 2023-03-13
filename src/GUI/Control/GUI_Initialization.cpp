@@ -354,7 +354,7 @@ void GUI_Initialization::open_selection(tree_file* node){
 
   if(with_remove_cloud){
     captureManager->stop_capture();
-    sceneManager->remove_cloud_all();
+    sceneManager->remove_collection_all();
   }
 
   if(node->type == "File"){

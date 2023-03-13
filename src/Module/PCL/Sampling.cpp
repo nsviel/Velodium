@@ -72,7 +72,7 @@ void Sampling::sampling_spaceRadius_PCL(Cloud* cloud){
   cloud->I = subset_filter.I;
 
   //Update cloud
-  sceneManager->update_subset_IntensityToColor(cloud);
+  //sceneManager->update_subset_IntensityToColor(cloud);
   sceneManager->update_buffer_location(cloud);
 
   //---------------------------

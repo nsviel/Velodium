@@ -89,7 +89,7 @@ void Linearization::lin_SurfacicGlobal(Collection* collection){
   }
 
   //---------------------------
-  sceneManager->update_cloud_IntensityToColor(cloud);
+  //sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::lin_SeparationGlobal(Collection* collection){
   Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
@@ -111,7 +111,7 @@ void Linearization::lin_SeparationGlobal(Collection* collection){
   }
 
   //---------------------------
-  sceneManager->update_cloud_IntensityToColor(cloud);
+  //sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::lin_SurfacicLocal(Collection* collection){
   Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
@@ -133,7 +133,7 @@ void Linearization::lin_SurfacicLocal(Collection* collection){
   }
 
   //---------------------------
-  sceneManager->update_cloud_IntensityToColor(cloud);
+  //sceneManager->update_cloud_IntensityToColor(cloud);
 }
 
 //Reverse
@@ -151,7 +151,7 @@ void Linearization::rev_SurfacicGlobal(Collection* collection){
   }
 
   //---------------------------
-  sceneManager->update_cloud_IntensityToColor(cloud);
+  //sceneManager->update_cloud_IntensityToColor(cloud);
 }
 void Linearization::rev_SeparationGlobal(Collection* collection){
   Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), 0);
@@ -166,7 +166,7 @@ void Linearization::rev_SeparationGlobal(Collection* collection){
   }
 
   //---------------------------
-  sceneManager->update_cloud_IntensityToColor(cloud);
+  //sceneManager->update_cloud_IntensityToColor(cloud);
 }
 
 //Math functions

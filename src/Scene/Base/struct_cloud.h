@@ -11,6 +11,7 @@ struct Cloud : public Object_
   //---------------------------
 
   Cloud();
+  void reset();
   Frame* get_frame();
 
   bool has_intensity;

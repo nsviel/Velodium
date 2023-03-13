@@ -41,8 +41,8 @@ void Extraction::fct_extractCloud(Collection* collection){
   //---------------------------
 
   //New cloud
-  Collection* cloud_out = new Collection();
-  Cloud* subset_out = new Cloud();
+  Collection* col_out = new Collection();
+  Cloud* cloud_out = new Cloud();
 
   //Parameters
   vector<vec3>& XYZ = cloud->xyz;
@@ -51,8 +51,8 @@ void Extraction::fct_extractCloud(Collection* collection){
   vector<float>& Is = cloud->I;
   vec3& max = cloud->max;
   vec3& min = cloud->min;
-  cloud_out->file_format = ".pts";
-  subset_out->name = cloud->name + "_" + "part" + to_string(ID_cloud);
+  col_out->file_format = ".pts";
+  cloud_out->name = cloud->name + "_" + "part" + to_string(ID_cloud);
   ID_cloud++;
 
   //Take values between sliceMin and sliceMax
@@ -62,31 +62,31 @@ void Extraction::fct_extractCloud(Collection* collection){
       XYZ[i].z >= min.z && XYZ[i].z <= max.z){
       //Location
       if(sliceON){
-        subset_out->xyz.push_back(vec3(XYZ[i].x, XYZ[i].y,  min.z));
+        cloud_out->xyz.push_back(vec3(XYZ[i].x, XYZ[i].y,  min.z));
       }
       else{
-        subset_out->xyz.push_back(vec3(XYZ[i].x, XYZ[i].y,  XYZ[i].z));
+        cloud_out->xyz.push_back(vec3(XYZ[i].x, XYZ[i].y,  XYZ[i].z));
       }
       //Color
       if(cloud->has_color){
-        subset_out->rgb.push_back(vec4(RGB[i].x, RGB[i].y, RGB[i].z, RGB[i].w));
-        subset_out->has_color = true;
+        cloud_out->rgb.push_back(vec4(RGB[i].x, RGB[i].y, RGB[i].z, RGB[i].w));
+        cloud_out->has_color = true;
       }
       //Normal
       if(cloud->Nxyz.size() != 0){
-        subset_out->Nxyz.push_back(vec3(N[i].x, N[i].y, N[i].z));
+        cloud_out->Nxyz.push_back(vec3(N[i].x, N[i].y, N[i].z));
       }
       //Intensity
       if(cloud->I.size() != 0){
-        subset_out->I.push_back(Is[i]);
+        cloud_out->I.push_back(Is[i]);
       }
     }
 
   //---------------------------
-  if(subset_out->xyz.size() != 0){
+  if(cloud_out->xyz.size() != 0){
     //Create slice if any points
-    cloud_out->list_obj.push_back(subset_out);
-    loaderManager->load_cloud_creation(cloud_out);
+    col_out->list_obj.push_back(cloud_out);
+    loaderManager->load_cloud_creation(col_out);
   }
   else{
     cout<<"No points detected"<<endl;
@@ -98,8 +98,8 @@ void Extraction::fct_extractSelected(Collection* collection){
   //---------------------------
 
   //New cloud
-  Collection* cloud_out = new Collection();
-  Cloud* subset_out = new Cloud();
+  Collection* col_out = new Collection();
+  Cloud* cloud_out = new Cloud();
 
   //Parameters
   vector<vec3>& XYZ = cloud->xyz;
@@ -107,37 +107,37 @@ void Extraction::fct_extractSelected(Collection* collection){
   vector<vec3>& N = cloud->Nxyz;
   vector<float>& Is = cloud->I;
 
-  cloud_out->file_format = ".pts";
-  subset_out->name = cloud->name + "_" + "part" + to_string(ID_cloud);
+  col_out->file_format = ".pts";
+  cloud_out->name = cloud->name + "_" + "part" + to_string(ID_cloud);
   ID_cloud++;
   vector<int>& idx = cloud->selected;
   //---------------------------
 
   for(int i=0; i<idx.size(); i++){
-    subset_out->xyz.push_back(vec3(XYZ[idx[i]].x, XYZ[idx[i]].y,  XYZ[idx[i]].z));
+    cloud_out->xyz.push_back(vec3(XYZ[idx[i]].x, XYZ[idx[i]].y,  XYZ[idx[i]].z));
 
     //Color
     if(cloud->has_color){
-      subset_out->rgb.push_back(vec4(RGB[idx[i]].x, RGB[idx[i]].y, RGB[idx[i]].z, RGB[idx[i]].w));
-      subset_out->has_color = true;
+      cloud_out->rgb.push_back(vec4(RGB[idx[i]].x, RGB[idx[i]].y, RGB[idx[i]].z, RGB[idx[i]].w));
+      cloud_out->has_color = true;
     }
 
     //Normal
     if(cloud->Nxyz.size() != 0){
-      subset_out->Nxyz.push_back(vec3(N[idx[i]].x, N[idx[i]].y, N[idx[i]].z));
+      cloud_out->Nxyz.push_back(vec3(N[idx[i]].x, N[idx[i]].y, N[idx[i]].z));
     }
 
     //Intensity
     if(cloud->I.size() != 0){
-      subset_out->I.push_back(Is[idx[i]]);
+      cloud_out->I.push_back(Is[idx[i]]);
     }
   }
 
   //---------------------------
   idx.clear();
-  if(subset_out->xyz.size() != 0){
-    cloud_out->list_obj.push_back(subset_out);
-    loaderManager->load_cloud_creation(cloud_out);
+  if(cloud_out->xyz.size() != 0){
+    col_out->list_obj.push_back(cloud_out);
+    loaderManager->load_cloud_creation(col_out);
   }
   else{
     cout<<"No points selected"<<endl;
@@ -229,8 +229,8 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
   //---------------------------
 
   //New cloud
-  Collection* cloud_out = new Collection();
-  Cloud* subset_out = new Cloud();
+  Collection* col_out = new Collection();
+  Cloud* cloud_out = new Cloud();
 
   for(int i=0; i<list_part.size()-1; i++){
     Collection* part_1 = list_part[i];
@@ -242,7 +242,7 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
     //Location
     vector<vec3>& XYZ_1 = subset_1->xyz;
     vector<vec3>& XYZ_2 = subset_2->xyz;
-    vector<vec3>& XYZ_out = subset_out->xyz;
+    vector<vec3>& XYZ_out = cloud_out->xyz;
 
     XYZ_out.insert( XYZ_out.end(), XYZ_1.begin(), XYZ_1.end());
     XYZ_out.insert( XYZ_out.end(), XYZ_2.begin(), XYZ_2.end());
@@ -251,18 +251,18 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
     if(subset_1->has_color && subset_2->has_color){
       vector<vec4>& RGB_1 = subset_1->rgb;
       vector<vec4>& RGB_2 = subset_2->rgb;
-      vector<vec4>& RGB_out = subset_out->rgb;
+      vector<vec4>& RGB_out = cloud_out->rgb;
 
       RGB_out.insert( RGB_out.end(), RGB_1.begin(), RGB_1.end());
       RGB_out.insert( RGB_out.end(), RGB_2.begin(), RGB_2.end());
 
-      subset_out->has_color = true;
+      cloud_out->has_color = true;
     }
     //Normal
     if(subset_1->Nxyz.size() != 0 && subset_2->Nxyz.size() != 0){
       vector<vec3>& N_1 = subset_1->Nxyz;
       vector<vec3>& N_2 = subset_2->Nxyz;
-      vector<vec3>& N_out = subset_out->Nxyz;
+      vector<vec3>& N_out = cloud_out->Nxyz;
 
       N_out.insert( N_out.end(), N_1.begin(), N_1.end());
       N_out.insert( N_out.end(), N_2.begin(), N_2.end());
@@ -271,7 +271,7 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
     if(subset_1->I.size() != 0 && subset_2->I.size() != 0){
       vector<float>& Is_1 = subset_1->I;
       vector<float>& Is_2 = subset_2->I;
-      vector<float>& Is_out = subset_out->I;
+      vector<float>& Is_out = cloud_out->I;
 
       Is_out.insert( Is_out.end(), Is_1.begin(), Is_1.end());
       Is_out.insert( Is_out.end(), Is_2.begin(), Is_2.end());
@@ -279,14 +279,14 @@ void Extraction::fct_merging_list(vector<Collection*> list_part){
   }
 
   //Infos
-  subset_out->name = "Merged cloud";
-  cloud_out->file_format = ".pts";
-  /*cloud_out->nb_point = subset_out->xyz.size();
+  cloud_out->name = "Merged cloud";
+  col_out->file_format = ".pts";
+  /*col_out->nb_point = cloud_out->xyz.size();
 
   //---------------------------
-  if(cloud_out->nb_point > 0){
-    cloud_out->list_obj.push_back(subset_out);
-    loaderManager->load_cloud_creation(cloud_out);
+  if(col_out->nb_point > 0){
+    col_out->list_obj.push_back(cloud_out);
+    loaderManager->load_cloud_creation(col_out);
   }
   else{
     cout<<"No points available"<<endl;
@@ -296,8 +296,8 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   //---------------------------
 
   //New cloud
-  Collection* cloud_out = new Collection();
-  Cloud* subset_out = new Cloud();
+  Collection* col_out = new Collection();
+  Cloud* cloud_out = new Cloud();
 
   Cloud* subset_1 = (Cloud*)cloud_1->get_obj(0);
   Cloud* subset_2 = (Cloud*)cloud_2->get_obj(0);
@@ -305,7 +305,7 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   //Location
   vector<vec3>& XYZ_1 = subset_1->xyz;
   vector<vec3>& XYZ_2 = subset_2->xyz;
-  vector<vec3>& XYZ_out = subset_out->xyz;
+  vector<vec3>& XYZ_out = cloud_out->xyz;
   XYZ_out.insert( XYZ_out.end(), XYZ_1.begin(), XYZ_1.end());
   XYZ_out.insert( XYZ_out.end(), XYZ_2.begin(), XYZ_2.end());
 
@@ -313,18 +313,18 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   if(subset_1->has_color && subset_2->has_color){
     vector<vec4>& RGB_1 = subset_1->rgb;
     vector<vec4>& RGB_2 = subset_2->rgb;
-    vector<vec4>& RGB_out = subset_out->rgb;
+    vector<vec4>& RGB_out = cloud_out->rgb;
 
     RGB_out.insert( RGB_out.end(), RGB_1.begin(), RGB_1.end());
     RGB_out.insert( RGB_out.end(), RGB_2.begin(), RGB_2.end());
 
-    subset_out->has_color = true;
+    cloud_out->has_color = true;
   }
   //Normal
   if(subset_1->Nxyz.size() != 0 && subset_2->Nxyz.size() != 0){
     vector<vec3>& N_1 = subset_1->Nxyz;
     vector<vec3>& N_2 = subset_2->Nxyz;
-    vector<vec3>& N_out = subset_out->Nxyz;
+    vector<vec3>& N_out = cloud_out->Nxyz;
 
     N_out.insert( N_out.end(), N_1.begin(), N_1.end());
     N_out.insert( N_out.end(), N_2.begin(), N_2.end());
@@ -333,21 +333,21 @@ void Extraction::fct_merging_newCloud(Collection* cloud_1, Collection* cloud_2){
   if(subset_1->I.size() != 0 && subset_2->I.size() != 0){
     vector<float>& Is_1 = subset_1->I;
     vector<float>& Is_2 = subset_2->I;
-    vector<float>& Is_out = subset_out->I;
+    vector<float>& Is_out = cloud_out->I;
 
     Is_out.insert( Is_out.end(), Is_1.begin(), Is_1.end());
     Is_out.insert( Is_out.end(), Is_2.begin(), Is_2.end());
   }
 
   //Infos
-  subset_out->name = "Merging_" + subset_1->name + "_" + subset_2->name;
-  cloud_out->file_format = ".pts";
-  /*cloud_out->nb_point = subset_out->xyz.size();
+  cloud_out->name = "Merging_" + subset_1->name + "_" + subset_2->name;
+  col_out->file_format = ".pts";
+  /*col_out->nb_point = cloud_out->xyz.size();
 
   //Create slice if any points
-  if(cloud_out->nb_point != 0){
-    cloud_out->list_obj.push_back(subset_out);
-    loaderManager->load_cloud_creation(cloud_out);
+  if(col_out->nb_point != 0){
+    col_out->list_obj.push_back(cloud_out);
+    loaderManager->load_cloud_creation(col_out);
   }
   else{
     cout<<"No points available"<<endl;
@@ -437,7 +437,7 @@ void Extraction::set_AABB_min(vec3 min_in){
   vec3 min_old = cloud->min;
 
   //Get Z extremums
-  sceneManager->update_col_MinMax(collection);
+  sceneManager->update_MinMax_col(collection);
   vec3 min = cloud->min;
   vec3 max = cloud->max;
   vec3 diff = max - min;
@@ -470,7 +470,7 @@ void Extraction::set_AABB_max(vec3 max_in){
   vec3 min_old = cloud->min;
 
   //Get Z extremums
-  sceneManager->update_col_MinMax(collection);
+  sceneManager->update_MinMax_col(collection);
   vec3 min = cloud->min;
   vec3 max = cloud->max;
   vec3 diff = max - min;

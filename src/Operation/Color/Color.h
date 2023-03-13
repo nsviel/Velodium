@@ -4,9 +4,9 @@
 #include "../../common.h"
 
 class Node_operation;
-class Scene;
 class Heatmap;
 class Configuration;
+class GPU_data;
 
 
 //Get a RGB random color
@@ -46,9 +46,9 @@ public:
   inline vec2* get_range_intensity(){return &range_intensity;}
 
 private:
-  Scene* sceneManager;
   Heatmap* heatmapManager;
   Configuration* configManager;
+  GPU_data* gpuManager;
 
   vec2 range_intensity;
   vec4 specific_color;

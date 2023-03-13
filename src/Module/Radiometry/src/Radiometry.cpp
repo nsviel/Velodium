@@ -263,7 +263,7 @@ bool Radiometry::compute_RadioCorrection(Collection* collection){
     cloud->intensity.Buffer = Ic;
 
     //Update color
-    sceneManager->update_cloud_IntensityToColor(cloud);
+    //sceneManager->update_cloud_IntensityToColor(cloud);
   }else{
     console.AddLog("[error] Problem occurs during correction");
   }

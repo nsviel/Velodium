@@ -30,6 +30,16 @@ struct Data_file{
   //---------------------------
 };
 
+struct Data_file_vec{
+  //---------------------------
+
+  std::string name;
+  std::string path_dir;
+  std::vector<Data_file*> data_files;
+
+  //---------------------------
+};
+
 
 
 #endif

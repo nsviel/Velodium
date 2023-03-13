@@ -113,7 +113,7 @@ void GUI_menuBar::MenuBar_menu_file(){
       sceneManager->remove_collection(collection);
     }
     if(ImGui::MenuItem("Remove all", "Fin")){
-      sceneManager->remove_cloud_all();
+      sceneManager->remove_collection_all();
     }
     if(ImGui::MenuItem("Next collection","tab")){
       graphManager->selection_setNext();

@@ -11,6 +11,7 @@
 #include "../Core/Dimension.h"
 #include "../Core/Engine.h"
 #include "../Core/Configuration.h"
+#include "../../Scene/Data/Data.h"
 
 #include "../../GUI/Node_gui.h"
 #include "../../GUI/Control/GUI.h"
@@ -30,6 +31,7 @@ CoreGLengine::CoreGLengine(){
   //---------------------------
 
   this->configManager = new Configuration();
+  Data* data = Data::get_instance();
 
   this->loop_run = true;
   this->window = nullptr;

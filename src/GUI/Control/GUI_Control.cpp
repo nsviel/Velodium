@@ -232,7 +232,7 @@ void GUI_Control::control_keyboard_oneAction(){
 
     //Fin key - Delete all
     if (ImGui::IsKeyPressed(269)){
-      sceneManager->remove_cloud_all();
+      sceneManager->remove_collection_all();
       break;
     }
 
@@ -263,7 +263,7 @@ void GUI_Control::control_keyboard_oneAction(){
     //N key - Save all & remove all & load new
     if(ImGui::IsKeyPressed(78) && !io.WantCaptureMouse){
       //pathManager->saving_allCloud();
-      //sceneManager->remove_cloud_all();
+      //sceneManager->remove_collection_all();
     }
 
     //o key - Open options

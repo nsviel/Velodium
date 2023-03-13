@@ -44,7 +44,7 @@ public:
 
   //Update function
   void update_configuration();
-  void update_glyph_subset(Cloud* cloud);
+  void update_glyph_cloud(Cloud* cloud);
   void update_glyph_collection(Collection* collection);
   void update_object(Glyph* glyph);
   void update_object(Glyph* glyph, vec4 color);

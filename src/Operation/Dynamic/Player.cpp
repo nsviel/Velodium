@@ -84,7 +84,7 @@ void Player::select_bySubsetID(Collection* collection, int ID_subset){
 
   //Update glyphs
   Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_subset);
-  objectManager->update_glyph_subset(cloud);
+  objectManager->update_glyph_cloud(cloud);
 
   //---------------------------
 }

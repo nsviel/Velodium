@@ -182,7 +182,7 @@ void Pather::loading_sampledCloud(string path){
 
   //Load the "base" part
   loaderManager->load_cloud_part(path, lmin, lmax);
-  Collection* cloud_base = data->get_cloud_selected();
+  Collection* cloud_base = data->get_selected_collection();
   Collection* cloud_toAdd;
 
   //load and merge all other parts
@@ -196,7 +196,7 @@ void Pather::loading_sampledCloud(string path){
 
     //Load nth part
     loaderManager->load_cloud_part(path, lmin, lmax);
-    cloud_toAdd = data->get_cloud_selected();
+    cloud_toAdd = data->get_selected_collection();
 
     //Merge the nth part with the base
     extractionManager->merging_addCloud(cloud_base, cloud_toAdd);
@@ -228,7 +228,7 @@ void Pather::loading_treatment(){
     loaderManager->load_cloud(path);
 
     //Save and remove
-    Collection* collection = data->get_cloud_selected();
+    Collection* collection = data->get_selected_collection();
     saverManager->save_cloud(collection, path);
     sceneManager->remove_collection(collection);
   }
@@ -238,7 +238,7 @@ void Pather::loading_treatment(){
 
 //Other functions
 void Pather::saving(){
-  Collection* collection = data->get_cloud_selected();
+  Collection* collection = data->get_selected_collection();
   //---------------------------
 
   if(sceneManager->get_is_list_empty() == false){
@@ -287,7 +287,7 @@ void Pather::saving_subset(Cloud* cloud){
   //---------------------------
 }
 void Pather::saving_subset_range(int frame_b, int frame_e){
-  Collection* collection = data->get_cloud_selected();
+  Collection* collection = data->get_selected_collection();
   //---------------------------
 
   //Select saving path
