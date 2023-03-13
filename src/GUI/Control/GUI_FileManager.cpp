@@ -49,10 +49,6 @@ void GUI_fileManager::data_tree(){
 
   ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(20, 20, 20, 255));
   ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 255, 255));
-  ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(20, 20, 20, 255));
-  ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(20, 20, 20, 255));
-  ImGui::PushStyleColor(ImGuiCol_CheckMark, IM_COL32(255, 255, 255, 255));
-  ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(0,0,0, 255));
 
   if (ImGui::BeginTable("table_advanced", 1, flags)){
     ImGui::TableSetupColumn("Name");
@@ -75,10 +71,6 @@ void GUI_fileManager::data_tree(){
     }
 
     ImGui::EndTable();
-    ImGui::PopStyleColor();
-    ImGui::PopStyleColor();
-    ImGui::PopStyleColor();
-    ImGui::PopStyleColor();
     ImGui::PopStyleColor();
     ImGui::PopStyleColor();
   }
@@ -135,27 +127,25 @@ void GUI_fileManager::collection_node(Collection* collection){
 void GUI_fileManager::info_collection(Collection* collection){
   //---------------------------
 
-  //Additional info
-  ImGui::Text("Format: %s", collection->file_format.c_str());
-  ImGui::Text("Frames: %d", (int)collection->list_obj.size());
-
   //Icon: info
-  if(ImGui::SmallButton(ICON_FA_CLIPBOARD)){
+  if(ImGui::Button(ICON_FA_CLIPBOARD)){
     data->set_selected_collection(collection);
     modal_tab.show_modifyFileInfo = !modal_tab.show_modifyFileInfo;
   }
+  ImGui::SameLine();
 
   //Icon: delete
-  ImGui::TableSetColumnIndex(2);
-  if(ImGui::SmallButton(ICON_FA_TRASH)){
+  if(ImGui::Button(ICON_FA_TRASH)){
     sceneManager->remove_collection(collection);
   }
+  ImGui::SameLine();
 
   //Icon: visibility
-  ImGui::TableNextColumn();
-  ImGui::PushItemWidth(1);
-  ImGui::Checkbox("", &collection->is_visible);
-  ImGui::PopItemWidth();
+  ImGui::Checkbox("##444", &collection->is_visible);
+  ImGui::SameLine();
+
+  //Additional info
+  ImGui::Text("   %d", (int)collection->list_obj.size());
 
   //---------------------------
 }

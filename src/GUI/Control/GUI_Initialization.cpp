@@ -359,7 +359,7 @@ void GUI_Initialization::open_selection(tree_file* node){
 
   if(node->type == "File"){
     Collection* collection = loaderManager->load_collection(node->path);
-    this->operation_cloud(collection);sayHello();
+    this->operation_cloud(collection);
   }
   else if(node->type == "Folder" && node->end_folder){
     if(pathManager->check_folder_format(node->path, "ply")){
