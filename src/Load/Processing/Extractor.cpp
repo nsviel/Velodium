@@ -47,7 +47,7 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
     //Init
     this->check_data(data[i]);
     this->init_subset_parameter(cloud, data[i], collection->ID_obj_last);
-    objectManager->create_glyph_subset(cloud);
+    objectManager->create_glyph_cloud(cloud);
 
     //Set parametrization
     gpuManager->gen_object_buffers(cloud);
@@ -71,7 +71,7 @@ Cloud* Extractor::extract_data(Data_file& data_file){
   this->init_subset_parameter(object, &data_file, 0);
 
   //Set parametrization
-  objectManager->create_glyph_subset(object);
+  objectManager->create_glyph_cloud(object);
   gpuManager->gen_object_buffers(object);
 
   //---------------------------
@@ -102,7 +102,7 @@ void Extractor::extract_data(Collection* collection, Data_file* data){
   this->init_subset_parameter(cloud, data, collection->ID_obj_last);
 
   //Create associated glyphs
-  objectManager->create_glyph_subset(cloud);
+  objectManager->create_glyph_cloud(cloud);
   this->define_buffer_init(collection, cloud);
   gpuManager->gen_object_buffers(cloud);
 

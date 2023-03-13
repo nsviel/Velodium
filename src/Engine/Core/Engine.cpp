@@ -37,34 +37,6 @@ Engine::Engine(Node_engine* engine){
 Engine::~Engine(){}
 
 //Program functions
-void Engine::draw_untextured_glyph(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
-  //---------------------------
-
-  //Draw glyph scene
-  objectManager->runtime_glyph_scene();
-
-  //Draw glyph cloud
-  for(int i=0; i<list_collection->size(); i++){
-    Collection* collection = *next(list_collection->begin(),i);
-
-    if(collection->is_visible){
-      //All cloud
-      objectManager->runtime_glyph_subset_all(collection);
-
-      //Selected susbet
-      Cloud* subset_sele = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected);
-      objectManager->runtime_glyph_subset_selected(subset_sele);
-
-      //OOBB
-      Cloud* subset_pred = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected - 2);
-      objectManager->runtime_glyph_pred(subset_pred);
-    }
-
-  }
-
-  //---------------------------
-}
 void Engine::arcball_cam_lookat(){
   Collection* collection = data->get_selected_collection();
   Cloud* cloud = (Cloud*)collection->selected_obj;
@@ -92,7 +64,7 @@ void Engine::draw_light(){
   //---------------------------
 }
 void Engine::draw_untextured_cloud(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //By collection
@@ -114,8 +86,36 @@ void Engine::draw_untextured_cloud(){
 
   //---------------------------
 }
+void Engine::draw_untextured_glyph(){
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
+  //---------------------------
+
+  //Draw glyph scene
+  objectManager->runtime_glyph_scene();
+/*
+  //Draw glyph cloud
+  for(int i=0; i<list_collection->size(); i++){
+    Collection* collection = *next(list_collection->begin(),i);
+
+    if(collection->is_visible){
+      //All cloud
+      //objectManager->runtime_glyph_subset_all(collection);
+
+      //Selected susbet
+      Cloud* subset_sele = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected);
+      objectManager->runtime_glyph_subset_selected(subset_sele);
+
+      //OOBB
+      Cloud* subset_pred = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected - 2);
+      objectManager->runtime_glyph_pred(subset_pred);
+    }
+
+  }*/
+
+  //---------------------------
+}
 void Engine::draw_textured_cloud(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   bool with_texture = *texManager->get_with_texture();
   //---------------------------
 

@@ -88,7 +88,7 @@ void Object::create_glyph_scene(){
   //---------------------------
   this->update_configuration();
 }
-void Object::create_glyph_subset(Cloud* cloud){
+void Object::create_glyph_cloud(Cloud* cloud){
   //---------------------------
 
   //Cloud axis glyph
@@ -125,11 +125,11 @@ Glyph* Object::create_glyph_ostacle(){
 
 //Runtime function
 void Object::runtime_glyph_scene(){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
   //---------------------------
 
-  for(int i=0;i<list_glyph->size();i++){
-    Glyph* glyph = *next(list_glyph->begin(),i);
+  for(int i=0;i<col_glyph->list_obj.size();i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(),i);
     glyphManager->draw_glyph(glyph);
   }
 
@@ -137,7 +137,7 @@ void Object::runtime_glyph_scene(){
 }
 void Object::runtime_glyph_subset_all(Collection* collection){
   //---------------------------
-
+/*
   for(int j=0; j<collection->list_obj.size(); j++){
     Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
 
@@ -148,7 +148,7 @@ void Object::runtime_glyph_subset_all(Collection* collection){
       glyphManager->draw_glyph(axis);
     }
   }
-
+*/
   //---------------------------
 }
 void Object::runtime_glyph_subset_selected(Cloud* cloud){
@@ -339,7 +339,7 @@ void Object::reset_object(Glyph* glyph){
 
 //Misc function
 void Object::set_object_visibility(string name, bool val){
-  list<Collection*>* list_collection = data->get_list_collection();
+  list<Collection*>* list_collection = data->get_list_col_object();
   //---------------------------
 
   for (int i=0; i<list_collection->size(); i++){
@@ -389,11 +389,11 @@ void Object::set_slam_object(bool value){
   //---------------------------
 }
 Glyph* Object::get_glyph_by_name(string name){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
   //---------------------------
 
-  for(int i=0; i<list_glyph->size(); i++){
-    Glyph* glyph = *next(list_glyph->begin(), i);
+  for(int i=0; i<col_glyph->list_obj.size(); i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(), i);
 
     if(glyph->name == name){
       return glyph;

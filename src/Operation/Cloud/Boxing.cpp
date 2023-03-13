@@ -135,7 +135,7 @@ void Boxing::supress_selected_point(Collection* collection){
   //---------------------------
 }
 void Boxing::stop_boxing(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //By cloud

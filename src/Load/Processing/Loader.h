@@ -28,7 +28,7 @@ public:
 
 public:
   //Main functions
-  Collection* load_cloud(string pathFile);
+  Collection* load_collection(string pathFile);
   Object_* load_object(string path);
   bool load_cloud_byFrame(vector<string> path_vec);
   bool load_cloud_onthefly(vector<string> path_vec);

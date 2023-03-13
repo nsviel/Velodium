@@ -8,6 +8,7 @@ class Scene;
 class Glyphs;
 class Transformation;
 class Pose;
+class GPU_data;
 
 
 class MOD_transformation
@@ -23,11 +24,10 @@ public:
   //Specifc function
   void actual_transformation_mat();
   void manual_transformation_mat();
-  void cloud_translation();
-  void cloud_rotation();
-  void cloud_elevation();
-  void cloud_alignment();
-
+  void object_translation();
+  void object_rotation();
+  void object_elevation();
+  
   //Elevation function
   void elevation_ground();
   void elevation_height();
@@ -38,6 +38,7 @@ private:
   Pose* poseManager;
   Scene* sceneManager;
   Glyphs* glyphManager;
+  GPU_data* gpuManager;
 
   int item_width;
   float ground;

@@ -130,7 +130,7 @@ void GUI_radiometry::correction(){
   ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(46, 75, 133, 255));
   if(ImGui::Button("Apply##linearization", ImVec2(100,0))){
     if(corr_num == 1){
-      list<Collection*>* list_collection = sceneManager->get_list_collection();
+      list<Collection*>* list_collection = sceneManager->get_list_col_object();
       //-------------------------------
 
       for(int i=0; i<list_collection->size(); i++){
@@ -147,7 +147,7 @@ void GUI_radiometry::correction(){
   ImGui::SameLine();
   if(ImGui::Button("Reverse##linearization", ImVec2(100,0))){
     if(corr_num == 1){
-      list<Collection*>* list_collection = sceneManager->get_list_collection();
+      list<Collection*>* list_collection = sceneManager->get_list_col_object();
       //-------------------------------
 
       for(int i=0; i<list_collection->size(); i++){
@@ -212,7 +212,7 @@ void GUI_radiometry::plotting(){
     }
 
     /*if(ImGui::Button("Special", ImVec2(150,0))){
-      list<Collection*>* list = sceneManager->get_list_collection();
+      list<Collection*>* list = sceneManager->get_list_col_object();
       vector<float> Is_99, Is_50, Is_25, Is_10;
       vector<float> Istd_99, Istd_50, Istd_25, Istd_10;
       vector<float> R_99, R_50, R_25, R_10;

@@ -1,6 +1,7 @@
 #ifndef GUI_FILEMANAGER_H
 #define GUI_FILEMANAGER_H
 
+#include "../../Scene/Data/Data.h"
 #include "../../common.h"
 
 class Scene;
@@ -18,12 +19,12 @@ public:
   ~GUI_fileManager();
 
 public:
-  void fileManager();
-  void cloudManager(Collection* collection);
+  void data_tree();
+  void collection_node(Collection* collection);
 
   void info_collection(Collection* collection);
-  void info_subset(Cloud* cloud);
   void info_iconAction(Collection* collection);
+  void info_object(Object_* object);
 
 
   void treeview();
@@ -33,6 +34,7 @@ private:
   Dimension* dimManager;
   GUI_Modal* gui_window;
   Graph* graphManager;
+  Data* data;
 };
 
 #endif

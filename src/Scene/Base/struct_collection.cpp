@@ -17,6 +17,7 @@ Collection::Collection(){
   this->path_file_load = "";
   this->path_file_save = "";
   this->lidar_model = "";
+  this->obj_type = "object";
 
   this->is_visible = true;
   this->is_heatmap = false;
@@ -89,7 +90,6 @@ void Collection::obj_add_new(Object_* object){
   //---------------------------
 
   //Initialize parameters
-  object->is_visible = true;
   Object_* list_obj_buffer = new Object_(*object);
   Object_* list_obj_init = new Object_(*object);
 
@@ -143,7 +143,7 @@ void Collection::obj_remove_all(){
   //---------------------------
 }
 
-// Get object frame
+//Retrieve object
 Frame* Collection::get_frame_byID(int querry){
   //---------------------------
 
@@ -156,8 +156,6 @@ Frame* Collection::get_frame_byID(int querry){
 
   //---------------------------
 }
-
-//Retrieve object
 Object_* Collection::get_obj_selected_init(){
   //---------------------------
 

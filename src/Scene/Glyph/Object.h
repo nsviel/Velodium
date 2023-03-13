@@ -33,7 +33,7 @@ public:
 public:
   //Creation function
   void create_glyph_scene();
-  void create_glyph_subset(Cloud* cloud);
+  void create_glyph_cloud(Cloud* cloud);
   Glyph* create_glyph_ostacle();
 
   //Runtime function

@@ -34,7 +34,7 @@ Attribut::~Attribut(){
 
 //General
 void Attribut::compute_attribut_all(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   for(int i=0;i<list_collection->size();i++){
@@ -360,7 +360,7 @@ void Attribut::make_supressPoints(vector<vec3>& vec, vector<int>& idx){
   vec = vec_b;
 }
 void Attribut::cloudsData(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   ofstream myfile;

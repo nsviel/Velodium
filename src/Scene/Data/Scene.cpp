@@ -25,7 +25,7 @@ Scene::~Scene(){
 
 //Remove functions
 void Scene::remove_collection(Collection* collection){
-  std::list<Collection*>* list_collection = data->get_list_collection();
+  std::list<Collection*>* list_collection = data->get_list_col_object();
   //---------------------------
 
   if(list_collection->size() != 0){
@@ -60,7 +60,7 @@ void Scene::remove_collection(Collection* collection){
   //---------------------------
 }
 void Scene::remove_collection_all(){
-  std::list<Collection*>* list_collection = data->get_list_collection();
+  std::list<Collection*>* list_collection = data->get_list_col_object();
   //---------------------------
 
   while(list_collection->size() != 0){
@@ -88,7 +88,7 @@ void Scene::reset_collection(Collection* collection){
   //this->update_glyph(collection);
 }
 void Scene::reset_collection_all(){
-  std::list<Collection*>* list_collection = data->get_list_collection();
+  std::list<Collection*>* list_collection = data->get_list_col_object();
   //---------------------------
 
   //Reset all collections
@@ -145,13 +145,13 @@ void Scene::update_MinMax(Object_* object){
 
 //Update collection function
 void Scene::update_glyph(Collection* collection){
-  if(collection == nullptr) return;
+  if(collection == nullptr && collection->obj_type != "cloud") return;
   //---------------------------
 
   for(int i=0; i<collection->list_obj.size(); i++){
-    Object_* object = collection->get_obj(i);
-    this->update_MinMax(object);
-    //objectManager->update_glyph_cloud(object);
+    Cloud* cloud = (Cloud*)collection->get_obj(i);
+    this->update_MinMax(cloud);
+    objectManager->update_glyph_cloud(cloud);
   }
 
   //---------------------------

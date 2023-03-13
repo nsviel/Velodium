@@ -35,13 +35,12 @@ public:
   //Update collection function
   void update_glyph(Collection* collection);
   void update_MinMax_col(Collection* collection);
-  void update_ID_order();
 
-  inline int get_nb_cloud(){return data->get_list_collection()->size();}
-  inline list<Collection*>* get_list_collection(){return data->get_list_collection();}
+  inline int get_nb_cloud(){return data->get_list_col_object()->size();}
+  inline list<Collection*>* get_list_col_object(){return data->get_list_col_object();}
   inline Collection* get_selected_collection(){return data->get_selected_collection();}
   inline void set_selected_collection(Collection* col){}
-  inline bool get_is_list_empty(){return data->get_list_collection()->empty();}
+  inline bool get_is_list_empty(){return data->get_list_col_object()->empty();}
 
 private:
   Object* objectManager;

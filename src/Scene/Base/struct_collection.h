@@ -19,12 +19,13 @@ struct Collection
 
   void reset();
 
+  //Add / remove function
   void obj_add_new(Object_* object);
   void obj_remove_all();
   void obj_remove_last();
-  Frame* get_frame_byID(int querry);
 
   //Stored object retrieval function
+  Frame* get_frame_byID(int querry);
   Object_* get_obj_selected_init();
   Object_* get_obj(int querry);
   Object_* get_obj_byID(int querry);
@@ -46,6 +47,7 @@ struct Collection
   std::string file_format;
   std::string path_file_load;
   std::string path_file_save;
+  std::string obj_type;
 
   glm::vec4 unicolor;
   glm::vec3 COM;

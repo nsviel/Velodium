@@ -79,7 +79,7 @@ void MOD_filter::filter_byAngle(){
   if(ImGui::Button("Filter by angle", ImVec2(item_width,0))){
     if(collection != nullptr){
 
-      list<Collection*>* list_collection = sceneManager->get_list_collection();
+      list<Collection*>* list_collection = sceneManager->get_list_col_object();
       for(int i=0; i<list_collection->size(); i++){
         Collection* collection = *next(list_collection->begin(),i);
         filterManager->filter_maxAngle(collection, maxAngle);

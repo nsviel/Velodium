@@ -26,7 +26,6 @@ struct Object_{ //Cloud cloud / part
   int draw_type;
   int draw_point_size;
   int draw_line_width;
-  std::string draw_type_name;
 
   //Infos
   int ID;
@@ -35,6 +34,7 @@ struct Object_{ //Cloud cloud / part
   std::string path_file;
   std::string path_save;
   std::string file_format;
+  std::string draw_type_name;
   glm::vec4 unicolor;
 
   bool is_visible;

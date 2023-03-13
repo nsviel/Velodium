@@ -42,7 +42,7 @@ void GUI_Player::design_player(){
   if(ImGui::BeginTabItem("Player")){
     //---------------------------
 
-    this->design_run();
+    //this->design_run();
     //this->player_onthefly();
     this->player_parameter();
 

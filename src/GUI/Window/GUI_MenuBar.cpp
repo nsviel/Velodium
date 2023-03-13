@@ -66,7 +66,7 @@ void GUI_menuBar::design_MenuBar(){
 
     this->MenuBar_menu();
     this->MenuBar_icons();
-    this->MenuBar_subsetSelection();
+    //this->MenuBar_subsetSelection();
     this->MenuBar_appInfo();
 
     //-------------------------

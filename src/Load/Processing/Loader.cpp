@@ -55,7 +55,7 @@ Loader::~Loader(){
 }
 
 //Main functions
-Collection* Loader::load_cloud(string path){
+Collection* Loader::load_collection(string path){
   //---------------------------
 
   //Check file existence
@@ -369,18 +369,12 @@ vector<Data_file*> Loader::load_retrieve_cloud_data(string path){
   return data_vec;
 }
 Collection* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
-  list<Collection*>* list_collection = data->get_list_collection();
+  list<Collection*>* list_collection = data->get_list_col_object();
   //---------------------------
 
   //Extract data and put in the engine
   this->collection = extractManager->extract_data(data_vec);
-  list_collection->push_back(collection);
-
-  //Update list collection
-//  cloud_selected = collection;
-  data->set_selected_collection(collection);
-  data->update_ID_order();
-  ////sceneManager->update_glyph(collection);
+  data->insert_new_collection(collection);
 
   //Delete raw data
   for(int i=0; i<data_vec.size(); i++){

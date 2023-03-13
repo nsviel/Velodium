@@ -91,7 +91,7 @@ void Pather::loading_cloud(){
   //Load files
   for(int i=0; i<path_vec.size(); i++){
     string path = path_vec[i];
-    loaderManager->load_cloud(path);
+    loaderManager->load_collection(path);
   }
 
   //---------------------------
@@ -225,7 +225,7 @@ void Pather::loading_treatment(){
     string path = path_vec[i];
 
     //Load files
-    loaderManager->load_cloud(path);
+    loaderManager->load_collection(path);
 
     //Save and remove
     Collection* collection = data->get_selected_collection();
@@ -333,7 +333,7 @@ void Pather::saving_cloud_all(){
   string path_dir = zenity_directory("Save clouds", path_current_dir);
 
   //Save all scene clouds
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
 

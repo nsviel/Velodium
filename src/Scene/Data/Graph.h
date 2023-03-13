@@ -17,10 +17,11 @@ public:
 
 public:
   void selection_setNext();
-  void selection_setCloud(int ID);
-  void selection_setSubset(Collection* collection, int ID);
+  void set_selected_collection(int ID);
+  void set_selected_object(Collection* collection, int ID);
   void selection_cloudByName(string name);
-  void selection_setCloud(Collection* collection);
+  void set_selected_collection(Collection* collection);
+  void object_clicked(Collection* collection, int ID);
 
 private:
   Scene* sceneManager;

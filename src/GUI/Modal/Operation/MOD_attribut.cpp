@@ -134,7 +134,7 @@ void MOD_attribut::window_normal(){
         //---------------------------
 
 
-        list<Collection*>* list_collection = sceneManager->get_list_collection();
+        list<Collection*>* list_collection = sceneManager->get_list_col_object();
         for(int i=0;i<list_collection->size();i++){
           Collection* collection = *next(list_collection->begin(),i);
 

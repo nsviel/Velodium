@@ -73,7 +73,7 @@ void Onthefly::compute_onthefly(Collection* collection, int ID){
   //---------------------------
 }
 void Onthefly::reset(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //Reset all clouds

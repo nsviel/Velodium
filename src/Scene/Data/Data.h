@@ -25,13 +25,15 @@ public:
     return &instance;
   }
   void update_ID_order();
-  void create_new_collection(std::string name);
+  void create_new_collection(std::list<Collection*>* list, std::string name);
+  void insert_new_collection(Collection* collection);
   void set_selected_collection(int ID_order);
   void set_selected_collection(Collection* collection);
+  Collection* get_collection_byName(std::string list_name, std::string querry);
 
-  inline std::list<Collection*>* get_list_collection(){return list_collection;}
+  inline std::list<Collection*>* get_list_col_object(){return list_col_object;}
+  inline std::list<Collection*>* get_list_col_glyph(){return list_col_glyph;}
   inline std::list<Light_*>* get_list_light(){return list_light;}
-  inline std::list<Glyph*>* get_list_glyph(){return list_glyph;}
 
   inline Collection* get_selected_collection(){return selected_col;}
 
@@ -41,9 +43,9 @@ private:
   Data& operator=(const Data&) = delete; // disable copy assignment operator
 
 private:
-  std::list<Collection*>* list_collection;
+  std::list<Collection*>* list_col_object;
+  std::list<Collection*>* list_col_glyph;
   std::list<Light_*>* list_light;
-  std::list<Glyph*>* list_glyph;
 
   Collection* selected_col;
 };

@@ -50,7 +50,7 @@ Heatmap::~Heatmap(){
 
 //HMI functions
 void Heatmap::make_heatmap_all(bool is_heatmap){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   for(int i=0; i<list_collection->size(); i++){

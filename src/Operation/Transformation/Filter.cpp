@@ -70,7 +70,7 @@ void Filter::filter_maxAngle(Collection* collection, float angleMax){
   }
 }
 void Filter::filter_sphere(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   float r = sphere_D/2;
   float err = r/20;
   //---------------------------

@@ -98,7 +98,7 @@ void Selection::selectionPoint(vec3 point){
   //---------------------------
 }
 void Selection::mark_pointCreation(vec3 point){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   float err = selectSensibility;
   //---------------------------
 
@@ -164,7 +164,7 @@ void Selection::mark_pointCreation(vec3 point){
   //---------------------------
 }
 bool Selection::mark_pointSupression(vec3 point){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   float err = selectSensibility;
   //---------------------------
 
@@ -239,7 +239,7 @@ void Selection::mark_pointColor(Collection* ptMark, int num){
   //---------------------------
 }
 void Selection::mark_supressAll(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   for(int i=0; i<list_collection->size(); i++){
@@ -253,7 +253,7 @@ void Selection::mark_supressAll(){
   //---------------------------
 }
 bool Selection::mark_supressSelectedPoints_all(){
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   bool is_selected_point = false;
   //---------------------------
 
@@ -297,7 +297,7 @@ void Selection::mark_supressSelectedPoints(Cloud* cloud){
   //---------------------------
 }
 void Selection::mark_pointLocation(){
-  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  /*list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //Reposionning of ptMark if collection move
@@ -392,7 +392,7 @@ void Selection::mouse_frameSelection(vec2 point1, vec2 point2){
   }
 
   //Search and colorize selected points
-  list<Collection*>* list_collection = sceneManager->get_list_collection();
+  list<Collection*>* list_collection = sceneManager->get_list_col_object();
   for(int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
 
@@ -571,7 +571,7 @@ void Selection::mark_planeABpoints(Collection* collection){
   //---------------------------
 }
 void Selection::mark_planeLocation(){
-  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  /*list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //For each Cloud insert plane

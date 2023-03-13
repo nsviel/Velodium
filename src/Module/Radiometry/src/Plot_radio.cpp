@@ -89,7 +89,7 @@ void Plot_radio::compute_IsItconcat(list<Collection*>* list){
 
 //plotting function
 void Plot_radio::plot_3Dmap(){
-  refManager->compute_list(sceneManager->get_list_collection());
+  refManager->compute_list(sceneManager->get_list_col_object());
   list<Collection*>* list_dist = refManager->get_listDist();
   list<Collection*>* list_angle = refManager->get_listAngle();
   vector<vector<float>> data_X, data_Y, data_Z;
@@ -118,7 +118,7 @@ void Plot_radio::plot_3Dmap(){
   plotManager->plot_3Dmap(data_X, data_Y, data_Z);
 }
 void Plot_radio::plot_2Dmap(){
-  /*refManager->compute_list(sceneManager->get_list_collection());
+  /*refManager->compute_list(sceneManager->get_list_col_object());
   list<Collection*>* list_dist = refManager->get_listDist();
   list<Collection*>* list_angle = refManager->get_listAngle();
   this->compute_IRmeans(list_dist);
@@ -476,7 +476,7 @@ void Plot_radio::plot_IbyR(){
   //---------------------------
 }
 void Plot_radio::plot_IbyR_all(){
-  list<Collection*>* list = sceneManager->get_list_collection();
+  list<Collection*>* list = sceneManager->get_list_col_object();
   vector<float> Is, Is_std, Is_R;
   //---------------------------
 
@@ -508,7 +508,7 @@ void Plot_radio::plot_IbyR_all(){
   //---------------------------
 }
 void Plot_radio::plot_IbyR_Sphere(){
-  //refManager->compute_list(sceneManager->get_list_collection());
+  //refManager->compute_list(sceneManager->get_list_col_object());
   refopeManager->compute_Sphere_IbyR();
   vector<float> IbyR_R = refopeManager->get_Sphere_IbyR_R();
   vector<float> IbyR_I = refopeManager->get_Sphere_IbyR_I01();
@@ -641,7 +641,7 @@ void Plot_radio::plot_IbyR_both(){
   std_multi.push_back(refopeManager->get_Spec_IbyR_std_25());
   std_multi.push_back(refopeManager->get_Spec_IbyR_std_10());
 
-  refManager->compute_list(sceneManager->get_list_collection());
+  refManager->compute_list(sceneManager->get_list_col_object());
   refopeManager->compute_Sphere_IbyR();
   R_multi.push_back(refopeManager->get_Sphere_IbyR_R());
   Is_multi.push_back(refopeManager->get_Sphere_IbyR_I01());
@@ -671,7 +671,7 @@ void Plot_radio::plot_IbyR_both(){
 
 //IbyIt
 void Plot_radio::plot_IbyCosIt(bool normalised){
-  refManager->compute_list(sceneManager->get_list_collection());
+  refManager->compute_list(sceneManager->get_list_col_object());
   //---------------------------
 
   if(refManager->isref_Spectralon()){
@@ -856,7 +856,7 @@ this->plot_IbyIt_allPercentage_Spectralon_10m();
     //this->plot_IbyIt_all_Sphere();
   }
   else{
-    refManager->compute_list(sceneManager->get_list_collection());
+    refManager->compute_list(sceneManager->get_list_col_object());
   }
 
   //---------------------------
@@ -894,7 +894,7 @@ void Plot_radio::plot_IbyCosIt_all_Sphere(){
   //---------------------------
 }
 void Plot_radio::plot_IbyIt_all_Sphere(){
-  refManager->compute_list(sceneManager->get_list_collection());
+  refManager->compute_list(sceneManager->get_list_col_object());
   //---------------------------
 
   refopeManager->compute_Sphere_IbycIt();
@@ -1306,7 +1306,7 @@ void Plot_radio::plot_IbyR_data(Collection* collection){
 
 //Sphere specific
 void Plot_radio::plot_IbyItbyR(){
-  list<Collection*>* list = sceneManager->get_list_collection();
+  list<Collection*>* list = sceneManager->get_list_col_object();
   vector<float> I_all, R_all, cIt_all;
   //---------------------------
 

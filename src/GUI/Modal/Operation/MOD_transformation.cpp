@@ -1,6 +1,7 @@
 #include "MOD_transformation.h"
 
 #include "../../../Engine/Node_engine.h"
+#include "../../../Engine/GPU/GPU_data.h"
 #include "../../../Scene/Node_scene.h"
 #include "../../../Scene/Data/Scene.h"
 #include "../../../Scene/Glyph/Glyphs.h"
@@ -24,6 +25,7 @@ MOD_transformation::MOD_transformation(Node_engine* node_engine){
   this->glyphManager = node_scene->get_glyphManager();
   this->poseManager = new Pose();
   this->transformManager = new Transformation();
+  this->gpuManager = new GPU_data();
 
   this->item_width = 150;
   this->ground = 0.0f;
@@ -41,9 +43,9 @@ void MOD_transformation::design_transformation(){
 
     this->actual_transformation_mat();
     this->manual_transformation_mat();
-    this->cloud_translation();
-    this->cloud_rotation();
-    this->cloud_elevation();
+    this->object_translation();
+    this->object_rotation();
+    this->object_elevation();
 
     //---------------------------
     if(ImGui::Button("Close")){
@@ -56,24 +58,24 @@ void MOD_transformation::design_transformation(){
 //Specific function
 void MOD_transformation::actual_transformation_mat(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* cloud = (Cloud*)collection->selected_obj;
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f),"Actual transformation from initial position");
-  MatrixXf cloudTransformation = glm_to_eigen_mat4_matXf(cloud->transformation);
+  MatrixXf objectTransformation = glm_to_eigen_mat4_matXf(object->transformation);
   std::stringstream ss;
-  ss << cloudTransformation;
+  ss << objectTransformation;
   string bla = ss.str();
-  static char cloudTransformation_c[1024 * 16];
-  strcpy(cloudTransformation_c, bla.c_str());
+  static char objectTransformation_c[1024 * 16];
+  strcpy(objectTransformation_c, bla.c_str());
   static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput | ImGuiInputTextFlags_CtrlEnterForNewLine;
-  ImGui::InputTextMultiline("##source", cloudTransformation_c, IM_ARRAYSIZE(cloudTransformation_c), ImVec2(300, ImGui::GetTextLineHeight() * 6), flags);
+  ImGui::InputTextMultiline("##source", objectTransformation_c, IM_ARRAYSIZE(objectTransformation_c), ImVec2(300, ImGui::GetTextLineHeight() * 6), flags);
 
   //---------------------------
 }
 void MOD_transformation::manual_transformation_mat(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* cloud = (Cloud*)collection->selected_obj;
+  Object_* object = collection->selected_obj;
 
   if(ImGui::CollapsingHeader("Manual transformation matrix")){
     //---------------------------
@@ -129,12 +131,9 @@ void MOD_transformation::manual_transformation_mat(){
       if(collection != nullptr){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
-        Collection* collection = sceneManager->get_selected_collection();
-        Cloud* cloud = (Cloud*)collection->selected_obj;
-
         sceneManager->reset_collection(collection);
-        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
-        //sceneManager->update_buffer_location(collection);
+        transformManager->make_Transformation(object, vec3(0,0,0), mat);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
@@ -142,9 +141,8 @@ void MOD_transformation::manual_transformation_mat(){
       if(collection != nullptr){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
 
-        //------------------
-        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
-        ////sceneManager->update_buffer_location(collection);
+        transformManager->make_Transformation(object, vec3(0,0,0), mat);
+        gpuManager->update_buffer_location(object);
       }
     }
     if(ImGui::Button("Reverse from initial pos", ImVec2(150,0))){
@@ -153,11 +151,11 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat2 = inverse(mat);
 
         Collection* collection = sceneManager->get_selected_collection();
-        Cloud* cloud = (Cloud*)collection->selected_obj;
+        Object_* object = collection->selected_obj;
 
         sceneManager->reset_collection(collection);
-        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
-        //sceneManager->update_buffer_location(collection);
+        transformManager->make_Transformation(object, vec3(0,0,0), mat);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
@@ -166,8 +164,8 @@ void MOD_transformation::manual_transformation_mat(){
         mat4 mat = char_to_glm_mat4(TransfoMatrix);
         mat4 mat2 = inverse(mat);
 
-        transformManager->make_Transformation(cloud, vec3(0,0,0), mat);
-        ////sceneManager->update_buffer_location(collection);
+        transformManager->make_Transformation(object, vec3(0,0,0), mat);
+        gpuManager->update_buffer_location(object);
       }
     }
 
@@ -175,9 +173,9 @@ void MOD_transformation::manual_transformation_mat(){
     ImGui::Separator();
   }
 }
-void MOD_transformation::cloud_translation(){
+void MOD_transformation::object_translation(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* cloud = (Cloud*)collection->selected_obj;
+  Object_* object = collection->selected_obj;
 
   if(ImGui::CollapsingHeader("Collection translation")){
     //---------------------------
@@ -189,8 +187,8 @@ void MOD_transformation::cloud_translation(){
     if(ImGui::Button("Apply##1")){
       if(collection != nullptr){
         vec3 translation = vec3(trans[0], trans[1], trans[2]);
-        transformManager->make_translation(collection, translation);
-        //sceneManager->update_buffer_location(collection);
+        transformManager->make_translation(object, translation);
+        gpuManager->update_buffer_location(object);
         trans[0] = 0;
         trans[1] = 0;
         trans[2] = 0;
@@ -201,9 +199,9 @@ void MOD_transformation::cloud_translation(){
     ImGui::Separator();
   }
 }
-void MOD_transformation::cloud_rotation(){
+void MOD_transformation::object_rotation(){
   Collection* collection = sceneManager->get_selected_collection();
-  Cloud* cloud = (Cloud*)collection->selected_obj;
+  Object_* object = collection->selected_obj;
 
   if(ImGui::CollapsingHeader("Collection rotation")){
     //---------------------------
@@ -211,48 +209,48 @@ void MOD_transformation::cloud_rotation(){
     if(ImGui::Button("X ->")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(90, 0, 0));
-        transformManager->make_rotation(cloud, cloud->COM, radian);
-        sceneManager->update_buffer_location(cloud);
+        transformManager->make_rotation(object, object->COM, radian);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("X <-")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(-90, 0, 0));
-        transformManager->make_rotation(cloud, cloud->COM, radian);
-        sceneManager->update_buffer_location(cloud);
+        transformManager->make_rotation(object, object->COM, radian);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Y ->")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 90, 0));
-        transformManager->make_rotation(cloud, cloud->COM, radian);
-        sceneManager->update_buffer_location(cloud);
+        transformManager->make_rotation(object, object->COM, radian);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Y <-")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, -90, 0));
-        transformManager->make_rotation(cloud, cloud->COM, radian);
-        sceneManager->update_buffer_location(cloud);
+        transformManager->make_rotation(object, object->COM, radian);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Z ->")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, 90));
-        transformManager->make_rotation(cloud, cloud->COM, radian);
-        sceneManager->update_buffer_location(cloud);
+        transformManager->make_rotation(object, object->COM, radian);
+        gpuManager->update_buffer_location(object);
       }
     }
     ImGui::SameLine();
     if(ImGui::Button("Z <-")){
       if(collection != nullptr){
         vec3 radian = fct_degreeToRadian_vec3(vec3(0, 0, -90));
-        transformManager->make_rotation(cloud, cloud->COM, radian);
-        sceneManager->update_buffer_location(cloud);
+        transformManager->make_rotation(object, object->COM, radian);
+        gpuManager->update_buffer_location(object);
       }
     }
 
@@ -260,7 +258,7 @@ void MOD_transformation::cloud_rotation(){
     ImGui::Separator();
   }
 }
-void MOD_transformation::cloud_elevation(){
+void MOD_transformation::object_elevation(){
   if(ImGui::CollapsingHeader("Collection elevation")){
     //---------------------------
 
@@ -276,6 +274,7 @@ void MOD_transformation::cloud_elevation(){
 //Elevation function
 void MOD_transformation::elevation_ground(){
   Collection* collection = sceneManager->get_selected_collection();
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Ground");
@@ -295,7 +294,7 @@ void MOD_transformation::elevation_ground(){
   if(ImGui::DragFloat("Manual setting", &Zpos, 0.01f)){
     if(collection != nullptr){
       poseManager->make_elevation(collection, Zpos);
-      //sceneManager->update_buffer_location(collection);
+      gpuManager->update_buffer_location(object);
       ground = poseManager->make_soilDetermination(collection);
     }
   }
@@ -305,6 +304,7 @@ void MOD_transformation::elevation_ground(){
 }
 void MOD_transformation::elevation_height(){
   Collection* collection = sceneManager->get_selected_collection();
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Elevation");
@@ -320,22 +320,22 @@ void MOD_transformation::elevation_height(){
 
   //One or all collection to operate
   static bool allClouds = false;
-  ImGui::Checkbox("All clouds", &allClouds);
+  ImGui::Checkbox("All objects", &allClouds);
   ImGui::SameLine();
 
   if(ImGui::Button("Apply##0")){
     if(allClouds){
-      list<Collection*>* list_collection = sceneManager->get_list_collection();
+      list<Collection*>* list_collection = sceneManager->get_list_col_object();
       for(int i=0;i<list_collection->size();i++){
         Collection* collection = *next(list_collection->begin(),i);
         poseManager->make_adjustPosToScanner(collection, Z_scan);
-        //sceneManager->update_buffer_location(collection);
+        gpuManager->update_buffer_location(object);
       }
     }
     else{
       if(collection != nullptr){
         poseManager->make_adjustPosToScanner(collection, Z_scan);
-        //sceneManager->update_buffer_location(collection);
+        gpuManager->update_buffer_location(object);
         ground = poseManager->make_soilDetermination(collection);
       }
     }
@@ -346,6 +346,7 @@ void MOD_transformation::elevation_height(){
 }
 void MOD_transformation::elevation_redressment(){
   Collection* collection = sceneManager->get_selected_collection();
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   ImGui::TextColored(ImVec4(0.4f,0.4f,0.4f,1.0f), "Redressment");
@@ -353,7 +354,7 @@ void MOD_transformation::elevation_redressment(){
   if(ImGui::Button("Plane fitting on selected points")){
     if(collection != nullptr){
       poseManager->make_alignSelectionToGround(collection);
-      //sceneManager->update_buffer_location(collection);
+      gpuManager->update_buffer_location(object);
     }
   }
 

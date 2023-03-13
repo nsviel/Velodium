@@ -146,7 +146,7 @@ void Radiometry::algo_separationGlobal(Collection* collection){
 
 //Correction functions
 void Radiometry::correction_allClouds(){
-  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  /*list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //Correct all cloud
@@ -166,7 +166,7 @@ void Radiometry::correction_allClouds(){
   //---------------------------
 }
 void Radiometry::correction_allClouds_Iini(){
-  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  /*list<Collection*>* list_collection = sceneManager->get_list_col_object();
   //---------------------------
 
   //Correct all cloud
@@ -199,7 +199,7 @@ void Radiometry::correction_allClouds_Iini(){
   //---------------------------
 }
 void Radiometry::correction_allClouds_WtRefs(){
-  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  /*list<Collection*>* list_collection = sceneManager->get_list_col_object();
   Is_std.clear(); Is_CV.clear(); Ic_std.clear(); Ic_CV.clear();
   //---------------------------
 
@@ -321,7 +321,7 @@ void Radiometry::compute_SpectralonAjustement(){
 }
 void Radiometry::set_referenceON(bool value){
   if(refManager->is_listsCompiled() == false){
-    refManager->compute_list(sceneManager->get_list_collection());
+    refManager->compute_list(sceneManager->get_list_col_object());
   }
   list<Collection*>* list = refManager->get_listReference();
   //---------------------------
@@ -350,7 +350,7 @@ void Radiometry::wrt_results(){
 }
 void Radiometry::remove_References(){
   if(refManager->is_listsCompiled() == false){
-    refManager->compute_list(sceneManager->get_list_collection());
+    refManager->compute_list(sceneManager->get_list_col_object());
   }
   list<Collection*>* list = refManager->get_listReference();
   //---------------------------

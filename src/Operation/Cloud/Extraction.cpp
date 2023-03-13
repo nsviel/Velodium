@@ -165,7 +165,7 @@ void Extraction::fct_cutCloud(Cloud* cloud){
   //---------------------------
 }
 void Extraction::fct_cutCloud_all(){
-  /*list<Collection*>* list_collection = sceneManager->get_list_collection();
+  /*list<Collection*>* list_collection = sceneManager->get_list_col_object();
   Collection* collection_selected = sceneManager->get_selected_collection();
   vec3& max = collection_selected->max;
   vec3& min = collection_selected->min;

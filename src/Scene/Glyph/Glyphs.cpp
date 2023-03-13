@@ -15,18 +15,12 @@ Glyphs::Glyphs(){
   this->gpuManager = new GPU_data();
   this->data = Data::get_instance();
 
-//  this->list_glyph = new list<Glyph*>;
   this->ID_glyph = 0;
-
-  //data->create_new_collection("glyph");
-
 
   //---------------------------
 }
 Glyphs::~Glyphs(){
   //---------------------------
-
-//  delete list_glyph;
 
   //---------------------------
 }
@@ -37,6 +31,83 @@ void Glyphs::draw_glyph(Glyph* glyph){
 
   if(glyph->is_visible){
     gpuManager->draw_object(glyph);
+  }
+
+  //---------------------------
+}
+void Glyphs::insert_into_gpu(Glyph* glyph){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
+  //---------------------------
+
+  gpuManager->gen_vao(glyph);
+  gpuManager->gen_buffer_location(glyph);
+  gpuManager->gen_buffer_color(glyph);
+  gpuManager->convert_draw_type_byName(glyph);
+
+  //ID
+  glyph->ID = col_glyph->list_obj.size();
+
+  //---------------------------
+}
+
+//Glyph creation / supression
+void Glyphs::create_glyph_scene(Glyph* glyph){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
+  //---------------------------
+
+  this->insert_into_gpu(glyph);
+  col_glyph->obj_add_new(glyph);
+
+  //---------------------------
+}
+Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
+  Glyph* glyph = new Glyph();
+  unsigned int VAO;
+  uint colorVBO, locationVBO;
+  //---------------------------
+
+  glyph->xyz = XYZ;
+  glyph->rgb = RGB;
+  glyph->name = "...";
+  glyph->draw_type_name = mode;
+  glyph->draw_line_width = 1;
+  glyph->is_permanent = perma;
+
+  this->insert_into_gpu(glyph);
+  col_glyph->list_obj.push_back(glyph);
+
+  //---------------------------
+  return glyph;
+}
+void Glyphs::remove_temporary_glyph(){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
+  //---------------------------
+
+  //Remove non permanent glyphs
+  for(int i=0; i<col_glyph->list_obj.size(); i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(),i);
+
+    if(glyph->is_permanent == false){
+      this->remove_glyph_scene(glyph->ID);
+      i = 0;
+    }
+  }
+
+  //---------------------------
+}
+void Glyphs::remove_glyph_scene(int ID){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
+  //---------------------------
+
+  for(int i=0;i<col_glyph->list_obj.size();i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(),i);
+
+    if(glyph->ID == ID){
+      delete glyph;
+      list<Object_*>::iterator it = next(col_glyph->list_obj.begin(), i);
+      col_glyph->list_obj.erase(it);
+    }
   }
 
   //---------------------------
@@ -97,81 +168,4 @@ void Glyphs::update_glyph_MinMax(Glyph* glyph){
   glyph->min = min;
   glyph->max = max;
   glyph->COM = centroid;
-}
-
-//Glyph creation / supression
-void Glyphs::insert_into_gpu(Glyph* glyph){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
-  //---------------------------
-
-  gpuManager->gen_vao(glyph);
-  gpuManager->gen_buffer_location(glyph);
-  gpuManager->gen_buffer_color(glyph);
-  gpuManager->convert_draw_type_byName(glyph);
-
-  //ID
-  glyph->ID = list_glyph->size();
-
-  //---------------------------
-}
-void Glyphs::remove_temporary_glyph(){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
-  //---------------------------
-
-  //Remove non permanent glyphs
-  for(int i=0; i<list_glyph->size(); i++){
-    Glyph* glyph = *next(list_glyph->begin(),i);
-
-    if(glyph->is_permanent == false){
-      this->remove_glyph_scene(glyph->ID);
-      i = 0;
-    }
-  }
-
-  //---------------------------
-}
-void Glyphs::remove_glyph_scene(int ID){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
-  //---------------------------
-
-  for(int i=0;i<list_glyph->size();i++){
-    Glyph* glyph = *next(list_glyph->begin(),i);
-
-    if(glyph->ID == ID){
-      delete glyph;
-      list<Glyph*>::iterator it = next(list_glyph->begin(), i);
-      list_glyph->erase(it);
-    }
-  }
-
-  //---------------------------
-}
-void Glyphs::create_glyph_scene(Glyph* glyph){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
-  //---------------------------
-
-  this->insert_into_gpu(glyph);
-  list_glyph->push_back(glyph);
-
-  //---------------------------
-}
-Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
-  list<Glyph*>* list_glyph = data->get_list_glyph();
-  Glyph* glyph = new Glyph();
-  unsigned int VAO;
-  uint colorVBO, locationVBO;
-  //---------------------------
-
-  glyph->xyz = XYZ;
-  glyph->rgb = RGB;
-  glyph->name = "...";
-  glyph->draw_type_name = mode;
-  glyph->draw_line_width = 1;
-  glyph->is_permanent = perma;
-
-  this->insert_into_gpu(glyph);
-  list_glyph->push_back(glyph);
-
-  //---------------------------
-  return glyph;
 }
