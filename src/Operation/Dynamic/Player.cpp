@@ -87,6 +87,8 @@ void Player::select_byObjectID(Collection* collection, int ID_object){
   //objectManager->update_glyph_cloud(object);
 
   //---------------------------
+  collection->ID_obj_selected = ID_object;
+  say(collection->ID_obj_selected);
 }
 void Player::compute_wheel_selection(string direction){
   Collection* collection = sceneManager->get_selected_collection();
@@ -94,16 +96,16 @@ void Player::compute_wheel_selection(string direction){
 
   //Wheel - rolling stone
   if(collection != nullptr){
-    int subset_selected_ID = collection->ID_obj_selected;
+    int ID_obj = collection->ID_obj_selected;
 
     if(direction == "up"){
-      subset_selected_ID++;
+      ID_obj++;
     }
     else if(direction =="down"){
-      subset_selected_ID--;
+      ID_obj--;
     }
 
-    this->select_byObjectID(collection, subset_selected_ID);
+    this->select_byObjectID(collection, ID_obj);
   }
 
   //----------------------------

@@ -38,12 +38,12 @@ void Pose::make_centering(Collection* collection){
   console.AddLog("#", "Point cloud centered");
 }
 void Pose::make_elevation(Collection* collection, float Z){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  Cloud* list_obj_init = (Cloud*)*next(collection->list_obj_init.begin(), collection->ID_obj_selected);
+  Object_* object = collection->selected_obj;
+  Object_* object_init = *next(collection->list_obj_init.begin(), collection->ID_obj_selected);
   //---------------------------
 
-  vector<vec3>& XYZ = cloud->xyz;
-  vector<vec3>& XYZ_ini = list_obj_init->xyz;
+  vector<vec3>& XYZ = object->xyz;
+  vector<vec3>& XYZ_ini = object_init->xyz;
 
   for(int i=0; i<XYZ.size(); i++){
     XYZ[i].z = XYZ_ini[i].z + Z;
@@ -52,8 +52,8 @@ void Pose::make_elevation(Collection* collection, float Z){
   //---------------------------
 }
 void Pose::make_positionning(Collection* collection, vec3 pos){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  vec3& COM = cloud->COM;
+  Object_* object = collection->selected_obj;
+  vec3& COM = object->COM;
   //---------------------------
 
   vec3 diff;
@@ -65,8 +65,8 @@ void Pose::make_positionning(Collection* collection, vec3 pos){
   transformManager->make_translation(collection, diff);
 }
 void Pose::make_positionning_XY(Collection* collection, vec3 pos){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  vec3& COM = cloud->COM;
+  Object_* object = collection->selected_obj;
+  vec3& COM = object->COM;
   //---------------------------
 
   vec3 diff;
@@ -107,8 +107,8 @@ void Pose::make_positionning_glyph(vector<vec3>& XYZ, vec3& COM, vec3 pos){
   //---------------------------
 }
 float Pose::make_soilDetermination(Collection* collection){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  vector<vec3>& XYZ = cloud->xyz;
+  Object_* object = collection->selected_obj;
+  vector<vec3>& XYZ = object->xyz;
   //---------------------------
 
   //Retrieve Z coordinates from XYZ
@@ -133,9 +133,9 @@ float Pose::make_soilDetermination(Collection* collection){
   return Z_soil;
 }
 void Pose::make_adjustPosToScanner(Collection* collection, float Z_scan){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  vector<vec3>& XYZ = cloud->xyz;
-  vec3& min = cloud->min;
+  Object_* object = collection->selected_obj;
+  vector<vec3>& XYZ = object->xyz;
+  vec3& min = object->min;
   float Z_soil = make_soilDetermination(collection);
   //---------------------------
 
@@ -148,11 +148,11 @@ void Pose::make_adjustPosToScanner(Collection* collection, float Z_scan){
 
 // Orientation
 float Pose::make_orientAxis_X(Collection* collection){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   //Retrieve A & B points
-  vector<vec3>& XYZ = cloud->xyz;
+  vector<vec3>& XYZ = object->xyz;
   vec3 A = XYZ[0];
   vec3 B = XYZ[0];
   for(int i=0; i<XYZ.size(); i++){
@@ -171,14 +171,14 @@ float Pose::make_orientAxis_X(Collection* collection){
 
   //Align with x axis
   vec3 rotation = vec3(0, 0, angle);
-  transformManager->make_rotation(collection, cloud->COM, rotation);
+  transformManager->make_rotation(collection, object->COM, rotation);
 
   //---------------------------
   return angle;
 }
 void Pose::make_alignAxis_X(Collection* collection){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  vector<vec3>& XYZ = cloud->xyz;
+  Object_* object = collection->selected_obj;
+  vector<vec3>& XYZ = object->xyz;
   //---------------------------
 
   for(int i=0; i<XYZ.size(); i++){
@@ -188,7 +188,7 @@ void Pose::make_alignAxis_X(Collection* collection){
   //---------------------------
 }
 float Pose::make_alignAxisX_AB(Collection* collection, vec3 A, vec3 B){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   //Determination of angle with x axis
@@ -198,13 +198,13 @@ float Pose::make_alignAxisX_AB(Collection* collection, vec3 A, vec3 B){
 
   //Align with x axis
   vec3 rotation = vec3(0, 0, angle);
-  transformManager->make_rotation(collection, cloud->COM, rotation);
+  transformManager->make_rotation(collection, object->COM, rotation);
 
   //---------------------------
   return angle;
 }
 float Pose::make_alignAxisY_AB(Collection* collection, vec3 A, vec3 B){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
+  Object_* object = collection->selected_obj;
   //---------------------------
 
   //Determination of angle with x axis
@@ -214,7 +214,7 @@ float Pose::make_alignAxisY_AB(Collection* collection, vec3 A, vec3 B){
 
   //Align with x axis
   vec3 rotation = vec3(0, 0, angle);
-  transformManager->make_rotation(collection, cloud->COM, rotation);
+  transformManager->make_rotation(collection, object->COM, rotation);
 
   //---------------------------
   return angle;
@@ -324,9 +324,9 @@ mat4 Pose::compute_transformMatrix(float tx, float ty, float tz, float rx, float
   return transMat;
 }
 vec3 Pose::compute_anglesError(Collection* collection){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  mat4 matReal = cloud->transformation;//.RealPose;
-  mat4 matIcp = cloud->transformation;
+  Object_* object = collection->selected_obj;
+  mat4 matReal = object->transformation;//.RealPose;
+  mat4 matIcp = object->transformation;
   vec3 angleReal = this->compute_anglesFromTransformationMatrix(matReal);
   vec3 angleIcp = this->compute_anglesFromTransformationMatrix(matIcp);
   //---------------------------
@@ -341,9 +341,9 @@ vec3 Pose::compute_anglesError(Collection* collection){
   return error;
 }
 vec3 Pose::compute_translationsError(Collection* collection){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  mat4 matReal = cloud->transformation; //.RealPose;
-  mat4 matIcp = cloud->transformation;
+  Object_* object = collection->selected_obj;
+  mat4 matReal = object->transformation; //.RealPose;
+  mat4 matIcp = object->transformation;
   vec3 transReal = this->compute_translFromTransformationMatrix(matReal);
   vec3 transIcp = this->compute_translFromTransformationMatrix(matIcp);
   //---------------------------
@@ -418,9 +418,9 @@ vec3 Pose::compute_translFromTransformationMatrix(const mat4& mat){
   return translation;
 }
 vector<vec3> Pose::compute_transformcloud_XYZ(Collection* collection, mat4 Mat){
-  Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), collection->ID_obj_selected);
-  vec3& COM = cloud->COM;
-  vector<vec3> XYZ = cloud->xyz;
+  Object_* object = collection->selected_obj;
+  vec3& COM = object->COM;
+  vector<vec3> XYZ = object->xyz;
   //---------------------------
 
   //Application of the Pose
@@ -461,8 +461,8 @@ void Pose::compute_COM(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    COM += fct_centroid(cloud->xyz);
+    Object_* object = *next(collection->list_obj.begin(), i);
+    COM += fct_centroid(object->xyz);
   }
 
   //---------------------------
@@ -473,8 +473,8 @@ void Pose::compute_min(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    vec3 subset_min = fct_min_vec3(cloud->xyz);
+    Object_* object = *next(collection->list_obj.begin(), i);
+    vec3 subset_min = fct_min_vec3(object->xyz);
 
     for(int j=0; j<3; j++){
       if(subset_min[j] < min[j]){

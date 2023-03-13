@@ -209,12 +209,12 @@ void GUI_Player::player_selection(){
     Cloud* cloud = (Cloud*)collection->selected_obj;
     Cloud* subset_first = (Cloud*)collection->get_obj(0);
     Cloud* subset_last = (Cloud*)collection->get_obj(collection->nb_obj-1);
-    int subset_selected_ID = collection->ID_obj_selected;
+    int ID_obj = collection->ID_obj_selected;
 
     ImGui::SetNextItemWidth(140);
-    if(ImGui::SliderInt("##666", &subset_selected_ID, subset_first->ID, subset_last->ID)){
+    if(ImGui::SliderInt("##666", &ID_obj, subset_first->ID, subset_last->ID)){
       if(collection != nullptr){
-        playerManager->select_byObjectID(collection, subset_selected_ID);
+        playerManager->select_byObjectID(collection, ID_obj);
       }
     }
     ImGui::SameLine();
