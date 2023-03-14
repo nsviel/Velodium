@@ -11,7 +11,9 @@ uniform vec3 light_color;
 
 void main()
 {
-  //fs_color = vec4(light_color * fs_in.color, 1.0);
-  //fs_color = fs_in.color;
-  fs_color = vec4(light_color.xyz, 1.0);
+  float ambientStrength = 0.1;
+  vec3 ambient = ambientStrength * light_color;
+
+  vec3 result = ambient * objectColor;
+  fs_color = vec4(result, 1.0);
 }
