@@ -46,6 +46,7 @@ Collection::Collection(std::string name){
   this->path_file_load = "";
   this->path_file_save = "";
   this->lidar_model = "";
+  this->obj_type = "object";
 
   this->is_visible = true;
   this->is_heatmap = false;

@@ -47,8 +47,15 @@ void Visibility::compute_visibility_range_max(Collection* collection){
   if(collection == nullptr) return;
   //---------------------------
 
-  if(collection->nb_obj < visibility_range_max && visibility_range_max > 15){
-    this->visibility_range_max = collection->nb_obj;
+  //Bricolage : just pour que ca reste pas bloqué à 1
+  if(collection->is_onthefly){
+    if(visibility_range_max < 15){
+      this->visibility_range_max = 15;
+    }
+  }
+
+  if(collection->nb_obj > visibility_range_max){
+    this->visibility_range_max = collection->nb_obj - 1;
   }
 
   //---------------------------

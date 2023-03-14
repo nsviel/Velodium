@@ -35,6 +35,18 @@ Pather::Pather(){
   //---------------------------
   this->update_configuration();
 }
+Pather::Pather(Node_load* node){
+  //---------------------------
+
+  this->configManager = new Configuration();
+  this->sceneManager = new Scene();
+  this->loaderManager = node->get_loaderManager();
+  this->saverManager = node->get_saverManager();
+  this->data = Data::get_instance();
+
+  //---------------------------
+  this->update_configuration();
+}
 Pather::~Pather(){
   //---------------------------
 

@@ -66,20 +66,22 @@ void Color::update_configuration(){
 
 //Color cloud functions
 void Color::make_colorization(Collection* collection, int ID_object){
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object);
+  Object_* object = collection->get_obj_byID(ID_object);
   //---------------------------
 
   switch(color_mode){
     case 0:{ // Unicolor
-      this->color_unicolor(cloud, collection->unicolor);
+      this->color_unicolor(object, collection->unicolor);
       break;
     }
     case 1:{ // Intensity
-      this->color_intensity(cloud);
+      if(object->obj_type == "cloud")
+        this->color_intensity((Cloud*)object);
       break;
     }
     case 2:{ // Heatmap
-      this->color_heatmap(cloud);
+      if(object->obj_type == "cloud")
+        this->color_heatmap((Cloud*)object);
       break;
     }
   }
@@ -109,8 +111,8 @@ void Color::make_colorization_specific(Cloud* cloud){
   gpuManager->update_buffer_color(cloud);
 }
 
-void Color::color_unicolor(Cloud* cloud, vec4 color){
-  vector<vec4>& RGB = cloud->rgb;
+void Color::color_unicolor(Object_* object, vec4 color){
+  vector<vec4>& RGB = object->rgb;
   //---------------------------
 
   for(int i=0; i<RGB.size(); i++){
@@ -118,7 +120,7 @@ void Color::color_unicolor(Cloud* cloud, vec4 color){
   }
 
   //---------------------------
-  gpuManager->update_buffer_color(cloud);
+  gpuManager->update_buffer_color(object);
 }
 void Color::color_intensity(Cloud* cloud){
   vector<vec4>& RGB = cloud->rgb;
@@ -153,7 +155,7 @@ void Color::color_intensity(Cloud* cloud){
 void Color::color_heatmap(Cloud* cloud){
   //---------------------------
 
-  heatmapManager->make_subset_heatmap(cloud);
+  heatmapManager->make_cloud_heatmap(cloud);
 
   //---------------------------
 }

@@ -15,6 +15,7 @@
 #include "../../Scene/Data/Scene.h"
 #include "../../Specific/File/Directory.h"
 #include "../../Specific/File/Info.h"
+#include "../../Specific/File/Path.h"
 #include "../../Specific/Function/fct_transtypage.h"
 
 
@@ -131,6 +132,7 @@ Collection* Loader::load_cloud_onthefly(vector<string> path_vec){
   collection->obj_add_new(object);
   collection->list_otf_path = path_vec;
   collection->is_onthefly = true;
+  collection->obj_type = "cloud";
   object->ID = collection->ID_obj_otf++;
 
   //---------------------------

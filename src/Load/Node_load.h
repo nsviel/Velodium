@@ -24,7 +24,6 @@ public:
   inline Pather* get_patherManager(){return patherManager;}
   inline Saver* get_saverManager(){return saverManager;}
   inline Loader* get_loaderManager(){return loaderManager;}
-  inline Extractor* get_extractManager(){return extractManager;}
 
 private:
   Node_engine* node_engine;

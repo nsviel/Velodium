@@ -32,7 +32,7 @@ Velodyne::Velodyne(Node_interface* node_interface){
 
   Node_load* node_load = node_interface->get_node_load();
 
-  this->extractManager = node_load->get_extractManager();
+  this->extractManager = new Extractor();
   this->serverManager = new Capture_server();
   this->frameManager = new Capture_frame();
   this->vlp16Parser = new Parser_VLP16();

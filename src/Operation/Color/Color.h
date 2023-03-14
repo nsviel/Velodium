@@ -29,7 +29,7 @@ public:
   void make_colorization_specific(Cloud* cloud);
 
   //Specific functions
-  void color_unicolor(Cloud* cloud, vec4 color);
+  void color_unicolor(Object_* object, vec4 color);
   void color_intensity(Cloud* cloud);
   void color_heatmap(Cloud* cloud);
 

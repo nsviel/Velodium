@@ -284,6 +284,54 @@ void Attribut::make_supressPoints(Cloud* cloud, vector<int>& idx){
   gpuManager->update_buffer_location(cloud);
   gpuManager->update_buffer_color(cloud);
 }
+void Attribut::make_supressPoints(Object_* object, vector<int>& idx){
+  if(idx.size() == 0)return;
+  vector<vec3>& XYZ = object->xyz;
+  vector<vec3>& N = object->Nxyz;
+  vector<vec4>& RGB = object->rgb;
+  //---------------------------
+
+  //Sort indice vector
+  sort(idx.begin(), idx.end());
+
+  //Recreate vector -> Fastest delection method
+  vector<vec3> XYZ_b;
+  vector<vec4> RGB_b;
+  vector<float> Is_b;
+  vector<vec3> N_b;
+  int cpt = 0;
+
+  for(int i=0; i<XYZ.size(); i++){
+    //if i different from not taking account point
+    if(i != idx[cpt]){
+      XYZ_b.push_back(XYZ[i]);
+      if(RGB.size() != 0) RGB_b.push_back(RGB[i]);
+      if(N.size() != 0) N_b.push_back(N[i]);
+    }
+    //if not taking account point, ok, pass to the next
+    else{
+      cpt++;
+    }
+  }
+
+  //location
+  object->xyz = XYZ_b;
+  object->nb_point = XYZ_b.size();
+
+  //attributs
+  if(RGB.size() != 0){
+    object->rgb = RGB_b;
+  }
+  if(N.size() != 0){
+    object->Nxyz = N_b;
+  }
+
+  idx.clear();
+
+  //---------------------------
+  gpuManager->update_buffer_location(object);
+  gpuManager->update_buffer_color(object);
+}
 void Attribut::make_supressPoint(Cloud* cloud, int id){
   vector<vec3>& XYZ = cloud->xyz;
   vector<vec3>& N = cloud->Nxyz;

@@ -88,7 +88,7 @@ void Object::create_glyph_scene(){
   //---------------------------
   this->update_configuration();
 }
-void Object::create_glyph_cloud(Cloud* cloud){
+void Object::create_glyph_object(Cloud* cloud){
   //---------------------------
 
   //Cloud axis glyph
@@ -109,6 +109,11 @@ void Object::create_glyph_cloud(Cloud* cloud){
   Tree* tree_src = (Tree*)get_glyph_src_byName("tree");
   tree_src->create_glyph(cloud);
   glyphManager->insert_into_gpu(&cloud->glyphs["tree"]);
+
+  glyphManager->create_glyph_object(cloud, &cloud->glyphs["axis"]);
+  glyphManager->create_glyph_object(cloud, &cloud->glyphs["normal"]);
+  glyphManager->create_glyph_object(cloud, &cloud->glyphs["keypoint"]);
+  glyphManager->create_glyph_object(cloud, &cloud->glyphs["tree"]);
 
   //---------------------------
 }

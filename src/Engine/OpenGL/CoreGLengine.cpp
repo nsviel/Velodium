@@ -116,7 +116,6 @@ void CoreGLengine::init_opengl(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
   }
-  glfwWindowHint(GLFW_SAMPLES, 16);
   glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
@@ -140,9 +139,6 @@ void CoreGLengine::init_opengl(){
 
   //Enable shader point size setting
   //glEnable(GL_PROGRAM_POINT_SIZE);
-  //Multisampling
-  //glfwWindowHint(GLFW_SAMPLES, 4);
-  //glEnable(GL_MULTISAMPLE);
 
   //GLEW
   glewInit();
@@ -154,7 +150,7 @@ void CoreGLengine::init_object(){
 
   this->node_engine = new Node_engine(this);
   this->node_gui = node_engine->get_node_gui();
-  this->dimManager = node_engine->get_dimManager();;
+  this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->viewportManager = node_engine->get_viewportManager();

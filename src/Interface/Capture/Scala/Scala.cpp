@@ -28,7 +28,7 @@ Scala::Scala(Node_interface* node_interface){
   Configuration* configManager = node_engine->get_configManager();
   string path_data = configManager->parse_json_s("parameter", "path_data");
 
-  this->extractManager = node_load->get_extractManager();
+  this->extractManager = new Extractor();
   this->path_scala = path_data + "scala/";
   this->is_capturing = false;
   this->run_capture = false;

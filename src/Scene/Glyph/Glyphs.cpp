@@ -60,6 +60,16 @@ void Glyphs::create_glyph_scene(Glyph* glyph){
 
   //---------------------------
 }
+void Glyphs::create_glyph_object(Cloud* cloud, Glyph* glyph){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_object");
+  //---------------------------
+
+  glyph->linked_object = cloud;
+  this->insert_into_gpu(glyph);
+  col_glyph->obj_add_new(glyph);
+
+  //---------------------------
+}
 Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
   Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
   Glyph* glyph = new Glyph();

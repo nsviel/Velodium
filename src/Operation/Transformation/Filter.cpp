@@ -115,23 +115,23 @@ void Filter::filter_sphere(){
 
   //---------------------------
 }
-void Filter::filter_sphere_cloud(Collection* collection){
+void Filter::filter_sphere_collection(Collection* collection){
   //---------------------------
 
   for(int i=0; i<collection->nb_obj; i++){
     Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    this->filter_sphere_subset(cloud);
+    this->filter_sphere_cloud(cloud);
   }
 
   //---------------------------
 }
-void Filter::filter_sphere_subset(Cloud* cloud){
-  vector<vec3>& xyz = cloud->xyz;
+void Filter::filter_sphere_cloud(Cloud* object){
+  vector<vec3>& xyz = object->xyz;
   vector<int> idx;
   //---------------------------
 
   for(int i=0; i<xyz.size(); i++){
-    float dist = fct_distance(xyz[i], cloud->root);
+    float dist = fct_distance(xyz[i], object->root);
     if(dist < sphere_min || dist > sphere_max){
       idx.push_back(i);
     }
@@ -139,7 +139,7 @@ void Filter::filter_sphere_subset(Cloud* cloud){
 
   //Supress points
   int idx_size = idx.size();
-  attribManager->make_supressPoints(cloud, idx);
+  attribManager->make_supressPoints(object, idx);
 
   //---------------------------
 }

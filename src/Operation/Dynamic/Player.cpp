@@ -106,7 +106,7 @@ void Player::compute_wheel_selection(string direction){
       ID_obj--;
     }
 
-    if(ID_obj < 0) ID_obj = 0;
+    if(ID_obj < collection->get_obj(0)->ID) ID_obj = collection->get_obj(0)->ID;
 
     this->select_byObjectID(collection, ID_obj);
   }

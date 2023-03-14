@@ -11,6 +11,7 @@ Data::Data(){
   this->selected_col = nullptr;
 
   this->create_collection_glyph("glyph_scene");
+  this->create_collection_glyph("glyph_object");
   this->create_collection_glyph("light");
 
   //---------------------------

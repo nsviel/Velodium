@@ -74,7 +74,7 @@ void Heatmap::make_col_heatmap(Collection* collection){
     //Apply heatmap
     if(collection->is_heatmap == false){
       subset_buf->rgb = cloud->rgb;
-      this->make_subset_heatmap(cloud);
+      this->make_cloud_heatmap(cloud);
       collection->is_heatmap = true;
     }
     //Reverse heatmap
@@ -88,7 +88,7 @@ void Heatmap::make_col_heatmap(Collection* collection){
   //---------------------------
   //sceneManager->update_buffer_color(cloud);
 }
-void Heatmap::make_subset_heatmap(Cloud* cloud){
+void Heatmap::make_cloud_heatmap(Cloud* cloud){
   //---------------------------
 
   switch(heatmap_mode){

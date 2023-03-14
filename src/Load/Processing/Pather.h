@@ -4,6 +4,7 @@
 #include "../../Scene/Data/Data.h"
 #include "../../common.h"
 
+class Node_load;
 class Scene;
 class Loader;
 class Saver;
@@ -15,6 +16,7 @@ class Pather
 public:
   //Constructor / Destructor
   Pather();
+  Pather(Node_load* node);
   ~Pather();
 
 public:

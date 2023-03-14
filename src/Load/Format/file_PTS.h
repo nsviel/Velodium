@@ -33,7 +33,7 @@ private:
   void Loader_init();
   void Loader_nbColumns();
   void Loader_configuration();
-  void Loader_data(int FILE_config);
+  void Loader_data(Data_file* data_out, int FILE_config);
 
   //Loader sub-functions
   bool check_header(string pathFile);
@@ -57,9 +57,6 @@ private:
   //Parameters
   int IdataFormat, export_IdataFormat;
   bool retrieve_I, retrieve_RGB, retrieve_N;
-
-  //Datatypes
-  Data_file* data_out;
 };
 
 #endif

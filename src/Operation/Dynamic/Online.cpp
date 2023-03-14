@@ -76,18 +76,19 @@ void Online::compute_onlineOpe(Collection* collection, int ID_object){
 
   //Some init operation
   if(object == nullptr) return;
+  if(object->obj_type != "cloud") return;
   collection->selected_obj = object;
 
   //Control object visibilities
   visibilityManager->compute_visibility(collection, ID_object);
 
   //Make slam on the current object
-  //node_module->online(collection, ID_object);
+  node_module->online(collection, ID_object);
   sceneManager->update_buffer_location(object);
 
   //Make cleaning on the current object
   if(with_filter_sphere){
-    //filterManager->filter_sphere_subset(object);
+    filterManager->filter_sphere_cloud((Cloud*)object);
   }
 
   //If camera follow up option activated

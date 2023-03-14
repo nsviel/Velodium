@@ -19,7 +19,7 @@ public:
 public:
   //Main functions
   void make_col_heatmap(Collection* collection);
-  void make_subset_heatmap(Cloud* cloud);
+  void make_cloud_heatmap(Cloud* cloud);
   void make_heatmap_all(bool heatAll);
 
   //Specific mode functions

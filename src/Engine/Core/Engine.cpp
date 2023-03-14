@@ -87,17 +87,21 @@ void Engine::draw_untextured_cloud(){
   //---------------------------
 }
 void Engine::draw_untextured_glyph(){
-  list<Collection*>* list_collection = sceneManager->get_list_col_object();
+  list<Collection*>* list_collection = data->get_list_col_glyph();
+  //Collection* col_glyph = data->get_collection_byName("glyph", "glyph_cloud");
+  //if(col_glyph == nullptr) return;
   //---------------------------
 
   //Draw glyph scene
   objectManager->runtime_glyph_scene();
-/*
-  //Draw glyph cloud
-  for(int i=0; i<list_collection->size(); i++){
-    Collection* collection = *next(list_collection->begin(),i);
+/*sayHello();
 
-    if(collection->is_visible){
+  //Draw glyph cloud
+  for(int i=0; i<col_glyph->list_obj.size(); i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(),i);
+
+    if(glyph->is_visible){
+      gpuManager->draw_object(glyph);/*
       //All cloud
       //objectManager->runtime_glyph_subset_all(collection);
 
@@ -108,9 +112,10 @@ void Engine::draw_untextured_glyph(){
       //OOBB
       Cloud* subset_pred = (Cloud*)collection->get_obj_byID(collection->ID_obj_selected - 2);
       objectManager->runtime_glyph_pred(subset_pred);
+      
     }
 
-  }*/
+  }sayHello();*/
 
   //---------------------------
 }

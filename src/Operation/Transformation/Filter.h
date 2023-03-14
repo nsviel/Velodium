@@ -21,8 +21,8 @@ public:
 
   void filter_maxAngle(Collection* collection, float sampleAngle);
   void filter_sphere();
-  void filter_sphere_cloud(Collection* collection);
-  void filter_sphere_subset(Cloud* cloud);
+  void filter_sphere_collection(Collection* collection);
+  void filter_sphere_cloud(Cloud* object);
   void filter_cylinder_cloud(Collection* collection);
   void filter_cylinder_subset(Cloud* cloud);
 

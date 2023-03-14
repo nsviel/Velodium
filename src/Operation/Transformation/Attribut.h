@@ -33,6 +33,7 @@ public:
   void compute_subset_distance(Cloud* cloud);
 
   void make_supressPoints(Cloud* cloud, vector<int>& idx);
+  void make_supressPoints(Object_* object, vector<int>& idx);
   void make_supressPoint(Cloud* cloud, int id);
   void make_supressPoints(vector<vec3>& XYZ, vector<int>& idx);
   void cloudsData();

@@ -31,6 +31,7 @@ public:
   void remove_glyph_scene(int ID);
   void remove_temporary_glyph();
   void create_glyph_scene(Glyph* glyph);
+  void create_glyph_object(Cloud* cloud, Glyph* glyph);
   Glyph* create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma);
 
 private:
