@@ -39,16 +39,12 @@ public:
   //Runtime function
   void draw_glyph_scene();
   void draw_glyph_object();
-  void runtime_glyph_subset_all(Collection* collection);
-  void runtime_glyph_subset_selected(Cloud* cloud);
-  void runtime_glyph_pred(Cloud* cloud);
 
   //Update function
   void update_configuration();
   void update_glyph_cloud(Cloud* cloud);
   void update_glyph_collection(Collection* collection);
-  void update_object(Glyph* glyph);
-  void update_object(Glyph* glyph, vec4 color);
+  void update_glyph(Glyph* glyph);
   void update_object(string obj, vec4 color);
 
   //Reset function
@@ -59,7 +55,8 @@ public:
   //Misc function
   void set_object_visibility(string name, bool val);
   void set_slam_object(bool value);
-  Glyph* get_glyph_by_name(string name);
+  Glyph* get_glyph_scene_byName(string name);
+  Glyph* get_glyph_object_byName(Cloud* cloud, string name);
   Glyph_source* get_glyph_src_byName(string name);
 
   inline Grid* get_object_grid(){return (Grid*)get_glyph_src_byName("grid");}

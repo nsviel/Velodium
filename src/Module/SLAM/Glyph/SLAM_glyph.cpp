@@ -70,7 +70,7 @@ void SLAM_glyph::update_glyph(Collection* collection, Cloud* cloud){
   this->update_visibility(cloud);
 
   //---------------------------
-  objectManager->update_object(keypoint);
+  objectManager->update_glyph(keypoint);
 }
 void SLAM_glyph::update_visibility(Cloud* cloud){
   //---------------------------
@@ -164,7 +164,7 @@ void SLAM_glyph::update_glyph_matching(Cloud* cloud){
     // Update matching glyph
     Matching* matchObject = objectManager->get_object_matching();
     matchObject->update_matching(xyz_matching);
-    objectManager->update_object(matchObject->get_glyph());
+    objectManager->update_glyph(matchObject->get_glyph());
 
     //---------------------------
   }
@@ -195,9 +195,9 @@ void SLAM_glyph::update_glyph_map(){
 
   Localmap* mapObject = objectManager->get_object_localmap();
   mapObject->update_localmap(slam_map->get_local_map());
-  objectManager->update_object(mapObject->get_localmap());
+  objectManager->update_glyph(mapObject->get_localmap());
   mapObject->update_localcloud(slam_map->get_local_cloud());
-  objectManager->update_object(mapObject->get_localcloud());
+  objectManager->update_glyph(mapObject->get_localcloud());
 
   //---------------------------
 }
@@ -208,7 +208,7 @@ void SLAM_glyph::update_glyph_car(Collection* collection){
     Car* carObject = objectManager->get_object_car();
     Glyph* car = carObject->get_glyph();
     carObject->update_glyph(collection);
-    objectManager->update_object(car);
+    objectManager->update_glyph(car);
 
     //---------------------------
   }
@@ -220,7 +220,7 @@ void SLAM_glyph::update_glyph_trajectory(Collection* collection){
     Trajectory* trajObject = objectManager->get_object_trajectory();
     Glyph* traj = trajObject->get_glyph();
     trajObject->update(collection);
-    objectManager->update_object(traj);
+    objectManager->update_glyph(traj);
 
     //---------------------------
   }

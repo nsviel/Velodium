@@ -36,16 +36,12 @@ void Glyphs::draw_glyph(Glyph* glyph){
   //---------------------------
 }
 void Glyphs::insert_into_gpu(Glyph* glyph){
-  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
   //---------------------------
 
   gpuManager->gen_vao(glyph);
   gpuManager->gen_buffer_location(glyph);
   gpuManager->gen_buffer_color(glyph);
   gpuManager->convert_draw_type_byName(glyph);
-
-  //ID
-  glyph->ID = col_glyph->list_obj.size();
 
   //---------------------------
 }
@@ -69,26 +65,6 @@ void Glyphs::create_glyph_object(Cloud* cloud, Glyph* glyph){
   col_glyph->obj_add_new(glyph);
 
   //---------------------------
-}
-Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
-  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
-  Glyph* glyph = new Glyph();
-  unsigned int VAO;
-  uint colorVBO, locationVBO;
-  //---------------------------
-
-  glyph->xyz = XYZ;
-  glyph->rgb = RGB;
-  glyph->name = "...";
-  glyph->draw_type_name = mode;
-  glyph->draw_line_width = 1;
-  glyph->is_permanent = perma;
-
-  this->insert_into_gpu(glyph);
-  col_glyph->list_obj.push_back(glyph);
-
-  //---------------------------
-  return glyph;
 }
 void Glyphs::remove_temporary_glyph(){
   Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
@@ -122,8 +98,36 @@ void Glyphs::remove_glyph_scene(int ID){
 
   //---------------------------
 }
+Glyph* Glyphs::create_glyph(vector<vec3>& XYZ, vector<vec4>& RGB, string mode, bool perma){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
+  Glyph* glyph = new Glyph();
+  unsigned int VAO;
+  uint colorVBO, locationVBO;
+  //---------------------------
+
+  glyph->xyz = XYZ;
+  glyph->rgb = RGB;
+  glyph->name = "...";
+  glyph->draw_type_name = mode;
+  glyph->draw_line_width = 1;
+  glyph->is_permanent = perma;
+
+  this->insert_into_gpu(glyph);
+  col_glyph->list_obj.push_back(glyph);
+
+  //---------------------------
+  return glyph;
+}
 
 //Glyph update
+void Glyphs::update_glyph_buffer(Glyph* glyph){
+  //---------------------------
+
+  gpuManager->update_buffer_location(glyph);
+  gpuManager->update_buffer_color(glyph);
+
+  //---------------------------
+}
 void Glyphs::update_glyph_location(Glyph* glyph){
   //---------------------------
 

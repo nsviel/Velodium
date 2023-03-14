@@ -244,3 +244,17 @@ Object_* Collection::get_obj_init_byID(int querry){
   //---------------------------
   return nullptr;
 }
+
+//Specific function
+void Collection::set_visibility(bool value){
+  //---------------------------
+
+  this->is_visible = value;
+
+  for(int i=0; i<list_obj.size(); i++){
+    Object_* object = get_obj(i);
+    object->is_visible = value;
+  }
+
+  //---------------------------
+}

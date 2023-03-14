@@ -11,6 +11,7 @@
 #include "../../Scene/Node_scene.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Object.h"
+#include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Glyph/Cloud/AABB.h"
 #include "../../Scene/Glyph/Scene/Grid.h"
 #include "../../Scene/Glyph/Scene/Axis.h"
@@ -40,6 +41,7 @@ GUI_option::GUI_option(Node_gui* node_gui){
   this->renderManager = node_engine->get_renderManager();
   this->gui_control = node_gui->get_gui_control();
   this->objectManager = node_scene->get_objectManager();
+  this->glyphManager = node_scene->get_glyphManager();
   this->sceneManager = node_scene->get_sceneManager();
   this->heatmapManager = node_ope->get_heatmapManager();
   this->colorManager = node_ope->get_colorManager();
@@ -100,9 +102,9 @@ void GUI_option::option_glyph(){
     gridObject->update_grid(nb_square);
     gridObject->update_grid_sub(nb_square);
     gridObject->update_grid_plane(nb_square);
-    objectManager->update_object(gridObject->get_grid());
-    objectManager->update_object(gridObject->get_grid_sub());
-    objectManager->update_object(gridObject->get_grid_plane());
+    glyphManager->update_glyph_buffer(gridObject->get_grid());
+    glyphManager->update_glyph_buffer(gridObject->get_grid_sub());
+    glyphManager->update_glyph_buffer(gridObject->get_grid_plane());
   }
   ImGui::NextColumn();
 
@@ -184,8 +186,8 @@ void GUI_option::option_glyph(){
   ImGui::PushItemWidth(75);
   if(ImGui::DragInt("##458", tree_level, 1, 1, 50, "%d")){
     Cloud* cloud = (Cloud*)collection->selected_obj;
-    treeObject->update_tree(cloud);
-    objectManager->update_object(&cloud->glyphs["tree"]);
+    //treeObject->update_tree(cloud);
+    //glyphManager->update_glyph_buffer(&cloud->glyphs["tree"]);
   }
   ImGui::NextColumn();
 
@@ -198,30 +200,30 @@ void GUI_option::option_mode(){
     //---------------------------
 
     //Light / Dark mode
-    static bool mode_dark = false;
+    /*ùstatic bool mode_dark = false;
     static vec4 color_old;
     if(ImGui::Checkbox("Dark mode", &mode_dark)){
       vec4* screen_color = renderManager->get_screen_color();
 
       if(mode_dark == true){
         color_old = *screen_color;
-        objectManager->update_object("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        objectManager->update_object("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        glyphManager->update_glyph_color("aabb",vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        glyphManager->update_glyph_color("selection",vec4(1.0f, 1.0f, 1.0f, 1.0f));
         *screen_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
       }else{
-        objectManager->update_object("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        objectManager->update_object("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        glyphManager->update_glyph_color("aabb",vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        glyphManager->update_glyph_color("selection",vec4(0.0f, 0.0f, 0.0f, 1.0f));
         *screen_color = color_old;
       }
-    }
+    }*/
 
     //Visualization mode
     static bool mode_visualization = false;
     if(ImGui::Checkbox("Display mode", &mode_visualization)){
       vec4* screen_color = renderManager->get_screen_color();
-      Glyph* axis = objectManager->get_glyph_by_name("axis");
-      Glyph* aabb = objectManager->get_glyph_by_name("aabb");
-      Glyph* grid = objectManager->get_glyph_by_name("grid");
+      Glyph* axis = objectManager->get_glyph_scene_byName("axis");
+      Glyph* aabb = objectManager->get_glyph_scene_byName("aabb");
+      Glyph* grid = objectManager->get_glyph_scene_byName("grid");
 
       if(mode_visualization == true){
         axis->is_visible = false;
@@ -388,7 +390,7 @@ void GUI_option::option_color(){
     ImGui::SetNextItemWidth(colorEditSize);
     vec4* color_normals = objectManager->get_glyph_color("normal");
     if(ImGui::ColorEdit4("Normals", (float*)color_normals)){
-      objectManager->update_object("normal", *color_normals);
+      glyphManager->update_glyph_color("normal", *color_normals);
     }*/
 
     //Grid color
@@ -396,7 +398,7 @@ void GUI_option::option_color(){
     Grid* gridObject = objectManager->get_object_grid();
     vec4* grid_color = gridObject->get_grid_color();
     if(ImGui::ColorEdit4("Grid", (float*)grid_color)){
-      objectManager->update_object(gridObject->get_grid(), *grid_color);
+      glyphManager->update_glyph_color(gridObject->get_grid(), *grid_color);
     }
 
     //Bounding box color
@@ -404,7 +406,7 @@ void GUI_option::option_color(){
     AABB* aabbObject = objectManager->get_object_aabb();
     vec4* aabb_color = aabbObject->get_color();
     if(ImGui::ColorEdit4("AABB", (float*)aabb_color)){
-      objectManager->update_object(aabbObject->get_glyph(), *aabb_color);
+      glyphManager->update_glyph_color(aabbObject->get_glyph(), *aabb_color);
     }
 
     //Uniform collection color

@@ -20,26 +20,27 @@ Tree::Tree(){
 }
 Tree::~Tree(){}
 
-void Tree::create_glyph(Cloud* cloud){
-  Glyph tree;
+Glyph* Tree::create_glyph(Cloud* cloud){
+  Glyph* tree = new Glyph();
   //---------------------------
 
   //Create glyph
-  tree.name = "tree";
-  tree.draw_line_width = 2;
-  tree.is_visible = is_visible;
-  tree.draw_type_name = "line";
-  tree.is_permanent = true;
-  tree.unicolor = tree_color;
+  tree->name = "tree";
+  tree->draw_line_width = 2;
+  tree->is_visible = is_visible;
+  tree->draw_type_name = "line";
+  tree->is_permanent = true;
+  tree->unicolor = tree_color;
 
   //---------------------------
-  cloud->glyphs.insert({"tree", tree});
+  return tree;
 }
-void Tree::update_tree(Cloud* cloud){
+void Tree::update_tree(Cloud* cloud, Glyph* tree){
   //---------------------------
 
   if(is_visible){
     octreeManager->create_octree(cloud, tree_level);
+    tree->xyz = glyph->xyz;
   }
 
   //---------------------------

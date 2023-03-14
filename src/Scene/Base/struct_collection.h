@@ -35,6 +35,9 @@ struct Collection
   Object_* get_obj_init(int querry);
   Object_* get_obj_init_byID(int querry);
 
+  //Specific function
+  void set_visibility(bool value);
+
   //IDs
   int ID_col_perma; //Permanent collection ID
   int ID_col_order; // List order collection ID

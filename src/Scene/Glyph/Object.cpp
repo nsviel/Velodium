@@ -93,13 +93,13 @@ void Object::create_glyph_object(Cloud* cloud){
 
   //Cloud axis glyph
   Axis* axis_src = (Axis*)get_glyph_src_byName("axis");
-  axis_src->create_axis_subset(cloud);
-  glyphManager->insert_into_gpu(&cloud->glyphs["axis"]);
+  Glyph* axis = axis_src->create_axis_subset(cloud);
+  glyphManager->create_glyph_object(cloud, axis);
 
   //Normal glyph
   Normal* normal_src = (Normal*)get_glyph_src_byName("normal");
-  normal_src->create_glyph(cloud);
-  glyphManager->insert_into_gpu(&cloud->glyphs["normal"]);
+  Glyph* normal = normal_src->create_glyph(cloud);
+  glyphManager->create_glyph_object(cloud, normal);
 
   //Keypoint glyph
   keyObject->create_glyph(cloud);
@@ -107,13 +107,8 @@ void Object::create_glyph_object(Cloud* cloud){
 
   //Tree glyph
   Tree* tree_src = (Tree*)get_glyph_src_byName("tree");
-  tree_src->create_glyph(cloud);
-  glyphManager->insert_into_gpu(&cloud->glyphs["tree"]);
-
-  glyphManager->create_glyph_object(cloud, &cloud->glyphs["axis"]);
-  glyphManager->create_glyph_object(cloud, &cloud->glyphs["normal"]);
-  glyphManager->create_glyph_object(cloud, &cloud->glyphs["keypoint"]);
-  glyphManager->create_glyph_object(cloud, &cloud->glyphs["tree"]);
+  Glyph* tree = tree_src->create_glyph(cloud);
+  glyphManager->create_glyph_object(cloud, tree);
 
   //---------------------------
 }
@@ -121,7 +116,7 @@ Glyph* Object::create_glyph_ostacle(){
   //---------------------------
 
   //Creat new OOBB object
-  Glyph* oobb = get_glyph_by_name("oobb");
+  Glyph* oobb = get_glyph_scene_byName("oobb");
   glyphManager->insert_into_gpu(oobb);
 
   //---------------------------
@@ -146,91 +141,22 @@ void Object::draw_glyph_object(){
 
   for(int i=0;i<col_glyph->list_obj.size();i++){
     Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(),i);
-    glyphManager->draw_glyph(glyph);
-  }
-
-  //---------------------------
-}
-
-
-
-// A VIRER
-void Object::runtime_glyph_subset_all(Collection* collection){
-  //---------------------------
-
-  for(int j=0; j<collection->list_obj.size(); j++){
-    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
-
-    //If the cloud is visible
-    if(cloud->is_visible){
-      //Subset axis
-      Glyph* axis = &cloud->glyphs["axis"];
-      glyphManager->draw_glyph(axis);
+    Object_* object = glyph->linked_object;
+    if(object->is_visible){
+      glyphManager->draw_glyph(glyph);
     }
   }
 
   //---------------------------
 }
-void Object::runtime_glyph_subset_selected(Cloud* cloud){
-  if(cloud == nullptr) return;
-  //---------------------------
-
-  //If the cloud is visible
-  if(cloud->is_visible){
-    //Keypoint
-    Glyph* keypoint = &cloud->glyphs["keypoint"];
-    if(keypoint->is_visible){
-      glyphManager->draw_glyph(keypoint);
-    }
-
-    //Normal
-    Glyph* normal = &cloud->glyphs["normal"];
-    if(normal->is_visible){
-      glyphManager->draw_glyph(normal);
-    }
-
-    //Tree
-    Glyph* tree = &cloud->glyphs["tree"];
-    if(tree->is_visible){
-      glyphManager->draw_glyph(tree);
-    }
-  }
-
-  //---------------------------
-}
-void Object::runtime_glyph_pred(Cloud* cloud){
-  //---------------------------
-
-  //Check for conditions
-  if(cloud == nullptr) return;
-  /*
-  //OOBB - prediction
-  vector<Glyph>& oobb_pr = cloud->detection.oobb;
-  for(int i=0; i<oobb_pr.size(); i++){
-    Glyph* oobb = &oobb_pr[i];
-    glyphManager->draw_glyph(oobb);
-  }
-
-  //OOBB - ground thruth
-  vector<Glyph>& oobb_gt = cloud->detection_gt.oobb;
-  for(int i=0; i<oobb_gt.size(); i++){
-    Glyph* oobb = &oobb_gt[i];
-    glyphManager->draw_glyph(oobb);
-  }*/
-
-  //---------------------------
-}
-
-
-
 
 //Update function
 void Object::update_configuration(){
   //---------------------------
 
-  Glyph* aabb = get_glyph_by_name("aabb");
-  Glyph* grid = get_glyph_by_name("grid");
-  Glyph* axis = get_glyph_by_name("axis");
+  Glyph* aabb = get_glyph_scene_byName("aabb");
+  Glyph* grid = get_glyph_scene_byName("grid");
+  Glyph* axis = get_glyph_scene_byName("axis");
   aabb->is_visible = configManager->parse_json_b("glyph", "aabb_visibility");
   grid->is_visible = configManager->parse_json_b("glyph", "grid_visibility");
   axis->is_visible = configManager->parse_json_b("glyph", "axis_visibility");
@@ -247,7 +173,7 @@ void Object::update_configuration(){
 
   //---------------------------
 }
-void Object::update_object(Glyph* glyph){
+void Object::update_glyph(Glyph* glyph){
   //---------------------------
 
   glyphManager->update_glyph_location(glyph);
@@ -255,42 +181,64 @@ void Object::update_object(Glyph* glyph){
 
   //---------------------------
 }
-void Object::update_object(Glyph* glyph, vec4 color){
+
+//Accesseurs
+Glyph* Object::get_glyph_scene_byName(string name){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
   //---------------------------
 
-  glyphManager->update_glyph_location(glyph);
-  glyphManager->update_glyph_color(glyph, color);
+  for(int i=0; i<col_glyph->list_obj.size(); i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(), i);
 
-  //---------------------------
-}
-void Object::update_object(string obj, vec4 color){
-  Glyph* glyph = get_glyph_by_name(obj);
-  //---------------------------
-
-  if(glyph != nullptr){
-    glyphManager->update_glyph_location(glyph);
-    glyphManager->update_glyph_color(glyph, color);
+    if(glyph->name == name){
+      return glyph;
+    }
   }
 
   //---------------------------
+  return nullptr;
 }
+Glyph* Object::get_glyph_object_byName(Cloud* cloud, string name){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_object");
+  //---------------------------
+
+  for(int i=0; i<col_glyph->list_obj.size(); i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(), i);
+
+    if(glyph->name == name && glyph->linked_object->ID == cloud->ID){
+      return glyph;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
+}
+
+
+
+
+
+// A VIRER
 void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 
-  //Subset axis
+  //Object axis
+  Glyph* axis = get_glyph_object_byName(cloud, "axis");
   Axis* axis_src = (Axis*)get_glyph_src_byName("axis");
-  axis_src->update_axis_subset(cloud);
-  glyphManager->update_glyph_location(&cloud->glyphs["axis"]);
+  axis_src->update_axis_subset(cloud, axis);
+  glyphManager->update_glyph_location(axis);
 
-  //Subset normal
+  //Object normal
+  Glyph* normal = get_glyph_object_byName(cloud, "normal");
   Normal* normal_src = (Normal*)get_glyph_src_byName("normal");
-  normal_src->update_normal_cloud(cloud);
-  this->update_object(&cloud->glyphs["normal"]);
+  normal_src->update_normal_cloud(cloud, normal);
+  glyphManager->update_glyph_buffer(normal);
 
   //Tree
+  Glyph* tree = get_glyph_object_byName(cloud, "tree");
   Tree* tree_src = (Tree*)get_glyph_src_byName("tree");
-  tree_src->update_tree(cloud);
-  this->update_object(&cloud->glyphs["tree"]);
+  tree_src->update_tree(cloud, tree);
+  glyphManager->update_glyph_buffer(tree);
 
   //---------------------------
 }
@@ -298,10 +246,10 @@ void Object::update_glyph_collection(Collection* collection){
   //---------------------------
 
   //Update cloud AABB
-  Glyph* aabb = get_glyph_by_name("aabb");
+  Glyph* aabb = get_glyph_scene_byName("aabb");
   AABB* aabb_src = (AABB*)get_glyph_src_byName("aabb");
   aabb_src->update_glyph(collection, aabb);
-  this->update_object(aabb);
+  this->update_glyph(aabb);
 
   //Update cloud cloud glyphs
   for(int i=0; i<collection->nb_obj; i++){
@@ -320,7 +268,7 @@ void Object::reset_scene_object(){
   glyphManager->remove_temporary_glyph();
 
   //Invisibilize all cloud dependant glyphs
-  Glyph* aabb = get_glyph_by_name("aabb");
+  Glyph* aabb = get_glyph_scene_byName("aabb");
   aabb->xyz.clear();
 
   //Reset specific glyphs
@@ -328,7 +276,7 @@ void Object::reset_scene_object(){
     vec_glyph_src[i]->reset();
   }
 
-  Glyph* box = get_glyph_by_name("box");
+  Glyph* box = get_glyph_scene_byName("box");
   box->is_visible = false;
 
   mapObject->clear();
@@ -338,8 +286,8 @@ void Object::reset_scene_object(){
 void Object::reset_color_object(){
   //---------------------------
 
-  Glyph* aabb = get_glyph_by_name("aabb");
-  Glyph* grid = get_glyph_by_name("grid");
+  Glyph* aabb = get_glyph_scene_byName("aabb");
+  Glyph* grid = get_glyph_scene_byName("grid");
 
   glyphManager->update_glyph_color(aabb, vec4(1.0f, 1.0f, 1.0f, 1.0f));
   glyphManager->update_glyph_color(grid, vec4(0.5f, 0.5f, 0.5f, 1.0f));
@@ -409,21 +357,7 @@ void Object::set_slam_object(bool value){
 
   //---------------------------
 }
-Glyph* Object::get_glyph_by_name(string name){
-  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
-  //---------------------------
 
-  for(int i=0; i<col_glyph->list_obj.size(); i++){
-    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(), i);
-
-    if(glyph->name == name){
-      return glyph;
-    }
-  }
-
-  //---------------------------
-  return nullptr;
-}
 Glyph_source* Object::get_glyph_src_byName(string name){
   //---------------------------
 

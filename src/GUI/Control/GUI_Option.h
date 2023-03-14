@@ -16,6 +16,7 @@ class GPU_rendering;
 class Configuration;
 class Engine;
 class Texture;
+class Glyphs;
 
 
 class GUI_option
@@ -49,6 +50,7 @@ private:
   Object* objectManager;
   Heatmap* heatmapManager;
   Pather* pathManager;
+  Glyphs* glyphManager;
   GPU_rendering* renderManager;
   Engine* engineManager;
   Texture* texManager;

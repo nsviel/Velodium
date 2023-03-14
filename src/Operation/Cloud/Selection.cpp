@@ -454,7 +454,7 @@ void Selection::mouse_drawFrame(vec2 point1, vec2 point2){
   Mark* markObject = objectManager->get_object_mark();
   Glyph* frame = markObject->get_selection_frame();
   frame->xyz = xyz;
-  objectManager->update_object(frame);
+  objectManager->update_glyph(frame);
 
   //---------------------------
 }

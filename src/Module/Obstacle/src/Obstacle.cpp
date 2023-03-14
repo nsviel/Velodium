@@ -139,7 +139,7 @@ void Obstacle::build_obstacleGlyph_pr(Cloud* cloud){
     vec4 color = AI_color_dic.find(detection->name[i])->second;
 
     oobbManager->update_glyph(glyph, transf);
-    objectManager->update_object(glyph, color);
+    objectManager->update_glyph(glyph, color);
     detection->oobb.push_back(*glyph);
 
     detection->is_predicted == true;
@@ -161,7 +161,7 @@ void Obstacle::build_obstacleGlyph_gt(Cloud* cloud){
     mat4 transf = poseManager->compute_transformMatrix(To, Ro, So);
 
     oobbManager->update_glyph(glyph, transf);
-    objectManager->update_object(glyph);
+    objectManager->update_glyph(glyph);
     detection_gt->oobb.push_back(*glyph);
     delete glyph;
   }*/

@@ -21,6 +21,7 @@ public:
   void draw_glyph(Glyph* glyph);
 
   //Glyph update
+  void update_glyph_buffer(Glyph* glyph);
   void update_glyph_location(Glyph* glyph);
   void update_glyph_color(Glyph* glyph);
   void update_glyph_color(Glyph* glyph, vec4 RGB_in);

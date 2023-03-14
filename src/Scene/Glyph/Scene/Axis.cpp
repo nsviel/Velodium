@@ -92,18 +92,18 @@ void Axis::create_axis_circle(float circleRadius){
 
   //---------------------------
 }
-void Axis::create_axis_subset(Cloud* cloud){
-  Glyph axis_subset;
+Glyph* Axis::create_axis_subset(Cloud* cloud){
+  Glyph* axis_subset = new Glyph();
   //---------------------------
 
   //Create glyph
-  axis_subset.name = "subset_axis";
-  axis_subset.draw_line_width = 3;
-  axis_subset.is_visible = is_visible;
-  axis_subset.draw_type_name = "line";
+  axis_subset->name = "axis";
+  axis_subset->draw_line_width = 3;
+  axis_subset->is_visible = is_visible;
+  axis_subset->draw_type_name = "line";
 
   //Axis colors
-  vector<vec4>& RGB = axis_subset.rgb;
+  vector<vec4>& RGB = axis_subset->rgb;
   RGB.push_back(vec4(0.9f, 0.2f, 0.2f, 1.0f));
   RGB.push_back(vec4(0.9f, 0.2f, 0.2f, 1.0f));
   RGB.push_back(vec4(0.2f, 0.9f, 0.2f, 1.0f));
@@ -112,19 +112,17 @@ void Axis::create_axis_subset(Cloud* cloud){
   RGB.push_back(vec4(0.2f, 0.2f, 0.9f, 1.0f));
 
   //---------------------------
-  cloud->glyphs.insert({"axis", axis_subset});
+  return axis_subset;
 }
-void Axis::update_axis_subset(Cloud* cloud){say("---");say(cloud->name);
-  Glyph* axis_subset = &cloud->glyphs["axis"];
-  say(axis_subset->xyz.size());
-  if(axis_subset == nullptr) return;
-  vector<vec3>& XYZ = axis_subset->xyz;
+void Axis::update_axis_subset(Cloud* cloud, Glyph* glyph){
+  if(glyph == nullptr) return;
+  vector<vec3>& XYZ = glyph->xyz;
   vec3 subset_root = cloud->root;
   //---------------------------
-sayHello();
-  axis_subset->is_visible = is_visible;
+
+  glyph->is_visible = is_visible;
   XYZ.clear();
-sayHello();
+
   //Axis rotation
   mat4 R = cloud->rotat;
   vec4 Rx = vec4(0.1,0,0,1) * R;
@@ -145,6 +143,6 @@ sayHello();
   vec3 subsey_z = vec3(subset_root.x + Rz.x, subset_root.y + Rz.y, subset_root.z + Rz.z);
   XYZ.push_back(subset_root);
   XYZ.push_back(subsey_z);
-sayHello();
+
   //---------------------------
 }

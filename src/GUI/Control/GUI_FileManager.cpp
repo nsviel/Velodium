@@ -141,7 +141,10 @@ void GUI_fileManager::info_collection(Collection* collection){
   ImGui::SameLine();
 
   //Icon: visibility
-  ImGui::Checkbox("##444", &collection->is_visible);
+  bool is_visible = collection->is_visible;
+  if(ImGui::Checkbox("##444", &is_visible)){
+    collection->set_visibility(is_visible);
+  }
   ImGui::SameLine();
 
   //Additional info

@@ -43,7 +43,7 @@ void MOD_cloud::mod_cloud_info(){
     //Visibility
     static bool visible = true;
     if(ImGui::Checkbox("Visibility", &visible)){
-      collection->is_visible = visible;
+      collection->set_visibility(visible);
     }
     ImGui::SameLine();
 

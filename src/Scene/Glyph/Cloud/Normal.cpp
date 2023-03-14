@@ -17,42 +17,41 @@ Normal::Normal(){
 }
 Normal::~Normal(){}
 
-void Normal::create_glyph(Cloud* cloud){
-  Glyph normal;
+Glyph* Normal::create_glyph(Cloud* cloud){
+  Glyph* glyph = new Glyph();
   //---------------------------
 
   //Create glyph
-  normal.name = "normal";
-  normal.draw_line_width = width;
-  normal.draw_type_name = "line";
-  normal.unicolor = color;
-  normal.is_visible = is_visible;
+  glyph->name = "normal";
+  glyph->draw_line_width = width;
+  glyph->draw_type_name = "line";
+  glyph->unicolor = color;
+  glyph->is_visible = is_visible;
 
   //---------------------------
-  cloud->glyphs.insert({"normal", normal});
+  return glyph;
 }
-void Normal::update_normal_cloud(Cloud* cloud){
-  Glyph* normal = &cloud->glyphs["normal"];
-  normal->draw_point_size = size;
+void Normal::update_normal_cloud(Cloud* cloud, Glyph* glyph){
+  glyph->draw_point_size = size;
   //---------------------------
 
   //Get vector values
   vector<vec3>& xyz_s = cloud->xyz;
   vector<vec3>& Nxyz_s = cloud->Nxyz;
-  vector<vec3>& xyz_n = normal->xyz;
-  vector<vec4>& rgb_n = normal->rgb;
+  vector<vec3>& xyz_n = glyph->xyz;
+  vector<vec4>& rgb_n = glyph->rgb;
 
   //Check vector length
   if(xyz_s.size() == 0 || Nxyz_s.size() == 0 || Nxyz_s.size() != xyz_s.size()){
     return;
   }
 
-  //Clear old normal values
+  //Clear old glyph values
   xyz_n.clear();
   rgb_n.clear();
 
-  //Construct normal
-  float lgt = 0.05 * normal->draw_point_size;
+  //Construct glyph
+  float lgt = 0.05 * glyph->draw_point_size;
   for(int i=0; i<xyz_s.size(); i++){
     vec3& xyz = xyz_s[i];
     vec3& nxyz = Nxyz_s[i];
@@ -64,8 +63,8 @@ void Normal::update_normal_cloud(Cloud* cloud){
     xyz_n.push_back(xyz);
     xyz_n.push_back(vec_n);
 
-    rgb_n.push_back(normal->unicolor);
-    rgb_n.push_back(normal->unicolor);
+    rgb_n.push_back(glyph->unicolor);
+    rgb_n.push_back(glyph->unicolor);
   }
 
   //---------------------------
