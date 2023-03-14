@@ -42,12 +42,12 @@ void Trajectory::update(Collection* collection){
 
   //Compute new trajectory values
   for(int j=1; j<collection->list_obj.size(); j++){
-    Cloud* subset_m0 = (Cloud*)*next(collection->list_obj.begin(), j);
-    Cloud* subset_m1 = (Cloud*)*next(collection->list_obj.begin(), j-1);
+    Cloud* cloud_m0 = (Cloud*)*next(collection->list_obj.begin(), j);
+    Cloud* cloud_m1 = (Cloud*)*next(collection->list_obj.begin(), j-1);
 
-    if(subset_m0->is_visible && subset_m1->is_visible){
-      vec3 root_m0 = subset_m0->root;
-      vec3 root_m1 = subset_m1->root;
+    if(cloud_m0->is_visible && cloud_m1->is_visible){
+      vec3 root_m0 = cloud_m0->root;
+      vec3 root_m1 = cloud_m1->root;
       vec4 color = trajectory->unicolor;
 
       //Add begin point

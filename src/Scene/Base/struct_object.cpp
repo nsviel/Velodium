@@ -9,6 +9,7 @@ Object_::Object_(){
   this->draw_point_size = 1;
   this->draw_line_width = 1;
   this->draw_type_name = "point";
+  this->obj_type = "object";
 
   //Infos
   this->ID = -1;

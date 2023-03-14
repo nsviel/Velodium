@@ -84,7 +84,7 @@ void GUI_menuBar::MenuBar_menu(){
   this->MenuBar_menu_save();
 
   //Option menu
-  if(ImGui::BeginMenu(ICON_FA_COG " Option")){
+  if(ImGui::BeginMenu(ICON_FA_COG, " Option")){
     optionManager->design_Options();
     ImGui::EndMenu();
   }
@@ -144,7 +144,7 @@ void GUI_menuBar::MenuBar_menu_load(){
   Collection* collection = sceneManager->get_selected_collection();
   //-------------------------
 
-  if(ImGui::BeginMenu(ICON_FA_FILE " Open")){
+  if(ImGui::BeginMenu(ICON_FA_FILE, "Open")){
     if (ImGui::MenuItem("Open")){
       pathManager->loading_cloud();
     }
@@ -167,7 +167,7 @@ void GUI_menuBar::MenuBar_menu_save(){
   Collection* collection = sceneManager->get_selected_collection();
   //-------------------------
 
-  if(ImGui::BeginMenu(ICON_FA_BOOK " Save")){
+  if(ImGui::BeginMenu(ICON_FA_BOOK, "Save")){
     if(ImGui::MenuItem("Save")){
       pathManager->saving_cloud_same(collection);
     }

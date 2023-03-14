@@ -109,15 +109,15 @@ void Collection::obj_remove_last(){
   //---------------------------
 
   //Get list_obj object
-  Object_* sub = this->get_obj(0);
-  Object_* sub_buf = this->get_obj_buffer(0);
-  Object_* sub_ini = this->get_obj_init(0);
+  Object_* obj = this->get_obj(0);
+  Object_* obj_buf = this->get_obj_buffer(0);
+  Object_* obj_ini = this->get_obj_init(0);
 
   //Remove data from GPU
-  glDeleteBuffers(1, &sub->vbo_xyz);
-  glDeleteBuffers(1, &sub->vbo_rgb);
-  glDeleteBuffers(1, &sub->vbo_uv);
-  glDeleteVertexArrays(1, &sub->vao);
+  glDeleteBuffers(1, &obj->vbo_xyz);
+  glDeleteBuffers(1, &obj->vbo_rgb);
+  glDeleteBuffers(1, &obj->vbo_uv);
+  glDeleteVertexArrays(1, &obj->vao);
 
   //Supress Subset pointer
   list_obj.pop_front();
@@ -125,9 +125,9 @@ void Collection::obj_remove_last(){
   list_obj_init.pop_front();
 
   //Delete Subset object
-  delete sub;
-  delete sub_buf;
-  delete sub_ini;
+  delete obj;
+  delete obj_buf;
+  delete obj_ini;
 
   //---------------------------
   this->nb_obj = list_obj.size();
@@ -160,10 +160,10 @@ Object_* Collection::get_obj_selected_init(){
   //---------------------------
 
   for(int i=0; i<list_obj.size(); i++){
-    Object_* sub = *next(list_obj_init.begin(), i);
+    Object_* obj = *next(list_obj_init.begin(), i);
 
-    if(sub->ID == ID_obj_selected){
-      return sub;
+    if(obj->ID == ID_obj_selected){
+      return obj;
     }
   }
 
@@ -173,7 +173,11 @@ Object_* Collection::get_obj_selected_init(){
 Object_* Collection::get_obj(int querry){
   //---------------------------
 
-  if(querry > list_obj.size()) return nullptr;
+  if(querry > list_obj.size() || querry < 0){
+    std::cout<<"[error] Problem with collection get_obj function"<<std::endl;
+    std::cout<<querry<<" / "<<list_obj.size()<<std::endl;
+    return nullptr;
+  }
   else{
     return *next(list_obj.begin(), querry);
   }
@@ -184,10 +188,10 @@ Object_* Collection::get_obj_byID(int querry){
   //---------------------------
 
   for(int i=0; i<list_obj.size(); i++){
-    Object_* sub = *next(list_obj.begin(), i);
+    Object_* obj = *next(list_obj.begin(), i);
 
-    if(sub->ID == querry){
-      return sub;
+    if(obj->ID == querry){
+      return obj;
     }
   }
 
@@ -205,10 +209,10 @@ Object_* Collection::get_obj_buffer_byID(int querry){
   //---------------------------
 
   for(int i=0; i<list_obj.size(); i++){
-    Object_* sub = *next(list_obj_buffer.begin(), i);
+    Object_* obj = *next(list_obj_buffer.begin(), i);
 
-    if(sub->ID == querry){
-      return sub;
+    if(obj->ID == querry){
+      return obj;
     }
   }
 
@@ -229,10 +233,10 @@ Object_* Collection::get_obj_init_byID(int querry){
   //---------------------------
 
   for(int i=0; i<list_obj.size(); i++){
-    Object_* sub = *next(list_obj_init.begin(), i);
+    Object_* obj = *next(list_obj_init.begin(), i);
 
-    if(sub->ID == querry){
-      return sub;
+    if(obj->ID == querry){
+      return obj;
     }
   }
 

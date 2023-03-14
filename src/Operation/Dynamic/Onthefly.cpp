@@ -44,6 +44,9 @@ void Onthefly::update_configuration(){
 void Onthefly::compute_onthefly(Collection* collection, int ID){
   //---------------------------
 
+
+
+
   if(collection->is_onthefly){
     vector<string>& list_path = collection->list_otf_path;
     list<int>& list_id = collection->list_otf_loaded;
@@ -64,11 +67,17 @@ void Onthefly::compute_onthefly(Collection* collection, int ID){
 
     //If too mush cloud, remove the last one
     if(collection->list_obj.size() > range){
-      Cloud* cloud = (Cloud*)collection->get_obj(0);
-      list_id.remove(cloud->ID);
+      Object_* object = collection->get_obj(0);
+      list_id.remove(object->ID);
+
+      Object_* obj = collection->get_obj(0);
+      Object_* obj_buf = collection->get_obj_buffer(0);
+      Object_* obj_ini = collection->get_obj_init(0);
+
       collection->obj_remove_last();
     }
   }
+
 
   //---------------------------
 }

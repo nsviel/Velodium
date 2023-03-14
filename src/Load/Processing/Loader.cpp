@@ -131,7 +131,7 @@ Collection* Loader::load_cloud_onthefly(vector<string> path_vec){
   collection->obj_add_new(object);
   collection->list_otf_path = path_vec;
   collection->is_onthefly = true;
-  collection->ID_obj_otf++;
+  object->ID = collection->ID_obj_otf++;
 
   //---------------------------
   string log = "Loaded on-the-fly cloud";
@@ -259,8 +259,8 @@ bool Loader::load_cloud_oneFrame(Collection* collection, string path){
     //Retrieve data
     Data_file* data = plyManager->Loader(path);
 
-    //Insert frame
-    this->load_insertIntoCloud(data, collection);
+    //Extract data and put in the engine
+    extractManager->extract_data(collection, data);
 
     //Delete raw data
     delete data;
@@ -397,13 +397,4 @@ Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
 
   //---------------------------
   return object;
-}
-void Loader::load_insertIntoCloud(Data_file* data, Collection* collection){
-  //---------------------------
-
-  //Extract data and put in the engine
-  extractManager->extract_data(collection, data);
-  collection->ID_obj_otf++;
-
-  //---------------------------
 }

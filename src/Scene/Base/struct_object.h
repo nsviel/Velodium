@@ -35,6 +35,7 @@ struct Object_{ //Cloud cloud / part
   std::string path_save;
   std::string file_format;
   std::string draw_type_name;
+  std::string obj_type;
   glm::vec4 unicolor;
 
   bool is_visible;

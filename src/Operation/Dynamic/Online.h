@@ -34,7 +34,7 @@ public:
 
   //Other functions
   void compute_recording(Collection* collection, int& ID_object);
-  void compute_displayStats(Cloud* cloud);
+  void compute_displayStats(Object_* object);
   void compute_http_command();
 
   inline bool* get_with_sphere_filter(){return &with_filter_sphere;}

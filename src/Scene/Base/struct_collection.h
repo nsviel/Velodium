@@ -6,6 +6,7 @@
 
 #include <string>
 #include <list>
+#include <iostream>
 
 
 //Collection are cloud containers

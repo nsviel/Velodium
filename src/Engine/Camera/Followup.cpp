@@ -72,27 +72,31 @@ void Followup::camera_mode(string mode){
 
 //Subfunctions
 vec3 Followup::camera_payload(Collection* collection, int ID_object){
-  Cloud* subset_m0 = (Cloud*)collection->get_obj_byID(ID_object);
-  Cloud* subset_m1 = (Cloud*)collection->get_obj_byID(ID_object - 1);
+  Cloud* cloud_m0 = (Cloud*)collection->get_obj_byID(ID_object);
+  Cloud* cloud_m1 = (Cloud*)collection->get_obj_byID(ID_object - 1);
   //---------------------------
 
   //Primilarly check
   vec3 E = vec3(0, 0, 0);
-  if(subset_m1 == nullptr) return E;
+  if(cloud_m0 == nullptr) return E;
+  if(cloud_m1 == nullptr) return E;
+  if(collection->nb_obj < camera_nb_pose) return E;
 
   //Check if no stationary
-  vec3 pos_m0 = eigen_to_glm_vec3(subset_m0->pose_T);
-  vec3 pos_m1 = eigen_to_glm_vec3(subset_m1->pose_T);
+  vec3 pos_m0 = eigen_to_glm_vec3(cloud_m0->pose_T);
+  vec3 pos_m1 = eigen_to_glm_vec3(cloud_m1->pose_T);
   float pos_dist = fct_distance(pos_m0, pos_m1);
   if(pos_dist < 0.1) return E;
 
   //Retrieve the mean of some previous pose
   for(int i=0; i<camera_nb_pose; i++){
     Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object - i);
-    Eigen::Vector3d pos = cloud->pose_T;
 
-    for(int j=0; j<3; j++){
-      E[j] += pos(j);
+    if(cloud != nullptr){
+      Eigen::Vector3d pos = cloud->pose_T;
+      for(int j=0; j<3; j++){
+        E[j] += pos(j);
+      }
     }
   }
   for(int j=0; j<3; j++){

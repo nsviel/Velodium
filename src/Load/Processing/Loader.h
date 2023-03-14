@@ -50,7 +50,6 @@ private:
   vector<Data_file*> load_retrieve_cloud_data(string path);
   Object_* load_insertIntoDatabase(Data_file* data_file);
   Collection* load_insertIntoDatabase(vector<Data_file*> data_vec);
-  void load_insertIntoCloud(Data_file* data, Collection* collection);
 
 private:
   Extractor* extractManager;

@@ -206,20 +206,20 @@ void GUI_Player::player_selection(){
   //---------------------------
 
   if(collection != nullptr && collection->nb_obj > 2){
-    Cloud* cloud = (Cloud*)collection->selected_obj;
-    Cloud* subset_first = (Cloud*)collection->get_obj(0);
-    Cloud* subset_last = (Cloud*)collection->get_obj(collection->nb_obj-1);
+    Object_* object = collection->selected_obj;
+    Object_* object_first = collection->get_obj(0);
+    Object_* object_last = collection->get_obj(collection->list_obj.size()-1);
     int ID_obj = collection->ID_obj_selected;
 
     ImGui::SetNextItemWidth(140);
-    if(ImGui::SliderInt("##666", &ID_obj, subset_first->ID, subset_last->ID)){
+    if(ImGui::SliderInt("##666", &ID_obj, object_first->ID, object_last->ID)){
       if(collection != nullptr){
         playerManager->select_byObjectID(collection, ID_obj);
       }
     }
     ImGui::SameLine();
-    if(cloud != nullptr){
-      float ts =  cloud->ts[0];
+    if(object != nullptr && object->obj_type == "cloud"){
+      float ts =  object->ts[0];
       ImGui::TextColored(ImVec4(0.0f,1.0f,0.0f,1.0f), "%.4f", ts);
     }
   }

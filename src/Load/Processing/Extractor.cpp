@@ -46,13 +46,13 @@ Collection* Extractor::extract_data(vector<Data_file*> data){
 
     //Init
     this->check_data(data[i]);
-    this->init_subset_parameter(cloud, data[i], collection->ID_obj_last);
+    this->init_cloud_parameter(cloud, data[i], collection->ID_obj_last);
     objectManager->create_glyph_cloud(cloud);
 
     //Set parametrization
     gpuManager->gen_object_buffers(cloud);
     this->define_visibility(cloud, i);
-    this->define_buffer_init(collection, cloud);
+    collection->obj_add_new(cloud);
     this->compute_texture(cloud, data[i]);
 
     collection->ID_obj_last++;
@@ -68,7 +68,7 @@ Cloud* Extractor::extract_data(Data_file& data_file){
   //Init
   this->check_data(&data_file);
   this->init_random_color();
-  this->init_subset_parameter(object, &data_file, 0);
+  this->init_cloud_parameter(object, &data_file, 0);
 
   //Set parametrization
   objectManager->create_glyph_cloud(object);
@@ -99,16 +99,17 @@ void Extractor::extract_data(Collection* collection, Data_file* data){
   //Init
   this->color_rdm = collection->unicolor;
   this->check_data(data);
-  this->init_subset_parameter(cloud, data, collection->ID_obj_last);
+  this->init_cloud_parameter(cloud, data, collection->ID_obj_last);
 
   //Create associated glyphs
   objectManager->create_glyph_cloud(cloud);
-  this->define_buffer_init(collection, cloud);
   gpuManager->gen_object_buffers(cloud);
 
   //Update collection stats
+  collection->obj_add_new(cloud);
   collection->nb_obj++;
   collection->ID_obj_last++;
+  cloud->ID = collection->ID_obj_otf++;
 
   //---------------------------
 }
@@ -218,7 +219,7 @@ void Extractor::init_object_parameter(Object_* object, Data_file* data, int ID){
 
   //---------------------------
 }
-void Extractor::init_subset_parameter(Cloud* cloud, Data_file* data, int ID){
+void Extractor::init_cloud_parameter(Cloud* cloud, Data_file* data, int ID){
   //---------------------------
 
   cloud->xyz = data->xyz;
@@ -276,19 +277,6 @@ void Extractor::define_visibility(Cloud* cloud, int i){
   }else{
     cloud->is_visible = false;
   }
-
-  //---------------------------
-}
-void Extractor::define_buffer_init(Collection* collection, Cloud* cloud){
-  //---------------------------
-
-  Cloud* cloud_buf = new Cloud(*cloud);
-  Cloud* cloud_ini = new Cloud(*cloud);
-
-  collection->selected_obj = cloud;
-  collection->list_obj.push_back(cloud);
-  collection->list_obj_buffer.push_back(cloud_buf);
-  collection->list_obj_init.push_back(cloud_ini);
 
   //---------------------------
 }

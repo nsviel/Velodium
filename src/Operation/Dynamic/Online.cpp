@@ -67,7 +67,7 @@ void Online::update_configuration(){
 void Online::compute_onlineOpe(Collection* collection, int ID_object){
   //This function is called each time a new cloud arrives
   Node_module* node_module = node_engine->get_node_module();
-  Cloud* cloud = (Cloud*)collection->get_obj_byID(ID_object);
+  Object_* object = collection->get_obj_byID(ID_object);
   auto t1 = start_chrono();
   //---------------------------
 
@@ -75,19 +75,19 @@ void Online::compute_onlineOpe(Collection* collection, int ID_object){
   this->compute_http_command();
 
   //Some init operation
-  if(cloud == nullptr) return;
-  collection->selected_obj = cloud;
+  if(object == nullptr) return;
+  collection->selected_obj = object;
 
-  //Control cloud visibilities
+  //Control object visibilities
   visibilityManager->compute_visibility(collection, ID_object);
 
-  //Make slam on the current cloud
-  node_module->online(collection, ID_object);
-  sceneManager->update_buffer_location(cloud);
+  //Make slam on the current object
+  //node_module->online(collection, ID_object);
+  sceneManager->update_buffer_location(object);
 
-  //Make cleaning on the current cloud
+  //Make cleaning on the current object
   if(with_filter_sphere){
-    filterManager->filter_sphere_subset(cloud);
+    //filterManager->filter_sphere_subset(object);
   }
 
   //If camera follow up option activated
@@ -101,7 +101,7 @@ void Online::compute_onlineOpe(Collection* collection, int ID_object){
 
   //---------------------------
   this->time_ope = stop_chrono(t1);
-  this->compute_displayStats(cloud);
+  this->compute_displayStats(object);
 }
 
 //Subfunctions
@@ -114,12 +114,11 @@ void Online::compute_recording(Collection* collection, int& ID_object){
 
   //---------------------------
 }
-void Online::compute_displayStats(Cloud* cloud){
-  Frame* frame = &cloud->frame;
+void Online::compute_displayStats(Object_* object){
   //---------------------------
 
   //Consol result
-  string stats = cloud->name + ": ope in ";
+  string stats = object->name + ": ope in ";
   stats += to_string((int)time_ope) + " ms";
   console.AddLog("#", stats);
 
