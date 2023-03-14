@@ -109,7 +109,7 @@ void Filter::filter_sphere(){
       }
 
       attribManager->make_supressPoints(cloud, idx);
-      //sceneManager->update_glyph(collection);
+      sceneManager->update_glyph(collection);
     }
   }
 

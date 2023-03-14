@@ -23,7 +23,7 @@ void Graph::set_selected_collection(int ID){
     Collection* collection = *next(list_collection->begin(),i);
     if(collection->ID_col_order == ID){
       sceneManager->set_selected_collection(collection);
-      //sceneManager->update_glyph(collection);
+      sceneManager->update_glyph(collection);
     }
   }
 
@@ -33,7 +33,7 @@ void Graph::set_selected_collection(Collection* collection){
   //---------------------------
 
   sceneManager->set_selected_collection(collection);
-  //sceneManager->update_glyph(collection);
+  sceneManager->update_glyph(collection);
 
   //---------------------------
 }
@@ -96,7 +96,7 @@ void Graph::selection_cloudByName(string name){
 
     if(collection->name == name){
       sceneManager->set_selected_collection(collection);
-      //sceneManager->update_glyph(collection);
+      sceneManager->update_glyph(collection);
     }
   }
 

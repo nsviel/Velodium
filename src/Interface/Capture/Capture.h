@@ -11,6 +11,7 @@ class Loader;
 class Configuration;
 class Scala;
 class Velodyne;
+class GPU_data;
 
 
 class Capture
@@ -43,7 +44,7 @@ public:
 
   inline Scala* get_scalaManager(){return scalaManager;}
   inline Velodyne* get_veloManager(){return veloManager;}
-  inline Collection* get_cloud_capture(){return cloud_capture;}
+  inline Collection* get_cloud_capture(){return collection_capture;}
 
   inline string* get_lidar_model(){return &lidar_model;}
   inline bool* get_is_capturing(){return &is_capturing;}
@@ -60,8 +61,9 @@ private:
   Loader* loaderManager;
   Configuration* configManager;
   Node_operation* node_ope;
+  GPU_data* gpuManager;
 
-  Collection* cloud_capture;
+  Collection* collection_capture;
   Scala* scalaManager;
   Velodyne* veloManager;
 

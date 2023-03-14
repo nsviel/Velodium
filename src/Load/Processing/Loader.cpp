@@ -56,26 +56,6 @@ Loader::~Loader(){
 }
 
 //Main functions
-Collection* Loader::load_collection(string path){
-  //---------------------------
-
-  //Check file existence
-  if(is_file_exist(path) == false){
-    string log = "File doesn't exists: "+ path;
-    console.AddLog("error", log);
-  }
-
-  //Check file format & retrieve data
-  vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
-
-  //Insert cloud
-  Collection* collection = load_insertIntoDatabase(data_vec);
-
-  //---------------------------
-  string log = "Loaded "+ path;
-  console.AddLog("ok", log);
-  return collection;
-}
 Object_* Loader::load_object(string path){
   //---------------------------
 
@@ -86,17 +66,40 @@ Object_* Loader::load_object(string path){
   }
 
   //Check file format & retrieve data
-  Data_file* data_file = load_retrieve_data(path);
+  vector<Data_file*> data_file = load_retrieve_data(path);
 
-  //Insert cloud
-  Object_* object = load_insertIntoDatabase(data_file);
+  //Extract data and put in the engine
+  Object_* object = extractManager->extract_data_object(data_file[0]);
+
+  //Delete raw data
+  delete data_file[0];
 
   //---------------------------
   string log = "Loaded "+ path;
   console.AddLog("ok", log);
   return object;
 }
-Collection* Loader::load_cloud_byFrame(vector<string> path_vec){
+Collection* Loader::load_collection(string path){
+  //---------------------------
+
+  //Check file existence
+  if(is_file_exist(path) == false){
+    string log = "File doesn't exists: "+ path;
+    console.AddLog("error", log);
+  }
+
+  //Check file format & retrieve data
+  vector<Data_file*> data_vec = load_retrieve_data(path);
+
+  //Insert cloud
+  Collection* collection = load_insertIntoDatabase(data_vec);
+
+  //---------------------------
+  string log = "Loaded "+ path;
+  console.AddLog("ok", log);
+  return collection;
+}
+Collection* Loader::load_collection_byFrame(vector<string> path_vec){
   tic();
   //---------------------------
 
@@ -140,6 +143,32 @@ Collection* Loader::load_cloud_onthefly(vector<string> path_vec){
   console.AddLog("ok", log);
   return collection;
 }
+Collection* Loader::load_cloud_empty(){
+  vector<Data_file*> data_vec;
+  //---------------------------
+
+  //Add NULL points
+  Data_file* data = new Data_file();
+  data->path_file = "../media/frame.ply";
+
+  data->xyz.push_back(vec3(0.0f,0.0f,0.0f));
+  data->xyz.push_back(vec3(1.0f,1.0f,1.0f));
+  data->xyz.push_back(vec3(0.5f,0.5f,0.5f));
+
+  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
+  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
+  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
+
+  data_vec.push_back(data);
+
+  //Insert cloud
+  Collection* collection = load_insertIntoDatabase(data_vec);
+
+  //---------------------------
+  return collection;
+}
+
+//Specific loader function
 bool Loader::load_cloud_silent(string path){
   //---------------------------
 
@@ -151,7 +180,7 @@ bool Loader::load_cloud_silent(string path){
   }
 
   //Check file format & retrieve data
-  vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
+  vector<Data_file*> data_vec = load_retrieve_data(path);
 
   //Extract data and put in the engine
   this->collection = extractManager->extract_data(data_vec);
@@ -230,30 +259,6 @@ bool Loader::load_cloud_creation(Collection* cloud_in){
   //---------------------------
   return true;
 }
-bool Loader::load_cloud_empty(){
-  vector<Data_file*> data_vec;
-  //---------------------------
-
-  //Add NULL points
-  Data_file* data = new Data_file();
-  data->path_file = "../media/frame.ply";
-
-  data->xyz.push_back(vec3(0.0f,0.0f,0.0f));
-  data->xyz.push_back(vec3(1.0f,1.0f,1.0f));
-  data->xyz.push_back(vec3(0.5f,0.5f,0.5f));
-
-  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
-  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
-  data->rgb.push_back(vec4(0.0f,0.0f,0.0f,1.0f));
-
-  data_vec.push_back(data);
-
-  //Insert cloud
-  this->load_insertIntoDatabase(data_vec);
-
-  //---------------------------
-  return true;
-}
 bool Loader::load_cloud_oneFrame(Collection* collection, string path){
   //---------------------------
 
@@ -273,59 +278,9 @@ bool Loader::load_cloud_oneFrame(Collection* collection, string path){
   //---------------------------
   return true;
 }
-vector<vec3> Loader::load_vertices(string path){
-  //---------------------------
-
-  //Check file existence
-  if(is_file_exist(path) == false){
-    string log = "File doesn't exists: " + path;
-    console.AddLog("error", log);
-  }
-
-  //Check file format & retrieve data
-  vector<Data_file*> data_vec = load_retrieve_cloud_data(path);
-
-  //Extract data
-  vector<vec3> xyz = data_vec[0]->xyz;
-
-  //---------------------------
-  return xyz;
-}
 
 //Sub-functions
-Data_file* Loader::load_retrieve_data(string path){
-  string format = get_format_from_path(path);
-  Data_file* data_out;
-  //---------------------------
-
-  if     (format == "pts"){
-    data_out = ptsManager->Loader(path);
-  }
-  else if(format == "ptx"){
-    data_out = ptxManager->Loader(path);
-  }
-  else if(format == "pcd"){
-    #ifdef FILE_PCD_H
-    data_out = pcdManager->Loader(path);
-    #endif
-  }
-  else if(format == "ply"){
-    data_out = plyManager->Loader(path);
-  }
-  else if(format == "obj"){
-    data_out = objManager->Loader(path);
-  }
-  else if(format == "xyz"){
-    data_out = xyzManager->Loader(path);
-  }
-  else{
-    console.AddLog("error", "File format not recognized");
-  }
-
-  //---------------------------
-  return data_out;
-}
-vector<Data_file*> Loader::load_retrieve_cloud_data(string path){
+vector<Data_file*> Loader::load_retrieve_data(string path){
   string format = get_format_from_path(path);
   vector<Data_file*> data_vec;
   //---------------------------
@@ -387,16 +342,4 @@ Collection* Loader::load_insertIntoDatabase(vector<Data_file*> data_vec){
 
   //---------------------------
   return collection;
-}
-Object_* Loader::load_insertIntoDatabase(Data_file* data_file){
-  //---------------------------
-
-  //Extract data and put in the engine
-  Object_* object = extractManager->extract_data_object(data_file);
-
-  //Delete raw data
-  delete data_file;
-
-  //---------------------------
-  return object;
 }

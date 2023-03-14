@@ -129,7 +129,7 @@ Glyph* Object::create_glyph_ostacle(){
 }
 
 //Runtime function
-void Object::runtime_glyph_scene(){
+void Object::draw_glyph_scene(){
   Collection* col_glyph = data->get_collection_byName("glyph", "glyph_scene");
   //---------------------------
 
@@ -140,9 +140,24 @@ void Object::runtime_glyph_scene(){
 
   //---------------------------
 }
+void Object::draw_glyph_object(){
+  Collection* col_glyph = data->get_collection_byName("glyph", "glyph_object");
+  //---------------------------
+
+  for(int i=0;i<col_glyph->list_obj.size();i++){
+    Glyph* glyph = (Glyph*)*next(col_glyph->list_obj.begin(),i);
+    glyphManager->draw_glyph(glyph);
+  }
+
+  //---------------------------
+}
+
+
+
+// A VIRER
 void Object::runtime_glyph_subset_all(Collection* collection){
   //---------------------------
-/*
+
   for(int j=0; j<collection->list_obj.size(); j++){
     Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), j);
 
@@ -153,7 +168,7 @@ void Object::runtime_glyph_subset_all(Collection* collection){
       glyphManager->draw_glyph(axis);
     }
   }
-*/
+
   //---------------------------
 }
 void Object::runtime_glyph_subset_selected(Cloud* cloud){
@@ -205,6 +220,9 @@ void Object::runtime_glyph_pred(Cloud* cloud){
 
   //---------------------------
 }
+
+
+
 
 //Update function
 void Object::update_configuration(){
@@ -260,11 +278,9 @@ void Object::update_glyph_cloud(Cloud* cloud){
   //---------------------------
 
   //Subset axis
-  if(configManager->parse_json_b("glyph", "axis_cloud_visibility")){
-    Axis* axis_src = (Axis*)get_glyph_src_byName("axis");
-    axis_src->update_axis_subset(cloud);
-    glyphManager->update_glyph_location(&cloud->glyphs["axis"]);
-  }
+  Axis* axis_src = (Axis*)get_glyph_src_byName("axis");
+  axis_src->update_axis_subset(cloud);
+  glyphManager->update_glyph_location(&cloud->glyphs["axis"]);
 
   //Subset normal
   Normal* normal_src = (Normal*)get_glyph_src_byName("normal");

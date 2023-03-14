@@ -114,15 +114,17 @@ void Axis::create_axis_subset(Cloud* cloud){
   //---------------------------
   cloud->glyphs.insert({"axis", axis_subset});
 }
-void Axis::update_axis_subset(Cloud* cloud){
+void Axis::update_axis_subset(Cloud* cloud){say("---");say(cloud->name);
   Glyph* axis_subset = &cloud->glyphs["axis"];
+  say(axis_subset->xyz.size());
+  if(axis_subset == nullptr) return;
   vector<vec3>& XYZ = axis_subset->xyz;
   vec3 subset_root = cloud->root;
   //---------------------------
-
+sayHello();
   axis_subset->is_visible = is_visible;
   XYZ.clear();
-
+sayHello();
   //Axis rotation
   mat4 R = cloud->rotat;
   vec4 Rx = vec4(0.1,0,0,1) * R;
@@ -143,6 +145,6 @@ void Axis::update_axis_subset(Cloud* cloud){
   vec3 subsey_z = vec3(subset_root.x + Rz.x, subset_root.y + Rz.y, subset_root.z + Rz.z);
   XYZ.push_back(subset_root);
   XYZ.push_back(subsey_z);
-
+sayHello();
   //---------------------------
 }

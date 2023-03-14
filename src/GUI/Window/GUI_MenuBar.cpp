@@ -149,7 +149,7 @@ void GUI_menuBar::MenuBar_menu_load(){
       pathManager->loading_cloud();
     }
     if (ImGui::MenuItem("Open frames")){
-      pathManager->loading_frames();
+      pathManager->loading_frame();
     }
     if (ImGui::MenuItem("Open on-the-fly")){
       pathManager->loading_onthefly();

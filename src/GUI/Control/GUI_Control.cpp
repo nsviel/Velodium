@@ -11,7 +11,6 @@
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Camera/struct_viewport.h"
 #include "../../Engine/Core/Dimension.h"
-#include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Scene/Data/Graph.h"
 #include "../../Engine/Core/Configuration.h"
@@ -49,7 +48,6 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->selectionManager = node_ope->get_selectionManager();
   this->sceneManager = node_scene->get_sceneManager();
   this->graphManager = node_scene->get_graphManager();
-  this->glyphManager = node_scene->get_glyphManager();
   this->attribManager = node_ope->get_attribManager();
   this->extractionManager = node_ope->get_extractionManager();
   this->pathManager = node_load->get_patherManager();
@@ -164,7 +162,7 @@ void GUI_Control::control_mouse_wheel(){
         poseManager->compute_COM(collection);
         transformManager->make_rotation(collection, R, direction);
         sceneManager->update_buffer_location(collection->selected_obj);
-        //sceneManager->update_glyph(collection);
+        sceneManager->update_glyph(collection);
       }
       //Subset selection
       else if(collection->nb_obj > 1 || collection->is_onthefly){
@@ -373,7 +371,7 @@ void GUI_Control::control_keyboard_ctrlAction(){
     }
     //ctrl+w - Open
     if(ImGui::IsKeyPressed(90)){
-      pathManager->loading();
+      pathManager->loading_cloud();
     }
   }
 
@@ -468,7 +466,7 @@ void GUI_Control::key_c(){
   if(!sceneManager->get_is_list_empty()){
     poseManager->make_centering(collection);
     //sceneManager->update_buffer_location(collection);
-    //sceneManager->update_glyph(collection);
+    sceneManager->update_glyph(collection);
   }
 
   //----------------------------
@@ -479,7 +477,7 @@ void GUI_Control::key_translation(vec3 trans){
 
   transformManager->make_translation(collection->selected_obj, trans);
   sceneManager->update_buffer_location(collection->selected_obj);
-  //sceneManager->update_glyph(collection);
+  sceneManager->update_glyph(collection);
 
   //----------------------------
 }
@@ -489,7 +487,7 @@ void GUI_Control::key_rotation(vec3 rotat){
 
   transformManager->make_rotation(collection->selected_obj, vec3(0,0,0), rotat);
   sceneManager->update_buffer_location(collection->selected_obj);
-  //sceneManager->update_glyph(collection);
+  sceneManager->update_glyph(collection);
 
   //----------------------------
 }

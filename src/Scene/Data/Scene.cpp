@@ -85,7 +85,7 @@ void Scene::reset_collection(Collection* collection){
   }
 
   //---------------------------
-  //this->update_glyph(collection);
+  this->update_glyph(collection);
 }
 void Scene::reset_collection_all(){
   std::list<Collection*>* list_collection = data->get_list_col_object();

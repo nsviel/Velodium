@@ -11,7 +11,6 @@ class Attribut;
 class Pather;
 class Transformation;
 class Extraction;
-class Glyphs;
 class Selection;
 class Heatmap;
 class Dimension;
@@ -63,7 +62,6 @@ private:
   Attribut* attribManager;
   Pather* pathManager;
   Extraction* extractionManager;
-  Glyphs* glyphManager;
   Selection* selectionManager;
   Heatmap* heatmapManager;
   Player* playerManager;

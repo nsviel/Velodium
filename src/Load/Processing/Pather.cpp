@@ -60,47 +60,19 @@ void Pather::update_configuration(){
   this->spaceSampling = 0.08f;
   this->nbLineSampling = 1000000;
   this->path_current_dir = get_path_abs_build();
-  this->open_mode = configManager->parse_json_s("parameter", "open_mode");
-  this->save_mode = configManager->parse_json_s("parameter", "save_mode");
   this->path_saved_frame = configManager->parse_json_s("parameter", "path_data")  + "frame";
 
   //---------------------------
 }
-bool Pather::check_folder_format(string path, string format){
-  bool all_ok = true;
-  //---------------------------
-
-  vector<string> path_vec = list_all_path(path);
-  for(int i=0; i<path_vec.size(); i++){
-    if(get_format_from_path(path_vec[i]) != format){
-      all_ok = false;
-    }
-  }
-
-  //---------------------------
-  return all_ok;
-}
 
 //Loading functions
-void Pather::loading(){
-  //---------------------------
-
-  if(open_mode == "cloud"){
-    this->loading_cloud();
-  }
-  else if(open_mode == "frame"){
-    this->loading_frames();
-  }
-
-  //---------------------------
-}
 void Pather::loading_cloud(){
   //---------------------------
 
   //select files
   vector<string> path_vec = zenity_file_vec("Cloud loading", path_current_dir);
 
-  //Load files
+  //Load 1 collection by cloud
   for(int i=0; i<path_vec.size(); i++){
     string path = path_vec[i];
     loaderManager->load_collection(path);
@@ -108,15 +80,15 @@ void Pather::loading_cloud(){
 
   //---------------------------
 }
-void Pather::loading_frames(){
+void Pather::loading_frame(){
   //---------------------------
 
   //select files
   vector<string> path_vec = zenity_file_vec("Frame loading", path_current_dir);
 
-  //Load files
+  //Load 1 collection with all frame
   if(path_vec.size() != 0){
-    loaderManager->load_cloud_byFrame(path_vec);
+    loaderManager->load_collection_byFrame(path_vec);
   }
 
   //---------------------------
@@ -134,6 +106,8 @@ void Pather::loading_onthefly(){
 
   //---------------------------
 }
+
+//Specific loader function
 void Pather::loading_sampling(){
   //---------------------------
 
@@ -216,6 +190,21 @@ void Pather::loading_treatment(){
   //---------------------------
 }
 
+//Onthefly stuff
+bool Pather::check_folder_format(string path, string format){
+  bool all_ok = true;
+  //---------------------------
+
+  vector<string> path_vec = list_all_path(path);
+  for(int i=0; i<path_vec.size(); i++){
+    if(get_format_from_path(path_vec[i]) != format){
+      all_ok = false;
+    }
+  }
+
+  //---------------------------
+  return all_ok;
+}
 Collection* Pather::loading_onthefly(string path){
   Collection* collection = nullptr;
   //---------------------------
@@ -241,7 +230,7 @@ Collection* Pather::loading_directory_frame(string path){
   //Sort alphabetically and load
   if(path_vec.size() != 0){
     fct_sort_alpha_num_(path_vec);
-    collection = loaderManager->load_cloud_byFrame(path_vec);
+    collection = loaderManager->load_collection_byFrame(path_vec);
   }
 
   //---------------------------
@@ -249,24 +238,6 @@ Collection* Pather::loading_directory_frame(string path){
 }
 
 //Other functions
-void Pather::saving(){
-  Collection* collection = data->get_selected_collection();
-  //---------------------------
-
-  if(sceneManager->get_is_list_empty() == false){
-    if(save_mode == "cloud"){
-      this->saving_cloud(collection);
-    }
-    else if(save_mode == "frame"){
-      this->saving_cloud_frame(collection);
-    }
-    else if(save_mode == "saved_frame"){
-      this->saving_saved_frames();
-    }
-  }
-
-  //---------------------------
-}
 void Pather::saving_cloud_frame(Collection* collection){
   //---------------------------
 

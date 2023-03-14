@@ -300,12 +300,12 @@ void MOD_loading::loading_action(){
 
   //Load cloud
   if(load_mode == 0){
-    pathManager->loading();
+    pathManager->loading_cloud();
   }
 
   //Load cloud
   if(load_mode == 1){
-    pathManager->loading_frames();
+    pathManager->loading_frame();
   }
 
   //---------------------------

@@ -232,7 +232,7 @@ void GUI_Slam::parameter_offline(){
         //slamManager->compute_slam_offline(cloud);
 
         //sceneManager->update_buffer_location(cloud);
-        //sceneManager->update_glyph(collection);
+        sceneManager->update_glyph(collection);
       }
     }
     ImGui::PopStyleColor(1);

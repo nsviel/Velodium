@@ -29,16 +29,16 @@ public:
 public:
   //Main functions
   Object_* load_object(string path);
-
   Collection* load_collection(string pathFile);
-  Collection* load_cloud_byFrame(vector<string> path_vec);
+  Collection* load_collection_byFrame(vector<string> path_vec);
   Collection* load_cloud_onthefly(vector<string> path_vec);
+  Collection* load_cloud_empty();
+
+  //Specific loader function
   bool load_cloud_silent(string pathFile);
   bool load_cloud_part(string path, int lmin, int lmax);
   bool load_cloud_creation(Collection* cloud_in);
-  bool load_cloud_empty();
   bool load_cloud_oneFrame(Collection* collection, string path);
-  vector<vec3> load_vertices(string path);
 
   inline Collection* get_created_collection(){return collection;}
   inline file_PTS* get_ptsManager(){return ptsManager;}
@@ -46,9 +46,7 @@ public:
   inline file_PCAP* get_pcapManager(){return pcapManager;}
 
 private:
-  Data_file* load_retrieve_data(string path);
-  vector<Data_file*> load_retrieve_cloud_data(string path);
-  Object_* load_insertIntoDatabase(Data_file* data_file);
+  vector<Data_file*> load_retrieve_data(string path);
   Collection* load_insertIntoDatabase(vector<Data_file*> data_vec);
 
 private:

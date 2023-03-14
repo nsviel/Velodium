@@ -37,7 +37,8 @@ public:
   Glyph* create_glyph_ostacle();
 
   //Runtime function
-  void runtime_glyph_scene();
+  void draw_glyph_scene();
+  void draw_glyph_object();
   void runtime_glyph_subset_all(Collection* collection);
   void runtime_glyph_subset_selected(Cloud* cloud);
   void runtime_glyph_pred(Cloud* cloud);
