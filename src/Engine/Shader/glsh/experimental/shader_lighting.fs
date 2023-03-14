@@ -14,6 +14,6 @@ void main()
   float ambientStrength = 0.1;
   vec3 ambient = ambientStrength * light_color;
 
-  vec3 result = ambient * fs_in.vertex_color;
+  vec3 result = ambient * fs_in.vertex_color.rgb;
   fs_color = vec4(result, 1.0);
 }

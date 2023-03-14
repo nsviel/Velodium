@@ -81,20 +81,20 @@ void Shader::init_shader(){
 	this->list_shader_obj->push_back(shader);
 
 	// Light mesh shader
-	path_vs = shader_dir + "pass_1/shader_mesh_light.vs";
-	path_fs = shader_dir + "pass_1/shader_mesh_light.fs";
-	Shader_obj* shader_mesh_light = new Shader_obj("mesh_light", path_vs, path_fs);
-	this->list_shader_obj->push_back(shader_mesh_light);
+	path_vs = shader_dir + "pass_1/shader_lamp.vs";
+	path_fs = shader_dir + "pass_1/shader_lamp.fs";
+	Shader_obj* shader_lamp = new Shader_obj("lamp", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader_lamp);
 
 	//Lighting shader
 	path_vs = shader_dir + "experimental/shader_lighting.vs";
 	path_fs = shader_dir + "experimental/shader_lighting.fs";
 	Shader_obj* shader_lighting = new Shader_obj("lighting", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lighting);
-	
+
 	Shader_lighting* lightManager = new Shader_lighting();
 	this->list_shader_src->push_back(lightManager);
-	lightManager->setup_shader(shader_lighting, shader_mesh_light);
+	lightManager->setup_shader(shader_lighting, shader_lamp);
 
 	//---------------------------
 }
@@ -118,6 +118,8 @@ void Shader::use_shader(string shader_name){
 	//Use it
 	if(shader_obj != nullptr){
 		shader_obj->use();
+	}else{
+		cout<<"[error] Shader obj not found"<<endl;
 	}
 
 	//---------------------------

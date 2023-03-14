@@ -15,7 +15,7 @@ public:
   Shader_lighting();
   ~Shader_lighting();
 
-  void setup_shader(Shader_obj* shader_mesh_light, Shader_obj* shader_lighting);
+  void setup_shader(Shader_obj* shader_lamp, Shader_obj* shader_lighting);
   void update_shader();
 
   inline vec3 get_light_color(){return light_color;}
@@ -24,7 +24,8 @@ public:
 private:
   Configuration* configManager;
 
-  Shader_obj* shader_mesh_light;
+  Shader_obj* shader_lighting;
+  Shader_obj* shader_lamp;
   vec3 light_color;
 };
 

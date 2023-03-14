@@ -186,7 +186,7 @@ void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
   //Light
-  shaderManager->use_shader("mesh_light");
+  shaderManager->use_shader("lamp");
   cameraManager->update_shader();
   engineManager->draw_light();
 

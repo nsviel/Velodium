@@ -20,28 +20,32 @@ Shader_lighting::Shader_lighting(){
 Shader_lighting::~Shader_lighting(){}
 
 void Shader_lighting::setup_shader(Shader_obj* shader_1, Shader_obj* shader_2){
-  this->shader = shader_1;
-  this->shader_mesh_light = shader_2;
+  this->shader_lighting = shader_1;
+  this->shader_lamp = shader_2;
   //---------------------------
 
   // Setup shader parameters
-  glUseProgram(shader->get_program_ID());
-  shader->setVec3("light_color", light_color);
+  glUseProgram(shader_lighting->get_program_ID());
+  shader_lighting->setVec3("light_color", light_color);
 
   // Setup shader parameters
-  glUseProgram(shader_mesh_light->get_program_ID());
-  shader->setVec3("light_color", light_color);
+  glUseProgram(shader_lamp->get_program_ID());
+  shader_lamp->setVec3("light_color", light_color);
 
   //---------------------------
+  glUseProgram(0);
 }
 void Shader_lighting::update_shader(){
   //---------------------------
 
-  //Use corresponding shader program
-  this->use();
+  // Setup shader parameters
+  glUseProgram(shader_lighting->get_program_ID());
+  shader_lighting->setVec3("light_color", light_color);
 
-  //Update shader parameters
-  shader->setVec3("light_color", light_color);
+  // Setup shader parameters
+  glUseProgram(shader_lamp->get_program_ID());
+  shader_lamp->setVec3("light_color", light_color);
 
   //---------------------------
+  glUseProgram(0);
 }

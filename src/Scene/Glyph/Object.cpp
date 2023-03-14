@@ -254,7 +254,7 @@ void Object::update_glyph_collection(Collection* collection){
   //Update cloud cloud glyphs
   for(int i=0; i<collection->nb_obj; i++){
     Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    //this->update_glyph_object(cloud);
+    this->update_glyph_cloud(cloud);
   }
 
   //---------------------------
@@ -314,29 +314,10 @@ void Object::set_object_visibility(string name, bool val){
   for (int i=0; i<list_collection->size(); i++){
     Collection* collection = *next(list_collection->begin(),i);
 
-    //Set normal glyph visibility
-    if(name == "normal"){
-      for(int i=0; i<collection->nb_obj; i++){
-        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-        Glyph* normal = &cloud->glyphs["normal"];
-        normal->is_visible = val;
-      }
-    }
-    //Set keypoint glyph visibility
-    else if(name == "keypoint"){
-      for(int i=0; i<collection->nb_obj; i++){
-        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-        Glyph* keypoint = &cloud->glyphs["keypoint"];
-        keypoint->is_visible = val;
-      }
-    }
-    //Set tree glyph visibility
-    else if(name == "tree"){
-      for(int i=0; i<collection->nb_obj; i++){
-        Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-        Glyph* tree = &cloud->glyphs["tree"];
-        tree->is_visible = val;
-      }
+    for(int i=0; i<collection->nb_obj; i++){
+      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+      Glyph* glyph = get_glyph_object_byName(cloud, name);
+      glyph->is_visible = val;
     }
   }
 
