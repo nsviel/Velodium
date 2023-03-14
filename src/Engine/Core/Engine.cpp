@@ -53,11 +53,11 @@ void Engine::arcball_cam_lookat(){
 
 //Cloud drawing function
 void Engine::draw_light(){
-  std::list<Light_*>* list_light = data->get_list_light();
+  Collection* col_light = data->get_collection_byName("glyph", "light");
   //---------------------------
 
-  for(int i=0; i<list_light->size(); i++){
-    Light_* light = *next(list_light->begin(),i);
+  for(int i=0; i<col_light->list_obj.size(); i++){
+    Light_* light = (Light_*)*next(col_light->list_obj.begin(),i);
     gpuManager->draw_object(light);
   }
 

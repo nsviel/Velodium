@@ -13,7 +13,7 @@ Shader_lighting::Shader_lighting(){
   this->path_vs = "../src/Engine/Shader/glsh/experimental/shader_lighting.vs";
   this->path_fs = "../src/Engine/Shader/glsh/experimental/shader_lighting.fs";
 
-  this->light_color = vec3(0, 0, 1);
+  this->light_color = vec3(0.0f, 0.0f, 1.0f);
 
   //---------------------------
 }

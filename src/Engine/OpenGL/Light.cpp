@@ -30,10 +30,11 @@ Light::Light(){
 Light::~Light(){}
 
 void Light::init(){
-  std::list<Light_*>* list_light = data->get_list_light();
+  Collection* col_light = data->get_collection_byName("glyph", "light");
   //---------------------------
 
   Light_* light = (Light_*)loaderManager->load_object("../media/engine/Marks/sphere.obj");
+  col_light->obj_add_new(light);
 
   light->name = "Light";
   light->is_visible = true;
@@ -41,7 +42,6 @@ void Light::init(){
   gpuManager->update_buffer_location(light);
   gpuManager->update_buffer_color(light);
   sceneManager->update_MinMax(light);
-  list_light->push_back(light);
 
   //---------------------------
 }

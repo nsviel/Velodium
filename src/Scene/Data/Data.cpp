@@ -6,7 +6,6 @@ Data::Data(){
 
   this->list_col_object = new std::list<Collection*>;
   this->list_col_glyph = new std::list<Collection*>;
-  this->list_light = new std::list<Light_*>;
 
   this->selected_col = nullptr;
 

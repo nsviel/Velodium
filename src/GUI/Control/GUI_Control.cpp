@@ -218,7 +218,7 @@ void GUI_Control::control_keyboard_oneAction(){
       *highlightON = false;
 
       //Select the next collection in the list
-      graphManager->selection_setNext();
+      graphManager->select_next_collection();
       break;
     }
 

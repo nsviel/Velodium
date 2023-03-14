@@ -13,5 +13,5 @@ void main()
 {
   //fs_color = vec4(light_color * fs_in.color, 1.0);
   //fs_color = fs_in.color;
-  fs_color = vec4(light_color, 1.0);
+  fs_color = vec4(light_color.xyz, 1.0);
 }

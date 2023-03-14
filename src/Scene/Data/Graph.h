@@ -16,7 +16,7 @@ public:
   ~Graph();
 
 public:
-  void selection_setNext();
+  void select_next_collection();
   void set_selected_collection(int ID);
   void set_selected_object(Collection* collection, int ID);
   void selection_cloudByName(string name);

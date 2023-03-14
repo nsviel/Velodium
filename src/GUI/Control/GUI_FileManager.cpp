@@ -53,6 +53,15 @@ void GUI_fileManager::data_tree(){
   if (ImGui::BeginTable("table_advanced", 1, flags)){
     ImGui::TableSetupColumn("Name");
 
+    //Light collection
+    Collection* collection = data->get_collection_byName("glyph", "light");
+    ImGui::TableNextRow();
+    ImGui::PushID(0);
+    ImGui::TableNextColumn();
+    this->collection_node(collection);
+    ImGui::PopID();
+
+    //Object collection
     for (int row_i=0; row_i<list_collection->size(); row_i++){
       Collection* collection = *next(list_collection->begin(), row_i);
       if(collection->nb_obj == 0) continue;
@@ -79,7 +88,7 @@ void GUI_fileManager::data_tree(){
 }
 void GUI_fileManager::collection_node(Collection* collection){
   Collection* selected_col = data->get_selected_collection();
-  if(selected_col == nullptr) {}
+  if(selected_col == nullptr) {return;}
   //-------------------------------
 
   ImGuiTreeNodeFlags node_flags;

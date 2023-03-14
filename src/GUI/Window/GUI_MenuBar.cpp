@@ -116,7 +116,7 @@ void GUI_menuBar::MenuBar_menu_file(){
       sceneManager->remove_collection_all();
     }
     if(ImGui::MenuItem("Next collection","tab")){
-      graphManager->selection_setNext();
+      graphManager->select_next_collection();
     }
     if(ImGui::MenuItem("Center collection", "c")){
       if(!sceneManager->get_is_list_empty()){

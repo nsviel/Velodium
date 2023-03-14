@@ -35,8 +35,6 @@ public:
 
   inline std::list<Collection*>* get_list_col_object(){return list_col_object;}
   inline std::list<Collection*>* get_list_col_glyph(){return list_col_glyph;}
-  inline std::list<Light_*>* get_list_light(){return list_light;}
-
   inline Collection* get_selected_collection(){return selected_col;}
 
 private:
@@ -47,7 +45,6 @@ private:
 private:
   std::list<Collection*>* list_col_object;
   std::list<Collection*>* list_col_glyph;
-  std::list<Light_*>* list_light;
 
   Collection* selected_col;
 };
