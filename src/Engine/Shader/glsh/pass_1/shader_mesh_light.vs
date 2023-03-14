@@ -4,7 +4,7 @@ layout(location = 0) in vec3 in_position;
 layout(location = 1) in vec4 in_color;
 
 out VS_OUT{
-  vec4 color;
+  vec4 vertex_color;
 } vs_out;
 
 uniform mat4 MVP;
@@ -17,5 +17,5 @@ void main()
   gl_Position = MVP * XYZ;
 
   //Color
-  vs_out.color = in_color;
+  vs_out.vertex_color = in_color;
 }

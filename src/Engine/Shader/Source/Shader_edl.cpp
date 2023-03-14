@@ -26,7 +26,7 @@ Shader_edl::Shader_edl(Node_engine* node){
 }
 Shader_edl::~Shader_edl(){}
 
-void Shader_edl::setup_shader(Shader_object* shader){
+void Shader_edl::setup_shader(Shader_obj* shader){
   this->shader = shader;
   //---------------------------
 

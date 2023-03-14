@@ -1,5 +1,5 @@
-#include "Shader_object.h"
-#include "Shader_source.h"
+#include "Shader_obj.h"
+#include "Shader_src.h"
 
 #include "../../../Specific/File/Directory.h"
 #include "../../../Specific/Function/fct_error.h"
@@ -8,7 +8,7 @@
 
 
 //Constructor / Destructor
-Shader_object::Shader_object(Shader_source* shader_src){
+Shader_obj::Shader_obj(Shader_src* shader_src){
 	//---------------------------
 
 	// Create the shaders program
@@ -30,7 +30,7 @@ Shader_object::Shader_object(Shader_source* shader_src){
 
 	//---------------------------
 }
-Shader_object::Shader_object(string name, string path_vs, string path_fs){
+Shader_obj::Shader_obj(string name, string path_vs, string path_fs){
 	//---------------------------
 
 	// Create the shaders program
@@ -52,7 +52,7 @@ Shader_object::Shader_object(string name, string path_vs, string path_fs){
 
 	//---------------------------
 }
-Shader_object::Shader_object(string name, string path_vs, string path_fs, string path_gs){
+Shader_obj::Shader_obj(string name, string path_vs, string path_fs, string path_gs){
 	//---------------------------
 
 	// Create the shaders program
@@ -76,7 +76,7 @@ Shader_object::Shader_object(string name, string path_vs, string path_fs, string
 
 	//---------------------------
 }
-Shader_object::~Shader_object(){
+Shader_obj::~Shader_obj(){
 	//---------------------------
 
 	glDeleteProgram(program_ID);
@@ -84,14 +84,14 @@ Shader_object::~Shader_object(){
 	//---------------------------
 }
 
-void Shader_object::use(){
+void Shader_obj::use(){
 	//---------------------------
 
 	glUseProgram(program_ID);
 
 	//---------------------------
 }
-void Shader_object::build_shader(GLuint& program_ID, string path_vs, string path_fs){
+void Shader_obj::build_shader(GLuint& program_ID, string path_vs, string path_fs){
 	string path_gs = "../src/Engine/Shader/shader_scene.gs";
 	//---------------------------
 
@@ -116,7 +116,7 @@ void Shader_object::build_shader(GLuint& program_ID, string path_vs, string path
 
 	//---------------------------
 }
-GLuint Shader_object::shader_compilation(string file_path, GLenum shaderType){
+GLuint Shader_obj::shader_compilation(string file_path, GLenum shaderType){
 	//---------------------------
 
 	//First, check if file exists
@@ -127,7 +127,7 @@ GLuint Shader_object::shader_compilation(string file_path, GLenum shaderType){
 	//Create shader
 	GLuint shaderID = glCreateShader(shaderType);
 
-	//Read Shader_object
+	//Read Shader_obj
 	std::ifstream shaderStream(file_path.c_str(), std::ios::in);
 	string shaderCode;
 	if(shaderStream.is_open()){
@@ -137,7 +137,7 @@ GLuint Shader_object::shader_compilation(string file_path, GLenum shaderType){
 		shaderStream.close();
 	}
 
-	//Compile Shader_object
+	//Compile Shader_obj
 	int success, InfoLogLength;
 	char const* sourcePointer = shaderCode.c_str();
 	glShaderSource(shaderID, 1, &sourcePointer , NULL);

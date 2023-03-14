@@ -1,23 +1,23 @@
 #ifndef SHADER_EDL_H
 #define SHADER_EDL_H
 
-#include "../Base/Shader_source.h"
+#include "../Base/Shader_src.h"
 
 #include "../../../common.h"
 
 class Node_engine;
 class Dimension;
 class Configuration;
-class Shader_object;
+class Shader_obj;
 
 
-class Shader_edl : public Shader_source
+class Shader_edl : public Shader_src
 {
 public:
   Shader_edl(Node_engine* node);
   ~Shader_edl();
 
-  void setup_shader(Shader_object* shader);
+  void setup_shader(Shader_obj* shader);
   void update_shader();
 
   inline float* get_edl_strength(){return &edl_strength;}

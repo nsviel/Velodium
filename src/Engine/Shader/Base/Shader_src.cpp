@@ -1,15 +1,15 @@
-#include "Shader_source.h"
+#include "Shader_src.h"
 
 
 //Constructor / Destructor
-Shader_source::Shader_source(){
+Shader_src::Shader_src(){
 	//---------------------------
 
 	//---------------------------
 }
-Shader_source::~Shader_source(){}
+Shader_src::~Shader_src(){}
 
-void Shader_source::use(){
+void Shader_src::use(){
   //---------------------------
 
   glUseProgram(shader->get_program_ID());

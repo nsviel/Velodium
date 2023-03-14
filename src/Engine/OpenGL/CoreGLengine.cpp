@@ -4,7 +4,7 @@
 #include "../GPU/GPU_screenshot.h"
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"
-#include "../Shader/Base/Shader_object.h"
+#include "../Shader/Base/Shader_obj.h"
 #include "../Camera/Camera.h"
 #include "../Camera/Viewport.h"
 #include "../Core/Argument.h"
@@ -186,7 +186,7 @@ void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
   //Light
-  shaderManager->use_shader("lighting");
+  shaderManager->use_shader("mesh_light");
   cameraManager->update_shader();
   engineManager->draw_light();
 

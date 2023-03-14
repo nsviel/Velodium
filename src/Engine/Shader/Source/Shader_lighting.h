@@ -1,21 +1,21 @@
 #ifndef SHADER_LIGHTING_H
 #define SHADER_LIGHTING_H
 
-#include "../Base/Shader_source.h"
+#include "../Base/Shader_src.h"
 
 #include "../../../common.h"
 
 class Configuration;
-class Shader_object;
+class Shader_obj;
 
 
-class Shader_lighting : public Shader_source
+class Shader_lighting : public Shader_src
 {
 public:
   Shader_lighting();
   ~Shader_lighting();
 
-  void setup_shader(Shader_object* shader);
+  void setup_shader(Shader_obj* shader_mesh_light, Shader_obj* shader_lighting);
   void update_shader();
 
   inline vec3 get_light_color(){return light_color;}
@@ -24,6 +24,7 @@ public:
 private:
   Configuration* configManager;
 
+  Shader_obj* shader_mesh_light;
   vec3 light_color;
 };
 

@@ -3,16 +3,16 @@
 
 #include "../../../common.h"
 
-class Shader_source;
+class Shader_src;
 
 
-class Shader_object
+class Shader_obj
 {
 public:
-  Shader_object(Shader_source* shader_src);
-  Shader_object(string name, string path_vs, string path_fs);
-  Shader_object(string name, string path_vs, string path_fs, string path_gs);
-  ~Shader_object();
+  Shader_obj(Shader_src* shader_src);
+  Shader_obj(string name, string path_vs, string path_fs);
+  Shader_obj(string name, string path_vs, string path_fs, string path_gs);
+  ~Shader_obj();
 
 public:
   void use();
