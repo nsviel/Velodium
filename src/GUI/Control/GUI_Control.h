@@ -19,7 +19,7 @@ class Boxing;
 class Player;
 class Pose;
 class Graph;
-
+class Light;
 
 class GUI_Control
 {
@@ -67,6 +67,7 @@ private:
   Player* playerManager;
   Boxing* boxingManager;
   Graph* graphManager;
+  Light* lightManager;
 
   float cloud_trans_speed;
   float cloud_rotat_degree;

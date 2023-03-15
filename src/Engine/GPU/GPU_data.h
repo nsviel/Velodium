@@ -20,12 +20,14 @@ public:
   void gen_object_buffers(Object_* object);
   void gen_buffer_location(Object_* object);
   void gen_buffer_color(Object_* object);
+  void gen_buffer_normal(Object_* object);
   void gen_buffer_uv(Object_* object);
   int gen_texture(unsigned char* tex_data, int w, int h, int nb);
 
   //Buffer update
   void update_buffer_location(Object_* object);
   void update_buffer_color(Object_* object);
+  void update_buffer_normal(Object_* object);
 
   //Buffer binding / unbinding
   void bind_texture(vector<int> tex_ID);

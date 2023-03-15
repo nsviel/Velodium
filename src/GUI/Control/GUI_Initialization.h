@@ -60,7 +60,7 @@ private:
   vector<string> path_init_file;
   bool with_remove_cloud;
   bool with_onthefly;
-  int cloud_scale;
+  float object_scale;
   string lidar_model;
 };
 

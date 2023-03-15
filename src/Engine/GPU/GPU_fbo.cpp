@@ -1,25 +1,27 @@
-#include "Framebuffer.h"
+#include "GPU_fbo.h"
 
 
 //Constructor / Destructor
-Framebuffer::Framebuffer(){
+GPU_fbo::GPU_fbo(){
   //---------------------------
 
 
 
   //---------------------------
 }
-Framebuffer::~Framebuffer(){
+GPU_fbo::~GPU_fbo(){
   //---------------------------
 
   //---------------------------
 }
 
-void Framebuffer::init_create_fbo(int nb_fbo){
+//Create / remove fbo
+void GPU_fbo::init_create_rendering_fbo(int nb_fbo){
   //---------------------------
 
   for(int i=0; i<nb_fbo; i++){
     FBO* fbo = new FBO();
+    fbo->name = "fbo_" + to_string(i);
     this->gen_fbo(fbo);
     this->gen_fbo_tex_color(fbo, 0);
     this->gen_fbo_tex_depth(fbo);
@@ -27,11 +29,11 @@ void Framebuffer::init_create_fbo(int nb_fbo){
     this->fbo_vec.push_back(fbo);
   }
 
-  fbo_vec[0]->name = "pass_2";
+  this->create_gbuffer();
 
   //---------------------------
 }
-void Framebuffer::delete_fbo_all(){
+void GPU_fbo::delete_fbo_all(){
   int nb = fbo_vec.size();
   //---------------------------
 
@@ -45,41 +47,29 @@ void Framebuffer::delete_fbo_all(){
 
   //---------------------------
 }
-FBO* Framebuffer::get_fbo_byName(string querry){
-  //---------------------------
-
-  for(int i=0; i<fbo_vec.size(); i++){
-    FBO* fbo = fbo_vec[i];
-    if(fbo->name == querry){
-      return fbo;
-    }
-  }
-
-  //---------------------------
-  return nullptr;
-}
-void Framebuffer::create_gbuffer(){
+void GPU_fbo::create_gbuffer(){
   FBO* gfbo = new FBO();
   //---------------------------
 
+  gfbo->name = "gfbo";
   this->gen_fbo(gfbo);
   this->gen_fbo_tex_position(gfbo, 0);
   this->gen_fbo_tex_color(gfbo, 2);
   this->gen_fbo_tex_normal(gfbo, 1);
-  this->draw_buffer(gfbo, 3);
+  this->gen_fbo_attachment(gfbo, 3);
 
   //---------------------------
 }
 
-//Framebuffer generation
-void Framebuffer::gen_fbo(FBO* fbo){
+//FBO generation
+void GPU_fbo::gen_fbo(FBO* fbo){
   //---------------------------
 
   glGenFramebuffers(1, &fbo->ID_fbo);
 
   //---------------------------
 }
-void Framebuffer::gen_fbo_tex_color(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int color_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -105,7 +95,7 @@ void Framebuffer::gen_fbo_tex_color(FBO* fbo, int color_id){
 
   //---------------------------
 }
-void Framebuffer::gen_fbo_tex_color_multisample(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int color_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -126,7 +116,7 @@ void Framebuffer::gen_fbo_tex_color_multisample(FBO* fbo, int color_id){
 
   //---------------------------
 }
-void Framebuffer::gen_fbo_tex_depth(FBO* fbo){
+void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -154,7 +144,7 @@ void Framebuffer::gen_fbo_tex_depth(FBO* fbo){
 
   //---------------------------
 }
-void Framebuffer::gen_fbo_tex_position(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int color_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -180,7 +170,7 @@ void Framebuffer::gen_fbo_tex_position(FBO* fbo, int color_id){
 
   //---------------------------
 }
-void Framebuffer::gen_fbo_tex_normal(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int color_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -206,20 +196,19 @@ void Framebuffer::gen_fbo_tex_normal(FBO* fbo, int color_id){
 
   //---------------------------
 }
-void Framebuffer::gen_fbo_check(FBO* fbo){
+void GPU_fbo::gen_fbo_check(FBO* fbo){
   //---------------------------
 
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
   auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if(fboStatus != GL_FRAMEBUFFER_COMPLETE){
-    std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete: " << fboStatus << std::endl;
+    std::cout << "ERROR::FRAMEBUFFER:: GPU_fbo is not complete: " << fboStatus << std::endl;
   }
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
 }
-
-void Framebuffer::draw_buffer(FBO* fbo, int nb_attachment){
+void GPU_fbo::gen_fbo_attachment(FBO* fbo, int nb_attachment){
   //---------------------------
 
   //Bind fbo
@@ -234,4 +223,19 @@ void Framebuffer::draw_buffer(FBO* fbo, int nb_attachment){
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
+}
+
+//Accesseur
+FBO* GPU_fbo::get_fbo_byName(string querry){
+  //---------------------------
+
+  for(int i=0; i<fbo_vec.size(); i++){
+    FBO* fbo = fbo_vec[i];
+    if(fbo->name == querry){
+      return fbo;
+    }
+  }
+
+  //---------------------------
+  return nullptr;
 }

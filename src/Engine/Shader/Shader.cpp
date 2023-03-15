@@ -2,7 +2,7 @@
 
 #include "Base/Shader_obj.h"
 #include "Base/Shader_src.h"
-#include "Source/Shader_lighting.h"
+#include "Source/Shader_light.h"
 #include "Source/Shader_edl.h"
 
 #include "../Node_engine.h"
@@ -92,8 +92,8 @@ void Shader::init_shader(){
 	Shader_obj* shader_lighting = new Shader_obj("lighting", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lighting);
 
-	Shader_lighting* lightManager = new Shader_lighting();
-	this->list_shader_src->push_back(lightManager);
+	Shader_light* lightManager = new Shader_light();
+	list_shader_src->push_back(lightManager);
 	lightManager->setup_shader(shader_lighting, shader_lamp);
 
 	//---------------------------
@@ -128,6 +128,10 @@ void Shader::use_shader(string shader_name){
 //Accesseur
 Shader_obj* Shader::get_shader_obj_byName(string querry){
 	//---------------------------
+
+	if(list_shader_obj->size() == 0){
+		cout << "[error] Shader src not being initialized !"<<endl;
+	}
 
 	//Search for corresponding shader and out it
 	for(int i=0; i<list_shader_obj->size(); i++){

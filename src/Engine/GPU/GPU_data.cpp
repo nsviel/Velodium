@@ -73,6 +73,7 @@ void GPU_data::gen_object_buffers(Object_* object){
   this->gen_buffer_uv(object);
   this->gen_buffer_location(object);
   this->gen_buffer_color(object);
+  this->gen_buffer_normal(object);
 
   //---------------------------
 }
@@ -97,6 +98,18 @@ void GPU_data::gen_buffer_color(Object_* object){
   glBufferData(GL_ARRAY_BUFFER, object->rgb.size()*sizeof(glm::vec4), &object->rgb[0], GL_DYNAMIC_DRAW);
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
   glEnableVertexAttribArray(1);
+
+  //---------------------------
+}
+void GPU_data::gen_buffer_normal(Object_* object){
+  //---------------------------
+
+  glBindVertexArray(object->vao);
+  glGenBuffers(1, &object->vbo_Nxyz);
+  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_Nxyz);
+  glBufferData(GL_ARRAY_BUFFER, object->Nxyz.size()*sizeof(glm::vec3), &object->Nxyz[0], GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
+  glEnableVertexAttribArray(3);
 
   //---------------------------
 }
@@ -147,12 +160,21 @@ void GPU_data::update_buffer_location(Object_* object){
   glBufferData(GL_ARRAY_BUFFER, object->xyz.size() * sizeof(glm::vec3), &object->xyz[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
+  this->update_buffer_normal(object);
 }
 void GPU_data::update_buffer_color(Object_* object){
   //---------------------------
 
   glBindBuffer(GL_ARRAY_BUFFER, object->vbo_rgb);
   glBufferData(GL_ARRAY_BUFFER, object->rgb.size() * sizeof(glm::vec4), &object->rgb[0],  GL_DYNAMIC_DRAW);
+
+  //---------------------------
+}
+void GPU_data::update_buffer_normal(Object_* object){
+  //---------------------------
+
+  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_Nxyz);
+  glBufferData(GL_ARRAY_BUFFER, object->Nxyz.size() * sizeof(glm::vec3), &object->Nxyz[0],  GL_DYNAMIC_DRAW);
 
   //---------------------------
 }

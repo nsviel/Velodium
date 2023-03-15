@@ -1,7 +1,7 @@
 #ifndef GPU_RENDER_H
 #define GPU_RENDER_H
 
-#include "../OpenGL/Framebuffer.h"
+#include "GPU_fbo.h"
 #include "../../common.h"
 
 class Node_engine;
@@ -40,7 +40,7 @@ private:
   Configuration* configManager;
   GPU_data* gpuManager;
   Shader* shaderManager;
-  Framebuffer* fboManager;
+  GPU_fbo* fboManager;
 
   Object_* canvas_render;
   Object_* canvas_screen;

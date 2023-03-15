@@ -2,18 +2,29 @@
 
 in VS_OUT{
   vec4 vertex_color;
+  vec3 vertex_normal;
+  vec3 vertex_position;
 } fs_in;
 
 out vec4 fs_color;
 
 uniform vec3 light_color;
+uniform vec3 light_position;
 
 
 void main()
 {
-  float ambientStrength = 0.1;
-  vec3 ambient = ambientStrength * light_color;
+  //Ambient light
+  float ambient_strength = 0.1;
+  vec3 ambient = ambient_strength * light_color;
 
-  vec3 result = ambient * fs_in.vertex_color.rgb;
+  //Diffuse light
+  vec3 norm = normalize(fs_in.vertex_normal);
+  vec3 light_direction = normalize(light_position - fs_in.vertex_position);
+  float diff = max(dot(norm, light_direction), 0.0);
+  vec3 diffuse = diff * light_color;
+
+  // Resulting lighting
+  vec3 result = (ambient + diffuse) * fs_in.vertex_color.rgb;
   fs_color = vec4(result, 1.0);
 }

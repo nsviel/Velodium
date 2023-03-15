@@ -4,24 +4,28 @@
 #include "../../Scene/Data/Data.h"
 #include "../../common.h"
 
+class Node_engine;
 class Transformation;
 class Loader;
 class Pose;
 class Scene;
 class GPU_data;
+class Shader;
 
 
 class Light
 {
 public:
   //Constructor / Destructor
-  Light();
+  Light(Node_engine* node);
   ~Light();
 
 public:
   void init();
+  void light_being_displaced();
 
 private:
+  Shader* shaderManager;
   Loader* loaderManager;
   Transformation* transformManager;
   Pose* poseManager;

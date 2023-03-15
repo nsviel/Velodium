@@ -6,7 +6,7 @@
 #include "../../../Scene/Node_scene.h"
 #include "../../../Engine/Shader/Shader.h"
 #include "../../../Engine/Shader/Source/Shader_edl.h"
-#include "../../../Engine/Shader/Source/Shader_lighting.h"
+#include "../../../Engine/Shader/Source/Shader_light.h"
 
 #include <fstream>
 
@@ -47,7 +47,7 @@ void MOD_shader::window_shader(){
 
 //Sub functions
 void MOD_shader::shader_lighting(){
-  Shader_lighting* shader_lighting = (Shader_lighting*)shaderManager->get_shader_src_byName("lighting");
+  Shader_light* shader_lighting = (Shader_light*)shaderManager->get_shader_src_byName("light");
   //---------------------------
 
   vec3 color = shader_lighting->get_light_color();

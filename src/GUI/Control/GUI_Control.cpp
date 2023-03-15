@@ -11,6 +11,7 @@
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Camera/struct_viewport.h"
 #include "../../Engine/Core/Dimension.h"
+#include "../../Engine/OpenGL/Light.h"
 #include "../../Scene/Data/Scene.h"
 #include "../../Scene/Data/Graph.h"
 #include "../../Engine/Core/Configuration.h"
@@ -53,6 +54,7 @@ GUI_Control::GUI_Control(Node_gui* node){
   this->pathManager = node_load->get_patherManager();
   this->playerManager = node_ope->get_playerManager();
   this->boxingManager = node_ope->get_boxingManager();
+  this->lightManager = node_engine->get_lightManager();
   this->transformManager = new Transformation();
   this->poseManager = new Pose();
 
@@ -476,8 +478,13 @@ void GUI_Control::key_translation(vec3 trans){
   //----------------------------
 
   transformManager->make_translation(collection->selected_obj, trans);
+  sceneManager->update_MinMax(collection->selected_obj);
   sceneManager->update_buffer_location(collection->selected_obj);
   sceneManager->update_glyph(collection);
+
+  if(collection->selected_obj->obj_type == "light"){
+    lightManager->light_being_displaced();
+  }
 
   //----------------------------
 }

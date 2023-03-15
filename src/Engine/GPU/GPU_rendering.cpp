@@ -19,7 +19,7 @@ GPU_rendering::GPU_rendering(Node_engine* node_engine){
   this->shaderManager = node_engine->get_shaderManager();
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
-  this->fboManager = new Framebuffer();
+  this->fboManager = new GPU_fbo();
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
@@ -43,7 +43,7 @@ GPU_rendering::~GPU_rendering(){
 void GPU_rendering::init_renderer(){
   //---------------------------
 
-  fboManager->init_create_fbo(nb_fbo);
+  fboManager->init_create_rendering_fbo(nb_fbo);
   this->canvas_screen = gen_canvas();
   this->canvas_render = gen_canvas();
 

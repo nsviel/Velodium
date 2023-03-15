@@ -38,6 +38,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->screenshotManager = new GPU_screenshot(this);
   this->renderManager = new GPU_rendering(this);
   this->texManager = new Texture();
+  this->lightManager = new Light(this);
 
   this->node_load = new Node_load(this);
   this->node_ope = new Node_operation(this);
@@ -45,7 +46,6 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->node_module = new Node_module(this);
   this->node_gui = new Node_gui(this);
 
-  this->lightManager = new Light();
   this->engineManager = new Engine(this);
 
   lightManager->init();

@@ -58,7 +58,7 @@ void GUI_Initialization::update_configuration(){
 
   this->with_remove_cloud = true;
   this->with_onthefly = false;
-  this->cloud_scale = 1;
+  this->object_scale = 1;
   this->lidar_model = "velodyne_vlp64";
 
   //Open accepted formats
@@ -91,12 +91,13 @@ void GUI_Initialization::operation_new_collection(Collection* collection){
     collection->lidar_model = lidar_model;
 
     //Set scaling
-    if(cloud_scale != 1){
+    if(object_scale != 1){
       Transformation transformManager;
       for(int i=0; i<collection->list_obj.size(); i++){
-        Cloud* cloud = (Cloud*)collection->get_obj(i);
-        transformManager.make_scaling(cloud, (float)cloud_scale);
-        sceneManager->update_buffer_location(cloud);
+        Object_* object = collection->get_obj(i);
+        sceneManager->update_MinMax(object);
+        transformManager.make_scaling(object, object_scale);
+        sceneManager->update_buffer_location(object);
       }
     }
   }
@@ -108,7 +109,7 @@ void GUI_Initialization::operation_option(){
 
   //Point cloud scaling
   ImGui::SetNextItemWidth(100);
-  ImGui::DragInt("Scale", &cloud_scale, 1, 1, 100, "%d x");
+  ImGui::DragFloat("Scale##4567", &object_scale, 0.1, 0.1, 100, "%.2f x");
   ImGui::SameLine();
 
   //Remove old clouds

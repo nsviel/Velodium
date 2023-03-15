@@ -186,10 +186,12 @@ void Transformation::make_scaling(Object_* object, float Sxyz){
 
   //Reverso old scaling
   mat4 scaling_reverse(1/object->scale[0][0]);
+  scaling_reverse[3][3] = 1;
   this->make_Transformation_atomic(object->xyz, object->COM, scaling_reverse);
 
   //Scale to new value
   mat4 scaling(Sxyz);
+  scaling[3][3] = 1;
   object->scale = scaling;
   this->make_Transformation_atomic(object->xyz, object->COM, scaling);
 
@@ -206,19 +208,19 @@ void Transformation::make_Transformation(Object_* object, vec3 COM, mat4 M){
   this->make_Transformation_atomic(XYZ, COM, M);
   this->make_transformation_attribut(object, COM, M);
   this->make_Transformation_point(ROOT, COM, M);
-  //this->make_Transformation_normal(N, M);
+  this->make_Transformation_normal(N, M);
 
   //---------------------------
 }
-void Transformation::make_Transformation_atomic(vector<vec3>& XYZ, vec3 COM, mat4 Transformation){
+void Transformation::make_Transformation_atomic(vector<vec3>& xyz, vec3 COM, mat4 transform){
   //---------------------------
 
   //#pragma omp parallel for
-  for(int i=0; i<XYZ.size(); i++){
-    vec4 XYZ_hom = vec4(XYZ[i].x - COM.x, XYZ[i].y - COM.y, XYZ[i].z - COM.z, 1.0);
-    vec4 XYZ_tr = XYZ_hom * Transformation;
+  for(int i=0; i<xyz.size(); i++){
+    vec4 xyz_hom = vec4(xyz[i].x - COM.x, xyz[i].y - COM.y, xyz[i].z - COM.z, 1.0);
+    vec4 xyz_tr = xyz_hom * transform;
 
-    XYZ[i] = vec3(XYZ_tr.x + COM.x, XYZ_tr.y + COM.y, XYZ_tr.z + COM.z);
+    xyz[i] = vec3(xyz_tr.x + COM.x, xyz_tr.y + COM.y, xyz_tr.z + COM.z);
   }
 
   //---------------------------
