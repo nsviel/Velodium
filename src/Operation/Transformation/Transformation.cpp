@@ -19,9 +19,9 @@ void Transformation::make_translation(Collection* collection, vec3 trans){
 
   //Apply
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    cloud->trans *= translation;
-    this->make_Transformation(cloud, cloud->root, translation);
+    Object_* object = *next(collection->list_obj.begin(), i);
+    object->trans *= translation;
+    this->make_Transformation(object, object->root, translation);
   }
 
   //---------------------------
@@ -85,9 +85,9 @@ mat4 Transformation::make_rotation(Collection* collection, vec3 COM, vec3 radian
 
   //Apply
   for(int i=0; i<collection->nb_obj; i++){
-    Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-    cloud->rotat *= rotation;
-    this->make_Transformation(cloud, COM, rotation);
+    Object_* object = *next(collection->list_obj.begin(), i);
+    object->rotat *= rotation;
+    this->make_Transformation(object, COM, rotation);
   }
 
   //---------------------------

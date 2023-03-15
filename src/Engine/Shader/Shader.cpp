@@ -62,6 +62,12 @@ void Shader::init_shader(){
 	this->list_shader_obj->push_back(shader);
 	this->list_shader_src->push_back(edlManager);
 
+	// Light mesh shader
+	path_vs = shader_dir + "pass_1/shader_lamp.vs";
+	path_fs = shader_dir + "pass_1/shader_lamp.fs";
+	Shader_obj* shader_lamp = new Shader_obj("lamp", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader_lamp);
+
 	//Inversion shader
 	path_vs = shader_dir + "pass_2/shader_inversion.vs";
 	path_fs = shader_dir + "pass_2/shader_inversion.fs";
@@ -80,18 +86,11 @@ void Shader::init_shader(){
 	shader = new Shader_obj("geometric", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
-	// Light mesh shader
-	path_vs = shader_dir + "pass_1/shader_lamp.vs";
-	path_fs = shader_dir + "pass_1/shader_lamp.fs";
-	Shader_obj* shader_lamp = new Shader_obj("lamp", path_vs, path_fs);
-	this->list_shader_obj->push_back(shader_lamp);
-
 	//Lighting shader
 	path_vs = shader_dir + "experimental/shader_lighting.vs";
 	path_fs = shader_dir + "experimental/shader_lighting.fs";
 	Shader_obj* shader_lighting = new Shader_obj("lighting", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lighting);
-
 	Shader_light* lightManager = new Shader_light();
 	list_shader_src->push_back(lightManager);
 	lightManager->setup_shader(shader_lighting, shader_lamp);

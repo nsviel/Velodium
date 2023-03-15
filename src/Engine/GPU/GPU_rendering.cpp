@@ -23,7 +23,7 @@ GPU_rendering::GPU_rendering(Node_engine* node_engine){
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
-  this->nb_fbo = 3;
+  this->nb_fbo = 4;
 
   //---------------------------
 }
@@ -72,8 +72,8 @@ void GPU_rendering::loop_pass_2(){
   this->bind_fbo_pass_2_edl();
 
   //Color inversion
-  shaderManager->use_shader("render_color_inv");
-  this->bind_fbo_pass_2_inv();
+  //shaderManager->use_shader("geometric");
+  //this->bind_fbo_pass_2_inv();
 
   //Draw screen quad
   shaderManager->use_shader("canvas");
@@ -95,7 +95,7 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
   glDisable(GL_DEPTH_TEST);
 
   //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_3->ID_fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2->ID_fbo);
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
@@ -119,14 +119,15 @@ void GPU_rendering::bind_fbo_pass_2_inv(){
   FBO* fbo_1 = fbo_vec[0];
   FBO* fbo_2 = fbo_vec[1];
   FBO* fbo_3 = fbo_vec[2];
+  FBO* fbo_4 = fbo_vec[3];
   //---------------------------
 
   //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2->ID_fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_3->ID_fbo);
 
   //input
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_2->ID_tex_color);
 
   gpuManager->draw_object(canvas_render);
 
@@ -141,12 +142,13 @@ void GPU_rendering::bind_canvas(){
   FBO* fbo_1 = fbo_vec[0];
   FBO* fbo_2 = fbo_vec[1];
   FBO* fbo_3 = fbo_vec[2];
+  FBO* fbo_4 = fbo_vec[3];
   //---------------------------
 
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_3->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_2->ID_tex_color);
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);

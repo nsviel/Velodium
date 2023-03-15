@@ -16,8 +16,8 @@ Shader_obj::Shader_obj(Shader_src* shader_src){
 	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
-	GLuint vs = shader_compilation(shader_src->get_path_vs(), GL_VERTEX_SHADER);
-	GLuint fs = shader_compilation(shader_src->get_path_fs(), GL_FRAGMENT_SHADER);
+	GLuint vs = shader_compilation(shader_src->get_path_vs(), GL_VERTEX_SHADER, "vertex");
+	GLuint fs = shader_compilation(shader_src->get_path_fs(), GL_FRAGMENT_SHADER, "fragment");
 
 	//Link program
 	glLinkProgram(program_ID);
@@ -38,8 +38,8 @@ Shader_obj::Shader_obj(string name, string path_vs, string path_fs){
 	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
-	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
-	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
+	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER, "vertex");
+	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER, "fragment");
 
 	//Link program
 	glLinkProgram(program_ID);
@@ -59,9 +59,9 @@ Shader_obj::Shader_obj(string name, string path_vs, string path_fs, string path_
 	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
-	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
-	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
-	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER);
+	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER, "vertex");
+	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER, "fragment");
+	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER, "geometry");
 
 	//Link program
 	glLinkProgram(program_ID);
@@ -99,9 +99,9 @@ void Shader_obj::build_shader(GLuint& program_ID, string path_vs, string path_fs
 	program_ID = glCreateProgram();
 
 	// Compile & check Shaders-
-	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER);
-	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER);
-	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER);
+	GLuint vs = shader_compilation(path_vs, GL_VERTEX_SHADER, "vertex");
+	GLuint gs = shader_compilation(path_gs, GL_GEOMETRY_SHADER, "geometry");
+	GLuint fs = shader_compilation(path_fs, GL_FRAGMENT_SHADER, "fragment");
 
 	//Link program
 	glLinkProgram(program_ID);
@@ -116,7 +116,7 @@ void Shader_obj::build_shader(GLuint& program_ID, string path_vs, string path_fs
 
 	//---------------------------
 }
-GLuint Shader_obj::shader_compilation(string file_path, GLenum shaderType){
+GLuint Shader_obj::shader_compilation(string file_path, GLenum shaderType, string name){
 	//---------------------------
 
 	//First, check if file exists
@@ -138,16 +138,32 @@ GLuint Shader_obj::shader_compilation(string file_path, GLenum shaderType){
 	}
 
 	//Compile Shader_obj
-	int success, InfoLogLength;
 	char const* sourcePointer = shaderCode.c_str();
 	glShaderSource(shaderID, 1, &sourcePointer , NULL);
 	glCompileShader(shaderID);
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
-	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	this->check_compilation_error(shaderID, name);
 
 	//Bind to program
 	glAttachShader(program_ID, shaderID);
 
 	//---------------------------
 	return shaderID;
+}
+void Shader_obj::check_compilation_error(GLuint shader, std::string type){
+	GLint success;
+	GLchar infoLog[1024];
+	if(type != "PROGRAM"){
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+		if(!success){
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
+	else{
+		glGetProgramiv(shader, GL_LINK_STATUS, &success);
+		if(!success){
+			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
 }

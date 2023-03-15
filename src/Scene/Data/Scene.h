@@ -27,6 +27,11 @@ public:
   void reset_collection(Collection* collection);
   void reset_collection_all();
 
+  //Update collection
+  void update_collection_location(Collection* collection);
+  void update_collection_color(Collection* collection);
+  void update_collection_MinMax(Collection* collection);
+
   //Update object function
   void update_buffer_location(Object_* object);
   void update_buffer_color(Object_* object);

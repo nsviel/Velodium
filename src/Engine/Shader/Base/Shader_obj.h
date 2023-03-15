@@ -35,7 +35,8 @@ public:
   inline string get_name(){return name;}
 
 private:
-  GLuint shader_compilation(string fileName, GLenum shaderType);
+  GLuint shader_compilation(string fileName, GLenum shaderType, string name);
+  void check_compilation_error(GLuint shader, std::string type);
 
 private:
   GLuint program_ID;

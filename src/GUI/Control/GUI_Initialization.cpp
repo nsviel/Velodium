@@ -33,6 +33,7 @@ GUI_Initialization::GUI_Initialization(Node_gui* node_gui){
   this->pathManager = node_load->get_patherManager();
   this->configManager = node_engine->get_configManager();
   this->captureManager = node_interface->get_captureManager();
+  this->transformManager = new Transformation();
 
   path_init_file.push_back("../media/engine/fastScene/buddha.pts");
   path_init_file.push_back("../media/engine/fastScene/cube.obj");
@@ -82,70 +83,6 @@ void GUI_Initialization::update_configuration(){
   this->construst_tree();
 }
 
-//GUI subfunctions
-void GUI_Initialization::operation_new_collection(Collection* collection){
-  //---------------------------
-
-  if(collection != nullptr){
-    //Set lidar model
-    collection->lidar_model = lidar_model;
-
-    //Set scaling
-    if(object_scale != 1){
-      Transformation transformManager;
-      for(int i=0; i<collection->list_obj.size(); i++){
-        Object_* object = collection->get_obj(i);
-        sceneManager->update_MinMax(object);
-        transformManager.make_scaling(object, object_scale);
-        sceneManager->update_buffer_location(object);
-      }
-    }
-  }
-
-  //---------------------------
-}
-void GUI_Initialization::operation_option(){
-  //---------------------------
-
-  //Point cloud scaling
-  ImGui::SetNextItemWidth(100);
-  ImGui::DragFloat("Scale##4567", &object_scale, 0.1, 0.1, 100, "%.2f x");
-  ImGui::SameLine();
-
-  //Remove old clouds
-  ImGui::Checkbox("Remove##222", &with_remove_cloud);
-
-  //Lidar model
-  static int lidar_model_id;
-  if(lidar_model == "velodyne_vlp16"){
-    lidar_model_id = 0;
-  }else if(lidar_model == "velodyne_vlp64"){
-    lidar_model_id = 1;
-  }else if(lidar_model == "velodyne_hdl32"){
-    lidar_model_id = 2;
-  }else if(lidar_model == "velodyne_vlp16_reduced"){
-    lidar_model_id = 3;
-  }
-  ImGui::SetNextItemWidth(100);
-  if(ImGui::Combo("Lidar", &lidar_model_id, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
-    if(lidar_model_id == 0){
-      this->lidar_model = "velodyne_vlp16";
-    }else if(lidar_model_id == 1){
-      this->lidar_model = "velodyne_vlp64";
-    }else if(lidar_model_id == 2){
-      this->lidar_model = "velodyne_hdl32";
-    }else if(lidar_model_id == 3){
-      this->lidar_model = "velodyne_vlp16_reduced";
-    }
-  }
-  ImGui::SameLine();
-
-  //Remove old cloud
-  ImGui::Checkbox("On the fly##222", &with_onthefly);
-
-  //---------------------------
-}
-
 //Tree view
 void GUI_Initialization::treeview(){
   //---------------------------
@@ -170,13 +107,16 @@ void GUI_Initialization::treeview(){
   //---------------------------
 }
 void GUI_Initialization::construst_tree(){
+  this->nodes_path_vec.clear();
   //---------------------------
 
   //Construct init path nodes for specific cloud locations
   this->construct_node_root(path_init_file, nodes_root);
 
+  //Set a node for specific scene construction
+  this->construct_node_scene(nodes_path_vec);
+
   //Construct predefined init path nodes
-  this->nodes_path_vec.clear();
   for(int i=0; i<path_init_vec.size(); i++){
     vector<tree_file*> nodes_path;
     this->construct_node(path_init_vec[i], nodes_path);
@@ -202,6 +142,31 @@ void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
 
     //---------------------------
   }
+}
+void GUI_Initialization::construct_node_scene(vector<vector<tree_file*>>& nodes_path_vec){
+  //---------------------------
+
+  //Scene folder
+  vector<tree_file*> root_scene;
+  tree_file* node = new tree_file();
+  node->name = "Scene";
+  node->type = "Folder";
+  node->end_folder = true;
+  node->leaf_nb = 1;
+  node->leaf_idx = 1;
+  node->already_open = true;
+  root_scene.push_back(node);
+
+  //Scene 1
+  node = new tree_file();
+  node->name = "scene_1";
+  node->leaf_nb = 0;
+  node->type = "scene";
+  root_scene.push_back(node);
+
+  nodes_path_vec.push_back(root_scene);
+
+  //---------------------------
 }
 void GUI_Initialization::construct_node_root(vector<string>& vec_path, vector<tree_file*>& nodes){
   //---------------------------
@@ -314,28 +279,26 @@ void GUI_Initialization::display_node(tree_file* node, vector<tree_file*>& all_n
   }
 }
 void GUI_Initialization::display_node_root(vector<tree_file*>& all_nodes){
-  if(all_nodes.size() != 0){
-    //---------------------------
+  //---------------------------
 
-    for(int i=0; i<all_nodes.size(); i++){
-      tree_file* node = all_nodes[i];
+  for(int i=0; i<all_nodes.size(); i++){
+    tree_file* node = all_nodes[i];
 
-      ImGui::TableNextRow();
-      ImGui::TableNextColumn();
+    ImGui::TableNextRow();
+    ImGui::TableNextColumn();
 
-      ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
-      ImGui::TreeNodeEx(node->name.c_str(), node_flags);
-      if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
-        this->open_selection(node);
-      }
-      ImGui::TableNextColumn();
-      ImGui::Text("%.1f MB", node->size);
-      ImGui::TableNextColumn();
-      ImGui::TextUnformatted(node->type.c_str());
+    ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
+    ImGui::TreeNodeEx(node->name.c_str(), node_flags);
+    if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
+      this->open_selection(node);
     }
-
-    //---------------------------
+    ImGui::TableNextColumn();
+    ImGui::Text("%.1f MB", node->size);
+    ImGui::TableNextColumn();
+    ImGui::TextUnformatted(node->type.c_str());
   }
+
+  //---------------------------
 }
 bool GUI_Initialization::check_file_format(string path){
   string format = get_format_from_path(path);
@@ -374,6 +337,89 @@ void GUI_Initialization::open_selection(tree_file* node){
 
       this->operation_new_collection(collection);
     }
+  }
+  else if(node->type == "scene"){
+    this->build_scene_1();
+  }
+
+  //---------------------------
+}
+
+//GUI subfunctions
+void GUI_Initialization::operation_new_collection(Collection* collection){
+  //---------------------------
+
+  if(collection != nullptr){
+    //Set lidar model
+    collection->lidar_model = lidar_model;
+
+    //Set scaling
+    if(object_scale != 1){
+      for(int i=0; i<collection->list_obj.size(); i++){
+        Object_* object = collection->get_obj(i);
+        sceneManager->update_MinMax(object);
+        transformManager->make_scaling(object, object_scale);
+        sceneManager->update_buffer_location(object);
+      }
+    }
+  }
+
+  //---------------------------
+}
+void GUI_Initialization::operation_option(){
+  //---------------------------
+
+  //Point cloud scaling
+  ImGui::SetNextItemWidth(100);
+  ImGui::DragFloat("Scale##4567", &object_scale, 0.1, 0.1, 100, "%.2f x");
+  ImGui::SameLine();
+
+  //Remove old clouds
+  ImGui::Checkbox("Remove##222", &with_remove_cloud);
+
+  //Lidar model
+  static int lidar_model_id;
+  if(lidar_model == "velodyne_vlp16"){
+    lidar_model_id = 0;
+  }else if(lidar_model == "velodyne_vlp64"){
+    lidar_model_id = 1;
+  }else if(lidar_model == "velodyne_hdl32"){
+    lidar_model_id = 2;
+  }else if(lidar_model == "velodyne_vlp16_reduced"){
+    lidar_model_id = 3;
+  }
+  ImGui::SetNextItemWidth(100);
+  if(ImGui::Combo("Lidar", &lidar_model_id, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
+    if(lidar_model_id == 0){
+      this->lidar_model = "velodyne_vlp16";
+    }else if(lidar_model_id == 1){
+      this->lidar_model = "velodyne_vlp64";
+    }else if(lidar_model_id == 2){
+      this->lidar_model = "velodyne_hdl32";
+    }else if(lidar_model_id == 3){
+      this->lidar_model = "velodyne_vlp16_reduced";
+    }
+  }
+  ImGui::SameLine();
+
+  //Remove old cloud
+  ImGui::Checkbox("On the fly##222", &with_onthefly);
+
+  //---------------------------
+}
+void GUI_Initialization::build_scene_1(){
+  //---------------------------
+
+  for (int i=0; i<3; i++){
+    Collection* rock = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/obj/rock/rock.obj");
+    transformManager->make_translation(rock, vec3(2-4*i, 0, 0));
+    sceneManager->update_collection_location(rock);
+  }
+
+  for (int i=0; i<3; i++){
+    Collection* rock = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/obj/rock/rock.obj");
+    transformManager->make_translation(rock, vec3(2-4*i, -4, 0));
+    sceneManager->update_collection_location(rock);
   }
 
   //---------------------------

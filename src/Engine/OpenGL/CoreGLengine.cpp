@@ -54,7 +54,7 @@ CoreGLengine::~CoreGLengine(){
 //Opengl stuff
 void CoreGLengine::arg(int argc, char* argv[]){
   Argument argManager(node_engine);
-  //---------------------------
+  //--------------geometric-------------
 
   argManager.process_arg(argc, argv);
 
@@ -191,7 +191,7 @@ void CoreGLengine::loop_draw_scene(){
   engineManager->draw_light();
 
   //Untextured cloud & glyph drawing
-  shaderManager->use_shader("lighting");
+  shaderManager->use_shader("mesh_untextured");
   cameraManager->update_shader();
   engineManager->draw_untextured_cloud();
 
@@ -201,7 +201,7 @@ void CoreGLengine::loop_draw_scene(){
   engineManager->draw_untextured_glyph();
 
   //Textured cloud drawing
-  shaderManager->use_shader("mesh_textured");
+  shaderManager->use_shader("geometric");
   cameraManager->update_shader();
   engineManager->draw_textured_cloud();
 

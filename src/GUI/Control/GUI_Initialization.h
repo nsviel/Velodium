@@ -9,6 +9,7 @@ class Loader;
 class Pather;
 class Configuration;
 class Capture;
+class Transformation;
 
 struct tree_file{
   string          name;
@@ -38,6 +39,7 @@ public:
 
   void treeview();
   void construst_tree();
+  void construct_node_scene(vector<vector<tree_file*>>& nodes_path_vec);
   void construct_node(string path, vector<tree_file*>& nodes);
   void construct_node_root(vector<string>& vec_path, vector<tree_file*>& nodes);
   void display_node(tree_file* node, vector<tree_file*>& all_nodes);
@@ -45,6 +47,7 @@ public:
   void node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent);
   bool check_file_format(string path);
   void open_selection(tree_file* node);
+  void build_scene_1();
 
 private:
   Scene* sceneManager;
@@ -52,6 +55,7 @@ private:
   Pather* pathManager;
   Configuration* configManager;
   Capture* captureManager;
+  Transformation* transformManager;
 
   vector<tree_file*> nodes_root;
   vector<vector<tree_file*>> nodes_path_vec;

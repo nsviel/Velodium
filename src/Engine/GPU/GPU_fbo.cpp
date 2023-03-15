@@ -53,9 +53,10 @@ void GPU_fbo::create_gbuffer(){
 
   gfbo->name = "gfbo";
   this->gen_fbo(gfbo);
+  this->gen_fbo_tex_depth(gfbo);
   this->gen_fbo_tex_position(gfbo, 0);
-  this->gen_fbo_tex_color(gfbo, 2);
-  this->gen_fbo_tex_normal(gfbo, 1);
+  this->gen_fbo_tex_color(gfbo, 1);
+  this->gen_fbo_tex_normal(gfbo, 2);
   this->gen_fbo_attachment(gfbo, 3);
 
   //---------------------------

@@ -97,13 +97,46 @@ void Scene::reset_collection_all(){
     this->reset_collection(collection);
   }
 
-  this->update_glyph(data->get_selected_collection());
+  Collection* col = data->get_selected_collection();
+  this->update_glyph(col);
 
   //---------------------------
   console.AddLog("#", "Reset scene...");
 }
 
-//Update object function
+//Update collection
+void Scene::update_collection_location(Collection* collection){
+  //---------------------------
+
+  for(int i=0; i<collection->nb_obj; i++){
+    Object_* object = collection->get_obj(i);
+    this->update_buffer_location(object);
+  }
+
+  //---------------------------
+}
+void Scene::update_collection_color(Collection* collection){
+  //---------------------------
+
+  for(int i=0; i<collection->nb_obj; i++){
+    Object_* object = collection->get_obj(i);
+    this->update_buffer_color(object);
+  }
+
+  //---------------------------
+}
+void Scene::update_collection_MinMax(Collection* collection){
+  //---------------------------
+
+  for(int i=0; i<collection->nb_obj; i++){
+    Object_* object = collection->get_obj(i);
+    this->update_MinMax(object);
+  }
+
+  //---------------------------
+}
+
+//Update object
 void Scene::update_buffer_location(Object_* object){
   //---------------------------
 
@@ -145,7 +178,8 @@ void Scene::update_MinMax(Object_* object){
 
 //Update collection function
 void Scene::update_glyph(Collection* collection){
-  if(collection == nullptr && collection->obj_type != "cloud") return;
+  if(collection == nullptr) return;
+  if(collection->obj_type != "cloud") return;
   //---------------------------
 
   for(int i=0; i<collection->list_obj.size(); i++){

@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include "Data.h"
 #include "../../common.h"
 
 class GPU_data;
@@ -25,6 +26,7 @@ public:
 
 private:
   Scene* sceneManager;
+  Data* data;
 };
 
 #endif

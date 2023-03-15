@@ -9,6 +9,7 @@ Graph::Graph(Node_scene* node){
   //---------------------------
 
   this->sceneManager = node->get_sceneManager();
+  this->data = Data::get_instance();
 
   //---------------------------
 }
@@ -70,17 +71,20 @@ void Graph::object_clicked(Collection* collection, int id){
   //---------------------------
 }
 void Graph::select_next_collection(){
-  list<Collection*>* list_collection= sceneManager->get_list_col_object();
-  Collection* selected_col = sceneManager->get_selected_collection();
+  list<Collection*>* list_collection = data->get_list_col_object();
+  Collection* selected_col = data->get_selected_collection();
   if(list_collection->size() == 0) return;
+  int ID_new_selected = 0;
   //---------------------------
 
   if(selected_col->ID_col_order + 1 < list_collection->size()){
-    selected_col = *next(list_collection->begin(), selected_col->ID_col_order + 1);
+    ID_new_selected = selected_col->ID_col_order + 1;
   }
   else{
-    selected_col = *next(list_collection->begin(), 0);
+    ID_new_selected = 0;
   }
+  
+  data->set_selected_collection(ID_new_selected);
   sceneManager->update_MinMax_col(selected_col);
   sceneManager->update_glyph(selected_col);
   sceneManager->set_selected_collection(selected_col);

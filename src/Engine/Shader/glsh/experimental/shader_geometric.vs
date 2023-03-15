@@ -1,10 +1,15 @@
 #version 330 core
 
-layout(location = 0) in vec3 in_position;
+layout (location = 0) in vec3 in_position;
+layout (location = 1) in vec4 in_color;
+layout (location = 2) in vec2 in_tex_coord;
+layout (location = 3) in vec3 in_normal;
+
 out VS_OUT{
   vec3 position;
   vec4 color;
-  vec2 texture;
+  vec2 tex_coord;
+  vec3 normal;
 } vs_out;
 
 uniform mat4 MVP;
@@ -12,15 +17,17 @@ uniform mat4 MVP;
 
 void main()
 {
-  //Location
+  //Position
   vec4 XYZ = vec4(in_position, 1.0);
-  vec4 XYZ_s = MVP * XYZ;
-  gl_Position = XYZ_s
-  vs_out.position = XYZ_s
+  gl_Position = MVP * XYZ;
+  vs_out.position = XYZ.xyz;
 
   //Color
   vs_out.color = in_color;
 
   //Texture
-  vs_out.texture = in_texture;
+  vs_out.tex_coord = in_tex_coord;
+
+  //Normal
+  vs_out.normal = in_normal;
 }
