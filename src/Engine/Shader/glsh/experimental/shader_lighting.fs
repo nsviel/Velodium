@@ -1,12 +1,12 @@
 #version 330 core
 
+layout (location = 0) out vec4 out_color;
+
 in VS_OUT{
   vec4 vertex_color;
   vec3 vertex_normal;
   vec3 vertex_position;
 } fs_in;
-
-out vec4 fs_color;
 
 uniform vec3 light_color;
 uniform vec3 light_position;
@@ -26,5 +26,5 @@ void main()
 
   // Resulting lighting
   vec3 result = (ambient + diffuse) * fs_in.vertex_color.rgb;
-  fs_color = vec4(result, 1.0);
+  out_color = vec4(result, 1.0);
 }

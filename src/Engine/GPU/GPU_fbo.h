@@ -26,11 +26,11 @@ public:
 
   //GPU_fbo generation stuff
   void gen_fbo(FBO* fbo);
-  void gen_fbo_tex_color(FBO* fbo, int color_id);
-  void gen_fbo_tex_color_multisample(FBO* fbo, int color_id);
+  void gen_fbo_tex_color(FBO* fbo, int attachment_id);
+  void gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id);
   void gen_fbo_tex_depth(FBO* fbo);
-  void gen_fbo_tex_position(FBO* fbo, int color_id);
-  void gen_fbo_tex_normal(FBO* fbo, int color_id);
+  void gen_fbo_tex_position(FBO* fbo, int attachment_id);
+  void gen_fbo_tex_normal(FBO* fbo, int attachment_id);
   void gen_fbo_check(FBO* fbo);
   void gen_fbo_attachment(FBO* fbo, int nb_attachment);
 

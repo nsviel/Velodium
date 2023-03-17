@@ -1,7 +1,8 @@
 #version 330 core
 
+layout (location = 0) out vec4 out_color;
+
 in vec2 vs_tex_coord;
-out vec4 fs_tex_color;
 
 uniform sampler2D tex_color;
 uniform sampler2D tex_depth;
@@ -64,5 +65,5 @@ void main()
 
   }
 
-  fs_tex_color = vec4(tex_color_rgba);
+  out_color = vec4(tex_color_rgba);
 }

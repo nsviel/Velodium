@@ -51,10 +51,12 @@ void GPU_rendering::init_renderer(){
 }
 void GPU_rendering::loop_pass_1(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
+  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
+  FBO* fbo_1 = fbo_vec[0];
   //---------------------------
 
   //Bind first fbo
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_vec[0]->ID_fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, gfbo->ID_fbo);
 
   //Clear framebuffer and enable depth
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
@@ -85,6 +87,7 @@ void GPU_rendering::loop_pass_2(){
 //Rendering
 void GPU_rendering::bind_fbo_pass_2_edl(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
+  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   FBO* fbo_1 = fbo_vec[0];
   FBO* fbo_2 = fbo_vec[1];
   FBO* fbo_3 = fbo_vec[2];
@@ -99,9 +102,9 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_1->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_vec[0]->ID_tex_depth);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_depth);
 
   gpuManager->draw_object(canvas_render);
 
@@ -139,6 +142,7 @@ void GPU_rendering::bind_fbo_pass_2_inv(){
 }
 void GPU_rendering::bind_canvas(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
+  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   FBO* fbo_1 = fbo_vec[0];
   FBO* fbo_2 = fbo_vec[1];
   FBO* fbo_3 = fbo_vec[2];
@@ -168,11 +172,20 @@ void GPU_rendering::update_dim_texture(){
   for(int i=0; i<fbo_vec.size(); i++){
     FBO* fbo = fbo_vec[i];
     glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_color);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, dim.x, dim.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
     glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_depth);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
+    glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_normal);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
   }
 
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   //---------------------------
 }

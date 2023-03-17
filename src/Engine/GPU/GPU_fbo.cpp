@@ -53,13 +53,15 @@ void GPU_fbo::create_gbuffer(){
 
   gfbo->name = "gfbo";
   this->gen_fbo(gfbo);
+  this->gen_fbo_tex_color(gfbo, 0);
   this->gen_fbo_tex_depth(gfbo);
-  this->gen_fbo_tex_position(gfbo, 0);
-  this->gen_fbo_tex_color(gfbo, 1);
+  this->gen_fbo_tex_position(gfbo, 1);
   this->gen_fbo_tex_normal(gfbo, 2);
   this->gen_fbo_attachment(gfbo, 3);
+  this->gen_fbo_check(gfbo);
 
   //---------------------------
+  this->fbo_vec.push_back(gfbo);
 }
 
 //FBO generation
@@ -70,7 +72,7 @@ void GPU_fbo::gen_fbo(FBO* fbo){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attachment_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -83,7 +85,7 @@ void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int color_id){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + color_id, GL_TEXTURE_2D, fbo->ID_tex_color, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_color, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -91,12 +93,12 @@ void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int color_id){
 
   //Check
   if(fbo->ID_tex_color == 0){
-    cout<<"ERROR ID FBO"<<endl;
+    cout<<"[error] FBO color ID"<<endl;
   }
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -109,7 +111,7 @@ void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int color_id){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, dim.x, dim.y, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + color_id, GL_TEXTURE_2D_MULTISAMPLE, fbo->ID_tex_color, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D_MULTISAMPLE, fbo->ID_tex_color, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -140,12 +142,12 @@ void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
 
   //Check
   if(fbo->ID_tex_depth == 0){
-    cout<<"ERROR ID FBO"<<endl;
+    cout<<"[error] FBO depth ID"<<endl;
   }
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attachment_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -158,7 +160,9 @@ void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int color_id){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + color_id, GL_TEXTURE_2D, fbo->ID_tex_position, 0);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_position, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -166,12 +170,12 @@ void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int color_id){
 
   //Check
   if(fbo->ID_tex_position == 0){
-    cout<<"ERROR ID FBO"<<endl;
+    cout<<"[error] FBO position ID"<<endl;
   }
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int color_id){
+void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attachment_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -184,15 +188,15 @@ void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int color_id){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + color_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //Check
-  if(fbo->ID_tex_position == 0){
-    cout<<"ERROR ID FBO"<<endl;
+  if(fbo->ID_tex_normal == 0){
+    cout<<"[error] FBO normal ID"<<endl;
   }
 
   //---------------------------
@@ -215,7 +219,15 @@ void GPU_fbo::gen_fbo_attachment(FBO* fbo, int nb_attachment){
   //Bind fbo
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
 
-  if(nb_attachment == 3){
+  if(nb_attachment == 1){
+    unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, attachments);
+  }
+  else if(nb_attachment == 2){
+    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glDrawBuffers(2, attachments);
+  }
+  else if(nb_attachment == 3){
     unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
     glDrawBuffers(3, attachments);
   }

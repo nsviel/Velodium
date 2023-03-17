@@ -201,7 +201,7 @@ void CoreGLengine::loop_draw_scene(){
   engineManager->draw_untextured_glyph();
 
   //Textured cloud drawing
-  shaderManager->use_shader("geometric");
+  shaderManager->use_shader("mesh_textured");
   cameraManager->update_shader();
   engineManager->draw_textured_cloud();
 

@@ -1,13 +1,13 @@
 #version 330 core
 
+layout (location = 0) out vec4 out_color;
+
 in VS_OUT{
   vec4 vertex_color;
 } fs_in;
 
-out vec4 fs_color;
-
 
 void main()
 {
-  fs_color = fs_in.vertex_color;
+  out_color = fs_in.vertex_color;
 }
