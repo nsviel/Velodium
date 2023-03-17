@@ -186,16 +186,16 @@ void CoreGLengine::loop_draw_scene(){
   //---------------------------
 
   //Light
-  shaderManager->use_shader("lamp");
-  cameraManager->update_shader();
-  engineManager->draw_light();
+  //shaderManager->use_shader("lamp");
+  //cameraManager->update_shader();
+  //engineManager->draw_light();
 
-  //Untextured cloud & glyph drawing
+  //Glyph
   shaderManager->use_shader("mesh_untextured");
   cameraManager->update_shader();
   engineManager->draw_untextured_cloud();
 
-  //GUI stuff
+  //Untextured cloud
   shaderManager->use_shader("mesh_untextured");
   cameraManager->update_shader();
   engineManager->draw_untextured_glyph();
