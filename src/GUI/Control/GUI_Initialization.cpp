@@ -147,6 +147,38 @@ void GUI_Initialization::operation_option(){
 }
 
 //Specific scene construction
+void GUI_Initialization::construct_node_scene(vector<vector<tree_file*>>& nodes_path_vec){
+  //---------------------------
+
+  //Scene folder
+  vector<tree_file*> root_scene;
+  tree_file* node = new tree_file();
+  node->name = "scene";
+  node->type = "Folder";
+  node->end_folder = true;
+  node->leaf_nb = 2;
+  node->leaf_idx = 1;
+  node->already_open = true;
+  root_scene.push_back(node);
+
+  //Scene 1
+  node = new tree_file();
+  node->name = "Rocks";
+  node->leaf_nb = 0;
+  node->type = "scene_1";
+  root_scene.push_back(node);
+
+  //Scene 1
+  node = new tree_file();
+  node->name = "Bunny";
+  node->leaf_nb = 0;
+  node->type = "scene_2";
+  root_scene.push_back(node);
+
+  nodes_path_vec.push_back(root_scene);
+
+  //---------------------------
+}
 void GUI_Initialization::build_scene_1(){
   //---------------------------
 
@@ -167,13 +199,8 @@ void GUI_Initialization::build_scene_1(){
 void GUI_Initialization::build_scene_2(){
   //---------------------------
 
-  Collection* rabbit = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply");
-  for(int i=0; i<rabbit->list_obj.size(); i++){
-    Object_* object = rabbit->get_obj(i);
-    sceneManager->update_MinMax(object);
-    transformManager->make_scaling(object, 50);
-    sceneManager->update_buffer_location(object);
-  }
+  Collection* rabbit = loaderManager->load_collection("../media/engine/fastScene/bunny.ply");
+
 
   //---------------------------
 }
@@ -237,38 +264,6 @@ void GUI_Initialization::construct_node(string path, vector<tree_file*>& nodes){
 
     //---------------------------
   }
-}
-void GUI_Initialization::construct_node_scene(vector<vector<tree_file*>>& nodes_path_vec){
-  //---------------------------
-
-  //Scene folder
-  vector<tree_file*> root_scene;
-  tree_file* node = new tree_file();
-  node->name = "scene";
-  node->type = "Folder";
-  node->end_folder = true;
-  node->leaf_nb = 2;
-  node->leaf_idx = 1;
-  node->already_open = true;
-  root_scene.push_back(node);
-
-  //Scene 1
-  node = new tree_file();
-  node->name = "Rocks";
-  node->leaf_nb = 0;
-  node->type = "scene_1";
-  root_scene.push_back(node);
-
-  //Scene 1
-  node = new tree_file();
-  node->name = "Rabbit";
-  node->leaf_nb = 0;
-  node->type = "scene_2";
-  root_scene.push_back(node);
-
-  nodes_path_vec.push_back(root_scene);
-
-  //---------------------------
 }
 void GUI_Initialization::construct_node_root(vector<string>& vec_path, vector<tree_file*>& nodes){
   //---------------------------
