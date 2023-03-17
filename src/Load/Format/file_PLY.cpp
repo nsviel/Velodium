@@ -149,7 +149,7 @@ void file_PLY::Loader_header(std::ifstream& file){
       else if(h3 == "red"){
         is_color = true;
       }
-      else if(h3 == "scalar_Scalar_field" || h3 == "intensity"){
+      else if(h3 == "scalar_field" || h3 == "scalar_Scalar_field" || h3 == "intensity"){
         is_intensity = true;
       }
 
@@ -739,7 +739,7 @@ float file_PLY::get_uchar_from_binary(char* block_data, int& offset){
 }
 
 //Main exporter functions
-bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* collection){
+bool file_PLY::exporter_collection(Collection* collection, string path_file, string ply_format){
   //---------------------------
 
   //Check for file format ending
@@ -749,24 +749,23 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
 
   if (ply_format == "ascii"){
     for(int i=0; i<collection->nb_obj; i++){
-      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
+      Object_* object = collection->get_obj(i);
 
       //Open file
       std::ofstream file(path_file);
 
       //Save header
-      this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
+      this->Exporter_header(file, ply_format, object, object->xyz.size());
 
       //Save data
-      this->Exporter_data_ascii(file, cloud);
+      this->Exporter_data_ascii(file, object);
 
       file.close();
     }
   }
-  else if (format == "binary" || format == "binary_little_endian"){
+  else if (ply_format == "binary" || ply_format == "binary_little_endian"){
     for(int i=0; i<collection->nb_obj; i++){
-      Cloud* cloud = (Cloud*)*next(collection->list_obj.begin(), i);
-      format = "binary_little_endian";
+      Object_* object = collection->get_obj(i);
 
       //Locak file
       int fd = open(path_file.c_str(), O_RDWR | O_CREAT, 0666);
@@ -776,16 +775,16 @@ bool file_PLY::Exporter_cloud(string path_file, string ply_format, Collection* c
       std::ofstream file(path_file, ios::binary);
 
       //Save header
-      this->Exporter_header(file, ply_format, cloud, cloud->xyz.size());
+      this->Exporter_header(file, "binary_little_endian", object, object->xyz.size());
 
       //Save data
-      this->Exporter_data_binary(file, cloud);
+      this->Exporter_data_binary(file, object);
 
       file.close();
     }
   }
   else{
-    cout << "WARNING: format not recognized" << endl;
+    cout << "WARNING: format not recognized " << ply_format << endl;
     return false;
   }
 
@@ -827,7 +826,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* cloud)
 
   }
   else{
-    cout << "WARNING: format not recognized" << endl;
+    cout << "WARNING: format not recognized " << ply_format << endl;
     return false;
   }
 
@@ -875,7 +874,7 @@ bool file_PLY::Exporter_subset(string path_dir, string ply_format, Cloud* cloud,
 
   }
   else{
-    cout << "WARNING: format not recognized" << endl;
+    cout << "WARNING: format not recognized " << ply_format << endl;
     return false;
   }
 
@@ -933,7 +932,7 @@ bool file_PLY::Exporter_set(string path_dir, string ply_format, Collection* coll
 }
 
 //Exporter subfunctions
-void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* cloud, int nb_point){
+void file_PLY::Exporter_header(std::ofstream& file, string format, Object_* object, int nb_point){
   this->point_number = nb_point;
   this->property_number = 3;
   this->property_name.clear();
@@ -941,47 +940,65 @@ void file_PLY::Exporter_header(std::ofstream& file, string format, Cloud* cloud,
 
   //Write header
   file << "ply" << endl;
-  file << "ID " << cloud->ID << endl;
   file << "format " + format + " 1.0" << endl;
   file << "element vertex " << point_number << endl;
-  file << "property float x" << endl;
-  file << "property float y" << endl;
-  file << "property float z" << endl;
-  if(cloud->has_color){
+
+  file << "property float32 x" << endl;
+  file << "property float32 y" << endl;
+  file << "property float32 z" << endl;
+  property_name.push_back("x");
+  property_name.push_back("y");
+  property_name.push_back("z");
+
+  if(object->has_color){
     file << "property uchar red" << endl;
     file << "property uchar green" << endl;
     file << "property uchar blue" << endl;
 
+    property_name.push_back("r");
+    property_name.push_back("g");
+    property_name.push_back("b");
     property_number += 3;
   }
-  if(cloud->has_normal != 0){
-    file << "property float nx" << endl;
-    file << "property float ny" << endl;
-    file << "property float nz" << endl;
+  if(object->has_normal != 0){
+    file << "property float32 nx" << endl;
+    file << "property float32 ny" << endl;
+    file << "property float32 nz" << endl;
 
+    property_name.push_back("nx");
+    property_name.push_back("ny");
+    property_name.push_back("nz");
     property_number += 3;
   }
-  if(cloud->has_intensity != 0){
-    file << "property float scalar_Scalar_field" << endl;
+  if(object->has_intensity != 0){
+    file << "property float32 scalar_field" << endl;
 
+    property_name.push_back("I");
     property_number++;
   }
-  if(cloud->has_timestamp != 0){
-    file << "property float timestamp" << endl;
+  if(object->has_timestamp != 0){
+    file << "property float32 timestamp" << endl;
 
+    property_name.push_back("ts");
     property_number++;
   }
   file << "end_header" <<endl;
 
   //---------------------------
 }
-void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* cloud){
-  vector<vec3>& XYZ = cloud->xyz;
-  vector<vec4>& RGB = cloud->rgb;
-  vector<vec3>& N = cloud->Nxyz;
-  vector<float>& Is = cloud->I;
+void file_PLY::Exporter_data_ascii(std::ofstream& file, Object_* object){
+  vector<vec3>& XYZ = object->xyz;
+  vector<vec4>& RGB = object->rgb;
+  vector<vec3>& N = object->Nxyz;
   int precision = 6;
   //---------------------------
+
+  //If cloud get intensity vector
+  vector<float> Is;
+  if(object->obj_type == "cloud"){
+    Cloud* cloud = (Cloud*)object;
+    Is = cloud->I;
+  }
 
   //Write data in the file
   for(int i=0; i<XYZ.size(); i++){
@@ -991,17 +1008,17 @@ void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* cloud){
     file << setprecision(precision) << XYZ[i].x <<" "<< XYZ[i].y <<" "<< XYZ[i].z <<" ";
 
     //Color
-    if(cloud->has_color){
+    if(object->has_color){
       file << setprecision(0) << RGB[i].x * 255 <<" "<< RGB[i].y * 255 <<" "<< RGB[i].z * 255 <<" ";
     }
 
     //Normal
-    if(cloud->Nxyz.size() != 0){
+    if(object->Nxyz.size() != 0){
       file << setprecision(precision) << N[i].x <<" "<< N[i].y <<" "<< N[i].z <<" ";
     }
 
     //Intensity
-    if(cloud->I.size() != 0){
+    if(Is.size() != 0){
       float Is_scaled = (Is[i]*4096)-2048;
       file << setprecision(0) << Is_scaled << " ";
     }
@@ -1011,32 +1028,61 @@ void file_PLY::Exporter_data_ascii(std::ofstream& file, Cloud* cloud){
 
   //---------------------------
 }
-void file_PLY::Exporter_data_binary(std::ofstream& file, Cloud* cloud){
+void file_PLY::Exporter_data_binary(std::ofstream& file, Object_* object){
   //---------------------------
 
+  //If cloud get intensity vector
+  vector<float> Is;
+  if(object->obj_type == "cloud"){
+    Cloud* cloud = (Cloud*)object;
+    Is = cloud->I;
+  }
+
   //Prepare data writing by blocks
-  int block_size = property_number * cloud->xyz.size() * sizeof(float);
+  int block_size = property_number * object->xyz.size() * sizeof(float);
   char* block_data = new char[block_size];
 
   //Convert decimal data into binary data
   int offset = 0;
-  for (int i=0; i<cloud->xyz.size(); i++){
-    //Location
-    for(int j=0; j<3; j++){
-      memcpy(block_data + offset, &cloud->xyz[i][j], sizeof(float));
-      offset += sizeof(float);
-    }
+  int cpt_property = 0;
+  for (int i=0; i<object->xyz.size(); i++){
+    for (int j=0; j<property_number; j++){
+      //Location
+      if(property_name[j] == "x"){
+        for(int k=0; k<3; k++){
+          memcpy(block_data + offset, &object->xyz[i][k], sizeof(float));
+          offset += sizeof(float);
+        }
+      }
 
-    //Intensity
-    if(cloud->has_intensity){
-      memcpy(block_data + offset, &cloud->I[i], sizeof(float));
-      offset += sizeof(float);
-    }
+      //Color
+      if(property_name[j] == "r"){
+        for(int k=0; k<3; k++){
+          int color_int = object->rgb[i][k] * 255;
+          memcpy(block_data + offset, &color_int, sizeof(u_char));
+          offset += sizeof(u_char);
+        }
+      }
 
-    //Timestamp
-    if(cloud->has_timestamp){
-      memcpy(block_data + offset, &cloud->ts[i], sizeof(float));
-      offset += sizeof(float);
+      //Intensity
+      if(property_name[j] == "I"){
+        memcpy(block_data + offset, &Is[i], sizeof(float));
+        offset += sizeof(float);
+      }
+
+      //Normal
+      if(property_name[j] == "nx"){
+        for(int k=0; k<3; k++){
+          memcpy(block_data + offset, &object->Nxyz[i][k], sizeof(float));
+          offset += sizeof(float);
+        }
+      }
+
+      //Timestamp
+      if(property_name[j] == "ts"){
+        memcpy(block_data + offset, &object->ts[i], sizeof(float));
+        offset += sizeof(float);
+      }
     }
   }
 

@@ -23,7 +23,6 @@ GPU_rendering::GPU_rendering(Node_engine* node_engine){
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
-  this->nb_fbo = 4;
 
   //---------------------------
 }
@@ -43,7 +42,7 @@ GPU_rendering::~GPU_rendering(){
 void GPU_rendering::init_renderer(){
   //---------------------------
 
-  fboManager->init_create_rendering_fbo(nb_fbo);
+  fboManager->init_create_rendering_fbo();
   this->canvas_screen = gen_canvas();
   this->canvas_render = gen_canvas();
 
@@ -69,13 +68,13 @@ void GPU_rendering::loop_pass_1(){
 void GPU_rendering::loop_pass_2(){
   //---------------------------
 
+  //Occlusion
+  shaderManager->use_shader("occlusion");
+  this->bind_fbo_pass_2_occlusion();
+
   //EDL shader
   shaderManager->use_shader("render_edl");
   this->bind_fbo_pass_2_edl();
-
-  //Color inversion
-  //shaderManager->use_shader("geometric");
-  //this->bind_fbo_pass_2_inv();
 
   //Draw screen quad
   shaderManager->use_shader("canvas");
@@ -85,20 +84,16 @@ void GPU_rendering::loop_pass_2(){
 }
 
 //Rendering
-void GPU_rendering::bind_fbo_pass_2_edl(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
+void GPU_rendering::bind_fbo_pass_2_occlusion(){
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_1 = fbo_vec[0];
-  FBO* fbo_2 = fbo_vec[1];
-  FBO* fbo_3 = fbo_vec[2];
-  vec2 dim = dimManager->get_win_dim();
+  FBO* fbo_occ = fboManager->get_fbo_byName("occlusion");
   //---------------------------
 
   //Disable depth test
   glDisable(GL_DEPTH_TEST);
 
   //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_2->ID_fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_occ->ID_fbo);
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
@@ -117,42 +112,45 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
 
   //---------------------------
 }
-void GPU_rendering::bind_fbo_pass_2_inv(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
-  FBO* fbo_1 = fbo_vec[0];
-  FBO* fbo_2 = fbo_vec[1];
-  FBO* fbo_3 = fbo_vec[2];
-  FBO* fbo_4 = fbo_vec[3];
+void GPU_rendering::bind_fbo_pass_2_edl(){
+  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
+  FBO* fbo_edl = fboManager->get_fbo_byName("edl");
+  FBO* fbo_occ = fboManager->get_fbo_byName("occlusion");
+  vec2 dim = dimManager->get_win_dim();
   //---------------------------
 
-  //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_3->ID_fbo);
+  //Disable depth test
+  glDisable(GL_DEPTH_TEST);
 
-  //input
+  //Bind fbo 2
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_edl->ID_fbo);
+
+  //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_2->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_occ->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_depth);
 
   gpuManager->draw_object(canvas_render);
 
   //Unbind
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
 }
 void GPU_rendering::bind_canvas(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_1 = fbo_vec[0];
-  FBO* fbo_2 = fbo_vec[1];
-  FBO* fbo_3 = fbo_vec[2];
-  FBO* fbo_4 = fbo_vec[3];
+  FBO* fbo_edl = fboManager->get_fbo_byName("edl");
   //---------------------------
 
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_2->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_edl->ID_tex_color);
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);

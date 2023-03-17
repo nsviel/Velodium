@@ -173,7 +173,10 @@ vec2 iSphere2(in vec3 ro, in vec3 rd)
     else return vec2((-b - sqrt(h)), (-b + sqrt(h)));
 }
 
-void mainImage( out vec4 fragColor, in vec2 vs_tex_coord )
+out vec4 fragColor;
+in vec2 vs_tex_coord;
+
+void main()
 {
 	vec2 p = vs_tex_coord.xy/iResolution.xy-0.5;
 	p.x*=iResolution.x/iResolution.y;

@@ -43,6 +43,7 @@ struct Object_{ //Cloud cloud / part
   bool has_intensity;
   bool has_normal;
   bool has_texture;
+  bool has_timestamp;
 
   //Data
   std::vector<glm::vec3> xyz;

@@ -86,6 +86,12 @@ void Shader::init_shader(){
 	shader = new Shader_obj("geometric", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
+	//Occlusion shader
+	path_vs = shader_dir + "pass_2/shader_occlusion.vs";
+	path_fs = shader_dir + "pass_2/shader_occlusion.fs";
+	shader = new Shader_obj("occlusion", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader);
+
 	//Lighting shader
 	path_vs = shader_dir + "experimental/shader_lighting.vs";
 	path_fs = shader_dir + "experimental/shader_lighting.fs";

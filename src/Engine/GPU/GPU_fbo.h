@@ -20,7 +20,7 @@ public:
   ~GPU_fbo();
 
 public:
-  void init_create_rendering_fbo(int nb_fbo);
+  void init_create_rendering_fbo();
   void delete_fbo_all();
   FBO* get_fbo_byName(string querry);
 

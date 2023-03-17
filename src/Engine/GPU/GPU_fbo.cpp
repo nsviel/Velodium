@@ -16,12 +16,16 @@ GPU_fbo::~GPU_fbo(){
 }
 
 //Create / remove fbo
-void GPU_fbo::init_create_rendering_fbo(int nb_fbo){
+void GPU_fbo::init_create_rendering_fbo(){
   //---------------------------
 
-  for(int i=0; i<nb_fbo; i++){
+  vector<string> fbo_name;
+  fbo_name.push_back("occlusion");
+  fbo_name.push_back("edl");
+
+  for(int i=0; i<fbo_name.size(); i++){
     FBO* fbo = new FBO();
-    fbo->name = "fbo_" + to_string(i);
+    fbo->name = fbo_name[i];
     this->gen_fbo(fbo);
     this->gen_fbo_tex_color(fbo, 0);
     this->gen_fbo_tex_depth(fbo);

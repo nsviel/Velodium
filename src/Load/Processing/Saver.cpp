@@ -35,7 +35,7 @@ Saver::Saver(){
 Saver::~Saver(){}
 
 //Main function
-bool Saver::save_cloud(Collection* collection, string path){
+bool Saver::save_collection(Collection* collection, string path){
   string format = get_format_from_path(path);
   bool success = false;
   //---------------------------
@@ -46,7 +46,8 @@ bool Saver::save_cloud(Collection* collection, string path){
   }
   else if(format == "ply"){
     string format = "binary";
-    success = plyManager->Exporter_cloud(path, format, collection);
+    success = plyManager->exporter_collection(collection, path, format);
+    say(success);
   }
 
   //Say if save is successfull

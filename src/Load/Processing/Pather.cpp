@@ -183,7 +183,7 @@ void Pather::loading_treatment(){
 
     //Save and remove
     Collection* collection = data->get_selected_collection();
-    saverManager->save_cloud(collection, path);
+    saverManager->save_collection(collection, path);
     sceneManager->remove_collection(collection);
   }
 
@@ -294,7 +294,7 @@ void Pather::saving_cloud(Collection* collection){
 
   //Save current collection
   if(collection != nullptr && path_saving != ""){
-    saverManager->save_cloud(collection, path_saving);
+    saverManager->save_collection(collection, path_saving);
   }
 
   //---------------------------
@@ -304,7 +304,7 @@ void Pather::saving_cloud_same(Collection* collection){
 
   //Save current collection
   if(collection != nullptr && collection->path_file_load != ""){
-    saverManager->save_cloud(collection, collection->path_file_load);
+    saverManager->save_collection(collection, collection->path_file_load);
   }
 
   //---------------------------
@@ -321,7 +321,7 @@ void Pather::saving_cloud_all(){
     Collection* collection = *next(list_collection->begin(),i);
 
     string pathFile = path_dir + "/" + collection->name + ".pts";
-    saverManager->save_cloud(collection, pathFile);
+    saverManager->save_collection(collection, pathFile);
   }
 
   //---------------------------

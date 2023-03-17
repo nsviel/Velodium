@@ -22,7 +22,7 @@ public:
 
 public:
   //Main functions
-  bool save_cloud(Collection* cloud_in, string pathFile);
+  bool save_collection(Collection* cloud_in, string pathFile);
   bool save_subset(Cloud* cloud, string format, string dirPath);
   bool save_subset(Cloud* cloud, string format, string dirPath, string fileName);
   bool save_subset_silent(Cloud* cloud, string format, string dirPath);

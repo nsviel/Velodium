@@ -449,6 +449,8 @@ void GUI_Control::key_suppr(){
   Collection* collection = sceneManager->get_selected_collection();
   //----------------------------
 
+  if(collection == nullptr) return;
+
   if(collection->is_boxed == false){
     bool is_selected = selectionManager->mark_supressSelectedPoints_all();
 

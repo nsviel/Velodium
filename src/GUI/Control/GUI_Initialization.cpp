@@ -83,6 +83,101 @@ void GUI_Initialization::update_configuration(){
   this->construst_tree();
 }
 
+//Operation on loaded cloud
+void GUI_Initialization::operation_new_collection(Collection* collection){
+  //---------------------------
+
+  if(collection != nullptr){
+    //Set lidar model
+    collection->lidar_model = lidar_model;
+
+    //Set scaling
+    if(object_scale != 1){
+      for(int i=0; i<collection->list_obj.size(); i++){
+        Object_* object = collection->get_obj(i);
+        sceneManager->update_MinMax(object);
+        transformManager->make_scaling(object, object_scale);
+        sceneManager->update_buffer_location(object);
+      }
+    }
+  }
+
+  //---------------------------
+}
+void GUI_Initialization::operation_option(){
+  //---------------------------
+
+  //Point cloud scaling
+  ImGui::SetNextItemWidth(100);
+  ImGui::DragFloat("Scale##4567", &object_scale, 0.1, 0.1, 100, "%.2f x");
+  ImGui::SameLine();
+
+  //Remove old clouds
+  ImGui::Checkbox("Remove##222", &with_remove_cloud);
+
+  //Lidar model
+  static int lidar_model_id;
+  if(lidar_model == "velodyne_vlp16"){
+    lidar_model_id = 0;
+  }else if(lidar_model == "velodyne_vlp64"){
+    lidar_model_id = 1;
+  }else if(lidar_model == "velodyne_hdl32"){
+    lidar_model_id = 2;
+  }else if(lidar_model == "velodyne_vlp16_reduced"){
+    lidar_model_id = 3;
+  }
+  ImGui::SetNextItemWidth(100);
+  if(ImGui::Combo("Lidar", &lidar_model_id, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
+    if(lidar_model_id == 0){
+      this->lidar_model = "velodyne_vlp16";
+    }else if(lidar_model_id == 1){
+      this->lidar_model = "velodyne_vlp64";
+    }else if(lidar_model_id == 2){
+      this->lidar_model = "velodyne_hdl32";
+    }else if(lidar_model_id == 3){
+      this->lidar_model = "velodyne_vlp16_reduced";
+    }
+  }
+  ImGui::SameLine();
+
+  //Remove old cloud
+  ImGui::Checkbox("On the fly##222", &with_onthefly);
+
+  //---------------------------
+}
+
+//Specific scene construction
+void GUI_Initialization::build_scene_1(){
+  //---------------------------
+
+  for (int i=0; i<3; i++){
+    Collection* rock = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/obj/rock/rock.obj");
+    transformManager->make_translation(rock, vec3(2-4*i, 0, 0));
+    sceneManager->update_collection_location(rock);
+  }
+
+  for (int i=0; i<3; i++){
+    Collection* rock = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/obj/rock/rock.obj");
+    transformManager->make_translation(rock, vec3(2-4*i, -4, 0));
+    sceneManager->update_collection_location(rock);
+  }
+
+  //---------------------------
+}
+void GUI_Initialization::build_scene_2(){
+  //---------------------------
+
+  Collection* rabbit = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/ply/bun_zipper.ply");
+  for(int i=0; i<rabbit->list_obj.size(); i++){
+    Object_* object = rabbit->get_obj(i);
+    sceneManager->update_MinMax(object);
+    transformManager->make_scaling(object, 50);
+    sceneManager->update_buffer_location(object);
+  }
+
+  //---------------------------
+}
+
 //Tree view
 void GUI_Initialization::treeview(){
   //---------------------------
@@ -149,19 +244,26 @@ void GUI_Initialization::construct_node_scene(vector<vector<tree_file*>>& nodes_
   //Scene folder
   vector<tree_file*> root_scene;
   tree_file* node = new tree_file();
-  node->name = "Scene";
+  node->name = "scene";
   node->type = "Folder";
   node->end_folder = true;
-  node->leaf_nb = 1;
+  node->leaf_nb = 2;
   node->leaf_idx = 1;
   node->already_open = true;
   root_scene.push_back(node);
 
   //Scene 1
   node = new tree_file();
-  node->name = "scene_1";
+  node->name = "Rocks";
   node->leaf_nb = 0;
-  node->type = "scene";
+  node->type = "scene_1";
+  root_scene.push_back(node);
+
+  //Scene 1
+  node = new tree_file();
+  node->name = "Rabbit";
+  node->leaf_nb = 0;
+  node->type = "scene_2";
   root_scene.push_back(node);
 
   nodes_path_vec.push_back(root_scene);
@@ -338,88 +440,11 @@ void GUI_Initialization::open_selection(tree_file* node){
       this->operation_new_collection(collection);
     }
   }
-  else if(node->type == "scene"){
+  else if(node->type == "scene_1"){
     this->build_scene_1();
   }
-
-  //---------------------------
-}
-
-//GUI subfunctions
-void GUI_Initialization::operation_new_collection(Collection* collection){
-  //---------------------------
-
-  if(collection != nullptr){
-    //Set lidar model
-    collection->lidar_model = lidar_model;
-
-    //Set scaling
-    if(object_scale != 1){
-      for(int i=0; i<collection->list_obj.size(); i++){
-        Object_* object = collection->get_obj(i);
-        sceneManager->update_MinMax(object);
-        transformManager->make_scaling(object, object_scale);
-        sceneManager->update_buffer_location(object);
-      }
-    }
-  }
-
-  //---------------------------
-}
-void GUI_Initialization::operation_option(){
-  //---------------------------
-
-  //Point cloud scaling
-  ImGui::SetNextItemWidth(100);
-  ImGui::DragFloat("Scale##4567", &object_scale, 0.1, 0.1, 100, "%.2f x");
-  ImGui::SameLine();
-
-  //Remove old clouds
-  ImGui::Checkbox("Remove##222", &with_remove_cloud);
-
-  //Lidar model
-  static int lidar_model_id;
-  if(lidar_model == "velodyne_vlp16"){
-    lidar_model_id = 0;
-  }else if(lidar_model == "velodyne_vlp64"){
-    lidar_model_id = 1;
-  }else if(lidar_model == "velodyne_hdl32"){
-    lidar_model_id = 2;
-  }else if(lidar_model == "velodyne_vlp16_reduced"){
-    lidar_model_id = 3;
-  }
-  ImGui::SetNextItemWidth(100);
-  if(ImGui::Combo("Lidar", &lidar_model_id, "vlp_16\0vlp_64\0hdl_32\0vlp_16_reduced\0")){
-    if(lidar_model_id == 0){
-      this->lidar_model = "velodyne_vlp16";
-    }else if(lidar_model_id == 1){
-      this->lidar_model = "velodyne_vlp64";
-    }else if(lidar_model_id == 2){
-      this->lidar_model = "velodyne_hdl32";
-    }else if(lidar_model_id == 3){
-      this->lidar_model = "velodyne_vlp16_reduced";
-    }
-  }
-  ImGui::SameLine();
-
-  //Remove old cloud
-  ImGui::Checkbox("On the fly##222", &with_onthefly);
-
-  //---------------------------
-}
-void GUI_Initialization::build_scene_1(){
-  //---------------------------
-
-  for (int i=0; i<3; i++){
-    Collection* rock = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/obj/rock/rock.obj");
-    transformManager->make_translation(rock, vec3(2-4*i, 0, 0));
-    sceneManager->update_collection_location(rock);
-  }
-
-  for (int i=0; i<3; i++){
-    Collection* rock = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/obj/rock/rock.obj");
-    transformManager->make_translation(rock, vec3(2-4*i, -4, 0));
-    sceneManager->update_collection_location(rock);
+  else if(node->type == "scene_2"){
+    this->build_scene_2();
   }
 
   //---------------------------

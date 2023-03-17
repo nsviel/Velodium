@@ -31,12 +31,19 @@ public:
   ~GUI_Initialization();
 
 public:
+  //Main funxtion
   void init_gui();
   void update_configuration();
 
+  //Operation on loaded cloud
   void operation_new_collection(Collection* collection);
   void operation_option();
 
+  //Spacific scene construction
+  void build_scene_1();
+  void build_scene_2();
+
+  //Treenode construction
   void treeview();
   void construst_tree();
   void construct_node_scene(vector<vector<tree_file*>>& nodes_path_vec);
@@ -47,7 +54,6 @@ public:
   void node_child_scan(string path, vector<tree_file*>& nodes, tree_file* parent);
   bool check_file_format(string path);
   void open_selection(tree_file* node);
-  void build_scene_1();
 
 private:
   Scene* sceneManager;

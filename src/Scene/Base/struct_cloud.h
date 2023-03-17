@@ -14,9 +14,6 @@ struct Cloud : public Object_
   void reset();
   Frame* get_frame();
 
-  bool has_intensity;
-  bool has_timestamp;
-
   //Main data
   std::vector<float> A;
   std::vector<float> R;

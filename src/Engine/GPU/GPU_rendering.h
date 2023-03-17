@@ -25,7 +25,7 @@ public:
 
   //Rendering
   void bind_fbo_pass_2_edl();
-  void bind_fbo_pass_2_inv();
+  void bind_fbo_pass_2_occlusion();
   void bind_canvas();
 
   //Update
@@ -45,7 +45,6 @@ private:
   Object_* canvas_render;
   Object_* canvas_screen;
   vec4 screen_color;
-  int nb_fbo;
 };
 
 #endif
