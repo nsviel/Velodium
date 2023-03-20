@@ -19,14 +19,20 @@ uniform int GL_HEIGHT;
 
 //FUNCTION 1 - Compute normalized depth
 float compute_depth_normalized(float depth){
+  //---------------------------
+
   // depth: Linear depth, in world units
-  float depth_norm = 0.5 * (A * depth + B) / depth + 0.5;
   // depth_norm: normalized depth between [0, 1]
+  float depth_norm = 0.5 * (A * depth + B) / depth + 0.5;
+
+  //---------------------------
   return depth_norm;
 }
 
 //FUNCTION 2 - Compute neighbor influence
 vec2 neighbor_contribution(float depth_norm, vec2 offset) {
+  //---------------------------
+
   // get normalized depth at texture offseted coordinate
   vec2 NN_coord = vs_tex_coord + offset;
   vec4 depth_NN_rgba = texture(tex_depth, NN_coord);
@@ -35,16 +41,17 @@ vec2 neighbor_contribution(float depth_norm, vec2 offset) {
   // interpolate the two adjacent depth values
   float NN_contrib = max(0.0, log2(depth_norm) - log2(depth_NN_norm));
 
+  //---------------------------
   return vec2(NN_contrib, 1.0);
 }
 
 //MAIN FUNCTION
-void main()
-{
+void main(){
+  //---------------------------
+
   vec4 tex_color_rgba = texture(tex_color, vs_tex_coord);
 
   if(EDL_ON){
-
     // Build the Depth
     vec4 depth_rgba = texture(tex_depth, vs_tex_coord);
     float depth_norm = compute_depth_normalized(depth_rgba.r);
@@ -62,8 +69,8 @@ void main()
     float shade = exp(-depth_response * 1500.0 * EDL_STRENGTH);
 
     tex_color_rgba.rgb *= shade;
-
   }
 
+  //---------------------------
   out_color = vec4(tex_color_rgba);
 }

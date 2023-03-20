@@ -4,6 +4,7 @@
 #include "Base/Shader_src.h"
 #include "Source/Shader_light.h"
 #include "Source/Shader_edl.h"
+#include "Source/Shader_pyramid.h"
 
 #include "../Node_engine.h"
 
@@ -55,13 +56,6 @@ void Shader::init_shader(){
 	shader = new Shader_obj("mesh_textured", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
-	//EDL shader
-	Shader_edl* edlManager = new Shader_edl(node_engine);
-	shader = new Shader_obj(edlManager);
-	edlManager->setup_shader(shader);
-	this->list_shader_obj->push_back(shader);
-	this->list_shader_src->push_back(edlManager);
-
 	// Light mesh shader
 	path_vs = shader_dir + "pass_1/shader_lamp.vs";
 	path_fs = shader_dir + "pass_1/shader_lamp.fs";
@@ -86,11 +80,19 @@ void Shader::init_shader(){
 	shader = new Shader_obj("geometric", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
-	//Occlusion shader
-	path_vs = shader_dir + "pass_2/shader_occlusion.vs";
-	path_fs = shader_dir + "pass_2/shader_occlusion.fs";
-	shader = new Shader_obj("occlusion", path_vs, path_fs);
+	//EDL shader
+	Shader_pyramid* shader_pyramid = new Shader_pyramid(node_engine);
+	shader = new Shader_obj(shader_pyramid);
+	shader_pyramid->setup_shader(shader);
 	this->list_shader_obj->push_back(shader);
+	this->list_shader_src->push_back(shader_pyramid);
+
+	//EDL shader
+	Shader_edl* shader_edl = new Shader_edl(node_engine);
+	shader = new Shader_obj(shader_edl);
+	shader_edl->setup_shader(shader);
+	this->list_shader_obj->push_back(shader);
+	this->list_shader_src->push_back(shader_edl);
 
 	//Lighting shader
 	path_vs = shader_dir + "experimental/shader_lighting.vs";

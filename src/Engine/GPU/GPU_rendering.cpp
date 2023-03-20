@@ -69,7 +69,7 @@ void GPU_rendering::loop_pass_2(){
   //---------------------------
 
   //Occlusion
-  shaderManager->use_shader("occlusion");
+  shaderManager->use_shader("pyramid");
   this->bind_fbo_pass_2_occlusion();
 
   //EDL shader
@@ -86,7 +86,7 @@ void GPU_rendering::loop_pass_2(){
 //Rendering
 void GPU_rendering::bind_fbo_pass_2_occlusion(){
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_occ = fboManager->get_fbo_byName("occlusion");
+  FBO* fbo_occ = fboManager->get_fbo_byName("pyramid");
   //---------------------------
 
   //Disable depth test
@@ -115,7 +115,7 @@ void GPU_rendering::bind_fbo_pass_2_occlusion(){
 void GPU_rendering::bind_fbo_pass_2_edl(){
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   FBO* fbo_edl = fboManager->get_fbo_byName("edl");
-  FBO* fbo_occ = fboManager->get_fbo_byName("occlusion");
+  FBO* fbo_occ = fboManager->get_fbo_byName("pyramid");
   vec2 dim = dimManager->get_win_dim();
   //---------------------------
 

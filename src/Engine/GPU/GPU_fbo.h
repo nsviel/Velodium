@@ -24,15 +24,18 @@ public:
   void delete_fbo_all();
   FBO* get_fbo_byName(string querry);
 
-  //GPU_fbo generation stuff
+  //FBO generation
   void gen_fbo(FBO* fbo);
+  void gen_fbo_check(FBO* fbo);
+  void gen_fbo_attachment(FBO* fbo, int nb_attachment);
+
+  //FBO texture generation
   void gen_fbo_tex_color(FBO* fbo, int attachment_id);
   void gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id);
   void gen_fbo_tex_depth(FBO* fbo);
   void gen_fbo_tex_position(FBO* fbo, int attachment_id);
   void gen_fbo_tex_normal(FBO* fbo, int attachment_id);
-  void gen_fbo_check(FBO* fbo);
-  void gen_fbo_attachment(FBO* fbo, int nb_attachment);
+  void gen_fbo_tex_pyramide(FBO* fbo, int attachment_id);
 
   //GBuffer stuff
   void create_gbuffer();

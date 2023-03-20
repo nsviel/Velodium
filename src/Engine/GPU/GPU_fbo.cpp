@@ -20,7 +20,7 @@ void GPU_fbo::init_create_rendering_fbo(){
   //---------------------------
 
   vector<string> fbo_name;
-  fbo_name.push_back("occlusion");
+  fbo_name.push_back("pyramid");
   fbo_name.push_back("edl");
 
   for(int i=0; i<fbo_name.size(); i++){
@@ -76,6 +76,44 @@ void GPU_fbo::gen_fbo(FBO* fbo){
 
   //---------------------------
 }
+void GPU_fbo::gen_fbo_check(FBO* fbo){
+  //---------------------------
+
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
+  auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+  if(fboStatus != GL_FRAMEBUFFER_COMPLETE){
+    std::cout << "ERROR::FRAMEBUFFER:: GPU_fbo is not complete: " << fboStatus << std::endl;
+  }
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //---------------------------
+}
+void GPU_fbo::gen_fbo_attachment(FBO* fbo, int nb_attachment){
+  //---------------------------
+
+  //Bind fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
+
+  if(nb_attachment == 1){
+    unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, attachments);
+  }
+  else if(nb_attachment == 2){
+    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+    glDrawBuffers(2, attachments);
+  }
+  else if(nb_attachment == 3){
+    unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+    glDrawBuffers(3, attachments);
+  }
+
+  //Unbind
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //---------------------------
+}
+
+//FBO texture generation
 void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attachment_id){
   vec2 dim = vec2(1);
   //---------------------------
@@ -205,39 +243,29 @@ void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attachment_id){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_check(FBO* fbo){
-  //---------------------------
-
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
-  auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-  if(fboStatus != GL_FRAMEBUFFER_COMPLETE){
-    std::cout << "ERROR::FRAMEBUFFER:: GPU_fbo is not complete: " << fboStatus << std::endl;
-  }
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //---------------------------
-}
-void GPU_fbo::gen_fbo_attachment(FBO* fbo, int nb_attachment){
+void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attachment_id){
+  vec2 dim = vec2(1);
   //---------------------------
 
   //Bind fbo
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
 
-  if(nb_attachment == 1){
-    unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
-    glDrawBuffers(1, attachments);
-  }
-  else if(nb_attachment == 2){
-    unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-    glDrawBuffers(2, attachments);
-  }
-  else if(nb_attachment == 3){
-    unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-    glDrawBuffers(3, attachments);
-  }
+  //Create texture
+  glGenTextures(1, &fbo->ID_tex_normal);
+  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_normal);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
 
   //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //Check
+  if(fbo->ID_tex_normal == 0){
+    cout<<"[error] FBO normal ID"<<endl;
+  }
 
   //---------------------------
 }
