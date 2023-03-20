@@ -161,34 +161,6 @@ void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
-  vec2 dim = vec2(1);
-  //---------------------------
-
-  //Bind fbo
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
-
-  //Creat texture
-  glGenTextures(1, &fbo->ID_tex_depth);
-  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_depth);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo->ID_tex_depth, 0);
-
-  //Unbind
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //Check
-  if(fbo->ID_tex_depth == 0){
-    cout<<"[error] FBO depth ID"<<endl;
-  }
-
-  //---------------------------
-}
 void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attachment_id){
   vec2 dim = vec2(1);
   //---------------------------
@@ -265,6 +237,34 @@ void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attachment_id){
   //Check
   if(fbo->ID_tex_normal == 0){
     cout<<"[error] FBO normal ID"<<endl;
+  }
+
+  //---------------------------
+}
+void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
+  vec2 dim = vec2(1);
+  //---------------------------
+
+  //Bind fbo
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
+
+  //Creat texture
+  glGenTextures(1, &fbo->ID_tex_depth);
+  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_depth);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo->ID_tex_depth, 0);
+
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //Check
+  if(fbo->ID_tex_depth == 0){
+    cout<<"[error] FBO depth ID"<<endl;
   }
 
   //---------------------------

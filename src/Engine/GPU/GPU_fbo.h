@@ -10,6 +10,7 @@ struct FBO{
   GLuint ID_tex_depth;
   GLuint ID_tex_position;
   GLuint ID_tex_normal;
+  GLuint ID_depth_buffer;
 };
 
 

@@ -1,6 +1,6 @@
 {
    "camera" : {
-      "clip_far" : 1000.0,
+      "clip_far" : 20.0,
       "clip_near" : 0.1,
       "fov" : 65.0,
       "initial_pos" : 5.0,

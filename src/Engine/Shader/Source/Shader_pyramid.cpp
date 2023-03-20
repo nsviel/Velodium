@@ -30,10 +30,8 @@ void Shader_pyramid::setup_shader(Shader_obj* shader){
   this->use();
 
   // Setup shader parameters
-  auto a = (clip_far + clip_near) / (clip_far - clip_near);
-  auto b = (-2 * clip_far * clip_near) / (clip_far - clip_near);
-  shader->setFloat("A", a);
-  shader->setFloat("B", b);
+  shader->setFloat("Z_NEAR", clip_near);
+  shader->setFloat("Z_FAR", clip_far);
 
   //A AUTOMATISER ICI !!!!
   shader->setInt("tex_color", 0);
@@ -52,10 +50,8 @@ void Shader_pyramid::update_shader(){
   this->use();
 
   // Setup shader parameters
-  auto a = (clip_far + clip_near) / (clip_far - clip_near);
-  auto b = (-2 * clip_far * clip_near) / (clip_far - clip_near);
-  shader->setFloat("A", a);
-  shader->setFloat("B", b);
+  shader->setFloat("Z_NEAR", clip_near);
+  shader->setFloat("Z_FAR", clip_far);
 
   vec2 gl_dim = dimManager->get_gl_dim();
   shader->setInt("GL_WIDTH", gl_dim.x);

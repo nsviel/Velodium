@@ -7,8 +7,8 @@ in vec2 vs_tex_coord;
 uniform sampler2D tex_color;
 uniform sampler2D tex_depth;
 
-uniform float A;
-uniform float B;
+uniform float Z_NEAR;
+uniform float Z_FAR;
 uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
 
@@ -16,12 +16,8 @@ uniform int GL_HEIGHT;
 //FUNCTION 1 - Compute normalized depth
 float compute_depth_normalized(float depth){
   //---------------------------
-  float A = 1.0002;
-  float B = -0.20002;
 
-  // depth: Linear depth, in world units
-  // depth_norm: normalized depth between [0, 1]
-  float depth_norm = 0.5 * (A * depth + B) / depth + 0.5;
+  float depth_norm = (2.0 * Z_NEAR) / (Z_FAR + Z_NEAR - depth * (Z_FAR - Z_NEAR));
 
   //---------------------------
   return depth_norm;
@@ -45,8 +41,38 @@ vec2 neighbor_contribution(float depth_norm, vec2 offset) {
 
 void main()
 {
+  vec4 pixel_depth = texture(tex_depth, vs_tex_coord);
+  //---------------------------
 
-  vec4 texel = texture(tex_color, vs_tex_coord);
-  vec4 color_rgba = vec4(vec3(1.0 - texel.rgb), 1.0);
-  out_color = vec4(color_rgba);
+  //Search for neighbor
+  bool is_nearest = true;
+  vec2 texel_size = 1 / vec2(GL_WIDTH, GL_HEIGHT);
+
+  for(int i=-1; i<2; i++){
+    for(int j=-1; j<2; j++){
+      vec2 nn_coord = vs_tex_coord + vec2(texel_size.x * i, texel_size.y * j);
+      vec4 NN_depth = texture(tex_depth, nn_coord);
+      float NN_depth_norm = compute_depth_normalized(NN_depth.r);
+
+      if(NN_depth_norm < 0.95 && NN_depth.r < pixel_depth.r){
+        is_nearest = false;
+      }
+    }
+  }
+
+  //Get normalized pixel depth
+  float pixel_depth_norm = compute_depth_normalized(pixel_depth.r);
+
+  //Retrieve fragment pixel color
+  vec4 pixel_color;
+  if(pixel_depth_norm > 0.95){
+    pixel_color = texture(tex_color, vs_tex_coord);;
+  }else if(is_nearest){
+    pixel_color = vec4(0, 0, pixel_depth_norm, 1);
+  }else if(is_nearest == false){
+    pixel_color = vec4(pixel_depth_norm, 0, 0, 1);
+  }
+
+  //---------------------------
+  out_color = pixel_color;
 }
