@@ -42,6 +42,7 @@ public:
   //Spacific scene construction
   void build_scene_1();
   void build_scene_2();
+  void build_scene_3();
 
   //Treenode construction
   void treeview();

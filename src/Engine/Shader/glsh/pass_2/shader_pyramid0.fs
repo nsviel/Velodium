@@ -14,6 +14,7 @@ uniform int GL_HEIGHT;
 uniform int NN_SIZE;
 
 
+//FUNCTION 1 - Compute normalized depth
 float compute_depth_normalized(float depth){
   //---------------------------
 
@@ -23,20 +24,19 @@ float compute_depth_normalized(float depth){
   return depth_norm;
 }
 
-bool compute_is_nearest(vec4 pixel_depth){
-  vec2 pixel_size = vec2(1) / vec2(GL_WIDTH, GL_HEIGHT);
+void main()
+{
+  vec4 pixel_depth = texture(tex_depth, vs_tex_coord);
   //---------------------------
 
-  //Retrieve cube position
-  vec2 tex_coord_dim = vs_tex_coord * vec2(GL_WIDTH, GL_HEIGHT);
-  vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) / vec2(GL_WIDTH, GL_HEIGHT);
-
-  //Check if current pixel is the nearest
+  //Search for neighbor
   bool is_nearest = true;
-  for(int i=0; i<NN_SIZE; i++){
-    for(int j=0; j<NN_SIZE; j++){
-      vec2 NN_coord = cube_pos + vec2(pixel_size.x * i, pixel_size.y * j);
-      vec4 NN_depth = texture(tex_depth, NN_coord);
+  vec2 pixel_size = 1 / vec2(GL_WIDTH, GL_HEIGHT);
+
+  for(int i=-1*NN_SIZE; i<2*NN_SIZE; i++){
+    for(int j=-1*NN_SIZE; j<2*NN_SIZE; j++){
+      vec2 nn_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
+      vec4 NN_depth = texture(tex_depth, nn_coord);
       float NN_depth_norm = compute_depth_normalized(NN_depth.r);
 
       if(NN_depth_norm < 0.95 && NN_depth.r < pixel_depth.r){
@@ -44,18 +44,6 @@ bool compute_is_nearest(vec4 pixel_depth){
       }
     }
   }
-
-  //---------------------------
-  return is_nearest;
-}
-
-void main()
-{
-  vec4 pixel_depth = texture(tex_depth, vs_tex_coord);
-  //---------------------------
-
-  // Check cube emplacment
-  bool is_nearest = compute_is_nearest(pixel_depth);
 
   //Get normalized pixel depth
   float pixel_depth_norm = compute_depth_normalized(pixel_depth.r);
@@ -67,10 +55,8 @@ void main()
   }else if(is_nearest){
     pixel_color = vec4(0, 0, pixel_depth_norm, 1);
   }else if(is_nearest == false){
-    pixel_color = vec4(1);//pixel_depth_norm, 0, 0, 1);
+    pixel_color = vec4(1);
   }
-
-  //pixel_color = texture(tex_color, vs_tex_coord);;
 
   //---------------------------
   out_color = pixel_color;

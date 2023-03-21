@@ -156,7 +156,7 @@ void GUI_Initialization::construct_node_scene(vector<vector<tree_file*>>& nodes_
   node->name = "scene";
   node->type = "Folder";
   node->end_folder = true;
-  node->leaf_nb = 2;
+  node->leaf_nb = 3;
   node->leaf_idx = 1;
   node->already_open = true;
   root_scene.push_back(node);
@@ -168,11 +168,18 @@ void GUI_Initialization::construct_node_scene(vector<vector<tree_file*>>& nodes_
   node->type = "scene_1";
   root_scene.push_back(node);
 
-  //Scene 1
+  //Scene 2
   node = new tree_file();
   node->name = "Bunny";
   node->leaf_nb = 0;
   node->type = "scene_2";
+  root_scene.push_back(node);
+
+  //Scene 3
+  node = new tree_file();
+  node->name = "Dragon";
+  node->leaf_nb = 0;
+  node->type = "scene_3";
   root_scene.push_back(node);
 
   nodes_path_vec.push_back(root_scene);
@@ -200,6 +207,14 @@ void GUI_Initialization::build_scene_2(){
   //---------------------------
 
   Collection* rabbit = loaderManager->load_collection("../media/engine/fastScene/bunny.ply");
+
+
+  //---------------------------
+}
+void GUI_Initialization::build_scene_3(){
+  //---------------------------
+
+  Collection* dragon = loaderManager->load_collection("/home/aeter/Desktop/Point_cloud/ply/dragon.ply");
 
 
   //---------------------------
@@ -440,6 +455,9 @@ void GUI_Initialization::open_selection(tree_file* node){
   }
   else if(node->type == "scene_2"){
     this->build_scene_2();
+  }
+  else if(node->type == "scene_3"){
+    this->build_scene_3();
   }
 
   //---------------------------

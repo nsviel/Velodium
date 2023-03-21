@@ -40,6 +40,7 @@ void Shader_pyramid::setup_shader(Shader_obj* shader){
   vec2 gl_dim = dimManager->get_gl_dim();
   shader->setInt("GL_WIDTH", gl_dim.x);
   shader->setInt("GL_HEIGHT", gl_dim.y);
+  shader->setInt("NN_SIZE", 2);
 
   //---------------------------
 }
