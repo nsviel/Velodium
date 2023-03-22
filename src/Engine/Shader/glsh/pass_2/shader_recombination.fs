@@ -10,8 +10,9 @@ uniform sampler2D tex_depth_1;
 uniform sampler2D tex_depth_2;
 
 
-void main()
-{
+void main(){
+  //---------------------------
+
   ivec2 texcoord = ivec2(floor(gl_FragCoord.xy));
   float depth_1 = texelFetch(tex_depth_1, texcoord, 0).r;
   float depth_2 = texelFetch(tex_depth_2, texcoord, 0).r;
@@ -23,4 +24,6 @@ void main()
     out_color = texelFetch(tex_color_2, texcoord, 0);//texture(tex_color_2, vs_tex_coord);
     gl_FragDepth = depth_2;
   }
+
+  //---------------------------
 }

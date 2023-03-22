@@ -36,6 +36,7 @@ void Shader_pyramid::setup_shader(Shader_obj* shader){
   //A AUTOMATISER ICI !!!!
   shader->setInt("tex_color", 0);
   shader->setInt("tex_depth", 1);
+  shader->setInt("tex_position", 2);
 
   vec2 gl_dim = dimManager->get_gl_dim();
   shader->setInt("GL_WIDTH", gl_dim.x);

@@ -34,6 +34,7 @@ public:
   void update_dim_texture();
   void update_dim_canvas();
   Object_* gen_canvas();
+  void unbind_fboAndTexture(int nb_tex);
 
   inline vec4* get_screen_color(){return &screen_color;}
 

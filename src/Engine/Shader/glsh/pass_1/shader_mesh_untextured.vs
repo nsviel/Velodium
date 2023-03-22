@@ -20,7 +20,7 @@ void main()
   //Location
   vec4 XYZ = vec4(in_position, 1.0);
   gl_Position = MVP * XYZ;
-  vs_out.position = XYZ.xyz;
+  vs_out.position = vec3(MVP * XYZ);
 
   //Color
   vs_out.color = in_color;

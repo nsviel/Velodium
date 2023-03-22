@@ -104,13 +104,6 @@ void compute_pixel_visibility(){
 
   //---------------------------
 }
-void construct_pyramid(){
-  //---------------------------
-
-  gl_FragDepth = 0;
-
-  //---------------------------
-}
 
 void main(){
   vec4 pixel_depth = texture(tex_depth, vs_tex_coord);

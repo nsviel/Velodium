@@ -135,16 +135,37 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   //---------------------------
 
-  //Bind fbo 2
-  //for(int i=0; i<struct_pyramid->nb_lvl; i++){
-    FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo_pyr->ID_fbo);
+  //Activate depth buffering
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
+
+  //First pyramid level
+  FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pyr->ID_fbo);
+
+  //Input: read textures
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_position);
+
+  gpuManager->draw_object(canvas_render);
+  this->unbind_fboAndTexture(3);
+
+/*
+  //Next pyramid level
+  for(int i=1; i<struct_pyramid->nb_lvl; i++){
+    FBO* fbo_bef = struct_pyramid->fbo_vec[i-1];
+    FBO* fbo_lvl = struct_pyramid->fbo_vec[i];
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl->ID_fbo);
 
     //Input: read textures
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_color);
+    glBindTexture(GL_TEXTURE_2D, fbo_bef->ID_tex_color);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
+    glBindTexture(GL_TEXTURE_2D, fbo_bef->ID_buffer_depth);
 
     gpuManager->draw_object(canvas_render);
 
@@ -154,7 +175,7 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  //}
+  }*/
 
   //---------------------------
 }
@@ -165,10 +186,6 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
   //---------------------------
-
-  //Activate depth buffering
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_ALWAYS);
 
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_recombination->ID_fbo);
 
@@ -183,17 +200,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
 
   gpuManager->draw_object(canvas_render);
-
-  //Unbind
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glActiveTexture(GL_TEXTURE3);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  this->unbind_fboAndTexture(4);
 
   //Disable depth test
   glDisable(GL_DEPTH_TEST);
@@ -219,13 +226,7 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
   glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_buffer_depth);
 
   gpuManager->draw_object(canvas_render);
-
-  //Unbind
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  this->unbind_fboAndTexture(2);
 
   //---------------------------
 }
@@ -241,9 +242,7 @@ void GPU_rendering::bind_canvas(){
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);
-
-  //Unbind
-  glBindTexture(GL_TEXTURE_2D, 0);
+  this->unbind_fboAndTexture(1);
 
   //---------------------------
 }
@@ -344,4 +343,18 @@ Object_* GPU_rendering::gen_canvas(){
 
   //---------------------------
   return canvas;
+}
+void GPU_rendering::unbind_fboAndTexture(int nb_tex){
+  //---------------------------
+
+  //Unbind texture
+  for(int i=0; i<nb_tex; i++){
+    glActiveTexture(GL_TEXTURE0 + i);
+    glBindTexture(GL_TEXTURE_2D, 0);
+  }
+
+  //Unbind FBO
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  //---------------------------
 }
