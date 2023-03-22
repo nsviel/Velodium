@@ -80,7 +80,7 @@ void CoreGLengine::loop(){
     //---------------------------
     this->loop_resizing();
     renderManager->loop_pass_1();
-    this->loop_draw_scene();
+    //this->loop_draw_scene();
 
     //Second pass
     //---------------------------

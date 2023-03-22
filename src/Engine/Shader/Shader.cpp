@@ -68,6 +68,17 @@ void Shader::init_shader(){
 	shader = new Shader_obj("render_color_inv", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
+	//Recombinaison shader
+	path_vs = shader_dir + "pass_2/shader_recombination.vs";
+	path_fs = shader_dir + "pass_2/shader_recombination.fs";
+	shader = new Shader_obj("recombination", path_vs, path_fs);
+	shader->use();
+	shader->setInt("tex_color_1", 0);
+	shader->setInt("tex_color_2", 1);
+	shader->setInt("tex_depth_1", 2);
+	shader->setInt("tex_depth_2", 3);
+	this->list_shader_obj->push_back(shader);
+
 	//Canvas shader
 	path_vs = shader_dir + "pass_3/shader_canvas.vs";
 	path_fs = shader_dir + "pass_3/shader_canvas.fs";
@@ -111,6 +122,10 @@ void Shader::update_shader(){
 	//EDL update
 	Shader_src* shader_edl = get_shader_src_byName("render_edl");
 	shader_edl->update_shader();
+
+	//EDL update
+	Shader_src* shader_pyramid = get_shader_src_byName("pyramid");
+	shader_pyramid->update_shader();
 
 	//...
 

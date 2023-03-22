@@ -19,20 +19,21 @@ GPU_fbo::~GPU_fbo(){
 void GPU_fbo::init_create_rendering_fbo(){
   //---------------------------
 
-  vector<string> fbo_name;
-  fbo_name.push_back("pyramid");
-  fbo_name.push_back("edl");
+  //Create pyramid FBO
+  this->struct_pyramid = new Pyramid();
+  this->struct_pyramid->nb_lvl = 3;
 
-  for(int i=0; i<fbo_name.size(); i++){
-    FBO* fbo = new FBO();
-    fbo->name = fbo_name[i];
-    this->gen_fbo(fbo);
-    this->gen_fbo_tex_color(fbo, 0);
-    this->gen_fbo_tex_depth(fbo);
-    this->gen_fbo_check(fbo);
-    this->fbo_vec.push_back(fbo);
+  for(int i=0; i<struct_pyramid->nb_lvl; i++){
+    FBO* fbo = create_new_fbo("pyramid_" + to_string(i));
+    struct_pyramid->fbo_vec.push_back(fbo);
   }
 
+  //Create specific FBO
+  this->create_new_fbo("pass_1");
+  this->create_new_fbo("recombination");
+  this->create_new_fbo("edl");
+
+  //Create GFBO
   this->create_gbuffer();
 
   //---------------------------
@@ -50,6 +51,20 @@ void GPU_fbo::delete_fbo_all(){
   fbo_vec.clear();
 
   //---------------------------
+}
+FBO* GPU_fbo::create_new_fbo(string name){
+  FBO* fbo = new FBO();
+  //---------------------------
+
+  fbo->name = name;
+  this->gen_fbo(fbo);
+  this->gen_fbo_tex_color(fbo, 0);
+  this->gen_fbo_tex_depth(fbo);
+  this->gen_fbo_check(fbo);
+  this->fbo_vec.push_back(fbo);
+
+  //---------------------------
+  return fbo;
 }
 void GPU_fbo::create_gbuffer(){
   FBO* gfbo = new FBO();
@@ -249,21 +264,21 @@ void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
   glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID_fbo);
 
   //Creat texture
-  glGenTextures(1, &fbo->ID_tex_depth);
-  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_depth);
+  glGenTextures(1, &fbo->ID_buffer_depth);
+  glBindTexture(GL_TEXTURE_2D, fbo->ID_buffer_depth);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo->ID_tex_depth, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fbo->ID_buffer_depth, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //Check
-  if(fbo->ID_tex_depth == 0){
+  if(fbo->ID_buffer_depth == 0){
     cout<<"[error] FBO depth ID"<<endl;
   }
 

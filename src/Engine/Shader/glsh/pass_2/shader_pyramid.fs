@@ -37,9 +37,12 @@ bool compute_is_nearest(vec4 pixel_depth){
     for(int j=0; j<NN_SIZE; j++){
       vec2 NN_coord = cube_pos + vec2(pixel_size.x * i, pixel_size.y * j);
       vec4 NN_depth = texture(tex_depth, NN_coord);
-      float NN_depth_norm = compute_depth_normalized(NN_depth.r);
 
-      if(NN_depth_norm < 0.95 && NN_depth.r < pixel_depth.r){
+      //Normalize depths
+      float NN_depth_norm = compute_depth_normalized(NN_depth.r);
+      float pixel_depth_norm = compute_depth_normalized(pixel_depth.r);
+
+      if(NN_depth_norm < 0.95 && NN_depth_norm < pixel_depth_norm){
         is_nearest = false;
       }
     }
@@ -67,10 +70,8 @@ void main()
   }else if(is_nearest){
     pixel_color = vec4(0, 0, pixel_depth_norm, 1);
   }else if(is_nearest == false){
-    pixel_color = vec4(1);//pixel_depth_norm, 0, 0, 1);
+    pixel_color = vec4(pixel_depth_norm, 0, 0, 1);
   }
-
-  //pixel_color = texture(tex_color, vs_tex_coord);;
 
   //---------------------------
   out_color = pixel_color;

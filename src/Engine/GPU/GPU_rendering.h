@@ -9,7 +9,8 @@ class Dimension;
 class Configuration;
 class GPU_data;
 class Shader;
-
+class Camera;
+class Engine;
 
 class GPU_rendering
 {
@@ -24,8 +25,9 @@ public:
   void loop_pass_2();
 
   //Rendering
+  void bind_fbo_pass_2_recombination();
   void bind_fbo_pass_2_edl();
-  void bind_fbo_pass_2_occlusion();
+  void bind_fbo_pass_2_pyramid();
   void bind_canvas();
 
   //Update
@@ -41,6 +43,8 @@ private:
   GPU_data* gpuManager;
   Shader* shaderManager;
   GPU_fbo* fboManager;
+  Engine* engineManager;
+  Camera* cameraManager;
 
   Object_* canvas_render;
   Object_* canvas_screen;

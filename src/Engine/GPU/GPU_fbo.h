@@ -11,6 +11,11 @@ struct FBO{
   GLuint ID_tex_position;
   GLuint ID_tex_normal;
   GLuint ID_depth_buffer;
+  GLuint ID_buffer_depth;
+};
+struct Pyramid{
+  int nb_lvl;
+  vector<FBO*> fbo_vec;
 };
 
 
@@ -23,6 +28,7 @@ public:
 public:
   void init_create_rendering_fbo();
   void delete_fbo_all();
+  FBO* create_new_fbo(string name);
   FBO* get_fbo_byName(string querry);
 
   //FBO generation
@@ -41,10 +47,11 @@ public:
   //GBuffer stuff
   void create_gbuffer();
 
-
   inline vector<FBO*> get_fbo_vec(){return fbo_vec;}
+  inline Pyramid* get_struct_pyramid(){return struct_pyramid;}
 
 private:
+  Pyramid* struct_pyramid;
   vector<FBO*> fbo_vec;
   int id_current;
 };
