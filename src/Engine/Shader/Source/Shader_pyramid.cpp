@@ -12,8 +12,8 @@ Shader_pyramid::Shader_pyramid(Node_engine* node){
   this->configManager = node->get_configManager();
 
   this->name = "pyramid";
-  this->path_vs = "../src/Engine/Shader/glsh/pass_2/shader_pyramid.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/pass_2/shader_pyramid.fs";
+  this->path_vs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid.fs";
 
   this->clip_far = configManager->parse_json_f("camera", "clip_far");
   this->clip_near = configManager->parse_json_f("camera", "clip_near");
@@ -34,14 +34,15 @@ void Shader_pyramid::setup_shader(Shader_obj* shader){
   shader->setFloat("Z_FAR", clip_far);
 
   //A AUTOMATISER ICI !!!!
-  shader->setInt("tex_color", 0);
-  shader->setInt("tex_depth", 1);
-  shader->setInt("tex_position", 2);
+  shader->setInt("tex_data_py", 0);
+  //shader->setInt("tex_color", 0);
+  //shader->setInt("tex_depth", 1);
+  //shader->setInt("tex_position", 2);
 
   vec2 gl_dim = dimManager->get_gl_dim();
   shader->setInt("GL_WIDTH", gl_dim.x);
   shader->setInt("GL_HEIGHT", gl_dim.y);
-  shader->setInt("NN_SIZE", 2);
+  shader->setInt("NN_SIZE", 5);
 
   //---------------------------
 }

@@ -4,7 +4,6 @@ layout (location = 0) out vec4 out_color;
 
 in vec2 vs_tex_coord;
 
-uniform sampler2D tex_color;
 uniform sampler2D tex_depth;
 uniform sampler2D tex_position;
 
@@ -114,33 +113,37 @@ void construct_pyramid(){
 
 void main(){
   vec4 pixel_depth = texture(tex_depth, vs_tex_coord);
+  vec4 pixel_position = texture(tex_position, vs_tex_coord);
+  vec2 pixel_size = vec2(1) / vec2(GL_WIDTH, GL_HEIGHT);
   //---------------------------
 
-  // Check cube emplacment
-  bool is_nearest = compute_is_nearest(pixel_depth);
+  //Retrieve cube position
+  vec2 tex_coord_dim = vs_tex_coord * vec2(GL_WIDTH, GL_HEIGHT);
+  vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) / vec2(GL_WIDTH, GL_HEIGHT);
 
-  //Get normalized pixel depth
-  float pixel_depth_norm = compute_depth_normalized(pixel_depth.r);
+  //Check if current pixel is the nearest
+  bool is_nearest = true;
+  float nearest_depth = pixel_depth.r;
+  vec4 nearest_position = pixel_position;
+  for(int i=0; i<NN_SIZE; i++){
+    for(int j=0; j<NN_SIZE; j++){
+      //Neigbor data
+      vec2 NN_coord = cube_pos + vec2(pixel_size.x * i, pixel_size.y * j);
+      float NN_depth = texture(tex_depth, NN_coord).r;
 
-  //Retrieve fragment pixel color
-  vec4 pixel_color;
-  if(pixel_depth_norm > 0.95){
-    pixel_color = texture(tex_color, vs_tex_coord);
-  }else if(is_nearest){
-    pixel_color = vec4(0, 0, pixel_depth_norm, 1);
-  }else if(is_nearest == false){
-    pixel_color = vec4(pixel_depth_norm, 0, 0, 1);
+      //Normalized depth data
+      float NN_depth_norm = compute_depth_normalized(NN_depth);
+      float pixel_depth_norm = compute_depth_normalized(pixel_depth.r);
+
+      if(NN_depth_norm < 0.95 && NN_depth_norm < pixel_depth_norm){
+        vec4 NN_position = texture(tex_position, vs_tex_coord);
+
+        nearest_depth = NN_depth;
+        nearest_position = NN_position;
+      }
+    }
   }
 
-
-
-
-
-
-
-
-  pixel_color = texture(tex_position, vs_tex_coord);;
-
   //---------------------------
-  out_color = pixel_color;
+  out_color = vec4(nearest_position.rgb, nearest_depth);
 }

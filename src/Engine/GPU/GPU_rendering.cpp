@@ -110,7 +110,6 @@ void GPU_rendering::loop_pass_2(){
   glDisable(GL_DEPTH_TEST);
 
   //Pyramid
-  shaderManager->use_shader("pyramid");
   this->bind_fbo_pass_2_pyramid();
 
   //Recombinaison
@@ -135,47 +134,36 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   //---------------------------
 
-  //Activate depth buffering
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_ALWAYS);
+  shaderManager->use_shader("pyramid_lvl0");
 
   //First pyramid level
-  FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pyr->ID_fbo);
+  FBO* fbo_lvl = struct_pyramid->fbo_vec[0];
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl->ID_fbo);
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_color);
-  glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
-  glActiveTexture(GL_TEXTURE2);
+  glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_position);
 
   gpuManager->draw_object(canvas_render);
-  this->unbind_fboAndTexture(3);
+  this->unbind_fboAndTexture(2);
 
-/*
+  shaderManager->use_shader("pyramid");
+
   //Next pyramid level
   for(int i=1; i<struct_pyramid->nb_lvl; i++){
-    FBO* fbo_bef = struct_pyramid->fbo_vec[i-1];
+    FBO* fbo_lvl_m1 = struct_pyramid->fbo_vec[i-1];
     FBO* fbo_lvl = struct_pyramid->fbo_vec[i];
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl->ID_fbo);
 
     //Input: read textures
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fbo_bef->ID_tex_color);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, fbo_bef->ID_buffer_depth);
+    glBindTexture(GL_TEXTURE_2D, fbo_lvl_m1->ID_tex_color);
 
     gpuManager->draw_object(canvas_render);
-
-    //Unbind
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  }*/
+    this->unbind_fboAndTexture(1);
+  }
 
   //---------------------------
 }
@@ -184,8 +172,12 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
+  FBO* fbo_pyr = struct_pyramid->fbo_vec[1];
   //---------------------------
+
+  //Activate depth buffering
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
 
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_recombination->ID_fbo);
 
