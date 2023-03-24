@@ -177,7 +177,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_pyr = struct_pyramid->fbo_vec[1];
+  FBO* fbo_pyr = struct_pyramid->fbo_vec[struct_pyramid->fbo_vec.size()-1];
   //---------------------------
 
   //Activate depth buffering
@@ -190,7 +190,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_pyr->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_pyr->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
   glActiveTexture(GL_TEXTURE3);
