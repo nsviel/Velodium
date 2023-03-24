@@ -11,9 +11,9 @@ Shader_pyramid::Shader_pyramid(Node_engine* node){
   this->dimManager = node->get_dimManager();
   this->configManager = node->get_configManager();
 
-  this->name = "pyramid";
-  this->path_vs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid.fs";
+  this->name = "pyramid_lvl_n";
+  this->path_vs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid_lvl_n.vs";
+  this->path_fs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid_lvl_n.fs";
 
   this->clip_far = configManager->parse_json_f("camera", "clip_far");
   this->clip_near = configManager->parse_json_f("camera", "clip_near");
@@ -22,44 +22,43 @@ Shader_pyramid::Shader_pyramid(Node_engine* node){
 }
 Shader_pyramid::~Shader_pyramid(){}
 
-void Shader_pyramid::setup_shader(Shader_obj* shader){
-  this->shader = shader;
+void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_lvl_n){
+  this->shader_lvl_0 = shader_lvl_0;
+  this->shader_lvl_n = shader_lvl_n;
   //---------------------------
 
-  //Use corresponding shader program
-  this->use();
-
-  // Setup shader parameters
-  shader->setFloat("Z_NEAR", clip_near);
-  shader->setFloat("Z_FAR", clip_far);
-
-  //A AUTOMATISER ICI !!!!
-  shader->setInt("tex_data_py", 0);
-  //shader->setInt("tex_color", 0);
-  //shader->setInt("tex_depth", 1);
-  //shader->setInt("tex_position", 2);
-
+  //Get canvas dimension
   vec2 gl_dim = dimManager->get_gl_dim();
-  shader->setInt("GL_WIDTH", gl_dim.x);
-  shader->setInt("GL_HEIGHT", gl_dim.y);
-  shader->setInt("NN_SIZE", 5);
+
+  //Use corresponding shader program
+  shader_lvl_0->use();
+  shader_lvl_0->setInt("tex_depth", 0);
+	shader_lvl_0->setInt("tex_position", 1);
+
+  //Use corresponding shader program
+  shader_lvl_n->use();
+  shader_lvl_n->setFloat("Z_NEAR", clip_near);
+  shader_lvl_n->setFloat("Z_FAR", clip_far);
+  shader_lvl_n->setInt("tex_data_py", 0);
+  shader_lvl_n->setInt("GL_WIDTH", gl_dim.x);
+  shader_lvl_n->setInt("GL_HEIGHT", gl_dim.y);
+  shader_lvl_n->setInt("NN_SIZE", 4);
 
   //---------------------------
 }
 void Shader_pyramid::update_shader(){
   //---------------------------
 
-  //Use corresponding shader program
-  this->use();
-
-  // Setup shader parameters
-  shader->setFloat("Z_NEAR", clip_near);
-  shader->setFloat("Z_FAR", clip_far);
-
+  //Get canvas dimension
   vec2 gl_dim = dimManager->get_gl_dim();
-  shader->setInt("GL_WIDTH", gl_dim.x);
-  shader->setInt("GL_HEIGHT", gl_dim.y);
-  shader->setInt("NN_SIZE", 2);
+
+  //Use corresponding shader program
+  shader_lvl_n->use();
+  shader_lvl_n->setFloat("Z_NEAR", clip_near);
+  shader_lvl_n->setFloat("Z_FAR", clip_far);
+  shader_lvl_n->setInt("GL_WIDTH", gl_dim.x);
+  shader_lvl_n->setInt("GL_HEIGHT", gl_dim.y);
+  shader_lvl_n->setInt("NN_SIZE", 4);
 
   //---------------------------
 }

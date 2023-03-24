@@ -6,7 +6,7 @@ layout (location = 2) in vec2 in_tex_coord;
 layout (location = 3) in vec3 in_normal;
 
 out VS_OUT{
-  vec3 position;
+  vec4 position;
   vec4 color;
   vec2 tex_coord;
   vec3 normal;
@@ -20,7 +20,7 @@ void main()
   //Position
   vec4 XYZ = vec4(in_position, 1.0);
   gl_Position = MVP * XYZ;
-  vs_out.position = XYZ.xyz;
+  vs_out.position = XYZ;
 
   //Color
   vs_out.color = in_color;

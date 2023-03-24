@@ -17,12 +17,15 @@ public:
   Shader_pyramid(Node_engine* node);
   ~Shader_pyramid();
 
-  void setup_shader(Shader_obj* shader);
+  void setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_lvl);
   void update_shader();
 
 private:
   Configuration* configManager;
   Dimension* dimManager;
+
+  Shader_obj* shader_lvl_0;
+  Shader_obj* shader_lvl_n;
 
   float clip_far;
   float clip_near;

@@ -1,6 +1,7 @@
 #include "GPU_rendering.h"
 #include "GPU_data.h"
 
+#include "../Shader/Base/Shader_obj.h"
 #include "../Node_engine.h"
 #include "../Core/Dimension.h"
 #include "../Core/Configuration.h"
@@ -134,7 +135,7 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   //---------------------------
 
-  shaderManager->use_shader("pyramid_lvl0");
+  shaderManager->use_shader("pyramid_lvl_0");
 
   //First pyramid level
   FBO* fbo_lvl = struct_pyramid->fbo_vec[0];
@@ -149,13 +150,17 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   gpuManager->draw_object(canvas_render);
   this->unbind_fboAndTexture(2);
 
-  shaderManager->use_shader("pyramid");
+  Shader_obj* shader_lvl_n = shaderManager->get_shader_obj_byName("pyramid_lvl_n");
+  shader_lvl_n->use();
 
   //Next pyramid level
   for(int i=1; i<struct_pyramid->nb_lvl; i++){
     FBO* fbo_lvl_m1 = struct_pyramid->fbo_vec[i-1];
-    FBO* fbo_lvl = struct_pyramid->fbo_vec[i];
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl->ID_fbo);
+    FBO* fbo_lvl_m0 = struct_pyramid->fbo_vec[i];
+
+    shader_lvl_n->setInt("NN_SIZE", i*2);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_m0->ID_fbo);
 
     //Input: read textures
     glActiveTexture(GL_TEXTURE0);
@@ -185,7 +190,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_pyr->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_pyr->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
   glActiveTexture(GL_TEXTURE3);

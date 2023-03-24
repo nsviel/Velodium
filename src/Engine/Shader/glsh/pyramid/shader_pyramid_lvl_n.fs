@@ -28,12 +28,12 @@ void main(){
   float pixel_depth = pixel_data.w;
   //---------------------------
 
-  //GEt pixel size
+  //Get pixel size
   vec2 pixel_size = vec2(1) / vec2(GL_WIDTH, GL_HEIGHT);
 
   //Retrieve cube position
   vec2 tex_coord_dim = vs_tex_coord * vec2(GL_WIDTH, GL_HEIGHT);
-  vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) / vec2(GL_WIDTH, GL_HEIGHT);
+  vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) * pixel_size;
 
   //Check if current pixel is the nearest
   vec4 nearest_data = pixel_data;
@@ -42,17 +42,14 @@ void main(){
       //Neigbor data
       vec2 NN_coord = cube_pos + vec2(pixel_size.x * i, pixel_size.y * j);
       vec4 NN_data = texture(tex_data_py, NN_coord);
-      float NN_depth = NN_data.w;
 
-      //Normalized depth data
-      float NN_depth_norm = compute_depth_normalized(NN_depth);
-      float pixel_depth_norm = compute_depth_normalized(nearest_data.w);
-
-      if(NN_depth_norm < 0.95 && NN_depth_norm < pixel_depth_norm){
+      if(NN_data.w < nearest_data.w){
         nearest_data = NN_data;
       }
     }
   }
+
+  //Essayer de visualiser la texture sur tout l'écran (devrait y avoir une mosaique de carrés)
 
   //---------------------------
   out_color = nearest_data;

@@ -86,25 +86,21 @@ void Shader::init_shader(){
 	this->list_shader_obj->push_back(shader);
 
 	//Geometric shader
-	path_vs = shader_dir + "experimental/shader_geometric.vs";
-	path_fs = shader_dir + "experimental/shader_geometric.fs";
+	path_vs = shader_dir + "pass_1/shader_geometric.vs";
+	path_fs = shader_dir + "pass_1/shader_geometric.fs";
 	shader = new Shader_obj("geometric", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
-	//Pyramid shader
+	//Pyramid
+	path_vs = shader_dir + "pyramid/shader_pyramid_lvl_0.vs";
+	path_fs = shader_dir + "pyramid/shader_pyramid_lvl_0.fs";
+	Shader_obj* shader_lvl_0 = new Shader_obj("pyramid_lvl_0", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader_lvl_0);
 	Shader_pyramid* shader_pyramid = new Shader_pyramid(node_engine);
-	shader = new Shader_obj(shader_pyramid);
-	shader_pyramid->setup_shader(shader);
-	this->list_shader_obj->push_back(shader);
+	Shader_obj* shader_lvl = new Shader_obj(shader_pyramid);
+	this->list_shader_obj->push_back(shader_lvl);
+	shader_pyramid->setup_shader(shader_lvl_0, shader_lvl);
 	this->list_shader_src->push_back(shader_pyramid);
-
-	//Pyramid lvl 0
-	path_vs = shader_dir + "pyramid/shader_pyramid_lvl0.vs";
-	path_fs = shader_dir + "pyramid/shader_pyramid_lvl0.fs";
-	shader = new Shader_obj("pyramid_lvl0", path_vs, path_fs);
-	shader->setInt("tex_depth", 0);
-	shader->setInt("tex_position", 1);
-	this->list_shader_obj->push_back(shader);
 
 	//EDL shader
 	Shader_edl* shader_edl = new Shader_edl(node_engine);

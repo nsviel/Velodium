@@ -5,7 +5,7 @@ layout (location = 1) out vec4 out_position;
 layout (location = 2) out vec4 out_normal;
 
 in VS_OUT{
-  vec3 position;
+  vec4 position;
   vec4 color;
   vec2 tex_coord;
   vec3 normal;
@@ -23,7 +23,7 @@ void main()
   out_color = vec4(color_rgba);
 
   //Position
-  out_position = vec4(fs_in.position, 1);
+  out_position = fs_in.position;
 
   //Normal
   out_normal = vec4(fs_in.normal, 1);
