@@ -97,10 +97,17 @@ void Shader::init_shader(){
 	Shader_obj* shader_lvl_0 = new Shader_obj("pyramid_lvl_0", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lvl_0);
 	Shader_pyramid* shader_pyramid = new Shader_pyramid(node_engine);
-	Shader_obj* shader_lvl = new Shader_obj(shader_pyramid);
-	this->list_shader_obj->push_back(shader_lvl);
-	shader_pyramid->setup_shader(shader_lvl_0, shader_lvl);
+	Shader_obj* shader_lvl_n = new Shader_obj(shader_pyramid);
+	this->list_shader_obj->push_back(shader_lvl_n);
+	path_vs = shader_dir + "pyramid/shader_pyramid_visibility.vs";
+	path_fs = shader_dir + "pyramid/shader_pyramid_visibility.fs";
+	Shader_obj* shader_pyramid_visibility = new Shader_obj("pyramid_visibility", path_vs, path_fs);
+	this->list_shader_obj->push_back(shader_pyramid_visibility);
+	shader_pyramid->setup_shader(shader_lvl_0, shader_lvl_n, shader_pyramid_visibility);
 	this->list_shader_src->push_back(shader_pyramid);
+
+	//Pyramid visibility
+
 
 	//EDL shader
 	Shader_edl* shader_edl = new Shader_edl(node_engine);

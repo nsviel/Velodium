@@ -135,11 +135,12 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   //---------------------------
 
+  //Pyramide level 0
   shaderManager->use_shader("pyramid_lvl_0");
 
   //First pyramid level
-  FBO* fbo_lvl = struct_pyramid->fbo_vec[0];
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl->ID_fbo);
+  FBO* fbo_lvl_0 = struct_pyramid->fbo_vec[0];
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_0->ID_fbo);
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
@@ -150,6 +151,8 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   gpuManager->draw_object(canvas_render);
   this->unbind_fboAndTexture(2);
 
+  //---------------------------
+  //Pyramid level n
   Shader_obj* shader_lvl_n = shaderManager->get_shader_obj_byName("pyramid_lvl_n");
   shader_lvl_n->use();
 
@@ -171,13 +174,29 @@ void GPU_rendering::bind_fbo_pass_2_pyramid(){
   }
 
   //---------------------------
+  //Pyramid visibility
+  Shader_obj* shader_visibility = shaderManager->get_shader_obj_byName("pyramid_visibility");
+  shader_visibility->use();
+
+  FBO* fbo_visibility = fboManager->get_fbo_byName("pyramid_visibility");
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_visibility->ID_fbo);
+
+  //Input: read textures
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_color);
+
+  gpuManager->draw_object(canvas_render);
+  this->unbind_fboAndTexture(2);
+
+  //---------------------------
 }
 void GPU_rendering::bind_fbo_pass_2_recombination(){;
   FBO* fbo_recombination = fboManager->get_fbo_byName("recombination");
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_pyr = struct_pyramid->fbo_vec[struct_pyramid->fbo_vec.size()-1];
+  FBO* fbo_pyr = struct_pyramid->fbo_vec[1];
+  FBO* fbo_visibility = fboManager->get_fbo_byName("pyramid_visibility");
   //---------------------------
 
   //Activate depth buffering
@@ -188,7 +207,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_pyr->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);

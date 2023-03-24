@@ -49,8 +49,6 @@ void main(){
     }
   }
 
-  //Essayer de visualiser la texture sur tout l'écran (devrait y avoir une mosaique de carrés)
-
   //---------------------------
   out_color = nearest_data;
 }

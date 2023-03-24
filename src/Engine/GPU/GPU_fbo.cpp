@@ -30,6 +30,7 @@ void GPU_fbo::init_create_rendering_fbo(){
 
   //Create specific FBO
   this->create_new_fbo("pass_1");
+  this->create_new_fbo("pyramid_visibility");
   this->create_new_fbo("recombination");
   this->create_new_fbo("edl");
 
