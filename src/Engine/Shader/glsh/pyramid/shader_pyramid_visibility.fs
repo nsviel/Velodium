@@ -140,7 +140,9 @@ void main(){
   }
   out_color = color;
 
+  //VOIR POURQUOI tex_posit_2 MARCHE PAS !!!!!!
+
   //---------------------------
-  vec4 truc = vec4(texture(tex_posit_1, vs_tex_coord).xyz, 1);
+  vec4 truc = vec4(texture(tex_posit_2, vs_tex_coord).xyz, 1);
   out_color = truc;
 }

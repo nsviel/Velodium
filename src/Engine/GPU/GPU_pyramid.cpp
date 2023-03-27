@@ -65,7 +65,7 @@ void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
     FBO* fbo_lvl_m1 = struct_pyramid->fbo_vec[i-1];
     FBO* fbo_lvl_m0 = struct_pyramid->fbo_vec[i];
 
-    shader_lvl_n->setInt("NN_SIZE", i*2);
+    shader_lvl_n->setInt("NN_SIZE", i*4);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_m0->ID_fbo);
 
@@ -103,7 +103,7 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_position);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_1->ID_tex_position);
-  glActiveTexture(GL_TEXTURE1);
+  glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_2->ID_tex_position);
 
   gpuManager->draw_object(canvas);
