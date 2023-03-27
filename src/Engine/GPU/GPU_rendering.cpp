@@ -1,5 +1,6 @@
 #include "GPU_rendering.h"
 #include "GPU_data.h"
+#include "GPU_pyramid.h"
 
 #include "../Shader/Base/Shader_obj.h"
 #include "../Node_engine.h"
@@ -24,7 +25,8 @@ GPU_rendering::GPU_rendering(Node_engine* node_engine){
   this->engineManager = node_engine->get_engineManager();
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
-  this->fboManager = new GPU_fbo();
+  this->fboManager = node_engine->get_fboManager();
+  this->pyramidManager = new GPU_pyramid(node_engine);
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
@@ -55,20 +57,22 @@ void GPU_rendering::init_renderer(){
 }
 void GPU_rendering::loop_pass_1(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
   bool is_timer = false;
   if(is_timer) tic();
   //---------------------------
 
-  //Bind first fbo
+  //Enable depth testing
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+
+  //-------------------------------
+  //Bind first pass fbo
+  FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1->ID_fbo);
 
   //Clear framebuffer and enable depth
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
 
   //Light
   //shaderManager->use_shader("lamp");
@@ -85,17 +89,17 @@ void GPU_rendering::loop_pass_1(){
   cameraManager->update_shader();
   engineManager->draw_textured_cloud();
 
-  //Bind first fbo
+  //-------------------------------
+  //Bind gfbo
+  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   glBindFramebuffer(GL_FRAMEBUFFER, gfbo->ID_fbo);
 
   //Clear framebuffer and enable depth
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
 
   //Untextured cloud
-  shaderManager->use_shader("mesh_untextured");
+  shaderManager->use_shader("geometric");
   cameraManager->update_shader();
   engineManager->draw_untextured_cloud();
 
@@ -111,7 +115,7 @@ void GPU_rendering::loop_pass_2(){
   glDisable(GL_DEPTH_TEST);
 
   //Pyramid
-  this->bind_fbo_pass_2_pyramid();
+  pyramidManager->bind_pyramid(canvas_render);
 
   //Recombinaison
   shaderManager->use_shader("recombination");
@@ -130,72 +134,12 @@ void GPU_rendering::loop_pass_2(){
 }
 
 //Rendering
-void GPU_rendering::bind_fbo_pass_2_pyramid(){
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  //---------------------------
-
-  //Pyramide level 0
-  shaderManager->use_shader("pyramid_lvl_0");
-
-  //First pyramid level
-  FBO* fbo_lvl_0 = struct_pyramid->fbo_vec[0];
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_0->ID_fbo);
-
-  //Input: read textures
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_position);
-
-  gpuManager->draw_object(canvas_render);
-  this->unbind_fboAndTexture(2);
-
-  //---------------------------
-  //Pyramid level n
-  Shader_obj* shader_lvl_n = shaderManager->get_shader_obj_byName("pyramid_lvl_n");
-  shader_lvl_n->use();
-
-  //Next pyramid level
-  for(int i=1; i<struct_pyramid->nb_lvl; i++){
-    FBO* fbo_lvl_m1 = struct_pyramid->fbo_vec[i-1];
-    FBO* fbo_lvl_m0 = struct_pyramid->fbo_vec[i];
-
-    shader_lvl_n->setInt("NN_SIZE", i*2);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_m0->ID_fbo);
-
-    //Input: read textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fbo_lvl_m1->ID_tex_color);
-
-    gpuManager->draw_object(canvas_render);
-    this->unbind_fboAndTexture(1);
-  }
-
-  //---------------------------
-  //Pyramid visibility
-  Shader_obj* shader_visibility = shaderManager->get_shader_obj_byName("pyramid_visibility");
-  shader_visibility->use();
-
-  FBO* fbo_visibility = fboManager->get_fbo_byName("pyramid_visibility");
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_visibility->ID_fbo);
-
-  //Input: read textures
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_color);
-
-  gpuManager->draw_object(canvas_render);
-  this->unbind_fboAndTexture(2);
-
-  //---------------------------
-}
 void GPU_rendering::bind_fbo_pass_2_recombination(){;
   FBO* fbo_recombination = fboManager->get_fbo_byName("recombination");
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
   FBO* gfbo = fboManager->get_fbo_byName("gfbo");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_pyr = struct_pyramid->fbo_vec[1];
+  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("pyramid_0");
   FBO* fbo_visibility = fboManager->get_fbo_byName("pyramid_visibility");
   //---------------------------
 
@@ -274,14 +218,18 @@ void GPU_rendering::update_dim_texture(){
     glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_color);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
+    if(fbo->ID_tex_position != 0){
+      glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
+    }
+
+    if(fbo->ID_tex_normal != 0){
+      glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_normal);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
+    }
+
     glBindTexture(GL_TEXTURE_2D, fbo->ID_buffer_depth);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-
-    glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
-
-    glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_normal);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
   }
 
   //Unbind
@@ -328,6 +276,8 @@ void GPU_rendering::update_dim_canvas(){
 
   //---------------------------
 }
+
+//Subfunction
 Object_* GPU_rendering::gen_canvas(){
   Object_* canvas = new Object_();
   //---------------------------

@@ -10,8 +10,6 @@
 #include "../../Scene/Data/Scene.h"
 #include "../../Scene/Glyph/Glyphs.h"
 #include "../../Scene/Glyph/Object.h"
-#include "../../GUI/Node_gui.h"
-#include "../../GUI/Control/GUI.h"
 
 
 //Constructor / Destructor
@@ -20,13 +18,11 @@ Engine::Engine(Node_engine* engine){
   //---------------------------
 
   Configuration* configManager = node_engine->get_configManager();
-  Node_gui* node_gui = node_engine->get_node_gui();
   Node_scene* node_scene = node_engine->get_node_scene();
 
   this->gpuManager = new GPU_data();
   this->sceneManager = node_scene->get_sceneManager();
   this->glyphManager = node_scene->get_glyphManager();
-  this->guiManager = node_gui->get_guiManager();
   this->objectManager = node_scene->get_objectManager();
   this->cameraManager = node_engine->get_cameraManager();
   this->texManager = node_engine->get_texManager();

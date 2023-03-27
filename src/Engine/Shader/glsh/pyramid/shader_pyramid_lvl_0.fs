@@ -1,19 +1,36 @@
 #version 330 core
 
 layout (location = 0) out vec4 out_color;
+layout (location = 1) out vec4 out_position;
 
 in vec2 vs_tex_coord;
 
 uniform sampler2D tex_depth;
 uniform sampler2D tex_position;
+uniform float Z_NEAR;
+uniform float Z_FAR;
 
+
+float compute_depth_normalized(float depth){
+  //---------------------------
+
+  float depth_norm = (2.0 * Z_NEAR) / (Z_FAR + Z_NEAR - depth * (Z_FAR - Z_NEAR));
+
+  //---------------------------
+  return depth_norm;
+}
 
 void main(){
   //---------------------------
 
-  vec4 pixel_depth = texture(tex_depth, vs_tex_coord);
-  vec4 pixel_position = texture(tex_position, vs_tex_coord);
+  //Depth
+  float depth = texture(tex_depth, vs_tex_coord).r;
+  float depth_norm = compute_depth_normalized(depth);
+  out_color = vec4(depth_norm, 0, 0, 1);
+
+  //Position
+  vec4 position = texture(tex_position, vs_tex_coord);
+  out_position = texture(tex_position, vs_tex_coord);
 
   //---------------------------
-  out_color = vec4(pixel_position.rgb, pixel_depth.r);
 }

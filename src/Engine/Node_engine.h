@@ -15,6 +15,7 @@ class Camera;
 class Shader;
 class GPU_rendering;
 class GPU_screenshot;
+class GPU_fbo;
 class Viewport;
 class Engine;
 class CoreGLengine;
@@ -49,6 +50,7 @@ public:
   inline Camera* get_cameraManager(){return cameraManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
   inline GPU_rendering* get_renderManager(){return renderManager;}
+  inline GPU_fbo* get_fboManager(){return fboManager;}
   inline Viewport* get_viewportManager(){return viewportManager;}
   inline Engine* get_engineManager(){return engineManager;}
   inline CoreGLengine* get_glManager(){return glManager;}
@@ -74,6 +76,7 @@ private:
   Shader* shaderManager;
   GPU_screenshot* screenshotManager;
   GPU_rendering* renderManager;
+  GPU_fbo* fboManager;
   Dimension* dimManager;
   Viewport* viewportManager;
   Engine* engineManager;

@@ -29,6 +29,7 @@ public:
   void init_create_rendering_fbo();
   void delete_fbo_all();
   FBO* create_new_fbo(string name);
+  FBO* create_new_pyramid_fbo(string name);
   FBO* get_fbo_byName(string querry);
 
   //FBO generation

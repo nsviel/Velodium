@@ -58,14 +58,6 @@ float compute_norm(vec3 pos){
   //---------------------------
   return norm;
 }
-
-void compute_nn_sector_ID(){
-  //---------------------------
-
-  //For each nn compute sector id
-
-  //---------------------------
-}
 void compute_pixel_visibility(){
   //---------------------------
 
@@ -100,13 +92,6 @@ void compute_pixel_visibility(){
   }else{
     is_visible = true;
   }
-
-  //---------------------------
-}
-void construct_pyramid(){
-  //---------------------------
-
-  gl_FragDepth = 0;
 
   //---------------------------
 }

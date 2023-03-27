@@ -11,6 +11,8 @@ class GPU_data;
 class Shader;
 class Camera;
 class Engine;
+class GPU_pyramid;
+
 
 class GPU_rendering
 {
@@ -27,12 +29,13 @@ public:
   //Rendering
   void bind_fbo_pass_2_recombination();
   void bind_fbo_pass_2_edl();
-  void bind_fbo_pass_2_pyramid();
   void bind_canvas();
 
   //Update
   void update_dim_texture();
   void update_dim_canvas();
+
+  //Subfunction
   Object_* gen_canvas();
   void unbind_fboAndTexture(int nb_tex);
 
@@ -46,6 +49,7 @@ private:
   GPU_fbo* fboManager;
   Engine* engineManager;
   Camera* cameraManager;
+  GPU_pyramid* pyramidManager;
 
   Object_* canvas_render;
   Object_* canvas_screen;

@@ -35,19 +35,22 @@ void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_l
   shader_lvl_0->use();
   shader_lvl_0->setInt("tex_depth", 0);
 	shader_lvl_0->setInt("tex_position", 1);
+  shader_lvl_0->setFloat("Z_NEAR", clip_near);
+  shader_lvl_0->setFloat("Z_FAR", clip_far);
 
   //Pyramid level n
   shader_lvl_n->use();
-  shader_lvl_n->setFloat("Z_NEAR", clip_near);
-  shader_lvl_n->setFloat("Z_FAR", clip_far);
-  shader_lvl_n->setInt("tex_data_py", 0);
+  shader_lvl_0->setInt("tex_depth", 0);
+	shader_lvl_0->setInt("tex_position", 1);
   shader_lvl_n->setInt("GL_WIDTH", gl_dim.x);
   shader_lvl_n->setInt("GL_HEIGHT", gl_dim.y);
   shader_lvl_n->setInt("NN_SIZE", 4);
 
   //Pyramid visibility
   shader_visibility->use();
-  shader_visibility->setInt("tex_py_0", 0);
+  shader_visibility->setInt("tex_posit_0", 0);
+  shader_visibility->setInt("tex_posit_1", 1);
+  shader_visibility->setInt("tex_posit_2", 2);
   shader_visibility->setInt("GL_WIDTH", gl_dim.x);
   shader_visibility->setInt("GL_HEIGHT", gl_dim.y);
 
@@ -65,7 +68,7 @@ void Shader_pyramid::update_shader(){
   shader_lvl_n->setFloat("Z_FAR", clip_far);
   shader_lvl_n->setInt("GL_WIDTH", gl_dim.x);
   shader_lvl_n->setInt("GL_HEIGHT", gl_dim.y);
-  shader_lvl_n->setInt("NN_SIZE", 4);
+  shader_lvl_n->setInt("NN_SIZE", 2);
 
   //---------------------------
 }

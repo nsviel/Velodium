@@ -7,7 +7,6 @@
 class Node_engine;
 class Scene;
 class Glyphs;
-class GUI;
 class Object;
 class Camera;
 class Texture;
@@ -35,7 +34,6 @@ private:
   Node_engine* node_engine;
   Scene* sceneManager;
   Glyphs* glyphManager;
-  GUI* guiManager;
   Object* objectManager;
   Camera* cameraManager;
   Texture* texManager;

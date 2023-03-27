@@ -19,7 +19,8 @@ void main()
 {
   //Position
   vec4 XYZ = vec4(in_position, 1.0);
-  gl_Position = MVP * XYZ;
+  vec4 XYZ_mvp = MVP * XYZ;
+  gl_Position = XYZ_mvp;
   vs_out.position = XYZ;
 
   //Color

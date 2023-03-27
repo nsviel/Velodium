@@ -24,7 +24,7 @@ void GPU_fbo::init_create_rendering_fbo(){
   this->struct_pyramid->nb_lvl = 4;
 
   for(int i=0; i<struct_pyramid->nb_lvl; i++){
-    FBO* fbo = create_new_fbo("pyramid_" + to_string(i));
+    FBO* fbo = create_new_pyramid_fbo("pyramid_" + to_string(i));
     struct_pyramid->fbo_vec.push_back(fbo);
   }
 
@@ -67,6 +67,22 @@ FBO* GPU_fbo::create_new_fbo(string name){
   //---------------------------
   return fbo;
 }
+FBO* GPU_fbo::create_new_pyramid_fbo(string name){
+  FBO* fbo = new FBO();
+  //---------------------------
+
+  fbo->name = name;
+  this->gen_fbo(fbo);
+  this->gen_fbo_tex_color(fbo, 0);
+  this->gen_fbo_tex_position(fbo, 1);
+  this->gen_fbo_tex_depth(fbo);
+  this->gen_fbo_attachment(fbo, 2);
+  this->gen_fbo_check(fbo);
+  this->fbo_vec.push_back(fbo);
+
+  //---------------------------
+  return fbo;
+}
 void GPU_fbo::create_gbuffer(){
   FBO* gfbo = new FBO();
   //---------------------------
@@ -74,9 +90,9 @@ void GPU_fbo::create_gbuffer(){
   gfbo->name = "gfbo";
   this->gen_fbo(gfbo);
   this->gen_fbo_tex_color(gfbo, 0);
-  this->gen_fbo_tex_depth(gfbo);
   this->gen_fbo_tex_position(gfbo, 1);
   this->gen_fbo_tex_normal(gfbo, 2);
+  this->gen_fbo_tex_depth(gfbo);
   this->gen_fbo_attachment(gfbo, 3);
   this->gen_fbo_check(gfbo);
 
@@ -130,7 +146,7 @@ void GPU_fbo::gen_fbo_attachment(FBO* fbo, int nb_attachment){
 }
 
 //FBO texture generation
-void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attachment_id){
+void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attach_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -143,7 +159,7 @@ void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attachment_id){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_color, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attach_id, GL_TEXTURE_2D, fbo->ID_tex_color, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -156,7 +172,7 @@ void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attachment_id){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id){
+void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attach_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -169,7 +185,7 @@ void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 64, GL_RGBA, dim.x, dim.y, false);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D_MULTISAMPLE, fbo->ID_tex_color, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attach_id, GL_TEXTURE_2D_MULTISAMPLE, fbo->ID_tex_color, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -177,7 +193,7 @@ void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attachment_id){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attachment_id){
+void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attach_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -192,7 +208,7 @@ void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attachment_id){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_position, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attach_id, GL_TEXTURE_2D, fbo->ID_tex_position, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -205,7 +221,7 @@ void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attachment_id){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attachment_id){
+void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attach_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -218,7 +234,7 @@ void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attachment_id){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attach_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -231,7 +247,7 @@ void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attachment_id){
 
   //---------------------------
 }
-void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attachment_id){
+void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attach_id){
   vec2 dim = vec2(1);
   //---------------------------
 
@@ -241,10 +257,10 @@ void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attachment_id){
   //Create texture
   glGenTextures(1, &fbo->ID_tex_normal);
   glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_normal);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attach_id, GL_TEXTURE_2D, fbo->ID_tex_normal, 0);
 
   //Unbind
   glBindTexture(GL_TEXTURE_2D, 0);
