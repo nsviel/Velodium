@@ -8,11 +8,11 @@
 
 
 //Constructor / Destructor
-Shader_obj::Shader_obj(Shader_src* shader_src){
+Shader_obj::Shader_obj(string name, Shader_src* shader_src){
 	//---------------------------
 
 	// Create the shaders program
-	this->name = shader_src->get_name();
+	this->name = name;
 	this->program_ID = glCreateProgram();
 
 	// Compile & check Shaders-

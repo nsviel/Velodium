@@ -67,7 +67,7 @@ void GPU_rendering::loop_pass_1(){
 
   //-------------------------------
   //Bind first pass fbo
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
+  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1->ID_fbo);
 
   //Clear framebuffer and enable depth
@@ -75,23 +75,23 @@ void GPU_rendering::loop_pass_1(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Light
-  //shaderManager->use_shader("lamp");
+  //shaderManager->use_shader("shader_lamp");
   //cameraManager->update_shader();
   //engineManager->draw_light();
 
   //Untextured glyphs
-  shaderManager->use_shader("mesh_untextured");
+  shaderManager->use_shader("shader_mesh_untextured");
   cameraManager->update_shader();
   engineManager->draw_untextured_glyph();
 
   //Textured cloud drawing
-  shaderManager->use_shader("mesh_textured");
+  shaderManager->use_shader("shader_mesh_textured");
   cameraManager->update_shader();
   engineManager->draw_textured_cloud();
 
   //-------------------------------
   //Bind gfbo
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
+  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   glBindFramebuffer(GL_FRAMEBUFFER, gfbo->ID_fbo);
 
   //Clear framebuffer and enable depth
@@ -99,7 +99,7 @@ void GPU_rendering::loop_pass_1(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Untextured cloud
-  shaderManager->use_shader("geometric");
+  shaderManager->use_shader("shader_geometry");
   cameraManager->update_shader();
   engineManager->draw_untextured_cloud();
 
@@ -118,15 +118,15 @@ void GPU_rendering::loop_pass_2(){
   pyramidManager->bind_pyramid(canvas_render);
 
   //Recombinaison
-  shaderManager->use_shader("recombination");
+  shaderManager->use_shader("shader_recombination");
   this->bind_fbo_pass_2_recombination();
 
   //EDL shader
-  shaderManager->use_shader("render_edl");
+  shaderManager->use_shader("shader_edl");
   this->bind_fbo_pass_2_edl();
 
   //Draw screen quad
-  shaderManager->use_shader("canvas");
+  shaderManager->use_shader("shader_canvas");
   this->bind_canvas();
 
   //---------------------------
@@ -135,13 +135,15 @@ void GPU_rendering::loop_pass_2(){
 
 //Rendering
 void GPU_rendering::bind_fbo_pass_2_recombination(){;
-  FBO* fbo_recombination = fboManager->get_fbo_byName("recombination");
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("pass_1");
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("pyramid_0");
-  FBO* fbo_visibility = fboManager->get_fbo_byName("pyramid_visibility");
+  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
+  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
+  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
   //---------------------------
+
+  //DEBUGING
+  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
+  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_0");
+  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
 
   //Activate depth buffering
   glEnable(GL_DEPTH_TEST);
@@ -168,12 +170,12 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   //---------------------------
 }
 void GPU_rendering::bind_fbo_pass_2_edl(){
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_edl = fboManager->get_fbo_byName("edl");
+  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
+  FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
   vec2 dim = dimManager->get_win_dim();
-  FBO* fbo_recombination = fboManager->get_fbo_byName("recombination");
+  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
   //---------------------------
 
   //Bind fbo 2
@@ -191,8 +193,8 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
   //---------------------------
 }
 void GPU_rendering::bind_canvas(){
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_edl = fboManager->get_fbo_byName("edl");
+  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
+  FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   //---------------------------
 
   //Bind fbo and clear old one

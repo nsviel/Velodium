@@ -11,10 +11,6 @@ Shader_pyramid::Shader_pyramid(Node_engine* node){
   this->dimManager = node->get_dimManager();
   this->configManager = node->get_configManager();
 
-  this->name = "pyramid_lvl_n";
-  this->path_vs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid_lvl_n.vs";
-  this->path_fs = "../src/Engine/Shader/glsh/pyramid/shader_pyramid_lvl_n.fs";
-
   this->clip_far = configManager->parse_json_f("camera", "clip_far");
   this->clip_near = configManager->parse_json_f("camera", "clip_near");
 
@@ -44,7 +40,6 @@ void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_l
 	shader_lvl_0->setInt("tex_position", 1);
   shader_lvl_n->setInt("GL_WIDTH", gl_dim.x);
   shader_lvl_n->setInt("GL_HEIGHT", gl_dim.y);
-  shader_lvl_n->setInt("NN_SIZE", 4);
 
   //Pyramid visibility
   shader_visibility->use();

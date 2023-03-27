@@ -29,7 +29,6 @@ void main(){
   out_color = vec4(depth_norm, 0, 0, 1);
 
   //Position
-  vec4 position = texture(tex_position, vs_tex_coord);
   out_position = texture(tex_position, vs_tex_coord);
 
   //---------------------------

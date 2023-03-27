@@ -166,7 +166,7 @@ void Camera::update_shader(){
   //---------------------------
 
   mat4 mvp = compute_cam_mvp();
-  Shader_obj* shader_screen = shaderManager->get_shader_obj_byName("mesh_untextured");
+  Shader_obj* shader_screen = shaderManager->get_shader_obj_byName("shader_mesh_untextured");
   shader_screen->setMat4("MVP", mvp);
 
   //---------------------------

@@ -30,12 +30,12 @@ void GPU_pyramid::bind_pyramid(Object_* canvas){
   //---------------------------
 }
 void GPU_pyramid::bind_pyramid_lvl_0(Object_* canvas){
-  FBO* gfbo = fboManager->get_fbo_byName("gfbo");
-  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("pyramid_0");
+  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
+  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_0");
   //---------------------------
 
   //Pyramide level 0
-  shaderManager->use_shader("pyramid_lvl_0");
+  shaderManager->use_shader("shader_py_lvl_0");
 
   //First pyramid level
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_0->ID_fbo);
@@ -57,7 +57,7 @@ void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
   //---------------------------
 
   //Pyramid level n
-  Shader_obj* shader_lvl_n = shaderManager->get_shader_obj_byName("pyramid_lvl_n");
+  Shader_obj* shader_lvl_n = shaderManager->get_shader_obj_byName("shader_py_lvl_n");
   shader_lvl_n->use();
 
   //Next pyramid level
@@ -76,7 +76,7 @@ void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
     glBindTexture(GL_TEXTURE_2D, fbo_lvl_m1->ID_tex_position);
 
     gpuManager->draw_object(canvas);
-    this->unbind_fboAndTexture(1);
+    this->unbind_fboAndTexture(2);
   }
 
   //---------------------------
@@ -86,13 +86,13 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
   //---------------------------
 
   //Get fbo pointer
-  FBO* fbo_visibility = fboManager->get_fbo_byName("pyramid_visibility");
+  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
   FBO* fbo_lvl_0 = struct_pyramid->fbo_vec[0];
   FBO* fbo_lvl_1 = struct_pyramid->fbo_vec[1];
   FBO* fbo_lvl_2 = struct_pyramid->fbo_vec[2];
 
   //Use shader
-  shaderManager->use_shader("pyramid_visibility");
+  shaderManager->use_shader("shader_py_visibility");
 
   //Set FBO
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_visibility->ID_fbo);
@@ -100,14 +100,14 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_position);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_1->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_1->ID_tex_position);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_2->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_2->ID_tex_position);
 
   gpuManager->draw_object(canvas);
-  this->unbind_fboAndTexture(2);
+  this->unbind_fboAndTexture(3);
 
   //---------------------------
 }

@@ -9,7 +9,7 @@ class Shader_src;
 class Shader_obj
 {
 public:
-  Shader_obj(Shader_src* shader_src);
+  Shader_obj(string name, Shader_src* shader_src);
   Shader_obj(string name, string path_vs, string path_fs);
   Shader_obj(string name, string path_vs, string path_fs, string path_gs);
   ~Shader_obj();

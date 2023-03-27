@@ -24,15 +24,15 @@ void GPU_fbo::init_create_rendering_fbo(){
   this->struct_pyramid->nb_lvl = 4;
 
   for(int i=0; i<struct_pyramid->nb_lvl; i++){
-    FBO* fbo = create_new_pyramid_fbo("pyramid_" + to_string(i));
+    FBO* fbo = create_new_pyramid_fbo("fbo_py_lvl_" + to_string(i));
     struct_pyramid->fbo_vec.push_back(fbo);
   }
+  this->create_new_fbo("fbo_py_visibility");
 
   //Create specific FBO
-  this->create_new_fbo("pass_1");
-  this->create_new_fbo("pyramid_visibility");
-  this->create_new_fbo("recombination");
-  this->create_new_fbo("edl");
+  this->create_new_fbo("fbo_pass_1");
+  this->create_new_fbo("fbo_recombination");
+  this->create_new_fbo("fbo_edl");
 
   //Create GFBO
   this->create_gbuffer();
@@ -87,7 +87,7 @@ void GPU_fbo::create_gbuffer(){
   FBO* gfbo = new FBO();
   //---------------------------
 
-  gfbo->name = "gfbo";
+  gfbo->name = "fbo_geometry";
   this->gen_fbo(gfbo);
   this->gen_fbo_tex_color(gfbo, 0);
   this->gen_fbo_tex_position(gfbo, 1);

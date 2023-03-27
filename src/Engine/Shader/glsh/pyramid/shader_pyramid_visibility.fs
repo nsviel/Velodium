@@ -8,9 +8,6 @@ in vec2 vs_tex_coord;
 uniform sampler2D tex_posit_0;
 uniform sampler2D tex_posit_1;
 uniform sampler2D tex_posit_2;
-/*uniform sampler2D tex_py_1;
-uniform sampler2D tex_py_2;
-uniform sampler2D tex_py_3;*/
 
 uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
@@ -39,7 +36,7 @@ float compute_norm(vec3 pos){
   //---------------------------
   return norm;
 }
-bool compute_visibility(int NN_SIZE){
+bool compute_visibility(){
   vec4 sector[100];
   //---------------------------
 
@@ -136,19 +133,14 @@ bool compute_visibility(int NN_SIZE){
 void main(){
   //---------------------------
 
-  bool is_visible = compute_visibility(1);
+  bool is_visible = compute_visibility();
   vec4 color = vec4(1);
   if(is_visible){
     color = vec4(1, 0, 0, 1);
   }
   out_color = color;
 
-  //for level 1
-  //vec2 tex_coord_dim = vs_tex_coord * vec2(GL_WIDTH, GL_HEIGHT);
-  //vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) / vec2(GL_WIDTH, GL_HEIGHT);
-
-
   //---------------------------
-  //vec4 truc = vec4(texture(tex_posit_0, vs_tex_coord).xyz, 1);
-  //out_color = truc;
+  vec4 truc = vec4(texture(tex_posit_1, vs_tex_coord).xyz, 1);
+  out_color = truc;
 }

@@ -47,31 +47,25 @@ void Shader::init_shader(){
 	// Untextured mesh shader
 	path_vs = shader_dir + "pass_1/shader_mesh_untextured.vs";
 	path_fs = shader_dir + "pass_1/shader_mesh_untextured.fs";
-	shader = new Shader_obj("mesh_untextured", path_vs, path_fs);
+	shader = new Shader_obj("shader_mesh_untextured", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	// Textured mesh shader
 	path_vs = shader_dir + "pass_1/shader_mesh_textured.vs";
 	path_fs = shader_dir + "pass_1/shader_mesh_textured.fs";
-	shader = new Shader_obj("mesh_textured", path_vs, path_fs);
+	shader = new Shader_obj("shader_mesh_textured", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	// Light mesh shader
 	path_vs = shader_dir + "pass_1/shader_lamp.vs";
 	path_fs = shader_dir + "pass_1/shader_lamp.fs";
-	Shader_obj* shader_lamp = new Shader_obj("lamp", path_vs, path_fs);
+	Shader_obj* shader_lamp = new Shader_obj("shader_lamp", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lamp);
-
-	//Inversion shader
-	path_vs = shader_dir + "pass_2/shader_inversion.vs";
-	path_fs = shader_dir + "pass_2/shader_inversion.fs";
-	shader = new Shader_obj("render_color_inv", path_vs, path_fs);
-	this->list_shader_obj->push_back(shader);
 
 	//Recombinaison shader
 	path_vs = shader_dir + "pass_2/shader_recombination.vs";
 	path_fs = shader_dir + "pass_2/shader_recombination.fs";
-	shader = new Shader_obj("recombination", path_vs, path_fs);
+	shader = new Shader_obj("shader_recombination", path_vs, path_fs);
 	shader->use();
 	shader->setInt("tex_color_1", 0);
 	shader->setInt("tex_color_2", 1);
@@ -82,36 +76,38 @@ void Shader::init_shader(){
 	//Canvas shader
 	path_vs = shader_dir + "pass_3/shader_canvas.vs";
 	path_fs = shader_dir + "pass_3/shader_canvas.fs";
-	shader = new Shader_obj("canvas", path_vs, path_fs);
+	shader = new Shader_obj("shader_canvas", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//Geometric shader
 	path_vs = shader_dir + "pass_1/shader_geometric.vs";
 	path_fs = shader_dir + "pass_1/shader_geometric.fs";
-	shader = new Shader_obj("geometric", path_vs, path_fs);
+	shader = new Shader_obj("shader_geometry", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
 
 	//Pyramid
 	path_vs = shader_dir + "pyramid/shader_pyramid_lvl_0.vs";
 	path_fs = shader_dir + "pyramid/shader_pyramid_lvl_0.fs";
-	Shader_obj* shader_lvl_0 = new Shader_obj("pyramid_lvl_0", path_vs, path_fs);
+	Shader_obj* shader_lvl_0 = new Shader_obj("shader_py_lvl_0", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lvl_0);
-	Shader_pyramid* shader_pyramid = new Shader_pyramid(node_engine);
-	Shader_obj* shader_lvl_n = new Shader_obj(shader_pyramid);
+
+	path_vs = shader_dir + "pyramid/shader_pyramid_lvl_n.vs";
+	path_fs = shader_dir + "pyramid/shader_pyramid_lvl_n.fs";
+	Shader_obj* shader_lvl_n = new Shader_obj("shader_py_lvl_n", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lvl_n);
+
 	path_vs = shader_dir + "pyramid/shader_pyramid_visibility.vs";
 	path_fs = shader_dir + "pyramid/shader_pyramid_visibility.fs";
-	Shader_obj* shader_pyramid_visibility = new Shader_obj("pyramid_visibility", path_vs, path_fs);
+	Shader_obj* shader_pyramid_visibility = new Shader_obj("shader_py_visibility", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_pyramid_visibility);
+
+	Shader_pyramid* shader_pyramid = new Shader_pyramid(node_engine);
 	shader_pyramid->setup_shader(shader_lvl_0, shader_lvl_n, shader_pyramid_visibility);
 	this->list_shader_src->push_back(shader_pyramid);
 
-	//Pyramid visibility
-
-
 	//EDL shader
 	Shader_edl* shader_edl = new Shader_edl(node_engine);
-	shader = new Shader_obj(shader_edl);
+	shader = new Shader_obj("shader_edl", shader_edl);
 	shader_edl->setup_shader(shader);
 	this->list_shader_obj->push_back(shader);
 	this->list_shader_src->push_back(shader_edl);
@@ -119,7 +115,7 @@ void Shader::init_shader(){
 	//Lighting shader
 	path_vs = shader_dir + "experimental/shader_lighting.vs";
 	path_fs = shader_dir + "experimental/shader_lighting.fs";
-	Shader_obj* shader_lighting = new Shader_obj("lighting", path_vs, path_fs);
+	Shader_obj* shader_lighting = new Shader_obj("shader_lighting", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader_lighting);
 	Shader_light* lightManager = new Shader_light();
 	list_shader_src->push_back(lightManager);
