@@ -8,6 +8,7 @@ class Node_engine;
 class GPU_data;
 class GPU_fbo;
 class Shader;
+class Camera;
 
 
 class GPU_pyramid
@@ -30,6 +31,7 @@ private:
   Shader* shaderManager;
   GPU_data* gpuManager;
   GPU_fbo* fboManager;
+  Camera* cameraManager;
 };
 
 #endif

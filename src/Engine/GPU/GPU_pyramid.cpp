@@ -5,6 +5,7 @@
 #include "../Shader/Base/Shader_obj.h"
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"
+#include "../Camera/Camera.h"
 
 
 //Constructor / Destructor
@@ -14,6 +15,7 @@ GPU_pyramid::GPU_pyramid(Node_engine* node_engine){
   this->shaderManager = node_engine->get_shaderManager();
   this->gpuManager = new GPU_data();
   this->fboManager = node_engine->get_fboManager();
+  this->cameraManager = node_engine->get_cameraManager();
 
   //---------------------------
 }
@@ -65,7 +67,7 @@ void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
     FBO* fbo_lvl_m1 = struct_pyramid->fbo_vec[i-1];
     FBO* fbo_lvl_m0 = struct_pyramid->fbo_vec[i];
 
-    shader_lvl_n->setInt("NN_SIZE", i*4);
+    shader_lvl_n->setInt("NN_SIZE", i);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_m0->ID_fbo);
 
@@ -86,25 +88,38 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
   //---------------------------
 
   //Get fbo pointer
+  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
   FBO* fbo_lvl_0 = struct_pyramid->fbo_vec[0];
   FBO* fbo_lvl_1 = struct_pyramid->fbo_vec[1];
   FBO* fbo_lvl_2 = struct_pyramid->fbo_vec[2];
+  FBO* fbo_lvl_3 = struct_pyramid->fbo_vec[2];
+  FBO* fbo_lvl_4 = struct_pyramid->fbo_vec[2];
 
   //Use shader
-  shaderManager->use_shader("shader_py_visibility");
+  Shader_obj* shader_visibility = shaderManager->get_shader_obj_byName("shader_py_visibility");
+  shader_visibility->use();
 
   //Set FBO
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_visibility->ID_fbo);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  vec3 cam_pose = cameraManager->get_cam_P();
+  shader_visibility->setVec3("CAM_POSE", cam_pose);
+
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_position);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_1->ID_tex_position);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_position);
   glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_1->ID_tex_position);
+  glActiveTexture(GL_TEXTURE3);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_2->ID_tex_position);
+  glActiveTexture(GL_TEXTURE3);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_3->ID_tex_position);
+  glActiveTexture(GL_TEXTURE3);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_4->ID_tex_position);
 
   gpuManager->draw_object(canvas);
   this->unbind_fboAndTexture(3);

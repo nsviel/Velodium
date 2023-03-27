@@ -21,7 +21,7 @@ void GPU_fbo::init_create_rendering_fbo(){
 
   //Create pyramid FBO
   this->struct_pyramid = new Pyramid();
-  this->struct_pyramid->nb_lvl = 4;
+  this->struct_pyramid->nb_lvl = 5;
 
   for(int i=0; i<struct_pyramid->nb_lvl; i++){
     FBO* fbo = create_new_pyramid_fbo("fbo_py_lvl_" + to_string(i));
