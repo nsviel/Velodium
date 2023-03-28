@@ -12,16 +12,17 @@ out VS_OUT{
   vec3 normal;
 } vs_out;
 
-uniform mat4 MVP;
+uniform mat4 VIEW;
+uniform mat4 PROJ;
+uniform vec2 GL_POS;
 
 
 void main()
 {
   //Position
   vec4 XYZ = vec4(in_position, 1.0);
-  vec4 XYZ_mvp = MVP * XYZ;
-  gl_Position = XYZ_mvp;
-  vs_out.position = XYZ;
+  gl_Position = PROJ * VIEW * XYZ;
+  vs_out.position = VIEW * XYZ;
 
   //Color
   vs_out.color = in_color;

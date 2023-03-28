@@ -24,8 +24,8 @@ Coordinate::Coordinate(Node_operation* node_ope){
 Coordinate::~Coordinate(){}
 
 vec2 Coordinate::WorldToScreen(vec3 point){
-  mat4 projMat = cameraManager->get_projMat();
-  mat4 viewMat = cameraManager->get_viewMat();
+  mat4 cam_proj = cameraManager->get_cam_proj();
+  mat4 cam_view = cameraManager->get_cam_view();
   vec2 glPos = dimManager->get_gl_pos();
   vec2 glDim = dimManager->get_gl_dim();
   vec2 pt_out;
@@ -33,7 +33,7 @@ vec2 Coordinate::WorldToScreen(vec3 point){
 
   vec4 viewport(0, 0, glDim.x, glDim.y);
 
-  vec3 projected = glm::project(point, viewMat, projMat, viewport);
+  vec3 projected = glm::project(point, cam_view, cam_proj, viewport);
   pt_out.x = projected.x;
   pt_out.y = glDim.y - projected.y;
 
@@ -59,11 +59,11 @@ vec3 Coordinate::ScreenToWorld(vec2 cursorPos){
   float z = 1.0f;
   vec3 ray_nds = vec3(x, y, z);
   vec4 ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0, 1.0);
-  mat4 projMat = cameraManager->get_projMat();
-  vec4 ray_eye = inverse(projMat) * ray_clip;
+  mat4 cam_proj = cameraManager->get_cam_proj();
+  vec4 ray_eye = inverse(cam_proj) * ray_clip;
   ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
-  mat4 viewMat = cameraManager->get_viewMat();
-  vec4 ray_wor = inverse(viewMat) * ray_eye;
+  mat4 cam_view = cameraManager->get_cam_view();
+  vec4 ray_wor = inverse(cam_view) * ray_eye;
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 
@@ -93,11 +93,11 @@ vec3 Coordinate::CursorToGround(){
   float z = 1.0f;
   vec3 ray_nds = vec3(x, y, z);
   vec4 ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0, 1.0);
-  mat4 projMat = cameraManager->get_projMat();
-  vec4 ray_eye = inverse(projMat) * ray_clip;
+  mat4 cam_proj = cameraManager->get_cam_proj();
+  vec4 ray_eye = inverse(cam_proj) * ray_clip;
   ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
-  mat4 viewMat = cameraManager->get_viewMat();
-  vec4 ray_wor = inverse(viewMat) * ray_eye;
+  mat4 cam_view = cameraManager->get_cam_view();
+  vec4 ray_wor = inverse(cam_view) * ray_eye;
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 

@@ -28,22 +28,21 @@ Camera::~Camera(){}
 
 //MVP Matrix
 mat4 Camera::compute_cam_view(){
-  mat4 viewMat;
+  mat4 cam_view;
   //---------------------------
 
   if(viewport->cam_pose){
-    viewMat = viewport->cam_pose_mat;
+    cam_view = viewport->cam_pose_mat;
   }else if(viewport->mode == "default"){
-    viewMat = compute_cam_default();
+    cam_view = compute_cam_default();
   }else if(viewport->mode == "arcball"){
-    viewMat = compute_cam_arcball();
+    cam_view = compute_cam_arcball();
   }
 
   //---------------------------
-  return viewMat;
+  return cam_view;
 }
 mat4 Camera::compute_cam_default(){
-  mat4 viewMat;
   //---------------------------
 
   float azimuth = viewport->angle_azimuth;
@@ -61,13 +60,13 @@ mat4 Camera::compute_cam_default(){
   vec3 cam_target = viewport->cam_P + viewport->cam_F;
 
   //Compute view matrix
-  viewMat = lookAt(viewport->cam_P, cam_target, viewport->cam_U);
+  mat4 cam_view = lookAt(viewport->cam_P, cam_target, viewport->cam_U);
 
   //---------------------------
-  return viewMat;
+  return cam_view;
 }
 mat4 Camera::compute_cam_arcball(){
-  mat4 viewMat;
+  mat4 cam_view;
   //---------------------------
 
   //Compute camera
@@ -75,13 +74,13 @@ mat4 Camera::compute_cam_arcball(){
   viewport->cam_U = normalize(cross(viewport->cam_R, viewport->cam_F));
 
   //Compute view matrix
-  viewMat = lookAt(viewport->cam_P, viewport->cam_COM, viewport->cam_U);
+  cam_view = lookAt(viewport->cam_P, viewport->cam_COM, viewport->cam_U);
 
   //---------------------------
-  return viewMat;
+  return cam_view;
 }
 mat4 Camera::compute_cam_proj(){
-  mat4 projMat;
+  mat4 cam_proj;
   //---------------------------
 
   //Compute projection matrix
@@ -90,24 +89,25 @@ mat4 Camera::compute_cam_proj(){
     float znear = viewport->clip_near;
     float zfar = viewport->clip_far;
     float fov = radians(viewport->fov);
-    projMat = perspective(fov, glDim.x / glDim.y, znear, zfar);
+    float ratio = glDim.x / glDim.y;
+    cam_proj = perspective(fov, ratio, znear, zfar);
   }
   else if(viewport->projection == "orthographic"){
     float zoom = viewport->zoom;
-    projMat = ortho(-5.f - zoom, 5.f + zoom, -5.f - zoom, 5.f + zoom, -1000.0f, 1000.0f);
+    cam_proj = ortho(-5.f - zoom, 5.f + zoom, -5.f - zoom, 5.f + zoom, -1000.0f, 1000.0f);
   }
 
   //---------------------------
-  return projMat;
+  return cam_proj;
 }
 mat4 Camera::compute_cam_mvp(){
   //---------------------------
 
-  //mat4 viewMat = compute_cam_view();
-  mat4 viewMat = compute_cam_view();
-  mat4 projMat = compute_cam_proj();
+  //mat4 cam_view = compute_cam_view();
+  mat4 cam_view = compute_cam_view();
+  mat4 cam_proj = compute_cam_proj();
 
-  mat4 mvpMatrix = projMat * viewMat;
+  mat4 mvpMatrix = cam_proj * cam_view;
 
   //---------------------------
   return mvpMatrix;
@@ -159,15 +159,6 @@ void Camera::compute_zoom_position(float yoffset){
     //Ortho zoom
     viewport->zoom -= yoffset * 0.1;
   }
-
-  //---------------------------
-}
-void Camera::update_shader(){
-  //---------------------------
-
-  mat4 mvp = compute_cam_mvp();
-  Shader_obj* shader_screen = shaderManager->get_shader_obj_byName("shader_mesh_untextured");
-  shader_screen->setMat4("MVP", mvp);
 
   //---------------------------
 }

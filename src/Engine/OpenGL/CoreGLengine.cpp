@@ -80,7 +80,6 @@ void CoreGLengine::loop(){
     //---------------------------
     this->loop_resizing();
     renderManager->loop_pass_1();
-    //this->loop_draw_scene();
 
     //Second pass
     //---------------------------
@@ -170,7 +169,7 @@ void CoreGLengine::init_rendering(){
   //---------------------------
 }
 
-// Loop scene stuff
+// Loop stuff
 void CoreGLengine::loop_gui(){
   //---------------------------
 
@@ -182,33 +181,6 @@ void CoreGLengine::loop_gui(){
 
   //---------------------------
 }
-void CoreGLengine::loop_draw_scene(){
-  //---------------------------
-
-  //Light
-  //shaderManager->use_shader("shader_lamp");
-  //cameraManager->update_shader();
-  //engineManager->draw_light();
-
-  //Glyph
-  shaderManager->use_shader("shader_mesh_untextured");
-  cameraManager->update_shader();
-  engineManager->draw_untextured_cloud();
-
-  //Untextured cloud
-  shaderManager->use_shader("shader_mesh_untextured");
-  cameraManager->update_shader();
-  engineManager->draw_untextured_glyph();
-
-  //Textured cloud drawing
-  shaderManager->use_shader("shader_mesh_textured");
-  cameraManager->update_shader();
-  engineManager->draw_textured_cloud();
-
-  //---------------------------
-}
-
-// Loop rendering stuff
 void CoreGLengine::loop_resizing(){
   //---------------------------
 

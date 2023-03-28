@@ -21,11 +21,7 @@ public:
   void viewport_init();
   void viewport_init_main();
   void viewport_init_map();
-  void viewport_update(int ID);
   void viewport_reset();
-
-  void update_viewport();
-  void update_viewport(int loop_cpt);
 
   inline Viewport_obj* get_viewport_main(){return &view_main;}
   inline int get_number_viewport(){return nb_viewport;}

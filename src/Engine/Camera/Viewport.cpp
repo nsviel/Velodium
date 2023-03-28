@@ -63,22 +63,6 @@ void Viewport::viewport_init_map(){
   //---------------------------
   this->nb_viewport++;
 }
-void Viewport::viewport_update(int ID){
-  //---------------------------
-
-  //Main viewport
-  if(ID == 0){
-    view_main.dim = dimManager->get_gl_dim();
-    view_main.pos = dimManager->get_gl_pos();
-    glViewport(0, 0, view_main.dim.x, view_main.dim.y);
-  }
-  //Map viewport
-  else if(ID == 1){
-    glViewport(view_map.pos.x, view_map.pos.y, view_map.dim.x, view_map.dim.y);
-  }
-
-  //---------------------------
-}
 void Viewport::viewport_reset(){
   //---------------------------
 
@@ -87,36 +71,6 @@ void Viewport::viewport_reset(){
   view_main.angle_azimuth = M_PI + M_PI/4;// Initial horizontal angle
   view_main.angle_elevation = - M_PI/6;// Initial vertical angle
   view_main.cam_R = normalize(vec3(cos(view_main.angle_azimuth - M_PI/2.0f), sin(view_main.angle_azimuth - M_PI/2.0f), 0));
-
-  //---------------------------
-}
-
-void Viewport::update_viewport(){
-  //---------------------------
-
-  dimManager->update_window_dim();
-  vec2 dim = dimManager->get_gl_dim();
-  vec2 pos = dimManager->get_gl_pos();
-
-  glViewport(pos.x, pos.y, dim.x/2, dim.y/2);
-
-  //---------------------------
-}
-void Viewport::update_viewport(int loop_cpt){
-  //---------------------------
-
-  dimManager->update_window_dim();
-  vec2 dim = dimManager->get_gl_dim();
-  vec2 pos = dimManager->get_gl_pos();
-
-  if(loop_cpt == 0){
-    glViewport(pos.x, pos.y, dim.x, dim.y);
-
-  }else{
-    glViewport(pos.x + dim.x/2, pos.y + dim.y/2, dim.x/2, dim.y/2);
-  }
-
-  //cameraManager->input_cam_mouse();
 
   //---------------------------
 }

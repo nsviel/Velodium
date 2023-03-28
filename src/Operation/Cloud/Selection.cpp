@@ -350,9 +350,9 @@ vec3 Selection::mouse_click_point(){
   glReadPixels(mouse_pos.x, mouse_pos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &mouse_pos.z);
   if((mouse_pos.z > 0) && (mouse_pos.z < 1)){
     glm::tvec4<unsigned int> viewport(gui_X, 0, gl_X, gl_Y);
-    mat4 viewMat = cameraManager->get_viewMat();
-    mat4 projMat = cameraManager->get_projMat();
-    point = glm::unProject(mouse_pos, viewMat, projMat, viewport);
+    mat4 cam_view = cameraManager->get_cam_view();
+    mat4 cam_proj = cameraManager->get_cam_proj();
+    point = glm::unProject(mouse_pos, cam_view, cam_proj, viewport);
   }
 
   //---------------------------
@@ -478,11 +478,11 @@ vec3 Selection::mouse_cameraPt(){
   float z = 1.0f;
   vec3 ray_nds = vec3(x, y, z);
   vec4 ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0, 1.0);
-  mat4 projMat = cameraManager->get_projMat();
-  vec4 ray_eye = inverse(projMat) * ray_clip;
+  mat4 cam_proj = cameraManager->get_cam_proj();
+  vec4 ray_eye = inverse(cam_proj) * ray_clip;
   ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
-  mat4 viewMat = cameraManager->get_viewMat();
-  vec4 ray_wor = inverse(viewMat) * ray_eye;
+  mat4 cam_view = cameraManager->get_cam_view();
+  vec4 ray_wor = inverse(cam_view) * ray_eye;
   vec3 ray_world = vec3(ray_wor);
   vec3 ray_dir = normalize(ray_world);
 

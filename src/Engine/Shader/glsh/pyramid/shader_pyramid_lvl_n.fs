@@ -1,6 +1,5 @@
 #version 330 core
 
-layout (location = 0) out vec4 out_color;
 layout (location = 1) out vec4 out_position;
 
 in vec2 vs_tex_coord;
@@ -43,6 +42,6 @@ void main(){
   }
 
   //---------------------------
-  out_color = vec4(pixel_nearest, pixel_nearest, pixel_nearest, 1);
+  gl_FragDepth = pixel_nearest;
   out_position = pixel_nearest_pos;
 }

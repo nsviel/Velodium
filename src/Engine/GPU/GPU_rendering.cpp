@@ -66,6 +66,12 @@ void GPU_rendering::loop_pass_1(){
   glDepthFunc(GL_LESS);
 
   //-------------------------------
+
+  //Get camera matrices
+  mat4 mvp = cameraManager->compute_cam_mvp();
+  mat4 view = cameraManager->compute_cam_view();
+  mat4 proj = cameraManager->compute_cam_proj();
+
   //Bind first pass fbo
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1->ID_fbo);
@@ -75,18 +81,21 @@ void GPU_rendering::loop_pass_1(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Light
-  //shaderManager->use_shader("shader_lamp");
-  //cameraManager->update_shader();
-  //engineManager->draw_light();
+  /*Shader_obj* shader_lamp = shaderManager->get_shader_obj_byName("shader_lamp");
+  shader_lamp->use();
+  shader_lamp->setMat4("MVP", mvp);
+  engineManager->draw_light();*/
 
   //Untextured glyphs
-  shaderManager->use_shader("shader_mesh_untextured");
-  cameraManager->update_shader();
+  Shader_obj* shader_untextured = shaderManager->get_shader_obj_byName("shader_mesh_untextured");
+  shader_untextured->use();
+  shader_untextured->setMat4("MVP", mvp);
   engineManager->draw_untextured_glyph();
 
   //Textured cloud drawing
-  shaderManager->use_shader("shader_mesh_textured");
-  cameraManager->update_shader();
+  Shader_obj* shader_textured = shaderManager->get_shader_obj_byName("shader_mesh_textured");
+  shader_textured->use();
+  shader_textured->setMat4("MVP", mvp);
   engineManager->draw_textured_cloud();
 
   //-------------------------------
@@ -99,8 +108,12 @@ void GPU_rendering::loop_pass_1(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Untextured cloud
-  shaderManager->use_shader("shader_geometry");
-  cameraManager->update_shader();
+  Shader_obj* shader_geometry = shaderManager->get_shader_obj_byName("shader_geometry");
+  vec2 gl_pos = dimManager->get_gl_pos();
+  shader_geometry->use();
+  shader_geometry->setMat4("VIEW", view);
+  shader_geometry->setMat4("PROJ", proj);
+  shader_geometry->setVec2("GL_POS", gl_pos);
   engineManager->draw_untextured_cloud();
 
   //---------------------------
@@ -153,7 +166,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_position);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);
@@ -196,6 +209,8 @@ void GPU_rendering::bind_canvas(){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   //---------------------------
+
+  //PROBLEM ICI on essaye de mapper texture edl de dim WIN sur canvas de dim GL
 
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

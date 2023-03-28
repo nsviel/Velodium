@@ -29,7 +29,7 @@ Data_file* file_OBJ::Loader(string path){
 
   // Fill output format with file data
   this->fill_data_file(data, vertex_vec);
-  
+
   //---------------------------
   return data;
 }
@@ -54,6 +54,7 @@ vector<Vertex> file_OBJ::get_data_from_file(istream& file){
 
   //Read file line by line
   string line;
+  this->is_face = false;
   while(std::getline(file, line)){
     std::istringstream line_str(line);
     string line_type;
@@ -79,6 +80,7 @@ vector<Vertex> file_OBJ::get_data_from_file(istream& file){
     }
     // polygon
     else if(line_type == "f"){
+      this->is_face = true;
       vector<Vertex_ref> refs;
       string refStr;
       while( line_str >> refStr){
@@ -122,6 +124,14 @@ vector<Vertex> file_OBJ::get_data_from_file(istream& file){
     }
   }
 
+  if(is_face == false){
+    for(int i=0; i<xyz.size(); i++){
+      Vertex vertex;
+      vertex.location = glm::vec3(xyz[i].x, xyz[i].y, xyz[i].z);
+      vertex_vec.push_back( vertex );
+    }
+  }
+
   //---------------------------
   return vertex_vec;
 }
@@ -158,13 +168,21 @@ void file_OBJ::parse_mtl(string path_obj){
 void file_OBJ::fill_data_file(Data_file* data, vector<Vertex>& vertex_vec){
   //---------------------------
 
-  for(int i=0; i<vertex_vec.size(); i++){
-    data->xyz.push_back(vertex_vec[i].location);
-    data->Nxyz.push_back(vertex_vec[i].normal);
-    data->uv.push_back(vertex_vec[i].texcoord);
+  if(is_face){
+    for(int i=0; i<vertex_vec.size(); i++){
+      data->xyz.push_back(vertex_vec[i].location);
+      data->Nxyz.push_back(vertex_vec[i].normal);
+      data->uv.push_back(vertex_vec[i].texcoord);
+    }
+    data->draw_type_name = "triangle";
+    data->path_texture = file_texture;
+  }else{
+    for(int i=0; i<vertex_vec.size(); i++){
+      data->xyz.push_back(vertex_vec[i].location);
+    }
+    data->draw_type_name = "point";
   }
-  data->draw_type_name = "triangle";
-  data->path_texture = file_texture;
+
 
   //---------------------------
 }

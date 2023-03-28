@@ -15,7 +15,7 @@ Shader_edl::Shader_edl(Node_engine* node){
   this->path_vs = "../src/Engine/Shader/glsh/pass_2/shader_edl.vs";
   this->path_fs = "../src/Engine/Shader/glsh/pass_2/shader_edl.fs";
 
-  this->with_edl = false;
+  this->with_edl = true;
   this->edl_strength = 100.0;
   this->edl_distance = 1.0;
   this->edl_radius = 1.0;

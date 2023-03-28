@@ -15,6 +15,7 @@ uniform sampler2D tex_posit_4;
 uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
 uniform vec3 CAM_POSE;
+uniform mat4 PROJ;
 
 
 float compute_sector_index(float l, float k){
@@ -54,7 +55,7 @@ bool compute_visibility(){
         float index = compute_sector_index(i, j);
 
         float l = pixel_size.x * i;
-        float k = pixel_size.y *j;
+        float k = pixel_size.y * j;
 
         vec2 NN_coord = vs_tex_coord + vec2(l, k);
         vec4 NN_position = texture(tex_posit_0, NN_coord);
@@ -72,7 +73,7 @@ bool compute_visibility(){
         float index = compute_sector_index(i, j);
 
         float l = pixel_size.x * i;
-        float k = pixel_size.y *j;
+        float k = pixel_size.y * j;
 
         vec2 NN_coord = vs_tex_coord + vec2(l, k);
         vec4 NN_position = texture(tex_posit_1, NN_coord);
@@ -90,7 +91,7 @@ bool compute_visibility(){
         float index = compute_sector_index(i, j);
 
         float l = pixel_size.x * i;
-        float k = pixel_size.y *j;
+        float k = pixel_size.y * j;
 
         vec2 NN_coord = vs_tex_coord + vec2(l, k);
         vec4 NN_position = texture(tex_posit_2, NN_coord);
@@ -108,7 +109,7 @@ bool compute_visibility(){
         float index = compute_sector_index(i, j);
 
         float l = pixel_size.x * i;
-        float k = pixel_size.y *j;
+        float k = pixel_size.y * j;
 
         vec2 NN_coord = vs_tex_coord + vec2(l, k);
         vec4 NN_position = texture(tex_posit_3, NN_coord);
@@ -126,7 +127,7 @@ bool compute_visibility(){
         float index = compute_sector_index(i, j);
 
         float l = pixel_size.x * i;
-        float k = pixel_size.y *j;
+        float k = pixel_size.y * j;
 
         vec2 NN_coord = vs_tex_coord + vec2(l, k);
         vec4 NN_position = texture(tex_posit_4, NN_coord);
@@ -142,10 +143,10 @@ bool compute_visibility(){
   vec3 pt_to_cam = - (CAM_POSE - pixel_pos) / compute_norm(CAM_POSE - pixel_pos);
 
   //for each sector and for each neighbor
-  float visibility_total_sum = 0;
+  float nn_occlusion_sum = 0;
   for(int i=0; i<8; i++){
     //init variable by the highest value
-    float visibility_sector_min = 2;
+    float sector_occlusion_min = 2;
 
     // Get minimal nn visibility per sector
     for(int j=0; j<cpt; j++){
@@ -155,21 +156,21 @@ bool compute_visibility(){
         vec3 x = CAM_POSE - pixel_pos;
         vec3 y = CAM_POSE - nn_pos;
         vec3 nn_cone = (y - x) / compute_norm(y - x);
-        float visibility_nn = 1 - dot(nn_cone, pt_to_cam);
+        float nn_occlusion = 1 - dot(nn_cone, pt_to_cam);
 
-        if(visibility_nn < visibility_sector_min){
-          visibility_sector_min = visibility_nn;
+        if(nn_occlusion < sector_occlusion_min){
+          sector_occlusion_min = nn_occlusion;
         }
       }
     }
 
     //Get sum of all sector visibility
-    visibility_total_sum += visibility_sector_min;
+    nn_occlusion_sum += sector_occlusion_min;
   }
-  float visibility = visibility_total_sum / 8;
+  float pixel_occ = nn_occlusion_sum / 8;
 
   bool is_visible;
-  if(visibility < 0.5){
+  if(pixel_occ < 0.5){
     is_visible = false;
   }else{
     is_visible = true;
@@ -177,6 +178,20 @@ bool compute_visibility(){
 
   //---------------------------
   return is_visible;
+}
+
+vec3 unproject(vec2 coord){
+  //---------------------------
+
+  float ac = GL_WIDTH / GL_HEIGHT;
+  float tanalpha = tan(1.1345);
+  vec3 r;
+  r.x = ac * tanalpha * (2/GL_WIDTH * coord.x - 1);
+  r.y = tanalpha * (2/GL_HEIGHT * coord.y - 1);
+  r.z = -1;
+
+  //---------------------------
+  return r;
 }
 
 void main(){
@@ -188,6 +203,11 @@ void main(){
     color = vec4(1, 0, 0, 1);
   }
   out_color = color;
+
+
+
+
+
 
   //---------------------------
 }

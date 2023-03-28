@@ -44,11 +44,8 @@ public:
   void init_object();
   void init_rendering();
 
-  // Loop scene stuff
+  // Loop stuff
   void loop_gui();
-  void loop_draw_scene();
-
-  // Loop rendering stuff
   void loop_resizing();
   void loop_end();
 

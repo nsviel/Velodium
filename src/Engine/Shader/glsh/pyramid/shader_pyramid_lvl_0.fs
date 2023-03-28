@@ -1,6 +1,5 @@
 #version 330 core
 
-layout (location = 0) out vec4 out_color;
 layout (location = 1) out vec4 out_position;
 
 in vec2 vs_tex_coord;
@@ -26,7 +25,7 @@ void main(){
   //Depth
   float depth = texture(tex_depth, vs_tex_coord).r;
   float depth_norm = compute_depth_normalized(depth);
-  out_color = vec4(depth_norm, 0, 0, 1);
+  gl_FragDepth = depth_norm;
 
   //Position
   out_position = texture(tex_position, vs_tex_coord);

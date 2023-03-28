@@ -44,6 +44,7 @@ private:
   Data_file* data_out;
   string file_mtl;
   string file_texture;
+  bool is_face;
 };
 
 #endif
