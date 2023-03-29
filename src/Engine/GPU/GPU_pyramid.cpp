@@ -110,7 +110,7 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_visibility->ID_fbo);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  vec3 cam_pose = cameraManager->get_cam_P();
+  vec3 cam_pose = cameraManager->get_cam_target();
   shader_visibility->setVec3("CAM_POSE", cam_pose);
 
   mat4 proj = cameraManager->compute_cam_proj();

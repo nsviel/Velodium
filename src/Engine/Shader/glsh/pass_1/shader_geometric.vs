@@ -19,9 +19,14 @@ uniform vec2 GL_POS;
 
 void main()
 {
-  //Position
+  //Vertex position
   vec4 XYZ = vec4(in_position, 1.0);
-  gl_Position = PROJ * VIEW * XYZ;
+  vec4 XYZ_p = PROJ * VIEW * XYZ;
+  gl_Position = XYZ_p;
+
+  //Tex position
+  vec4 XYZ_pos = XYZ_p;
+  XYZ_pos.z = - XYZ_p.w / 100;
   vs_out.position = XYZ;
 
   //Color

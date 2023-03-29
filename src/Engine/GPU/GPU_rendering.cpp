@@ -111,6 +111,17 @@ void GPU_rendering::loop_pass_1(){
   shader_geometry->use();
   shader_geometry->setMat4("VIEW", view);
   shader_geometry->setMat4("PROJ", proj);
+
+  /*vec2 gl_dim = dimManager->get_win_dim();
+  vec4 point = vec4(1);
+  vec4 pp = proj*view*point;
+  vec4 pn = pp / pp.w;
+  vec3 pv;
+  pv.x = 0.5*(pn.x+1)*gl_dim.x;
+  pv.y = 0.5*(pn.y+1)*gl_dim.y;
+  pv.z = -pp.w/100;
+  say(pv);*/
+
   shader_geometry->setVec2("GL_POS", gl_pos);
   engineManager->draw_untextured_cloud();
 

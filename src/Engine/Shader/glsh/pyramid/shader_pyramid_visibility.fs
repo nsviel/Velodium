@@ -70,9 +70,12 @@ bool compute_visibility(){
     sector[i+32] = nn_lvl_4[i];
   }
 
+
+
   //Get point to camera vector
   vec3 pixel_pos = texture(tex_posit_0, vs_tex_coord).xyz;
-  vec3 pt_to_cam = - (CAM_POSE - pixel_pos) / compute_norm(CAM_POSE - pixel_pos);
+  vec3 x = CAM_POSE - pixel_pos;
+  vec3 pt_to_cam = - x / compute_norm(x);
 
   //for each sector and for each neighbor
   float nn_occlusion_sum = 0;
@@ -85,7 +88,6 @@ bool compute_visibility(){
       if((sector[j].w - i) < 0.01){
         vec3 nn_pos = sector[j].xyz;
 
-        vec3 x = CAM_POSE - pixel_pos;
         vec3 y = CAM_POSE - nn_pos;
         vec3 nn_cone = (y - x) / compute_norm(y - x);
         float nn_occlusion = 1 - dot(nn_cone, pt_to_cam);
@@ -128,6 +130,7 @@ void main(){
   }
 
   out_color = color;
+  //out_color = texture(tex_posit_0, vs_tex_coord);
 
 
 

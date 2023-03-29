@@ -12,6 +12,7 @@
 #include "../Core/Engine.h"
 #include "../Core/Configuration.h"
 #include "../../Scene/Data/Data.h"
+#include "../../Specific/Function/fct_math.h"
 
 #include "../../GUI/Node_gui.h"
 #include "../../GUI/Control/GUI.h"
@@ -211,23 +212,27 @@ void CoreGLengine::loop_end(){
   //End, if needed, by a screenshot
   screenshotManager->render_screenshot_online();
 
+  //Compteur for measuring GPU usage
   static vector<float> time_vec;
   static int cpt = 0;
-tic();
+  tic();
 
-  //Window display stuff
-  glfwSwapBuffers(window);
-  glfwPollEvents();
+  {
+    //Window display stuff
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+  }
 
-float time = toc_ms();
-if(cpt == 1000){
-  float mean = fct_mean(time_vec);
-  cout<<"Mean time = "<<mean<<endl;
-  time_vec.clear();
-}else{
-  time_vec.push_back(time);
-}
-
+  float time = toc_ms();
+  if(cpt == 100){
+    float mean = fct_mean(time_vec);
+    cout<<"Mean time = "<<mean<< " ms" <<endl;
+    time_vec.clear();
+    cpt = 0;
+  }else{
+    time_vec.push_back(time);
+    cpt++;
+  }
 
   //Check for window termination
   if(glfwWindowShouldClose(window)){

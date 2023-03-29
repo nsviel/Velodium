@@ -27,8 +27,9 @@ void main(){
   //Check if current pixel is the nearest
   float pixel_nearest = 1;
   vec4 pixel_nearest_pos = vec4(1);
-  for(int i=0; i<NN_SIZE; i++){
-    for(int j=0; j<NN_SIZE; j++){
+  int block_size = NN_SIZE / 2;
+  for(int i=0; i<NN_SIZE; i = i + block_size){
+    for(int j=0; j<NN_SIZE; j = j + block_size){
       //Neigbor data
       vec2 NN_coord = cube_pos + vec2(pixel_size.x * i, pixel_size.y * j);
       float NN_depth = texture(tex_depth, NN_coord).r;
