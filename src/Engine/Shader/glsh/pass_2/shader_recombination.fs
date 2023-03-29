@@ -18,10 +18,10 @@ void main(){
   float depth_2 = texelFetch(tex_depth_2, texcoord, 0).r;
 
   if(depth_1 < depth_2){
-    out_color = texelFetch(tex_color_1, texcoord, 0);//texture(tex_color_1, vs_tex_coord);
+    out_color = texture(tex_color_1, vs_tex_coord);
     gl_FragDepth = 1;
   }else{
-    out_color = texelFetch(tex_color_2, texcoord, 0);//texture(tex_color_2, vs_tex_coord);
+    out_color = texture(tex_color_2, vs_tex_coord);
     gl_FragDepth = depth_2;
   }
 

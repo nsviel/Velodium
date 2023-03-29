@@ -20,6 +20,7 @@ public:
 
   inline void setBool(const std::string &name, bool value){glUniform1i(glGetUniformLocation(program_ID, name.c_str()), (int)value);}
   inline void setInt(const std::string &name, int value){glUniform1i(glGetUniformLocation(program_ID, name.c_str()), value);}
+  inline void setIntVec(const std::string &name, int value[]){glUniform1iv(glGetUniformLocation(program_ID, name.c_str()), 1, &value[0]);}
   inline void setFloat(const std::string &name, float value){glUniform1f(glGetUniformLocation(program_ID, name.c_str()), value);}
   inline void setVec2(const std::string &name, glm::vec2 &value){glUniform2fv(glGetUniformLocation(program_ID, name.c_str()), 1, &value[0]);}
   inline void setVec2(const std::string &name, float x, float y){glUniform2f(glGetUniformLocation(program_ID, name.c_str()), x, y);}

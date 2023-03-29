@@ -57,8 +57,6 @@ void GPU_rendering::init_renderer(){
 }
 void GPU_rendering::loop_pass_1(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
-  bool is_timer = false;
-  if(is_timer) tic();
   //---------------------------
 
   //Enable depth testing
@@ -117,11 +115,8 @@ void GPU_rendering::loop_pass_1(){
   engineManager->draw_untextured_cloud();
 
   //---------------------------
-  if(is_timer) toc_us("pass_1");
 }
 void GPU_rendering::loop_pass_2(){
-  bool is_timer = false;
-  if(is_timer) tic();
   //---------------------------
 
   //Disable depth test
@@ -129,21 +124,20 @@ void GPU_rendering::loop_pass_2(){
 
   //Pyramid
   pyramidManager->bind_pyramid(canvas_render);
-
+/*
   //Recombinaison
   shaderManager->use_shader("shader_recombination");
   this->bind_fbo_pass_2_recombination();
 
   //EDL shader
   shaderManager->use_shader("shader_edl");
-  this->bind_fbo_pass_2_edl();
+  this->bind_fbo_pass_2_edl();*/
 
   //Draw screen quad
   shaderManager->use_shader("shader_canvas");
   this->bind_canvas();
 
   //---------------------------
-  if(is_timer) toc_us("pass_2");
 }
 
 //Rendering
@@ -170,7 +164,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
   glActiveTexture(GL_TEXTURE3);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
 

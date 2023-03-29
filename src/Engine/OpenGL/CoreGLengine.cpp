@@ -71,19 +71,21 @@ void CoreGLengine::init(){
   console.AddLog("ok" ,"Program initialized...");
 }
 void CoreGLengine::loop(){
+  bool is_timer = false;
   //---------------------------
 
   do{
     auto t1 = high_resolution_clock::now();
-
     //First pass
     //---------------------------
     this->loop_resizing();
+    if(is_timer) tic();
     renderManager->loop_pass_1();
 
     //Second pass
     //---------------------------
     renderManager->loop_pass_2();
+    if(is_timer) toc_ms("pass_1");
 
     //GUI and end
     //---------------------------

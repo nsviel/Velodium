@@ -116,6 +116,9 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
   mat4 proj = cameraManager->compute_cam_proj();
   shader_visibility->setMat4("PROJ", proj);
 
+  GLint samplers[5] = { 0, 1, 2, 3, 4 };
+  shader_visibility->setIntVec("tex_position", samplers);
+
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_buffer_depth);

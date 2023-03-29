@@ -31,7 +31,7 @@ float compute_norm(vec3 pos){
   //---------------------------
   return norm;
 }
-vec4[8] compute_lvl_nn(int nn_size, sampler2D tex_pos){
+vec4[8] compute_nn(int nn_size, sampler2D tex_pos){
   vec4 nn_level[8];
   //---------------------------
 
@@ -54,14 +54,14 @@ vec4[8] compute_lvl_nn(int nn_size, sampler2D tex_pos){
 bool compute_visibility(){
   //---------------------------
 
-  vec4[8] nn_lvl_0 = compute_lvl_nn(1, tex_posit_0);
-  vec4[8] nn_lvl_1 = compute_lvl_nn(2, tex_posit_1);
-  vec4[8] nn_lvl_2 = compute_lvl_nn(4, tex_posit_2);
-  vec4[8] nn_lvl_3 = compute_lvl_nn(8, tex_posit_3);
-  vec4[8] nn_lvl_4 = compute_lvl_nn(16, tex_posit_4);
+  vec4[8] nn_lvl_0 = compute_nn(1, tex_posit_0);
+  vec4[8] nn_lvl_1 = compute_nn(2, tex_posit_1);
+  vec4[8] nn_lvl_2 = compute_nn(4, tex_posit_2);
+  vec4[8] nn_lvl_3 = compute_nn(8, tex_posit_3);
+  vec4[8] nn_lvl_4 = compute_nn(16, tex_posit_4);
 
   //Concatenate the nn arrays
-  vec4 sector[32];
+  vec4 sector[100];
   for(int i=0; i<8; i++){
     sector[i] = nn_lvl_0[i];
     sector[i+8] = nn_lvl_1[i];
@@ -69,7 +69,84 @@ bool compute_visibility(){
     sector[i+24] = nn_lvl_3[i];
     sector[i+32] = nn_lvl_4[i];
   }
+  int cpt = 32;
+/*
+  int cpt = 0;
+  int cpt_idx = 0;
+  vec2 pixel_size = vec2(1) / vec2(GL_WIDTH, GL_HEIGHT);
+  for(int i=-1; i<2; i++){
+    for(int j=-1; j<2; j++){
+      float index = table_index[cpt_idx];
+      vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
+      vec4 NN_position = texture(tex_posit_0, NN_coord);
 
+      sector[cpt] = vec4(NN_position.xyz, index);
+
+      cpt_idx ++;
+      cpt ++;
+    }
+  }
+
+  pixel_size = vec2(2) / vec2(GL_WIDTH, GL_HEIGHT);
+  cpt_idx = 0;
+  for(int i=-1; i<2; i++){
+    for(int j=-1; j<2; j++){
+      float index = table_index[cpt_idx];
+      vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
+      vec4 NN_position = texture(tex_posit_1, NN_coord);
+
+      sector[cpt] = vec4(NN_position.xyz, index);
+
+      cpt_idx ++;
+      cpt ++;
+    }
+  }
+
+  pixel_size = vec2(4) / vec2(GL_WIDTH, GL_HEIGHT);
+  cpt_idx = 0;
+  for(int i=-1; i<2; i++){
+    for(int j=-1; j<2; j++){
+      float index = table_index[cpt_idx];
+      vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
+      vec4 NN_position = texture(tex_posit_2, NN_coord);
+
+      sector[cpt] = vec4(NN_position.xyz, index);
+
+      cpt_idx ++;
+      cpt ++;
+    }
+  }
+
+  pixel_size = vec2(8) / vec2(GL_WIDTH, GL_HEIGHT);
+  cpt_idx = 0;
+  for(int i=-1; i<2; i++){
+    for(int j=-1; j<2; j++){
+      float index = table_index[cpt_idx];
+      vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
+      vec4 NN_position = texture(tex_posit_3, NN_coord);
+
+      sector[cpt] = vec4(NN_position.xyz, index);
+
+      cpt_idx ++;
+      cpt ++;
+    }
+  }
+
+  pixel_size = vec2(16) / vec2(GL_WIDTH, GL_HEIGHT);
+  cpt_idx = 0;
+  for(int i=-1; i<2; i++){
+    for(int j=-1; j<2; j++){
+      float index = table_index[cpt_idx];
+      vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
+      vec4 NN_position = texture(tex_posit_4, NN_coord);
+
+      sector[cpt] = vec4(NN_position.xyz, index);
+
+      cpt_idx ++;
+      cpt ++;
+    }
+  }
+*/
   //Get point to camera vector
   vec3 pixel_pos = texture(tex_posit_0, vs_tex_coord).xyz;
   vec3 pt_to_cam = - (CAM_POSE - pixel_pos) / compute_norm(CAM_POSE - pixel_pos);
@@ -81,7 +158,7 @@ bool compute_visibility(){
     float sector_occlusion_min = 2;
 
     // Get minimal nn visibility per sector
-    for(int j=0; j<sector.length(); j++){
+    for(int j=0; j<cpt; j++){
       if((sector[j].w - i) < 0.01){
         vec3 nn_pos = sector[j].xyz;
 

@@ -15,6 +15,7 @@ struct FBO{
 };
 struct Pyramid{
   int nb_lvl;
+  GLuint tex_index;
   vector<FBO*> fbo_vec;
   vector<int> size_nn;
 };
@@ -45,6 +46,7 @@ public:
   void gen_fbo_tex_position(FBO* fbo, int attachment_id);
   void gen_fbo_tex_normal(FBO* fbo, int attachment_id);
   void gen_fbo_tex_pyramide(FBO* fbo, int attachment_id);
+  void gen_fbo_tex_sector_idx();
 
   //GBuffer stuff
   void create_gbuffer();

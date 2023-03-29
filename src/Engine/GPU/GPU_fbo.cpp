@@ -28,6 +28,7 @@ void GPU_fbo::init_create_rendering_fbo(){
   this->struct_pyramid->size_nn.push_back(8);
   this->struct_pyramid->size_nn.push_back(16);
   this->struct_pyramid->size_nn.push_back(32);
+  this->gen_fbo_tex_sector_idx();
 
   for(int i=0; i<struct_pyramid->nb_lvl; i++){
     FBO* fbo = create_new_pyramid_fbo("fbo_py_lvl_" + to_string(i));
@@ -304,6 +305,46 @@ void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
   if(fbo->ID_buffer_depth == 0){
     cout<<"[error] FBO depth ID"<<endl;
   }
+
+  //---------------------------
+}
+void GPU_fbo::gen_fbo_tex_sector_idx(){
+  //---------------------------
+
+  // Create a correspondence table texture
+  glGenTextures(1, &struct_pyramid->tex_index);
+  glBindTexture(GL_TEXTURE_1D, struct_pyramid->tex_index);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+  // Create a buffer to hold the table data
+  vector<float> index_vec;
+  for(float i=-1; i<2; i++){
+    for(float j=-1; j<2; j++){
+      float index;
+      if(i == 0 && j== 0){
+        index = -1;
+      }else{
+        float alpha = atan(i, j);
+
+        if(alpha < 0){
+          alpha = alpha + 2 * M_PI;
+        }
+
+        float theta = (8 * alpha) / (2 * M_PI);
+        index = round(theta);
+      }
+
+      index_vec.push_back(index);
+    }
+  }
+
+  // Upload the table data to the texture
+  glTexImage1D(GL_TEXTURE_1D, 0, GL_R32F, index_vec.size(), 0, GL_RED, GL_FLOAT, index_vec.data());
+
+  //Unbind
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   //---------------------------
 }
