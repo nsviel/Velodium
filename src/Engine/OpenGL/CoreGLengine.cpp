@@ -211,9 +211,23 @@ void CoreGLengine::loop_end(){
   //End, if needed, by a screenshot
   screenshotManager->render_screenshot_online();
 
+  static vector<float> time_vec;
+  static int cpt = 0;
+tic();
+
   //Window display stuff
   glfwSwapBuffers(window);
   glfwPollEvents();
+
+float time = toc_ms();
+if(cpt == 1000){
+  float mean = fct_mean(time_vec);
+  cout<<"Mean time = "<<mean<<endl;
+  time_vec.clear();
+}else{
+  time_vec.push_back(time);
+}
+
 
   //Check for window termination
   if(glfwWindowShouldClose(window)){
