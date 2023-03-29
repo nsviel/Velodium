@@ -22,11 +22,11 @@ void main(){
 
   //Retrieve cube position
   vec2 tex_coord_dim = vs_tex_coord * vec2(GL_WIDTH, GL_HEIGHT);
-  vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) * pixel_size;
+  vec2 cube_pos = (floor(tex_coord_dim / NN_SIZE) * NN_SIZE) / vec2(GL_WIDTH, GL_HEIGHT);
 
   //Check if current pixel is the nearest
-  float pixel_nearest = pixel_depth;
-  vec4 pixel_nearest_pos = pixel_position;
+  float pixel_nearest = 1;
+  vec4 pixel_nearest_pos = vec4(1);
   for(int i=0; i<NN_SIZE; i++){
     for(int j=0; j<NN_SIZE; j++){
       //Neigbor data

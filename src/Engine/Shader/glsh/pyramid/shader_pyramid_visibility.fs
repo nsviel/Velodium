@@ -6,6 +6,7 @@ layout (location = 0) out vec4 out_color;
 in vec2 vs_tex_coord;
 
 uniform sampler2D tex_depth;
+uniform sampler2D tex_color;
 uniform sampler2D tex_posit_0;
 uniform sampler2D tex_posit_1;
 uniform sampler2D tex_posit_2;
@@ -54,10 +55,7 @@ bool compute_visibility(){
       if(i != 0 && j!= 0){
         float index = compute_sector_index(i, j);
 
-        float l = pixel_size.x * i;
-        float k = pixel_size.y * j;
-
-        vec2 NN_coord = vs_tex_coord + vec2(l, k);
+        vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
         vec4 NN_position = texture(tex_posit_0, NN_coord);
 
         sector[cpt] = vec4(NN_position.xyz, index);
@@ -72,10 +70,7 @@ bool compute_visibility(){
       if(i != 0 && j!= 0){
         float index = compute_sector_index(i, j);
 
-        float l = pixel_size.x * i;
-        float k = pixel_size.y * j;
-
-        vec2 NN_coord = vs_tex_coord + vec2(l, k);
+        vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
         vec4 NN_position = texture(tex_posit_1, NN_coord);
 
         sector[cpt] = vec4(NN_position.xyz, index);
@@ -90,10 +85,7 @@ bool compute_visibility(){
       if(i != 0 && j!= 0){
         float index = compute_sector_index(i, j);
 
-        float l = pixel_size.x * i;
-        float k = pixel_size.y * j;
-
-        vec2 NN_coord = vs_tex_coord + vec2(l, k);
+        vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
         vec4 NN_position = texture(tex_posit_2, NN_coord);
 
         sector[cpt] = vec4(NN_position.xyz, index);
@@ -108,10 +100,7 @@ bool compute_visibility(){
       if(i != 0 && j!= 0){
         float index = compute_sector_index(i, j);
 
-        float l = pixel_size.x * i;
-        float k = pixel_size.y * j;
-
-        vec2 NN_coord = vs_tex_coord + vec2(l, k);
+        vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
         vec4 NN_position = texture(tex_posit_3, NN_coord);
 
         sector[cpt] = vec4(NN_position.xyz, index);
@@ -126,10 +115,7 @@ bool compute_visibility(){
       if(i != 0 && j!= 0){
         float index = compute_sector_index(i, j);
 
-        float l = pixel_size.x * i;
-        float k = pixel_size.y * j;
-
-        vec2 NN_coord = vs_tex_coord + vec2(l, k);
+        vec2 NN_coord = vs_tex_coord + vec2(pixel_size.x * i, pixel_size.y * j);
         vec4 NN_position = texture(tex_posit_4, NN_coord);
 
         sector[cpt] = vec4(NN_position.xyz, index);
@@ -180,30 +166,24 @@ bool compute_visibility(){
   return is_visible;
 }
 
-vec3 unproject(vec2 coord){
-  //---------------------------
-
-  float ac = GL_WIDTH / GL_HEIGHT;
-  float tanalpha = tan(1.1345);
-  vec3 r;
-  r.x = ac * tanalpha * (2/GL_WIDTH * coord.x - 1);
-  r.y = tanalpha * (2/GL_HEIGHT * coord.y - 1);
-  r.z = -1;
-
-  //---------------------------
-  return r;
-}
-
 void main(){
+  float depth = texture(tex_depth, vs_tex_coord).r;
   //---------------------------
 
-  bool is_visible = compute_visibility();
+  bool is_visible = false;
+  if(depth < 0.98){
+    is_visible = compute_visibility();
+  }
+
   vec4 color = vec4(1);
   if(is_visible){
-    color = vec4(1, 0, 0, 1);
+    color = texture(tex_color, vs_tex_coord);
+    gl_FragDepth = texture(tex_depth, vs_tex_coord).r;
+  }else{
+    gl_FragDepth = 0;
   }
-  out_color = color;
 
+  out_color = color;
 
 
 

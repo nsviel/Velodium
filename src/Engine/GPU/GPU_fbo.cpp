@@ -22,6 +22,12 @@ void GPU_fbo::init_create_rendering_fbo(){
   //Create pyramid FBO
   this->struct_pyramid = new Pyramid();
   this->struct_pyramid->nb_lvl = 5;
+  this->struct_pyramid->size_nn.push_back(1);
+  this->struct_pyramid->size_nn.push_back(2);
+  this->struct_pyramid->size_nn.push_back(4);
+  this->struct_pyramid->size_nn.push_back(8);
+  this->struct_pyramid->size_nn.push_back(16);
+  this->struct_pyramid->size_nn.push_back(32);
 
   for(int i=0; i<struct_pyramid->nb_lvl; i++){
     FBO* fbo = create_new_pyramid_fbo("fbo_py_lvl_" + to_string(i));
@@ -204,8 +210,8 @@ void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attach_id){
   glGenTextures(1, &fbo->ID_tex_position);
   glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attach_id, GL_TEXTURE_2D, fbo->ID_tex_position, 0);

@@ -25,10 +25,14 @@ void main(){
   //Depth
   float depth = texture(tex_depth, vs_tex_coord).r;
   float depth_norm = compute_depth_normalized(depth);
-  gl_FragDepth = depth_norm;
-
-  //Position
-  out_position = texture(tex_position, vs_tex_coord);
+  if(depth_norm < 0.95){
+    gl_FragDepth = depth_norm;
+    out_position = texture(tex_position, vs_tex_coord);
+    //out_position = vec4(gl_FragDepth,0,0,1);
+  }else{
+    gl_FragDepth = 1;
+    out_position = vec4(1, 1, 1, 1);
+  }
 
   //---------------------------
 }

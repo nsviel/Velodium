@@ -48,7 +48,7 @@ void Shader_edl::setup_shader(Shader_obj* shader){
   shader->setInt("tex_color", 0);
   shader->setInt("tex_depth", 1);
 
-  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 gl_dim = dimManager->get_win_dim();
   shader->setInt("GL_WIDTH", gl_dim.x);
   shader->setInt("GL_HEIGHT", gl_dim.y);
 
@@ -71,7 +71,7 @@ void Shader_edl::update_shader(){
   shader->setFloat("EDL_RADIUS", edl_radius);
   shader->setInt("EDL_ON", with_edl);
 
-  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 gl_dim = dimManager->get_win_dim();
   shader->setInt("GL_WIDTH", gl_dim.x);
   shader->setInt("GL_HEIGHT", gl_dim.y);
 

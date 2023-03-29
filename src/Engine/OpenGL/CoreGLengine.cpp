@@ -191,12 +191,12 @@ void CoreGLengine::loop_resizing(){
     renderManager->update_dim_texture();
     shaderManager->update_shader();
     renderManager->update_dim_canvas();
+
+    vec2 gl_dim = dimManager->get_win_dim();
+    glViewport(0, 0, gl_dim.x, gl_dim.y);
   }
 
   //Camera & scene runtime
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 gl_pos = dimManager->get_gl_pos();
-  glViewport(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y);
   cameraManager->input_cam_mouse();
   node_engine->runtime();
   node_gui->loop_selection();

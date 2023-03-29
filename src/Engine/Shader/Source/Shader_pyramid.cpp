@@ -25,7 +25,7 @@ void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_l
   //---------------------------
 
   //Get canvas dimension
-  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 gl_dim = dimManager->get_win_dim();
 
   //Pyramid level 0
   shader_lvl_0->use();
@@ -43,12 +43,13 @@ void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_l
 
   //Pyramid visibility
   shader_visibility->use();
-  shader_visibility->setInt("tex_posit_0", 0);
-  shader_visibility->setInt("tex_posit_0", 1);
-  shader_visibility->setInt("tex_posit_1", 2);
-  shader_visibility->setInt("tex_posit_2", 3);
-  shader_visibility->setInt("tex_posit_3", 4);
-  shader_visibility->setInt("tex_posit_4", 5);
+  shader_visibility->setInt("tex_depth", 0);
+  shader_visibility->setInt("tex_color", 1);
+  shader_visibility->setInt("tex_posit_0", 2);
+  shader_visibility->setInt("tex_posit_1", 3);
+  shader_visibility->setInt("tex_posit_2", 4);
+  shader_visibility->setInt("tex_posit_3", 5);
+  shader_visibility->setInt("tex_posit_4", 6);
   shader_visibility->setInt("GL_WIDTH", gl_dim.x);
   shader_visibility->setInt("GL_HEIGHT", gl_dim.y);
 
@@ -58,7 +59,7 @@ void Shader_pyramid::update_shader(){
   //---------------------------
 
   //Get canvas dimension
-  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 gl_dim = dimManager->get_win_dim();
 
   //Use corresponding shader program
   shader_lvl_n->use();

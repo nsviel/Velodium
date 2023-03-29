@@ -166,7 +166,7 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_position);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_position);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);
@@ -208,14 +208,14 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
 void GPU_rendering::bind_canvas(){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
+  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_2");
+  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
   //---------------------------
-
-  //PROBLEM ICI on essaye de mapper texture edl de dim WIN sur canvas de dim GL
 
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_edl->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);
@@ -272,13 +272,13 @@ void GPU_rendering::update_dim_canvas(){
   br.z = 0.0f;
 
   tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  tl.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+  tl.y = 1;
   tl.z = 0.0f;
 
   tr.x = 1;
-  tr.y = 2 * (gl_pos.y + gl_dim.y) / (win_dim.y) - 1;
+  tr.y = 1;
   tr.z = 0.0f;
-
+/*
   //Update canvas location buffer
   canvas_screen->xyz.clear();
   canvas_screen->xyz.push_back(tl);
@@ -289,7 +289,7 @@ void GPU_rendering::update_dim_canvas(){
   canvas_screen->xyz.push_back(br);
   canvas_screen->xyz.push_back(tr);
 
-  gpuManager->update_buffer_location(canvas_screen);
+  gpuManager->update_buffer_location(canvas_screen);*/
 
   //---------------------------
 }
@@ -315,6 +315,7 @@ Object_* GPU_rendering::gen_canvas(){
   uv.push_back(vec2(0.0f,  1.0f));
   uv.push_back(vec2(1.0f,  0.0f));
   uv.push_back(vec2(1.0f,  1.0f));
+  uv.push_back(vec2(0.0f,  1.0f));
 
   canvas->xyz = xyz;
   canvas->uv = uv;

@@ -85,11 +85,11 @@ mat4 Camera::compute_cam_proj(){
 
   //Compute projection matrix
   if(viewport->projection == "perspective"){
-    vec2 glDim = dimManager->get_gl_dim();
+    vec2 win_dim = dimManager->get_win_dim();
     float znear = viewport->clip_near;
     float zfar = viewport->clip_far;
     float fov = radians(viewport->fov);
-    float ratio = glDim.x / glDim.y;
+    float ratio = win_dim.x / win_dim.y;
     cam_proj = perspective(fov, ratio, znear, zfar);
   }
   else if(viewport->projection == "orthographic"){

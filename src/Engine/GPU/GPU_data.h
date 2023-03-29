@@ -28,6 +28,7 @@ public:
   void update_buffer_location(Object_* object);
   void update_buffer_color(Object_* object);
   void update_buffer_normal(Object_* object);
+  void update_buffer_texture(Object_* object);
 
   //Buffer binding / unbinding
   void bind_texture(vector<int> tex_ID);

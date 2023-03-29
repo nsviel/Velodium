@@ -18,9 +18,7 @@ uniform sampler2D tex_depth;
 void main()
 {
   //Color
-  vec4 color_rgba = vec4(vec3(1.0 - texture(tex_color, fs_in.tex_coord)), 1.0);
-  color_rgba = texture(tex_depth, fs_in.tex_coord);
-  out_color = vec4(color_rgba);
+  out_color = fs_in.color;
 
   //Position
   out_position = fs_in.position;

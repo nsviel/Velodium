@@ -16,6 +16,7 @@ struct FBO{
 struct Pyramid{
   int nb_lvl;
   vector<FBO*> fbo_vec;
+  vector<int> size_nn;
 };
 
 

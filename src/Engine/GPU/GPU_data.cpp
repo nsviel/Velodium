@@ -178,6 +178,14 @@ void GPU_data::update_buffer_normal(Object_* object){
 
   //---------------------------
 }
+void GPU_data::update_buffer_texture(Object_* object){
+  //---------------------------
+
+  glBindBuffer(GL_ARRAY_BUFFER, object->vbo_uv);
+  glBufferData(GL_ARRAY_BUFFER, object->uv.size() * sizeof(glm::vec2), &object->uv[0],  GL_DYNAMIC_DRAW);
+
+  //---------------------------
+}
 
 //Buffer binding / unbinding
 void GPU_data::bind_texture(vector<int> tex_ID){

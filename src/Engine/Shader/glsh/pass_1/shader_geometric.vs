@@ -22,7 +22,7 @@ void main()
   //Position
   vec4 XYZ = vec4(in_position, 1.0);
   gl_Position = PROJ * VIEW * XYZ;
-  vs_out.position = VIEW * XYZ;
+  vs_out.position = XYZ;
 
   //Color
   vs_out.color = in_color;

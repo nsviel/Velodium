@@ -25,9 +25,15 @@ GPU_pyramid::~GPU_pyramid(){}
 void GPU_pyramid::bind_pyramid(Object_* canvas){
   //---------------------------
 
+  //Activate depth buffering
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
+
   this->bind_pyramid_lvl_0(canvas);
   this->bind_pyramid_lvl_n(canvas);
   this->bind_pyramid_visibility(canvas);
+
+  glDisable(GL_DEPTH_TEST);
 
   //---------------------------
 }
@@ -67,7 +73,7 @@ void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
     FBO* fbo_lvl_m1 = struct_pyramid->fbo_vec[i-1];
     FBO* fbo_lvl_m0 = struct_pyramid->fbo_vec[i];
 
-    shader_lvl_n->setInt("NN_SIZE", i);
+    shader_lvl_n->setInt("NN_SIZE", struct_pyramid->size_nn[i]);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_m0->ID_fbo);
 
@@ -112,20 +118,22 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_buffer_depth);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_position);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_tex_color);
   glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, fbo_lvl_0->ID_tex_position);
+  glActiveTexture(GL_TEXTURE3);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_1->ID_tex_position);
-  glActiveTexture(GL_TEXTURE3);
+  glActiveTexture(GL_TEXTURE4);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_2->ID_tex_position);
-  glActiveTexture(GL_TEXTURE3);
+  glActiveTexture(GL_TEXTURE5);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_3->ID_tex_position);
-  glActiveTexture(GL_TEXTURE3);
+  glActiveTexture(GL_TEXTURE6);
   glBindTexture(GL_TEXTURE_2D, fbo_lvl_4->ID_tex_position);
 
   gpuManager->draw_object(canvas);
-  this->unbind_fboAndTexture(3);
+  this->unbind_fboAndTexture(struct_pyramid->nb_lvl+1);
 
   //---------------------------
 }
