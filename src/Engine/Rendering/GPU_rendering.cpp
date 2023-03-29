@@ -1,7 +1,7 @@
 #include "GPU_rendering.h"
-#include "GPU_data.h"
 #include "GPU_pyramid.h"
 
+#include "../GPU/GPU_data.h"
 #include "../Shader/Base/Shader_obj.h"
 #include "../Node_engine.h"
 #include "../Core/Dimension.h"
@@ -283,7 +283,7 @@ void GPU_rendering::update_dim_canvas(){
   tr.x = 1;
   tr.y = 1;
   tr.z = 0.0f;
-/*
+
   //Update canvas location buffer
   canvas_screen->xyz.clear();
   canvas_screen->xyz.push_back(tl);
@@ -294,7 +294,7 @@ void GPU_rendering::update_dim_canvas(){
   canvas_screen->xyz.push_back(br);
   canvas_screen->xyz.push_back(tr);
 
-  gpuManager->update_buffer_location(canvas_screen);*/
+  gpuManager->update_buffer_location(canvas_screen);
 
   //---------------------------
 }

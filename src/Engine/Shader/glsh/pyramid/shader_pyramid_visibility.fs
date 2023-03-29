@@ -129,12 +129,6 @@ void main(){
     gl_FragDepth = texture(tex_depth, vs_tex_coord).r;
   }
 
-  out_color = color;
-  //out_color = texture(tex_posit_0, vs_tex_coord);
-
-
-
-
-
   //---------------------------
+  out_color = color;
 }

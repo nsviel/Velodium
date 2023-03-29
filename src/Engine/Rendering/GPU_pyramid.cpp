@@ -1,7 +1,7 @@
 #include "GPU_pyramid.h"
-#include "GPU_data.h"
-#include "GPU_fbo.h"
 
+#include "../GPU/GPU_data.h"
+#include "../GPU/GPU_fbo.h"
 #include "../Shader/Base/Shader_obj.h"
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"

@@ -1,7 +1,7 @@
 #ifndef GPU_PYRAMID_H
 #define GPU_PYRAMID_H
 
-#include "GPU_fbo.h"
+#include "../GPU/GPU_fbo.h"
 #include "../../common.h"
 
 class Node_engine;

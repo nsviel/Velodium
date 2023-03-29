@@ -1,7 +1,7 @@
 #ifndef GPU_RENDER_H
 #define GPU_RENDER_H
 
-#include "GPU_fbo.h"
+#include "../GPU/GPU_fbo.h"
 #include "../../common.h"
 
 class Node_engine;

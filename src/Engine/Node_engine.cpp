@@ -9,7 +9,7 @@
 #include "OpenGL/Light.h"
 #include "Shader/Shader.h"
 
-#include "GPU/GPU_rendering.h"
+#include "Rendering/GPU_rendering.h"
 #include "GPU/GPU_screenshot.h"
 #include "GPU/GPU_fbo.h"
 

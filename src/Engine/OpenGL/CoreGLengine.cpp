@@ -1,6 +1,6 @@
 #include "CoreGLengine.h"
 
-#include "../GPU/GPU_rendering.h"
+#include "../Rendering/GPU_rendering.h"
 #include "../GPU/GPU_screenshot.h"
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"
