@@ -17,6 +17,7 @@ uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
 uniform vec3 CAM_POSE;
 uniform mat4 PROJ;
+uniform mat4 VIEW;
 
 const int index_size = 9;
 float table_index[index_size] = float[](5.0, 6.0, 7.0, 4.0, -1.0, 0.0, 3.0, 2.0, 1.0);
@@ -30,6 +31,18 @@ float compute_norm(vec3 pos){
 
   //---------------------------
   return norm;
+}
+vec3 unproject(vec2 coord){
+  //---------------------------
+
+  float ratio = GL_WIDTH / GL_HEIGHT;
+  float Px = (2 * ((coord.x + 0.5) / GL_WIDTH) - 1) * tan(65 / 2 * PI / 180) * ratio;
+  float Py = (1 - 2 * (coord.y + 0.5) / GL_HEIGHT) * tan(65 / 2 * PI / 180);
+  vec3 cam_to_point = vec3(Px, Py, -1) - CAM_POSE; // note that this just equal to Vec3f(Px, Py, -1);
+  cam_to_point = normalize(cam_to_point); // it's a direction so don't forget to normalize
+
+  //---------------------------
+  return cam_to_point;
 }
 vec4[8] compute_lvl_nn(int nn_size, sampler2D tex_pos){
   vec4 nn_level[8];
@@ -119,7 +132,7 @@ void main(){
   //---------------------------
 
   bool is_visible = false;
-  if(depth < 0.98){
+  if(depth < 0.999999){
     is_visible = compute_visibility();
   }
 

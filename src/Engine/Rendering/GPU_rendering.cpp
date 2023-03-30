@@ -122,6 +122,16 @@ void GPU_rendering::loop_pass_1(){
   pv.z = -pp.w/100;
   say(pv);*/
 
+  vec3 cam_pose = cameraManager->get_cam_P();
+  vec2 gl_dim = dimManager->get_win_dim();
+  vec2 coord = vec2(0, 0);
+  float ratio = gl_dim.x / gl_dim.y;
+  float Px = (2 * ((coord.x + 0.5) / gl_dim.x) - 1) * tan(65 / 2 * M_PI / 180) * ratio;
+  float Py = (1 - 2 * (coord.y + 0.5) / gl_dim.y) * tan(65 / 2 * M_PI / 180);
+  vec3 cam_to_point = vec3(Px, Py, -1) - cam_pose; // note that this just equal to Vec3f(Px, Py, -1);
+  cam_to_point = normalize(cam_to_point); // it's a direction so don't forget to normalize
+say(cam_to_point);
+
   shader_geometry->setVec2("GL_POS", gl_pos);
   engineManager->draw_untextured_cloud();
 
@@ -135,11 +145,11 @@ void GPU_rendering::loop_pass_2(){
 
   //Pyramid
   pyramidManager->bind_pyramid(canvas_render);
-/*
+
   //Recombinaison
   shaderManager->use_shader("shader_recombination");
   this->bind_fbo_pass_2_recombination();
-
+/*
   //EDL shader
   shaderManager->use_shader("shader_edl");
   this->bind_fbo_pass_2_edl();*/
@@ -171,13 +181,14 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_position);
-  glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
+
   glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
-  glActiveTexture(GL_TEXTURE3);
   glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
+  glActiveTexture(GL_TEXTURE3);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
 
   gpuManager->draw_object(canvas_render);
   this->unbind_fboAndTexture(4);
@@ -215,12 +226,13 @@ void GPU_rendering::bind_canvas(){
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_2");
   FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
+  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
   //---------------------------
 
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_tex_color);
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);

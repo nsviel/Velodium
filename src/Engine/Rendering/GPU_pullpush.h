@@ -6,6 +6,11 @@
 
 class Node_engine;
 
+// 1/ faire texture avec poids entre 0 et 1
+// 2/ Faire un masque H
+// 2/ FAire reccurssivement une piramide (pull)
+// 3/ Combler les trous (push)
+
 
 class GPU_pullpush
 {
