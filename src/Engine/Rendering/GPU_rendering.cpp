@@ -55,6 +55,38 @@ void GPU_rendering::init_renderer(){
 
   //---------------------------
 }
+vec3 GPU_rendering::fct_unproject(vec2 coord_frag){
+  vec2 gl_dim = dimManager->get_win_dim();
+  mat4 view = cameraManager->compute_cam_view();
+  //---------------------------
+
+  //Raster space to NDC space
+  vec2 coord_ndc;
+  coord_ndc.x = (coord_frag.x) / gl_dim.x;
+  coord_ndc.y = (coord_frag.y) / gl_dim.y;
+
+  //Coord in NDC space to clip coordinate
+  vec2 coord_clip;
+  coord_clip.x = 2 * coord_ndc.x - 1;
+  coord_clip.y = 2 * coord_ndc.y - 1;
+
+  //Clip to view  space
+  float ratio = gl_dim.x / gl_dim.y;
+  vec4 coord_view;
+  coord_view.x = coord_clip.x * tan(65 / 2) * ratio;
+  coord_view.y = coord_clip.y * tan(65 / 2);
+  coord_view.z = -1;
+  coord_view.w = 1;
+
+  //View space to world space
+  mat4 view_inv = inverse(view);
+  vec4 coord_world = view_inv * coord_view;
+
+  vec3 fct_out  = vec3(coord_world);
+
+  //---------------------------
+  return fct_out;
+}
 void GPU_rendering::loop_pass_1(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
   //---------------------------
@@ -112,25 +144,17 @@ void GPU_rendering::loop_pass_1(){
   shader_geometry->setMat4("VIEW", view);
   shader_geometry->setMat4("PROJ", proj);
 
-  /*vec2 gl_dim = dimManager->get_win_dim();
-  vec4 point = vec4(1);
-  vec4 pp = proj*view*point;
-  vec4 pn = pp / pp.w;
-  vec3 pv;
-  pv.x = 0.5*(pn.x+1)*gl_dim.x;
-  pv.y = 0.5*(pn.y+1)*gl_dim.y;
-  pv.z = -pp.w/100;
-  say(pv);*/
+say(dimManager->get_gl_pos());
 
-  vec3 cam_pose = cameraManager->get_cam_P();
-  vec2 gl_dim = dimManager->get_win_dim();
-  vec2 coord = vec2(0, 0);
-  float ratio = gl_dim.x / gl_dim.y;
-  float Px = (2 * ((coord.x + 0.5) / gl_dim.x) - 1) * tan(65 / 2 * M_PI / 180) * ratio;
-  float Py = (1 - 2 * (coord.y + 0.5) / gl_dim.y) * tan(65 / 2 * M_PI / 180);
-  vec3 cam_to_point = vec3(Px, Py, -1) - cam_pose; // note that this just equal to Vec3f(Px, Py, -1);
-  cam_to_point = normalize(cam_to_point); // it's a direction so don't forget to normalize
-say(cam_to_point);
+vec3 pt = fct_unproject(vec2(100,80));
+
+glBegin(GL_LINES);
+  glVertex3f(0, 0, 0);
+  glVertex3f(pt.x, pt.y, pt.z);
+glEnd();
+
+
+
 
   shader_geometry->setVec2("GL_POS", gl_pos);
   engineManager->draw_untextured_cloud();

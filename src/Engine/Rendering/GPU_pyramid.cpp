@@ -6,12 +6,14 @@
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"
 #include "../Camera/Camera.h"
+#include "../Core/Dimension.h"
 
 
 //Constructor / Destructor
 GPU_pyramid::GPU_pyramid(Node_engine* node_engine){
   //---------------------------
 
+  this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->gpuManager = new GPU_data();
   this->fboManager = node_engine->get_fboManager();
@@ -43,7 +45,15 @@ void GPU_pyramid::bind_pyramid_lvl_0(Object_* canvas){
   //---------------------------
 
   //Pyramide level 0
-  shaderManager->use_shader("shader_py_lvl_0");
+  Shader_obj* shader_lvl_0 = shaderManager->get_shader_obj_byName("shader_py_lvl_0");
+  shader_lvl_0->use();
+
+  vec2 gl_dim = dimManager->get_win_dim();
+  shader_lvl_0->setInt("GL_WIDTH", gl_dim.x);
+  shader_lvl_0->setInt("GL_HEIGHT", gl_dim.y);
+
+  mat4 view = cameraManager->get_cam_view();
+  shader_lvl_0->setMat4("VIEW", view);
 
   //First pyramid level
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_lvl_0->ID_fbo);

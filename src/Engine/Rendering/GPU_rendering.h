@@ -26,6 +26,9 @@ public:
   void loop_pass_1();
   void loop_pass_2();
 
+
+  vec3 fct_unproject(vec2 coord_frag);
+
   //Rendering
   void bind_fbo_pass_2_recombination();
   void bind_fbo_pass_2_edl();

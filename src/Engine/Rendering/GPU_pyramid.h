@@ -9,7 +9,7 @@ class GPU_data;
 class GPU_fbo;
 class Shader;
 class Camera;
-
+class Dimension;
 
 class GPU_pyramid
 {
@@ -32,6 +32,7 @@ private:
   GPU_data* gpuManager;
   GPU_fbo* fboManager;
   Camera* cameraManager;
+  Dimension* dimManager;
 };
 
 #endif

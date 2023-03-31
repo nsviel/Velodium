@@ -32,17 +32,35 @@ float compute_norm(vec3 pos){
   //---------------------------
   return norm;
 }
-vec3 unproject(vec2 coord){
+vec3 unproject(vec2 coord_frag){
   //---------------------------
 
+  //Raster space to NDC space
+  vec2 coord_ndc;
+  coord_ndc.x = (coord_frag.x) / GL_WIDTH;
+  coord_ndc.y = (coord_frag.y) / GL_HEIGHT;
+
+  //Coord in NDC space to clip coordinate
+  vec2 coord_clip;
+  coord_clip.x = 2 * coord_ndc.x - 1;
+  coord_clip.y = 1 - 2 * coord_ndc.y;
+
+  //Clip to view  space
   float ratio = GL_WIDTH / GL_HEIGHT;
-  float Px = (2 * ((coord.x + 0.5) / GL_WIDTH) - 1) * tan(65 / 2 * PI / 180) * ratio;
-  float Py = (1 - 2 * (coord.y + 0.5) / GL_HEIGHT) * tan(65 / 2 * PI / 180);
-  vec3 cam_to_point = vec3(Px, Py, -1) - CAM_POSE; // note that this just equal to Vec3f(Px, Py, -1);
-  cam_to_point = normalize(cam_to_point); // it's a direction so don't forget to normalize
+  vec4 coord_view;
+  coord_view.x = coord_clip.x * tan(65 / 2 * 2 * PI) * ratio;
+  coord_view.y = coord_clip.y * tan(65 / 2 * 2 * PI);
+  coord_view.z = -1;
+  coord_view.w = 1;
+
+  //View space to world space
+  mat4 view_inv = inverse(VIEW);
+  vec4 coord_world = view_inv * coord_view;
+
+  vec3 fct_out  = vec3(coord_world);
 
   //---------------------------
-  return cam_to_point;
+  return fct_out;
 }
 vec4[8] compute_lvl_nn(int nn_size, sampler2D tex_pos){
   vec4 nn_level[8];
@@ -87,7 +105,8 @@ bool compute_visibility(){
 
   //Get point to camera vector
   vec3 pixel_pos = texture(tex_posit_0, vs_tex_coord).xyz;
-  vec3 x = CAM_POSE - pixel_pos;
+  vec3 truc = unproject(gl_FragCoord.xy);
+  vec3 x = truc - pixel_pos;
   vec3 pt_to_cam = - x / compute_norm(x);
 
   //for each sector and for each neighbor
@@ -101,7 +120,7 @@ bool compute_visibility(){
       if((sector[j].w - i) < 0.01){
         vec3 nn_pos = sector[j].xyz;
 
-        vec3 y = CAM_POSE - nn_pos;
+        vec3 y = truc - nn_pos;
         vec3 nn_cone = (y - x) / compute_norm(y - x);
         float nn_occlusion = 1 - dot(nn_cone, pt_to_cam);
 
@@ -144,4 +163,5 @@ void main(){
 
   //---------------------------
   out_color = color;
+  //out_color = texture(tex_posit_0, vs_tex_coord);
 }
