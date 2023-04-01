@@ -12,6 +12,7 @@
 #include "Rendering/Renderer.h"
 #include "GPU/GPU_screenshot.h"
 #include "GPU/GPU_fbo.h"
+#include "GPU/GPU_render.h"
 
 #include "Camera/Camera.h"
 #include "Camera/Followup.h"
@@ -37,8 +38,9 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->viewportManager = new Viewport(this);
   this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
-  this->screenshotManager = new GPU_screenshot(this);
-  this->fboManager = new GPU_fbo(this);
+  this->gpu_screenshot = new GPU_screenshot(this);
+  this->gpu_fbo = new GPU_fbo(this);
+  this->gpu_render = new GPU_render();
   this->texManager = new Texture();
   this->lightManager = new Light(this);
 

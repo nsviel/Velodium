@@ -26,7 +26,7 @@ Render_pass_2::Render_pass_2(Node_engine* node_engine){
   this->engineManager = node_engine->get_engineManager();
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
-  this->fboManager = node_engine->get_fboManager();
+  this->fboManager = node_engine->get_gpu_fbo();
   this->pyramidManager = new Render_pyramid(node_engine);
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
@@ -164,7 +164,7 @@ glEnd();
 
   //---------------------------*/
 }
-void Render_pass_2::loop_pass_2(){
+void Render_pass_2::compute_pass(){
   //---------------------------
 
   //Disable depth test

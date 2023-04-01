@@ -16,6 +16,7 @@ class Shader;
 class Renderer;
 class GPU_screenshot;
 class GPU_fbo;
+class GPU_render;
 class Viewport;
 class Engine;
 class CoreGLengine;
@@ -50,15 +51,16 @@ public:
   inline Camera* get_cameraManager(){return cameraManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
   inline Renderer* get_renderManager(){return renderManager;}
-  inline GPU_fbo* get_fboManager(){return fboManager;}
+  inline GPU_fbo* get_gpu_fbo(){return gpu_fbo;}
   inline Viewport* get_viewportManager(){return viewportManager;}
   inline Engine* get_engineManager(){return engineManager;}
   inline CoreGLengine* get_glManager(){return glManager;}
   inline Followup* get_followManager(){return followManager;}
   inline Texture* get_texManager(){return texManager;}
   inline Light* get_lightManager(){return lightManager;}
-  inline GPU_screenshot* get_screenshotManager(){return screenshotManager;}
+  inline GPU_screenshot* get_gpu_screenshot(){return gpu_screenshot;}
   inline Dimension* get_dimManager(){return dimManager;}
+  inline GPU_render* get_gpu_render(){return gpu_render;}
 
 private:
   Node_operation* node_ope;
@@ -74,9 +76,10 @@ private:
   Configuration* configManager;
   Camera* cameraManager;
   Shader* shaderManager;
-  GPU_screenshot* screenshotManager;
+  GPU_screenshot* gpu_screenshot;
   Renderer* renderManager;
-  GPU_fbo* fboManager;
+  GPU_fbo* gpu_fbo;
+  GPU_render* gpu_render;
   Dimension* dimManager;
   Viewport* viewportManager;
   Engine* engineManager;

@@ -24,7 +24,7 @@ public:
   //Loop function
   void init_renderer();
   void loop_pass_1();
-  void loop_pass_2();
+  void compute_pass();
 
 
   vec3 fct_unproject(vec2 coord_frag);

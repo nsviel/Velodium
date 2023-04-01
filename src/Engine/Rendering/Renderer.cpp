@@ -32,8 +32,8 @@ Renderer::Renderer(Node_engine* node_engine){
   this->cameraManager = node_engine->get_cameraManager();
   this->engineManager = node_engine->get_engineManager();
   this->configManager = new Configuration();
-  this->gpuManager = new GPU_data();
-  this->fboManager = node_engine->get_fboManager();
+  this->gpu_data = new GPU_data();
+  this->gpu_fbo = node_engine->get_gpu_fbo();
 
   this->pyramidManager = new Render_pyramid(node_engine);
   this->render_pass_1 = new Render_pass_1(node_engine);
@@ -48,11 +48,11 @@ Renderer::Renderer(Node_engine* node_engine){
 Renderer::~Renderer(){
   //---------------------------
 
-  fboManager->delete_fbo_all();
+  gpu_fbo->delete_fbo_all();
 
   delete configManager;
-  delete fboManager;
-  delete gpuManager;
+  delete gpu_fbo;
+  delete gpu_data;
 
   //---------------------------
 }
@@ -61,7 +61,7 @@ Renderer::~Renderer(){
 void Renderer::init_renderer(){
   //---------------------------
 
-  fboManager->init_create_rendering_fbo();
+  gpu_fbo->init_create_rendering_fbo();
   this->canvas_screen = gen_canvas();
   this->canvas_render = gen_canvas();
 
@@ -70,27 +70,23 @@ void Renderer::init_renderer(){
 void Renderer::loop_rendering(){
   //---------------------------
 
-  render_pass_1->loop_pass_1();
-
-  //Disable depth test
-  glDisable(GL_DEPTH_TEST);
-  shaderManager->use_shader("shader_canvas");
-  this->bind_canvas();
+  render_pass_1->compute_pass();
+  render_pass_3->compute_pass();
 
   //---------------------------
 }
 
 //Rendering
 void Renderer::bind_fbo_pass_2_recombination(){;
-  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
-  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
+  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
+  FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
+  FBO* fbo_visibility = gpu_fbo->get_fbo_byName("fbo_py_visibility");
   //---------------------------
 
   //DEBUGING
-  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_0");
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
+  Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
+  FBO* fbo_lvl_0 = gpu_fbo->get_fbo_byName("fbo_py_lvl_0");
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
 
   //Activate depth buffering
   glEnable(GL_DEPTH_TEST);
@@ -109,7 +105,7 @@ void Renderer::bind_fbo_pass_2_recombination(){;
   glActiveTexture(GL_TEXTURE3);
   glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
 
-  gpuManager->draw_object(canvas_render);
+  gpu_data->draw_object(canvas_render);
   this->unbind_fboAndTexture(4);
 
   //Disable depth test
@@ -118,11 +114,11 @@ void Renderer::bind_fbo_pass_2_recombination(){;
   //---------------------------
 }
 void Renderer::bind_fbo_pass_2_edl(){
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-  FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
-  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
+  FBO* fbo_edl = gpu_fbo->get_fbo_byName("fbo_edl");
+  Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
   FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
-  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
+  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
   //---------------------------
 
   //Bind fbo 2
@@ -134,18 +130,18 @@ void Renderer::bind_fbo_pass_2_edl(){
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_buffer_depth);
 
-  gpuManager->draw_object(canvas_render);
+  gpu_data->draw_object(canvas_render);
   this->unbind_fboAndTexture(2);
 
   //---------------------------
 }
 void Renderer::bind_canvas(){
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-  FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
-  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_2");
-  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
-  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
+  FBO* fbo_edl = gpu_fbo->get_fbo_byName("fbo_edl");
+  FBO* fbo_lvl_0 = gpu_fbo->get_fbo_byName("fbo_py_lvl_2");
+  FBO* fbo_visibility = gpu_fbo->get_fbo_byName("fbo_py_visibility");
+  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
+  FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
   //---------------------------
 //LE FBO 1 fait de la MERDEEEE
   //Bind fbo and clear old one
@@ -158,7 +154,7 @@ void Renderer::bind_canvas(){
   glViewport(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y);
 
   //Draw quad
-  gpuManager->draw_object(canvas_screen);
+  gpu_data->draw_object(canvas_screen);
   this->unbind_fboAndTexture(1);
 
   //---------------------------
@@ -166,7 +162,7 @@ void Renderer::bind_canvas(){
 
 //Update
 void Renderer::update_dim_texture(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
+  vector<FBO*> fbo_vec = gpu_fbo->get_fbo_vec();
   //---------------------------
 
   vec2 dim = dimManager->get_gl_dim();
@@ -227,9 +223,9 @@ Object_* Renderer::gen_canvas(){
   canvas->xyz = xyz;
   canvas->uv = uv;
 
-  gpuManager->gen_vao(canvas);
-  gpuManager->gen_buffer_location(canvas);
-  gpuManager->gen_buffer_uv(canvas);
+  gpu_data->gen_vao(canvas);
+  gpu_data->gen_buffer_location(canvas);
+  gpu_data->gen_buffer_uv(canvas);
   canvas->draw_type = GL_TRIANGLES;
 
   //---------------------------

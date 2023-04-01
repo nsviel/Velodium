@@ -50,9 +50,9 @@ public:
 private:
   Dimension* dimManager;
   Configuration* configManager;
-  GPU_data* gpuManager;
+  GPU_data* gpu_data;
   Shader* shaderManager;
-  GPU_fbo* fboManager;
+  GPU_fbo* gpu_fbo;
   Engine* engineManager;
   Camera* cameraManager;
   Render_pyramid* pyramidManager;

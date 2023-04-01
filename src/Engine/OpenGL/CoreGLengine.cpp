@@ -154,7 +154,7 @@ void CoreGLengine::init_object(){
   this->viewportManager = node_engine->get_viewportManager();
   this->renderManager = node_engine->get_renderManager();
   this->engineManager = node_engine->get_engineManager();
-  this->screenshotManager = node_engine->get_screenshotManager();
+  this->screenshotManager = node_engine->get_gpu_screenshot();
 
   //---------------------------
 }

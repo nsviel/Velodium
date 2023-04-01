@@ -6,12 +6,10 @@
 
 class Node_engine;
 class Dimension;
-class Configuration;
-class GPU_data;
+class GPU_fbo;
 class Shader;
-class Camera;
-class Engine;
-class Render_pyramid;
+class GPU_data;
+class GPU_render;
 
 
 class Render_pass_3
@@ -21,42 +19,20 @@ public:
   ~Render_pass_3();
 
 public:
-  //Loop function
-  void init_renderer();
-  void loop_pass_1();
-  void loop_pass_2();
-
-
-  vec3 fct_unproject(vec2 coord_frag);
-
-  //Rendering
-  void bind_fbo_pass_2_recombination();
-  void bind_fbo_pass_2_edl();
-  void bind_canvas();
-
-  //Update
-  void update_dim_texture();
-  void update_dim_canvas();
+  //Main function
+  void compute_pass();
 
   //Subfunction
-  Object_* gen_canvas();
-  void unbind_fboAndTexture(int nb_tex);
-
-  inline vec4* get_screen_color(){return &screen_color;}
+  void bind_canvas();
 
 private:
   Dimension* dimManager;
-  Configuration* configManager;
-  GPU_data* gpuManager;
   Shader* shaderManager;
   GPU_fbo* fboManager;
-  Engine* engineManager;
-  Camera* cameraManager;
-  Render_pyramid* pyramidManager;
+  GPU_data* gpu_data;
+  GPU_render* gpu_render;
 
-  Object_* canvas_render;
-  Object_* canvas_screen;
-  vec4 screen_color;
+  Object_* canvas;
 };
 
 #endif

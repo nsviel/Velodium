@@ -20,7 +20,7 @@ public:
 
 public:
   //Main function
-  void loop_pass_1();
+  void compute_pass();
 
   //Subfunction
   void configure_opengl();

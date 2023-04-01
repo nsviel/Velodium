@@ -16,7 +16,7 @@ Render_pyramid::Render_pyramid(Node_engine* node_engine){
   this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
   this->gpuManager = new GPU_data();
-  this->fboManager = node_engine->get_fboManager();
+  this->fboManager = node_engine->get_gpu_fbo();
   this->cameraManager = node_engine->get_cameraManager();
 
   //---------------------------

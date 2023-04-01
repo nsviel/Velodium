@@ -42,7 +42,7 @@ GUI_Online::GUI_Online(Node_gui* node_gui){
   this->sceneManager = node_scene->get_sceneManager();
   this->followManager = node_engine->get_followManager();
   this->recordManager = node_interface->get_recordManager();
-  this->screenshotManager = node_engine->get_screenshotManager();
+  this->screenshotManager = node_engine->get_gpu_screenshot();
   this->colorManager = node_ope->get_colorManager();
   this->configManager = node_engine->get_configManager();
   this->playerManager = node_ope->get_playerManager();

@@ -22,7 +22,7 @@ Render_pass_1::Render_pass_1(Node_engine* node_engine){
   this->cameraManager = node_engine->get_cameraManager();
   this->engineManager = node_engine->get_engineManager();
   this->configManager = node_engine->get_configManager();
-  this->fboManager = node_engine->get_fboManager();
+  this->fboManager = node_engine->get_gpu_fbo();
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
@@ -32,7 +32,7 @@ Render_pass_1::Render_pass_1(Node_engine* node_engine){
 Render_pass_1::~Render_pass_1(){}
 
 //Main function
-void Render_pass_1::loop_pass_1(){
+void Render_pass_1::compute_pass(){
   //---------------------------
 
   this->configure_opengl();

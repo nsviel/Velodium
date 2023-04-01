@@ -29,7 +29,7 @@ Recorder::Recorder(Node_interface* node){
   this->renderManager = node_engine->get_renderManager();
   this->saverManager = node_load->get_saverManager();
   this->sceneManager = node_scene->get_sceneManager();
-  this->screenshotManager = node_engine->get_screenshotManager();
+  this->screenshotManager = node_engine->get_gpu_screenshot();
 
   //---------------------------
   this->update_configuration();
