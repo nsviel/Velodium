@@ -3,6 +3,9 @@
 
 #include "../../common.h"
 
+class Node_engine;
+class Dimension;
+
 struct FBO{
   std::string name;
   GLuint ID_fbo;
@@ -24,7 +27,7 @@ struct Pyramid{
 class GPU_fbo
 {
 public:
-  GPU_fbo();
+  GPU_fbo(Node_engine* node_engine);
   ~GPU_fbo();
 
 public:
@@ -56,6 +59,7 @@ public:
 
 private:
   Pyramid* struct_pyramid;
+  Dimension* dimManager;
   vector<FBO*> fbo_vec;
   int id_current;
 };

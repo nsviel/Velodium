@@ -85,7 +85,7 @@ mat4 Camera::compute_cam_proj(){
 
   //Compute projection matrix
   if(viewport->projection == "perspective"){
-    vec2 win_dim = dimManager->get_win_dim();
+    vec2 win_dim = dimManager->get_gl_dim();
     float znear = viewport->clip_near;
     float zfar = viewport->clip_far;
     float fov = radians(viewport->fov);

@@ -21,7 +21,7 @@ class Shader;
 class Camera;
 class GUI;
 class Viewport;
-class GPU_rendering;
+class Renderer;
 class GPU_screenshot;
 class Configuration;
 class Engine;
@@ -60,7 +60,7 @@ private:
   GLFWwindow* window;
   Camera* cameraManager;
   Dimension* dimManager;
-  GPU_rendering* renderManager;
+  Renderer* renderManager;
   GPU_screenshot* screenshotManager;
   GUI* guiManager;
   Shader* shaderManager;

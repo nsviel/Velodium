@@ -1,6 +1,6 @@
 #include "CoreGLengine.h"
 
-#include "../Rendering/GPU_rendering.h"
+#include "../Rendering/Renderer.h"
 #include "../GPU/GPU_screenshot.h"
 #include "../Node_engine.h"
 #include "../Shader/Shader.h"
@@ -74,7 +74,6 @@ void CoreGLengine::init(){
 void CoreGLengine::loop(){
   bool is_timer = false;
   //---------------------------
-
   do{
     auto t1 = high_resolution_clock::now();
     //First pass
@@ -190,13 +189,11 @@ void CoreGLengine::loop_resizing(){
   //Update things
   dimManager->update();
   this->flag_resized = dimManager->get_is_resized();
+
   if(flag_resized){
     renderManager->update_dim_texture();
     shaderManager->update_shader();
     renderManager->update_dim_canvas();
-
-    vec2 gl_dim = dimManager->get_win_dim();
-    glViewport(0, 0, gl_dim.x, gl_dim.y);
   }
 
   //Camera & scene runtime

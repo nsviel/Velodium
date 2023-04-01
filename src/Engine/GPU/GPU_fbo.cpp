@@ -1,11 +1,14 @@
 #include "GPU_fbo.h"
 
+#include "../Node_engine.h"
+#include "../Core/Dimension.h"
+
 
 //Constructor / Destructor
-GPU_fbo::GPU_fbo(){
+GPU_fbo::GPU_fbo(Node_engine* node_engine){
   //---------------------------
 
-
+  this->dimManager = node_engine->get_dimManager();
 
   //---------------------------
 }
@@ -154,7 +157,7 @@ void GPU_fbo::gen_fbo_attachment(FBO* fbo, int nb_attachment){
 
 //FBO texture generation
 void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attach_id){
-  vec2 dim = vec2(1);
+  vec2 dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Bind fbo
@@ -180,7 +183,7 @@ void GPU_fbo::gen_fbo_tex_color(FBO* fbo, int attach_id){
   //---------------------------
 }
 void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attach_id){
-  vec2 dim = vec2(1);
+  vec2 dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Bind fbo
@@ -201,7 +204,7 @@ void GPU_fbo::gen_fbo_tex_color_multisample(FBO* fbo, int attach_id){
   //---------------------------
 }
 void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attach_id){
-  vec2 dim = vec2(1);
+  vec2 dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Bind fbo
@@ -229,7 +232,7 @@ void GPU_fbo::gen_fbo_tex_position(FBO* fbo, int attach_id){
   //---------------------------
 }
 void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attach_id){
-  vec2 dim = vec2(1);
+  vec2 dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Bind fbo
@@ -255,7 +258,7 @@ void GPU_fbo::gen_fbo_tex_normal(FBO* fbo, int attach_id){
   //---------------------------
 }
 void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attach_id){
-  vec2 dim = vec2(1);
+  vec2 dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Bind fbo
@@ -281,7 +284,7 @@ void GPU_fbo::gen_fbo_tex_pyramide(FBO* fbo, int attach_id){
   //---------------------------
 }
 void GPU_fbo::gen_fbo_tex_depth(FBO* fbo){
-  vec2 dim = vec2(1);
+  vec2 dim = dimManager->get_gl_dim();
   //---------------------------
 
   //Bind fbo

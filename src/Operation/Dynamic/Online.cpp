@@ -17,7 +17,7 @@
 #include "../../Operation/Transformation/Transformation.h"
 #include "../../Operation/Transformation/Filter.h"
 
-#include "../../Engine/Rendering/GPU_rendering.h"
+#include "../../Engine/Rendering/Renderer.h"
 #include "../../Engine/Camera/Followup.h"
 #include "../../Engine/Core/Dimension.h"
 #include "../../Engine/Core/Engine.h"

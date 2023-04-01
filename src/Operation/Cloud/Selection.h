@@ -10,7 +10,7 @@ class Attribut;
 class Camera;
 class Dimension;
 class Coordinate;
-class GPU_rendering;
+class Renderer;
 class Fitting;
 
 #include "../../common.h"
@@ -70,7 +70,7 @@ private:
   Object* objectManager;
   Camera* cameraManager;
   Coordinate* coordManager;
-  GPU_rendering* renderManager;
+  Renderer* renderManager;
   Fitting* fittingManager;
 
   list<Collection*> list_Mark;

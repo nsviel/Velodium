@@ -1,5 +1,5 @@
-#ifndef GPU_PYRAMID_H
-#define GPU_PYRAMID_H
+#ifndef RENDER_PYRAMID_H
+#define RENDER_PYRAMID_H
 
 #include "../GPU/GPU_fbo.h"
 #include "../../common.h"
@@ -11,11 +11,11 @@ class Shader;
 class Camera;
 class Dimension;
 
-class GPU_pyramid
+class render_pyramid
 {
 public:
-  GPU_pyramid(Node_engine* node_engine);
-  ~GPU_pyramid();
+  render_pyramid(Node_engine* node_engine);
+  ~render_pyramid();
 
 public:
   //Main function

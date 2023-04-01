@@ -119,7 +119,7 @@ void GPU_data::gen_buffer_uv(Object_* object){
   glBindVertexArray(object->vao);
   glGenBuffers(1, &object->vbo_uv);
   glBindBuffer(GL_ARRAY_BUFFER, object->vbo_uv);
-  glBufferData(GL_ARRAY_BUFFER, object->uv.size()*sizeof(glm::vec2), &object->uv[0], GL_DYNAMIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, object->uv.size()*sizeof(glm::vec2), &object->uv[0], GL_STATIC_DRAW);
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
   glEnableVertexAttribArray(2);
 

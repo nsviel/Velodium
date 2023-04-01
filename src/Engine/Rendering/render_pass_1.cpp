@@ -1,5 +1,5 @@
-#include "GPU_rendering.h"
-#include "GPU_pyramid.h"
+#include "render_pass_1.h"
+#include "render_pyramid.h"
 
 #include "../GPU/GPU_data.h"
 #include "../Shader/Base/Shader_obj.h"
@@ -16,7 +16,7 @@
 
 
 //Constructor / Destructor
-GPU_rendering::GPU_rendering(Node_engine* node_engine){
+render_pass_1::render_pass_1(Node_engine* node_engine){
   //---------------------------
 
   this->dimManager = node_engine->get_dimManager();
@@ -26,14 +26,14 @@ GPU_rendering::GPU_rendering(Node_engine* node_engine){
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
   this->fboManager = node_engine->get_fboManager();
-  this->pyramidManager = new GPU_pyramid(node_engine);
+  this->pyramidManager = new render_pyramid(node_engine);
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
   //---------------------------
 }
-GPU_rendering::~GPU_rendering(){
+render_pass_1::~render_pass_1(){
   //---------------------------
 
   fboManager->delete_fbo_all();
@@ -46,7 +46,7 @@ GPU_rendering::~GPU_rendering(){
 }
 
 //Loop function
-void GPU_rendering::init_renderer(){
+void render_pass_1::init_renderer(){
   //---------------------------
 
   fboManager->init_create_rendering_fbo();
@@ -55,7 +55,7 @@ void GPU_rendering::init_renderer(){
 
   //---------------------------
 }
-vec3 GPU_rendering::fct_unproject(vec2 coord_frag){
+vec3 render_pass_1::fct_unproject(vec2 coord_frag){
   vec2 gl_dim = dimManager->get_win_dim();
   mat4 view = cameraManager->compute_cam_view();
   //---------------------------
@@ -87,7 +87,7 @@ vec3 GPU_rendering::fct_unproject(vec2 coord_frag){
   //---------------------------
   return fct_out;
 }
-void GPU_rendering::loop_pass_1(){
+void render_pass_1::loop_pass_1(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
   //---------------------------
 
@@ -95,7 +95,9 @@ void GPU_rendering::loop_pass_1(){
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 
-  //-------------------------------
+  //Set appropriate viewport
+  vec2 gl_dim = dimManager->get_gl_dim();
+  glViewport(0, 0, gl_dim.x, gl_dim.y);
 
   //Get camera matrices
   mat4 mvp = cameraManager->compute_cam_mvp();
@@ -127,7 +129,7 @@ void GPU_rendering::loop_pass_1(){
   shader_textured->use();
   shader_textured->setMat4("MVP", mvp);
   engineManager->draw_textured_cloud();
-
+/*
   //-------------------------------
   //Bind gfbo
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
@@ -144,7 +146,7 @@ void GPU_rendering::loop_pass_1(){
   shader_geometry->setMat4("VIEW", view);
   shader_geometry->setMat4("PROJ", proj);
 
-say(dimManager->get_gl_pos());
+//say(dimManager->get_gl_pos());
 
 vec3 pt = fct_unproject(vec2(100,80));
 
@@ -159,14 +161,14 @@ glEnd();
   shader_geometry->setVec2("GL_POS", gl_pos);
   engineManager->draw_untextured_cloud();
 
-  //---------------------------
+  //---------------------------*/
 }
-void GPU_rendering::loop_pass_2(){
+void render_pass_1::loop_pass_2(){
   //---------------------------
 
   //Disable depth test
   glDisable(GL_DEPTH_TEST);
-
+/*
   //Pyramid
   pyramidManager->bind_pyramid(canvas_render);
 
@@ -177,8 +179,8 @@ void GPU_rendering::loop_pass_2(){
   //EDL shader
   shaderManager->use_shader("shader_edl");
   this->bind_fbo_pass_2_edl();*/
-
-  //Draw screen quad
+/*
+  //Draw screen quad*/
   shaderManager->use_shader("shader_canvas");
   this->bind_canvas();
 
@@ -186,7 +188,7 @@ void GPU_rendering::loop_pass_2(){
 }
 
 //Rendering
-void GPU_rendering::bind_fbo_pass_2_recombination(){;
+void render_pass_1::bind_fbo_pass_2_recombination(){;
   FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
   FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
@@ -222,12 +224,11 @@ void GPU_rendering::bind_fbo_pass_2_recombination(){;
 
   //---------------------------
 }
-void GPU_rendering::bind_fbo_pass_2_edl(){
+void render_pass_1::bind_fbo_pass_2_edl(){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
-  vec2 dim = dimManager->get_win_dim();
   FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
   //---------------------------
 
@@ -245,18 +246,23 @@ void GPU_rendering::bind_fbo_pass_2_edl(){
 
   //---------------------------
 }
-void GPU_rendering::bind_canvas(){
+void render_pass_1::bind_canvas(){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_2");
   FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
   FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
+  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
   //---------------------------
-
+//LE FBO 1 fait de la MERDEEEE
   //Bind fbo and clear old one
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
+
+  vec2 gl_dim = dimManager->get_gl_dim();
+  vec2 gl_pos = dimManager->get_gl_pos();
+  glViewport(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y);
 
   //Draw quad
   gpuManager->draw_object(canvas_screen);
@@ -266,15 +272,15 @@ void GPU_rendering::bind_canvas(){
 }
 
 //Update
-void GPU_rendering::update_dim_texture(){
+void render_pass_1::update_dim_texture(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
   //---------------------------
 
-  vec2 dim = dimManager->get_win_dim();
+  vec2 dim = dimManager->get_gl_dim();
   for(int i=0; i<fbo_vec.size(); i++){
     FBO* fbo = fbo_vec[i];
     glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_color);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
     if(fbo->ID_tex_position != 0){
       glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
@@ -287,7 +293,7 @@ void GPU_rendering::update_dim_texture(){
     }
 
     glBindTexture(GL_TEXTURE_2D, fbo->ID_buffer_depth);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
   }
 
   //Unbind
@@ -295,7 +301,7 @@ void GPU_rendering::update_dim_texture(){
 
   //---------------------------
 }
-void GPU_rendering::update_dim_canvas(){
+void render_pass_1::update_dim_canvas(){
   //---------------------------
 
   //Compute canvas coordinates
@@ -322,13 +328,19 @@ void GPU_rendering::update_dim_canvas(){
 
   //Update canvas location buffer
   canvas_screen->xyz.clear();
-  canvas_screen->xyz.push_back(tl);
+  canvas_screen->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
+  canvas_screen->xyz.push_back(vec3(-1.0f, -1.0f, 0.0f));
+  canvas_screen->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
+  canvas_screen->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
+  canvas_screen->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
+  canvas_screen->xyz.push_back(vec3(1.0f, 1.0f, 0.0f));
+  /*canvas_screen->xyz.push_back(tl);
   canvas_screen->xyz.push_back(bl);
   canvas_screen->xyz.push_back(br);
 
   canvas_screen->xyz.push_back(tl);
   canvas_screen->xyz.push_back(br);
-  canvas_screen->xyz.push_back(tr);
+  canvas_screen->xyz.push_back(tr);*/
 
   gpuManager->update_buffer_location(canvas_screen);
 
@@ -336,7 +348,7 @@ void GPU_rendering::update_dim_canvas(){
 }
 
 //Subfunction
-Object_* GPU_rendering::gen_canvas(){
+Object_* render_pass_1::gen_canvas(){
   Object_* canvas = new Object_();
   //---------------------------
 
@@ -356,7 +368,6 @@ Object_* GPU_rendering::gen_canvas(){
   uv.push_back(vec2(0.0f,  1.0f));
   uv.push_back(vec2(1.0f,  0.0f));
   uv.push_back(vec2(1.0f,  1.0f));
-  uv.push_back(vec2(0.0f,  1.0f));
 
   canvas->xyz = xyz;
   canvas->uv = uv;
@@ -369,7 +380,7 @@ Object_* GPU_rendering::gen_canvas(){
   //---------------------------
   return canvas;
 }
-void GPU_rendering::unbind_fboAndTexture(int nb_tex){
+void render_pass_1::unbind_fboAndTexture(int nb_tex){
   //---------------------------
 
   //Unbind texture

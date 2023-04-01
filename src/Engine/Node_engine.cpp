@@ -9,7 +9,7 @@
 #include "OpenGL/Light.h"
 #include "Shader/Shader.h"
 
-#include "Rendering/GPU_rendering.h"
+#include "Rendering/Renderer.h"
 #include "GPU/GPU_screenshot.h"
 #include "GPU/GPU_fbo.h"
 
@@ -38,7 +38,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->cameraManager = new Camera(this);
   this->followManager = new Followup(this);
   this->screenshotManager = new GPU_screenshot(this);
-  this->fboManager = new GPU_fbo();
+  this->fboManager = new GPU_fbo(this);
   this->texManager = new Texture();
   this->lightManager = new Light(this);
 
@@ -48,7 +48,7 @@ Node_engine::Node_engine(CoreGLengine* ogl){
   this->node_module = new Node_module(this);
 
   this->engineManager = new Engine(this);
-  this->renderManager = new GPU_rendering(this);
+  this->renderManager = new Renderer(this);
 
   this->node_gui = new Node_gui(this);
 

@@ -18,7 +18,7 @@
 #include "../../Scene/Glyph/Cloud/Normal.h"
 #include "../../Scene/Glyph/Cloud/Tree.h"
 #include "../../Engine/Core/Configuration.h"
-#include "../../Engine/Rendering/GPU_rendering.h"
+#include "../../Engine/Rendering/Renderer.h"
 #include "../../Engine/OpenGL/Texture.h"
 
 #include "../../Operation/Node_operation.h"

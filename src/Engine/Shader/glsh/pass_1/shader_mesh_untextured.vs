@@ -19,8 +19,9 @@ void main()
 {
   //Location
   vec4 XYZ = vec4(in_position, 1.0);
-  gl_Position = MVP * XYZ;
-  vs_out.position = vec3(MVP * XYZ);
+  vec4 XYZ_p = MVP * XYZ;
+  gl_Position = XYZ_p;
+  vs_out.position = XYZ_p.xyz;
 
   //Color
   vs_out.color = in_color;

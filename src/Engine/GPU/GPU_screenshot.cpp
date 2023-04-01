@@ -27,7 +27,7 @@ GPU_screenshot::~GPU_screenshot(){}
 
 //Screenshot functions
 void GPU_screenshot::render_screenshot(string path_file){
-  GLFWwindow* window = dimManager->get_window();
+  /*GLFWwindow* window = dimManager->get_window();
   //---------------------------
 
   if(window != nullptr){
@@ -59,10 +59,10 @@ void GPU_screenshot::render_screenshot(string path_file){
     delete pixels;
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void GPU_screenshot::render_screenshot_stb_image(string path){
-  GLFWwindow* window = dimManager->get_window();
+  /*GLFWwindow* window = dimManager->get_window();
   //---------------------------
 
   if(window != nullptr){
@@ -97,10 +97,10 @@ void GPU_screenshot::render_screenshot_stb_image(string path){
     delete pixels;
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void GPU_screenshot::render_screenshot_pbo(string path){
-  GLFWwindow* window = dimManager->get_window();
+  /*GLFWwindow* window = dimManager->get_window();
   static bool first_screenshot = true;
   //---------------------------
 
@@ -133,10 +133,10 @@ void GPU_screenshot::render_screenshot_pbo(string path){
     delete pixels;
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void GPU_screenshot::render_screenshot_freeimage(string path){
-  GLFWwindow* window = dimManager->get_window();
+  /*GLFWwindow* window = dimManager->get_window();
   //---------------------------
 
   if(window != nullptr){
@@ -161,7 +161,7 @@ void GPU_screenshot::render_screenshot_freeimage(string path){
     delete pixels;
   }
 
-  //---------------------------
+  //---------------------------*/
 }
 void GPU_screenshot::render_screenshot_online(){
   if(is_screenshot && save_path_screenshot != ""){

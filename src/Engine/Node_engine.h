@@ -13,7 +13,7 @@ class Node_interface;
 class Configuration;
 class Camera;
 class Shader;
-class GPU_rendering;
+class Renderer;
 class GPU_screenshot;
 class GPU_fbo;
 class Viewport;
@@ -49,7 +49,7 @@ public:
   inline Configuration* get_configManager(){return configManager;}
   inline Camera* get_cameraManager(){return cameraManager;}
   inline Shader* get_shaderManager(){return shaderManager;}
-  inline GPU_rendering* get_renderManager(){return renderManager;}
+  inline Renderer* get_renderManager(){return renderManager;}
   inline GPU_fbo* get_fboManager(){return fboManager;}
   inline Viewport* get_viewportManager(){return viewportManager;}
   inline Engine* get_engineManager(){return engineManager;}
@@ -75,7 +75,7 @@ private:
   Camera* cameraManager;
   Shader* shaderManager;
   GPU_screenshot* screenshotManager;
-  GPU_rendering* renderManager;
+  Renderer* renderManager;
   GPU_fbo* fboManager;
   Dimension* dimManager;
   Viewport* viewportManager;

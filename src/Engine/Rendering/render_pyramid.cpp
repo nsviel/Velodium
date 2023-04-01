@@ -1,4 +1,4 @@
-#include "GPU_pyramid.h"
+#include "render_pyramid.h"
 
 #include "../GPU/GPU_data.h"
 #include "../GPU/GPU_fbo.h"
@@ -10,7 +10,7 @@
 
 
 //Constructor / Destructor
-GPU_pyramid::GPU_pyramid(Node_engine* node_engine){
+render_pyramid::render_pyramid(Node_engine* node_engine){
   //---------------------------
 
   this->dimManager = node_engine->get_dimManager();
@@ -21,10 +21,10 @@ GPU_pyramid::GPU_pyramid(Node_engine* node_engine){
 
   //---------------------------
 }
-GPU_pyramid::~GPU_pyramid(){}
+render_pyramid::~render_pyramid(){}
 
 //Main function
-void GPU_pyramid::bind_pyramid(Object_* canvas){
+void render_pyramid::bind_pyramid(Object_* canvas){
   //---------------------------
 
   //Activate depth buffering
@@ -39,7 +39,7 @@ void GPU_pyramid::bind_pyramid(Object_* canvas){
 
   //---------------------------
 }
-void GPU_pyramid::bind_pyramid_lvl_0(Object_* canvas){
+void render_pyramid::bind_pyramid_lvl_0(Object_* canvas){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_0");
   //---------------------------
@@ -70,7 +70,7 @@ void GPU_pyramid::bind_pyramid_lvl_0(Object_* canvas){
 
   //---------------------------
 }
-void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
+void render_pyramid::bind_pyramid_lvl_n(Object_* canvas){
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   //---------------------------
 
@@ -99,7 +99,7 @@ void GPU_pyramid::bind_pyramid_lvl_n(Object_* canvas){
 
   //---------------------------
 }
-void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
+void render_pyramid::bind_pyramid_visibility(Object_* canvas){
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
   //---------------------------
 
@@ -158,7 +158,7 @@ void GPU_pyramid::bind_pyramid_visibility(Object_* canvas){
 }
 
 //Subfunction
-void GPU_pyramid::unbind_fboAndTexture(int nb_tex){
+void render_pyramid::unbind_fboAndTexture(int nb_tex){
   //---------------------------
 
   //Unbind texture

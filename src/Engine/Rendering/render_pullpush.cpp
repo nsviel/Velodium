@@ -1,4 +1,4 @@
-#include "GPU_pullpush.h"
+#include "render_pullpush.h"
 
 #include "../GPU/GPU_data.h"
 #include "../GPU/GPU_fbo.h"
@@ -9,17 +9,17 @@
 
 
 //Constructor / Destructor
-GPU_pullpush::GPU_pullpush(Node_engine* node_engine){
+render_pullpush::render_pullpush(Node_engine* node_engine){
   //---------------------------
 
 
 
   //---------------------------
 }
-GPU_pullpush::~GPU_pullpush(){}
+render_pullpush::~render_pullpush(){}
 
 //Main function
-void GPU_pullpush::bind_pullpush(Object_* canvas){
+void render_pullpush::bind_pullpush(Object_* canvas){
   //---------------------------
 
 
@@ -28,7 +28,7 @@ void GPU_pullpush::bind_pullpush(Object_* canvas){
 }
 
 //Subfunction
-void GPU_pullpush::unbind_fboAndTexture(int nb_tex){
+void render_pullpush::unbind_fboAndTexture(int nb_tex){
   //---------------------------
 
   //Unbind texture

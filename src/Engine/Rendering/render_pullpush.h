@@ -1,5 +1,5 @@
-#ifndef GPU_PULLPUSH_H
-#define GPU_PULLPUSH_H
+#ifndef RENDER_PULLPUSH_H
+#define RENDER_PULLPUSH_H
 
 #include "../GPU/GPU_fbo.h"
 #include "../../common.h"
@@ -12,11 +12,11 @@ class Node_engine;
 // 3/ Combler les trous (push)
 
 
-class GPU_pullpush
+class render_pullpush
 {
 public:
-  GPU_pullpush(Node_engine* node_engine);
-  ~GPU_pullpush();
+  render_pullpush(Node_engine* node_engine);
+  ~render_pullpush();
 
 public:
   //Main function
