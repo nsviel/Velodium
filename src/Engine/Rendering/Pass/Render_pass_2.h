@@ -1,8 +1,8 @@
-#ifndef RENDER_PASS_1_H
-#define RENDER_PASS_1_H
+#ifndef RENDER_PASS_2_H
+#define RENDER_PASS_2_H
 
-#include "../GPU/GPU_fbo.h"
-#include "../../common.h"
+#include "../../GPU/GPU_fbo.h"
+#include "../../../common.h"
 
 class Node_engine;
 class Dimension;
@@ -11,14 +11,14 @@ class GPU_data;
 class Shader;
 class Camera;
 class Engine;
-class render_pyramid;
+class Render_pyramid;
 
 
-class render_pass_1
+class Render_pass_2
 {
 public:
-  render_pass_1(Node_engine* node_engine);
-  ~render_pass_1();
+  Render_pass_2(Node_engine* node_engine);
+  ~Render_pass_2();
 
 public:
   //Loop function
@@ -52,7 +52,7 @@ private:
   GPU_fbo* fboManager;
   Engine* engineManager;
   Camera* cameraManager;
-  render_pyramid* pyramidManager;
+  Render_pyramid* pyramidManager;
 
   Object_* canvas_render;
   Object_* canvas_screen;

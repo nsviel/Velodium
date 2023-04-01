@@ -11,7 +11,11 @@ class GPU_data;
 class Shader;
 class Camera;
 class Engine;
-class render_pyramid;
+class Render_pyramid;
+
+class Render_pass_1;
+class Render_pass_2;
+class Render_pass_3;
 
 
 class Renderer
@@ -23,8 +27,7 @@ public:
 public:
   //Loop function
   void init_renderer();
-  void loop_pass_1();
-  void loop_pass_2();
+  void loop_rendering();
 
 
   vec3 fct_unproject(vec2 coord_frag);
@@ -52,7 +55,11 @@ private:
   GPU_fbo* fboManager;
   Engine* engineManager;
   Camera* cameraManager;
-  render_pyramid* pyramidManager;
+  Render_pyramid* pyramidManager;
+
+  Render_pass_1* render_pass_1;
+  Render_pass_2* render_pass_2;
+  Render_pass_3* render_pass_3;
 
   Object_* canvas_render;
   Object_* canvas_screen;

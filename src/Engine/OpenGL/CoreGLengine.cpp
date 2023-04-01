@@ -80,11 +80,8 @@ void CoreGLengine::loop(){
     //---------------------------
     this->loop_resizing();
     if(is_timer) tic();
-    renderManager->loop_pass_1();
+    renderManager->loop_rendering();
 
-    //Second pass
-    //---------------------------
-    renderManager->loop_pass_2();
     if(is_timer) toc_ms("pass_1");
 
     //GUI and end

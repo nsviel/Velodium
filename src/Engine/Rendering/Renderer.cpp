@@ -1,5 +1,9 @@
 #include "Renderer.h"
-#include "render_pyramid.h"
+
+#include "Pass/Render_pass_1.h"
+#include "Pass/Render_pass_2.h"
+#include "Pass/Render_pass_3.h"
+#include "Processing/Render_pyramid.h"
 
 #include "../GPU/GPU_data.h"
 #include "../Shader/Base/Shader_obj.h"
@@ -14,6 +18,10 @@
 #include <FreeImage.h>
 #include <cstdint>
 
+//Pass 1: render-to-texture
+//Pass 2: texture post-processing
+//Pass 3: texture-to-screen
+
 
 //Constructor / Destructor
 Renderer::Renderer(Node_engine* node_engine){
@@ -26,7 +34,11 @@ Renderer::Renderer(Node_engine* node_engine){
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
   this->fboManager = node_engine->get_fboManager();
-  this->pyramidManager = new render_pyramid(node_engine);
+
+  this->pyramidManager = new Render_pyramid(node_engine);
+  this->render_pass_1 = new Render_pass_1(node_engine);
+  this->render_pass_2 = new Render_pass_2(node_engine);
+  this->render_pass_3 = new Render_pass_3(node_engine);
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
@@ -55,132 +67,13 @@ void Renderer::init_renderer(){
 
   //---------------------------
 }
-vec3 Renderer::fct_unproject(vec2 coord_frag){
-  vec2 gl_dim = dimManager->get_win_dim();
-  mat4 view = cameraManager->compute_cam_view();
+void Renderer::loop_rendering(){
   //---------------------------
 
-  //Raster space to NDC space
-  vec2 coord_ndc;
-  coord_ndc.x = (coord_frag.x) / gl_dim.x;
-  coord_ndc.y = (coord_frag.y) / gl_dim.y;
-
-  //Coord in NDC space to clip coordinate
-  vec2 coord_clip;
-  coord_clip.x = 2 * coord_ndc.x - 1;
-  coord_clip.y = 2 * coord_ndc.y - 1;
-
-  //Clip to view  space
-  float ratio = gl_dim.x / gl_dim.y;
-  vec4 coord_view;
-  coord_view.x = coord_clip.x * tan(65 / 2) * ratio;
-  coord_view.y = coord_clip.y * tan(65 / 2);
-  coord_view.z = -1;
-  coord_view.w = 1;
-
-  //View space to world space
-  mat4 view_inv = inverse(view);
-  vec4 coord_world = view_inv * coord_view;
-
-  vec3 fct_out  = vec3(coord_world);
-
-  //---------------------------
-  return fct_out;
-}
-void Renderer::loop_pass_1(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
-  //---------------------------
-
-  //Enable depth testing
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
-
-  //Set appropriate viewport
-  vec2 gl_dim = dimManager->get_gl_dim();
-  glViewport(0, 0, gl_dim.x, gl_dim.y);
-
-  //Get camera matrices
-  mat4 mvp = cameraManager->compute_cam_mvp();
-  mat4 view = cameraManager->compute_cam_view();
-  mat4 proj = cameraManager->compute_cam_proj();
-
-  //Bind first pass fbo
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1->ID_fbo);
-
-  //Clear framebuffer and enable depth
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //Light
-  /*Shader_obj* shader_lamp = shaderManager->get_shader_obj_byName("shader_lamp");
-  shader_lamp->use();
-  shader_lamp->setMat4("MVP", mvp);
-  engineManager->draw_light();*/
-
-  //Untextured glyphs
-  Shader_obj* shader_untextured = shaderManager->get_shader_obj_byName("shader_mesh_untextured");
-  shader_untextured->use();
-  shader_untextured->setMat4("MVP", mvp);
-  engineManager->draw_untextured_glyph();
-
-  //Textured cloud drawing
-  Shader_obj* shader_textured = shaderManager->get_shader_obj_byName("shader_mesh_textured");
-  shader_textured->use();
-  shader_textured->setMat4("MVP", mvp);
-  engineManager->draw_textured_cloud();
-/*
-  //-------------------------------
-  //Bind gfbo
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-  glBindFramebuffer(GL_FRAMEBUFFER, gfbo->ID_fbo);
-
-  //Clear framebuffer and enable depth
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //Untextured cloud
-  Shader_obj* shader_geometry = shaderManager->get_shader_obj_byName("shader_geometry");
-  vec2 gl_pos = dimManager->get_gl_pos();
-  shader_geometry->use();
-  shader_geometry->setMat4("VIEW", view);
-  shader_geometry->setMat4("PROJ", proj);
-
-//say(dimManager->get_gl_pos());
-
-vec3 pt = fct_unproject(vec2(100,80));
-
-glBegin(GL_LINES);
-  glVertex3f(0, 0, 0);
-  glVertex3f(pt.x, pt.y, pt.z);
-glEnd();
-
-
-
-
-  shader_geometry->setVec2("GL_POS", gl_pos);
-  engineManager->draw_untextured_cloud();
-
-  //---------------------------*/
-}
-void Renderer::loop_pass_2(){
-  //---------------------------
+  render_pass_1->loop_pass_1();
 
   //Disable depth test
   glDisable(GL_DEPTH_TEST);
-/*
-  //Pyramid
-  pyramidManager->bind_pyramid(canvas_render);
-
-  //Recombinaison
-  shaderManager->use_shader("shader_recombination");
-  this->bind_fbo_pass_2_recombination();
-/*
-  //EDL shader
-  shaderManager->use_shader("shader_edl");
-  this->bind_fbo_pass_2_edl();*/
-/*
-  //Draw screen quad*/
   shaderManager->use_shader("shader_canvas");
   this->bind_canvas();
 
@@ -304,45 +197,7 @@ void Renderer::update_dim_texture(){
 void Renderer::update_dim_canvas(){
   //---------------------------
 
-  //Compute canvas coordinates
-  vec2 gl_pos = dimManager->get_gl_pos();
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 win_dim = dimManager->get_win_dim();
 
-  vec3 tl, br, tr, bl;
-  bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-  bl.z = 0.0f;
-
-  br.x = 1;
-  br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-  br.z = 0.0f;
-
-  tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  tl.y = 1;
-  tl.z = 0.0f;
-
-  tr.x = 1;
-  tr.y = 1;
-  tr.z = 0.0f;
-
-  //Update canvas location buffer
-  canvas_screen->xyz.clear();
-  canvas_screen->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(-1.0f, -1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(1.0f, 1.0f, 0.0f));
-  /*canvas_screen->xyz.push_back(tl);
-  canvas_screen->xyz.push_back(bl);
-  canvas_screen->xyz.push_back(br);
-
-  canvas_screen->xyz.push_back(tl);
-  canvas_screen->xyz.push_back(br);
-  canvas_screen->xyz.push_back(tr);*/
-
-  gpuManager->update_buffer_location(canvas_screen);
 
   //---------------------------
 }
@@ -393,4 +248,36 @@ void Renderer::unbind_fboAndTexture(int nb_tex){
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   //---------------------------
+}
+vec3 Renderer::fct_unproject(vec2 coord_frag){
+  vec2 gl_dim = dimManager->get_win_dim();
+  mat4 view = cameraManager->compute_cam_view();
+  //---------------------------
+
+  //Raster space to NDC space
+  vec2 coord_ndc;
+  coord_ndc.x = (coord_frag.x) / gl_dim.x;
+  coord_ndc.y = (coord_frag.y) / gl_dim.y;
+
+  //Coord in NDC space to clip coordinate
+  vec2 coord_clip;
+  coord_clip.x = 2 * coord_ndc.x - 1;
+  coord_clip.y = 2 * coord_ndc.y - 1;
+
+  //Clip to view  space
+  float ratio = gl_dim.x / gl_dim.y;
+  vec4 coord_view;
+  coord_view.x = coord_clip.x * tan(65 / 2) * ratio;
+  coord_view.y = coord_clip.y * tan(65 / 2);
+  coord_view.z = -1;
+  coord_view.w = 1;
+
+  //View space to world space
+  mat4 view_inv = inverse(view);
+  vec4 coord_world = view_inv * coord_view;
+
+  vec3 fct_out  = vec3(coord_world);
+
+  //---------------------------
+  return fct_out;
 }

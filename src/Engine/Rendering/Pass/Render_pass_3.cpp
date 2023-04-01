@@ -1,14 +1,15 @@
-#include "render_pass_1.h"
-#include "render_pyramid.h"
+#include "Render_pass_3.h"
 
-#include "../GPU/GPU_data.h"
-#include "../Shader/Base/Shader_obj.h"
-#include "../Node_engine.h"
-#include "../Core/Dimension.h"
-#include "../Core/Configuration.h"
-#include "../Core/Engine.h"
-#include "../Camera/Camera.h"
-#include "../Shader/Shader.h"
+#include "../Processing/Render_pyramid.h"
+
+#include "../../GPU/GPU_data.h"
+#include "../../Shader/Base/Shader_obj.h"
+#include "../../Node_engine.h"
+#include "../../Core/Dimension.h"
+#include "../../Core/Configuration.h"
+#include "../../Core/Engine.h"
+#include "../../Camera/Camera.h"
+#include "../../Shader/Shader.h"
 
 #include <filesystem>
 #include <FreeImage.h>
@@ -16,7 +17,7 @@
 
 
 //Constructor / Destructor
-render_pass_1::render_pass_1(Node_engine* node_engine){
+Render_pass_3::Render_pass_3(Node_engine* node_engine){
   //---------------------------
 
   this->dimManager = node_engine->get_dimManager();
@@ -26,14 +27,14 @@ render_pass_1::render_pass_1(Node_engine* node_engine){
   this->configManager = new Configuration();
   this->gpuManager = new GPU_data();
   this->fboManager = node_engine->get_fboManager();
-  this->pyramidManager = new render_pyramid(node_engine);
+  this->pyramidManager = new Render_pyramid(node_engine);
 
   float bkg_color = configManager->parse_json_f("window", "background_color");
   this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
 
   //---------------------------
 }
-render_pass_1::~render_pass_1(){
+Render_pass_3::~Render_pass_3(){
   //---------------------------
 
   fboManager->delete_fbo_all();
@@ -46,7 +47,7 @@ render_pass_1::~render_pass_1(){
 }
 
 //Loop function
-void render_pass_1::init_renderer(){
+void Render_pass_3::init_renderer(){
   //---------------------------
 
   fboManager->init_create_rendering_fbo();
@@ -55,7 +56,7 @@ void render_pass_1::init_renderer(){
 
   //---------------------------
 }
-vec3 render_pass_1::fct_unproject(vec2 coord_frag){
+vec3 Render_pass_3::fct_unproject(vec2 coord_frag){
   vec2 gl_dim = dimManager->get_win_dim();
   mat4 view = cameraManager->compute_cam_view();
   //---------------------------
@@ -87,7 +88,7 @@ vec3 render_pass_1::fct_unproject(vec2 coord_frag){
   //---------------------------
   return fct_out;
 }
-void render_pass_1::loop_pass_1(){
+void Render_pass_3::loop_pass_1(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
   //---------------------------
 
@@ -163,7 +164,7 @@ glEnd();
 
   //---------------------------*/
 }
-void render_pass_1::loop_pass_2(){
+void Render_pass_3::loop_pass_2(){
   //---------------------------
 
   //Disable depth test
@@ -188,7 +189,7 @@ void render_pass_1::loop_pass_2(){
 }
 
 //Rendering
-void render_pass_1::bind_fbo_pass_2_recombination(){;
+void Render_pass_3::bind_fbo_pass_2_recombination(){;
   FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
   FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
   FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
@@ -224,7 +225,7 @@ void render_pass_1::bind_fbo_pass_2_recombination(){;
 
   //---------------------------
 }
-void render_pass_1::bind_fbo_pass_2_edl(){
+void Render_pass_3::bind_fbo_pass_2_edl(){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
@@ -246,7 +247,7 @@ void render_pass_1::bind_fbo_pass_2_edl(){
 
   //---------------------------
 }
-void render_pass_1::bind_canvas(){
+void Render_pass_3::bind_canvas(){
   FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
   FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_2");
@@ -272,7 +273,7 @@ void render_pass_1::bind_canvas(){
 }
 
 //Update
-void render_pass_1::update_dim_texture(){
+void Render_pass_3::update_dim_texture(){
   vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
   //---------------------------
 
@@ -301,7 +302,7 @@ void render_pass_1::update_dim_texture(){
 
   //---------------------------
 }
-void render_pass_1::update_dim_canvas(){
+void Render_pass_3::update_dim_canvas(){
   //---------------------------
 
   //Compute canvas coordinates
@@ -348,7 +349,7 @@ void render_pass_1::update_dim_canvas(){
 }
 
 //Subfunction
-Object_* render_pass_1::gen_canvas(){
+Object_* Render_pass_3::gen_canvas(){
   Object_* canvas = new Object_();
   //---------------------------
 
@@ -380,7 +381,7 @@ Object_* render_pass_1::gen_canvas(){
   //---------------------------
   return canvas;
 }
-void render_pass_1::unbind_fboAndTexture(int nb_tex){
+void Render_pass_3::unbind_fboAndTexture(int nb_tex){
   //---------------------------
 
   //Unbind texture
