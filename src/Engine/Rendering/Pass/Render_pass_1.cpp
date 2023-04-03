@@ -8,10 +8,6 @@
 #include "../../Shader/Base/Shader_obj.h"
 #include "../../Shader/Shader.h"
 
-#include <filesystem>
-#include <FreeImage.h>
-#include <cstdint>
-
 
 //Constructor / Destructor
 Render_pass_1::Render_pass_1(Node_engine* node_engine){
@@ -22,10 +18,10 @@ Render_pass_1::Render_pass_1(Node_engine* node_engine){
   this->cameraManager = node_engine->get_cameraManager();
   this->engineManager = node_engine->get_engineManager();
   this->configManager = node_engine->get_configManager();
-  this->fboManager = node_engine->get_gpu_fbo();
+  this->gpu_fbo = node_engine->get_gpu_fbo();
 
-  float bkg_color = configManager->parse_json_f("window", "background_color");
-  this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
+  float color = configManager->parse_json_f("window", "background_color");
+  this->screen_color = vec4(color, color, color, 1.0f);
 
   //---------------------------
 }
@@ -36,13 +32,11 @@ void Render_pass_1::compute_pass(){
   //---------------------------
 
   this->configure_opengl();
-  this->render_simple_mesh();
-  this->render_gfbo();
+  this->render_mesh();
+  this->render_mrt();
 
   //---------------------------
 }
-
-//Subfunction
 void Render_pass_1::configure_opengl(){
   //---------------------------
 
@@ -56,74 +50,108 @@ void Render_pass_1::configure_opengl(){
 
   //---------------------------
 }
-void Render_pass_1::render_simple_mesh(){
+
+//Simple mesh function
+void Render_pass_1::render_mesh(){
   //---------------------------
 
-  //Get camera matrices
-  mat4 mvp = cameraManager->compute_cam_mvp();
+  this->render_mesh_fbo();
+  //this->render_mesh_light();
+  this->render_mesh_untextured();
+  this->render_mesh_textured();
+
+  //---------------------------
+}
+void Render_pass_1::render_mesh_fbo(){
+  //---------------------------
 
   //Bind first pass fbo
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
+  FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1->ID_fbo);
 
   //Clear framebuffer and enable depth
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  //Light
-  /*Shader_obj* shader_lamp = shaderManager->get_shader_obj_byName("shader_lamp");
+  //---------------------------
+}
+void Render_pass_1::render_mesh_light(){
+  Shader_obj* shader_lamp = shaderManager->get_shader_obj_byName("shader_lamp");
+  mat4 mvp = cameraManager->compute_cam_mvp();
+  //---------------------------
+
   shader_lamp->use();
   shader_lamp->setMat4("MVP", mvp);
-  engineManager->draw_light();*/
+  engineManager->draw_light();
 
-  //Untextured glyphs
+  //---------------------------
+}
+void Render_pass_1::render_mesh_untextured(){
   Shader_obj* shader_untextured = shaderManager->get_shader_obj_byName("shader_mesh_untextured");
+  mat4 mvp = cameraManager->compute_cam_mvp();
+  //---------------------------
+
   shader_untextured->use();
   shader_untextured->setMat4("MVP", mvp);
   engineManager->draw_untextured_glyph();
 
-  //Textured cloud drawing
+  //---------------------------
+}
+void Render_pass_1::render_mesh_textured(){
   Shader_obj* shader_textured = shaderManager->get_shader_obj_byName("shader_mesh_textured");
+  mat4 mvp = cameraManager->compute_cam_mvp();
+  //---------------------------
+
   shader_textured->use();
   shader_textured->setMat4("MVP", mvp);
   engineManager->draw_textured_cloud();
 
   //---------------------------
 }
-void Render_pass_1::render_gfbo(){
+
+//Specific cloud-to-render function
+void Render_pass_1::render_mrt(){
   //-------------------------------
 
-  mat4 view = cameraManager->compute_cam_view();
-  mat4 proj = cameraManager->compute_cam_proj();
+  this->render_mrt_gfbo();
+  this->render_mrt_shader();
+
+  //-------------------------------
+}
+void Render_pass_1::render_mrt_gfbo(){
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
+  //-------------------------------
 
   //Bind gfbo
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
   glBindFramebuffer(GL_FRAMEBUFFER, gfbo->ID_fbo);
 
   //Clear framebuffer and enable depth
   glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  //Untextured cloud
+  //-------------------------------
+}
+void Render_pass_1::render_mrt_shader(){
   Shader_obj* shader_geometry = shaderManager->get_shader_obj_byName("shader_geometry");
+  mat4 view = cameraManager->compute_cam_view();
+  mat4 proj = cameraManager->compute_cam_proj();
   vec2 gl_pos = dimManager->get_gl_pos();
+  //-------------------------------
+
   shader_geometry->use();
   shader_geometry->setMat4("VIEW", view);
   shader_geometry->setMat4("PROJ", proj);
-
-//say(dimManager->get_gl_pos());
-/*
-vec3 pt = fct_unproject(vec2(100,80));
-
-glBegin(GL_LINES);
-  glVertex3f(0, 0, 0);
-  glVertex3f(pt.x, pt.y, pt.z);
-glEnd();*/
-
-
-
-
   shader_geometry->setVec2("GL_POS", gl_pos);
+
+  //say(dimManager->get_gl_pos());
+  /*
+  vec3 pt = fct_unproject(vec2(100,80));
+
+  glBegin(GL_LINES);
+    glVertex3f(0, 0, 0);
+    glVertex3f(pt.x, pt.y, pt.z);
+  glEnd();*/
+
   engineManager->draw_untextured_cloud();
 
   //-------------------------------

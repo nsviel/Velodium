@@ -163,7 +163,6 @@ void CoreGLengine::init_rendering(){
 
   dimManager->update();
   shaderManager->init_shader();
-  renderManager->init_renderer();
 
   //---------------------------
 }
@@ -190,7 +189,6 @@ void CoreGLengine::loop_resizing(){
   if(flag_resized){
     renderManager->update_dim_texture();
     shaderManager->update_shader();
-    renderManager->update_dim_canvas();
   }
 
   //Camera & scene runtime

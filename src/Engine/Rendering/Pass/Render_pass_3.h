@@ -23,12 +23,14 @@ public:
   void compute_pass();
 
   //Subfunction
-  void bind_canvas();
+  void configure_opengl();
+  void render_canvas_fbo();
+  void render_canvas_draw();
 
 private:
   Dimension* dimManager;
   Shader* shaderManager;
-  GPU_fbo* fboManager;
+  GPU_fbo* gpu_fbo;
   GPU_data* gpu_data;
   GPU_render* gpu_render;
 

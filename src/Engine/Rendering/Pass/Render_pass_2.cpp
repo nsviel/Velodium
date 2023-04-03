@@ -2,14 +2,12 @@
 
 #include "../Processing/Render_pyramid.h"
 
-#include "../../GPU/GPU_data.h"
-#include "../../Shader/Base/Shader_obj.h"
 #include "../../Node_engine.h"
 #include "../../Core/Dimension.h"
-#include "../../Core/Configuration.h"
-#include "../../Core/Engine.h"
 #include "../../Camera/Camera.h"
 #include "../../Shader/Shader.h"
+#include "../../GPU/GPU_data.h"
+#include "../../GPU/GPU_render.h"
 
 #include <filesystem>
 #include <FreeImage.h>
@@ -20,43 +18,105 @@
 Render_pass_2::Render_pass_2(Node_engine* node_engine){
   //---------------------------
 
-  this->dimManager = node_engine->get_dimManager();
   this->shaderManager = node_engine->get_shaderManager();
-  this->cameraManager = node_engine->get_cameraManager();
-  this->engineManager = node_engine->get_engineManager();
-  this->configManager = new Configuration();
-  this->gpuManager = new GPU_data();
-  this->fboManager = node_engine->get_gpu_fbo();
   this->pyramidManager = new Render_pyramid(node_engine);
+  this->gpu_render = node_engine->get_gpu_render();
+  this->gpu_fbo = node_engine->get_gpu_fbo();
+  this->gpu_data = new GPU_data();
 
-  float bkg_color = configManager->parse_json_f("window", "background_color");
-  this->screen_color = vec4(bkg_color, bkg_color, bkg_color, 1.0f);
+  //A VIRER PLUS TARD
+  this->dimManager = node_engine->get_dimManager();
+  this->cameraManager = node_engine->get_cameraManager();
 
-  //---------------------------
-}
-Render_pass_2::~Render_pass_2(){
-  //---------------------------
-
-  fboManager->delete_fbo_all();
-
-  delete configManager;
-  delete fboManager;
-  delete gpuManager;
+  this->canvas = gpu_render->gen_canvas();
 
   //---------------------------
 }
+Render_pass_2::~Render_pass_2(){}
 
-//Loop function
-void Render_pass_2::init_renderer(){
+//Main function
+void Render_pass_2::compute_pass(){
   //---------------------------
 
-  fboManager->init_create_rendering_fbo();
-  this->canvas_screen = gen_canvas();
-  this->canvas_render = gen_canvas();
+  this->configure_opengl();
+  pyramidManager->bind_pyramid(canvas);
+  this->render_recombination();
+  this->render_edl();
 
   //---------------------------
 }
-vec3 Render_pass_2::fct_unproject(vec2 coord_frag){
+
+//Subfunction
+void Render_pass_2::configure_opengl(){
+  //---------------------------
+
+  //Activate depth buffering
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
+
+  //---------------------------
+}
+void Render_pass_2::render_recombination(){;
+  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
+  FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
+  FBO* fbo_visibility = gpu_fbo->get_fbo_byName("fbo_py_visibility");
+  //---------------------------
+
+  //Bind shader
+  shaderManager->use_shader("shader_recombination");
+
+  //DEBUGING
+  Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
+  FBO* fbo_lvl_0 = gpu_fbo->get_fbo_byName("fbo_py_lvl_0");
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
+
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_recombination->ID_fbo);
+
+  //Input: read textures
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
+
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
+  glActiveTexture(GL_TEXTURE3);
+  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
+
+  //Draw render canvas
+  gpu_data->draw_object(canvas);
+  gpu_render->unbind_fboAndTexture(4);
+
+  //---------------------------
+}
+void Render_pass_2::render_edl(){
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
+  FBO* fbo_edl = gpu_fbo->get_fbo_byName("fbo_edl");
+  Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
+  FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
+  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
+  //---------------------------
+
+  shaderManager->use_shader("shader_edl");
+
+  //Bind fbo 2
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_edl->ID_fbo);
+
+  //Input: read textures
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_tex_color);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_buffer_depth);
+
+  //Draw render canvas
+  gpu_data->draw_object(canvas);
+  gpu_render->unbind_fboAndTexture(2);
+
+  //---------------------------
+}
+
+
+/*vec3 Render_pass_2::fct_unproject(vec2 coord_frag){
   vec2 gl_dim = dimManager->get_win_dim();
   mat4 view = cameraManager->compute_cam_view();
   //---------------------------
@@ -87,311 +147,4 @@ vec3 Render_pass_2::fct_unproject(vec2 coord_frag){
 
   //---------------------------
   return fct_out;
-}
-void Render_pass_2::loop_pass_1(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
-  //---------------------------
-
-  //Enable depth testing
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
-
-  //Set appropriate viewport
-  vec2 gl_dim = dimManager->get_gl_dim();
-  glViewport(0, 0, gl_dim.x, gl_dim.y);
-
-  //Get camera matrices
-  mat4 mvp = cameraManager->compute_cam_mvp();
-  mat4 view = cameraManager->compute_cam_view();
-  mat4 proj = cameraManager->compute_cam_proj();
-
-  //Bind first pass fbo
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_pass_1->ID_fbo);
-
-  //Clear framebuffer and enable depth
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //Light
-  /*Shader_obj* shader_lamp = shaderManager->get_shader_obj_byName("shader_lamp");
-  shader_lamp->use();
-  shader_lamp->setMat4("MVP", mvp);
-  engineManager->draw_light();*/
-
-  //Untextured glyphs
-  Shader_obj* shader_untextured = shaderManager->get_shader_obj_byName("shader_mesh_untextured");
-  shader_untextured->use();
-  shader_untextured->setMat4("MVP", mvp);
-  engineManager->draw_untextured_glyph();
-
-  //Textured cloud drawing
-  Shader_obj* shader_textured = shaderManager->get_shader_obj_byName("shader_mesh_textured");
-  shader_textured->use();
-  shader_textured->setMat4("MVP", mvp);
-  engineManager->draw_textured_cloud();
-/*
-  //-------------------------------
-  //Bind gfbo
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-  glBindFramebuffer(GL_FRAMEBUFFER, gfbo->ID_fbo);
-
-  //Clear framebuffer and enable depth
-  glClearColor(screen_color.x, screen_color.y, screen_color.z, screen_color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //Untextured cloud
-  Shader_obj* shader_geometry = shaderManager->get_shader_obj_byName("shader_geometry");
-  vec2 gl_pos = dimManager->get_gl_pos();
-  shader_geometry->use();
-  shader_geometry->setMat4("VIEW", view);
-  shader_geometry->setMat4("PROJ", proj);
-
-//say(dimManager->get_gl_pos());
-
-vec3 pt = fct_unproject(vec2(100,80));
-
-glBegin(GL_LINES);
-  glVertex3f(0, 0, 0);
-  glVertex3f(pt.x, pt.y, pt.z);
-glEnd();
-
-
-
-
-  shader_geometry->setVec2("GL_POS", gl_pos);
-  engineManager->draw_untextured_cloud();
-
-  //---------------------------*/
-}
-void Render_pass_2::compute_pass(){
-  //---------------------------
-
-  //Disable depth test
-  glDisable(GL_DEPTH_TEST);
-/*
-  //Pyramid
-  pyramidManager->bind_pyramid(canvas_render);
-
-  //Recombinaison
-  shaderManager->use_shader("shader_recombination");
-  this->bind_fbo_pass_2_recombination();
-/*
-  //EDL shader
-  shaderManager->use_shader("shader_edl");
-  this->bind_fbo_pass_2_edl();*/
-/*
-  //Draw screen quad*/
-  shaderManager->use_shader("shader_canvas");
-  this->bind_canvas();
-
-  //---------------------------
-}
-
-//Rendering
-void Render_pass_2::bind_fbo_pass_2_recombination(){;
-  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
-  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
-  //---------------------------
-
-  //DEBUGING
-  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_0");
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-
-  //Activate depth buffering
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_ALWAYS);
-
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_recombination->ID_fbo);
-
-  //Input: read textures
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
-
-  glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
-  glActiveTexture(GL_TEXTURE3);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
-
-  gpuManager->draw_object(canvas_render);
-  this->unbind_fboAndTexture(4);
-
-  //Disable depth test
-  glDisable(GL_DEPTH_TEST);
-
-  //---------------------------
-}
-void Render_pass_2::bind_fbo_pass_2_edl(){
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-  FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
-  Pyramid* struct_pyramid = fboManager->get_struct_pyramid();
-  FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
-  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
-  //---------------------------
-
-  //Bind fbo 2
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_edl->ID_fbo);
-
-  //Input: read textures
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_tex_color);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_buffer_depth);
-
-  gpuManager->draw_object(canvas_render);
-  this->unbind_fboAndTexture(2);
-
-  //---------------------------
-}
-void Render_pass_2::bind_canvas(){
-  FBO* gfbo = fboManager->get_fbo_byName("fbo_geometry");
-  FBO* fbo_edl = fboManager->get_fbo_byName("fbo_edl");
-  FBO* fbo_lvl_0 = fboManager->get_fbo_byName("fbo_py_lvl_2");
-  FBO* fbo_visibility = fboManager->get_fbo_byName("fbo_py_visibility");
-  FBO* fbo_recombination = fboManager->get_fbo_byName("fbo_recombination");
-  FBO* fbo_pass_1 = fboManager->get_fbo_byName("fbo_pass_1");
-  //---------------------------
-//LE FBO 1 fait de la MERDEEEE
-  //Bind fbo and clear old one
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
-
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 gl_pos = dimManager->get_gl_pos();
-  glViewport(gl_pos.x, gl_pos.y, gl_dim.x, gl_dim.y);
-
-  //Draw quad
-  gpuManager->draw_object(canvas_screen);
-  this->unbind_fboAndTexture(1);
-
-  //---------------------------
-}
-
-//Update
-void Render_pass_2::update_dim_texture(){
-  vector<FBO*> fbo_vec = fboManager->get_fbo_vec();
-  //---------------------------
-
-  vec2 dim = dimManager->get_gl_dim();
-  for(int i=0; i<fbo_vec.size(); i++){
-    FBO* fbo = fbo_vec[i];
-    glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_color);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.x, dim.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
-    if(fbo->ID_tex_position != 0){
-      glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
-    }
-
-    if(fbo->ID_tex_normal != 0){
-      glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_normal);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, dim.x, dim.y, 0, GL_RGBA, GL_FLOAT, NULL);
-    }
-
-    glBindTexture(GL_TEXTURE_2D, fbo->ID_buffer_depth);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, dim.x, dim.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-  }
-
-  //Unbind
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  //---------------------------
-}
-void Render_pass_2::update_dim_canvas(){
-  //---------------------------
-
-  //Compute canvas coordinates
-  vec2 gl_pos = dimManager->get_gl_pos();
-  vec2 gl_dim = dimManager->get_gl_dim();
-  vec2 win_dim = dimManager->get_win_dim();
-
-  vec3 tl, br, tr, bl;
-  bl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  bl.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-  bl.z = 0.0f;
-
-  br.x = 1;
-  br.y = 2 * (gl_pos.y) / (win_dim.y) - 1;
-  br.z = 0.0f;
-
-  tl.x = 2 * (gl_pos.x) / (win_dim.x) - 1;
-  tl.y = 1;
-  tl.z = 0.0f;
-
-  tr.x = 1;
-  tr.y = 1;
-  tr.z = 0.0f;
-
-  //Update canvas location buffer
-  canvas_screen->xyz.clear();
-  canvas_screen->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(-1.0f, -1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
-  canvas_screen->xyz.push_back(vec3(1.0f, 1.0f, 0.0f));
-  /*canvas_screen->xyz.push_back(tl);
-  canvas_screen->xyz.push_back(bl);
-  canvas_screen->xyz.push_back(br);
-
-  canvas_screen->xyz.push_back(tl);
-  canvas_screen->xyz.push_back(br);
-  canvas_screen->xyz.push_back(tr);*/
-
-  gpuManager->update_buffer_location(canvas_screen);
-
-  //---------------------------
-}
-
-//Subfunction
-Object_* Render_pass_2::gen_canvas(){
-  Object_* canvas = new Object_();
-  //---------------------------
-
-  //Generic quad coordinates and UV
-  vector<vec3> xyz;
-  xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
-  xyz.push_back(vec3(-1.0f, -1.0f, 0.0f));
-  xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
-  xyz.push_back(vec3(-1.0f, 1.0f, 0.0f));
-  xyz.push_back(vec3(1.0f, -1.0f, 0.0f));
-  xyz.push_back(vec3(1.0f, 1.0f, 0.0f));
-
-  vector<vec2> uv;
-  uv.push_back(vec2(0.0f,  1.0f));
-  uv.push_back(vec2(0.0f,  0.0f));
-  uv.push_back(vec2(1.0f,  0.0f));
-  uv.push_back(vec2(0.0f,  1.0f));
-  uv.push_back(vec2(1.0f,  0.0f));
-  uv.push_back(vec2(1.0f,  1.0f));
-
-  canvas->xyz = xyz;
-  canvas->uv = uv;
-
-  gpuManager->gen_vao(canvas);
-  gpuManager->gen_buffer_location(canvas);
-  gpuManager->gen_buffer_uv(canvas);
-  canvas->draw_type = GL_TRIANGLES;
-
-  //---------------------------
-  return canvas;
-}
-void Render_pass_2::unbind_fboAndTexture(int nb_tex){
-  //---------------------------
-
-  //Unbind texture
-  for(int i=0; i<nb_tex; i++){
-    glActiveTexture(GL_TEXTURE0 + i);
-    glBindTexture(GL_TEXTURE_2D, 0);
-  }
-
-  //Unbind FBO
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  //---------------------------
-}
+}*/

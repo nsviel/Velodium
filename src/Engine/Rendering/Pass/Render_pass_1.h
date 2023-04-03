@@ -21,11 +21,21 @@ public:
 public:
   //Main function
   void compute_pass();
-
-  //Subfunction
   void configure_opengl();
-  void render_simple_mesh();
-  void render_gfbo();
+
+  //Render mesh function
+  void render_mesh();
+  void render_mesh_fbo();
+  void render_mesh_light();
+  void render_mesh_untextured();
+  void render_mesh_textured();
+
+  //Specific cloud-to-render function
+  void render_mrt();
+  void render_mrt_gfbo();
+  void render_mrt_shader();
+
+  inline vec4* get_screen_color(){return &screen_color;}
 
 private:
   Dimension* dimManager;
@@ -33,7 +43,7 @@ private:
   Camera* cameraManager;
   Engine* engineManager;
   Configuration* configManager;
-  GPU_fbo* fboManager;
+  GPU_fbo* gpu_fbo;
 
   vec4 screen_color;
 };
