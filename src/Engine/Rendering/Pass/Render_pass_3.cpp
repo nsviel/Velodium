@@ -60,17 +60,14 @@ void Render_pass_3::render_canvas_fbo(){
   //---------------------------
 }
 void Render_pass_3::render_canvas_draw(){
-  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
-  FBO* fbo_edl = gpu_fbo->get_fbo_byName("fbo_edl");
-  FBO* fbo_lvl_0 = gpu_fbo->get_fbo_byName("fbo_py_lvl_2");
-  FBO* fbo_visibility = gpu_fbo->get_fbo_byName("fbo_py_visibility");
   FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
-  FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
+  FBO* fbo = gpu_fbo->get_fbo_byName("fbo_py_lvl_1");
   //---------------------------
 
   //Bind texture-to-render
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Draw quad
   gpu_data->draw_object(canvas);

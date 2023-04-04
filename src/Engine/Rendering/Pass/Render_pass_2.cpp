@@ -39,9 +39,9 @@ void Render_pass_2::compute_pass(){
   //---------------------------
 
   this->configure_opengl();
-  pyramidManager->bind_pyramid(canvas);
+  pyramidManager->render_pyramid(canvas);
   this->render_recombination();
-  this->render_edl();
+  //this->render_edl();
 
   //---------------------------
 }
@@ -60,28 +60,26 @@ void Render_pass_2::render_recombination(){;
   FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
   FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
   FBO* fbo_visibility = gpu_fbo->get_fbo_byName("fbo_py_visibility");
+  FBO* fbo_truc = gpu_fbo->get_fbo_byName("fbo_py_lvl_1");
+  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
   //---------------------------
 
   //Bind shader
   shaderManager->use_shader("shader_recombination");
 
-  //DEBUGING
-  Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
-  FBO* fbo_lvl_0 = gpu_fbo->get_fbo_byName("fbo_py_lvl_0");
-  FBO* gfbo = gpu_fbo->get_fbo_byName("fbo_geometry");
-
+  //Bind fbo
   glBindFramebuffer(GL_FRAMEBUFFER, fbo_recombination->ID_fbo);
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_truc->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_truc->ID_tex_position);
 
   glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
   glActiveTexture(GL_TEXTURE3);
-  glBindTexture(GL_TEXTURE_2D, fbo_visibility->ID_buffer_depth);
+  glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
 
   //Draw render canvas
   gpu_data->draw_object(canvas);
@@ -95,6 +93,7 @@ void Render_pass_2::render_edl(){
   Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
   FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
   FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
+  FBO* fbo_truc = gpu_fbo->get_fbo_byName("fbo_py_lvl_1");
   //---------------------------
 
   shaderManager->use_shader("shader_edl");

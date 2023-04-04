@@ -7,11 +7,12 @@ in vec2 vs_tex_coord;
 
 uniform sampler2D tex_depth;
 uniform sampler2D tex_color;
-uniform sampler2D tex_posit_0;
-uniform sampler2D tex_posit_1;
-uniform sampler2D tex_posit_2;
-uniform sampler2D tex_posit_3;
-uniform sampler2D tex_posit_4;
+uniform sampler2D tex_position;
+uniform sampler2D tex_coord_0;
+uniform sampler2D tex_coord_1;
+uniform sampler2D tex_coord_2;
+uniform sampler2D tex_coord_3;
+uniform sampler2D tex_coord_4;
 
 uniform int GL_WIDTH;
 uniform int GL_HEIGHT;
@@ -32,24 +33,19 @@ float compute_norm(vec3 pos){
   //---------------------------
   return norm;
 }
-vec3 unproject(vec2 coord_frag){
+vec3 unproject(vec2 coord_tex){
   //---------------------------
 
-  //Raster space to NDC space
+  //Coord in Raster space to NDC coordinate
   vec2 coord_ndc;
-  coord_ndc.x = (coord_frag.x) / GL_WIDTH;
-  coord_ndc.y = (coord_frag.y) / GL_HEIGHT;
-
-  //Coord in NDC space to clip coordinate
-  vec2 coord_clip;
-  coord_clip.x = 2 * coord_ndc.x - 1;
-  coord_clip.y = 1 - 2 * coord_ndc.y;
+  coord_ndc.x = (2 * coord_tex.x) - 1;
+  coord_ndc.y = 1 - (2 * coord_tex.y);
 
   //Clip to view  space
   float ratio = GL_WIDTH / GL_HEIGHT;
   vec4 coord_view;
-  coord_view.x = coord_clip.x * tan(65 / 2 * 2 * PI) * ratio;
-  coord_view.y = coord_clip.y * tan(65 / 2 * 2 * PI);
+  coord_view.x = coord_ndc.x * tan(65 / 2) * ratio;
+  coord_view.y = coord_ndc.y * tan(65 / 2);
   coord_view.z = -1;
   coord_view.w = 1;
 
@@ -85,13 +81,14 @@ vec4[8] compute_lvl_nn(int nn_size, sampler2D tex_pos){
 bool compute_visibility(){
   //---------------------------
 
-  vec4[8] nn_lvl_0 = compute_lvl_nn(1, tex_posit_0);
-  vec4[8] nn_lvl_1 = compute_lvl_nn(2, tex_posit_1);
-  vec4[8] nn_lvl_2 = compute_lvl_nn(4, tex_posit_2);
-  vec4[8] nn_lvl_3 = compute_lvl_nn(8, tex_posit_3);
-  vec4[8] nn_lvl_4 = compute_lvl_nn(16, tex_posit_4);
+  //Get neighbor on all pyramid level
+  vec4[8] nn_lvl_0 = compute_lvl_nn(1, tex_coord_0);
+  vec4[8] nn_lvl_1 = compute_lvl_nn(2, tex_coord_1);
+  vec4[8] nn_lvl_2 = compute_lvl_nn(4, tex_coord_2);
+  vec4[8] nn_lvl_3 = compute_lvl_nn(8, tex_coord_3);
+  vec4[8] nn_lvl_4 = compute_lvl_nn(16, tex_coord_4);
 
-  //Concatenate the nn arrays
+  //Concatenate the neighbor arrays
   vec4 sector[32];
   for(int i=0; i<8; i++){
     sector[i] = nn_lvl_0[i];
@@ -104,9 +101,9 @@ bool compute_visibility(){
 
 
   //Get point to camera vector
-  vec3 pixel_pos = texture(tex_posit_0, vs_tex_coord).xyz;
-  vec3 truc = unproject(gl_FragCoord.xy);
-  vec3 x = truc - pixel_pos;
+  vec3 pixel_pos = texture(tex_position, vs_tex_coord).xyz;
+  vec3 tex_world = unproject(vs_tex_coord);
+  vec3 x = tex_world - pixel_pos;
   vec3 pt_to_cam = - x / compute_norm(x);
 
   //for each sector and for each neighbor
@@ -118,9 +115,11 @@ bool compute_visibility(){
     // Get minimal nn visibility per sector
     for(int j=0; j<sector.length(); j++){
       if((sector[j].w - i) < 0.01){
-        vec3 nn_pos = sector[j].xyz;
+        vec2 nn_coord = sector[j].xy;
+        vec3 nn_pos = texture(tex_position, nn_coord).xyz;
 
-        vec3 y = truc - nn_pos;
+        // OK IL FAUT QUE TEX8WOLRD ICI CORRESPONDE AU TEX QUI VIT LE NN !!!!!!
+        vec3 y = tex_world - nn_pos;
         vec3 nn_cone = (y - x) / compute_norm(y - x);
         float nn_occlusion = 1 - dot(nn_cone, pt_to_cam);
 
@@ -147,7 +146,7 @@ bool compute_visibility(){
 }
 
 void main(){
-  float depth = texture(tex_depth, vs_tex_coord).r;
+  /*float depth = texture(tex_depth, vs_tex_coord).r;
   //---------------------------
 
   bool is_visible = false;
@@ -161,7 +160,50 @@ void main(){
     gl_FragDepth = texture(tex_depth, vs_tex_coord).r;
   }
 
+
+/*
+
+
+  //UNPROECTION BUG SEARCH
+  vec2 coord_frag = gl_FragCoord.xy;
+
+  //Coord in Raster space to NDC coordinate
+  vec2 coord_ndc;
+  coord_ndc.x = (2 * coord_frag.x / GL_WIDTH) - 1;
+  coord_ndc.y = 1 - (2 * (coord_frag.y) / GL_HEIGHT);
+
+  //NDC to view  space
+  float ratio = GL_WIDTH / GL_HEIGHT;
+  vec4 coord_view;
+  coord_view.x = coord_ndc.x * tan((65 / 2) * 2 * PI) * ratio;
+  coord_view.y = coord_ndc.y * tan((65 / 2) * 2 * PI);
+  coord_view.z = -1;
+  coord_view.w = 1;
+
+  //View space to world space
+  mat4 view_inv = inverse(VIEW);
+  vec4 coord_world =  view_inv * coord_view;
+
+  vec3 fct_out  = vec3(coord_world);
+
+
+
+  color = vec4(fct_out, 1);
+*/
+//Get point to camera vector
+/*vec3 pixel_pos = texture(tex_coord_0, vs_tex_coord).xyz;
+vec3 truc = unproject(vs_tex_coord);
+vec3 x = truc - pixel_pos;
+
+float dist = compute_norm(x);
+
+if(depth < 0.999999){
+//color = texture(tex_coord_0, vs_tex_coord).xyz;
+}*/
+
+  vec4 color = texture(tex_coord_1, vs_tex_coord);
+
   //---------------------------
   out_color = color;
-  //out_color = texture(tex_posit_0, vs_tex_coord);
+  //out_color = texture(tex_coord_0, vs_tex_coord);
 }

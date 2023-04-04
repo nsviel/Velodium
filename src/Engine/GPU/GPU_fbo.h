@@ -10,7 +10,6 @@ struct FBO{
   std::string name;
   GLuint ID_fbo;
   GLuint ID_tex_color;
-  GLuint ID_tex_depth;
   GLuint ID_tex_position;
   GLuint ID_tex_normal;
   GLuint ID_depth_buffer;

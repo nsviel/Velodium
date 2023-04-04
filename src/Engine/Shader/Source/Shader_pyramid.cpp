@@ -36,8 +36,8 @@ void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_l
 
   //Pyramid level n
   shader_lvl_n->use();
-  shader_lvl_0->setInt("tex_depth", 0);
-	shader_lvl_0->setInt("tex_position", 1);
+  shader_lvl_n->setInt("tex_depth", 0);
+	shader_lvl_n->setInt("tex_position", 1);
   shader_lvl_n->setInt("GL_WIDTH", gl_dim.x);
   shader_lvl_n->setInt("GL_HEIGHT", gl_dim.y);
 
@@ -45,11 +45,12 @@ void Shader_pyramid::setup_shader(Shader_obj* shader_lvl_0, Shader_obj* shader_l
   shader_visibility->use();
   shader_visibility->setInt("tex_depth", 0);
   shader_visibility->setInt("tex_color", 1);
-  shader_visibility->setInt("tex_posit_0", 2);
-  shader_visibility->setInt("tex_posit_1", 3);
-  shader_visibility->setInt("tex_posit_2", 4);
-  shader_visibility->setInt("tex_posit_3", 5);
-  shader_visibility->setInt("tex_posit_4", 6);
+  shader_visibility->setInt("tex_position", 2);
+  shader_visibility->setInt("tex_coord_0", 3);
+  shader_visibility->setInt("tex_coord_1", 5);
+  shader_visibility->setInt("tex_coord_2", 6);
+  shader_visibility->setInt("tex_coord_3", 7);
+  shader_visibility->setInt("tex_coord_4", 8);
   shader_visibility->setInt("GL_WIDTH", gl_dim.x);
   shader_visibility->setInt("GL_HEIGHT", gl_dim.y);
 

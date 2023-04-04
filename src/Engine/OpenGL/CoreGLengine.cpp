@@ -216,7 +216,7 @@ void CoreGLengine::loop_end(){
   }
 
   float time = toc_ms();
-  if(cpt == 100){
+  if(false && cpt == 100){
     float mean = fct_mean(time_vec);
     cout<<"Mean time = "<<mean<< " ms" <<endl;
     time_vec.clear();
