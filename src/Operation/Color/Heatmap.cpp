@@ -125,13 +125,12 @@ void Heatmap::mode_height(Cloud* cloud){
   vector<float> z_vec = attribManager->get_z_vector(cloud->xyz);
 
   //Check for preventing too much near range
-  if(range_height.x + 1 > range_height.y){
-    range_height.x = range_height.y - 1;
+  if(range_height[0] + 1 > range_height[1]){
+    range_height[0] = range_height.y - 2;
   }
 
   //fct_normalize resulting color vector
   vector<float> z_vec_norm = fct_normalize(z_vec, range_height);
-  z_vec_norm = fct_standardize(z_vec_norm, -1);
   vector<float>& color_vec = z_vec_norm;
 
   //---------------------------

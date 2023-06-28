@@ -135,10 +135,10 @@ void GUI_Color::heatmap_select_colormap(){
 
   //Automatic normalization
   bool* normalizeON = heatmapManager->get_is_normalization();
-  ImGui::Checkbox("fct_normalized", normalizeON);
+  ImGui::Checkbox("Normalized", normalizeON);
 
   //Manual normalization
-  if(*normalizeON){
+  if(*normalizeON == false){
     this->heatmap_mode_height();
     this->heatmap_mode_intensity();
   }

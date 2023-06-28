@@ -43,6 +43,7 @@ GUI_Control::GUI_Control(Node_gui* node){
   Node_load* node_load = node_engine->get_node_load();
   Node_scene* node_scene = node_engine->get_node_scene();
 
+
   this->cameraManager = node_engine->get_cameraManager();
   this->dimManager = node_engine->get_dimManager();
   this->heatmapManager = node_ope->get_heatmapManager();

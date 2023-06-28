@@ -25,6 +25,10 @@
 #include "../../Operation/Color/Heatmap.h"
 #include "../../Operation/Color/Color.h"
 #include "../../Operation/Transformation/Transformation.h"
+#include "../../Operation/Dynamic/Online.h"
+
+#include "../../Interface/Node_interface.h"
+#include "../../Interface/Capture/Capture.h"
 
 #include "imgui/imgui.h"
 
@@ -37,6 +41,7 @@ GUI_option::GUI_option(Node_gui* node_gui){
   Node_operation* node_ope = node_gui->get_node_ope();
   Node_load* node_load = node_engine->get_node_load();
   Node_scene* node_scene = node_engine->get_node_scene();
+  Node_interface* node_interface = node_engine->get_node_interface();
 
   this->renderManager = node_engine->get_renderManager();
   this->gui_control = node_gui->get_gui_control();
@@ -49,6 +54,8 @@ GUI_option::GUI_option(Node_gui* node_gui){
   this->configManager = node_engine->get_configManager();
   this->engineManager = node_engine->get_engineManager();
   this->texManager = node_engine->get_texManager();
+  this->captureManager = node_interface->get_captureManager();
+  this->onlineManager = node_ope->get_onlineManager();
 
   //---------------------------
 }
@@ -218,23 +225,38 @@ void GUI_option::option_mode(){
     }*/
 
     //Visualization mode
-    static bool mode_visualization = false;
-    if(ImGui::Checkbox("Display mode", &mode_visualization)){
+    static bool mode_light_display = false;
+    if(ImGui::Checkbox("Display light mode", &mode_light_display)){
+      //Color
       vec4* screen_color = renderManager->get_screen_color();
+      *screen_color = vec4(1,1,1,1);
+
+      //Glyph
       Glyph* axis = objectManager->get_glyph_scene_byName("axis");
       Glyph* aabb = objectManager->get_glyph_scene_byName("aabb");
       Glyph* grid = objectManager->get_glyph_scene_byName("grid");
-
-      if(mode_visualization == true){
-        axis->is_visible = false;
-        aabb->is_visible = false;
-        grid->is_visible = false;
-      }else{
-        axis->is_visible = true;
-        aabb->is_visible = true;
-        grid->is_visible = true;
-      }
+      axis->is_visible = !mode_light_display;
+      aabb->is_visible = !mode_light_display;
+      grid->is_visible = !mode_light_display;
     }
+
+    //Visualization mode
+    static bool mode_dark_display = false;
+    if(ImGui::Checkbox("Display dark mode", &mode_dark_display)){
+      //Color
+      vec4* screen_color = renderManager->get_screen_color();
+      *screen_color = vec4(0,0,0,1);
+
+      //Glyph
+      Glyph* axis = objectManager->get_glyph_scene_byName("axis");
+      Glyph* aabb = objectManager->get_glyph_scene_byName("aabb");
+      Glyph* grid = objectManager->get_glyph_scene_byName("grid");
+      axis->is_visible = !mode_dark_display;
+      aabb->is_visible = !mode_dark_display;
+      grid->is_visible = !mode_dark_display;
+    }
+
+    this->mode_capture_demo();
 
     //---------------------------
     ImGui::Separator();
@@ -243,6 +265,7 @@ void GUI_option::option_mode(){
 void GUI_option::option_parameter(){
   if(ImGui::CollapsingHeader("Parameters")){
     Collection* collection = sceneManager->get_selected_collection();
+    if(collection == nullptr) return;
     Cloud* cloud = (Cloud*)collection->selected_obj;
     ImGuiStyle& style = ImGui::GetStyle();
     //---------------------------
@@ -325,12 +348,18 @@ void GUI_option::option_parameter(){
       if(cloud->draw_point_size <= 1){
         cloud->draw_point_size = 1;
       }
+
+      int* point_size = captureManager->get_point_size();
+      *point_size = cloud->draw_point_size;
     }
     ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
     if (ImGui::ArrowButton("##right", ImGuiDir_Right) && cloud != nullptr){
       cloud->draw_point_size++;
 
       point_size = cloud->draw_point_size;
+
+      int* point_size = captureManager->get_point_size();
+      *point_size = cloud->draw_point_size;
     }
     ImGui::PopButtonRepeat();
     ImGui::SameLine();
@@ -431,4 +460,52 @@ void GUI_option::option_color(){
       objectManager->reset_color_object();
     }
   }
+}
+
+//Mode subfunction
+void GUI_option::mode_capture_demo(){
+  //---------------------------
+
+  //Capture demo mode
+  static bool mode_capture_demo = false;
+  if(ImGui::Checkbox("Capture demo mode", &mode_capture_demo)){
+    //Color
+    vec4* screen_color = renderManager->get_screen_color();
+    *screen_color = vec4(0,0,0,1);
+    Collection* collection = sceneManager->get_selected_collection();
+    if(collection != nullptr){
+      colorManager->set_color_new(collection, vec4(1,1,1,1));
+    }
+
+    //Glyph
+    Axis* axisObject = objectManager->get_object_axis();
+    Glyph* axis = objectManager->get_glyph_scene_byName("axis");
+    Glyph* aabb = objectManager->get_glyph_scene_byName("aabb");
+    Glyph* grid = objectManager->get_glyph_scene_byName("grid");
+    bool* axis_visibility = axisObject->get_axis_subset_visibility();
+    axis->is_visible = !mode_capture_demo;
+    aabb->is_visible = !mode_capture_demo;
+    grid->is_visible = !mode_capture_demo;
+    *axis_visibility= true;
+
+    //Point size
+    int* point_size = captureManager->get_point_size();
+    *point_size = 5;
+
+    //Colorization
+    int* color_mode = colorManager->get_color_mode();
+    *color_mode = 2; //heatmap mode
+    int* heatmap_mode = heatmapManager->get_heatmap_mode();
+    *heatmap_mode = 0; //height mode
+
+    //Online
+    bool* with_filter_sphere = onlineManager->get_with_sphere_filter();
+    *with_filter_sphere = false;
+    bool* with_slam = onlineManager->get_with_slam();
+    *with_slam = false;
+    bool* with_camera_follow = onlineManager->get_with_camera_follow();
+    *with_camera_follow = false;
+  }
+
+  //---------------------------
 }

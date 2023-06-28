@@ -36,6 +36,8 @@ Capture::Capture(Node_interface* node_interface){
   this->veloManager = new Velodyne(node_interface);
   this->gpuManager = new GPU_data();
 
+  this->point_size = 1;
+
   //---------------------------
   this->update_configuration();
 }
@@ -243,6 +245,7 @@ void Capture::operation_new_subset(Cloud* cloud){
     //Set new cloud identifieurs
     cloud->name = "frame_" + to_string(collection_capture->ID_obj_last);
     cloud->ID = collection_capture->ID_obj_last;
+    cloud->draw_point_size = point_size;
     collection_capture->ID_obj_last++;
 
     //Update cloud data

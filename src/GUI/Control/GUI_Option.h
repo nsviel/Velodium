@@ -17,6 +17,8 @@ class Configuration;
 class Engine;
 class Texture;
 class Glyphs;
+class Capture;
+class Online;
 
 
 class GUI_option
@@ -37,6 +39,9 @@ public:
   void option_mode();
   void option_font();
 
+  //Mode subfunction
+  void mode_capture_demo();
+
   inline void set_backgroundColorPtr(vec3* value){this->backgColor = value;}
 
 private:
@@ -54,6 +59,8 @@ private:
   Renderer* renderManager;
   Engine* engineManager;
   Texture* texManager;
+  Capture* captureManager;
+  Online* onlineManager;
 
   vec3* backgColor;
 };

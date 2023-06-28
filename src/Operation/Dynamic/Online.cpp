@@ -83,8 +83,10 @@ void Online::compute_onlineOpe(Collection* collection, int ID_object){
   visibilityManager->compute_visibility(collection, ID_object);
 
   //Make slam on the current object
-  node_module->online(collection, ID_object);
-  sceneManager->update_buffer_location(object);
+  if(with_slam){
+    node_module->online(collection, ID_object);
+    sceneManager->update_buffer_location(object);
+  }
 
   //Make cleaning on the current object
   if(with_filter_sphere){
@@ -92,7 +94,9 @@ void Online::compute_onlineOpe(Collection* collection, int ID_object){
   }
 
   //If camera follow up option activated
-  followManager->camera_followup(collection, ID_object);
+  if(with_camera_follow){
+    followManager->camera_followup(collection, ID_object);
+  }
 
   //Colorization
   colorManager->make_colorization(collection, ID_object);

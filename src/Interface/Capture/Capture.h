@@ -54,6 +54,7 @@ public:
   inline int get_capture_nb_point_raw(){return capture_nb_point_raw;}
   inline int* get_nb_subset_max(){return &nb_subset_max;}
   inline int get_ratio_frame(){return ratio_frame;}
+  inline int* get_point_size(){return &point_size;}
   inline void set_ratio_frame(int value){this->ratio_frame = value; this->ratio_cpt = 0;}
 
 private:
@@ -80,6 +81,7 @@ private:
   int ratio_frame;
   int ratio_cpt;
   int nb_subset_max;
+  int point_size;
 };
 
 #endif

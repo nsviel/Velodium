@@ -38,6 +38,8 @@ public:
   void compute_http_command();
 
   inline bool* get_with_sphere_filter(){return &with_filter_sphere;}
+  inline bool* get_with_slam(){return &with_slam;}
+  inline bool* get_with_camera_follow(){return &with_camera_follow;}
   inline float get_time_operation(){return time_ope;}
   inline int* get_filter_mode(){return &filter_mode;}
 
@@ -59,6 +61,8 @@ private:
   bool with_subset_specific_color;
   bool with_filter_sphere;
   bool with_remove_lastSubset;
+  bool with_slam = true;
+  bool with_camera_follow = true;
 };
 
 #endif
