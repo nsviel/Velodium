@@ -131,6 +131,7 @@ void Heatmap::mode_height(Cloud* cloud){
 
   //fct_normalize resulting color vector
   vector<float> z_vec_norm = fct_normalize(z_vec, range_height);
+  //z_vec_norm = fct_standardize(z_vec_norm, -1);
   vector<float>& color_vec = z_vec_norm;
 
   //---------------------------

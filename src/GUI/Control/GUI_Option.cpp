@@ -471,7 +471,7 @@ void GUI_option::mode_capture_demo(){
   if(ImGui::Checkbox("Capture demo mode", &mode_capture_demo)){
     //Color
     vec4* screen_color = renderManager->get_screen_color();
-    *screen_color = vec4(0,0,0,1);
+    *screen_color = vec4(1,1,1,1);
     Collection* collection = sceneManager->get_selected_collection();
     if(collection != nullptr){
       colorManager->set_color_new(collection, vec4(1,1,1,1));
@@ -486,7 +486,8 @@ void GUI_option::mode_capture_demo(){
     axis->is_visible = !mode_capture_demo;
     aabb->is_visible = !mode_capture_demo;
     grid->is_visible = !mode_capture_demo;
-    *axis_visibility= true;
+    *axis_visibility = true;
+    objectManager->update_glyph_collection(collection);
 
     //Point size
     int* point_size = captureManager->get_point_size();
