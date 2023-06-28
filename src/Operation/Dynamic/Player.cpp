@@ -101,14 +101,15 @@ void Player::compute_wheel_selection(string direction){
 
     if(direction == "up"){
       ID_obj++;
+
+      this->select_byObjectID(collection, ID_obj);
     }
-    else if(direction =="down"){
+    else if(direction =="down" && collection->is_onthefly == false){
       ID_obj--;
+
+      if(ID_obj < collection->get_obj(0)->ID) ID_obj = collection->get_obj(0)->ID;
+      this->select_byObjectID(collection, ID_obj);
     }
-
-    if(ID_obj < collection->get_obj(0)->ID) ID_obj = collection->get_obj(0)->ID;
-
-    this->select_byObjectID(collection, ID_obj);
   }
 
   //----------------------------

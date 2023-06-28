@@ -201,7 +201,7 @@ void GUI_Online::parameter_recorder(){
       recordManager->select_path_frame();
     }
     ImGui::SameLine();
-    string path = get_path_abs(recordManager->get_path_frame());
+    string path = recordManager->get_path_frame();
     ImGui::TextColored(ImVec4(0.0f,1.0f,1.0f,1.0f), "%s", path.c_str());
   }
 
