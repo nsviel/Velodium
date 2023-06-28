@@ -56,7 +56,6 @@ void Render_pass_1::render_mesh(){
   //---------------------------
 
   this->render_mesh_fbo();
-  //this->render_mesh_light();
   this->render_mesh_untextured();
   this->render_mesh_textured();
 
@@ -94,6 +93,7 @@ void Render_pass_1::render_mesh_untextured(){
   shader_untextured->use();
   shader_untextured->setMat4("MVP", mvp);
   engineManager->draw_untextured_glyph();
+  engineManager->draw_untextured_cloud();
 
   //---------------------------
 }
@@ -142,15 +142,6 @@ void Render_pass_1::render_mrt_shader(){
   shader_geometry->setMat4("VIEW", view);
   shader_geometry->setMat4("PROJ", proj);
   shader_geometry->setVec2("GL_POS", gl_pos);
-
-  //say(dimManager->get_gl_pos());
-  /*
-  vec3 pt = fct_unproject(vec2(100,80));
-
-  glBegin(GL_LINES);
-    glVertex3f(0, 0, 0);
-    glVertex3f(pt.x, pt.y, pt.z);
-  glEnd();*/
 
   engineManager->draw_untextured_cloud();
 

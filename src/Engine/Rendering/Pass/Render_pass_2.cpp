@@ -39,9 +39,9 @@ void Render_pass_2::compute_pass(){
   //---------------------------
 
   this->configure_opengl();
-  pyramidManager->render_pyramid(canvas);
+  //pyramidManager->render_pyramid(canvas);
   this->render_recombination();
-  //this->render_edl();
+  this->render_edl();
 
   //---------------------------
 }
@@ -72,9 +72,9 @@ void Render_pass_2::render_recombination(){;
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_truc->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_truc->ID_tex_position);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_position);
 
   glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, gfbo->ID_buffer_depth);
@@ -93,7 +93,7 @@ void Render_pass_2::render_edl(){
   Pyramid* struct_pyramid = gpu_fbo->get_struct_pyramid();
   FBO* fbo_pyr = struct_pyramid->fbo_vec[0];
   FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
-  FBO* fbo_truc = gpu_fbo->get_fbo_byName("fbo_py_lvl_1");
+  FBO* fbo_pass_1 = gpu_fbo->get_fbo_byName("fbo_pass_1");
   //---------------------------
 
   shaderManager->use_shader("shader_edl");
@@ -103,9 +103,9 @@ void Render_pass_2::render_edl(){
 
   //Input: read textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_tex_color);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_tex_color);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, fbo_recombination->ID_buffer_depth);
+  glBindTexture(GL_TEXTURE_2D, fbo_pass_1->ID_buffer_depth);
 
   //Draw render canvas
   gpu_data->draw_object(canvas);
@@ -113,37 +113,3 @@ void Render_pass_2::render_edl(){
 
   //---------------------------
 }
-
-
-/*vec3 Render_pass_2::fct_unproject(vec2 coord_frag){
-  vec2 gl_dim = dimManager->get_win_dim();
-  mat4 view = cameraManager->compute_cam_view();
-  //---------------------------
-
-  //Raster space to NDC space
-  vec2 coord_ndc;
-  coord_ndc.x = (coord_frag.x) / gl_dim.x;
-  coord_ndc.y = (coord_frag.y) / gl_dim.y;
-
-  //Coord in NDC space to clip coordinate
-  vec2 coord_clip;
-  coord_clip.x = 2 * coord_ndc.x - 1;
-  coord_clip.y = 2 * coord_ndc.y - 1;
-
-  //Clip to view  space
-  float ratio = gl_dim.x / gl_dim.y;
-  vec4 coord_view;
-  coord_view.x = coord_clip.x * tan(65 / 2) * ratio;
-  coord_view.y = coord_clip.y * tan(65 / 2);
-  coord_view.z = -1;
-  coord_view.w = 1;
-
-  //View space to world space
-  mat4 view_inv = inverse(view);
-  vec4 coord_world = view_inv * coord_view;
-
-  vec3 fct_out  = vec3(coord_world);
-
-  //---------------------------
-  return fct_out;
-}*/

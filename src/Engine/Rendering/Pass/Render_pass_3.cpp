@@ -60,13 +60,13 @@ void Render_pass_3::render_canvas_fbo(){
   //---------------------------
 }
 void Render_pass_3::render_canvas_draw(){
-  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_recombination");
-  FBO* fbo = gpu_fbo->get_fbo_byName("fbo_py_lvl_1");
+  FBO* fbo_recombination = gpu_fbo->get_fbo_byName("fbo_pass_1");
+  FBO* fbo_edl = gpu_fbo->get_fbo_byName("fbo_edl");
   //---------------------------
 
   //Bind texture-to-render
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fbo->ID_tex_position);
+  glBindTexture(GL_TEXTURE_2D, fbo_edl->ID_tex_color);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Draw quad

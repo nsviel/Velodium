@@ -84,7 +84,7 @@ void Shader::init_shader(){
 	path_fs = shader_dir + "pass_1/shader_geometric.fs";
 	shader = new Shader_obj("shader_geometry", path_vs, path_fs);
 	this->list_shader_obj->push_back(shader);
-
+	/*
 	//Pyramid
 	path_vs = shader_dir + "pyramid/shader_pyramid_lvl_0.vs";
 	path_fs = shader_dir + "pyramid/shader_pyramid_lvl_0.fs";
@@ -104,6 +104,7 @@ void Shader::init_shader(){
 	Shader_pyramid* shader_pyramid = new Shader_pyramid(node_engine);
 	shader_pyramid->setup_shader(shader_lvl_0, shader_lvl_n, shader_pyramid_visibility);
 	this->list_shader_src->push_back(shader_pyramid);
+	*/
 
 	//EDL shader
 	Shader_edl* shader_edl = new Shader_edl(node_engine);
